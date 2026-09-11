@@ -390,7 +390,10 @@ public class ClassSelectManager {
     }
 
     /**
-     * 更新所有玩家的 faction 为最终选择的编制
+     * 更新所有玩家的 faction 为最终选择的编制。
+     * 队伍以玩家的权威队伍记录为准（含投票阶段之后才加入/重连、未被 VoteManager
+     * 名单收录的玩家），VoteManager 名单仅作旧路径兜底——否则这类玩家会带着
+     * 临时队名（ATTACK/DEFEND）进入部署阶段，选择任何职业都被判"不属于当前编制"。
      */
     private void updatePlayerFactions(MinecraftServer server) {
         ClassCountManager countManager = ClassCountManager.getInstance();
@@ -398,12 +401,14 @@ public class ClassSelectManager {
 
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             UUID uuid = player.getUUID();
-            String team = null;
-
-            if (voteManager.getAttackPlayers().contains(uuid)) {
-                team = "ATTACK";
-            } else if (voteManager.getDefendPlayers().contains(uuid)) {
-                team = "DEFEND";
+            String team = countManager.getPlayerTeam(uuid);
+            if (team == null) {
+                // 兜底：参与投票但未显式记录队伍的玩家
+                if (voteManager.getAttackPlayers().contains(uuid)) {
+                    team = "ATTACK";
+                } else if (voteManager.getDefendPlayers().contains(uuid)) {
+                    team = "DEFEND";
+                }
             }
 
             if (team == null) continue;

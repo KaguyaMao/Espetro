@@ -3,9 +3,8 @@ package org.espetro.team;
 /**
  * 游戏阶段枚举（多维度战局流程）。
  *
- * LOBBY → MAP_VOTE → MAP_LOADING → TEAM_SELECT
- * → ATTACK_COMMANDER_VOTE → DEFEND_COMMANDER_VOTE
- * → ATTACK_FACTION_SELECT → DEFEND_FACTION_SELECT
+ * LOBBY → MAP_VOTE → MAP_REVEAL → MAP_LOADING → TEAM_SELECT → TEAM_ASSIGN_SHOW
+ * → COMMANDER_VOTE（双方并行）→ DEFEND/ATTACK_FACTION_SELECT（先后）
  * → FACTION_REVEAL → DEPLOYING → BATTLE
  * → ROUND_END → CLEANUP → LOBBY
  */
@@ -15,8 +14,14 @@ public enum GamePhase {
     WAITING_FOR_PLAYERS("等待玩家集结"),
     LOBBY("主城等待"),
     MAP_VOTE("地图投票"),
+    /** 地图投票结束后的揭晓页（显示胜出地图与预览图，5s）。 */
+    MAP_REVEAL("地图揭示"),
     MAP_LOADING("地图加载"),
     TEAM_SELECT("攻守方选择"),
+    /** 自动分配完成后的分配结果展示页（5s，随后进入指挥官投票）。 */
+    TEAM_ASSIGN_SHOW("队伍分配"),
+    /** 双方指挥官投票（并行进行，统一倒计时）。 */
+    COMMANDER_VOTE("指挥官投票"),
     DEFEND_COMMANDER_VOTE("守方指挥官投票"),
     ATTACK_COMMANDER_VOTE("攻方指挥官投票"),
     DEFEND_FACTION_SELECT("守方编制选择"),
@@ -38,7 +43,8 @@ public enum GamePhase {
     }
 
     public boolean isCommanderVotePhase() {
-        return this == DEFEND_COMMANDER_VOTE || this == ATTACK_COMMANDER_VOTE;
+        return this == DEFEND_COMMANDER_VOTE || this == ATTACK_COMMANDER_VOTE
+            || this == COMMANDER_VOTE;
     }
 
     public boolean isFactionSelectPhase() {

@@ -231,7 +231,7 @@ public class FactionRevealScreen extends EspetroMenuScreen {
             phaseHeader.setDetail("\u00a78" + getSecondsRemaining() + "秒后进入部署");
         }
         if (ticksRemaining <= 0 && Minecraft.getInstance().screen == this && !tutorialPreviewMode) {
-            Minecraft.getInstance().setScreen(null);
+            org.espetro.client.aui.AuiScreen.closeWithFade(this);
         }
     }
 

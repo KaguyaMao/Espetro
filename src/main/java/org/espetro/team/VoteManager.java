@@ -10,19 +10,20 @@ import java.util.*;
 
 /**
  * 指挥官投票管理器
- * 支持分阶段投票：先攻方(20s)，后守方(20s)
+ * 双方并行投票：同时开始、统一倒计时（取攻/守配置较大者），结束时同时结算双方。
  */
 public class VoteManager {
 
     private static VoteManager INSTANCE;
 
-    // 投票阶段是否在进行
+    // 投票是否在进行
     private boolean votingActive = false;
-    // 当前正在投票的队伍: "DEFEND" 或 "ATTACK"
+    // 兼容旧路径：串行模式下的当前投票队伍（并行模式为 null）
     private String currentVotingTeam = null;
 
-    // 投票计时器
+    // 投票计时器（并行统一倒计时）
     private int voteTickCounter = 0;
+    private int timeoutSeconds = 20;
     private static final int TICKS_PER_SECOND = 20;
 
     // 攻方投票: 玩家UUID -> 投票目标玩家UUID
@@ -81,7 +82,27 @@ public class VoteManager {
     }
 
     /**
-     * 开始守方指挥官投票
+     * 开始双方并行指挥官投票。
+     * 统一倒计时 = max(攻方配置, 守方配置)，到点同时结算双方。
+     */
+    public void startBothVote() {
+        votingActive = true;
+        currentVotingTeam = null; // 并行模式
+        voteTickCounter = 0;
+        attackVotes.clear();
+        defendVotes.clear();
+
+        timeoutSeconds = Math.max(
+            GameConfig.getAttackCommanderVoteSeconds(),
+            GameConfig.getDefendCommanderVoteSeconds());
+        Espetro.LOGGER.info("双方指挥官投票开始（并行）！限时{}秒", timeoutSeconds);
+
+        // 双方并行：各自收到本方候选 + 统一倒计时
+        org.espetro.network.NetworkManager.broadcastBothCommanderVoteScreens(timeoutSeconds);
+    }
+
+    /**
+     * 开始守方指挥官投票（旧串行路径保留）
      */
     public void startDefendVote() {
         votingActive = true;
@@ -90,15 +111,14 @@ public class VoteManager {
         defendVotes.clear();
 
         int timeout = GameConfig.getDefendCommanderVoteSeconds();
+        timeoutSeconds = timeout;
         Espetro.LOGGER.info("守方指挥官投票开始！限时{}秒", timeout);
-        // 消息已通过 CommanderVoteScreen GUI 实时显示，不再发送聊天消息
 
-        // 发送投票界面给守方玩家
         org.espetro.network.NetworkManager.broadcastCommanderVoteScreenForTeam("DEFEND", timeout);
     }
 
     /**
-     * 开始攻方指挥官投票
+     * 开始攻方指挥官投票（旧串行路径保留）
      */
     public void startAttackVote() {
         votingActive = true;
@@ -107,36 +127,36 @@ public class VoteManager {
         attackVotes.clear();
 
         int timeout = GameConfig.getAttackCommanderVoteSeconds();
+        timeoutSeconds = timeout;
         Espetro.LOGGER.info("攻方指挥官投票开始！限时{}秒", timeout);
-        // 消息已通过 CommanderVoteScreen GUI 实时显示，不再发送聊天消息
 
-        // 发送投票界面给攻方玩家
         org.espetro.network.NetworkManager.broadcastCommanderVoteScreenForTeam("ATTACK", timeout);
     }
 
     /**
-     * 玩家投票
+     * 玩家投票（并行：按投票者自身队伍写入对应票箱，目标必须与投票者同队）
      */
     public boolean castVote(ServerPlayer voter, UUID targetUUID) {
         if (!votingActive) return false;
+        if (voter == null || voter.getUUID().equals(targetUUID)) return false;
 
-        // 不能投自己
-        if (voter.getUUID().equals(targetUUID)) return false;
-
-        // 检查当前阶段是否允许该玩家投票
         String voterTeam = getPlayerTeam(voter.getUUID());
-        if (voterTeam == null || !voterTeam.equals(currentVotingTeam)) {
+        if (voterTeam == null) {
+            Espetro.sendToPlayer(voter, "§c你尚未加入任何队伍，无法投票！");
+            return false;
+        }
+        // 并行模式下两方均可投；串行模式仍需匹配当前投票方
+        if (!isParallel() && !voterTeam.equals(currentVotingTeam)) {
             Espetro.sendToPlayer(voter, "§c当前不是你的投票时间！");
             return false;
         }
 
-        // 检查目标是否和投票者在同一队伍
         String targetTeam = getPlayerTeam(targetUUID);
-        if (targetTeam == null || !targetTeam.equals(currentVotingTeam)) {
+        if (targetTeam == null || !targetTeam.equals(voterTeam)) {
             return false;
         }
 
-        if ("ATTACK".equals(currentVotingTeam)) {
+        if ("ATTACK".equals(voterTeam)) {
             attackVotes.put(voter.getUUID(), targetUUID);
             Espetro.LOGGER.info("玩家 {} 投票给攻方玩家 {}", voter.getName().getString(), targetUUID);
         } else {
@@ -144,9 +164,12 @@ public class VoteManager {
             Espetro.LOGGER.info("玩家 {} 投票给守方玩家 {}", voter.getName().getString(), targetUUID);
         }
 
-        // 广播投票数据更新
         broadcastVoteUpdate();
         return true;
+    }
+
+    public boolean isParallel() {
+        return votingActive && currentVotingTeam == null;
     }
 
     private String getPlayerTeam(UUID uuid) {
@@ -166,15 +189,31 @@ public class VoteManager {
     }
 
     /**
-     * 计算某玩家的得票数
+     * 计算某玩家在其所属队伍的得票数（按目标玩家 UUID 匹配）
      */
     public int getVoteCount(UUID playerUUID) {
+        if (attackPlayers.contains(playerUUID)) {
+            return countVotesIn(attackVotes, playerUUID);
+        }
+        if (defendPlayers.contains(playerUUID)) {
+            return countVotesIn(defendVotes, playerUUID);
+        }
+        return 0;
+    }
+
+    private static int countVotesIn(Map<UUID, UUID> votes, UUID target) {
         int count = 0;
-        Map<UUID, UUID> votes = "ATTACK".equals(currentVotingTeam) ? attackVotes : defendVotes;
-        for (UUID target : votes.values()) {
-            if (target.equals(playerUUID)) count++;
+        for (UUID t : votes.values()) {
+            if (target.equals(t)) count++;
         }
         return count;
+    }
+
+    /**
+     * 获取指定队伍的投票 Map（视图）
+     */
+    public Map<UUID, UUID> getTeamVotes(String team) {
+        return "ATTACK".equals(team) ? attackVotes : defendVotes;
     }
 
     /**
@@ -192,13 +231,11 @@ public class VoteManager {
             voteCounts.merge(target, 1, Integer::sum);
         }
 
-        // 找出最高票数
         int maxVotes = 0;
         for (int count : voteCounts.values()) {
             if (count > maxVotes) maxVotes = count;
         }
 
-        // 收集所有最高票数的玩家
         List<UUID> candidates = new ArrayList<>();
         for (Map.Entry<UUID, Integer> entry : voteCounts.entrySet()) {
             if (entry.getValue() == maxVotes) {
@@ -206,7 +243,6 @@ public class VoteManager {
             }
         }
 
-        // 如果有多个最高票数，随机选一个
         if (candidates.size() > 1) {
             return candidates.get(new Random().nextInt(candidates.size()));
         }
@@ -215,98 +251,163 @@ public class VoteManager {
     }
 
     /**
-     * 结束当前队伍的投票
-     * @return 当前完成的队伍 "DEFEND" 或 "ATTACK"
+     * 结算指定队伍并完成治理同步。
      */
-    public String finishCurrentVote() {
-        if (!votingActive) return null;
-
-        String finishedTeam = currentVotingTeam;
-        votingActive = false;
-
+    private void settleTeam(String team) {
         MinecraftServer server = Espetro.getServer();
-        if (server == null) return finishedTeam;
-
-        if ("DEFEND".equals(finishedTeam)) {
+        UUID commander;
+        if ("DEFEND".equals(team)) {
             defendCommander = getWinningCandidate(defendPlayers, defendVotes);
+            commander = defendCommander;
             String name = getPlayerName(server, defendCommander);
             Espetro.broadcastToTeam("DEFEND", "§6★ 你所在的队伍指挥官为§9" + name + "§6！★");
             if (defendCommander != null) {
-                ServerPlayer cmd = server.getPlayerList().getPlayer(defendCommander);
-                Espetro.sendToPlayer(cmd, "§a你已被选为§9守方§a指挥官！");
-                // 指挥官身份变更，立即同步技能数据
-                org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                ServerPlayer cmd = server == null ? null : server.getPlayerList().getPlayer(defendCommander);
+                if (cmd != null) {
+                    Espetro.sendToPlayer(cmd, "§a你已被选为§9守方§a指挥官！");
+                    org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                }
             }
             Espetro.LOGGER.info("守方指挥官投票结束！指挥官: {}", name);
             CommanderGovernanceManager.getInstance()
                 .acceptElectionResult("DEFEND", defendCommander);
         } else {
             attackCommander = getWinningCandidate(attackPlayers, attackVotes);
+            commander = attackCommander;
             String name = getPlayerName(server, attackCommander);
             Espetro.broadcastToTeam("ATTACK", "§6★ 你所在的队伍指挥官为§c" + name + "§6！★");
             if (attackCommander != null) {
-                ServerPlayer cmd = server.getPlayerList().getPlayer(attackCommander);
-                Espetro.sendToPlayer(cmd, "§a你已被选为§c攻方§a指挥官！");
-                // 指挥官身份变更，立即同步技能数据
-                org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                ServerPlayer cmd = server == null ? null : server.getPlayerList().getPlayer(attackCommander);
+                if (cmd != null) {
+                    Espetro.sendToPlayer(cmd, "§a你已被选为§c攻方§a指挥官！");
+                    org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                }
             }
             Espetro.LOGGER.info("攻方指挥官投票结束！指挥官: {}", name);
             CommanderGovernanceManager.getInstance()
                 .acceptElectionResult("ATTACK", attackCommander);
         }
+        // 指挥官选出后自动创建名为「指挥小队」的默认小队（走正常建队流程，指挥官为队长）。
+        if (commander != null && server != null) {
+            ServerPlayer commanderPlayer = server.getPlayerList().getPlayer(commander);
+            if (commanderPlayer == null) {
+                Espetro.LOGGER.info("[指挥小队] {} 指挥官 {} 不在线，跳过自动建队",
+                    team, commander);
+            } else if (org.espetro.team.SquadManager.getInstance().getPlayerSquadId(commander)
+                    != org.espetro.team.SquadManager.NO_SQUAD) {
+                Espetro.LOGGER.info("[指挥小队] {} 指挥官 {} 已在小队中，跳过自动建队",
+                    team, commanderPlayer.getName().getString());
+            } else {
+                var result = org.espetro.team.SquadManager.getInstance().createSquad(
+                    commanderPlayer, org.espetro.team.SquadManager.COMMAND_SQUAD_NAME);
+                Espetro.LOGGER.info("[指挥小队] {} 自动建队结果 success={} team={} msg={}",
+                    team, result.success, result.team, result.message);
+                if (result.success && result.team != null) {
+                    org.espetro.team.TeamPackManager.getInstance().reconcileTeam(result.team);
+                    org.espetro.team.TeamPackManager.getInstance().handleSquadLeaderTransition(
+                        commanderPlayer,
+                        result.team,
+                        org.espetro.team.SquadManager.NO_SQUAD,
+                        false,
+                        result.team,
+                        org.espetro.team.SquadManager.getInstance().getPlayerSquadId(commander),
+                        true
+                    );
+                    org.espetro.network.NetworkManager.sendCommanderSkillSync(commanderPlayer);
+                    org.espetro.network.NetworkManager.syncSquadsToTeam(result.team);
+                    org.espetro.network.NetworkManager.broadcastClassCounts(result.team,
+                        org.espetro.team.ClassCountManager.getInstance()
+                            .getPlayerFaction(commander));
+                    org.espetro.network.NetworkManager.broadcastMatchStats(
+                        org.espetro.stats.PlayerMatchStatsManager.getInstance());
+                    org.espetro.network.NetworkManager.syncUnifiedDeployScreen(commanderPlayer, -1);
+                }
+            }
+        }
+    }
 
-        return finishedTeam;
+    /**
+     * 结束投票（并行：同时结算双方；串行兼容：结算当前队）。
+     * @return 并行模式返回 "BOTH"，串行模式返回完成队伍 "DEFEND"/"ATTACK"；无投票返回 null
+     */
+    public String finishCurrentVote() {
+        if (!votingActive) return null;
+
+        // 先读并行标记再复位：isParallel() 依赖 votingActive/currentVotingTeam，
+        // 复位后判断会恒 false 导致 settleTeam 不执行（指挥官/指挥小队不产生）。
+        boolean parallel = isParallel();
+        String legacyTeam = currentVotingTeam;
+        votingActive = false;
+        currentVotingTeam = null;
+
+        if (parallel) {
+            settleTeam("ATTACK");
+            settleTeam("DEFEND");
+            return "BOTH";
+        }
+        // 旧串行路径兼容：结算当前投票队
+        if (legacyTeam != null) {
+            settleTeam(legacyTeam);
+            return legacyTeam;
+        }
+        return null;
     }
 
     private String getPlayerName(MinecraftServer server, UUID uuid) {
         if (uuid == null) return "无";
+        if (server == null) return "离线";
         ServerPlayer player = server.getPlayerList().getPlayer(uuid);
         return player != null ? player.getName().getString() : "离线玩家";
     }
 
     /**
-     * 广播投票数据更新
+     * 广播投票数据更新：双方各自收到本方候选得票 + 统一倒计时。
      */
     private void broadcastVoteUpdate() {
-        if (!votingActive || currentVotingTeam == null) return;
+        if (!votingActive) return;
 
         MinecraftServer server = Espetro.getServer();
         if (server == null) return;
 
-        Set<UUID> activePlayers = "ATTACK".equals(currentVotingTeam) ? attackPlayers : defendPlayers;
-        Set<UUID> waitingPlayers = "ATTACK".equals(currentVotingTeam) ? defendPlayers : attackPlayers;
-        Map<UUID, UUID> votes = "ATTACK".equals(currentVotingTeam) ? attackVotes : defendVotes;
+        int remaining = getRemainingSeconds();
+        sendTeamVoteUpdate(server, "ATTACK", remaining);
+        if (isParallel()) {
+            sendTeamVoteUpdate(server, "DEFEND", remaining);
+        } else {
+            // 串行：非投票方收到空票 + 对方倒计时
+            String active = currentVotingTeam;
+            String waiting = "ATTACK".equals(active) ? "DEFEND" : "ATTACK";
+            org.espetro.network.VoteDataPacket waitingPacket =
+                new org.espetro.network.VoteDataPacket(Collections.emptyMap(), 0, remaining);
+            for (UUID uuid : ("ATTACK".equals(waiting) ? attackPlayers : defendPlayers)) {
+                ServerPlayer p = server.getPlayerList().getPlayer(uuid);
+                if (p != null) {
+                    org.espetro.network.NetworkManager.NET.send(
+                        net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> p), waitingPacket);
+                }
+            }
+        }
+    }
 
-        java.util.Map<String, Integer> voteCounts = new java.util.HashMap<>();
-        for (UUID uuid : activePlayers) {
+    private void sendTeamVoteUpdate(MinecraftServer server, String team, int remaining) {
+        Set<UUID> players = "ATTACK".equals(team) ? attackPlayers : defendPlayers;
+        Map<UUID, UUID> votes = "ATTACK".equals(team) ? attackVotes : defendVotes;
+
+        Map<String, Integer> voteCounts = new java.util.HashMap<>();
+        for (UUID uuid : players) {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
             if (p != null) {
-                int count = 0;
-                for (UUID target : votes.values()) {
-                    if (target.equals(uuid)) count++;
-                }
-                voteCounts.put(p.getName().getString(), count);
+                voteCounts.put(p.getName().getString(), countVotesIn(votes, uuid));
             }
         }
 
-        int remaining = getRemainingSeconds();
         org.espetro.network.VoteDataPacket activePacket =
             new org.espetro.network.VoteDataPacket(voteCounts, remaining, -1);
-        for (UUID uuid : activePlayers) {
+        for (UUID uuid : players) {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
             if (p != null) {
                 org.espetro.network.NetworkManager.NET.send(
                     net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> p), activePacket);
-            }
-        }
-
-        org.espetro.network.VoteDataPacket waitingPacket =
-            new org.espetro.network.VoteDataPacket(Collections.emptyMap(), 0, remaining);
-        for (UUID uuid : waitingPlayers) {
-            ServerPlayer p = server.getPlayerList().getPlayer(uuid);
-            if (p != null) {
-                org.espetro.network.NetworkManager.NET.send(
-                    net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> p), waitingPacket);
             }
         }
     }
@@ -318,23 +419,11 @@ public class VoteManager {
         if (!votingActive) return;
 
         voteTickCounter++;
-        int timeout = getCurrentTimeoutSeconds();
-        int secondsRemaining = timeout - (voteTickCounter / TICKS_PER_SECOND);
+        int secondsRemaining = timeoutSeconds - (voteTickCounter / TICKS_PER_SECOND);
 
-        // The UI displays whole seconds, so publish every second instead of
-        // skipping directly from N to N - 2.
         if (voteTickCounter % TICKS_PER_SECOND == 0) {
             broadcastVoteUpdate();
         }
-    }
-
-    private int getCurrentTimeoutSeconds() {
-        if ("DEFEND".equals(currentVotingTeam)) {
-            return GameConfig.getDefendCommanderVoteSeconds();
-        } else if ("ATTACK".equals(currentVotingTeam)) {
-            return GameConfig.getAttackCommanderVoteSeconds();
-        }
-        return 20;
     }
 
     /**
@@ -342,8 +431,7 @@ public class VoteManager {
      */
     public boolean isCurrentVoteTimedOut() {
         if (!votingActive) return false;
-        int timeout = getCurrentTimeoutSeconds();
-        return voteTickCounter >= timeout * TICKS_PER_SECOND;
+        return voteTickCounter >= timeoutSeconds * TICKS_PER_SECOND;
     }
 
     /**
@@ -354,7 +442,7 @@ public class VoteManager {
     }
 
     /**
-     * 获取当前投票的队伍
+     * 获取当前投票的队伍（并行模式返回 null）
      */
     public String getCurrentVotingTeam() {
         return currentVotingTeam;
@@ -365,8 +453,24 @@ public class VoteManager {
      */
     public int getRemainingSeconds() {
         if (!votingActive) return 0;
-        int timeout = getCurrentTimeoutSeconds();
-        return Math.max(0, timeout - (voteTickCounter / TICKS_PER_SECOND));
+        return Math.max(0, timeoutSeconds - (voteTickCounter / TICKS_PER_SECOND));
+    }
+
+    /**
+     * 获取指定队伍的在线玩家名（用于投票界面候选）。
+     */
+    public String[] getPlayerNamesForTeam(String team) {
+        MinecraftServer server = Espetro.getServer();
+        if (server == null) return new String[0];
+        Set<UUID> uuids = "ATTACK".equals(team) ? attackPlayers : defendPlayers;
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : uuids) {
+            ServerPlayer p = server.getPlayerList().getPlayer(uuid);
+            if (p != null) {
+                names.add(p.getName().getString());
+            }
+        }
+        return names.toArray(new String[0]);
     }
 
     /**

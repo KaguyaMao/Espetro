@@ -76,9 +76,11 @@ public enum TutorialStep {
         return switch (phase) {
             case LOBBY, WAITING_FOR_PLAYERS -> HUB;
             case MAP_VOTE -> MAP_VOTE;
+            case MAP_REVEAL -> MAP_LOADING;
             case MAP_LOADING -> MAP_LOADING;
             case TEAM_SELECT -> TEAM_SELECT;
-            case DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE -> COMMANDER_VOTE;
+            case TEAM_ASSIGN_SHOW -> TEAM_SELECT;
+            case COMMANDER_VOTE, DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE -> COMMANDER_VOTE;
             case DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT -> FACTION_SELECT;
             case FACTION_REVEAL -> FACTION_REVEAL;
             case DEPLOYING -> DEPLOY_PANEL;

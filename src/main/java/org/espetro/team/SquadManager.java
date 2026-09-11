@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 public class SquadManager {
 
     public static final int NO_SQUAD = -1;
+    /** 指挥官自动小队的固定名称（不参与“小队N”序号命名）。 */
+    public static final String COMMAND_SQUAD_NAME = "指挥小队";
     private static final int MAX_MEMBERS = 9;
     private static final int MAX_NAME_LENGTH = 18;
     private static final Pattern FORMAT_CODE = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");

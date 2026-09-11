@@ -199,6 +199,24 @@ public class NetworkManager {
             FactionRevealPacket::handle
         );
 
+        // 队伍分配提示页包（S→C）
+        NET.registerMessage(
+            nextId(),
+            TeamAssignPacket.class,
+            TeamAssignPacket::write,
+            TeamAssignPacket::read,
+            TeamAssignPacket::handle
+        );
+
+        // 地图揭晓页包（S→C）
+        NET.registerMessage(
+            nextId(),
+            MapRevealPacket.class,
+            MapRevealPacket::write,
+            MapRevealPacket::read,
+            MapRevealPacket::handle
+        );
+
         // 职业选择界面包（S→C）
         NET.registerMessage(
             nextId(),
@@ -442,6 +460,12 @@ public class NetworkManager {
             .encoder(HitboxPolicyPacket::write)
             .decoder(HitboxPolicyPacket::read)
             .consumerMainThread(HitboxPolicyPacket::handle)
+            .add();
+        // 服务端→客户端：强制关闭对局内模组界面（设为观察者等移出对局场景）
+        NET.messageBuilder(CloseModScreensPacket.class, nextId(), NetworkDirection.PLAY_TO_CLIENT)
+            .encoder(CloseModScreensPacket::write)
+            .decoder(CloseModScreensPacket::read)
+            .consumerMainThread(CloseModScreensPacket::handle)
             .add();
     }
 
@@ -764,6 +788,15 @@ public class NetworkManager {
         sendCurrentTeamSelectState(player);
     }
 
+    /**
+     * 要求指定玩家客户端立即关闭对局内模组界面（设为观察者/移出对局时调用）。
+     * 主城菜单等基础界面保留。
+     */
+    public static void sendCloseModScreens(ServerPlayer player) {
+        if (player == null) return;
+        NET.send(PacketDistributor.PLAYER.with(() -> player), new CloseModScreensPacket());
+    }
+
     /** 向单个玩家发送当前的队伍选择状态。 */
     public static void sendCurrentTeamSelectState(ServerPlayer player) {
         MinecraftServer server = Espetro.getServer();
@@ -926,6 +959,16 @@ public class NetworkManager {
         sendCommanderVoteScreenForTeamView(server, oppositeTeam(team), 0, timeRemaining);
     }
 
+    /**
+     * 双方并行指挥官投票：给攻守两队各自发送「本方候选 + 统一倒计时」的投票界面。
+     */
+    public static void broadcastBothCommanderVoteScreens(int timeRemaining) {
+        MinecraftServer server = Espetro.getServer();
+        if (server == null) return;
+        sendCommanderVoteScreenForTeamView(server, "ATTACK", timeRemaining, -1);
+        sendCommanderVoteScreenForTeamView(server, "DEFEND", timeRemaining, -1);
+    }
+
     private static void sendCommanderVoteScreenForTeamView(MinecraftServer server, String viewTeam,
                                                            int timeRemaining, int opponentTimeRemaining) {
         VoteManager voteManager = VoteManager.getInstance();
@@ -954,6 +997,19 @@ public class NetworkManager {
                 NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
             }
         }
+    }
+
+    /**
+     * 发送指挥官投票界面给单个指定玩家（并行模式：本方候选 + 剩余倒计时）。
+     */
+    public static void sendCommanderVoteScreenToPlayer(ServerPlayer player, String team,
+                                                       String[] candidateNames, int timeRemaining) {
+        if (player == null || team == null) return;
+        List<String> names = candidateNames == null
+            ? List.of() : java.util.Arrays.asList(candidateNames);
+        CommanderVotePacket packet = new CommanderVotePacket(team, names, timeRemaining,
+            "", "", -1);
+        NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
     /**
@@ -1083,6 +1139,56 @@ public class NetworkManager {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
         }
+    }
+
+    // ==================== 队伍分配提示页 / 地图揭晓页 ====================
+
+    /**
+     * 广播队伍分配提示页：每个玩家收到自己所在队伍（5 秒后由服务端推进到指挥官投票）。
+     */
+    public static void broadcastTeamAssignShow(MinecraftServer server) {
+        if (server == null) return;
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            String team = org.espetro.team.ClassCountManager.getInstance()
+                .getPlayerTeam(player.getUUID());
+            if (team == null) team = org.espetro.team.GameStateManager
+                .getTeamFromFactionStatic(
+                    org.espetro.team.ClassCountManager.getInstance()
+                        .getPlayerFaction(player.getUUID()));
+            if (team == null) continue;
+            sendTeamAssignShowTo(player, team, 5);
+        }
+    }
+
+    /** 向单个玩家发送队伍分配提示页（剩余秒数用于页面倒计时展示）。 */
+    public static void sendTeamAssignShowTo(ServerPlayer player, String team, int remainingSeconds) {
+        if (player == null || player.connection == null || team == null) return;
+        NET.send(PacketDistributor.PLAYER.with(() -> player),
+            new TeamAssignPacket(team, Math.max(1, remainingSeconds)));
+    }
+
+    /**
+     * 广播地图揭晓页（胜出地图 + 预览图）。
+     */
+    public static void broadcastMapRevealScreen(MinecraftServer server,
+                                                 org.espetro.mapconfig.ActiveMapConfig winner,
+                                                 int durationSeconds) {
+        if (server == null || winner == null) return;
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            NET.send(PacketDistributor.PLAYER.with(() -> player),
+                new MapRevealPacket(winner.displayName, winner.mapFolder,
+                    Math.max(1, durationSeconds)));
+        }
+    }
+
+    /** 向单个玩家发送地图揭晓页（中途加入同步）。 */
+    public static void broadcastMapRevealScreenTo(ServerPlayer player,
+                                                  org.espetro.mapconfig.ActiveMapConfig winner,
+                                                  int durationSeconds) {
+        if (player == null || player.connection == null || winner == null) return;
+        NET.send(PacketDistributor.PLAYER.with(() -> player),
+            new MapRevealPacket(winner.displayName, winner.mapFolder,
+                Math.max(1, durationSeconds)));
     }
 
     /**

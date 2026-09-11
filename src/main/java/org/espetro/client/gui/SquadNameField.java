@@ -29,6 +29,23 @@ final class SquadNameField extends GuiElement {
         return value.trim();
     }
 
+    /** 原始输入内容（不做 trim），用于整树重建时无损恢复草稿。 */
+    String getRawValue() {
+        return value;
+    }
+
+    void setValue(String text) {
+        value = text == null ? "" : text;
+    }
+
+    boolean isActive() {
+        return active;
+    }
+
+    void setActive(boolean active) {
+        this.active = active;
+    }
+
     void clear() {
         value = "";
     }

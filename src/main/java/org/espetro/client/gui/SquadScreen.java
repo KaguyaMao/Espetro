@@ -18,7 +18,10 @@ import java.util.UUID;
  *
  * 更新策略（tetra/mutil 风格）：树只建一次；
  * 类别弹窗用 setVisible 切换；展开详情/选中态只重建对应子树；
- * 仅当小队列表结构（id+成员）变化时整树 rebuild。
+ * 仅当小队数量/顺序或己方小队（mySquadId）变化时整树 rebuild；
+ * 成员进出/队长转移等只原地刷新行标签与详情，避免打断正在输入的队名。
+ * 即使整树 rebuild，也会先接住输入框草稿（文本+焦点）与类别弹窗状态，
+ * 在重建后的新树上恢复，保证队名不丢。
  */
 public class SquadScreen extends EspetroMenuScreen {
 
@@ -86,21 +89,22 @@ public class SquadScreen extends EspetroMenuScreen {
         if (structureChanged) {
             rebuildMenuRoot();
         } else {
-            // 仅成员职业名等展示字段变化：原地刷新行标签与详情
+            // 成员进出/队长/锁定/满员等变化：行标签与详情可原地刷新，无需整树重建
+            // （整树重建会打断正在输入的队名，见 buildMenuRoot 的草稿恢复）。
             refreshSquadRowLabels();
             rebuildDetailContainer();
         }
     }
 
-    /** 结构签名 = 小队 id + 成员 UUID 列表（忽略 className 等展示字段）。 */
+    /**
+     * 结构签名 = 小队 id 顺序（含自身小队变化由 mySquadId 单独判断）。
+     * 成员进出/队长转移等只影响行标签与详情面板，走原地刷新，
+     * 不触发整树重建，避免打断创建小队时正在输入的队名。
+     */
     private static List<Object> squadStructureSignature(List<UnifiedDeployScreenPacket.SquadInfo> list) {
         List<Object> signature = new ArrayList<>();
         for (UnifiedDeployScreenPacket.SquadInfo squad : list) {
             signature.add(squad.id);
-            for (UnifiedDeployScreenPacket.SquadMemberInfo member : squad.members) {
-                signature.add(member.uuid);
-                signature.add(member.leader);
-            }
         }
         return signature;
     }
@@ -126,6 +130,13 @@ public class SquadScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
+        // 整树重建前接住旧输入框草稿（原始文本 + 焦点）与类别弹窗打开状态：
+        // rebuildMenuRoot 会在本方法返回后才替换 this.root，此处 nameField 仍指向
+        // 旧树实例，读取到的就是玩家正在输入的内容；重建后原样恢复，队名不丢。
+        String previousName = nameField != null ? nameField.getRawValue() : "";
+        boolean previousNameActive = nameField != null && nameField.isActive();
+        boolean previousPopupOpen = categoryPopup != null && categoryPopup.isVisible();
+
         rowJoinButtons.clear();
         rowDetailButtons.clear();
 
@@ -181,6 +192,15 @@ public class SquadScreen extends EspetroMenuScreen {
         categoryPopup = buildCategoryPopup(panelX, panelY, panelW, panelH);
         categoryPopup.setVisible(false);
         root.addChild(categoryPopup);
+
+        // 恢复输入框草稿与类别弹窗状态（若重建发生在玩家输入/选类过程中）。
+        if (nameField != null) {
+            nameField.setValue(previousName);
+            nameField.setActive(previousNameActive);
+        }
+        if (categoryPopup != null && previousPopupOpen) {
+            categoryPopup.setVisible(true);
+        }
     }
 
     private void buildSquadList(GuiElement root, int x, int y, int width, int height) {

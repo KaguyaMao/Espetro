@@ -94,6 +94,10 @@ public class VehicleManager {
     private final Map<String, Map<String, Long>> cooldowns = new HashMap<>();
     /** 被摧毁载具的自动刷新队列：key → 就绪时间戳（升序）。 */
     private final Map<RespawnKey, PriorityQueue<Long>> autoRespawnQueue = new HashMap<>();
+    /** 开局刷新延时计时锚点（epoch ms）；0 = 战斗尚未正式开始，延时载具只登记不计时。 */
+    private long initialDelayAnchorEpochMs;
+    /** 开局延时记录：cooldownOwner -> type -> 延时秒数，供开战时刻统一落锚。 */
+    private final Map<String, Map<String, Integer>> initialDelaySecondsByOwner = new HashMap<>();
 
     private record RespawnKey(String team, String factionId, String vehicleType) {
     }
@@ -299,18 +303,33 @@ public class VehicleManager {
         if (factionId == null || factionId.isBlank() || team == null) return;
         Map<String, VehicleConfig.VehicleTypeConfig> types = VehicleConfig.getFactionVehicles(factionId);
         if (types == null || types.isEmpty()) return;
-        long now = System.currentTimeMillis();
-        Map<String, Long> map = cooldowns.computeIfAbsent(
-            cooldownOwner(team, factionId), k -> new HashMap<>());
+        String owner = cooldownOwner(team, factionId);
+        Map<String, Long> map = cooldowns.computeIfAbsent(owner, k -> new HashMap<>());
+        Map<String, Integer> delayMap = initialDelaySecondsByOwner.computeIfAbsent(owner,
+            k -> new HashMap<>());
         for (Map.Entry<String, VehicleConfig.VehicleTypeConfig> e : types.entrySet()) {
             int delaySec = e.getValue().initialDeployDelaySeconds(team);
+            delayMap.put(e.getKey(), delaySec);
             if (delaySec > 0) {
-                map.put(e.getKey(), now + delaySec * 1000L);
+                // 开局刷新延时：战斗正式开始（锚点）后才开始计时，开战前不倒数。
+                map.put(e.getKey(), initialDelayReadyAt(delaySec));
             } else {
                 map.remove(e.getKey());
             }
         }
         Espetro.LOGGER.info("编制 {} 作为 {} 的首次载具冷却已写入 ({} 种)", factionId, team, types.size());
+    }
+
+    /** 开局延时载具就绪时刻：战斗未开始返回无限（不计时）；开战后 = 锚点 + 延时。 */
+    private long initialDelayReadyAt(int delaySeconds) {
+        if (delaySeconds <= 0) {
+            return System.currentTimeMillis();
+        }
+        long anchor = initialDelayAnchorEpochMs;
+        if (anchor <= 0L) {
+            return Long.MAX_VALUE;
+        }
+        return anchor + (long) delaySeconds * 1000L;
     }
 
     /** 部署成功后启动 respawn 冷却。 */
@@ -560,6 +579,10 @@ public class VehicleManager {
         // 检查冷却
         long cooldownRemaining = getCooldownRemaining(team, factionId, vehicleType);
         if (cooldownRemaining > 0) {
+            if (initialDelayAnchorEpochMs <= 0L) {
+                return "§e" + getDisplayName(factionId, vehicleType)
+                    + " 的开局刷新延时将在战斗开始后开始计时。";
+            }
             long seconds = cooldownRemaining / 1000;
             return "§c" + getDisplayName(factionId, vehicleType) + " 刷新冷却中！剩余 " + seconds + " 秒。";
         }
@@ -648,8 +671,13 @@ public class VehicleManager {
         for (Map.Entry<String, VehicleConfig.VehicleTypeConfig> entry : configs.entrySet()) {
             String vehicleType = entry.getKey();
             VehicleConfig.VehicleTypeConfig cfg = entry.getValue();
-            long readyAtEpochMs = computeInitialReadyAt(
-                deploymentStartedAtEpochMs, cfg.initialDeployDelaySeconds(normalizedTeam));
+            int initialDelaySec = cfg.initialDeployDelaySeconds(normalizedTeam);
+            // 开局刷新延时（>0）：战斗正式开始前只登记不计时（readyAt=MAX 排队），
+            // 开战瞬间由 onBattleStarted() 统一按「开战时刻 + 延时」落锚；
+            // 零延时载具维持现状：布防阶段开始即可自动刷新。
+            long readyAtEpochMs = initialDelaySec > 0
+                ? initialDelayReadyAt(initialDelaySec)
+                : computeInitialReadyAt(deploymentStartedAtEpochMs, initialDelaySec);
 
             int slotCount = cfg.slots.isEmpty() ? 1 : cfg.slots.size();
             for (int slotIndex = 0; slotIndex < slotCount; slotIndex++) {
@@ -708,6 +736,63 @@ public class VehicleManager {
         processInitialVehicleDeployments();
         logInitialDeploymentCompletionIfReady();
         return initialVehiclesSpawned - before;
+    }
+
+    /**
+     * 战斗正式开始（BATTLE 阶段）时由游戏状态机调用：
+     * 为有开局刷新延时的首发载具统一落锚——计时从此刻起算（开战前只登记不计时），
+     * 并把已到期的延时载具送入区块加载/自动生成流程。
+     */
+    public void onBattleStarted() {
+        if (initialDelayAnchorEpochMs > 0L) {
+            return;
+        }
+        long anchor = System.currentTimeMillis();
+        initialDelayAnchorEpochMs = anchor;
+        Espetro.LOGGER.info("战斗开始：开局延时载具计时锚点已设置 (anchor={})", anchor);
+
+        // 冷却截止时刻落锚：各车行冷却 = 开战时刻 + 延时
+        for (Map.Entry<String, Map<String, Integer>> ownerEntry
+                : initialDelaySecondsByOwner.entrySet()) {
+            Map<String, Long> map = cooldowns.get(ownerEntry.getKey());
+            if (map == null) {
+                continue;
+            }
+            for (Map.Entry<String, Integer> typeEntry : ownerEntry.getValue().entrySet()) {
+                int delaySec = typeEntry.getValue();
+                if (delaySec > 0) {
+                    map.put(typeEntry.getKey(), anchor + (long) delaySec * 1000L);
+                } else {
+                    map.remove(typeEntry.getKey());
+                }
+            }
+        }
+
+        // 自动首发队列重排：开战前 readyAt=MAX 的延时项，按「开战时刻 + 延时」重算，
+        // 已到期的立即送入生成流程。
+        int rearmed = 0;
+        if (!delayedInitialVehicles.isEmpty()) {
+            java.util.List<PendingInitialVehicle> pending = new java.util.ArrayList<>();
+            while (!delayedInitialVehicles.isEmpty()) {
+                pending.add(delayedInitialVehicles.poll());
+            }
+            for (PendingInitialVehicle item : pending) {
+                InitialVehicleDeploymentLedger.SlotKey key = item.key();
+                VehicleConfig.VehicleTypeConfig cfg = item.config();
+                int delaySec = cfg.initialDeployDelaySeconds(key.team());
+                if (delaySec > 0) {
+                    long ready = anchor + (long) delaySec * 1000L;
+                    item = new PendingInitialVehicle(key, cfg, item.slot(), item.deployment(),
+                        item.spawnPosition(), ready);
+                    rearmed++;
+                }
+                delayedInitialVehicles.add(item);
+            }
+        }
+        if (rearmed > 0) {
+            Espetro.LOGGER.info("已按开战时刻重排 {} 辆延时首发载具", rearmed);
+            processInitialVehicleDeployments();
+        }
     }
 
     /**
@@ -1504,6 +1589,8 @@ public class VehicleManager {
         initialVehiclesPlanned = 0;
         initialVehiclesSpawned = 0;
         initialVehiclesFailed = 0;
+        initialDelayAnchorEpochMs = 0L;
+        initialDelaySecondsByOwner.clear();
     }
 
     public void registerMappedSupplyStation(@Nullable Entity entity) {

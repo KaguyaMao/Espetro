@@ -48,8 +48,10 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
                             String opponentTeamName, String opponentFaction,
                             int opponentTimeRemaining) {
         Minecraft mc = Minecraft.getInstance();
-        mc.setScreen(new CommanderVoteScreen(team, players, timeRemaining,
-            opponentTeamName, opponentFaction, opponentTimeRemaining));
+        org.espetro.client.aui.AuiScreen.openWithFade(
+            new CommanderVoteScreen(team, players, timeRemaining,
+                opponentTeamName, opponentFaction, opponentTimeRemaining),
+            mc.screen);
     }
 
     public static void updateVoteData(Map<String, Integer> voteCounts, int timeRemaining, int opponentTimeRemaining) {
@@ -105,7 +107,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
             "\u00a76\u00a7l指挥官投票 \u00a77| " + teamPrefix + "\u00a7l"
                 + EspetroAuiWidgets.teamName(team),
-            buildTimeText(), buildOpponentText(), EspetroAuiWidgets.teamColor(team));
+            buildTimeText(), "", EspetroAuiWidgets.teamColor(team));
         int phaseHeaderH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
 
         int columns = 4;
@@ -202,7 +204,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
                 lastTimeRemainingRendered = timeRemaining;
                 lastOpponentTimeRendered = opponentTimeRemaining;
                 phaseHeader.setStatus(buildTimeText());
-                phaseHeader.setDetail(buildOpponentText());
+                phaseHeader.setDetail("");
             }
         }
 
@@ -313,6 +315,11 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
 
     @Override
     public void onClose() {
+        // 淡出切换目标屏时放行；否则保持页面（玩家不能手动跳过投票流程）。
+        if (isFadeOutClosing()) {
+            super.onClose();
+            return;
+        }
         Minecraft mc = Minecraft.getInstance();
         if (mc != null) {
             mc.setScreen(new CommanderVoteScreen(team, players, timeRemaining,

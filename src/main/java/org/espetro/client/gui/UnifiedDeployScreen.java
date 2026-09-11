@@ -151,6 +151,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private PlainText troopCountText;
     private PlainText phaseTitleText;
     private PlainText governanceTimerText;
+    /** 指挥官空缺治理小窗是否已关闭（最小化为「载具信息」右侧的按钮）。 */
+    private boolean vacancyWindowMinimized;
+    /** 指挥官空缺治理小窗宽度/标题区高度。 */
+    private static final int VACANCY_WINDOW_W = 186;
+    private static final int VACANCY_WINDOW_HEADER_H = 26;
     private String pendingDeployPosition;
     private String pendingDeployCommand;
     private final Set<Integer> expandedSquadIds = new HashSet<>();
@@ -501,9 +506,16 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     public void updateDeploymentState(boolean waitingForSelection, int redeployCooldownRemaining) {
+        boolean columnLayoutChanged = this.waitingForDeploySelection != waitingForSelection;
         this.waitingForDeploySelection = waitingForSelection;
         this.outpostRedeployCooldownEndsAt = System.currentTimeMillis()
             + Math.max(0, redeployCooldownRemaining) * 1000L;
+        if (columnLayoutChanged && root != null) {
+            // 职业/部署点栏在「等待部署 ⇄ 已部署」间切换显隐与几何：
+            // 重建整树（populateGui 依据新 waiting 状态决定是否构建中栏），
+            // 下一 tick 生效，旧按钮树随即被整体替换。
+            rebuildMenuRoot();
+        }
         refreshDeployButtonStates();
     }
 
@@ -863,22 +875,33 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         // 所有非地图区域使用同一层不透明纯黑底；地图视口由桥接渲染器逐帧绘制。
         root.addChild(new GuiRect(leftX, leftY, leftW, leftH, PANEL_LEFT_BG));
-        root.addChild(new GuiRect(centerX, centerY, centerW, centerH, PANEL_CENTER_BG));
+        boolean combatColumnVisible = waitingForDeploySelection;
+        if (combatColumnVisible) {
+            root.addChild(new GuiRect(centerX, centerY, centerW, centerH, PANEL_CENTER_BG));
+        }
         root.addChild(new GuiRect(mapX, mapY + Math.max(0, mapH - MAP_FOOTER_H),
             mapW, MAP_FOOTER_H, PANEL_MAP_FOOTER_BG));
 
         squadSectionRoot = new GuiElement(0, 0, this.width, this.height);
-        classSectionRoot = new GuiElement(0, 0, this.width, this.height);
-        deploySectionRoot = new GuiElement(0, 0, this.width, this.height);
         mapControlsRoot = new GuiElement(0, 0, this.width, this.height);
         statusSectionRoot = new GuiElement(0, 0, this.width, this.height);
 
         root.addChild(squadSectionRoot);
         buildSquadSection(squadSectionRoot);
-        root.addChild(classSectionRoot);
-        buildClassSection(classSectionRoot);
-        root.addChild(deploySectionRoot);
-        buildDeploySection(deploySectionRoot);
+        if (combatColumnVisible) {
+            // 等待部署：构建职业选择与部署点两节（区域宽度已在 computeRegions 中按 3/4 计算）。
+            classSectionRoot = new GuiElement(0, 0, this.width, this.height);
+            deploySectionRoot = new GuiElement(0, 0, this.width, this.height);
+            root.addChild(classSectionRoot);
+            buildClassSection(classSectionRoot);
+            root.addChild(deploySectionRoot);
+            buildDeploySection(deploySectionRoot);
+        } else {
+            // 已部署（战局中）：职业/部署点栏整体隐藏，树中不含这两节。
+            // 数据仍由各 update* 方法缓存，死亡重选时整树重建即可恢复。
+            classSectionRoot = null;
+            deploySectionRoot = null;
+        }
         root.addChild(mapControlsRoot);
         buildMapPanel(mapControlsRoot);
         root.addChild(statusSectionRoot);
@@ -993,7 +1016,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         centerX = leftX + leftW + 4;
         centerY = leftY;
-        centerW = Math.max(132, Math.min(260, (int) (this.width * 0.31f)));
+        // 职业选择 + 部署点栏：仅等待部署（含死亡重选部署点）时可见，宽度收窄为原
+        // 布局的 3/4，把空间让给右侧地图；玩家已部署进入战局后该栏隐藏
+        // （centerW=0），地图自动向左扩展占满剩余宽度。死亡后服务端把
+        // waiting 置回 true 并重推部署面板，本栏随之重新显示。
+        int centerFullW = Math.max(132, Math.min(260, (int) (this.width * 0.31f)));
+        centerW = waitingForDeploySelection ? centerFullW * 3 / 4 : 0;
         centerH = usableH;
 
         mapX = centerX + centerW + 4;
@@ -1745,27 +1773,122 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             () -> Minecraft.getInstance().setScreen(new MatchScoreboardScreen(this)));
         score.setTextScale(UI_TEXT_SCALE);
         sectionRoot.addChild(score);
+        int nextX = bx + 68;
 
         GovernanceStatePacket.TeamState state = activeGovernance();
         boolean battle = ClientGameState.getCurrentPhase() == GamePhase.BATTLE;
-        if (battle && (state == null || "IDLE".equals(state.state))) {
-            EspButton impeach = new EspButton(bx + 68, by, 56, BTN_H, "\u00a7c发起弹劾",
+        boolean idle = state == null || "IDLE".equals(state.state);
+
+        if (battle && idle) {
+            EspButton impeach = new EspButton(nextX, by, 56, BTN_H, "\u00a7c发起弹劾",
                 () -> NetworkManager.sendGovernanceAction(
                     GovernanceActionPacket.Action.START_IMPEACHMENT, null));
             impeach.setTextScale(UI_TEXT_SCALE);
             sectionRoot.addChild(impeach);
-
-            EspButton vehicleInfo = new EspButton(bx + 128, by, 64, BTN_H, "\u00a7b载具信息",
+            nextX += 60;
+        }
+        if (battle) {
+            EspButton vehicleInfo = new EspButton(nextX, by, 64, BTN_H, "\u00a7b载具信息",
                 () -> NetworkManager.requestVehicleInfo());
             vehicleInfo.setTextScale(UI_TEXT_SCALE);
             sectionRoot.addChild(vehicleInfo);
+            nextX += 68;
+        }
+
+        if (idle) {
             return;
         }
 
+        // 指挥官空缺（志愿/公投）：不再整块盖住地图，改为屏幕右侧可关闭的小窗；
+        // 关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
+        boolean vacancy = "VACANCY_VOLUNTEER".equals(state.state)
+            || "VACANCY_VOTE".equals(state.state);
+        if (battle && vacancy) {
+            if (vacancyWindowMinimized) {
+                EspButton restore = new EspButton(nextX, by, 60, BTN_H, "\u00a7a指挥官补位",
+                    () -> {
+                        vacancyWindowMinimized = false;
+                        invalidateSections(Section.MAP_CONTROLS);
+                    });
+                restore.setTextScale(UI_TEXT_SCALE);
+                sectionRoot.addChild(restore);
+            } else {
+                buildVacancyWindow(sectionRoot, state);
+            }
+            return;
+        }
+
+        // 其余治理（弹劾投票等）保留旧式覆盖层。
+        buildLegacyGovernanceOverlay(sectionRoot, state);
+    }
+
+    /** 指挥官空缺治理：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
+    private void buildVacancyWindow(GuiElement sectionRoot, GovernanceStatePacket.TeamState state) {
+        boolean volunteerPhase = "VACANCY_VOLUNTEER".equals(state.state);
+        int w = Math.min(VACANCY_WINDOW_W, Math.max(120, mapW - 16));
+        int x = mapX + mapW - w - 6;
+        int y = mapY + 6;
+
+        // 高度按内容行数估算：标题区 + 志愿/候选人行 + 已志愿文本
+        int bodyH = 10 + BTN_H + 2
+            + (volunteerPhase ? 10 : Math.max(1, state.volunteers.size()) * 18);
+        int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
+            Math.max(64, mapH - MAP_FOOTER_H - 16));
+
+        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xE0181818));
+        sectionRoot.addChild(new GuiRect(x, y, w, h, 0xFF141719));
+
+        sectionRoot.addChild(new PlainText(x + 6, y + 4,
+            "\u00a76\u00a7l" + (volunteerPhase ? "指挥官空缺" : "空缺公投"), 0xFFFFC766));
+        governanceTimerText = new PlainText(x + 6, y + 17,
+            "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
+        sectionRoot.addChild(governanceTimerText);
+
+        // 关闭：最小化为「载具信息」右侧按钮
+        EspButton close = new EspButton(x + w - 36, y + 3, 32, BTN_H, "\u00a7c关闭",
+            () -> {
+                vacancyWindowMinimized = true;
+                invalidateSections(Section.MAP_CONTROLS);
+            });
+        close.setTextScale(UI_TEXT_SCALE);
+        sectionRoot.addChild(close);
+
+        int contentX = x + 6;
+        int contentW = w - 12;
+        int cy = y + VACANCY_WINDOW_HEADER_H;
+        if (volunteerPhase) {
+            EspButton volunteer = new EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
+                () -> NetworkManager.sendGovernanceAction(
+                    GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
+            volunteer.setTextScale(UI_TEXT_SCALE);
+            sectionRoot.addChild(volunteer);
+            cy += BTN_H + 3;
+            if (!state.volunteers.isEmpty()) {
+                String names = state.volunteers.stream()
+                    .map(MatchScoreboardScreen::nameFor)
+                    .reduce((a, b) -> a + ", " + b).orElse("");
+                sectionRoot.addChild(new PlainText(contentX, cy,
+                    EspetroAuiWidgets.trimToWidth("\u00a77已志愿: " + names,
+                        Math.max(8, (int) (contentW / UI_TEXT_SCALE))),
+                    0xFFB0B0B0));
+            }
+        } else {
+            int y2 = cy;
+            for (UUID volunteer : state.volunteers) {
+                addGovernanceVoteButton(sectionRoot, state, volunteer, "志愿者",
+                    contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_VACANCY);
+                y2 += 18;
+                if (y2 + 16 > y + h - 4) break;
+            }
+        }
+    }
+
+    /** 弹劾投票等旧式治理覆盖层：整块覆盖战术地图上部。 */
+    private void buildLegacyGovernanceOverlay(GuiElement sectionRoot,
+                                              GovernanceStatePacket.TeamState state) {
         if (state == null || "IDLE".equals(state.state)) {
             return;
         }
-
         int governanceH = Math.max(20, mapH - MAP_FOOTER_H - 6);
         sectionRoot.addChild(new GuiRect(mapX + 3, mapY + 3, mapW - 6, governanceH, 0xE0181818));
         String stateTitle = switch (state.state) {
@@ -1781,10 +1904,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(governanceTimerText);
         int rowY = mapY + 60;
         if ("IMPEACHMENT_VOTE".equals(state.state)) {
-            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官", rowY,
-                GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
-            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者", rowY + 18,
-                GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官",
+                mapX + 10, rowY, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
+                mapX + 10, rowY + 18, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
         } else if ("VACANCY_VOLUNTEER".equals(state.state)) {
             EspButton volunteer = new EspButton(mapX + 10, rowY, Math.max(80, mapW - 20), BTN_H,
                 "\u00a7a志愿补位", () -> NetworkManager.sendGovernanceAction(
@@ -1801,8 +1924,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else if ("VACANCY_VOTE".equals(state.state)) {
             int y = rowY;
             for (UUID volunteer : state.volunteers) {
-                addGovernanceVoteButton(sectionRoot, state, volunteer, "志愿者", y,
-                    GovernanceActionPacket.Action.VOTE_VACANCY);
+                addGovernanceVoteButton(sectionRoot, state, volunteer, "志愿者",
+                    mapX + 10, y, mapW - 20, GovernanceActionPacket.Action.VOTE_VACANCY);
                 y += 18;
                 if (y > mapY + mapH - MAP_FOOTER_H - 18) break;
             }
@@ -1811,10 +1934,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private void addGovernanceVoteButton(GuiElement sectionRoot,
                                          GovernanceStatePacket.TeamState state,
-                                         UUID candidate, String prefix, int y,
+                                         UUID candidate, String prefix,
+                                         int x, int y, int width,
                                          GovernanceActionPacket.Action action) {
         if (candidate == null) return;
-        EspButton button = new EspButton(mapX + 10, y, Math.max(80, mapW - 20), BTN_H,
+        EspButton button = new EspButton(x, y, Math.max(80, width), BTN_H,
             buildVoteButtonLabel(state, candidate, prefix),
             () -> NetworkManager.sendGovernanceAction(action, candidate));
         button.setTextScale(UI_TEXT_SCALE);
@@ -1877,9 +2001,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             case WAITING_FOR_PLAYERS -> "\u00a76\u00a7l等待";
             case LOBBY -> "\u00a76\u00a7l主城等待";
             case MAP_VOTE -> "\u00a76\u00a7l地图投票";
+            case MAP_REVEAL -> "\u00a76\u00a7l地图揭晓";
             case MAP_LOADING -> "\u00a76\u00a7l地图加载";
             case TEAM_SELECT -> "\u00a76\u00a7l选边";
-            case ATTACK_COMMANDER_VOTE, DEFEND_COMMANDER_VOTE -> "\u00a76\u00a7l指挥官投票";
+            case TEAM_ASSIGN_SHOW -> "\u00a76\u00a7l队伍分配";
+            case COMMANDER_VOTE, ATTACK_COMMANDER_VOTE, DEFEND_COMMANDER_VOTE -> "\u00a76\u00a7l指挥官投票";
             case ATTACK_FACTION_SELECT, DEFEND_FACTION_SELECT -> "\u00a76\u00a7l编制选择";
             case FACTION_REVEAL -> "\u00a76\u00a7l编制揭示";
             case DEPLOYING -> "\u00a76\u00a7l部署阶段";
@@ -2032,9 +2158,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         UnifiedDeployScreenPacket.LoadoutPreview activePreview = getActivePreview();
         if (activePreview != null) {
             renderClassPreview(graphics, activePreview, mouseX, mouseY);
-        } else if (activeGovernance() == null || "IDLE".equals(activeGovernance().state)) {
+        } else if (shouldRenderTacticalMap()) {
             renderTacticalMap(graphics, partialTick);
         } else {
+            // 旧式治理覆盖层（弹劾投票等）整块盖住地图时不再绘制地图。
             int viewportH = Math.max(1, mapH - MAP_FOOTER_H);
             graphics.fill(mapX, mapY, mapX + mapW, mapY + viewportH, PANEL_MAP_FOOTER_BG);
         }
@@ -2054,6 +2181,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     /**
+     * 战术地图是否照常渲染：治理空闲，或指挥官空缺/志愿类治理已改为右侧小窗
+     * （不再整块盖住地图）时地图继续显示；仅旧式覆盖层（弹劾投票等）盖住地图时省略。
+     */
+    private boolean shouldRenderTacticalMap() {
+        GovernanceStatePacket.TeamState state = activeGovernance();
+        if (state == null || "IDLE".equals(state.state)) {
+            return true;
+        }
+        return "VACANCY_VOLUNTEER".equals(state.state)
+            || "VACANCY_VOTE".equals(state.state);
+    }
+
+    /**
      * 仅依赖当前窗口布局的装饰线。它们与阵营强调条同属稳定背景层，
      * 不加入任何会因网络数据更新而清空、替换的 MUtil 区域容器。
      */
@@ -2064,8 +2204,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int dividerBottom = Math.max(TITLE_H + 2, this.height - STATUS_BAR_H - 2);
         graphics.fill(leftX + leftW, TITLE_H + 2, leftX + leftW + 1, dividerBottom,
             STATIC_DIVIDER);
-        graphics.fill(centerX + centerW, TITLE_H + 2, centerX + centerW + 1, dividerBottom,
-            STATIC_DIVIDER);
+        // 中栏隐藏（已部署战局内）时没有列间分隔线可画。
+        if (centerW > 0) {
+            graphics.fill(centerX + centerW, TITLE_H + 2, centerX + centerW + 1, dividerBottom,
+                STATIC_DIVIDER);
+        }
     }
 
     private static void resetGuiRenderState(GuiGraphics graphics) {

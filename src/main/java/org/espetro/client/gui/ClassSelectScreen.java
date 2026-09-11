@@ -100,8 +100,14 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
             "\u00a76\u00a7l编制投票 \u00a77| " + teamPrefix + "\u00a7l"
                 + EspetroAuiWidgets.teamName(team) + " \u00a77[全员投票]",
-            buildTimeText(), buildOpponentText(), EspetroAuiWidgets.teamColor(team));
+            buildTimeText(), "", EspetroAuiWidgets.teamColor(team));
         int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
+
+        // 等待对方投票：不渲染编制卡片，仅屏幕正中显示稍大字号提示。
+        if (isWaitingForOwnSelection()) {
+            root.addChild(new WaitingText(this.width / 2, this.height / 2));
+            return;
+        }
 
         if (count == 0) {
             root.addChild(EspetroAuiWidgets.centeredText(panelX, headerH + 18, panelW,
@@ -364,8 +370,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
     }
 
     private boolean isWaitingForOwnSelection() {
-        // 当前流程固定守方先选编制、攻方后选编制；攻方收到对方倒计时表示本方尚未开始。
-        return "ATTACK".equals(team) && timeRemaining <= 0 && opponentTimeRemaining > 0;
+        // 编制先后顺序：本方倒计时未启动（timeRemaining<=0）且对方仍在投票时，本方处于等待。
+        return timeRemaining <= 0 && opponentTimeRemaining > 0;
     }
 
     public void updateFromPacket(ClassSelectScreenPacket packet) {
@@ -376,6 +382,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         this.team = packet.getTeam();
         this.isCommander = packet.isCommander();
         this.factions = nextFactions;
+        boolean wasWaiting = isWaitingForOwnSelection();
         this.timeRemaining = packet.getTimeRemaining();
         this.opponentTeamName = packet.getOpponentTeamName();
         this.opponentFaction = packet.getOpponentFaction();
@@ -383,7 +390,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         this.lastSelectedFaction = packet.getSelectedFactionId().isEmpty()
             ? null : packet.getSelectedFactionId();
         if (this.root != null) {
-            if (layoutChanged) {
+            // 等待页 ↔ 卡片页 结构切换必须重建整棵树（含时间耗尽后进入等待对方）
+            if (layoutChanged || wasWaiting != isWaitingForOwnSelection()) {
                 rebuildMenuRoot();
             } else {
                 refreshDynamicElements();
@@ -394,13 +402,20 @@ public class ClassSelectScreen extends EspetroMenuScreen {
     /** 轻量倒计时包：只改时间/选中态，绝不 rebuild。 */
     public void updateTimer(int timeRemaining, int opponentTimeRemaining,
                             String selectedFactionId, boolean isCommander) {
+        boolean wasWaiting = isWaitingForOwnSelection();
         this.timeRemaining = timeRemaining;
         this.opponentTimeRemaining = opponentTimeRemaining;
         this.isCommander = isCommander;
         this.lastSelectedFaction = selectedFactionId == null || selectedFactionId.isEmpty()
             ? null : selectedFactionId;
+        boolean nowWaiting = isWaitingForOwnSelection();
         if (root != null) {
-            refreshDynamicElements();
+            // 等待页 ↔ 卡片页 结构切换必须重建整棵树
+            if (wasWaiting != nowWaiting) {
+                rebuildMenuRoot();
+            } else {
+                refreshDynamicElements();
+            }
         }
     }
 
@@ -410,7 +425,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
                 + EspetroAuiWidgets.teamPrefix(team) + "\u00a7l"
                 + EspetroAuiWidgets.teamName(team) + " \u00a77[全员投票]");
             phaseHeader.setStatus(buildTimeText());
-            phaseHeader.setDetail(buildOpponentText());
+            phaseHeader.setDetail("");
         }
         boolean enabled = timeRemaining > 0;
         for (ClassSelectScreenPacket.FactionInfo faction : factions) {
@@ -426,9 +441,13 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             return (timeRemaining <= 5 ? "\u00a7c" : "\u00a76")
                 + "剩余时间: " + timeRemaining + "秒";
         }
-        return isWaitingForOwnSelection()
-            ? "\u00a77本方编制投票尚未开始"
-            : "\u00a77本方编制已确定，等待对方选择编制";
+        if (isWaitingForOwnSelection()) {
+            // 等待对方时顶部第二行与投票一致：显示对方剩余倒计时
+            int remaining = Math.max(0, opponentTimeRemaining);
+            return (remaining <= 5 ? "\u00a7c" : "\u00a76")
+                + "对方选择剩余: " + remaining + "秒";
+        }
+        return "\u00a77本方编制已确定";
     }
 
     private String buildOpponentText() {
@@ -447,6 +466,32 @@ public class ClassSelectScreen extends EspetroMenuScreen {
                 + "剩余 " + opponentTimeRemaining + "秒";
         }
         return text;
+    }
+
+    /** 屏幕正中的“等待对方投票中…”大字提示（自绘缩放）。 */
+    private static final class WaitingText extends GuiElement {
+        private final int centerX;
+        private final int centerY;
+
+        WaitingText(int centerX, int centerY) {
+            super(0, 0, 1, 1);
+            this.centerX = centerX;
+            this.centerY = centerY;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
+                         int mouseX, int mouseY, float partialTick) {
+            if (!isVisible()) return;
+            String label = "等待对方投票中…";
+            float scale = 2.0f;
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, centerY, 0);
+            graphics.pose().scale(scale, scale, 1.0f);
+            graphics.drawCenteredString(Minecraft.getInstance().font,
+                Component.literal(label), 0, 0, 0xFFE8B85C);
+            graphics.pose().popPose();
+        }
     }
 
     private static boolean hasSameFactionLayout(List<ClassSelectScreenPacket.FactionInfo> current,
