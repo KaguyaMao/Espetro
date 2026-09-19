@@ -305,12 +305,9 @@ public class ClientPacketHandlers {
             screen.updateClassSwitchCooldown(packet.getClassSwitchCooldownRemaining());
             screen.updateBastions(packet.getBastions());
             screen.updateSquads(packet.getSquads(), packet.getMySquadId());
+            screen.updateSquadCategories(packet.getSquadCategories());
             screen.updateClasses(packet.getClasses(), packet.getClassCounts(), packet.getVariantCounts());
             screen.updateSelectedClass(packet.getSelectedClassId());
-        } else if (mc.screen instanceof org.espetro.client.gui.SquadScreen screen) {
-            // 班组管理是部署界面的子界面。部署阶段会持续发送该包，
-            // 此处只同步实时状态，不能把玩家强制切回部署界面。
-            screen.updateFromDeployPacket(packet);
         } else if (packet.shouldOpenScreen()) {
             mc.setScreen(new org.espetro.client.gui.UnifiedDeployScreen(packet));
         }
@@ -326,9 +323,7 @@ public class ClientPacketHandlers {
             packet.getSquads(), packet.getMySquadId(),
             packet.getCommanderNames(), packet.getTeammateNameTagDistance());
 
-        if (mc.screen instanceof org.espetro.client.gui.SquadScreen screen) {
-            screen.updateSquads(packet.getSquads(), packet.getMySquadId());
-        } else if (mc.screen instanceof org.espetro.client.gui.UnifiedDeployScreen screen) {
+        if (mc.screen instanceof org.espetro.client.gui.UnifiedDeployScreen screen) {
             screen.updateSquads(packet.getSquads(), packet.getMySquadId());
             screen.updateSelectedClass(packet.getSelectedClassId());
         }
@@ -437,7 +432,6 @@ public class ClientPacketHandlers {
         if (screen == null) return;
         boolean modRoundScreen =
             screen instanceof org.espetro.client.gui.UnifiedDeployScreen
-            || screen instanceof org.espetro.client.gui.SquadScreen
             || screen instanceof org.espetro.client.gui.ClassSelectionScreen
             || screen instanceof org.espetro.client.gui.ClassSelectScreen
             || screen instanceof org.espetro.client.gui.CommanderVoteScreen
