@@ -37,6 +37,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int INNER_PADDING = 3;
     private static final int SCROLLBAR_RESERVED_W = 6;
     private static final int SQUAD_ROW_H = 11;
+    /** 班组标题（组名框）行高：比动作按钮略高，便于容纳右侧"加入"按钮与更清晰的文字。 */
+    private static final int SQUAD_TITLE_ROW_H = SQUAD_ROW_H + 3;
+    /** 未入队时标题行右端"加入"按钮宽度。 */
+    private static final int SQUAD_JOIN_BTN_W = 32;
     private static final int SQUAD_MEMBER_ROW_H = 9;
     private static final int SQUAD_ACTION_ROW_H = 10;
     /** 身份色条与火力组色块同宽（像素），事件驱动静态绘制。 */
@@ -1135,14 +1139,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaH = squadAreaH;
 
         sectionRoot.addChild(new PlainText(sx, sy, "\u00a76\u00a7l班组", 0xFFFFC766));
-        // 底部三行动作按钮（自上而下：解散 / 锁定·解锁 / 创建·退出）
-        int actionGap = SQUAD_ROW_GAP;
-        int actionsH = 3 * SQUAD_ROW_H + 2 * actionGap;
+        // 底部动作按钮：行数随身份变化（队长 3 行 / 其他 1 行）
+        int actionRows = squadActionRowCount();
+        int actionsH = actionRows * SQUAD_ROW_H + Math.max(0, actionRows - 1) * SQUAD_ROW_GAP;
         int listY = sy + SECTION_TITLE_H + 1;
         int listH = areaH - SECTION_TITLE_H - actionsH - 5;
 
         squadScrollList = new ScrollableList(sx, listY, areaW, Math.max(SQUAD_ROW_H, listH))
-            .setScrollStep(SQUAD_ROW_H + SQUAD_ROW_GAP)
+            .setScrollStep(SQUAD_TITLE_ROW_H + SQUAD_ROW_GAP)
             .setAlwaysShowScrollbar(false);
         sectionRoot.addChild(squadScrollList);
 
@@ -1159,11 +1163,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             boolean mine = squad.id == mySquadId;
             boolean unavailable = squad.isLocked || squad.memberCount >= squad.maxMembers;
             boolean expanded = expandedSquadIds.contains(squad.id);
+            // 未入队时，每个班组标题行右端提供"加入"按钮（锁定/满员灰显并提示原因）
+            boolean showJoin = !inSquad();
+            int titleW = showJoin ? Math.max(40, rowW - SQUAD_JOIN_BTN_W - 2) : rowW;
             String disclosure = expanded ? "\u00a7f\u25bc" : "\u00a7f\u25b6";
             String state = mine ? "\u00a7a\u25cf" : squad.isLocked ? "\u00a7c\u25a0" : "\u00a77\u25cb";
             String label = disclosure + " " + state + " \u00a7f" + squad.displayId + ". " + squad.name
                 + " \u00a77" + squad.memberCount + "/" + squad.maxMembers;
-            EspButton button = new EspButton(0, rowY, rowW, SQUAD_ROW_H,
+            EspButton button = new EspButton(0, rowY, titleW, SQUAD_TITLE_ROW_H,
                 label, () -> toggleSquadExpanded(squad.id));
             button.setTextScale(SQUAD_TEXT_SCALE);
             button.setCenteredText(false);
@@ -1179,7 +1186,25 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 button.hoverColor = 0xFF3C5542;
             }
             squadScrollList.addChild(button);
-            rowY += SQUAD_ROW_H + SQUAD_ROW_GAP;
+            if (showJoin) {
+                // 后添加 → 优先响应点击，避免与标题按钮抢事件
+                EspButton join = new EspButton(rowW - SQUAD_JOIN_BTN_W, rowY,
+                    SQUAD_JOIN_BTN_W, SQUAD_TITLE_ROW_H, "\u00a7a加入",
+                    () -> NetworkManager.joinSquad(squad.id));
+                join.setTextScale(SQUAD_TEXT_SCALE);
+                join.setEnabled(!unavailable);
+                if (unavailable) {
+                    String reason = squad.isLocked
+                        ? "该班组已锁定，无法加入。"
+                        : "该班组人数已满。";
+                    join.setDisabledAction(() -> EspetroTipNotifier.showDenial("无法加入班组", reason));
+                } else {
+                    join.normalColor = 0xFF25352B;
+                    join.hoverColor = 0xFF3C5542;
+                }
+                squadScrollList.addChild(join);
+            }
+            rowY += SQUAD_TITLE_ROW_H + SQUAD_ROW_GAP;
 
             if (!expanded) {
                 continue;
@@ -1223,66 +1248,60 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     rowY += SQUAD_MEMBER_ROW_H + SQUAD_ROW_GAP;
                 }
             }
-
-            if (!mine && !unavailable) {
-                EspButton join = new EspButton(3, rowY, rowW - 3, SQUAD_ACTION_ROW_H,
-                    "\u00a7a+ 加入班组", () -> NetworkManager.joinSquad(squad.id));
-                join.setTextScale(SQUAD_MEMBER_TEXT_SCALE);
-                join.normalColor = 0xFF25352B;
-                join.hoverColor = 0xFF3C5542;
-                squadScrollList.addChild(join);
-                rowY += SQUAD_ACTION_ROW_H + SQUAD_ROW_GAP;
-            }
         }
         if (squads.isEmpty()) {
             squadScrollList.addChild(new PlainText(2, 3, "\u00a77暂无班组", 0xFFABB0B3));
         }
     }
 
-    /** 原地重建底部三行动作按钮（成员/队长/锁定变化走原地刷新分支时也需刷新）。 */
+    /** 底部动作按钮可见行数：队长 3 行（解散/锁定/创建·退出），其他 1 行（创建·退出）。 */
+    private int squadActionRowCount() {
+        return inSquad() && isLocalPlayerLeader() ? 3 : 1;
+    }
+
+    /**
+     * 重建底部动作按钮。
+     * 队长（且已入队）显示 3 行：解散 / 锁定·解锁 / 创建·退出；
+     * 其余情况只显示最后一行（创建小队或退出小队）——解散与锁定对非队长/未入队完全隐藏。
+     */
     private void rebuildSquadActions() {
         if (squadActionRoot == null) {
             return;
         }
         squadActionRoot.clearChildren();
         boolean inSquadNow = inSquad();
-        boolean leader = isLocalPlayerLeader();
+        boolean leader = inSquadNow && isLocalPlayerLeader();
         boolean locked = isMySquadLocked();
         int rowH = SQUAD_ROW_H;
         int gap = SQUAD_ROW_GAP;
+        int rows = squadActionRowCount();
+        // 创建/退出永远在最底一行
+        int bottomY = squadActionY + Math.max(0, rows - 1) * (rowH + gap);
 
-        // 第 1 行：解散小队（仅队长可用，非队长可见但灰显）
-        squadDisbandButton = new EspButton(squadActionX, squadActionY, squadActionW, rowH,
-            "\u00a7c解散小队", this::openDisbandSquadConfirm);
-        squadDisbandButton.setTextScale(SQUAD_TEXT_SCALE);
-        squadDisbandButton.setEnabled(inSquadNow && leader);
-        if (!inSquadNow || !leader) {
-            squadDisbandButton.setDisabledAction(() -> EspetroTipNotifier.showDenial(
-                "无法解散", inSquadNow ? "仅小队长可解散小队。" : "你尚未加入任何小队。"));
+        if (leader) {
+            // 第 1 行：解散小队（仅队长可见）
+            squadDisbandButton = new EspButton(squadActionX, squadActionY, squadActionW, rowH,
+                "\u00a7c解散小队", this::openDisbandSquadConfirm);
+            squadDisbandButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadActionRoot.addChild(squadDisbandButton);
+
+            // 第 2 行：锁定/解锁（仅队长可见）
+            squadLockButton = new EspButton(squadActionX, squadActionY + rowH + gap,
+                squadActionW, rowH,
+                locked ? "\u00a7e解锁小队" : "\u00a7e锁定小队",
+                () -> {
+                    if (isMySquadLocked()) {
+                        NetworkManager.unlockSquad();
+                    } else {
+                        NetworkManager.lockSquad();
+                    }
+                });
+            squadLockButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadActionRoot.addChild(squadLockButton);
         }
-        squadActionRoot.addChild(squadDisbandButton);
 
-        // 第 2 行：锁定/解锁（仅队长可用，非队长可见但灰显）
-        squadLockButton = new EspButton(squadActionX, squadActionY + rowH + gap, squadActionW, rowH,
-            locked ? "\u00a7e解锁小队" : "\u00a7e锁定小队",
-            () -> {
-                if (isMySquadLocked()) {
-                    NetworkManager.unlockSquad();
-                } else {
-                    NetworkManager.lockSquad();
-                }
-            });
-        squadLockButton.setTextScale(SQUAD_TEXT_SCALE);
-        squadLockButton.setEnabled(inSquadNow && leader);
-        if (!inSquadNow || !leader) {
-            squadLockButton.setDisabledAction(() -> EspetroTipNotifier.showDenial(
-                "无法锁定", inSquadNow ? "仅小队长可锁定/解锁小队。" : "你尚未加入任何小队。"));
-        }
-        squadActionRoot.addChild(squadLockButton);
-
-        // 第 3 行：创建小队 / 退出小队（两态；退出需二次确认）
-        squadCreateLeaveButton = new EspButton(squadActionX, squadActionY + 2 * (rowH + gap),
-            squadActionW, rowH,
+        // 最后一行：创建小队 / 退出小队（两态；退出需二次确认）
+        squadCreateLeaveButton = new EspButton(squadActionX, bottomY, squadActionW, rowH,
             inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
             inSquadNow ? this::openLeaveSquadConfirm : this::openSquadCreateDialog);
         squadCreateLeaveButton.setTextScale(SQUAD_TEXT_SCALE);
