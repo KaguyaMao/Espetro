@@ -1,0 +1,34 @@
+{
+  "name": "liaowangta",
+  "author": "ly01_lin",
+  "time": "20260923-151952",
+  "dimension": "minecraft:overworld",
+  "size": [
+    8,
+    5,
+    6
+  ],
+  "blocks": 142,
+  "entities": 0,
+  "ignored_blocks": 0,
+  "nbt_bytes": 8164,
+  "include_entities": true,
+  "carve": false,
+  "region": {
+    "a": [
+      52,
+      -60,
+      345
+    ],
+    "b": [
+      45,
+      -56,
+      350
+    ],
+    "anchor": [
+      47,
+      -60,
+      348
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:toyota_seiki",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/toyota_seiki.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/toyota_seiki.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/toyota_seiki.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/toyota_seiki.png"
+                   }
+               ]
+}

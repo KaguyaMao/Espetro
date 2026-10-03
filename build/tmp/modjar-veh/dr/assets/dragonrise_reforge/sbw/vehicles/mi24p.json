@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:mi24p",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/mi24p.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/mi24v.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/mi24p.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/mi24v.png"
+    }
+  ]
+}

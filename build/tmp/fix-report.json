@@ -1,0 +1,35 @@
+{
+ "m4a1": 80,
+ "riflemanMerged": [
+  "us_1th_ar/US_1th_arma_RIFLEMAN 变体=[default,倍镜,机瞄,握把,握把红点,握把倍镜]",
+  "us_1th_ri/US_1th_RIFLEMAN 变体=[default,倍镜,机瞄,握把,握把红点,握把倍镜]",
+  "us_2nd_stryker/US_2CAV_RIFLEMAN 变体=[default,倍镜,机瞄,握把,握把红点,握把倍镜]",
+  "us_redone/US_REDONE_RIFLEMAN 变体=[default,倍镜,机瞄,握把,握把红点,握把倍镜]"
+ ],
+ "assaultDeleted": [
+  "us_1th_ar/US_1th_arma_ASSAULT",
+  "us_1th_ri/US_1th_ASSAULT",
+  "us_2nd_stryker/US_2CAV_ASSAULT",
+  "us_redone/US_REDONE_ASSAULT"
+ ],
+ "bigSquadMgAdded": [
+  "us_1th_ar/US_1th_arma_BIG_SQUADMG row3 变体=[default,光瞄] ; US_1th_arma_SQUADMG row2 变体=[default]",
+  "us_1th_ri/US_1th_BIG_SQUADMG row3 变体=[default,光瞄] ; US_1th_SQUADMG row2 变体=[default]",
+  "us_2nd_stryker/US_2CAV_BIG_SQUADMG row3 变体=[default,光瞄] ; US_2CAV_SQUADMG row2 变体=[default]",
+  "us_redone/US_REDONE_BIG_SQUADMG row3 变体=[default,光瞄] ; US_REDONE_SQUADMG row2 变体=[default]"
+ ],
+ "m60Guns": 8,
+ "m60Mags": 8,
+ "m60Resupply": 8,
+ "ruAtLauncher": 4,
+ "ruHeavyAmmo": 4,
+ "engineerC4": 16,
+ "engineerMine": 16,
+ "spyglass": 352,
+ "warnings": [
+  "ru_205th/RU_205th_ANTITANK 找不到 rpg7_pg7heat 的给予串",
+  "ru_3th/RU_3th_ANTITANK 找不到 rpg7_pg7heat 的给予串",
+  "ru_49th/RU_R1_ANTITANK 找不到 rpg7_pg7heat 的给予串",
+  "ru_6th_tank/RU_6th_tank_ANTITANK 找不到 rpg7_pg7heat 的给予串"
+ ]
+}

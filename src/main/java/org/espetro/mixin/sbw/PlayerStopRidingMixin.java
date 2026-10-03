@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.vehicle.DismountServer;
 import org.espetro.vehicle.VehicleInteractionConfig;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,6 +28,10 @@ public abstract class PlayerStopRidingMixin {
         NetworkEvent.Context context = contextSupplier == null ? null : contextSupplier.get();
         ServerPlayer player = context == null ? null : context.getSender();
         if (player == null) {
+            return;
+        }
+        // 白名单载具：原生下车包直接放行，不要求读条 token。
+        if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
             return;
         }
         if (!DismountServer.consumeReady(player)) {

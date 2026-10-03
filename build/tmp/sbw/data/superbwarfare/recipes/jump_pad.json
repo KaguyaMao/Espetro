@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "b": {
+      "item": "minecraft:lime_concrete"
+    },
+    "c": {
+      "item": "minecraft:piston"
+    }
+  },
+  "pattern": [
+    " a ",
+    "bcb",
+    "bcb"
+  ],
+  "result": {
+    "item": "superbwarfare:jump_pad"
+  },
+  "show_notification": true
+}

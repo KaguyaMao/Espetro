@@ -15,6 +15,7 @@ import org.espetro.network.MountRequestPacket;
 import org.espetro.network.NetworkManager;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
 import org.espetro.vehicle.VehicleInteractionConfig;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 
 import java.util.UUID;
 
@@ -44,6 +45,10 @@ public final class VehicleMountClientGate {
         if (event.getSide() != LogicalSide.CLIENT && event.getSide() != LogicalSide.SERVER) {
             return;
         }
+        // 白名单载具：不取消原生交互（也不进入本 mod 的上车读条）。
+        if (VehicleNativeWhitelist.isNative(event.getTarget())) {
+            return;
+        }
         if (!SbwVehicleSeatResolver.isSupportedVehicle(event.getTarget())) {
             return;
         }
@@ -70,6 +75,12 @@ public final class VehicleMountClientGate {
 
         if (mc.player.getVehicle() != null) {
             resetMount(false);
+            return;
+        }
+
+        // 白名单载具：不接管上车读条，完全走 SBW 原生交互上车。
+        if (VehicleNativeWhitelist.isNative(lookVehicle(mc))) {
+            resetMount(true);
             return;
         }
 

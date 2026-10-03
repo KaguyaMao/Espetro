@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:challenger",
+  "Model": {
+    "Model": "vvp:geo/challenger.geo.json",
+    "Texture": "vvp:textures/entity/challenger_green.png"
+  }
+}

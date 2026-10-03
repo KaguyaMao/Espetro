@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "b": {
+      "item": "minecraft:string"
+    },
+    "c": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "b b",
+    "bcb"
+  ],
+  "result": {
+    "item": "superbwarfare:parachute"
+  },
+  "show_notification": true
+}

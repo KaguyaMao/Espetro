@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "a": {
+      "item": "minecraft:comparator"
+    },
+    "c": {
+      "tag": "forge:ingots/copper"
+    },
+    "d": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "cac",
+    "ddd"
+  ],
+  "result": {
+    "item": "superbwarfare:catapult_controller"
+  },
+  "show_notification": true
+}

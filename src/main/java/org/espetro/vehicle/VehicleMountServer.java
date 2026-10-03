@@ -30,6 +30,11 @@ public final class VehicleMountServer {
             return;
         }
         Entity entity = player.serverLevel().getEntity(vehicleId);
+        // 白名单载具：不接管上车读条，完全走 SBW 原生交互。
+        if (VehicleNativeWhitelist.isNative(entity)) {
+            cancel(player);
+            return;
+        }
         if (!SbwVehicleSeatResolver.isSupportedVehicle(entity)) {
             cancel(player);
             return;
@@ -75,6 +80,11 @@ public final class VehicleMountServer {
         if (player == null || vehicleId == null) {
             return;
         }
+        // 白名单载具：不接管读条通道（原生上车已由 SBW 处理），顺手清掉残留 token。
+        if (VehicleNativeWhitelist.isNative(player.serverLevel().getEntity(vehicleId))) {
+            cancel(player);
+            return;
+        }
         PendingMount pending = PENDING.get(player.getUUID());
         if (pending == null || !vehicleId.equals(pending.vehicleId)) {
             cancel(player);
@@ -96,6 +106,11 @@ public final class VehicleMountServer {
             return;
         }
         Entity entity = player.serverLevel().getEntity(pending.vehicleId);
+        // 白名单载具：不推进/不拦截读条，直接放弃该 token。
+        if (VehicleNativeWhitelist.isNative(entity)) {
+            cancel(player);
+            return;
+        }
         if (!SbwVehicleSeatResolver.isSupportedVehicle(entity)
             || player.getVehicle() != null
             || player.distanceTo(entity) > VehicleInteractionConfig.mountMaxDistance() + 0.75) {
@@ -127,6 +142,11 @@ public final class VehicleMountServer {
             return;
         }
         if (player.getVehicle() != null) {
+            return;
+        }
+        // 白名单载具：跳过距离/归属/读条全部门控，直接按 SBW 原生方式上车。
+        if (VehicleNativeWhitelist.isNative(entity)) {
+            player.startRiding(entity, true);
             return;
         }
         if (player.distanceTo(entity) > VehicleInteractionConfig.mountMaxDistance() + 0.75) {

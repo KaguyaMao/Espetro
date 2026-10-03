@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "superbwarfare:slime_covered_leather"
+  },
+  "result": "superbwarfare:engineering_plastic"
+}

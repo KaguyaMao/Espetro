@@ -1,0 +1,140 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "coremods",
+    "version": "5.2.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.7.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.7.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.7.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "coremods-5.2.4.jar",
+          "url": "coremods-5.2.4.jar",
+          "size": 31872,
+          "sha512": "79b0dd3bb2a92e02871694ac29eab302b1d635420a11e437384940abc982e30224a362fc650f52a8f8fb93323e4b143f6b164517e46590f2207db5449bc18cac",
+          "sha256": "db32dc040af2eea1216a145a3f5fc6bc45d006740fe696da5a9a445006167c9f",
+          "sha1": "e30bab269d896613e38396274711410b3a0e4b87",
+          "md5": "5295505357ba9b98450c5e3121f82191"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-api",
+          "version": {
+            "requires": "2.19.0"
+          }
+        },
+        {
+          "group": "org.openjdk.nashorn",
+          "module": "nashorn-core",
+          "version": {
+            "requires": "15.4"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.7.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.7.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.7.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "coremods-5.2.4.jar",
+          "url": "coremods-5.2.4.jar",
+          "size": 31872,
+          "sha512": "79b0dd3bb2a92e02871694ac29eab302b1d635420a11e437384940abc982e30224a362fc650f52a8f8fb93323e4b143f6b164517e46590f2207db5449bc18cac",
+          "sha256": "db32dc040af2eea1216a145a3f5fc6bc45d006740fe696da5a9a445006167c9f",
+          "sha1": "e30bab269d896613e38396274711410b3a0e4b87",
+          "md5": "5295505357ba9b98450c5e3121f82191"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "coremods-5.2.4-sources.jar",
+          "url": "coremods-5.2.4-sources.jar",
+          "size": 20573,
+          "sha512": "5fcb73406eae0fb25677bb3f5b739ae314e477c2bd64944550ae45f82f53067397514a716731cea99f46b0fee2b4c4db46ba1d8ade8ec06715edebf5f89b803c",
+          "sha256": "b83d4bcc4c532767724c57b581b13373c4e512c52530ffa6c8d8406e6902a36c",
+          "sha1": "e74070bd1e29d5b8301ec1bba167b6afbc4ffb34",
+          "md5": "585cad6a8dbbe890c978a3fc32d66b65"
+        }
+      ]
+    }
+  ]
+}

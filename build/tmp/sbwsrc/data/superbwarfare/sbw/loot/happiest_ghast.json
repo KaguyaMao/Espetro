@@ -1,0 +1,39 @@
+{
+  "ID": "superbwarfare:happiest_ghast",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Name": "superbwarfare:handsome_goggles"
+        },
+        {
+          "Count": 4,
+          "Name": "minecraft:ghast_tear"
+        }
+      ],
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Name": "minecraft:ghast_tear"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "minecraft:ghast_tear"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "minecraft:ghast_tear"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "minecraft:ghast_tear"
+        }
+      ],
+      "Type": "complete"
+    }
+  ]
+}

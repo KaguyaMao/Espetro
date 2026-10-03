@@ -1,0 +1,39 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.main.idle.1": {
+			"loop": true
+		},
+		"animation.main.fire.1": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"paoguan2": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.05": [0, 0, 11],
+						"0.4917": [0, 0, 0],
+						"0.6667": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.main.idle": {
+			"loop": true
+		},
+		"animation.main.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"paoguan": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.05": [0, 0, 11],
+						"0.4917": [0, 0, 0],
+						"0.6667": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

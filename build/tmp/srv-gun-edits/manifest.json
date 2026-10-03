@@ -1,0 +1,184 @@
+[
+  {
+    "gun": "ccrp:ak74m",
+    "cat": "rifle",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/ak74m_data.json",
+    "file": "ccrp__ak74m__gun__ccrp__ak74m.json",
+    "ammo": "tacz:545x39"
+  },
+  {
+    "gun": "ccrp:rpk74m",
+    "cat": "saw",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/rpk74m_data.json",
+    "file": "ccrp__rpk74m__gun__ccrp__rpk74m.json",
+    "ammo": "tacz:545x39"
+  },
+  {
+    "gun": "ccrp:sr25",
+    "cat": "dmr",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/sr25_data.json",
+    "file": "ccrp__sr25__gun__ccrp__sr25.json",
+    "ammo": "tacz:308"
+  },
+  {
+    "gun": "cib:pkp",
+    "cat": "gpmg",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/pkp_data.json",
+    "file": "cib__pkp__gun__cib__pkp.json",
+    "ammo": "tacz:762x54"
+  },
+  {
+    "gun": "cib:qbu191",
+    "cat": "dmr",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbu191_data.json",
+    "file": "cib__qbu191__gun__cib__qbu191.json",
+    "ammo": "tacz:58x42"
+  },
+  {
+    "gun": "cib:qbz191",
+    "cat": "rifle",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz191_data.json",
+    "file": "cib__qbz191__gun__cib__qbz191.json",
+    "ammo": "tacz:58x42"
+  },
+  {
+    "gun": "cib:qbz192",
+    "cat": "rifle",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz192_data.json",
+    "file": "cib__qbz192__gun__cib__qbz192.json",
+    "ammo": "tacz:58x42"
+  },
+  {
+    "gun": "cib:qcw05",
+    "cat": "smg",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qcw05_data.json",
+    "file": "cib__qcw05__gun__cib__qcw05.json",
+    "ammo": "cib:58x21"
+  },
+  {
+    "gun": "cib:qjb201",
+    "cat": "saw",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjb201_data.json",
+    "file": "cib__qjb201__gun__cib__qjb201.json",
+    "ammo": "tacz:58x42"
+  },
+  {
+    "gun": "cib:qjy201",
+    "cat": "gpmg",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjy201_data.json",
+    "file": "cib__qjy201__gun__cib__qjy201.json",
+    "ammo": "tacz:308"
+  },
+  {
+    "gun": "cib:qsz92",
+    "cat": "pistol",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qsz92_data.json",
+    "file": "cib__qsz92__gun__cib__qsz92.json",
+    "ammo": "cib:58x21"
+  },
+  {
+    "gun": "cib:svd",
+    "cat": "dmr",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/svd_data.json",
+    "file": "cib__svd__gun__cib__svd.json",
+    "ammo": "tacz:762x54"
+  },
+  {
+    "gun": "suffuse:aks74u",
+    "cat": "rifle",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/aks74u_data.json",
+    "file": "suffuse__aks74u__gun__suffuse__aks74u.json",
+    "ammo": "suffuse:545x39"
+  },
+  {
+    "gun": "suffuse:tt33",
+    "cat": "pistol",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/tt33_data.json",
+    "file": "suffuse__tt33__gun__suffuse__tt33.json",
+    "ammo": "tacz:762x25"
+  },
+  {
+    "gun": "tacz:m249",
+    "cat": "saw",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/guns/m249_data.json",
+    "file": "tacz__m249__gun__tacz__m249.json",
+    "ammo": "tacz:556x45"
+  },
+  {
+    "gun": "tacz:m4a1",
+    "cat": "rifle",
+    "serverRel": "tacz/VanguardArmament/data/tacz/data/guns/m4a1_data.json",
+    "file": "tacz__m4a1__gun__tacz__m4a1.json",
+    "ammo": "tacz:556x45"
+  },
+  {
+    "gun": "tacz:p320",
+    "cat": "pistol",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/guns/p320_data.json",
+    "file": "tacz__p320__gun__tacz__p320.json",
+    "ammo": "tacz:45acp"
+  },
+  {
+    "gun": "cib:dzj08",
+    "cat": "rpg",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/dzj08_data.json",
+    "file": "cib__dzj08__gun__cib__dzj08.json",
+    "ammo": "cib:80"
+  },
+  {
+    "gun": "murasamet:rpg7_og7he",
+    "cat": "rpg",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_og7he_data.json",
+    "file": "murasamet__rpg7_og7he__gun__murasamet__rpg7_og7he.json",
+    "ammo": "murasamet:og7he"
+  },
+  {
+    "gun": "murasamet:rpg7_pg7heat",
+    "cat": "rpg",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7heat_data.json",
+    "file": "murasamet__rpg7_pg7heat__gun__murasamet__rpg7_pg7heat.json",
+    "ammo": "murasamet:pg7heat"
+  },
+  {
+    "gun": "murasamet:rpg7_pg7vr_tandem_heat",
+    "cat": "rpg",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7vr_tandem_heat_data.json",
+    "file": "murasamet__rpg7_pg7vr_tandem_heat__gun__murasamet__rpg7_pg7vr_tandem_heat.json",
+    "ammo": "murasamet:pg7vr_tandem_heat"
+  },
+  {
+    "gun": "suffuse:pf98a",
+    "cat": "rpg",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/pf98a_data.json",
+    "file": "suffuse__pf98a__gun__suffuse__pf98a.json",
+    "ammo": "suffuse:120mm"
+  },
+  {
+    "gun": "suffuse:qlz87",
+    "cat": "rpg",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/qlz87_data.json",
+    "file": "suffuse__qlz87__gun__suffuse__qlz87.json",
+    "ammo": "suffuse:35x32mm"
+  },
+  {
+    "gun": "tacz:m320",
+    "cat": "rpg",
+    "serverRel": "tacz/VanguardArmament/data/tacz/data/guns/m320_data.json",
+    "file": "tacz__m320__gun__tacz__m320.json",
+    "ammo": "tacz:40mm"
+  },
+  {
+    "gun": "ts:at4",
+    "cat": "rpg",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/guns/at4_data.json",
+    "file": "ts__at4__gun__ts__at4.json",
+    "ammo": "ts:at4_rocket"
+  },
+  {
+    "gun": "ts:gustavm4",
+    "cat": "rpg",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/guns/gustavm4_data.json",
+    "file": "ts__gustavm4__gun__ts__gustavm4.json",
+    "ammo": "ts:84mm_ffv551"
+  }
+]

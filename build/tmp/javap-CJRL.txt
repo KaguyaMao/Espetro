@@ -1,0 +1,275 @@
+Compiled from "ComplexJsonResourceReloadListener.kt"
+public final class com.atsuishio.superbwarfare.data.ComplexJsonResourceReloadListener extends net.minecraft.server.packs.resources.SimplePreparableReloadListener<java.lang.Object> {
+  public static final com.atsuishio.superbwarfare.data.ComplexJsonResourceReloadListener$Companion Companion;
+
+  private final java.util.Map<java.lang.String, com.atsuishio.superbwarfare.data.DataLoader$GeneralData<?>> data;
+
+  private static final java.lang.Object NULL;
+
+  public com.atsuishio.superbwarfare.data.ComplexJsonResourceReloadListener(java.util.Map<java.lang.String, com.atsuishio.superbwarfare.data.DataLoader$GeneralData<?>>);
+    Code:
+       0: aload_1
+       1: ldc           #64                 // String data
+       3: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_0
+       7: invokespecial #73                 // Method net/minecraft/server/packs/resources/SimplePreparableReloadListener."<init>":()V
+      10: aload_0
+      11: aload_1
+      12: putfield      #75                 // Field data:Ljava/util/Map;
+      15: return
+
+  protected java.lang.Object m_5944_(net.minecraft.server.packs.resources.ResourceManager, net.minecraft.util.profiling.ProfilerFiller);
+    Code:
+       0: aload_1
+       1: ldc           #83                 // String resourceManager
+       3: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_2
+       7: ldc           #84                 // String profiler
+       9: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: aload_0
+      13: getfield      #75                 // Field data:Ljava/util/Map;
+      16: astore_3
+      17: iconst_0
+      18: istore        4
+      20: aload_3
+      21: invokeinterface #88,  1           // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+      26: invokeinterface #94,  1           // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      31: astore        5
+      33: aload         5
+      35: invokeinterface #100,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      40: ifeq          527
+      43: aload         5
+      45: invokeinterface #104,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      50: checkcast     #53                 // class java/util/Map$Entry
+      53: astore        6
+      55: aload         6
+      57: astore        7
+      59: iconst_0
+      60: istore        8
+      62: aload         7
+      64: invokeinterface #107,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+      69: checkcast     #109                // class java/lang/String
+      72: astore        9
+      74: aload         7
+      76: invokeinterface #112,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+      81: checkcast     #48                 // class com/atsuishio/superbwarfare/data/DataLoader$GeneralData
+      84: astore        10
+      86: aload         10
+      88: invokevirtual #116                // Method com/atsuishio/superbwarfare/data/DataLoader$GeneralData.getDataMap:()Ljava/util/HashMap;
+      91: astore        11
+      93: aload         11
+      95: invokevirtual #121                // Method java/util/HashMap.clear:()V
+      98: aload         9
+     100: invokestatic  #127                // Method net/minecraft/resources/FileToIdConverter.m_246568_:(Ljava/lang/String;)Lnet/minecraft/resources/FileToIdConverter;
+     103: astore        12
+     105: aload         12
+     107: aload_1
+     108: invokevirtual #131                // Method net/minecraft/resources/FileToIdConverter.m_247457_:(Lnet/minecraft/server/packs/resources/ResourceManager;)Ljava/util/Map;
+     111: invokeinterface #88,  1           // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+     116: invokeinterface #94,  1           // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     121: astore        13
+     123: aload         13
+     125: invokeinterface #100,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     130: ifeq          502
+     133: aload         13
+     135: invokeinterface #104,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     140: checkcast     #53                 // class java/util/Map$Entry
+     143: astore        14
+     145: aload         14
+     147: invokeinterface #107,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     152: checkcast     #137                // class net/minecraft/resources/ResourceLocation
+     155: astore        15
+     157: aload         12
+     159: aload         15
+     161: invokevirtual #141                // Method net/minecraft/resources/FileToIdConverter.m_245273_:(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceLocation;
+     164: astore        16
+     166: nop
+     167: aload         14
+     169: invokeinterface #112,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     174: checkcast     #143                // class net/minecraft/server/packs/resources/Resource
+     177: invokevirtual #147                // Method net/minecraft/server/packs/resources/Resource.m_215508_:()Ljava/io/BufferedReader;
+     180: checkcast     #149                // class java/io/Closeable
+     183: astore        17
+     185: aconst_null
+     186: astore        18
+     188: nop
+     189: aload         17
+     191: checkcast     #151                // class java/io/BufferedReader
+     194: astore        19
+     196: iconst_0
+     197: istore        20
+     199: aload         16
+     201: invokevirtual #155                // Method net/minecraft/resources/ResourceLocation.toString:()Ljava/lang/String;
+     204: dup
+     205: ldc           #157                // String toString(...)
+     207: invokestatic  #160                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     210: astore        21
+     212: aload         19
+     214: invokestatic  #164                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+     217: aload         19
+     219: invokestatic  #170                // Method kotlin/io/TextStreamsKt.lineSequence:(Ljava/io/BufferedReader;)Lkotlin/sequences/Sequence;
+     222: ldc           #172                // String \n
+     224: checkcast     #174                // class java/lang/CharSequence
+     227: aconst_null
+     228: aconst_null
+     229: iconst_0
+     230: aconst_null
+     231: aconst_null
+     232: bipush        62
+     234: aconst_null
+     235: invokestatic  #180                // Method kotlin/sequences/SequencesKt.joinToString$default:(Lkotlin/sequences/Sequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/CharSequence;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/String;
+     238: astore        22
+     240: new           #182                // class com/atsuishio/superbwarfare/api/event/LoadingJsonEvent
+     243: dup
+     244: aload         21
+     246: aload         22
+     248: invokespecial #185                // Method com/atsuishio/superbwarfare/api/event/LoadingJsonEvent."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+     251: astore        23
+     253: aload         23
+     255: checkcast     #187                // class net/minecraftforge/eventbus/api/Event
+     258: invokestatic  #193                // Method com/atsuishio/superbwarfare/tools/MinecraftUtil.postEvent:(Lnet/minecraftforge/eventbus/api/Event;)Z
+     261: ifne          271
+     264: aload         23
+     266: invokevirtual #196                // Method com/atsuishio/superbwarfare/api/event/LoadingJsonEvent.getJsonStr:()Ljava/lang/String;
+     269: astore        22
+     271: aload         10
+     273: invokevirtual #199                // Method com/atsuishio/superbwarfare/data/DataLoader$GeneralData.isKtData:()Z
+     276: ifeq          307
+     279: getstatic     #203                // Field com/atsuishio/superbwarfare/data/DataLoader.INSTANCE:Lcom/atsuishio/superbwarfare/data/DataLoader;
+     282: invokevirtual #207                // Method com/atsuishio/superbwarfare/data/DataLoader.getJSON:()Lkotlinx/serialization/json/Json;
+     285: aload         10
+     287: invokevirtual #211                // Method com/atsuishio/superbwarfare/data/DataLoader$GeneralData.getType:()Ljava/lang/Class;
+     290: checkcast     #213                // class java/lang/reflect/Type
+     293: invokestatic  #219                // Method kotlinx/serialization/SerializersKt.serializer:(Ljava/lang/reflect/Type;)Lkotlinx/serialization/KSerializer;
+     296: checkcast     #221                // class kotlinx/serialization/DeserializationStrategy
+     299: aload         22
+     301: invokevirtual #227                // Method kotlinx/serialization/json/Json.decodeFromString:(Lkotlinx/serialization/DeserializationStrategy;Ljava/lang/String;)Ljava/lang/Object;
+     304: goto          320
+     307: getstatic     #231                // Field com/atsuishio/superbwarfare/data/DataLoader.GSON:Lcom/google/gson/Gson;
+     310: aload         22
+     312: aload         10
+     314: invokevirtual #211                // Method com/atsuishio/superbwarfare/data/DataLoader$GeneralData.getType:()Ljava/lang/Class;
+     317: invokevirtual #237                // Method com/google/gson/Gson.fromJson:(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;
+     320: astore        24
+     322: aload         24
+     324: instanceof    #241                // class com/atsuishio/superbwarfare/data/IDBasedData
+     327: ifeq          342
+     330: aload         24
+     332: checkcast     #241                // class com/atsuishio/superbwarfare/data/IDBasedData
+     335: aload         21
+     337: invokeinterface #245,  2          // InterfaceMethod com/atsuishio/superbwarfare/data/IDBasedData.setId:(Ljava/lang/String;)V
+     342: aload         24
+     344: instanceof    #247                // class com/atsuishio/superbwarfare/data/gun/DefaultGunData
+     347: ifeq          384
+     350: new           #38                 // class com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Gun
+     353: dup
+     354: aload         21
+     356: aload         24
+     358: checkcast     #247                // class com/atsuishio/superbwarfare/data/gun/DefaultGunData
+     361: invokespecial #250                // Method com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Gun."<init>":(Ljava/lang/String;Lcom/atsuishio/superbwarfare/data/gun/DefaultGunData;)V
+     364: astore        25
+     366: aload         25
+     368: checkcast     #187                // class net/minecraftforge/eventbus/api/Event
+     371: invokestatic  #193                // Method com/atsuishio/superbwarfare/tools/MinecraftUtil.postEvent:(Lnet/minecraftforge/eventbus/api/Event;)Z
+     374: ifne          384
+     377: aload         25
+     379: invokevirtual #253                // Method com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Gun.getData:()Ljava/lang/Object;
+     382: astore        24
+     384: aload         24
+     386: instanceof    #255                // class com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData
+     389: ifeq          426
+     392: new           #43                 // class com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Vehicle
+     395: dup
+     396: aload         21
+     398: aload         24
+     400: checkcast     #255                // class com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData
+     403: invokespecial #258                // Method com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Vehicle."<init>":(Ljava/lang/String;Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;)V
+     406: astore        25
+     408: aload         25
+     410: checkcast     #187                // class net/minecraftforge/eventbus/api/Event
+     413: invokestatic  #193                // Method com/atsuishio/superbwarfare/tools/MinecraftUtil.postEvent:(Lnet/minecraftforge/eventbus/api/Event;)Z
+     416: ifne          426
+     419: aload         25
+     421: invokevirtual #259                // Method com/atsuishio/superbwarfare/api/event/LoadingDataEvent$Vehicle.getData:()Ljava/lang/Object;
+     424: astore        24
+     426: aload         11
+     428: aload         21
+     430: aload         24
+     432: invokevirtual #263                // Method java/util/HashMap.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+     435: astore        19
+     437: aload         17
+     439: aload         18
+     441: invokestatic  #269                // Method kotlin/io/CloseableKt.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V
+     444: aload         19
+     446: goto          470
+     449: astore        19
+     451: aload         19
+     453: astore        18
+     455: aload         19
+     457: athrow
+     458: astore        19
+     460: aload         17
+     462: aload         18
+     464: invokestatic  #269                // Method kotlin/io/CloseableKt.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V
+     467: aload         19
+     469: athrow
+     470: astore        17
+     472: goto          123
+     475: astore        18
+     477: getstatic     #275                // Field com/atsuishio/superbwarfare/Mod.LOGGER:Lorg/apache/logging/log4j/Logger;
+     480: ldc_w         #277                // String Couldn\'t parse data file {} from {}
+     483: aload         16
+     485: aload         15
+     487: aload         18
+     489: invokeinterface #283,  5          // InterfaceMethod org/apache/logging/log4j/Logger.error:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+     494: getstatic     #288                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+     497: astore        17
+     499: goto          123
+     502: aload         10
+     504: invokevirtual #292                // Method com/atsuishio/superbwarfare/data/DataLoader$GeneralData.getOnReload:()Ljava/util/function/Consumer;
+     507: dup
+     508: ifnull        521
+     511: aload         11
+     513: invokeinterface #297,  2          // InterfaceMethod java/util/function/Consumer.accept:(Ljava/lang/Object;)V
+     518: goto          522
+     521: pop
+     522: nop
+     523: nop
+     524: goto          33
+     527: nop
+     528: getstatic     #299                // Field NULL:Ljava/lang/Object;
+     531: areturn
+    Exception table:
+       from    to  target type
+         188   437   449   Class java/lang/Throwable
+         188   437   458   any
+         449   458   458   any
+         458   460   458   any
+         166   472   475   Class java/lang/Exception
+
+  protected void m_5787_(java.lang.Object, net.minecraft.server.packs.resources.ResourceManager, net.minecraft.util.profiling.ProfilerFiller);
+    Code:
+       0: aload_1
+       1: ldc_w         #330                // String obj
+       4: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_2
+       8: ldc           #83                 // String resourceManager
+      10: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      13: aload_3
+      14: ldc           #84                 // String profiler
+      16: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      19: return
+
+  static {};
+    Code:
+       0: new           #46                 // class com/atsuishio/superbwarfare/data/ComplexJsonResourceReloadListener$Companion
+       3: dup
+       4: aconst_null
+       5: invokespecial #334                // Method com/atsuishio/superbwarfare/data/ComplexJsonResourceReloadListener$Companion."<init>":(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+       8: putstatic     #336                // Field Companion:Lcom/atsuishio/superbwarfare/data/ComplexJsonResourceReloadListener$Companion;
+      11: new           #239                // class java/lang/Object
+      14: dup
+      15: invokespecial #337                // Method java/lang/Object."<init>":()V
+      18: putstatic     #299                // Field NULL:Ljava/lang/Object;
+      21: return
+}

@@ -1,0 +1,16 @@
+{
+  "DamageModifiers": [
+    "$entity.getSourceAngle(source, -0.3164163132) * damage",
+    "$entity.getSourceAngle(source, 0.4122722554) * damage",
+    "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+  ],
+  "MaxHealth": 5,
+  "MaxEnergy": 0,
+  "Mass": 0.0005,
+  "VehicleContainerType": "Empty",
+  "SendHitParticles": false,
+  "EngineSound": "superbwarfare:drone_engine",
+  "Type": "Drone",
+  "HasLowHealthWarning": false,
+  "SelfHurtPercent": 0
+}

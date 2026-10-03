@@ -9,6 +9,7 @@ import org.espetro.network.DismountRequestPacket;
 import org.espetro.network.NetworkManager;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
 import org.espetro.vehicle.VehicleInteractionConfig;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 
 /** Hold SBW INTERACT while seated to dismount after a progress channel. */
 public final class DismountGate {
@@ -45,6 +46,13 @@ public final class DismountGate {
             || !SbwVehicleSeatResolver.isSupportedVehicle(mc.player.getVehicle())) {
             reset();
             wasDown = false;
+            return;
+        }
+        // 白名单载具：不接管下车读条，走 SBW 原生下车。
+        if (VehicleNativeWhitelist.isNative(mc.player.getVehicle())) {
+            reset();
+            wasDown = false;
+            sent = false;
             return;
         }
 

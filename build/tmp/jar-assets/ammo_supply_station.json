@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:ammo_supply_station",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ammo_supply_station.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ammo_supply_station.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ammo_supply_station.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ammo_supply_station.png"
+                   }
+               ]
+}

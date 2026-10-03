@@ -1,0 +1,48 @@
+{
+  "mappings": {
+    "com/redabysslucia/dragonrise_reforge/mixin/VehicleAssemblingScreenMixin": {
+      "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V": "Lnet/minecraft/client/renderer/entity/ItemRenderer;m_269128_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V"
+    },
+    "com/redabysslucia/dragonrise_reforge/mixin/MonitorItemServerMixin": {
+      "inventoryTick": "Lcom/atsuishio/superbwarfare/item/misc/MonitorItem;m_6883_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V"
+    },
+    "com/redabysslucia/dragonrise_reforge/mixin/VehicleRegenMixin": {
+      "baseTick": "Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;m_6075_()V"
+    },
+    "com/redabysslucia/dragonrise_reforge/mixin/R6DroneCameraMixin": {
+      "setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V": "Lnet/minecraft/client/Camera;m_90575_(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
+      "Lnet/minecraft/client/Camera;setRotation(FF)V": "Lnet/minecraft/client/Camera;m_90572_(FF)V"
+    },
+    "com/redabysslucia/dragonrise_reforge/mixin/MonitorItemMixin": {
+      "inventoryTick": "Lcom/atsuishio/superbwarfare/item/misc/MonitorItem;m_6883_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V"
+    },
+    "com/redabysslucia/dragonrise_reforge/mixin/GameRendererMixin": {
+      "getNightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F": "Lnet/minecraft/client/renderer/GameRenderer;m_109108_(Lnet/minecraft/world/entity/LivingEntity;F)F",
+      "renderItemInHand": "Lnet/minecraft/client/renderer/GameRenderer;m_109120_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/Camera;F)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/redabysslucia/dragonrise_reforge/mixin/VehicleAssemblingScreenMixin": {
+        "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V": "Lnet/minecraft/client/renderer/entity/ItemRenderer;m_269128_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;IILcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;I)V"
+      },
+      "com/redabysslucia/dragonrise_reforge/mixin/MonitorItemServerMixin": {
+        "inventoryTick": "Lcom/atsuishio/superbwarfare/item/misc/MonitorItem;m_6883_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V"
+      },
+      "com/redabysslucia/dragonrise_reforge/mixin/VehicleRegenMixin": {
+        "baseTick": "Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;m_6075_()V"
+      },
+      "com/redabysslucia/dragonrise_reforge/mixin/R6DroneCameraMixin": {
+        "setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V": "Lnet/minecraft/client/Camera;m_90575_(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
+        "Lnet/minecraft/client/Camera;setRotation(FF)V": "Lnet/minecraft/client/Camera;m_90572_(FF)V"
+      },
+      "com/redabysslucia/dragonrise_reforge/mixin/MonitorItemMixin": {
+        "inventoryTick": "Lcom/atsuishio/superbwarfare/item/misc/MonitorItem;m_6883_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V"
+      },
+      "com/redabysslucia/dragonrise_reforge/mixin/GameRendererMixin": {
+        "getNightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F": "Lnet/minecraft/client/renderer/GameRenderer;m_109108_(Lnet/minecraft/world/entity/LivingEntity;F)F",
+        "renderItemInHand": "Lnet/minecraft/client/renderer/GameRenderer;m_109120_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/Camera;F)V"
+      }
+    }
+  }
+}

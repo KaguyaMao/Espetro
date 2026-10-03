@@ -1,0 +1,52 @@
+﻿Arcana-1.1.5-loader-hybrid.jar
+architectury-9.2.14-forge.jar
+auratip-forge-1.20.1-1.1.3-beta-espetro.1.jar
+CameraOverhaul-v2.1.1-forge+mc[1.20-1.20.5].jar
+cloth-config-11.1.136-forge.jar
+curios-forge-5.14.1+1.20.1.jar
+CustomSkinLoader_ForgeV2-14.28.jar
+disablef5-1.2(1).jar
+dragonrise_reforge-1.5.0-beta.jar
+embeddium-0.3.31+mc1.20.1.jar
+esico-1.0.0.jar
+espetro-1.1.3-i.jar
+espoints-1.1.1b.jar
+esvoice-1.0.0-final.jar
+fancymenu_forge_3.9.9_MC_1.20.1.jar
+fcp-1.1.1-更改特化版.jar
+geckolib-forge-1.20.1-4.8.3.jar
+IBEEditor-1.20-2.2.8-forge.jar
+konkrete_forge_1.8.0_MC_1.20-1.20.1.jar
+kotlinforforge-4.12.0-all.jar
+kubejs-forge-2001.6.5-build.26.jar
+lightspeed-1.20.1-1.1.2hotfix.jar
+melody_forge_1.0.3_MC_1.20.1-1.20.4.jar
+mm_armor-1.1.0-forge-1.20.1.jar
+mutil-1.20.1-6.3.0.jar
+OELib-forge-1.20.1-0.2.4.1.jar
+Ping-Wheel-1.12.1-forge-1.20.1.jar
+player-animation-lib-forge-1.0.2-rc1+1.20.jar
+Presence Footsteps [FORGE] 1.0.0.jar
+realgrisly-1.0.0.jar
+rhino-forge-2001.2.3-build.10.jar
+sbwarcanacompat-1.0.0.jar
+snassets_particles-1.0.1.jar
+taczadditions-1.20.1-1.0.0-hotfix.jar
+taczjs-forge-1.4.2+mc1.20.1.jar
+taczmagazines-1.20.1-0.1.6-Beta.jar
+tacz_tactical_breaching-forge-1.20.1-1.0.1.jar
+tetrachordlib-1.20+1.0.3.jar
+voicechat-forge-1.20.1-2.6.20.jar
+vvp-alpha-beta-1.20.1-0.2.1-更改特化版.jar
+[Xaero的世界地图] xaeroworldmap-forge-1.20.1-1.44.2.jar
+[内存泄漏修复] memoryleakfix-forge-1.17+-1.1.5.jar
+[卓越前线] superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar
+[星光] starlight-1.1.2+forge.1cda73c.jar
+[晴雪UI] ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar
+[末日装饰] doomsday_decoration-1.1.3-forge-1.20.1.jar
+[机械动力] create-1.20.1-6.0.8.jar
+[永恒枪械工坊：零] tacz-1.20.1-1.1.8-release.jar
+[浮冰UI] auratip-forge-1.20.1-1.1.1-beta.jar
+[火花] spark-1.10.53-forge.jar
+[现代化修复] modernfix-forge-5.27.25+mc1.20.1.jar
+[自定义游戏加载界面] drippyloadingscreen_forge_3.1.5_MC_1.20.1.jar

@@ -67,6 +67,11 @@ public class VoteManager {
 
         String factionId;
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            // 观战者不参与指挥官选举（既不是候选人也不能投票）。正常情况下他们已因
+            // clearPlayerRoundAssignment 失去编制而被上面的判断过滤，这里再显式挡一层。
+            if (GameStateManager.getInstance().isObserver(player.getUUID())) {
+                continue;
+            }
             factionId = ClassCountManager.getInstance().getPlayerFaction(player.getUUID());
             if (factionId != null) {
                 String team = GameStateManager.getTeamFromFactionStatic(factionId);
@@ -138,7 +143,8 @@ public class VoteManager {
      */
     public boolean castVote(ServerPlayer voter, UUID targetUUID) {
         if (!votingActive) return false;
-        if (voter == null || voter.getUUID().equals(targetUUID)) return false;
+        if (voter == null) return false;
+        // 允许给自己投票：指挥官候选人可以投自己一票。
 
         String voterTeam = getPlayerTeam(voter.getUUID());
         if (voterTeam == null) {

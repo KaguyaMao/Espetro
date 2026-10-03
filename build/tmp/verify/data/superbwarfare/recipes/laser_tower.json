@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "defense",
+  "inputs": [
+    "#forge:storage_blocks/steel",
+    "superbwarfare:laser_unit",
+    "superbwarfare:small_battery_pack",
+    "superbwarfare:motor"
+  ],
+  "result": {
+    "entity": "superbwarfare:laser_tower"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "mappings": {
+    "com/tacz/guns/mixin/common/ServerGamePacketListenerImplMixin": {
+      "handlePlayerCommand": "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;m_5681_(Lnet/minecraft/network/protocol/game/ServerboundPlayerCommandPacket;)V",
+      "Lnet/minecraft/server/level/ServerPlayer;setSprinting(Z)V": "Lnet/minecraft/server/level/ServerPlayer;m_6858_(Z)V"
+    },
+    "com/tacz/guns/mixin/client/MouseHandlerMixin": {
+      "turnPlayer": "Lnet/minecraft/client/MouseHandler;m_91523_()V",
+      "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V": "Lnet/minecraft/client/player/LocalPlayer;m_19884_(DD)V"
+    },
+    "com/tacz/guns/mixin/common/ServerPlayerMixin": {
+      "restoreFrom": "Lnet/minecraft/server/level/ServerPlayer;m_9015_(Lnet/minecraft/server/level/ServerPlayer;Z)V"
+    },
+    "com/tacz/guns/mixin/client/ItemInHandRendererMixin": {
+      "renderHandsWithItems": "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109314_(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/player/LocalPlayer;I)V",
+      "tick": "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109311_()V"
+    },
+    "com/tacz/guns/mixin/client/HumanoidModelMixin": {
+      "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/HumanoidModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+    },
+    "com/tacz/guns/mixin/client/ItemInHandLayerMixin": {
+      "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V": "Lnet/minecraft/client/renderer/entity/layers/ItemInHandLayer;m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+      "renderArmWithItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V": "Lnet/minecraft/client/renderer/entity/layers/ItemInHandLayer;m_117184_(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
+    },
+    "com/tacz/guns/mixin/client/PlayerModelMixin": {
+      "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/PlayerModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+    },
+    "com/tacz/guns/mixin/client/LocalPlayerMixin": {
+      "respawn": "Lnet/minecraft/client/player/LocalPlayer;m_7583_()V",
+      "aiStep": "Lnet/minecraft/client/player/LocalPlayer;m_8107_()V",
+      "tick": "Lnet/minecraft/client/player/LocalPlayer;m_8119_()V",
+      "Lnet/minecraft/client/player/LocalPlayer;setSprinting(Z)V": "Lnet/minecraft/client/player/LocalPlayer;m_6858_(Z)V"
+    },
+    "com/tacz/guns/mixin/common/ServerPlayNetHandlerMixin": {
+      "Lnet/minecraft/server/level/ServerPlayer;stopUsingItem()V": "Lnet/minecraft/server/level/ServerPlayer;m_5810_()V",
+      "handlePlayerAction": "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;m_7502_(Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket;)V"
+    },
+    "com/tacz/guns/mixin/client/GameRendererMixin": {
+      "bobHurt": "Lnet/minecraft/client/renderer/GameRenderer;m_109117_(Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+      "bobView": "Lnet/minecraft/client/renderer/GameRenderer;m_109138_(Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+      "getFov": "Lnet/minecraft/client/renderer/GameRenderer;m_109141_(Lnet/minecraft/client/Camera;FZ)D"
+    },
+    "com/tacz/guns/mixin/client/SoundManagerPreparationsMixin": {
+      "listResources": "Lnet/minecraft/client/sounds/SoundManager$Preparations;m_245281_(Lnet/minecraft/server/packs/resources/ResourceManager;)V",
+      "net.minecraft.client.sounds.SoundManager$Preparations": "net/minecraft/client/sounds/SoundManager$Preparations"
+    },
+    "com/tacz/guns/mixin/common/LivingEntityMixin": {
+      "tick": "Lnet/minecraft/world/entity/LivingEntity;m_8119_()V"
+    },
+    "com/tacz/guns/mixin/client/AbstractButtonMixin": {
+      "onClick(DD)V": "Lnet/minecraft/client/gui/components/AbstractButton;m_5716_(DD)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/tacz/guns/mixin/common/ServerGamePacketListenerImplMixin": {
+        "handlePlayerCommand": "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;m_5681_(Lnet/minecraft/network/protocol/game/ServerboundPlayerCommandPacket;)V",
+        "Lnet/minecraft/server/level/ServerPlayer;setSprinting(Z)V": "Lnet/minecraft/server/level/ServerPlayer;m_6858_(Z)V"
+      },
+      "com/tacz/guns/mixin/client/MouseHandlerMixin": {
+        "turnPlayer": "Lnet/minecraft/client/MouseHandler;m_91523_()V",
+        "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V": "Lnet/minecraft/client/player/LocalPlayer;m_19884_(DD)V"
+      },
+      "com/tacz/guns/mixin/common/ServerPlayerMixin": {
+        "restoreFrom": "Lnet/minecraft/server/level/ServerPlayer;m_9015_(Lnet/minecraft/server/level/ServerPlayer;Z)V"
+      },
+      "com/tacz/guns/mixin/client/ItemInHandRendererMixin": {
+        "renderHandsWithItems": "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109314_(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/player/LocalPlayer;I)V",
+        "tick": "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109311_()V"
+      },
+      "com/tacz/guns/mixin/client/HumanoidModelMixin": {
+        "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/HumanoidModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+      },
+      "com/tacz/guns/mixin/client/ItemInHandLayerMixin": {
+        "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V": "Lnet/minecraft/client/renderer/entity/layers/ItemInHandLayer;m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+        "renderArmWithItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V": "Lnet/minecraft/client/renderer/entity/layers/ItemInHandLayer;m_117184_(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
+      },
+      "com/tacz/guns/mixin/client/PlayerModelMixin": {
+        "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/PlayerModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+      },
+      "com/tacz/guns/mixin/client/LocalPlayerMixin": {
+        "respawn": "Lnet/minecraft/client/player/LocalPlayer;m_7583_()V",
+        "aiStep": "Lnet/minecraft/client/player/LocalPlayer;m_8107_()V",
+        "tick": "Lnet/minecraft/client/player/LocalPlayer;m_8119_()V",
+        "Lnet/minecraft/client/player/LocalPlayer;setSprinting(Z)V": "Lnet/minecraft/client/player/LocalPlayer;m_6858_(Z)V"
+      },
+      "com/tacz/guns/mixin/common/ServerPlayNetHandlerMixin": {
+        "Lnet/minecraft/server/level/ServerPlayer;stopUsingItem()V": "Lnet/minecraft/server/level/ServerPlayer;m_5810_()V",
+        "handlePlayerAction": "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;m_7502_(Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket;)V"
+      },
+      "com/tacz/guns/mixin/client/GameRendererMixin": {
+        "bobHurt": "Lnet/minecraft/client/renderer/GameRenderer;m_109117_(Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+        "bobView": "Lnet/minecraft/client/renderer/GameRenderer;m_109138_(Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+        "getFov": "Lnet/minecraft/client/renderer/GameRenderer;m_109141_(Lnet/minecraft/client/Camera;FZ)D"
+      },
+      "com/tacz/guns/mixin/client/SoundManagerPreparationsMixin": {
+        "listResources": "Lnet/minecraft/client/sounds/SoundManager$Preparations;m_245281_(Lnet/minecraft/server/packs/resources/ResourceManager;)V",
+        "net.minecraft.client.sounds.SoundManager$Preparations": "net/minecraft/client/sounds/SoundManager$Preparations"
+      },
+      "com/tacz/guns/mixin/common/LivingEntityMixin": {
+        "tick": "Lnet/minecraft/world/entity/LivingEntity;m_8119_()V"
+      },
+      "com/tacz/guns/mixin/client/AbstractButtonMixin": {
+        "onClick(DD)V": "Lnet/minecraft/client/gui/components/AbstractButton;m_5716_(DD)V"
+      }
+    }
+  }
+}

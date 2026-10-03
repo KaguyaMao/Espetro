@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "enabled=false,facing=east,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 90
+    },
+    "enabled=false,facing=east,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 90
+    },
+    "enabled=false,facing=north,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table"
+    },
+    "enabled=false,facing=north,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table"
+    },
+    "enabled=false,facing=south,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 180
+    },
+    "enabled=false,facing=south,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 180
+    },
+    "enabled=false,facing=west,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 270
+    },
+    "enabled=false,facing=west,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 270
+    },
+    "enabled=true,facing=east,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 90
+    },
+    "enabled=true,facing=east,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 90
+    },
+    "enabled=true,facing=north,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table"
+    },
+    "enabled=true,facing=north,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table"
+    },
+    "enabled=true,facing=south,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 180
+    },
+    "enabled=true,facing=south,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 180
+    },
+    "enabled=true,facing=west,part=foot": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 270
+    },
+    "enabled=true,facing=west,part=head": {
+      "model": "superbwarfare:block/blueprint_research_table",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "minecraft:planks"
+    },
+    "b": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    "aba"
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:barbed_wire"
+  },
+  "show_notification": true
+}

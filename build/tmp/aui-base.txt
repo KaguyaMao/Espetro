@@ -1,0 +1,1847 @@
+﻿Compiled from "Base.java"
+public class com.sighs.apricityui.render.Base {
+  private static final float DEFAULT_DEPTH_STEP;
+
+  private static final float GLOBAL_DOCUMENT_Z_OFFSET;
+
+  private static final float GUI_ITEM_MODEL_Z_OFFSET;
+
+  private static final float GUI_ITEM_DECORATION_Z_OFFSET;
+
+  private static final float GUI_ITEM_FOREGROUND_Z_OFFSET;
+
+  private static final float GUI_FLOATING_ITEM_MODEL_Z_OFFSET;
+
+  private static final float GUI_FLOATING_ITEM_DECORATION_Z_OFFSET;
+
+  private static final float FLAT_DOCUMENT_LAYER_STEP;
+
+  private static final java.util.ArrayDeque<java.lang.Float> DOCUMENT_Z_OFFSET_STACK;
+
+  private static final java.util.ArrayDeque<com.sighs.apricityui.render.Base$GuiItemZ> GUI_ITEM_Z_STACK;
+
+  private static final java.util.ArrayDeque<com.sighs.apricityui.render.Base$PoseSnapshot> POSE_SNAPSHOT_POOL;
+
+  private static float guiItemModelZ;
+
+  private static float guiItemDecorationZ;
+
+  private static final java.util.ArrayDeque<java.lang.Float> DEPTH_STEP_STACK;
+
+  private static float depthStep;
+
+  private static final java.util.ArrayDeque<java.lang.Boolean> DEPTH_MODE_STACK;
+
+  private static final java.util.ArrayDeque<java.lang.Float> DEPTH_CURSOR_STACK;
+
+  private static final java.util.ArrayDeque<java.lang.Boolean> DEPTH_TEST_STACK;
+
+  private static boolean accumulateDepth;
+
+  private static float depthCursor;
+
+  private static boolean depthTestEnabled;
+
+  private static float documentZOffset;
+
+  private static final java.util.ArrayDeque<java.util.Set<com.sighs.apricityui.init.Element>> ENTERED_SUBTREES_POOL;
+
+  private static com.sighs.apricityui.spi.MeshBuilder currentMesh;
+
+  public com.sighs.apricityui.render.Base();
+    Code:
+       0: aload_0
+       1: invokespecial #98                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  private static com.sighs.apricityui.render.Base$PoseSnapshot savePose(com.mojang.blaze3d.vertex.PoseStack);
+    Code:
+       0: getstatic     #104                // Field POSE_SNAPSHOT_POOL:Ljava/util/ArrayDeque;
+       3: invokevirtual #110                // Method java/util/ArrayDeque.pollLast:()Ljava/lang/Object;
+       6: checkcast     #11                 // class com/sighs/apricityui/render/Base$PoseSnapshot
+       9: astore_1
+      10: aload_1
+      11: ifnonnull     22
+      14: new           #11                 // class com/sighs/apricityui/render/Base$PoseSnapshot
+      17: dup
+      18: invokespecial #111                // Method com/sighs/apricityui/render/Base$PoseSnapshot."<init>":()V
+      21: astore_1
+      22: aload_0
+      23: invokevirtual #115                // Method com/mojang/blaze3d/vertex/PoseStack.m_85850_:()Lcom/mojang/blaze3d/vertex/PoseStack$Pose;
+      26: astore_2
+      27: aload_1
+      28: getfield      #119                // Field com/sighs/apricityui/render/Base$PoseSnapshot.pose:Lorg/joml/Matrix4f;
+      31: aload_2
+      32: invokevirtual #123                // Method com/mojang/blaze3d/vertex/PoseStack$Pose.m_252922_:()Lorg/joml/Matrix4f;
+      35: invokevirtual #129                // Method org/joml/Matrix4f.set:(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;
+      38: pop
+      39: aload_1
+      40: getfield      #133                // Field com/sighs/apricityui/render/Base$PoseSnapshot.normal:Lorg/joml/Matrix3f;
+      43: aload_2
+      44: invokevirtual #137                // Method com/mojang/blaze3d/vertex/PoseStack$Pose.m_252943_:()Lorg/joml/Matrix3f;
+      47: invokevirtual #142                // Method org/joml/Matrix3f.set:(Lorg/joml/Matrix3fc;)Lorg/joml/Matrix3f;
+      50: pop
+      51: aload_1
+      52: areturn
+
+  private static void restorePose(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.render.Base$PoseSnapshot);
+    Code:
+       0: aload_0
+       1: invokevirtual #115                // Method com/mojang/blaze3d/vertex/PoseStack.m_85850_:()Lcom/mojang/blaze3d/vertex/PoseStack$Pose;
+       4: astore_2
+       5: aload_2
+       6: invokevirtual #123                // Method com/mojang/blaze3d/vertex/PoseStack$Pose.m_252922_:()Lorg/joml/Matrix4f;
+       9: aload_1
+      10: getfield      #119                // Field com/sighs/apricityui/render/Base$PoseSnapshot.pose:Lorg/joml/Matrix4f;
+      13: invokevirtual #129                // Method org/joml/Matrix4f.set:(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;
+      16: pop
+      17: aload_2
+      18: invokevirtual #137                // Method com/mojang/blaze3d/vertex/PoseStack$Pose.m_252943_:()Lorg/joml/Matrix3f;
+      21: aload_1
+      22: getfield      #133                // Field com/sighs/apricityui/render/Base$PoseSnapshot.normal:Lorg/joml/Matrix3f;
+      25: invokevirtual #142                // Method org/joml/Matrix3f.set:(Lorg/joml/Matrix3fc;)Lorg/joml/Matrix3f;
+      28: pop
+      29: getstatic     #104                // Field POSE_SNAPSHOT_POOL:Ljava/util/ArrayDeque;
+      32: aload_1
+      33: invokevirtual #154                // Method java/util/ArrayDeque.addLast:(Ljava/lang/Object;)V
+      36: return
+
+  public static void drawOverlayDocument(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_1
+       1: ifnonnull     5
+       4: return
+       5: aload_1
+       6: invokestatic  #162                // Method com/sighs/apricityui/init/Document.withContext:(Lcom/sighs/apricityui/init/Document;)Lcom/sighs/apricityui/init/Document$ContextScope;
+       9: astore_2
+      10: aload_1
+      11: invokevirtual #166                // Method com/sighs/apricityui/init/Document.getViewport:()Lcom/sighs/apricityui/viewport/ApricityViewport;
+      14: astore_3
+      15: invokestatic  #171                // Method com/sighs/apricityui/render/Mask.resetDepth:()V
+      18: aload_0
+      19: invokevirtual #174                // Method com/mojang/blaze3d/vertex/PoseStack.m_85836_:()V
+      22: aload_3
+      23: invokevirtual #180                // Method com/sighs/apricityui/viewport/ApricityViewport.scissorScale:()D
+      26: invokestatic  #184                // Method com/sighs/apricityui/render/Mask.pushScissorScale:(D)V
+      29: aload_0
+      30: aload_3
+      31: invokevirtual #188                // Method com/sighs/apricityui/viewport/ApricityViewport.renderScale:()F
+      34: aload_3
+      35: invokevirtual #188                // Method com/sighs/apricityui/viewport/ApricityViewport.renderScale:()F
+      38: fconst_1
+      39: invokevirtual #192                // Method com/mojang/blaze3d/vertex/PoseStack.m_85841_:(FFF)V
+      42: aload_0
+      43: aload_1
+      44: invokestatic  #198                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+      47: invokestatic  #202                // Method drawFlatDocumentInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+      50: invokestatic  #205                // Method com/sighs/apricityui/render/Mask.popScissorScale:()V
+      53: aload_0
+      54: invokevirtual #208                // Method com/mojang/blaze3d/vertex/PoseStack.m_85849_:()V
+      57: goto          72
+      60: astore        4
+      62: invokestatic  #205                // Method com/sighs/apricityui/render/Mask.popScissorScale:()V
+      65: aload_0
+      66: invokevirtual #208                // Method com/mojang/blaze3d/vertex/PoseStack.m_85849_:()V
+      69: aload         4
+      71: athrow
+      72: aload_2
+      73: ifnull        105
+      76: aload_2
+      77: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      80: goto          105
+      83: astore_3
+      84: aload_2
+      85: ifnull        103
+      88: aload_2
+      89: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      92: goto          103
+      95: astore        4
+      97: aload_3
+      98: aload         4
+     100: invokevirtual #215                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     103: aload_3
+     104: athrow
+     105: return
+    Exception table:
+       from    to  target type
+          29    50    60   any
+          60    62    60   any
+          10    72    83   Class java/lang/Throwable
+          88    92    95   Class java/lang/Throwable
+
+  public static void drawScreenDocument(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokestatic  #198                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+       5: invokestatic  #224                // Method drawScreenDocument:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+       8: return
+
+  public static void drawScreenDocument(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document, java.util.List<? extends com.sighs.apricityui.render.RenderNode>);
+    Code:
+       0: aload_1
+       1: ifnonnull     5
+       4: return
+       5: aload_1
+       6: invokestatic  #162                // Method com/sighs/apricityui/init/Document.withContext:(Lcom/sighs/apricityui/init/Document;)Lcom/sighs/apricityui/init/Document$ContextScope;
+       9: astore_3
+      10: invokestatic  #171                // Method com/sighs/apricityui/render/Mask.resetDepth:()V
+      13: aload_0
+      14: aload_1
+      15: aload_2
+      16: invokestatic  #202                // Method drawFlatDocumentInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+      19: aload_3
+      20: ifnull        55
+      23: aload_3
+      24: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      27: goto          55
+      30: astore        4
+      32: aload_3
+      33: ifnull        52
+      36: aload_3
+      37: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      40: goto          52
+      43: astore        5
+      45: aload         4
+      47: aload         5
+      49: invokevirtual #215                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+      52: aload         4
+      54: athrow
+      55: return
+    Exception table:
+       from    to  target type
+          10    19    30   Class java/lang/Throwable
+          36    40    43   Class java/lang/Throwable
+
+  public static void drawDocument(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_1
+       1: ifnonnull     5
+       4: return
+       5: aload_1
+       6: invokestatic  #162                // Method com/sighs/apricityui/init/Document.withContext:(Lcom/sighs/apricityui/init/Document;)Lcom/sighs/apricityui/init/Document$ContextScope;
+       9: astore_2
+      10: aload_0
+      11: aload_1
+      12: invokestatic  #198                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+      15: invokestatic  #232                // Method drawDocumentInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+      18: aload_2
+      19: ifnull        51
+      22: aload_2
+      23: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      26: goto          51
+      29: astore_3
+      30: aload_2
+      31: ifnull        49
+      34: aload_2
+      35: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      38: goto          49
+      41: astore        4
+      43: aload_3
+      44: aload         4
+      46: invokevirtual #215                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+      49: aload_3
+      50: athrow
+      51: return
+    Exception table:
+       from    to  target type
+          10    18    29   Class java/lang/Throwable
+          34    38    41   Class java/lang/Throwable
+
+  public static void drawEmbeddedDocument(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document, com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_1
+       1: ifnonnull     5
+       4: return
+       5: aload_1
+       6: invokestatic  #162                // Method com/sighs/apricityui/init/Document.withContext:(Lcom/sighs/apricityui/init/Document;)Lcom/sighs/apricityui/init/Document$ContextScope;
+       9: astore_3
+      10: aload_0
+      11: aload_1
+      12: invokestatic  #198                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+      15: aload_2
+      16: invokestatic  #238                // Method resolveEmbeddedDocumentBaseZ:(Lcom/sighs/apricityui/init/Document;)F
+      19: invokestatic  #242                // Method drawFlatDocumentAtZInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;F)V
+      22: aload_3
+      23: ifnull        58
+      26: aload_3
+      27: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      30: goto          58
+      33: astore        4
+      35: aload_3
+      36: ifnull        55
+      39: aload_3
+      40: invokevirtual #211                // Method com/sighs/apricityui/init/Document$ContextScope.close:()V
+      43: goto          55
+      46: astore        5
+      48: aload         4
+      50: aload         5
+      52: invokevirtual #215                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+      55: aload         4
+      57: athrow
+      58: return
+    Exception table:
+       from    to  target type
+          10    22    33   Class java/lang/Throwable
+          39    43    46   Class java/lang/Throwable
+
+  private static void drawFlatDocumentInContext(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document, java.util.List<? extends com.sighs.apricityui.render.RenderNode>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_1
+       4: invokestatic  #246                // Method resolveFlatDocumentBaseZ:(Lcom/sighs/apricityui/init/Document;)F
+       7: invokestatic  #242                // Method drawFlatDocumentAtZInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;F)V
+      10: return
+
+  private static void drawFlatDocumentAtZInContext(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document, java.util.List<? extends com.sighs.apricityui.render.RenderNode>, float);
+    Code:
+       0: fload_3
+       1: invokestatic  #251                // Method pushDocumentZOffset:(F)V
+       4: ldc           #60                 // float 150.0f
+       6: ldc           #62                 // float 200.0f
+       8: invokestatic  #255                // Method pushGuiItemZ:(FF)V
+      11: aload_0
+      12: aload_1
+      13: aload_2
+      14: invokestatic  #232                // Method drawDocumentInContext:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+      17: invokestatic  #258                // Method popGuiItemZ:()V
+      20: invokestatic  #261                // Method popDocumentZOffset:()V
+      23: goto          37
+      26: astore        4
+      28: invokestatic  #258                // Method popGuiItemZ:()V
+      31: invokestatic  #261                // Method popDocumentZOffset:()V
+      34: aload         4
+      36: athrow
+      37: return
+    Exception table:
+       from    to  target type
+          11    17    26   any
+          26    28    26   any
+
+  static float resolveFlatDocumentBaseZ(com.sighs.apricityui.init.Document);
+    Code:
+       0: iconst_0
+       1: istore_1
+       2: invokestatic  #265                // Method com/sighs/apricityui/init/Document.getAll:()Ljava/util/List;
+       5: invokestatic  #271                // Method com/sighs/apricityui/render/DocumentLayerOrder.backToFront:(Ljava/util/Collection;)Ljava/util/List;
+       8: invokeinterface #275,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      13: astore_2
+      14: aload_2
+      15: invokeinterface #281,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      20: ifeq          62
+      23: aload_2
+      24: invokeinterface #284,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      29: checkcast     #23                 // class com/sighs/apricityui/init/Document
+      32: astore_3
+      33: aload_3
+      34: invokestatic  #288                // Method isFlatDocument:(Lcom/sighs/apricityui/init/Document;)Z
+      37: ifne          43
+      40: goto          14
+      43: aload_3
+      44: aload_0
+      45: if_acmpne     56
+      48: fconst_1
+      49: iload_1
+      50: i2f
+      51: ldc           #70                 // float 251.25f
+      53: fmul
+      54: fadd
+      55: freturn
+      56: iinc          1, 1
+      59: goto          14
+      62: fconst_1
+      63: freturn
+
+  static float resolveEmbeddedDocumentBaseZ(com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_0
+       1: invokestatic  #246                // Method resolveFlatDocumentBaseZ:(Lcom/sighs/apricityui/init/Document;)F
+       4: freturn
+
+  public static float getFlatOverlayZ();
+    Code:
+       0: iconst_0
+       1: istore_0
+       2: invokestatic  #265                // Method com/sighs/apricityui/init/Document.getAll:()Ljava/util/List;
+       5: invokeinterface #275,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      10: astore_1
+      11: aload_1
+      12: invokeinterface #281,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      17: ifeq          43
+      20: aload_1
+      21: invokeinterface #284,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      26: checkcast     #23                 // class com/sighs/apricityui/init/Document
+      29: astore_2
+      30: aload_2
+      31: invokestatic  #288                // Method isFlatDocument:(Lcom/sighs/apricityui/init/Document;)Z
+      34: ifeq          40
+      37: iinc          0, 1
+      40: goto          11
+      43: fconst_1
+      44: iload_0
+      45: i2f
+      46: ldc           #70                 // float 251.25f
+      48: fmul
+      49: fadd
+      50: freturn
+
+  private static boolean isFlatDocument(com.sighs.apricityui.init.Document);
+    Code:
+       0: aload_0
+       1: ifnull        22
+       4: aload_0
+       5: getfield      #296                // Field com/sighs/apricityui/init/Document.inWorld:Z
+       8: ifne          22
+      11: aload_0
+      12: invokevirtual #299                // Method com/sighs/apricityui/init/Document.isManuallyRendered:()Z
+      15: ifne          22
+      18: iconst_1
+      19: goto          23
+      22: iconst_0
+      23: ireturn
+
+  private static java.util.Set<com.sighs.apricityui.init.Element> obtainEnteredSubtrees();
+    Code:
+       0: getstatic     #304                // Field ENTERED_SUBTREES_POOL:Ljava/util/ArrayDeque;
+       3: invokevirtual #307                // Method java/util/ArrayDeque.poll:()Ljava/lang/Object;
+       6: checkcast     #309                // class java/util/Set
+       9: astore_0
+      10: aload_0
+      11: ifnull        18
+      14: aload_0
+      15: goto          28
+      18: new           #311                // class java/util/IdentityHashMap
+      21: dup
+      22: invokespecial #312                // Method java/util/IdentityHashMap."<init>":()V
+      25: invokestatic  #318                // Method java/util/Collections.newSetFromMap:(Ljava/util/Map;)Ljava/util/Set;
+      28: areturn
+
+  private static void releaseEnteredSubtrees(java.util.Set<com.sighs.apricityui.init.Element>);
+    Code:
+       0: aload_0
+       1: invokeinterface #326,  1          // InterfaceMethod java/util/Set.clear:()V
+       6: getstatic     #304                // Field ENTERED_SUBTREES_POOL:Ljava/util/ArrayDeque;
+       9: invokevirtual #330                // Method java/util/ArrayDeque.size:()I
+      12: iconst_4
+      13: if_icmpge     23
+      16: getstatic     #304                // Field ENTERED_SUBTREES_POOL:Ljava/util/ArrayDeque;
+      19: aload_0
+      20: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      23: return
+
+  private static void drawDocumentInContext(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Document, java.util.List<? extends com.sighs.apricityui.render.RenderNode>);
+    Code:
+       0: invokestatic  #339                // Method java/lang/System.nanoTime:()J
+       3: lstore_3
+       4: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       7: invokeinterface #349,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.pushFilterRenderState:()Lcom/sighs/apricityui/spi/AuiRenderService$RenderStateScope;
+      12: astore        5
+      14: aload         5
+      16: ifnonnull     24
+      19: getstatic     #353                // Field com/sighs/apricityui/spi/AuiRenderService$RenderStateScope.NOOP:Lcom/sighs/apricityui/spi/AuiRenderService$RenderStateScope;
+      22: astore        5
+      24: invokestatic  #358                // Method com/sighs/apricityui/task/FrameScheduler.renderBegin:()V
+      27: invokestatic  #363                // Method com/sighs/apricityui/render/RenderBatchStats.beginDocument:()V
+      30: invokestatic  #368                // Method com/sighs/apricityui/render/FontDrawer.drainCompletedRasters:()V
+      33: invokestatic  #373                // Method com/sighs/apricityui/render/RectFrameCache.begin:()V
+      36: invokestatic  #376                // Method com/sighs/apricityui/render/TransformFrameCache.begin:()V
+      39: invokestatic  #379                // Method com/sighs/apricityui/layout/LayoutMeasureCache.begin:()V
+      42: invokestatic  #382                // Method com/sighs/apricityui/style/StyleFrameCache.begin:()V
+      45: invokestatic  #387                // Method com/sighs/apricityui/render/FilterRenderer.beginFrame:()V
+      48: aload_0
+      49: invokevirtual #174                // Method com/mojang/blaze3d/vertex/PoseStack.m_85836_:()V
+      52: aload_1
+      53: invokevirtual #166                // Method com/sighs/apricityui/init/Document.getViewport:()Lcom/sighs/apricityui/viewport/ApricityViewport;
+      56: invokevirtual #180                // Method com/sighs/apricityui/viewport/ApricityViewport.scissorScale:()D
+      59: invokestatic  #390                // Method com/sighs/apricityui/render/FontDrawer.pushDocumentPixelScale:(D)V
+      62: aload_1
+      63: invokevirtual #393                // Method com/sighs/apricityui/init/Document.commitPendingStyleRecalcForRender:()Z
+      66: istore        6
+      68: iconst_0
+      69: istore        7
+      71: iload         6
+      73: ifeq          85
+      76: aload_1
+      77: invokevirtual #396                // Method com/sighs/apricityui/init/Document.commitRenderStateForMotion:()Z
+      80: istore        7
+      82: goto          96
+      85: aload_1
+      86: invokevirtual #399                // Method com/sighs/apricityui/init/Document.hasPendingRenderState:()Z
+      89: ifeq          96
+      92: aload_1
+      93: invokevirtual #402                // Method com/sighs/apricityui/init/Document.commitRenderState:()V
+      96: aload_1
+      97: invokevirtual #405                // Method com/sighs/apricityui/init/Document.stepMotionRender:()Z
+     100: istore        8
+     102: aload_1
+     103: invokevirtual #408                // Method com/sighs/apricityui/init/Document.stepScrollRender:()Z
+     106: istore        9
+     108: iload         7
+     110: ifeq          128
+     113: aload_1
+     114: invokestatic  #414                // Method com/sighs/apricityui/render/LayoutCommit.commit:(Lcom/sighs/apricityui/init/Document;)V
+     117: aload_1
+     118: invokevirtual #417                // Method com/sighs/apricityui/init/Document.discardScrollShifts:()V
+     121: aload_1
+     122: invokevirtual #420                // Method com/sighs/apricityui/init/Document.commitMotionHitTest:()V
+     125: goto          273
+     128: iload         9
+     130: ifeq          212
+     133: aload_1
+     134: invokevirtual #423                // Method com/sighs/apricityui/init/Document.drainMotionLayoutRoots:()Ljava/util/Set;
+     137: astore        10
+     139: aload_1
+     140: invokevirtual #426                // Method com/sighs/apricityui/init/Document.drainMotionGeometryRoots:()Ljava/util/Set;
+     143: astore        11
+     145: aload         10
+     147: invokeinterface #429,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     152: ifeq          170
+     155: iload         8
+     157: ifeq          181
+     160: aload         11
+     162: invokeinterface #429,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     167: ifeq          181
+     170: aload_1
+     171: invokestatic  #414                // Method com/sighs/apricityui/render/LayoutCommit.commit:(Lcom/sighs/apricityui/init/Document;)V
+     174: aload_1
+     175: invokevirtual #417                // Method com/sighs/apricityui/init/Document.discardScrollShifts:()V
+     178: goto          205
+     181: aload_1
+     182: aload_1
+     183: invokevirtual #432                // Method com/sighs/apricityui/init/Document.getScrollShifts:()Ljava/util/List;
+     186: invokestatic  #436                // Method com/sighs/apricityui/render/LayoutCommit.commitScrollTranslation:(Lcom/sighs/apricityui/init/Document;Ljava/util/List;)V
+     189: aload         11
+     191: invokeinterface #429,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     196: ifne          205
+     199: aload_1
+     200: aload         11
+     202: invokestatic  #440                // Method com/sighs/apricityui/render/LayoutCommit.commitTransforms:(Lcom/sighs/apricityui/init/Document;Ljava/util/Set;)V
+     205: aload_1
+     206: invokevirtual #420                // Method com/sighs/apricityui/init/Document.commitMotionHitTest:()V
+     209: goto          273
+     212: iload         8
+     214: ifeq          273
+     217: aload_1
+     218: invokevirtual #423                // Method com/sighs/apricityui/init/Document.drainMotionLayoutRoots:()Ljava/util/Set;
+     221: astore        10
+     223: aload_1
+     224: invokevirtual #426                // Method com/sighs/apricityui/init/Document.drainMotionGeometryRoots:()Ljava/util/Set;
+     227: astore        11
+     229: aload         10
+     231: invokeinterface #429,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     236: ifne          246
+     239: aload_1
+     240: invokestatic  #414                // Method com/sighs/apricityui/render/LayoutCommit.commit:(Lcom/sighs/apricityui/init/Document;)V
+     243: goto          269
+     246: aload         11
+     248: invokeinterface #429,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     253: ifne          265
+     256: aload_1
+     257: aload         11
+     259: invokestatic  #440                // Method com/sighs/apricityui/render/LayoutCommit.commitTransforms:(Lcom/sighs/apricityui/init/Document;Ljava/util/Set;)V
+     262: goto          269
+     265: aload_1
+     266: invokestatic  #414                // Method com/sighs/apricityui/render/LayoutCommit.commit:(Lcom/sighs/apricityui/init/Document;)V
+     269: aload_1
+     270: invokevirtual #420                // Method com/sighs/apricityui/init/Document.commitMotionHitTest:()V
+     273: aload_0
+     274: fconst_0
+     275: fconst_0
+     276: getstatic     #442                // Field documentZOffset:F
+     279: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+     282: aconst_null
+     283: astore        10
+     285: invokestatic  #447                // Method obtainEnteredSubtrees:()Ljava/util/Set;
+     288: astore        11
+     290: aconst_null
+     291: astore        12
+     293: aconst_null
+     294: astore        13
+     296: aload_1
+     297: invokevirtual #451                // Method com/sighs/apricityui/init/Document.getPaintList:()Ljava/util/ArrayList;
+     300: astore        14
+     302: iconst_0
+     303: istore        15
+     305: iload         15
+     307: aload         14
+     309: invokeinterface #454,  1          // InterfaceMethod java/util/List.size:()I
+     314: if_icmpge     483
+     317: aload         14
+     319: iload         15
+     321: invokeinterface #458,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     326: checkcast     #460                // class com/sighs/apricityui/render/RenderNode
+     329: astore        16
+     331: aload         16
+     333: invokestatic  #464                // InterfaceMethod com/sighs/apricityui/render/RenderNode.getRenderNodeTarget:(Lcom/sighs/apricityui/render/RenderNode;)Lcom/sighs/apricityui/init/Element;
+     336: astore        17
+     338: aload         10
+     340: ifnull        364
+     343: aload         17
+     345: ifnull        361
+     348: aload         17
+     350: aload         10
+     352: invokestatic  #468                // InterfaceMethod com/sighs/apricityui/render/RenderNode.isSameOrDescendant:(Lcom/sighs/apricityui/init/Element;Lcom/sighs/apricityui/init/Element;)Z
+     355: ifeq          361
+     358: goto          477
+     361: aconst_null
+     362: astore        10
+     364: aload         17
+     366: ifnull        396
+     369: aload         11
+     371: aload         17
+     373: invokeinterface #472,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+     378: ifeq          396
+     381: aload         17
+     383: invokestatic  #476                // Method shouldSkipSubtree:(Lcom/sighs/apricityui/init/Element;)Z
+     386: ifeq          396
+     389: aload         17
+     391: astore        10
+     393: goto          477
+     396: aload         17
+     398: invokestatic  #480                // Method findTopLayerRoot:(Lcom/sighs/apricityui/init/Element;)Lcom/sighs/apricityui/init/Element;
+     401: astore        18
+     403: aload         18
+     405: aload         12
+     407: if_acmpeq     437
+     410: aload         13
+     412: ifnull        420
+     415: aload         13
+     417: invokevirtual #481                // Method com/sighs/apricityui/render/Base$TopLayerDepthScope.close:()V
+     420: aconst_null
+     421: astore        13
+     423: aload         18
+     425: astore        12
+     427: aload         18
+     429: ifnull        437
+     432: invokestatic  #485                // Method com/sighs/apricityui/render/Base$TopLayerDepthScope.open:()Lcom/sighs/apricityui/render/Base$TopLayerDepthScope;
+     435: astore        13
+     437: aload_0
+     438: invokestatic  #487                // Method savePose:(Lcom/mojang/blaze3d/vertex/PoseStack;)Lcom/sighs/apricityui/render/Base$PoseSnapshot;
+     441: astore        19
+     443: aload_0
+     444: aload         16
+     446: invokestatic  #491                // Method resolvePaintOffset:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/RenderNode;)V
+     449: aload         16
+     451: aload_0
+     452: invokeinterface #494,  2          // InterfaceMethod com/sighs/apricityui/render/RenderNode.render:(Lcom/mojang/blaze3d/vertex/PoseStack;)V
+     457: aload_0
+     458: aload         19
+     460: invokestatic  #496                // Method restorePose:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/Base$PoseSnapshot;)V
+     463: goto          477
+     466: astore        20
+     468: aload_0
+     469: aload         19
+     471: invokestatic  #496                // Method restorePose:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/Base$PoseSnapshot;)V
+     474: aload         20
+     476: athrow
+     477: iinc          15, 1
+     480: goto          305
+     483: aload         13
+     485: ifnull        493
+     488: aload         13
+     490: invokevirtual #481                // Method com/sighs/apricityui/render/Base$TopLayerDepthScope.close:()V
+     493: aload         11
+     495: invokestatic  #498                // Method releaseEnteredSubtrees:(Ljava/util/Set;)V
+     498: goto          521
+     501: astore        21
+     503: aload         13
+     505: ifnull        513
+     508: aload         13
+     510: invokevirtual #481                // Method com/sighs/apricityui/render/Base$TopLayerDepthScope.close:()V
+     513: aload         11
+     515: invokestatic  #498                // Method releaseEnteredSubtrees:(Ljava/util/Set;)V
+     518: aload         21
+     520: athrow
+     521: aload         13
+     523: ifnull        534
+     526: aload         13
+     528: invokevirtual #481                // Method com/sighs/apricityui/render/Base$TopLayerDepthScope.close:()V
+     531: aconst_null
+     532: astore        13
+     534: ldc           #66                 // float 200.25f
+     536: ldc           #68                 // float 250.25f
+     538: invokestatic  #255                // Method pushGuiItemZ:(FF)V
+     541: aload_2
+     542: invokeinterface #275,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     547: astore        14
+     549: aload         14
+     551: invokeinterface #281,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     556: ifeq          622
+     559: aload         14
+     561: invokeinterface #284,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     566: checkcast     #460                // class com/sighs/apricityui/render/RenderNode
+     569: astore        15
+     571: aload         15
+     573: ifnonnull     579
+     576: goto          549
+     579: aload_0
+     580: invokestatic  #487                // Method savePose:(Lcom/mojang/blaze3d/vertex/PoseStack;)Lcom/sighs/apricityui/render/Base$PoseSnapshot;
+     583: astore        16
+     585: aload_0
+     586: aload         15
+     588: invokestatic  #491                // Method resolvePaintOffset:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/RenderNode;)V
+     591: aload         15
+     593: aload_0
+     594: invokeinterface #494,  2          // InterfaceMethod com/sighs/apricityui/render/RenderNode.render:(Lcom/mojang/blaze3d/vertex/PoseStack;)V
+     599: aload_0
+     600: aload         16
+     602: invokestatic  #496                // Method restorePose:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/Base$PoseSnapshot;)V
+     605: goto          619
+     608: astore        22
+     610: aload_0
+     611: aload         16
+     613: invokestatic  #496                // Method restorePose:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/sighs/apricityui/render/Base$PoseSnapshot;)V
+     616: aload         22
+     618: athrow
+     619: goto          549
+     622: invokestatic  #258                // Method popGuiItemZ:()V
+     625: goto          636
+     628: astore        23
+     630: invokestatic  #258                // Method popGuiItemZ:()V
+     633: aload         23
+     635: athrow
+     636: invokestatic  #501                // Method com/sighs/apricityui/render/FontDrawer.popDocumentPixelScale:()V
+     639: aload_0
+     640: invokevirtual #208                // Method com/mojang/blaze3d/vertex/PoseStack.m_85849_:()V
+     643: invokestatic  #504                // Method com/sighs/apricityui/style/StyleFrameCache.end:()V
+     646: invokestatic  #505                // Method com/sighs/apricityui/layout/LayoutMeasureCache.end:()V
+     649: invokestatic  #506                // Method com/sighs/apricityui/render/TransformFrameCache.end:()V
+     652: invokestatic  #507                // Method com/sighs/apricityui/render/RectFrameCache.end:()V
+     655: invokestatic  #510                // Method commitDraws:()V
+     658: invokestatic  #513                // Method com/sighs/apricityui/render/FilterRenderer.endFrame:()V
+     661: invokestatic  #516                // Method com/sighs/apricityui/render/RenderBatchStats.endDocument:()V
+     664: invokestatic  #339                // Method java/lang/System.nanoTime:()J
+     667: lload_3
+     668: lsub
+     669: invokestatic  #522                // Method com/sighs/apricityui/render/FrameTimingHud.record:(J)V
+     672: goto          716
+     675: astore        24
+     677: invokestatic  #501                // Method com/sighs/apricityui/render/FontDrawer.popDocumentPixelScale:()V
+     680: aload_0
+     681: invokevirtual #208                // Method com/mojang/blaze3d/vertex/PoseStack.m_85849_:()V
+     684: invokestatic  #504                // Method com/sighs/apricityui/style/StyleFrameCache.end:()V
+     687: invokestatic  #505                // Method com/sighs/apricityui/layout/LayoutMeasureCache.end:()V
+     690: invokestatic  #506                // Method com/sighs/apricityui/render/TransformFrameCache.end:()V
+     693: invokestatic  #507                // Method com/sighs/apricityui/render/RectFrameCache.end:()V
+     696: invokestatic  #510                // Method commitDraws:()V
+     699: invokestatic  #513                // Method com/sighs/apricityui/render/FilterRenderer.endFrame:()V
+     702: invokestatic  #516                // Method com/sighs/apricityui/render/RenderBatchStats.endDocument:()V
+     705: invokestatic  #339                // Method java/lang/System.nanoTime:()J
+     708: lload_3
+     709: lsub
+     710: invokestatic  #522                // Method com/sighs/apricityui/render/FrameTimingHud.record:(J)V
+     713: aload         24
+     715: athrow
+     716: aload         5
+     718: invokeinterface #523,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService$RenderStateScope.close:()V
+     723: goto          738
+     726: astore        25
+     728: aload         5
+     730: invokeinterface #523,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService$RenderStateScope.close:()V
+     735: aload         25
+     737: athrow
+     738: return
+    Exception table:
+       from    to  target type
+         443   457   466   any
+         466   468   466   any
+         296   483   501   any
+         501   503   501   any
+         585   599   608   any
+         608   610   608   any
+         541   622   628   any
+         628   630   628   any
+          62   636   675   any
+         675   677   675   any
+          24   716   726   any
+         726   728   726   any
+
+  private static com.sighs.apricityui.init.Element findTopLayerRoot(com.sighs.apricityui.init.Element);
+    Code:
+       0: aload_0
+       1: astore_1
+       2: aload_1
+       3: ifnull        23
+       6: aload_1
+       7: invokevirtual #548                // Method com/sighs/apricityui/init/Element.isTopLayer:()Z
+      10: ifeq          15
+      13: aload_1
+      14: areturn
+      15: aload_1
+      16: getfield      #551                // Field com/sighs/apricityui/init/Element.parentElement:Lcom/sighs/apricityui/init/Element;
+      19: astore_1
+      20: goto          2
+      23: aconst_null
+      24: areturn
+
+  private static boolean shouldSkipSubtree(com.sighs.apricityui.init.Element);
+    Code:
+       0: aload_0
+       1: ifnull        33
+       4: aload_0
+       5: getfield      #554                // Field com/sighs/apricityui/init/Element.document:Lcom/sighs/apricityui/init/Document;
+       8: ifnull        33
+      11: aload_0
+      12: aload_0
+      13: getfield      #554                // Field com/sighs/apricityui/init/Element.document:Lcom/sighs/apricityui/init/Document;
+      16: getfield      #558                // Field com/sighs/apricityui/init/Document.documentElement:Lcom/sighs/apricityui/element/Html;
+      19: if_acmpeq     33
+      22: aload_0
+      23: aload_0
+      24: getfield      #554                // Field com/sighs/apricityui/init/Element.document:Lcom/sighs/apricityui/init/Document;
+      27: getfield      #562                // Field com/sighs/apricityui/init/Document.body:Lcom/sighs/apricityui/element/Body;
+      30: if_acmpne     35
+      33: iconst_0
+      34: ireturn
+      35: aload_0
+      36: invokestatic  #565                // InterfaceMethod com/sighs/apricityui/render/RenderNode.shouldSkip:(Lcom/sighs/apricityui/init/Element;)Z
+      39: ifeq          44
+      42: iconst_1
+      43: ireturn
+      44: invokestatic  #569                // Method com/sighs/apricityui/render/Mask.getCurrentClip:()Lcom/sighs/apricityui/render/AABB;
+      47: astore_1
+      48: aload_1
+      49: invokevirtual #574                // Method com/sighs/apricityui/render/AABB.isValid:()Z
+      52: ifne          57
+      55: iconst_0
+      56: ireturn
+      57: aload_0
+      58: invokestatic  #577                // Method com/sighs/apricityui/render/RectFrameCache.get:(Lcom/sighs/apricityui/init/Element;)Lcom/sighs/apricityui/render/Rect;
+      61: astore_2
+      62: aload_2
+      63: ifnonnull     68
+      66: iconst_0
+      67: ireturn
+      68: aload_2
+      69: invokevirtual #582                // Method com/sighs/apricityui/render/Rect.getVisualBounds:()Lcom/sighs/apricityui/render/AABB;
+      72: aload_1
+      73: invokevirtual #586                // Method com/sighs/apricityui/render/AABB.intersects:(Lcom/sighs/apricityui/render/AABB;)Z
+      76: ifne          83
+      79: iconst_1
+      80: goto          84
+      83: iconst_0
+      84: ireturn
+
+  public static void commitDraws();
+    Code:
+       0: invokestatic  #595                // Method com/sighs/apricityui/render/Graph.endBatch:()V
+       3: invokestatic  #600                // Method com/sighs/apricityui/render/ImageDrawer.flushBatch:()V
+       6: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       9: invokeinterface #603,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.flushSharedBuffers:()V
+      14: return
+
+  public static void beginRendering();
+    Code:
+       0: getstatic     #606                // Field depthTestEnabled:Z
+       3: ifeq          26
+       6: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       9: invokeinterface #609,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.enableDepthTest:()V
+      14: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      17: iconst_1
+      18: invokeinterface #613,  2          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setDepthMask:(Z)V
+      23: goto          43
+      26: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      29: invokeinterface #616,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.disableDepthTest:()V
+      34: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      37: iconst_0
+      38: invokeinterface #613,  2          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setDepthMask:(Z)V
+      43: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      46: invokeinterface #619,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.disableCull:()V
+      51: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      54: invokeinterface #622,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.enableBlend:()V
+      59: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      62: sipush        770
+      65: sipush        771
+      68: iconst_1
+      69: sipush        771
+      72: invokeinterface #626,  5          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setBlendFuncSeparate:(IIII)V
+      77: invokestatic  #629                // Method setPositionColorShader:()V
+      80: return
+
+  public static void finishRendering();
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: invokeinterface #633,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.enableCull:()V
+       8: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+      11: invokeinterface #636,  1          // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.disableBlend:()V
+      16: return
+
+  public static com.sighs.apricityui.spi.MeshBuilder getMesh();
+    Code:
+       0: getstatic     #640                // Field currentMesh:Lcom/sighs/apricityui/spi/MeshBuilder;
+       3: areturn
+
+  public static void setMesh(com.sighs.apricityui.spi.MeshBuilder);
+    Code:
+       0: aload_0
+       1: putstatic     #640                // Field currentMesh:Lcom/sighs/apricityui/spi/MeshBuilder;
+       4: return
+
+  public static void applyTransform(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.init.Element);
+    Code:
+       0: aload_1
+       1: invokestatic  #649                // Method prepareWorldTransform:(Lcom/sighs/apricityui/init/Element;)Lorg/joml/Matrix4f;
+       4: astore_2
+       5: aload_0
+       6: invokevirtual #115                // Method com/mojang/blaze3d/vertex/PoseStack.m_85850_:()Lcom/mojang/blaze3d/vertex/PoseStack$Pose;
+       9: invokevirtual #123                // Method com/mojang/blaze3d/vertex/PoseStack$Pose.m_252922_:()Lorg/joml/Matrix4f;
+      12: aload_2
+      13: invokevirtual #652                // Method org/joml/Matrix4f.mul:(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;
+      16: pop
+      17: return
+
+  public static org.joml.Matrix4f prepareWorldTransform(com.sighs.apricityui.init.Element);
+    Code:
+       0: invokestatic  #659                // Method com/sighs/apricityui/render/WorldPaintDepth.canReuseCommittedTransforms:()Z
+       3: ifeq          13
+       6: aload_0
+       7: invokestatic  #661                // Method com/sighs/apricityui/render/TransformFrameCache.get:(Lcom/sighs/apricityui/init/Element;)Lorg/joml/Matrix4f;
+      10: goto          17
+      13: aload_0
+      14: invokestatic  #664                // Method com/sighs/apricityui/render/TransformFrameCache.getFrame:(Lcom/sighs/apricityui/init/Element;)Lorg/joml/Matrix4f;
+      17: astore_1
+      18: aload_1
+      19: ifnull        24
+      22: aload_1
+      23: areturn
+      24: aload_0
+      25: invokestatic  #667                // Method computeWorldTransform:(Lcom/sighs/apricityui/init/Element;)Lorg/joml/Matrix4f;
+      28: astore_2
+      29: aload_0
+      30: aload_2
+      31: invokestatic  #671                // Method com/sighs/apricityui/render/TransformFrameCache.put:(Lcom/sighs/apricityui/init/Element;Lorg/joml/Matrix4f;)V
+      34: aload_2
+      35: areturn
+
+  public static org.joml.Matrix4f createAndCacheWorldTransform(com.sighs.apricityui.init.Element);
+    Code:
+       0: aload_0
+       1: invokestatic  #667                // Method computeWorldTransform:(Lcom/sighs/apricityui/init/Element;)Lorg/joml/Matrix4f;
+       4: astore_1
+       5: aload_0
+       6: aload_1
+       7: invokestatic  #671                // Method com/sighs/apricityui/render/TransformFrameCache.put:(Lcom/sighs/apricityui/init/Element;Lorg/joml/Matrix4f;)V
+      10: aload_1
+      11: areturn
+
+  private static org.joml.Matrix4f computeWorldTransform(com.sighs.apricityui.init.Element);
+    Code:
+       0: aload_0
+       1: invokevirtual #677                // Method com/sighs/apricityui/init/Element.getRouteArray:()[Lcom/sighs/apricityui/init/Element;
+       4: astore_1
+       5: aload_1
+       6: arraylength
+       7: istore_2
+       8: new           #125                // class org/joml/Matrix4f
+      11: dup
+      12: invokespecial #678                // Method org/joml/Matrix4f."<init>":()V
+      15: astore_3
+      16: iload_2
+      17: iconst_1
+      18: isub
+      19: istore        4
+      21: iload         4
+      23: iflt          468
+      26: aload_1
+      27: iload         4
+      29: aaload
+      30: astore        5
+      32: aload         5
+      34: invokestatic  #682                // Method com/sighs/apricityui/render/Rect.of:(Lcom/sighs/apricityui/init/Element;)Lcom/sighs/apricityui/render/Rect;
+      37: astore        6
+      39: aload         6
+      41: getfield      #686                // Field com/sighs/apricityui/render/Rect.position:Lcom/sighs/apricityui/layout/Position;
+      44: getfield      #692                // Field com/sighs/apricityui/layout/Position.x:D
+      47: dstore        7
+      49: aload         6
+      51: getfield      #686                // Field com/sighs/apricityui/render/Rect.position:Lcom/sighs/apricityui/layout/Position;
+      54: getfield      #695                // Field com/sighs/apricityui/layout/Position.y:D
+      57: dstore        9
+      59: aload         6
+      61: getfield      #699                // Field com/sighs/apricityui/render/Rect.box:Lcom/sighs/apricityui/layout/Box;
+      64: astore        11
+      66: aload         6
+      68: invokevirtual #703                // Method com/sighs/apricityui/render/Rect.getShadowSize:()Lcom/sighs/apricityui/layout/Size;
+      71: astore        12
+      73: dload         7
+      75: aload         11
+      77: invokevirtual #708                // Method com/sighs/apricityui/layout/Box.getMarginLeft:()D
+      80: dadd
+      81: dstore        13
+      83: dload         9
+      85: aload         11
+      87: invokevirtual #711                // Method com/sighs/apricityui/layout/Box.getMarginTop:()D
+      90: dadd
+      91: dstore        15
+      93: aload         5
+      95: aload         12
+      97: invokestatic  #715                // Method prepareTransform:(Lcom/sighs/apricityui/init/Element;Lcom/sighs/apricityui/layout/Size;)Ljava/util/List;
+     100: astore        17
+     102: aload         17
+     104: invokeinterface #716,  1          // InterfaceMethod java/util/List.isEmpty:()Z
+     109: ifne          462
+     112: aload         12
+     114: invokevirtual #721                // Method com/sighs/apricityui/layout/Size.width:()D
+     117: dstore        18
+     119: aload         12
+     121: invokevirtual #724                // Method com/sighs/apricityui/layout/Size.height:()D
+     124: dstore        20
+     126: aload         5
+     128: invokevirtual #728                // Method com/sighs/apricityui/init/Element.getComputedStyle:()Lcom/sighs/apricityui/style/Style;
+     131: getfield      #734                // Field com/sighs/apricityui/style/Style.transformOrigin:Ljava/lang/String;
+     134: dload         18
+     136: dload         20
+     138: invokestatic  #738                // Method resolveTransformOrigin:(Ljava/lang/String;DD)[F
+     141: astore        22
+     143: aload         22
+     145: iconst_0
+     146: faload
+     147: fstore        23
+     149: aload         22
+     151: iconst_1
+     152: faload
+     153: fstore        24
+     155: iconst_0
+     156: istore        25
+     158: iload         25
+     160: aload         17
+     162: invokeinterface #454,  1          // InterfaceMethod java/util/List.size:()I
+     167: if_icmpge     462
+     170: aload         17
+     172: iload         25
+     174: invokeinterface #458,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     179: checkcast     #34                 // class com/sighs/apricityui/style/Transform
+     182: astore        26
+     184: aload         26
+     186: instanceof    #32                 // class com/sighs/apricityui/style/Transform$Translate
+     189: ifeq          227
+     192: aload         26
+     194: checkcast     #32                 // class com/sighs/apricityui/style/Transform$Translate
+     197: astore        27
+     199: aload_3
+     200: aload         27
+     202: invokevirtual #742                // Method com/sighs/apricityui/style/Transform$Translate.x:()D
+     205: d2f
+     206: aload         27
+     208: invokevirtual #744                // Method com/sighs/apricityui/style/Transform$Translate.y:()D
+     211: d2f
+     212: aload         27
+     214: invokevirtual #747                // Method com/sighs/apricityui/style/Transform$Translate.z:()D
+     217: invokestatic  #751                // Method com/sighs/apricityui/render/WorldPaintDepth.effectiveTranslateZ:(D)F
+     220: invokevirtual #755                // Method org/joml/Matrix4f.translate:(FFF)Lorg/joml/Matrix4f;
+     223: pop
+     224: goto          456
+     227: aload         26
+     229: instanceof    #37                 // class com/sighs/apricityui/style/Transform$Rotate
+     232: ifeq          385
+     235: aload         26
+     237: checkcast     #37                 // class com/sighs/apricityui/style/Transform$Rotate
+     240: astore        28
+     242: aload_3
+     243: dload         13
+     245: d2f
+     246: fload         23
+     248: fadd
+     249: dload         15
+     251: d2f
+     252: fload         24
+     254: fadd
+     255: fconst_0
+     256: invokevirtual #755                // Method org/joml/Matrix4f.translate:(FFF)Lorg/joml/Matrix4f;
+     259: pop
+     260: aload         28
+     262: invokevirtual #756                // Method com/sighs/apricityui/style/Transform$Rotate.x:()D
+     265: dconst_0
+     266: dcmpl
+     267: ifeq          294
+     270: aload_3
+     271: new           #758                // class org/joml/Quaternionf
+     274: dup
+     275: invokespecial #759                // Method org/joml/Quaternionf."<init>":()V
+     278: aload         28
+     280: invokevirtual #756                // Method com/sighs/apricityui/style/Transform$Rotate.x:()D
+     283: invokestatic  #765                // Method java/lang/Math.toRadians:(D)D
+     286: d2f
+     287: invokevirtual #769                // Method org/joml/Quaternionf.rotationX:(F)Lorg/joml/Quaternionf;
+     290: invokevirtual #773                // Method org/joml/Matrix4f.rotate:(Lorg/joml/Quaternionfc;)Lorg/joml/Matrix4f;
+     293: pop
+     294: aload         28
+     296: invokevirtual #774                // Method com/sighs/apricityui/style/Transform$Rotate.y:()D
+     299: dconst_0
+     300: dcmpl
+     301: ifeq          328
+     304: aload_3
+     305: new           #758                // class org/joml/Quaternionf
+     308: dup
+     309: invokespecial #759                // Method org/joml/Quaternionf."<init>":()V
+     312: aload         28
+     314: invokevirtual #774                // Method com/sighs/apricityui/style/Transform$Rotate.y:()D
+     317: invokestatic  #765                // Method java/lang/Math.toRadians:(D)D
+     320: d2f
+     321: invokevirtual #777                // Method org/joml/Quaternionf.rotationY:(F)Lorg/joml/Quaternionf;
+     324: invokevirtual #773                // Method org/joml/Matrix4f.rotate:(Lorg/joml/Quaternionfc;)Lorg/joml/Matrix4f;
+     327: pop
+     328: aload         28
+     330: invokevirtual #778                // Method com/sighs/apricityui/style/Transform$Rotate.z:()D
+     333: dconst_0
+     334: dcmpl
+     335: ifeq          362
+     338: aload_3
+     339: new           #758                // class org/joml/Quaternionf
+     342: dup
+     343: invokespecial #759                // Method org/joml/Quaternionf."<init>":()V
+     346: aload         28
+     348: invokevirtual #778                // Method com/sighs/apricityui/style/Transform$Rotate.z:()D
+     351: invokestatic  #765                // Method java/lang/Math.toRadians:(D)D
+     354: d2f
+     355: invokevirtual #781                // Method org/joml/Quaternionf.rotationZ:(F)Lorg/joml/Quaternionf;
+     358: invokevirtual #773                // Method org/joml/Matrix4f.rotate:(Lorg/joml/Quaternionfc;)Lorg/joml/Matrix4f;
+     361: pop
+     362: aload_3
+     363: dload         13
+     365: d2f
+     366: fload         23
+     368: fadd
+     369: fneg
+     370: dload         15
+     372: d2f
+     373: fload         24
+     375: fadd
+     376: fneg
+     377: fconst_0
+     378: invokevirtual #755                // Method org/joml/Matrix4f.translate:(FFF)Lorg/joml/Matrix4f;
+     381: pop
+     382: goto          456
+     385: aload         26
+     387: instanceof    #40                 // class com/sighs/apricityui/style/Transform$Scale
+     390: ifeq          456
+     393: aload         26
+     395: checkcast     #40                 // class com/sighs/apricityui/style/Transform$Scale
+     398: astore        29
+     400: aload_3
+     401: dload         13
+     403: d2f
+     404: fload         23
+     406: fadd
+     407: dload         15
+     409: d2f
+     410: fload         24
+     412: fadd
+     413: fconst_0
+     414: invokevirtual #755                // Method org/joml/Matrix4f.translate:(FFF)Lorg/joml/Matrix4f;
+     417: pop
+     418: aload_3
+     419: aload         29
+     421: invokevirtual #782                // Method com/sighs/apricityui/style/Transform$Scale.x:()D
+     424: d2f
+     425: aload         29
+     427: invokevirtual #783                // Method com/sighs/apricityui/style/Transform$Scale.y:()D
+     430: d2f
+     431: fconst_1
+     432: invokevirtual #786                // Method org/joml/Matrix4f.scale:(FFF)Lorg/joml/Matrix4f;
+     435: pop
+     436: aload_3
+     437: dload         13
+     439: d2f
+     440: fload         23
+     442: fadd
+     443: fneg
+     444: dload         15
+     446: d2f
+     447: fload         24
+     449: fadd
+     450: fneg
+     451: fconst_0
+     452: invokevirtual #755                // Method org/joml/Matrix4f.translate:(FFF)Lorg/joml/Matrix4f;
+     455: pop
+     456: iinc          25, 1
+     459: goto          158
+     462: iinc          4, -1
+     465: goto          21
+     468: aload_3
+     469: areturn
+
+  public static java.util.List<com.sighs.apricityui.style.Transform> prepareTransform(com.sighs.apricityui.init.Element, com.sighs.apricityui.layout.Size);
+    Code:
+       0: aload_0
+       1: invokevirtual #817                // Method com/sighs/apricityui/init/Element.getRenderer:()Lcom/sighs/apricityui/dom/RenderElement;
+       4: getfield      #820                // Field com/sighs/apricityui/dom/RenderElement.transform:Lcom/sighs/apricityui/dom/RenderElement$Cache;
+       7: invokevirtual #822                // Method com/sighs/apricityui/dom/RenderElement$Cache.get:()Ljava/lang/Object;
+      10: checkcast     #194                // class java/util/List
+      13: astore_2
+      14: aload_2
+      15: ifnull        20
+      18: aload_2
+      19: areturn
+      20: aload_0
+      21: invokevirtual #728                // Method com/sighs/apricityui/init/Element.getComputedStyle:()Lcom/sighs/apricityui/style/Style;
+      24: getfield      #824                // Field com/sighs/apricityui/style/Style.transform:Ljava/lang/String;
+      27: astore_3
+      28: aload_3
+      29: aload_1
+      30: invokevirtual #721                // Method com/sighs/apricityui/layout/Size.width:()D
+      33: aload_1
+      34: invokevirtual #724                // Method com/sighs/apricityui/layout/Size.height:()D
+      37: invokestatic  #828                // InterfaceMethod com/sighs/apricityui/style/Transform.parse:(Ljava/lang/String;DD)Ljava/util/List;
+      40: astore_2
+      41: aload_0
+      42: invokevirtual #817                // Method com/sighs/apricityui/init/Element.getRenderer:()Lcom/sighs/apricityui/dom/RenderElement;
+      45: getfield      #820                // Field com/sighs/apricityui/dom/RenderElement.transform:Lcom/sighs/apricityui/dom/RenderElement$Cache;
+      48: aload_2
+      49: invokevirtual #830                // Method com/sighs/apricityui/dom/RenderElement$Cache.set:(Ljava/lang/Object;)V
+      52: aload_2
+      53: areturn
+
+  private static float[] resolveTransformOrigin(java.lang.String, double, double);
+    Code:
+       0: aload_0
+       1: ifnull        21
+       4: aload_0
+       5: invokevirtual #836                // Method java/lang/String.isBlank:()Z
+       8: ifne          21
+      11: ldc_w         #838                // String unset
+      14: aload_0
+      15: invokevirtual #842                // Method java/lang/String.equalsIgnoreCase:(Ljava/lang/String;)Z
+      18: ifeq          43
+      21: iconst_2
+      22: newarray       float
+      24: dup
+      25: iconst_0
+      26: dload_1
+      27: ldc2_w        #843                // double 2.0d
+      30: ddiv
+      31: d2f
+      32: fastore
+      33: dup
+      34: iconst_1
+      35: dload_3
+      36: ldc2_w        #843                // double 2.0d
+      39: ddiv
+      40: d2f
+      41: fastore
+      42: areturn
+      43: aload_0
+      44: invokevirtual #848                // Method java/lang/String.trim:()Ljava/lang/String;
+      47: getstatic     #854                // Field java/util/Locale.ROOT:Ljava/util/Locale;
+      50: invokevirtual #858                // Method java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+      53: invokestatic  #864                // Method com/sighs/apricityui/layout/Layout.splitTopLevelWhitespace:(Ljava/lang/String;)Ljava/util/List;
+      56: invokedynamic #882,  0            // InvokeDynamic #0:apply:()Ljava/util/function/IntFunction;
+      61: invokeinterface #886,  2          // InterfaceMethod java/util/List.toArray:(Ljava/util/function/IntFunction;)[Ljava/lang/Object;
+      66: checkcast     #888                // class "[Ljava/lang/String;"
+      69: astore        5
+      71: ldc_w         #890                // String 50%
+      74: astore        6
+      76: ldc_w         #890                // String 50%
+      79: astore        7
+      81: aload         5
+      83: arraylength
+      84: iconst_1
+      85: if_icmpne     116
+      88: aload         5
+      90: iconst_0
+      91: aaload
+      92: invokestatic  #893                // Method isVerticalOrigin:(Ljava/lang/String;)Z
+      95: ifeq          107
+      98: aload         5
+     100: iconst_0
+     101: aaload
+     102: astore        7
+     104: goto          156
+     107: aload         5
+     109: iconst_0
+     110: aaload
+     111: astore        6
+     113: goto          156
+     116: aload         5
+     118: iconst_0
+     119: aaload
+     120: astore        6
+     122: aload         5
+     124: iconst_1
+     125: aaload
+     126: astore        7
+     128: aload         6
+     130: invokestatic  #893                // Method isVerticalOrigin:(Ljava/lang/String;)Z
+     133: ifeq          156
+     136: aload         7
+     138: invokestatic  #893                // Method isVerticalOrigin:(Ljava/lang/String;)Z
+     141: ifne          156
+     144: aload         6
+     146: astore        8
+     148: aload         7
+     150: astore        6
+     152: aload         8
+     154: astore        7
+     156: iconst_2
+     157: newarray       float
+     159: dup
+     160: iconst_0
+     161: aload         6
+     163: dload_1
+     164: iconst_1
+     165: invokestatic  #897                // Method resolveOriginToken:(Ljava/lang/String;DZ)D
+     168: d2f
+     169: fastore
+     170: dup
+     171: iconst_1
+     172: aload         7
+     174: dload_3
+     175: iconst_0
+     176: invokestatic  #897                // Method resolveOriginToken:(Ljava/lang/String;DZ)D
+     179: d2f
+     180: fastore
+     181: areturn
+
+  private static boolean isVerticalOrigin(java.lang.String);
+    Code:
+       0: ldc_w         #904                // String top
+       3: aload_0
+       4: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+       7: ifne          20
+      10: ldc_w         #909                // String bottom
+      13: aload_0
+      14: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+      17: ifeq          24
+      20: iconst_1
+      21: goto          25
+      24: iconst_0
+      25: ireturn
+
+  private static double resolveOriginToken(java.lang.String, double, boolean);
+    Code:
+       0: aload_0
+       1: ifnull        11
+       4: aload_0
+       5: invokevirtual #836                // Method java/lang/String.isBlank:()Z
+       8: ifeq          17
+      11: dload_1
+      12: ldc2_w        #843                // double 2.0d
+      15: ddiv
+      16: dreturn
+      17: aload_0
+      18: astore        4
+      20: iconst_m1
+      21: istore        5
+      23: aload         4
+      25: invokevirtual #913                // Method java/lang/String.hashCode:()I
+      28: lookupswitch  { // 5
+
+           -1383228885: 131
+
+           -1364013995: 148
+
+                115029: 114
+
+               3317767: 80
+
+             108511772: 97
+               default: 162
+          }
+      80: aload         4
+      82: ldc_w         #915                // String left
+      85: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+      88: ifeq          162
+      91: iconst_0
+      92: istore        5
+      94: goto          162
+      97: aload         4
+      99: ldc_w         #917                // String right
+     102: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     105: ifeq          162
+     108: iconst_1
+     109: istore        5
+     111: goto          162
+     114: aload         4
+     116: ldc_w         #904                // String top
+     119: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     122: ifeq          162
+     125: iconst_2
+     126: istore        5
+     128: goto          162
+     131: aload         4
+     133: ldc_w         #909                // String bottom
+     136: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     139: ifeq          162
+     142: iconst_3
+     143: istore        5
+     145: goto          162
+     148: aload         4
+     150: ldc_w         #919                // String center
+     153: invokevirtual #907                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     156: ifeq          162
+     159: iconst_4
+     160: istore        5
+     162: iload         5
+     164: tableswitch   { // 0 to 4
+
+                     0: 200
+
+                     1: 216
+
+                     2: 232
+
+                     3: 248
+
+                     4: 264
+               default: 272
+          }
+     200: iload_3
+     201: ifeq          208
+     204: dconst_0
+     205: goto          282
+     208: dload_1
+     209: ldc2_w        #843                // double 2.0d
+     212: ddiv
+     213: goto          282
+     216: iload_3
+     217: ifeq          224
+     220: dload_1
+     221: goto          282
+     224: dload_1
+     225: ldc2_w        #843                // double 2.0d
+     228: ddiv
+     229: goto          282
+     232: iload_3
+     233: ifeq          244
+     236: dload_1
+     237: ldc2_w        #843                // double 2.0d
+     240: ddiv
+     241: goto          282
+     244: dconst_0
+     245: goto          282
+     248: iload_3
+     249: ifeq          260
+     252: dload_1
+     253: ldc2_w        #843                // double 2.0d
+     256: ddiv
+     257: goto          282
+     260: dload_1
+     261: goto          282
+     264: dload_1
+     265: ldc2_w        #843                // double 2.0d
+     268: ddiv
+     269: goto          282
+     272: aload_0
+     273: dload_1
+     274: dload_1
+     275: ldc2_w        #843                // double 2.0d
+     278: ddiv
+     279: invokestatic  #923                // Method com/sighs/apricityui/layout/Size.resolveLength:(Ljava/lang/String;DD)D
+     282: dreturn
+
+  public static void resolveOffset(com.mojang.blaze3d.vertex.PoseStack);
+    Code:
+       0: getstatic     #928                // Field accumulateDepth:Z
+       3: ifeq          7
+       6: return
+       7: aload_0
+       8: fconst_0
+       9: fconst_0
+      10: getstatic     #930                // Field depthStep:F
+      13: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+      16: return
+
+  private static void resolvePaintOffset(com.mojang.blaze3d.vertex.PoseStack, com.sighs.apricityui.render.RenderNode);
+    Code:
+       0: getstatic     #928                // Field accumulateDepth:Z
+       3: ifne          16
+       6: aload_0
+       7: fconst_0
+       8: fconst_0
+       9: getstatic     #930                // Field depthStep:F
+      12: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+      15: return
+      16: aload_0
+      17: fconst_0
+      18: fconst_0
+      19: aload_1
+      20: invokestatic  #934                // Method advancePaintDepth:(Lcom/sighs/apricityui/render/RenderNode;)F
+      23: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+      26: return
+
+  private static float advancePaintDepth(com.sighs.apricityui.render.RenderNode);
+    Code:
+       0: getstatic     #936                // Field depthCursor:F
+       3: getstatic     #930                // Field depthStep:F
+       6: aload_0
+       7: ifnull        19
+      10: aload_0
+      11: invokeinterface #939,  1          // InterfaceMethod com/sighs/apricityui/render/RenderNode.advancesPaintDepth:()Z
+      16: ifeq          23
+      19: iconst_1
+      20: goto          24
+      23: iconst_0
+      24: invokestatic  #943                // Method com/sighs/apricityui/render/WorldPaintDepth.advance:(FFZ)F
+      27: putstatic     #936                // Field depthCursor:F
+      30: getstatic     #936                // Field depthCursor:F
+      33: freturn
+
+  public static void offsetPaintDepth(com.mojang.blaze3d.vertex.PoseStack, float);
+    Code:
+       0: getstatic     #928                // Field accumulateDepth:Z
+       3: ifeq          17
+       6: aload_0
+       7: ifnull        17
+      10: fload_1
+      11: invokestatic  #951                // Method java/lang/Float.isFinite:(F)Z
+      14: ifne          18
+      17: return
+      18: aload_0
+      19: fconst_0
+      20: fconst_0
+      21: getstatic     #930                // Field depthStep:F
+      24: fload_1
+      25: fmul
+      26: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+      29: return
+
+  public static void offsetLocalPaintDepth(com.mojang.blaze3d.vertex.PoseStack, int);
+    Code:
+       0: aload_0
+       1: ifnull        8
+       4: iload_1
+       5: ifne          9
+       8: return
+       9: ldc_w         #955                // float -0.45f
+      12: ldc_w         #956                // float 0.45f
+      15: iload_1
+      16: i2f
+      17: ldc_w         #957                // float 1000.0f
+      20: fdiv
+      21: invokestatic  #961                // Method java/lang/Math.min:(FF)F
+      24: invokestatic  #964                // Method java/lang/Math.max:(FF)F
+      27: fstore_2
+      28: aload_0
+      29: fconst_0
+      30: fconst_0
+      31: getstatic     #930                // Field depthStep:F
+      34: fload_2
+      35: fmul
+      36: invokevirtual #445                // Method com/mojang/blaze3d/vertex/PoseStack.m_252880_:(FFF)V
+      39: return
+
+  public static void pushDepthStep(float);
+    Code:
+       0: getstatic     #968                // Field DEPTH_STEP_STACK:Ljava/util/ArrayDeque;
+       3: getstatic     #930                // Field depthStep:F
+       6: invokestatic  #972                // Method java/lang/Float.valueOf:(F)Ljava/lang/Float;
+       9: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      12: fload_0
+      13: putstatic     #930                // Field depthStep:F
+      16: return
+
+  public static void popDepthStep();
+    Code:
+       0: getstatic     #968                // Field DEPTH_STEP_STACK:Ljava/util/ArrayDeque;
+       3: invokevirtual #975                // Method java/util/ArrayDeque.isEmpty:()Z
+       6: ifne          27
+       9: getstatic     #968                // Field DEPTH_STEP_STACK:Ljava/util/ArrayDeque;
+      12: invokevirtual #978                // Method java/util/ArrayDeque.pop:()Ljava/lang/Object;
+      15: checkcast     #947                // class java/lang/Float
+      18: invokevirtual #981                // Method java/lang/Float.floatValue:()F
+      21: putstatic     #930                // Field depthStep:F
+      24: goto          32
+      27: ldc           #56                 // float 0.005f
+      29: putstatic     #930                // Field depthStep:F
+      32: return
+
+  public static void pushDepthMode(boolean);
+    Code:
+       0: getstatic     #984                // Field DEPTH_MODE_STACK:Ljava/util/ArrayDeque;
+       3: getstatic     #928                // Field accumulateDepth:Z
+       6: invokestatic  #989                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+       9: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      12: getstatic     #991                // Field DEPTH_CURSOR_STACK:Ljava/util/ArrayDeque;
+      15: getstatic     #936                // Field depthCursor:F
+      18: invokestatic  #972                // Method java/lang/Float.valueOf:(F)Ljava/lang/Float;
+      21: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      24: iload_0
+      25: putstatic     #928                // Field accumulateDepth:Z
+      28: fconst_0
+      29: putstatic     #936                // Field depthCursor:F
+      32: return
+
+  public static void pushDocumentZOffset(float);
+    Code:
+       0: getstatic     #994                // Field DOCUMENT_Z_OFFSET_STACK:Ljava/util/ArrayDeque;
+       3: getstatic     #442                // Field documentZOffset:F
+       6: invokestatic  #972                // Method java/lang/Float.valueOf:(F)Ljava/lang/Float;
+       9: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      12: fload_0
+      13: invokestatic  #951                // Method java/lang/Float.isFinite:(F)Z
+      16: ifeq          23
+      19: fload_0
+      20: goto          24
+      23: fconst_1
+      24: putstatic     #442                // Field documentZOffset:F
+      27: return
+
+  public static void popDocumentZOffset();
+    Code:
+       0: getstatic     #994                // Field DOCUMENT_Z_OFFSET_STACK:Ljava/util/ArrayDeque;
+       3: invokevirtual #975                // Method java/util/ArrayDeque.isEmpty:()Z
+       6: ifeq          13
+       9: fconst_1
+      10: goto          25
+      13: getstatic     #994                // Field DOCUMENT_Z_OFFSET_STACK:Ljava/util/ArrayDeque;
+      16: invokevirtual #978                // Method java/util/ArrayDeque.pop:()Ljava/lang/Object;
+      19: checkcast     #947                // class java/lang/Float
+      22: invokevirtual #981                // Method java/lang/Float.floatValue:()F
+      25: putstatic     #442                // Field documentZOffset:F
+      28: return
+
+  public static void pushDepthTest(boolean);
+    Code:
+       0: getstatic     #998                // Field DEPTH_TEST_STACK:Ljava/util/ArrayDeque;
+       3: getstatic     #606                // Field depthTestEnabled:Z
+       6: invokestatic  #989                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+       9: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      12: iload_0
+      13: putstatic     #606                // Field depthTestEnabled:Z
+      16: return
+
+  public static void popDepthTest();
+    Code:
+       0: getstatic     #998                // Field DEPTH_TEST_STACK:Ljava/util/ArrayDeque;
+       3: invokevirtual #975                // Method java/util/ArrayDeque.isEmpty:()Z
+       6: ifeq          13
+       9: iconst_1
+      10: goto          25
+      13: getstatic     #998                // Field DEPTH_TEST_STACK:Ljava/util/ArrayDeque;
+      16: invokevirtual #978                // Method java/util/ArrayDeque.pop:()Ljava/lang/Object;
+      19: checkcast     #986                // class java/lang/Boolean
+      22: invokevirtual #1003               // Method java/lang/Boolean.booleanValue:()Z
+      25: putstatic     #606                // Field depthTestEnabled:Z
+      28: return
+
+  public static boolean isDepthTestEnabled();
+    Code:
+       0: getstatic     #606                // Field depthTestEnabled:Z
+       3: ireturn
+
+  public static float getGuiItemModelZ();
+    Code:
+       0: getstatic     #1007               // Field guiItemModelZ:F
+       3: freturn
+
+  public static float getGuiItemDecorationZ();
+    Code:
+       0: getstatic     #1010               // Field guiItemDecorationZ:F
+       3: freturn
+
+  public static float getGuiItemForegroundZ();
+    Code:
+       0: getstatic     #1010               // Field guiItemDecorationZ:F
+       3: getstatic     #928                // Field accumulateDepth:Z
+       6: invokestatic  #1017               // Method com/sighs/apricityui/render/GuiItemDepths.foregroundZ:(FZ)F
+       9: freturn
+
+  public static void pushGuiItemZ(float, float);
+    Code:
+       0: getstatic     #1019               // Field GUI_ITEM_Z_STACK:Ljava/util/ArrayDeque;
+       3: new           #7                  // class com/sighs/apricityui/render/Base$GuiItemZ
+       6: dup
+       7: getstatic     #1007               // Field guiItemModelZ:F
+      10: getstatic     #1010               // Field guiItemDecorationZ:F
+      13: invokespecial #1021               // Method com/sighs/apricityui/render/Base$GuiItemZ."<init>":(FF)V
+      16: invokevirtual #333                // Method java/util/ArrayDeque.push:(Ljava/lang/Object;)V
+      19: fload_0
+      20: invokestatic  #951                // Method java/lang/Float.isFinite:(F)Z
+      23: ifeq          30
+      26: fload_0
+      27: goto          32
+      30: ldc           #60                 // float 150.0f
+      32: putstatic     #1007               // Field guiItemModelZ:F
+      35: fload_1
+      36: invokestatic  #951                // Method java/lang/Float.isFinite:(F)Z
+      39: ifeq          46
+      42: fload_1
+      43: goto          48
+      46: ldc           #62                 // float 200.0f
+      48: putstatic     #1010               // Field guiItemDecorationZ:F
+      51: return
+
+  public static void popGuiItemZ();
+    Code:
+       0: getstatic     #1019               // Field GUI_ITEM_Z_STACK:Ljava/util/ArrayDeque;
+       3: invokevirtual #307                // Method java/util/ArrayDeque.poll:()Ljava/lang/Object;
+       6: checkcast     #7                  // class com/sighs/apricityui/render/Base$GuiItemZ
+       9: astore_0
+      10: aload_0
+      11: ifnonnull     19
+      14: ldc           #60                 // float 150.0f
+      16: goto          23
+      19: aload_0
+      20: invokevirtual #1025               // Method com/sighs/apricityui/render/Base$GuiItemZ.modelZ:()F
+      23: putstatic     #1007               // Field guiItemModelZ:F
+      26: aload_0
+      27: ifnonnull     35
+      30: ldc           #62                 // float 200.0f
+      32: goto          39
+      35: aload_0
+      36: invokevirtual #1027               // Method com/sighs/apricityui/render/Base$GuiItemZ.decorationZ:()F
+      39: putstatic     #1010               // Field guiItemDecorationZ:F
+      42: return
+
+  public static void popDepthMode();
+    Code:
+       0: getstatic     #984                // Field DEPTH_MODE_STACK:Ljava/util/ArrayDeque;
+       3: invokevirtual #975                // Method java/util/ArrayDeque.isEmpty:()Z
+       6: ifne          27
+       9: getstatic     #984                // Field DEPTH_MODE_STACK:Ljava/util/ArrayDeque;
+      12: invokevirtual #978                // Method java/util/ArrayDeque.pop:()Ljava/lang/Object;
+      15: checkcast     #986                // class java/lang/Boolean
+      18: invokevirtual #1003               // Method java/lang/Boolean.booleanValue:()Z
+      21: putstatic     #928                // Field accumulateDepth:Z
+      24: goto          31
+      27: iconst_0
+      28: putstatic     #928                // Field accumulateDepth:Z
+      31: getstatic     #991                // Field DEPTH_CURSOR_STACK:Ljava/util/ArrayDeque;
+      34: invokevirtual #975                // Method java/util/ArrayDeque.isEmpty:()Z
+      37: ifne          58
+      40: getstatic     #991                // Field DEPTH_CURSOR_STACK:Ljava/util/ArrayDeque;
+      43: invokevirtual #978                // Method java/util/ArrayDeque.pop:()Ljava/lang/Object;
+      46: checkcast     #947                // class java/lang/Float
+      49: invokevirtual #981                // Method java/lang/Float.floatValue:()F
+      52: putstatic     #936                // Field depthCursor:F
+      55: goto          62
+      58: fconst_0
+      59: putstatic     #936                // Field depthCursor:F
+      62: return
+
+  public static void setProjectionMatrix(org.joml.Matrix4f);
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: aload_0
+       4: invokeinterface #1034,  2         // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setProjectionMatrix:(Lorg/joml/Matrix4f;)V
+       9: return
+
+  public static org.joml.Matrix4f getProjectionMatrix();
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: invokeinterface #1037,  1         // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.getProjectionMatrix:()Lorg/joml/Matrix4f;
+       8: areturn
+
+  public static void setShader(java.lang.Object);
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: aload_0
+       4: invokeinterface #1040,  2         // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setShader:(Ljava/lang/Object;)V
+       9: return
+
+  public static void setPositionColorShader();
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: invokeinterface #1043,  1         // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setPositionColorShader:()V
+       8: return
+
+  public static void setShaderColor(float, float, float, float);
+    Code:
+       0: invokestatic  #345                // Method com/sighs/apricityui/spi/AuiServices.render:()Lcom/sighs/apricityui/spi/AuiRenderService;
+       3: fload_0
+       4: fload_1
+       5: fload_2
+       6: fload_3
+       7: invokeinterface #1047,  5         // InterfaceMethod com/sighs/apricityui/spi/AuiRenderService.setShaderColor:(FFFF)V
+      12: return
+
+  public static java.lang.String getClipboardText();
+    Code:
+       0: invokestatic  #1057               // Method net/minecraft/client/Minecraft.m_91087_:()Lnet/minecraft/client/Minecraft;
+       3: astore_0
+       4: aload_0
+       5: ifnull        15
+       8: aload_0
+       9: getfield      #1061               // Field net/minecraft/client/Minecraft.f_91068_:Lnet/minecraft/client/KeyboardHandler;
+      12: ifnonnull     19
+      15: ldc_w         #1063               // String
+      18: areturn
+      19: aload_0
+      20: getfield      #1061               // Field net/minecraft/client/Minecraft.f_91068_:Lnet/minecraft/client/KeyboardHandler;
+      23: invokevirtual #1068               // Method net/minecraft/client/KeyboardHandler.m_90876_:()Ljava/lang/String;
+      26: astore_1
+      27: aload_1
+      28: ifnonnull     37
+      31: ldc_w         #1063               // String
+      34: goto          38
+      37: aload_1
+      38: areturn
+
+  public static void setClipboardText(java.lang.String);
+    Code:
+       0: invokestatic  #1057               // Method net/minecraft/client/Minecraft.m_91087_:()Lnet/minecraft/client/Minecraft;
+       3: astore_1
+       4: aload_1
+       5: ifnull        15
+       8: aload_1
+       9: getfield      #1061               // Field net/minecraft/client/Minecraft.f_91068_:Lnet/minecraft/client/KeyboardHandler;
+      12: ifnonnull     16
+      15: return
+      16: aload_1
+      17: getfield      #1061               // Field net/minecraft/client/Minecraft.f_91068_:Lnet/minecraft/client/KeyboardHandler;
+      20: aload_0
+      21: ifnonnull     30
+      24: ldc_w         #1063               // String
+      27: goto          31
+      30: aload_0
+      31: invokevirtual #1076               // Method net/minecraft/client/KeyboardHandler.m_90911_:(Ljava/lang/String;)V
+      34: return
+
+  private static java.lang.String[] lambda$resolveTransformOrigin$0(int);
+    Code:
+       0: iload_0
+       1: anewarray     #833                // class java/lang/String
+       4: areturn
+
+  static {};
+    Code:
+       0: new           #106                // class java/util/ArrayDeque
+       3: dup
+       4: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+       7: putstatic     #994                // Field DOCUMENT_Z_OFFSET_STACK:Ljava/util/ArrayDeque;
+      10: new           #106                // class java/util/ArrayDeque
+      13: dup
+      14: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      17: putstatic     #1019               // Field GUI_ITEM_Z_STACK:Ljava/util/ArrayDeque;
+      20: new           #106                // class java/util/ArrayDeque
+      23: dup
+      24: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      27: putstatic     #104                // Field POSE_SNAPSHOT_POOL:Ljava/util/ArrayDeque;
+      30: ldc           #60                 // float 150.0f
+      32: putstatic     #1007               // Field guiItemModelZ:F
+      35: ldc           #62                 // float 200.0f
+      37: putstatic     #1010               // Field guiItemDecorationZ:F
+      40: new           #106                // class java/util/ArrayDeque
+      43: dup
+      44: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      47: putstatic     #968                // Field DEPTH_STEP_STACK:Ljava/util/ArrayDeque;
+      50: ldc           #56                 // float 0.005f
+      52: putstatic     #930                // Field depthStep:F
+      55: new           #106                // class java/util/ArrayDeque
+      58: dup
+      59: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      62: putstatic     #984                // Field DEPTH_MODE_STACK:Ljava/util/ArrayDeque;
+      65: new           #106                // class java/util/ArrayDeque
+      68: dup
+      69: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      72: putstatic     #991                // Field DEPTH_CURSOR_STACK:Ljava/util/ArrayDeque;
+      75: new           #106                // class java/util/ArrayDeque
+      78: dup
+      79: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+      82: putstatic     #998                // Field DEPTH_TEST_STACK:Ljava/util/ArrayDeque;
+      85: iconst_0
+      86: putstatic     #928                // Field accumulateDepth:Z
+      89: fconst_0
+      90: putstatic     #936                // Field depthCursor:F
+      93: iconst_1
+      94: putstatic     #606                // Field depthTestEnabled:Z
+      97: fconst_1
+      98: putstatic     #442                // Field documentZOffset:F
+     101: new           #106                // class java/util/ArrayDeque
+     104: dup
+     105: invokespecial #1079               // Method java/util/ArrayDeque."<init>":()V
+     108: putstatic     #304                // Field ENTERED_SUBTREES_POOL:Ljava/util/ArrayDeque;
+     111: return
+}

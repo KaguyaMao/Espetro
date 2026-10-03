@@ -31,6 +31,10 @@ public final class VehicleMountEvents {
             return;
         }
         Entity target = event.getTarget();
+        // 白名单载具：不接管交互，允许 SBW 原生瞬时上车。
+        if (VehicleNativeWhitelist.isNative(target)) {
+            return;
+        }
         if (!SbwVehicleSeatResolver.isSupportedVehicle(target)) {
             return;
         }

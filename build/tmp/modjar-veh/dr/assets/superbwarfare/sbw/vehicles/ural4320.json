@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:ural4320",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ural4320.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ural4320.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ural4320.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ural4320.png"
+    }
+  ]
+}

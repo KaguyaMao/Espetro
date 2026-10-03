@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:ural",
+  "Model": {
+    "Model": "vvp:geo/ural.geo.json",
+    "Texture": "vvp:textures/entity/ural.png"
+  }
+}

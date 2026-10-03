@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "javafmllanguage",
+    "version": "1.20.1-47.4.20",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "javafmllanguage-1.20.1-47.4.20.jar",
+          "url": "javafmllanguage-1.20.1-47.4.20.jar",
+          "size": 16851,
+          "sha512": "8e0c880a8e849d6cf6cfe8411eaad62fb108d6f84cbf64de5e80103bda62228034fb9c0f3ea53eee6106a3f0e2d76564fc67ff55888424604adf77c1711d3e98",
+          "sha256": "fb659dd963f14b2c34c2b935dcf1f7f40e8018c6900deaa9c673229893bb0218",
+          "sha1": "c354b21002937b393c4f86163a98dccdf1d51e72",
+          "md5": "f1f54e5194c89f78a95d1366cec09caa"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.minecraftforge",
+          "module": "fmlloader",
+          "version": {
+            "requires": "1.20.1-47.4.20"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "fmlcore",
+          "version": {
+            "requires": "1.20.1-47.4.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "javafmllanguage-1.20.1-47.4.20.jar",
+          "url": "javafmllanguage-1.20.1-47.4.20.jar",
+          "size": 16851,
+          "sha512": "8e0c880a8e849d6cf6cfe8411eaad62fb108d6f84cbf64de5e80103bda62228034fb9c0f3ea53eee6106a3f0e2d76564fc67ff55888424604adf77c1711d3e98",
+          "sha256": "fb659dd963f14b2c34c2b935dcf1f7f40e8018c6900deaa9c673229893bb0218",
+          "sha1": "c354b21002937b393c4f86163a98dccdf1d51e72",
+          "md5": "f1f54e5194c89f78a95d1366cec09caa"
+        }
+      ]
+    }
+  ]
+}

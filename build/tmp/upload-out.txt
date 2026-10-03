@@ -1,0 +1,6 @@
+login status=200 token len=45 cookie len=399
+task status=200 body={"status":200,"data":{"password":"7aa622e794f64b5c9c7efcb246af37d61790050269968","addr":"wss://localhost:20443","remoteMappings":[]},"time":1790050269970}
+password=7aa622e794f64b5c9c7efcb246af37d61790050269968 daemon=https://www.derpydoge.fun:20443
+file size=16509067
+upload status=200 body=OK
+UPLOAD_OK espetro-1.1.3-x.jar

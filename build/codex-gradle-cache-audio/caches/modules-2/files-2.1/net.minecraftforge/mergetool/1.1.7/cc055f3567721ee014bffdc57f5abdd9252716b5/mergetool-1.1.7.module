@@ -1,0 +1,137 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "mergetool",
+    "version": "1.1.7",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "mergetool-1.1.7.jar",
+          "url": "mergetool-1.1.7.jar",
+          "size": 28066,
+          "sha512": "a076f037475ed8c834222898139e77b920edbfc67d53c44dd7b5a4e9b8ddbb4489e318f31297bb1a6132d401a7d629b3b947b9b8098a33201a3dc20a778afb74",
+          "sha256": "d80c6163da3c1b57da5cb6489b5d1b59aa5adac0f23cb6ef72026a6c18493449",
+          "sha1": "fe2225c1a7834ee20d5a1e2630bcca798367d962",
+          "md5": "95cd68395c5e09e5e56e244988456598"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.5"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.5"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-util",
+          "version": {
+            "requires": "9.5"
+          }
+        },
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "srgutils",
+          "version": {
+            "requires": "0.4.15"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "mergetool-1.1.7.jar",
+          "url": "mergetool-1.1.7.jar",
+          "size": 28066,
+          "sha512": "a076f037475ed8c834222898139e77b920edbfc67d53c44dd7b5a4e9b8ddbb4489e318f31297bb1a6132d401a7d629b3b947b9b8098a33201a3dc20a778afb74",
+          "sha256": "d80c6163da3c1b57da5cb6489b5d1b59aa5adac0f23cb6ef72026a6c18493449",
+          "sha1": "fe2225c1a7834ee20d5a1e2630bcca798367d962",
+          "md5": "95cd68395c5e09e5e56e244988456598"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "mergetool-1.1.7-fatjar.jar",
+          "url": "mergetool-1.1.7-fatjar.jar",
+          "size": 467912,
+          "sha512": "3211a1f57905d1aea2638dc88abe248288997caf464622a6e407199fb7de3556441f835f7e1552738acd460d82ae40e8ecff30dccebfbb0e687cb02673dca07a",
+          "sha256": "2fbb74386cc9f9f4e816d2b5167ed9274c0864eae532d658e34587b2a47857e8",
+          "sha1": "3d41564f78f123d64573cae7948014baf3aaba3f",
+          "md5": "a56c17f181964bc68472db1487bdcdc2"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "mergetool-1.1.7-sources.jar",
+          "url": "mergetool-1.1.7-sources.jar",
+          "size": 16783,
+          "sha512": "993bc94d2905164ceeaf119638d743d8e6e47a5e82f650f186288cd23259f084226bda3f3b9b635bc055625dc7d16b7b6449d2b4c895361c38fd6a6528f7097a",
+          "sha256": "690ec23ea08f47496710e0f6cb5315b750dbc2f218aa8c721b7060717e99f532",
+          "sha1": "451d93347f25d099776b0d6fcc8dacae258cf06c",
+          "md5": "3bf558f0669737d2de8d74fcee3936ee"
+        }
+      ]
+    }
+  ]
+}

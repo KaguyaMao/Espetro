@@ -168,6 +168,16 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
         root.addChild(EspetroAuiWidgets.centeredText(defendImgX, labelY, IMG_W,
             EspetroAuiWidgets.teamPrefix("DEFEND") + "§l" + defendName, EspetroAuiWidgets.DEFEND));
 
+        // 中途加入者可以直接选择观战（不再选边），由服务端设为观察者。
+        int spectateW = 120;
+        int spectateX = panelX + (panelW - spectateW) / 2;
+        int spectateY = labelY + 14;
+        root.addChild(EspetroAuiWidgets.button(spectateX, spectateY, spectateW, 20,
+            "进入观战", () -> {
+                org.espetro.network.NetworkManager.sendSpectateRequest();
+                net.minecraft.client.Minecraft.getInstance().setScreen(null);
+            }));
+
         refreshSelectionBorders();
     }
 

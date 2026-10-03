@@ -62,7 +62,14 @@ public final class VehicleSeatAccessPolicy {
     }
 
     public static boolean mayUseSeat(ServerPlayer player, Entity vehicle, int seatIndex) {
+        // 白名单载具：座位权限（组员座位/敌对阵营禁乘）全部豁免。
+        if (VehicleNativeWhitelist.isNative(vehicle)) return true;
         if (!isRestrictionActive(player)) return true;
+        // 敌对阵营：任何座位都不许用（换座 / 操作武器一并拦截）
+        if (VehicleEventHandler.isEnemyVehicle(player, vehicle)) {
+            VehicleEventHandler.notifyEnemyVehicle(player);
+            return false;
+        }
         int requiredSeatCount = getRequiredVehicleCrewSeatCount(vehicle);
         return !requiresVehicleCrew(requiredSeatCount, seatIndex) || isVehicleCrew(player);
     }
@@ -78,7 +85,10 @@ public final class VehicleSeatAccessPolicy {
     public static void revalidateCurrentSeat(ServerPlayer player) {
         SbwVehicleSeatResolver.SeatState state =
             SbwVehicleSeatResolver.resolveCurrent(player);
-        if (state == null || mayUseSeat(player, state.vehicle(), state.seatIndex())) return;
+        if (state == null) return;
+        // 白名单载具：换职业/退队不把人踢下座位。
+        if (VehicleNativeWhitelist.isNative(state.vehicle())) return;
+        if (mayUseSeat(player, state.vehicle(), state.seatIndex())) return;
         player.stopRiding();
         notifyDenied(player);
     }
@@ -95,6 +105,9 @@ public final class VehicleSeatAccessPolicy {
         }
         Entity vehicle = event.getEntityBeingMounted();
         if (!SbwVehicleSeatResolver.isSupportedVehicle(vehicle)) return;
+
+        // 白名单载具：不做归属 cancel、不做座位重派，完全走 SBW 原生上车。
+        if (VehicleNativeWhitelist.isNative(vehicle)) return;
 
         // 小队归属准入（主城阶段放行；非队长成员不能上未认领/非本队的载具）。
         // 作为读条通道 tryMount 之外的最后防线，覆盖任何其他上车路径。

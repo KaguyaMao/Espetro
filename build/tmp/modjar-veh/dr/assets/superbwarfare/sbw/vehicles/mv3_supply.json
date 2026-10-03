@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:mv3_supply",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_supply.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/mv3_supply.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_supply.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/mv3_supply.png"
+    }
+  ]
+}

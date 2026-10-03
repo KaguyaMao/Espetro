@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/green"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    },
+    "R": {
+      "tag": "forge:dyes/red"
+    }
+  },
+  "pattern": [
+    "KRK",
+    "KDK",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:med21_chest"
+  },
+  "show_notification": true
+}

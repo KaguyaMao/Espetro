@@ -5,6 +5,7 @@
   "key.espetro.class": "Class Selection",
   "key.espetro.skill": "Commander Skill",
   "key.espetro.radial": "Tactical Interaction Radial (Hold)",
+  "key.espetro.fort_rotate": "Rotate Fortification (90° CW)",
   "radial.espetro.deploy": "Deploy",
   "radial.espetro.logistics": "Logistics",
   "radial.espetro.radio": "Deploy Radio",
@@ -17,6 +18,7 @@
   "block.espetro.supply_source": "Logistics Supply Point",
   "item.espetro.supply_source": "Logistics Supply Point",
   "item.espetro.construction_material": "Construction Material",
+  "item.espetro.fortification_wand": "Fortification Wand",
 
   "tutorial.step.welcome.title": "Welcome to Espetro",
   "tutorial.step.welcome.body": "AuraTip tips explain each phase and GUI. Close a tip to continue. Use /espetro tutorial skip to skip this session; reopen from the hub or command.",

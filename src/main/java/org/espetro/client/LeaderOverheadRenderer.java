@@ -15,14 +15,25 @@ import org.espetro.client.gui.ClientTacticalState;
 import org.joml.Matrix4f;
 
 /**
- * 头顶标识渲染器（指挥官/队长/火力组长）。
+ * 头顶标识渲染器（指挥官/小队长/火力组长/普通成员）。
  * 仿 vanilla EntityRenderer.renderNameTag 的 PoseStack 推栈方式，
  * 修复此前自建 Matrix4f 导致的位移/旋转顺序错误。
+ *
+ * <p>按需求：所有标识**全距离可见**（含本队），仅车内规则不同——车内只保留
+ * 指挥官/小队长/火力组长，不画普通成员标识。普通成员标识为队长标识的 1/2。</p>
  */
 public final class LeaderOverheadRenderer {
 
-    /** 原标识半宽为 0.28；PNG 画框按需求缩小为原来的 1/2。 */
+    /** 队长类标识半宽（PNG 画框按需求已缩小为原来 1/2）。 */
     private static final float HALF = 0.14f;
+    /** 普通成员标识半宽 = 队长标识的 1/2。 */
+    private static final float HALF_MEMBER = HALF / 2f;
+    /**
+     * 普通成员标识相对原版 nametag 顶边的抬高量。
+     * nametag 顶边 = {@code Entity#getNameTagOffsetY()}（= bbHeight + 0.5，文本从锚点向下 0.225），
+     * 图标中心 = 顶边 + 抬高量 + 图标半高 ⇒ 图标底边 = 顶边 + 抬高量。
+     */
+    private static final double MEMBER_LIFT = 0.05;
     private static final float NUMBER_MAX_SCALE = 0.018f;
     private static final float NUMBER_MAX_WIDTH = HALF * 1.45f;
     private static final float NUMBER_FORWARD_OFFSET = 0.02f;
@@ -32,10 +43,9 @@ public final class LeaderOverheadRenderer {
     private static final ResourceLocation SELF_SQUAD_LEADER_TEX = texture("self_squad_leader.png");
     private static final ResourceLocation FIRETEAM_B_TEX = texture("fireteam_b.png");
     private static final ResourceLocation FIRETEAM_C_TEX = texture("fireteam_c.png");
-
-    private static final double R_CMD = 200.0;
-    private static final double R_SL_OTHER = 50.0;
-    private static final double R_FT = 50.0;
+    /** 本队 B / C 组普通成员（普通玩家标识）。 */
+    private static final ResourceLocation FIRETEAMMATE_B_TEX = texture("fireteammate_b.png");
+    private static final ResourceLocation FIRETEAMMATE_C_TEX = texture("fireteammate_c.png");
 
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) return;
@@ -54,11 +64,11 @@ public final class LeaderOverheadRenderer {
             if (p == mc.player || p.isSpectator() || p.isInvisible() || !p.isAlive()) continue;
             OverheadInfo info = resolve(p);
             if (info == null) continue;
-            double distSq = camera.getPosition().distanceToSqr(p.getX(), p.getY(), p.getZ());
-            if (!inRange(info, distSq)) continue;
 
             Entity rv = p.getVehicle();
             if (rv != null) {
+                // 车内只保留指挥官/小队长/火力组长，不画普通成员标识
+                if (info.type == T.MEMBER) continue;
                 int vid = rv.getId();
                 VehicleEntry e = veh.get(vid);
                 int nr = info.rankOrdinal();
@@ -85,31 +95,22 @@ public final class LeaderOverheadRenderer {
         byte ft = m.fireteam();
         if (cmd) return new OverheadInfo(sid, displayId, ft, T.COMMANDER);
         if (m.leader() && sid > 0) return new OverheadInfo(sid, displayId, ft, T.SQUAD_LEADER);
+        // A 组组长即小队长（已在上一条返回）；这里只剩 B/C 组组长
         if (m.fireteamLeader() && (ft == 1 || ft == 2)) return new OverheadInfo(sid, displayId, ft, T.FIRETEAM_LEADER);
+        // 其余有编制的小队成员 → 普通成员标识（全距离可见）
+        if (sid > 0) return new OverheadInfo(sid, displayId, ft, T.MEMBER);
         return null;
-    }
-
-    private static boolean inRange(OverheadInfo info, double distSq) {
-        return switch (info.type) {
-            case COMMANDER -> distSq <= R_CMD * R_CMD;
-            case SQUAD_LEADER -> {
-                if (info.squadId == ClientTacticalState.getMySquadId()) yield true;
-                yield distSq <= R_SL_OTHER * R_SL_OTHER;
-            }
-            case FIRETEAM_LEADER -> {
-                if (info.squadId != ClientTacticalState.getMySquadId()) yield false;
-                if (ClientTacticalState.isLocalSquadLeader(Minecraft.getInstance().player.getName().getString())) yield true;
-                if (info.fireteam != ClientTacticalState.getMyFireteam()) yield false;
-                yield distSq <= R_FT * R_FT;
-            }
-        };
     }
 
     /** 仿 vanilla renderNameTag：push → translate → mulPose(cameraOrientation) → scale → draw → pop */
     private static void render(PoseStack ps, MultiBufferSource.BufferSource buf,
                                Entity entity, float pt, OverheadInfo info, Camera camera) {
         double x = entity.xo + (entity.getX() - entity.xo) * pt;
-        double y = entity.yo + (entity.getY() - entity.yo) * pt + entity.getBbHeight() + 1.0;
+        double baseY = entity.yo + (entity.getY() - entity.yo) * pt;
+        // 队长类：实体高度 + 1.0（保持原样）；普通成员：位于 nametag 顶边上方
+        double y = baseY + (info.type == T.MEMBER
+            ? entity.getNameTagOffsetY() + MEMBER_LIFT + HALF_MEMBER
+            : entity.getBbHeight() + 1.0);
         double z = entity.zo + (entity.getZ() - entity.zo) * pt;
 
         ResourceLocation icon = textureFor(info);
@@ -121,7 +122,9 @@ public final class LeaderOverheadRenderer {
         ps.pushPose();
         // 保持正向缩放以维持顶点绕序；通过 UV 水平翻转修正镜像，避免被背面剔除。
         RenderType iconLayer = RenderType.textSeeThrough(icon);
-        ps.scale(HALF, HALF, 1f);
+        // 普通成员标识为队长标识的 1/5
+        float half = info.type == T.MEMBER ? HALF_MEMBER : HALF;
+        ps.scale(half, half, 1f);
         quadFlippedX(buf.getBuffer(iconLayer), ps.last().pose(), 0xFFFFFFFF);
         ps.popPose();
         // 先提交不透明图标，再把数字写入字体缓冲，确保数字最终覆盖在图标上。
@@ -140,6 +143,15 @@ public final class LeaderOverheadRenderer {
             case SQUAD_LEADER -> info.squadId == ClientTacticalState.getMySquadId()
                 ? SELF_SQUAD_LEADER_TEX : SQUAD_LEADER_TEX;
             case FIRETEAM_LEADER -> info.fireteam == 1 ? FIRETEAM_B_TEX : FIRETEAM_C_TEX;
+            // 普通成员：其它小队用 squad_leader.png（不画数字）；本队 A/B/C 组各用一张（不画数字）
+            case MEMBER -> {
+                if (info.squadId != ClientTacticalState.getMySquadId()) yield SQUAD_LEADER_TEX;
+                yield switch (info.fireteam) {
+                    case 1 -> FIRETEAMMATE_B_TEX;   // B 组
+                    case 2 -> FIRETEAMMATE_C_TEX;   // C 组
+                    default -> SELF_SQUAD_LEADER_TEX;   // A 组（0）
+                };
+            }
         };
     }
 
@@ -175,12 +187,19 @@ public final class LeaderOverheadRenderer {
             "espetro", "textures/gui/overhead/" + fileName);
     }
 
-    private enum T { COMMANDER, SQUAD_LEADER, FIRETEAM_LEADER }
+    private enum T { COMMANDER, SQUAD_LEADER, FIRETEAM_LEADER, MEMBER }
 
     private static class OverheadInfo {
         final int squadId; final int displayId; final byte fireteam; final T type;
         OverheadInfo(int s, int d, byte f, T t) { squadId = s; displayId = d; fireteam = f; type = t; }
-        int rankOrdinal() { return type == T.COMMANDER ? 0 : type == T.SQUAD_LEADER ? 1 : 2; }
+        int rankOrdinal() {
+            return switch (type) {
+                case COMMANDER -> 0;
+                case SQUAD_LEADER -> 1;
+                case FIRETEAM_LEADER -> 2;
+                case MEMBER -> 3;
+            };
+        }
     }
 
     private static class VehicleEntry {

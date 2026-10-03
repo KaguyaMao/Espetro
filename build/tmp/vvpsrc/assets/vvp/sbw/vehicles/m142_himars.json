@@ -1,0 +1,8 @@
+{
+  "ID": "vvp:m142_himars",
+  "Model": {
+    "Model": "vvp:geo/m142_himars.geo.json",
+    "Texture": "vvp:textures/entity/m142_himars.png",
+    "Animation": "vvp:animations/m142_himars.animation.json"
+  }
+}

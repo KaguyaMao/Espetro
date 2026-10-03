@@ -1,0 +1,19 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/q5.animation.json",
+    "ID":  "dragonrise_reforge:q5",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/q5.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/q5.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/q5.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/q5.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/q5.png"
+                   }
+               ]
+}

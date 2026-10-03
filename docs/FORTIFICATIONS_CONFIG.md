@@ -1,14 +1,22 @@
 # 工事与载具补给配置
 
 权威文件是游戏实例根目录的 `config/espetro/fortifications.json`。服务端在首次 datapack
-加载完成后、战场 gate 开放前解析、编译 Structure NBT 并冻结；修改后必须完整重启。
-运行中 `/reload` 不会改变已冻结定义。客户端只收到当前角色可用的目录；放置范围、资源、
-角色、距离和施工操作始终由服务端复核。
+加载完成后、战场 gate 开放前解析、编译 Structure NBT 并冻结；修改后必须完整重启，
+或由管理员在主城用 `/espetro fort reload` 免重启重载（失败会回滚，见
+[FORTIFICATION_AUTHORING.md](FORTIFICATION_AUTHORING.md)）。运行中 `/reload` 不会改变已冻结定义。
+客户端只收到当前角色可用的目录；放置范围、资源、角色、距离和施工操作始终由服务端复核。
 
-形状真源是原版 Minecraft Structure NBT（`data/<namespace>/structures/<path>.nbt`）。
-仓库里的 `data/espetro/structure_sources/fortifications/*.snbt` 只是便于审阅的文本源，
-启动时由 `DimensionPackBootstrap` 编译进内存数据包。`.bbmodel`、方块模型 JSON、OBJ
+形状真源是原版 Minecraft Structure NBT。解析顺序：先查
+`config/espetro/fortification_templates/<name>.nbt`（管理员用「工事选定棒」导出，
+引用名仍是 `espetro:fortifications/<name>`），再回退数据包
+`data/<namespace>/structures/<path>.nbt`（内置 6 个模板由
+`data/espetro/structure_sources/fortifications/*.snbt` 在
+`DimensionPackBootstrap` 启动时编译进内存数据包）。`.bbmodel`、方块模型 JSON、OBJ
 不是运行时输入。
+
+模板里的实体/方块实体在编译时按 `entity_policy` 过滤（默认 `filter`：剔除并警告，
+不再让整份配置冻结失败），文件本身始终无损保存。详见
+[FORTIFICATION_AUTHORING.md](FORTIFICATION_AUTHORING.md) §6。
 
 地图差异只能写在该图 `EsConfig/logistics.json` 的
 `fortification_overrides.<fortification_id>.<field>`。运行时唯一事实源是
@@ -98,6 +106,7 @@
 | `origin_offset` / `pivot` | 结构坐标。`world = anchor + R(origin_offset + local - pivot)`。 |
 | `air_policy` | 目前只支持 `reject_non_replaceable`。`structure_void` 永不触碰世界。 |
 | `required_progress` | 未建成阶段的施工进度。 |
+| `instant` | `true` 时**放置即建成**，跳过施工阶段（电台当前就是这么配的）。`required_progress` 仍作为结构值/摧毁结算依据。 |
 | `structural_value` | 建成后的结构值上限；归零后整座销毁且不能复活。 |
 | `damage_reduction` | 减掉的比例，有效伤害 = 原始伤害 × `(1 - reduction)`。 |
 | `require_radio_range` | 为 `true` 时锚点必须位于同阵营 Radio 范围内。 |
@@ -115,8 +124,13 @@ Rally 仍是非结构部署点，不进入本文件。
 | `espetro:vehicle_supply_station` | `vehicle_supply_station` | DragonRise 实体，失败时用 fallback NBT |
 | `espetro:sandbag_wall` | `generic` | 原 3×2 沙袋导出为 NBT |
 
-管理员新增工事时，把 NBT 放到存档 datapack 的
-`datapacks/<pack>/data/<namespace>/structures/<path>.nbt`，并在启动前启用该包。
+> `espetro:radio` 在服务器配置里带 `"construction": {..., "instant": true}`：电台放下即建成，
+> 不需要按住工兵铲修建（详见 FORTIFICATION_AUTHORING.md §7）。
+
+管理员新增工事时，可以用游戏内「工事选定棒」导出到
+`config/espetro/fortification_templates/`（推荐，`/espetro fort save`），
+或手工把 NBT 放到存档 datapack 的
+`datapacks/<pack>/data/<namespace>/structures/<path>.nbt` 并在启动前启用该包。
 
 ## 游戏内施工流程
 
@@ -124,6 +138,7 @@ Rally 仍是非结构部署点，不进入本文件。
 2. 客户端只绘制逐方块线框：黄色可放置，红色被占据。
 3. 左键确认后才扣除资源；任一步失败回滚方块、实体和费用。
 4. 未建成阶段累计 `required_progress`；完成后提交最终模板/实体，并把当前结构值设为 `structural_value`。
+   `instant: true` 的定义跳过本步，放置即完成。
 5. 建成后铁铲左键按 `repair_per_hit` 修复，右键/爆炸/弹丸按结构部件扣结构值。
 6. 施工状态只存在于当前会话，不写 SavedData。每次服务器启动会隔离当前存档的 `dimensions/espetro`。
 

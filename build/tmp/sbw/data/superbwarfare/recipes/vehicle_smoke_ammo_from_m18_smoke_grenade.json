@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "superbwarfare:m18_smoke_grenade"
+    }
+  ],
+  "result": {
+    "item": "superbwarfare:vehicle_smoke_ammo"
+  }
+}

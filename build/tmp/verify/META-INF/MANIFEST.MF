@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Specification-Title: superbwarfare
+Specification-Vendor: Atsuishio, Roki27, Light_Quanta and other contribu
+ tors
+Specification-Version: 1
+Implementation-Title: SuperbWarfare
+Implementation-Version: 0.8.9.1-mc1.20.1-993063bed
+Implementation-Vendor: Atsuishio, Roki27, Light_Quanta and other contrib
+ utors
+Implementation-Timestamp: 2026-08-20T07:02:37.234715500Z
+MixinConfigs: mixins.superbwarfare.json
+

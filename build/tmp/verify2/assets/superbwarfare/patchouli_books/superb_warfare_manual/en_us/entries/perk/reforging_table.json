@@ -1,0 +1,26 @@
+{
+  "name": "superbwarfare.entry.perk.reforging_table",
+  "icon": "superbwarfare:reforging_table",
+  "category": "superbwarfare:perk",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.perk.reforging_table.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.perk.reforging_table.2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:shortcut_pack",
+      "text": "superbwarfare.page.perk.reforging_table.3"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:reforging_table",
+      "recipe2": "superbwarfare:empty_perk"
+    }
+  ],
+  "sortnum": 30000
+}

@@ -1,0 +1,81 @@
+{
+  "totalBatches": 5,
+  "endBehavior": "terminate",
+  "attackBatchCompletionReinforcement": 50,
+  "teamReinforcements": {
+    "ATTACK": 75,
+    "DEFEND": 350
+  },
+  "plannedPoints": [
+    {
+      "name": "A",
+      "batch": 1,
+      "pos1": {
+        "x": -4,
+        "y": 76,
+        "z": -953
+      },
+      "pos2": {
+        "x": 208,
+        "y": 102,
+        "z": -1106
+      }
+    },
+    {
+      "name": "B",
+      "batch": 2,
+      "pos1": {
+        "x": 335,
+        "y": 66,
+        "z": -1368
+      },
+      "pos2": {
+        "x": 430,
+        "y": 89,
+        "z": -1282
+      }
+    },
+    {
+      "name": "C",
+      "batch": 3,
+      "pos1": {
+        "x": 646,
+        "y": 66,
+        "z": -1173
+      },
+      "pos2": {
+        "x": 793,
+        "y": 84,
+        "z": -1070
+      }
+    },
+    {
+      "name": "D",
+      "batch": 4,
+      "pos1": {
+        "x": 794,
+        "y": 66,
+        "z": -1220
+      },
+      "pos2": {
+        "x": 885,
+        "y": 100,
+        "z": -1286
+      }
+    },
+    {
+      "name": "E",
+      "batch": 5,
+      "pos1": {
+        "x": 949,
+        "y": 66,
+        "z": -1428
+      },
+      "pos2": {
+        "x": 1039,
+        "y": 89,
+        "z": -1524
+      }
+    }
+  ]
+}

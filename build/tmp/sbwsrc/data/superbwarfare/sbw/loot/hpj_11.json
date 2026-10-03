@@ -1,0 +1,37 @@
+{
+  "ID": "superbwarfare:hpj_11",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:cannon_core"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.2,
+          "Name": "superbwarfare:medium_battery_pack"
+        }
+      ],
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Type": "complete"
+    }
+  ]
+}

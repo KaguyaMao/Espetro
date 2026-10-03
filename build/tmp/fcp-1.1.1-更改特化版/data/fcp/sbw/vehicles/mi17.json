@@ -1,0 +1,465 @@
+{
+  "ID": "fcp:mi17",
+  "MaxHealth": 420,
+  "MaxEnergy": 8000000,
+  "OBB": [
+    {
+      "Size": [
+        1.2,
+        1.0,
+        5.2
+      ],
+      "Position": [
+        0.0,
+        1.8,
+        -0.68
+      ],
+      "Part": "Body"
+    },
+    {
+      "Size": [
+        0.8,
+        0.4,
+        2.8
+      ],
+      "Position": [
+        0.0,
+        3.0,
+        -0.8
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.6,
+        0.4,
+        1.92
+      ],
+      "Position": [
+        0.0,
+        3.6,
+        -1.56
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.32,
+        0.8,
+        0.32
+      ],
+      "Position": [
+        0.0,
+        4.2,
+        -1.2
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.8,
+        0.4,
+        4.4
+      ],
+      "Position": [
+        0.0,
+        3.0,
+        -8.0
+      ],
+      "Part": "Body"
+    },
+    {
+      "Size": [
+        2.0,
+        0.2,
+        0.4
+      ],
+      "Position": [
+        0.0,
+        3.0,
+        -10.8
+      ],
+      "Part": "Body"
+    },
+    {
+      "Size": [
+        0.6,
+        1.2,
+        1.2
+      ],
+      "Position": [
+        0.0,
+        3.8,
+        -12.8
+      ],
+      "Part": "SubEngine"
+    }
+  ],
+  "PassengerRenderScale": 0.85,
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.56,
+        0.72,
+        2.56
+      ],
+      "Sensitivity": [
+        0,
+        0,
+        0
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.56,
+          2.0,
+          2.56
+        ],
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [
+          -3,
+          3,
+          -10
+        ]
+      },
+      "CanRotateHead": false
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.56,
+        0.72,
+        2.56
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.56,
+          2.0,
+          2.56
+        ]
+      },
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.88,
+        0.8,
+        0.4
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.88,
+          2.0,
+          0.4
+        ]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.88,
+        0.8,
+        0.4
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.88,
+          2.0,
+          0.4
+        ]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.88,
+        0.8,
+        -0.4
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.88,
+          2.0,
+          -0.4
+        ]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.88,
+        0.8,
+        -0.4
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.88,
+          2.0,
+          -0.4
+        ]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.88,
+        0.8,
+        -1.2
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.88,
+          2.0,
+          -1.2
+        ]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.88,
+        0.8,
+        -1.2
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.88,
+          2.0,
+          -1.2
+        ]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.88,
+        0.8,
+        -2.0
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.88,
+          2.0,
+          -2.0
+        ]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.88,
+        0.8,
+        -2.0
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.88,
+          2.0,
+          -2.0
+        ]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.88,
+        0.8,
+        -2.8
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          -0.88,
+          2.0,
+          -2.8
+        ]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.88,
+        0.8,
+        -2.8
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.88,
+          2.0,
+          -2.8
+        ]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    }
+  ],
+  "EngineType": "Helicopter",
+  "EngineInfo": {
+    "EnergyCostRate": 280,
+    "Increment": 0.9,
+    "Decrement": 0.9,
+    "PitchSpeed": 0.55,
+    "YawSpeed": 0.6,
+    "RollSpeed": 0.45,
+    "LiftSpeed": 0.92,
+    "EngineStartSound": "superbwarfare:ah_6_engine_start",
+    "EngineSoundVolume": 1.5
+  },
+  "EngineSound": "superbwarfare:ah_6_engine",
+  "ThirdPersonCameraPos": [
+    2.5,
+    3.5,
+    10
+  ],
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1.5,
+  "Mass": 1.0,
+  "AllowFreeCam": true,
+  "HasDecoy": true,
+  "DamageModifiers": [
+    "minecraft:arrow * 0.15",
+    "minecraft:explosion * 4",
+    "superbwarfare:projectile_hit * 0.7",
+    "#superbwarfare:projectile * 0.05",
+    "superbwarfare:vehicle_strike * 6",
+    "@#superbwarfare:at_rocket * 2",
+    "All * 0.8",
+    "All - 8"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Medium",
+    "ExplosionDamage": 350,
+    "ExplosionRadius": 12,
+    "CrashPassengers": true
+  },
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/air_rus.png",
+  "Type": "Helicopter",
+  "HudType": "@Helicopter",
+  "TerrainCompat": [
+    [
+      -1.12,
+      0,
+      2.4
+    ],
+    [
+      1.12,
+      0,
+      2.4
+    ],
+    [
+      -1.12,
+      0,
+      2.0
+    ],
+    [
+      1.12,
+      0,
+      2.0
+    ],
+    [
+      -1.12,
+      0,
+      1.6
+    ],
+    [
+      -1.12,
+      0,
+      1.6
+    ]
+  ]
+}

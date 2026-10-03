@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:stryker",
+  "Model": {
+    "Model": "vvp:geo/stryker_m1128.geo.json",
+    "Texture": "vvp:textures/entity/strykers_green.png"
+  }
+}

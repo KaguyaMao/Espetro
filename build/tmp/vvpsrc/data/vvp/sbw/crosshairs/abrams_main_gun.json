@@ -1,0 +1,31 @@
+{
+  "Layers": [
+    {
+      "Type": "Image",
+      "Texture": "vvp:textures/reticles/outline_digital.png",
+      "Alpha": 1.0,
+      "Scale": 1.0,
+      "X": 0,
+      "Y": 0,
+      "Width": 512,
+      "Height": 288
+    },
+    {
+      "Type": "Image",
+      "Texture": "vvp:textures/reticles/abrams_main.png",
+      "Alpha": 0.9,
+      "Scale": 0.8,
+      "X": 0,
+      "Y": 0
+    },
+    {
+      "Type": "ShootNoise",
+      "Texture": "vvp:textures/reticles/noise1.png",
+      "Alpha": 0.15,
+      "Scale": 1.2,
+      "Duration": 8,
+      "FadeOut": true
+    }
+  ]
+}
+

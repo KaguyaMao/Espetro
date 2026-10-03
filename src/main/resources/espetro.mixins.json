@@ -7,6 +7,9 @@
   "plugin": "org.espetro.mixin.EspetroMixinPlugin",
   "mixins": [
     "ServerGamePacketListenerWaitingLockMixin",
+    "network.KeepAliveTimeoutMixin",
+    "network.ClientReadTimeoutMixin",
+    "network.ServerReadTimeoutMixin",
     "hcrpoints.CapturePointAudioMixin",
     "hcrpoints.CapturePointNeutralizedAudioMixin",
     "tacz.CommonAssetsManagerMixin",

@@ -1,0 +1,113 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.m3a3.main_cannon": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"maincannon": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0417": [0, 0, 2],
+						"0.25": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.m3a3.missile_deploy": {
+			"animation_length": 1.5,
+			"bones": {
+				"missile": {
+					"rotation": {
+						"0.0": [0, 0, 90],
+						"1.5": [0, 0, 0]
+					}
+				},
+				"bone": {
+					"rotation": {
+						"0.0": [0, 0, -45],
+						"1.5": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.m3a3.missile_retract": {
+			"animation_length": 1.5,
+			"bones": {
+				"missile": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.5": [0, 0, 90]
+					}
+				},
+				"bone": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.5": [0, 0, -45]
+					}
+				}
+			}
+		},
+		"animation.m3a3.missile_hold": {
+			"animation_length": 0,
+			"bones": {
+				"missile": {
+					"rotation": [0, 0, 0]
+				},
+				"bone": {
+					"rotation": [0, 0, 0]
+				}
+			}
+		},
+		"animation.m3a3.missile_off_hold": {
+			"animation_length": 0,
+			"bones": {
+				"missile": {
+					"rotation": [0, 0, 90]
+				},
+				"bone": {
+					"rotation": [0, 0, -45]
+				}
+			}
+		},
+		"animation.cannon.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.cannon.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.15,
+			"bones": {
+				
+			}
+		},
+		"animation.missile.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.missile.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.15,
+			"bones": {
+				
+			}
+		},
+		"animation.main_machine_gun.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.main_machine_gun.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.15,
+			"bones": {
+				
+			}
+		}
+	}
+}

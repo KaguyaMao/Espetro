@@ -1,0 +1,20 @@
+{
+  "name": "superbwarfare.entry.vehicle.speedboat",
+  "icon": "superbwarfare:container",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.speedboat.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.speedboat.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.speedboat.3"
+    }
+  ],
+  "sortnum": 20201
+}

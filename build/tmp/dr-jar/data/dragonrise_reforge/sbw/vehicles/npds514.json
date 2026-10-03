@@ -1,0 +1,173 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/npds514.animation.json",
+    "ID":  "dragonrise_reforge:npds514",
+    "MaxHealth":  350,
+    "TurretPos":  [
+                      0.0609375,
+                      1.22021875,
+                      -0.20801875
+                  ],
+    "TurretTurnSpeed":  [
+                            20,
+                            15
+                        ],
+    "TurretPitchRange":  [
+                             -32.5,
+                             90
+                         ],
+    "BarrelPos":  [
+                      0.0,
+                      0.4890625,
+                      0.0
+                  ],
+    "MaxEnergy":  5000000,
+    "Seats":  {
+                  "HidePassenger":  true,
+                  "Transform":  "Vehicle",
+                  "Position":  [
+                                   0,
+                                   0,
+                                   0
+                               ],
+                  "MinPitch":  -32.5,
+                  "MaxPitch":  90,
+                  "Sensitivity":  [
+                                      0.6,
+                                      0.8,
+                                      1
+                                  ],
+                  "CameraPos":  {
+                                    "Transform":  "Turret",
+                                    "UseFixedCameraPos":  true,
+                                    "Position":  [
+                                                     0,
+                                                     2,
+                                                     0.0625
+                                                 ],
+                                    "ZoomDirection":  "Barrel"
+                                },
+                  "Weapons":  [
+                                  "Main"
+                              ]
+              },
+    "SeekInfo":  {
+                     "MinSeekRange":  8,
+                     "MaxSeekRange":  256,
+                     "ChangeTargetTime":  60,
+                     "SeekIterative":  20,
+                     "MinTargetSize":  0.25,
+                     "SeekEnergyCost":  5000
+                 },
+    "Weapons":  {
+                    "Main":  {
+                                 "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/ap_shell.png",
+                                 "DefaultFireMode":  "Semi",
+                                 "AvailableFireModes":  "Semi",
+                                 "Projectile":  "superbwarfare:cannon_shell",
+                                 "IsArmorPiercingProjectile":  true,
+                                 "DefaultZoom":  3,
+                                 "RPM":  60,
+                                 "Magazine":  2,
+                                 "EmptyReloadTime":  20,
+                                 "Velocity":  6.6667,
+                                 "Gravity":  0.05,
+                                 "Damage":  500,
+                                 "ExplosionDamage":  80,
+                                 "ExplosionRadius":  4,
+                                 "RecoilTime":  20,
+                                 "RecoilForce":  0,
+                                 "ShootShake":  [
+                                                    0.5,
+                                                    0.5,
+                                                    0.5
+                                                ],
+                                 "Spread":  0.02,
+                                 "ShootAnimationTime":  40,
+                                 "Crosshair":  "@VehicleDynamicCross",
+                                 "CrosshairColor":  "0x00ff66",
+                                 "Name":  "dragonrise_reforge:type59ap",
+                                 "AmmoType":  "superbwarfare:large_shell_ap",
+                                 "SeekWeaponInfo":  {
+                                                        "SeekDirection":  "Barrel",
+                                                        "SeekRange":  384,
+                                                        "SeekAngle":  20,
+                                                        "SeekTime":  10,
+                                                        "MinTargetSize":  0.1,
+                                                        "OnlyLockEntity":  true,
+                                                        "CalculateTrajectory":  true
+                                                    },
+                                 "ShootPos":  {
+                                                  "Transform":  "Barrel",
+                                                  "Positions":  [
+                                                                    [
+                                                                        -0.96860625,
+                                                                        0.27979375,
+                                                                        0.1101
+                                                                    ],
+                                                                    [
+                                                                        0.96860625,
+                                                                        0.27979375,
+                                                                        0.1101
+                                                                    ]
+                                                                ],
+                                                  "Directions":  [
+                                                                     "Barrel"
+                                                                 ]
+                                              },
+                                 "SoundInfo":  {
+                                                   "FireSoundInstances":  "dragonrise_reforge:fire_sound_57mm"
+                                               }
+                             }
+                },
+    "Mass":  30,
+    "DamageModifiers":  [
+                            "minecraft:lava - -8",
+                            "minecraft:lava * 6.66",
+                            "@minecraft:tnt * 3",
+                            "@minecraft:tnt_minecart * 3",
+                            "All * 0.3",
+                            "minecraft:arrow * 1.5",
+                            "minecraft:trident * 1.5",
+                            "minecraft:mob_attack * 2.5",
+                            "minecraft:mob_attack_no_aggro * 2",
+                            "minecraft:mob_projectile * 1.5",
+                            "minecraft:explosion * 6",
+                            "minecraft:player_explosion * 6",
+                            "superbwarfare:custom_explosion * 2.0",
+                            "superbwarfare:projectile_explosion * 2",
+                            "superbwarfare:mine * 0.75",
+                            "superbwarfare:projectile_hit * 1.25",
+                            "superbwarfare:grapeshot_hit * 0.3",
+                            "superbwarfare:laser * 1.25",
+                            "@#superbwarfare:aerial_bomb * 3",
+                            "#superbwarfare:projectile * 0.25",
+                            "#superbwarfare:projectile_absolute * 0.85",
+                            "@superbwarfare:mortar_shell * 1.25",
+                            "@superbwarfare:gun_grenade * 1.5",
+                            "@superbwarfare:javelin_missile * 0.8",
+                            "@superbwarfare:igla_9k38_missile * 0.75",
+                            "All - 8",
+                            "$entity.getSourceAngle(source, 0.3) * damage"
+                        ],
+    "ThirdPersonCameraPos":  [
+                                 0,
+                                 1,
+                                 2
+                             ],
+    "EngineType":  "Fixed",
+    "DestroyInfo":  {
+                        "ParticleType":  "Medium",
+                        "ExplosionDamage":  100,
+                        "ExplosionRadius":  7
+                    },
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/npds514_icon.png",
+    "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+    "Type":  "Defense",
+    "HudType":  "@Artillery",
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/npds514.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/npds514.png"
+                   }
+               ]
+}

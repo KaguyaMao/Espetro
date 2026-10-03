@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:cnchest",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/cnchest.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/cnchest.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/cnchest.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/cnchest.png"
+                   }
+               ]
+}

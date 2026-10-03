@@ -1,0 +1,19 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "frontline.combat.fcp.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "fcp.refmap.json",
+  "mixins": [
+    "VehicleBackblastMixin",
+    "SmallRocketChunkLoadMixin",
+    "FireControlTurretAimMixin"
+  ],
+  "client": [
+    "LandVehicleHudStatsMixin",
+    "HideVehicleHitboxMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

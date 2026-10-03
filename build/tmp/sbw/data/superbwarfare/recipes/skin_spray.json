@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:iron_nugget"
+    },
+    "b": {
+      "item": "minecraft:tripwire_hook"
+    },
+    "c": {
+      "tag": "forge:plates/steel"
+    },
+    "d": {
+      "tag": "forge:dyes"
+    }
+  },
+  "pattern": [
+    " ab",
+    "cdc",
+    " c "
+  ],
+  "result": {
+    "item": "superbwarfare:skin_spray"
+  },
+  "show_notification": true
+}

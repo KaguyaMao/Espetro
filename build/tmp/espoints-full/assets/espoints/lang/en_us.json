@@ -1,0 +1,12 @@
+{
+  "mod.espoints.name": "HCR AAD",
+  "key.categories.espoints": "HCR Capture Points",
+  "key.espoints.open_gui": "Open Point Info",
+  "key.espoints.tactical_map": "Toggle Tactical Map",
+  "key.espoints.map_display_mode": "Cycle Map Display Mode",
+  "key.espoints.map_config": "Open Map Config",
+  "key.espoints.open_md_reader": "Open MD Reader",
+  "key.espoints.tactical_mark": "Tactical Mark Radial (Hold)",
+  "gui.espoints.md_reader.title": "MD File Reader",
+  "gui.espoints.md_reader.file_list": "File List"
+}

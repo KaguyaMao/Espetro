@@ -1,0 +1,16 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "8 #forge:storage_blocks/steel",
+    "24 superbwarfare:cemented_carbide_block",
+    "superbwarfare:heavy_armament_module",
+    "superbwarfare:medium_armament_module",
+    "superbwarfare:large_battery_pack",
+    "2 superbwarfare:track",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "superbwarfare:yx_100"
+  }
+}

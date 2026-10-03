@@ -1,0 +1,15 @@
+{
+  "values": [
+    "superbwarfare:projectile_explosion",
+    "superbwarfare:custom_explosion",
+    "superbwarfare:projectile_hit",
+    "superbwarfare:grapeshot_hit",
+    "superbwarfare:laser",
+    "superbwarfare:laser_headshot",
+    "superbwarfare:laser_static",
+    "superbwarfare:repair_tool",
+    "superbwarfare:super_star_hit",
+    "superbwarfare:super_star_slash",
+    "superbwarfare:phosphorus_fire"
+  ]
+}

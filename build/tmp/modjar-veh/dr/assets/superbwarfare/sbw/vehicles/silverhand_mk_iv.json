@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:silverhand_mk_iv",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/silverhand_mk_iv.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/silverhand_mk_iv.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/silverhand_mk_iv.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/silverhand_mk_iv.png"
+    }
+  ]
+}

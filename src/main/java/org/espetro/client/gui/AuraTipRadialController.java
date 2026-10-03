@@ -45,6 +45,8 @@ public final class AuraTipRadialController {
     private static final ResourceLocation EXECUTE_ACTION = id("execute_tactical_action");
     private static final ResourceLocation SKILL_ACTIVATE_ACTION = id("skill_activate");
     private static final ResourceLocation BUILD_FORT_ACTION = id("build_fortification");
+    /** 火力组长不允许建造的工事 id（电台：仍限指挥官/小队长）。 */
+    private static final String FIRETEAM_FORBIDDEN_FORT_ID = "espetro:radio";
 
     private static final ResourceLocation RALLY = id("textures/gui/squad/rally_deploy.png");
     private static final ResourceLocation BUILD_ICON =
@@ -410,11 +412,18 @@ public final class AuraTipRadialController {
      * Radio / 兵站已在 fortifications.json 中，不能再硬编码一份。
      */
     private static cc.sighs.auratip.data.RadialMenuData buildMenu() {
-        var builder = base(BUILD_MENU)
-            .slot("espetro.rally", RALLY, action(RadialActionPacket.Action.DEPLOY_RALLY),
+        // 只是火力组长（非指挥官、非小队长）时：不给 Rally（队包）和电台，其余工事照常。
+        boolean fireteamOnly = isFireteamLeaderOnly();
+        var builder = base(BUILD_MENU);
+        if (!fireteamOnly) {
+            builder = builder.slot("espetro.rally", RALLY, action(RadialActionPacket.Action.DEPLOY_RALLY),
                 Component.translatable("radial.espetro.rally"), "#FF7DAE82");
+        }
         for (FortificationCatalogPacket.Entry fort : cachedFortifications) {
             if (fort == null || fort.id() == null || fort.id().isBlank()) {
+                continue;
+            }
+            if (fireteamOnly && FIRETEAM_FORBIDDEN_FORT_ID.equals(fort.id())) {
                 continue;
             }
             ResourceLocation icon = ResourceLocation.tryParse(fort.icon());
@@ -485,7 +494,10 @@ public final class AuraTipRadialController {
     /** Rally plus one slot per catalog fort; radio/HAB must not be hard-coded again. */
     static List<String> buildMenuSlotIds(List<FortificationCatalogPacket.Entry> forts) {
         List<String> ids = new ArrayList<>();
-        ids.add("espetro.rally");
+        boolean fireteamOnly = isFireteamLeaderOnly();
+        if (!fireteamOnly) {
+            ids.add("espetro.rally");
+        }
         if (forts == null) {
             return ids;
         }
@@ -493,9 +505,28 @@ public final class AuraTipRadialController {
             if (fort == null || fort.id() == null || fort.id().isBlank()) {
                 continue;
             }
+            if (fireteamOnly && FIRETEAM_FORBIDDEN_FORT_ID.equals(fort.id())) {
+                continue;
+            }
             ids.add("espetro.fort." + fort.id());
         }
         return ids;
+    }
+
+    /**
+     * 当前本地玩家是否"只是火力组长"——非指挥官、非小队长，仅火力组长。
+     * 这类玩家可以开轮盘建工事，但不能建电台，也不能放 Rally/队包。
+     */
+    private static boolean isFireteamLeaderOnly() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.player == null) {
+            return false;
+        }
+        String name = mc.player.getName().getString();
+        if (ClientTacticalState.isCommander(name) || ClientTacticalState.isLocalSquadLeader(name)) {
+            return false;
+        }
+        return ClientTacticalState.isLocalFireteamLeader(name);
     }
 
     private static RadialMenuBuilder base(ResourceLocation menuId) {

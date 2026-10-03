@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/cyborg_tank.animation.json",
+    "ID":  "dragonrise_reforge:cyborg_tank",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/cyborg_tank.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/cyborg_tank.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/cyborg_tank.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/cyborg_tank.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/cyborg_tank.png"
+                   }
+               ]
+}

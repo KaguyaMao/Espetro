@@ -1,0 +1,671 @@
+
+
+{
+  
+  "Default": {
+    "Mode": "MAGAZINE",
+    "FixedAmount": 24,
+    "HealPercent": 50,
+    "BonusItem": "superbwarfare:medical_kit",
+    "BonusItemCount": 2,
+    "AmmoOverrides": {
+      "superbwarfare:large_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 12
+      },
+      "superbwarfare:large_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 12
+      },
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 240
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 240
+      },
+      "superbwarfare:handgun_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 120
+      },
+      "superbwarfare:shotgun_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 30
+      },
+      "superbwarfare:sniper_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 20
+      },
+      "superbwarfare:grenade_40mm": {
+        "Mode": "FIXED",
+        "FixedAmount": 30
+      }
+    }
+  },
+
+  
+  "VehicleOverrides": {
+  "dragonrise_reforge:t72b3": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:large_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 21
+      },
+      "superbwarfare:large_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 18
+      },
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 4
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      }
+    }
+  },
+  "dragonrise_reforge:bmp3": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:small_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 200
+      },
+      "superbwarfare:small_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 300
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:large_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 22
+      },
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 4
+      }
+    }
+  },
+  "dragonrise_reforge:zbd05": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:small_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 160
+      },
+      "superbwarfare:small_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 300
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 2
+      }
+    }
+  },
+  "dragonrise_reforge:ztd05": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:large_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 10
+      },
+      "superbwarfare:large_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 10
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      }
+    }
+  },
+  "dragonrise_reforge:m113": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "dragonrise_reforge:mv3_armed": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "fcp:gaz_tigr_gl": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:grenade_40mm": {
+        "Mode": "FIXED",
+        "FixedAmount": 100
+      }
+    }
+  },
+  "fcp:gaz_tigr_mg": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "fcp:matv": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "fcp:matv_9in1": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "fcp:matv_crow": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 1000
+      }
+    }
+  },
+  "fcp:matv_tow": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 6
+      }
+    }
+  },
+  "fcp:bmp1am": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:small_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 160
+      },
+      "superbwarfare:small_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 300
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      }
+    }
+  },
+  "fcp:bmp2": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:small_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 200
+      },
+      "superbwarfare:small_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 300
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 3
+      }
+    }
+  },
+  "fcp:bmp2m": {
+    "Mode": "FIXED",
+    "HealPercent": 50,
+    "AmmoOverrides": {
+      "superbwarfare:small_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 200
+      },
+      "superbwarfare:small_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 300
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 500
+      },
+      "superbwarfare:medium_anti_ground_missile": {
+        "Mode": "FIXED",
+        "FixedAmount": 4
+      }
+    }
+  },
+
+
+    
+    "dragonrise_reforge:ztz99a": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 18
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    "dragonrise_reforge:ztz96a": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 18
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+    
+    
+    "dragonrise_reforge:zbd04a": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 22
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:zbl08": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 160
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 2
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:zlt11": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 10
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 10
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:zsl10": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:csk181": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        },
+        "superbwarfare:grenade_40mm": {
+          "Mode": "FIXED",
+          "FixedAmount": 60
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:m1a2sepv2": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 400
+        }
+      }
+    },
+
+    "dragonrise_reforge:m1a2sepv1": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 400
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:m3a3": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 70
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 230
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 2
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:m1296": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 100
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:m1126": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 600
+        }
+      }
+    },
+
+    
+    "dragonrise_reforge:m1128": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 9
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 9
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 600
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    
+    "fcp:bmp2d": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 22
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        }
+      }
+    },
+    
+    "fcp:btr82": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 160
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+    
+    "dragonrise_reforge:t90mh": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 18
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+    
+    "fcp:btr80": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    },
+    
+    "fcp:gaz_tigr_rws": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    }
+  }
+}

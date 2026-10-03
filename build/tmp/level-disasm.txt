@@ -1,0 +1,2152 @@
+﻿Compiled from "Level.java"
+public abstract class net.minecraft.world.level.Level implements net.minecraft.world.level.LevelAccessor,java.lang.AutoCloseable {
+  public static final com.mojang.serialization.Codec<net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>> f_46427_;
+
+  public static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> f_46428_;
+
+  public static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> f_46429_;
+
+  public static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> f_46430_;
+
+  public static final int f_151505_;
+
+  public static final int f_151506_;
+
+  public static final int f_151507_;
+
+  public static final int f_151508_;
+
+  public static final int f_151509_;
+
+  public static final int f_151510_;
+
+  public static final int f_151511_;
+
+  protected final java.util.List<net.minecraft.world.level.block.entity.TickingBlockEntity> f_151512_;
+
+  protected final net.minecraft.world.level.redstone.NeighborUpdater f_220350_;
+
+  private final java.util.List<net.minecraft.world.level.block.entity.TickingBlockEntity> f_151503_;
+
+  private boolean f_151504_;
+
+  private final java.lang.Thread f_46423_;
+
+  private final boolean f_46424_;
+
+  private int f_46425_;
+
+  protected int f_46435_;
+
+  protected final int f_46436_;
+
+  protected float f_46437_;
+
+  protected float f_46438_;
+
+  protected float f_46439_;
+
+  protected float f_46440_;
+
+  public final net.minecraft.util.RandomSource f_46441_;
+
+  private final net.minecraft.util.RandomSource f_220348_;
+
+  private final net.minecraft.resources.ResourceKey<net.minecraft.world.level.dimension.DimensionType> f_220349_;
+
+  private final net.minecraft.core.Holder<net.minecraft.world.level.dimension.DimensionType> f_204147_;
+
+  protected final net.minecraft.world.level.storage.WritableLevelData f_46442_;
+
+  private final java.util.function.Supplier<net.minecraft.util.profiling.ProfilerFiller> f_46446_;
+
+  public final boolean f_46443_;
+
+  private final net.minecraft.world.level.border.WorldBorder f_46447_;
+
+  private final net.minecraft.world.level.biome.BiomeManager f_46420_;
+
+  private final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> f_46421_;
+
+  private final net.minecraft.core.RegistryAccess f_268710_;
+
+  private final net.minecraft.world.damagesource.DamageSources f_268497_;
+
+  private long f_186455_;
+
+  protected net.minecraft.world.level.Level(net.minecraft.world.level.storage.WritableLevelData, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>, net.minecraft.core.RegistryAccess, net.minecraft.core.Holder<net.minecraft.world.level.dimension.DimensionType>, java.util.function.Supplier<net.minecraft.util.profiling.ProfilerFiller>, boolean, boolean, long, int);
+    Code:
+       0: aload_0
+       1: invokespecial #130                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: invokestatic  #136                // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+       8: putfield      #1284               // Field f_151512_:Ljava/util/List;
+      11: aload_0
+      12: invokestatic  #136                // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+      15: putfield      #1286               // Field f_151503_:Ljava/util/List;
+      18: aload_0
+      19: invokestatic  #1292               // InterfaceMethod net/minecraft/util/RandomSource.m_216327_:()Lnet/minecraft/util/RandomSource;
+      22: invokeinterface #1295,  1         // InterfaceMethod net/minecraft/util/RandomSource.m_188502_:()I
+      27: putfield      #1297               // Field f_46435_:I
+      30: aload_0
+      31: ldc           #96                 // int 1013904223
+      33: putfield      #1299               // Field f_46436_:I
+      36: aload_0
+      37: invokestatic  #1292               // InterfaceMethod net/minecraft/util/RandomSource.m_216327_:()Lnet/minecraft/util/RandomSource;
+      40: putfield      #1301               // Field f_46441_:Lnet/minecraft/util/RandomSource;
+      43: aload_0
+      44: invokestatic  #1304               // InterfaceMethod net/minecraft/util/RandomSource.m_216337_:()Lnet/minecraft/util/RandomSource;
+      47: putfield      #1306               // Field f_220348_:Lnet/minecraft/util/RandomSource;
+      50: aload_0
+      51: aload         5
+      53: putfield      #1308               // Field f_46446_:Ljava/util/function/Supplier;
+      56: aload_0
+      57: aload_1
+      58: putfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+      61: aload_0
+      62: aload         4
+      64: putfield      #1312               // Field f_204147_:Lnet/minecraft/core/Holder;
+      67: aload_0
+      68: aload         4
+      70: invokeinterface #1317,  1         // InterfaceMethod net/minecraft/core/Holder.m_203543_:()Ljava/util/Optional;
+      75: aload         4
+      77: invokedynamic #1325,  0           // InvokeDynamic #8:get:(Lnet/minecraft/core/Holder;)Ljava/util/function/Supplier;
+      82: invokevirtual #194                // Method java/util/Optional.orElseThrow:(Ljava/util/function/Supplier;)Ljava/lang/Object;
+      85: checkcast     #1327               // class net/minecraft/resources/ResourceKey
+      88: putfield      #1329               // Field f_220349_:Lnet/minecraft/resources/ResourceKey;
+      91: aload         4
+      93: invokeinterface #1332,  1         // InterfaceMethod net/minecraft/core/Holder.m_203334_:()Ljava/lang/Object;
+      98: checkcast     #1334               // class net/minecraft/world/level/dimension/DimensionType
+     101: astore        11
+     103: aload_0
+     104: aload_2
+     105: putfield      #1336               // Field f_46421_:Lnet/minecraft/resources/ResourceKey;
+     108: aload_0
+     109: iload         6
+     111: putfield      #1338               // Field f_46443_:Z
+     114: aload         11
+     116: invokevirtual #1341               // Method net/minecraft/world/level/dimension/DimensionType.f_63859_:()D
+     119: dconst_1
+     120: dcmpl
+     121: ifeq          141
+     124: aload_0
+     125: new           #1179               // class net/minecraft/world/level/Level$1
+     128: dup
+     129: aload_0
+     130: aload         11
+     132: invokespecial #1344               // Method net/minecraft/world/level/Level$1."<init>":(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/dimension/DimensionType;)V
+     135: putfield      #1346               // Field f_46447_:Lnet/minecraft/world/level/border/WorldBorder;
+     138: goto          152
+     141: aload_0
+     142: new           #1350               // class net/minecraft/world/level/border/WorldBorder
+     145: dup
+     146: invokespecial #1351               // Method net/minecraft/world/level/border/WorldBorder."<init>":()V
+     149: putfield      #1346               // Field f_46447_:Lnet/minecraft/world/level/border/WorldBorder;
+     152: aload_0
+     153: invokestatic  #225                // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+     156: putfield      #1353               // Field f_46423_:Ljava/lang/Thread;
+     159: aload_0
+     160: new           #1183               // class net/minecraft/world/level/biome/BiomeManager
+     163: dup
+     164: aload_0
+     165: lload         8
+     167: invokespecial #1356               // Method net/minecraft/world/level/biome/BiomeManager."<init>":(Lnet/minecraft/world/level/biome/BiomeManager$NoiseBiomeSource;J)V
+     170: putfield      #1358               // Field f_46420_:Lnet/minecraft/world/level/biome/BiomeManager;
+     173: aload_0
+     174: iload         7
+     176: putfield      #1360               // Field f_46424_:Z
+     179: aload_0
+     180: new           #1362               // class net/minecraft/world/level/redstone/CollectingNeighborUpdater
+     183: dup
+     184: aload_0
+     185: iload         10
+     187: invokespecial #1365               // Method net/minecraft/world/level/redstone/CollectingNeighborUpdater."<init>":(Lnet/minecraft/world/level/Level;I)V
+     190: putfield      #1367               // Field f_220350_:Lnet/minecraft/world/level/redstone/NeighborUpdater;
+     193: aload_0
+     194: aload_3
+     195: putfield      #1369               // Field f_268710_:Lnet/minecraft/core/RegistryAccess;
+     198: aload_0
+     199: new           #1371               // class net/minecraft/world/damagesource/DamageSources
+     202: dup
+     203: aload_3
+     204: invokespecial #1374               // Method net/minecraft/world/damagesource/DamageSources."<init>":(Lnet/minecraft/core/RegistryAccess;)V
+     207: putfield      #1376               // Field f_268497_:Lnet/minecraft/world/damagesource/DamageSources;
+     210: return
+
+  public boolean m_5776_();
+    Code:
+       0: aload_0
+       1: getfield      #1338               // Field f_46443_:Z
+       4: ireturn
+
+  public net.minecraft.server.MinecraftServer m_7654_();
+    Code:
+       0: aconst_null
+       1: areturn
+
+  public boolean m_46739_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifne          19
+       8: aload_1
+       9: invokestatic  #1397               // Method m_46457_:(Lnet/minecraft/core/BlockPos;)Z
+      12: ifeq          19
+      15: iconst_1
+      16: goto          20
+      19: iconst_0
+      20: ireturn
+
+  public static boolean m_46741_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: invokevirtual #1405               // Method net/minecraft/core/BlockPos.m_123342_:()I
+       4: invokestatic  #1408               // Method m_46724_:(I)Z
+       7: ifne          21
+      10: aload_0
+      11: invokestatic  #1397               // Method m_46457_:(Lnet/minecraft/core/BlockPos;)Z
+      14: ifeq          21
+      17: iconst_1
+      18: goto          22
+      21: iconst_0
+      22: ireturn
+
+  private static boolean m_46457_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+       4: ldc_w         #283                // int -30000000
+       7: if_icmplt     42
+      10: aload_0
+      11: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      14: ldc_w         #283                // int -30000000
+      17: if_icmplt     42
+      20: aload_0
+      21: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+      24: ldc           #73                 // int 30000000
+      26: if_icmpge     42
+      29: aload_0
+      30: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      33: ldc           #73                 // int 30000000
+      35: if_icmpge     42
+      38: iconst_1
+      39: goto          43
+      42: iconst_0
+      43: ireturn
+
+  private static boolean m_46724_(int);
+    Code:
+       0: iload_0
+       1: ldc           #85                 // int -20000000
+       3: if_icmplt     12
+       6: iload_0
+       7: ldc           #83                 // int 20000000
+       9: if_icmplt     16
+      12: iconst_1
+      13: goto          17
+      16: iconst_0
+      17: ireturn
+
+  public net.minecraft.world.level.chunk.LevelChunk m_46745_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+       5: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+       8: aload_1
+       9: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      12: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      15: invokevirtual #1428               // Method m_6325_:(II)Lnet/minecraft/world/level/chunk/LevelChunk;
+      18: areturn
+
+  public net.minecraft.world.level.chunk.LevelChunk m_6325_(int, int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: getstatic     #1435               // Field net/minecraft/world/level/chunk/ChunkStatus.f_62326_:Lnet/minecraft/world/level/chunk/ChunkStatus;
+       6: invokevirtual #1439               // Method m_46819_:(IILnet/minecraft/world/level/chunk/ChunkStatus;)Lnet/minecraft/world/level/chunk/ChunkAccess;
+       9: checkcast     #1209               // class net/minecraft/world/level/chunk/LevelChunk
+      12: areturn
+
+  public net.minecraft.world.level.chunk.ChunkAccess m_6522_(int, int, net.minecraft.world.level.chunk.ChunkStatus, boolean);
+    Code:
+       0: aload_0
+       1: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+       4: iload_1
+       5: iload_2
+       6: aload_3
+       7: iload         4
+       9: invokevirtual #1452               // Method net/minecraft/world/level/chunk/ChunkSource.m_7587_:(IILnet/minecraft/world/level/chunk/ChunkStatus;Z)Lnet/minecraft/world/level/chunk/ChunkAccess;
+      12: astore        5
+      14: aload         5
+      16: ifnonnull     35
+      19: iload         4
+      21: ifeq          35
+      24: new           #312                // class java/lang/IllegalStateException
+      27: dup
+      28: ldc_w         #314                // String Should always be able to create a chunk!
+      31: invokespecial #317                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      34: athrow
+      35: aload         5
+      37: areturn
+
+  public boolean m_7731_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: iload_3
+       4: sipush        512
+       7: invokevirtual #1465               // Method m_6933_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z
+      10: ireturn
+
+  public boolean m_6933_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, int, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          10
+       8: iconst_0
+       9: ireturn
+      10: aload_0
+      11: getfield      #1338               // Field f_46443_:Z
+      14: ifne          26
+      17: aload_0
+      18: invokevirtual #1472               // Method m_46659_:()Z
+      21: ifeq          26
+      24: iconst_0
+      25: ireturn
+      26: aload_0
+      27: aload_1
+      28: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      31: astore        5
+      33: aload_2
+      34: invokevirtual #1480               // Method net/minecraft/world/level/block/state/BlockState.m_60734_:()Lnet/minecraft/world/level/block/Block;
+      37: astore        6
+      39: aload         5
+      41: aload_1
+      42: aload_2
+      43: iload_3
+      44: bipush        64
+      46: iand
+      47: ifeq          54
+      50: iconst_1
+      51: goto          55
+      54: iconst_0
+      55: invokevirtual #1486               // Method net/minecraft/world/level/chunk/LevelChunk.m_6978_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Lnet/minecraft/world/level/block/state/BlockState;
+      58: astore        7
+      60: aload         7
+      62: ifnull        254
+      65: aload_0
+      66: aload_1
+      67: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+      70: astore        8
+      72: aload         8
+      74: aload_2
+      75: if_acmpne     252
+      78: aload         7
+      80: aload         8
+      82: if_acmpeq     94
+      85: aload_0
+      86: aload_1
+      87: aload         7
+      89: aload         8
+      91: invokevirtual #1494               // Method m_6550_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)V
+      94: iload_3
+      95: iconst_2
+      96: iand
+      97: ifeq          151
+     100: aload_0
+     101: getfield      #1338               // Field f_46443_:Z
+     104: ifeq          113
+     107: iload_3
+     108: iconst_4
+     109: iand
+     110: ifne          151
+     113: aload_0
+     114: getfield      #1338               // Field f_46443_:Z
+     117: ifne          142
+     120: aload         5
+     122: invokevirtual #1498               // Method net/minecraft/world/level/chunk/LevelChunk.m_287138_:()Lnet/minecraft/server/level/FullChunkStatus;
+     125: ifnull        151
+     128: aload         5
+     130: invokevirtual #1498               // Method net/minecraft/world/level/chunk/LevelChunk.m_287138_:()Lnet/minecraft/server/level/FullChunkStatus;
+     133: getstatic     #1504               // Field net/minecraft/server/level/FullChunkStatus.BLOCK_TICKING:Lnet/minecraft/server/level/FullChunkStatus;
+     136: invokevirtual #1508               // Method net/minecraft/server/level/FullChunkStatus.m_287205_:(Lnet/minecraft/server/level/FullChunkStatus;)Z
+     139: ifeq          151
+     142: aload_0
+     143: aload_1
+     144: aload         7
+     146: aload_2
+     147: iload_3
+     148: invokevirtual #1512               // Method m_7260_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;I)V
+     151: iload_3
+     152: iconst_1
+     153: iand
+     154: ifeq          188
+     157: aload_0
+     158: aload_1
+     159: aload         7
+     161: invokevirtual #1480               // Method net/minecraft/world/level/block/state/BlockState.m_60734_:()Lnet/minecraft/world/level/block/Block;
+     164: invokevirtual #1516               // Method m_6289_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;)V
+     167: aload_0
+     168: getfield      #1338               // Field f_46443_:Z
+     171: ifne          188
+     174: aload_2
+     175: invokevirtual #1519               // Method net/minecraft/world/level/block/state/BlockState.m_60807_:()Z
+     178: ifeq          188
+     181: aload_0
+     182: aload_1
+     183: aload         6
+     185: invokevirtual #1522               // Method m_46717_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;)V
+     188: iload_3
+     189: bipush        16
+     191: iand
+     192: ifne          243
+     195: iload         4
+     197: ifle          243
+     200: iload_3
+     201: bipush        -34
+     203: iand
+     204: istore        9
+     206: aload         7
+     208: aload_0
+     209: aload_1
+     210: iload         9
+     212: iload         4
+     214: iconst_1
+     215: isub
+     216: invokevirtual #1526               // Method net/minecraft/world/level/block/state/BlockState.m_60762_:(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V
+     219: aload_2
+     220: aload_0
+     221: aload_1
+     222: iload         9
+     224: iload         4
+     226: iconst_1
+     227: isub
+     228: invokevirtual #1529               // Method net/minecraft/world/level/block/state/BlockState.m_60705_:(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V
+     231: aload_2
+     232: aload_0
+     233: aload_1
+     234: iload         9
+     236: iload         4
+     238: iconst_1
+     239: isub
+     240: invokevirtual #1526               // Method net/minecraft/world/level/block/state/BlockState.m_60762_:(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V
+     243: aload_0
+     244: aload_1
+     245: aload         7
+     247: aload         8
+     249: invokevirtual #1532               // Method m_6559_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)V
+     252: iconst_1
+     253: ireturn
+     254: iconst_0
+     255: ireturn
+
+  public void m_6559_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: return
+
+  public boolean m_7471_(net.minecraft.core.BlockPos, boolean);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1547               // Method m_6425_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;
+       5: astore_3
+       6: aload_0
+       7: aload_1
+       8: aload_3
+       9: invokevirtual #1553               // Method net/minecraft/world/level/material/FluidState.m_76188_:()Lnet/minecraft/world/level/block/state/BlockState;
+      12: iconst_3
+      13: iload_2
+      14: ifeq          22
+      17: bipush        64
+      19: goto          23
+      22: iconst_0
+      23: ior
+      24: invokevirtual #1555               // Method m_7731_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z
+      27: ireturn
+
+  public boolean m_7740_(net.minecraft.core.BlockPos, boolean, net.minecraft.world.entity.Entity, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+       5: astore        5
+       7: aload         5
+       9: invokevirtual #1563               // Method net/minecraft/world/level/block/state/BlockState.m_60795_:()Z
+      12: ifeq          17
+      15: iconst_0
+      16: ireturn
+      17: aload_0
+      18: aload_1
+      19: invokevirtual #1547               // Method m_6425_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;
+      22: astore        6
+      24: aload         5
+      26: invokevirtual #1480               // Method net/minecraft/world/level/block/state/BlockState.m_60734_:()Lnet/minecraft/world/level/block/Block;
+      29: instanceof    #1565               // class net/minecraft/world/level/block/BaseFireBlock
+      32: ifne          48
+      35: aload_0
+      36: sipush        2001
+      39: aload_1
+      40: aload         5
+      42: invokestatic  #1569               // Method net/minecraft/world/level/block/Block.m_49956_:(Lnet/minecraft/world/level/block/state/BlockState;)I
+      45: invokevirtual #1573               // Method m_46796_:(ILnet/minecraft/core/BlockPos;I)V
+      48: iload_2
+      49: ifeq          84
+      52: aload         5
+      54: invokevirtual #1576               // Method net/minecraft/world/level/block/state/BlockState.m_155947_:()Z
+      57: ifeq          68
+      60: aload_0
+      61: aload_1
+      62: invokevirtual #1580               // Method m_7702_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      65: goto          69
+      68: aconst_null
+      69: astore        7
+      71: aload         5
+      73: aload_0
+      74: aload_1
+      75: aload         7
+      77: aload_3
+      78: getstatic     #1590               // Field net/minecraft/world/item/ItemStack.f_41583_:Lnet/minecraft/world/item/ItemStack;
+      81: invokestatic  #1594               // Method net/minecraft/world/level/block/Block.m_49881_:(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)V
+      84: aload_0
+      85: aload_1
+      86: aload         6
+      88: invokevirtual #1553               // Method net/minecraft/world/level/material/FluidState.m_76188_:()Lnet/minecraft/world/level/block/state/BlockState;
+      91: iconst_3
+      92: iload         4
+      94: invokevirtual #1465               // Method m_6933_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z
+      97: istore        7
+      99: iload         7
+     101: ifeq          118
+     104: aload_0
+     105: getstatic     #1598               // Field net/minecraft/world/level/gameevent/GameEvent.f_157794_:Lnet/minecraft/world/level/gameevent/GameEvent;
+     108: aload_1
+     109: aload_3
+     110: aload         5
+     112: invokestatic  #1602               // Method net/minecraft/world/level/gameevent/GameEvent$Context.m_223719_:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/gameevent/GameEvent$Context;
+     115: invokevirtual #1606               // Method m_220407_:(Lnet/minecraft/world/level/gameevent/GameEvent;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V
+     118: iload         7
+     120: ireturn
+
+  public void m_142052_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: return
+
+  public boolean m_46597_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: iconst_3
+       4: invokevirtual #1555               // Method m_7731_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z
+       7: ireturn
+
+  public abstract void m_7260_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.block.state.BlockState, int);
+
+  public void m_6550_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: return
+
+  public void m_46672_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block);
+    Code:
+       0: return
+
+  public void m_46590_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block, net.minecraft.core.Direction);
+    Code:
+       0: return
+
+  public void m_46586_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block, net.minecraft.core.BlockPos);
+    Code:
+       0: return
+
+  public void m_213960_(net.minecraft.world.level.block.state.BlockState, net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block, net.minecraft.core.BlockPos, boolean);
+    Code:
+       0: return
+
+  public void m_213683_(net.minecraft.core.Direction, net.minecraft.world.level.block.state.BlockState, net.minecraft.core.BlockPos, net.minecraft.core.BlockPos, int, int);
+    Code:
+       0: aload_0
+       1: getfield      #1367               // Field f_220350_:Lnet/minecraft/world/level/redstone/NeighborUpdater;
+       4: aload_1
+       5: aload_2
+       6: aload_3
+       7: aload         4
+       9: iload         5
+      11: iload         6
+      13: invokeinterface #1651,  7         // InterfaceMethod net/minecraft/world/level/redstone/NeighborUpdater.m_213547_:(Lnet/minecraft/core/Direction;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;II)V
+      18: return
+
+  public int m_6924_(net.minecraft.world.level.levelgen.Heightmap$Types, int, int);
+    Code:
+       0: iload_2
+       1: ldc_w         #283                // int -30000000
+       4: if_icmplt     26
+       7: iload_3
+       8: ldc_w         #283                // int -30000000
+      11: if_icmplt     26
+      14: iload_2
+      15: ldc           #73                 // int 30000000
+      17: if_icmpge     26
+      20: iload_3
+      21: ldc           #73                 // int 30000000
+      23: if_icmplt     37
+      26: aload_0
+      27: invokevirtual #1662               // Method m_5736_:()I
+      30: iconst_1
+      31: iadd
+      32: istore        4
+      34: goto          89
+      37: aload_0
+      38: iload_2
+      39: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      42: iload_3
+      43: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      46: invokevirtual #1665               // Method m_7232_:(II)Z
+      49: ifeq          83
+      52: aload_0
+      53: iload_2
+      54: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      57: iload_3
+      58: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      61: invokevirtual #1428               // Method m_6325_:(II)Lnet/minecraft/world/level/chunk/LevelChunk;
+      64: aload_1
+      65: iload_2
+      66: bipush        15
+      68: iand
+      69: iload_3
+      70: bipush        15
+      72: iand
+      73: invokevirtual #1668               // Method net/minecraft/world/level/chunk/LevelChunk.m_5885_:(Lnet/minecraft/world/level/levelgen/Heightmap$Types;II)I
+      76: iconst_1
+      77: iadd
+      78: istore        4
+      80: goto          89
+      83: aload_0
+      84: invokevirtual #1671               // Method m_141937_:()I
+      87: istore        4
+      89: iload         4
+      91: ireturn
+
+  public net.minecraft.world.level.lighting.LevelLightEngine m_5518_();
+    Code:
+       0: aload_0
+       1: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+       4: invokevirtual #1680               // Method net/minecraft/world/level/chunk/ChunkSource.m_7827_:()Lnet/minecraft/world/level/lighting/LevelLightEngine;
+       7: areturn
+
+  public net.minecraft.world.level.block.state.BlockState m_8055_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          15
+       8: getstatic     #1685               // Field net/minecraft/world/level/block/Blocks.f_50626_:Lnet/minecraft/world/level/block/Block;
+      11: invokevirtual #1688               // Method net/minecraft/world/level/block/Block.m_49966_:()Lnet/minecraft/world/level/block/state/BlockState;
+      14: areturn
+      15: aload_0
+      16: aload_1
+      17: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+      20: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      23: aload_1
+      24: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      27: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      30: invokevirtual #1428               // Method m_6325_:(II)Lnet/minecraft/world/level/chunk/LevelChunk;
+      33: astore_2
+      34: aload_2
+      35: aload_1
+      36: invokevirtual #1689               // Method net/minecraft/world/level/chunk/LevelChunk.m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+      39: areturn
+
+  public net.minecraft.world.level.material.FluidState m_6425_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          15
+       8: getstatic     #1696               // Field net/minecraft/world/level/material/Fluids.f_76191_:Lnet/minecraft/world/level/material/Fluid;
+      11: invokevirtual #1702               // Method net/minecraft/world/level/material/Fluid.m_76145_:()Lnet/minecraft/world/level/material/FluidState;
+      14: areturn
+      15: aload_0
+      16: aload_1
+      17: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      20: astore_2
+      21: aload_2
+      22: aload_1
+      23: invokevirtual #1703               // Method net/minecraft/world/level/chunk/LevelChunk.m_6425_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;
+      26: areturn
+
+  public boolean m_46461_();
+    Code:
+       0: aload_0
+       1: invokevirtual #1709               // Method m_6042_:()Lnet/minecraft/world/level/dimension/DimensionType;
+       4: invokevirtual #1712               // Method net/minecraft/world/level/dimension/DimensionType.m_63967_:()Z
+       7: ifne          22
+      10: aload_0
+      11: getfield      #1714               // Field f_46425_:I
+      14: iconst_4
+      15: if_icmpge     22
+      18: iconst_1
+      19: goto          23
+      22: iconst_0
+      23: ireturn
+
+  public boolean m_46462_();
+    Code:
+       0: aload_0
+       1: invokevirtual #1709               // Method m_6042_:()Lnet/minecraft/world/level/dimension/DimensionType;
+       4: invokevirtual #1712               // Method net/minecraft/world/level/dimension/DimensionType.m_63967_:()Z
+       7: ifne          21
+      10: aload_0
+      11: invokevirtual #1717               // Method m_46461_:()Z
+      14: ifne          21
+      17: iconst_1
+      18: goto          22
+      21: iconst_0
+      22: ireturn
+
+  public void m_245803_(net.minecraft.world.entity.Entity, net.minecraft.core.BlockPos, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: instanceof    #1721               // class net/minecraft/world/entity/player/Player
+       5: ifeq          19
+       8: aload_1
+       9: checkcast     #1721               // class net/minecraft/world/entity/player/Player
+      12: astore        7
+      14: aload         7
+      16: goto          20
+      19: aconst_null
+      20: aload_2
+      21: aload_3
+      22: aload         4
+      24: fload         5
+      26: fload         6
+      28: invokevirtual #1729               // Method m_5594_:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+      31: return
+
+  public void m_5594_(net.minecraft.world.entity.player.Player, net.minecraft.core.BlockPos, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+       6: i2d
+       7: ldc2_w        #503                // double 0.5d
+      10: dadd
+      11: aload_2
+      12: invokevirtual #1405               // Method net/minecraft/core/BlockPos.m_123342_:()I
+      15: i2d
+      16: ldc2_w        #503                // double 0.5d
+      19: dadd
+      20: aload_2
+      21: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      24: i2d
+      25: ldc2_w        #503                // double 0.5d
+      28: dadd
+      29: aload_3
+      30: aload         4
+      32: fload         5
+      34: fload         6
+      36: invokevirtual #1742               // Method m_6263_:(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+      39: return
+
+  public abstract void m_262808_(net.minecraft.world.entity.player.Player, double, double, double, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent>, net.minecraft.sounds.SoundSource, float, float, long);
+
+  public void m_214150_(net.minecraft.world.entity.player.Player, double, double, double, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float, long);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: dload_2
+       3: dload         4
+       5: dload         6
+       7: getstatic     #1759               // Field net/minecraft/core/registries/BuiltInRegistries.f_256894_:Lnet/minecraft/core/Registry;
+      10: aload         8
+      12: invokeinterface #1765,  2         // InterfaceMethod net/minecraft/core/Registry.m_263177_:(Ljava/lang/Object;)Lnet/minecraft/core/Holder;
+      17: aload         9
+      19: fload         10
+      21: fload         11
+      23: lload         12
+      25: invokevirtual #1767               // Method m_262808_:(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V
+      28: return
+
+  public abstract void m_213890_(net.minecraft.world.entity.player.Player, net.minecraft.world.entity.Entity, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent>, net.minecraft.sounds.SoundSource, float, float, long);
+
+  public void m_6263_(net.minecraft.world.entity.player.Player, double, double, double, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: dload_2
+       3: dload         4
+       5: dload         6
+       7: aload         8
+       9: aload         9
+      11: fload         10
+      13: fload         11
+      15: aload_0
+      16: getfield      #1306               // Field f_220348_:Lnet/minecraft/util/RandomSource;
+      19: invokeinterface #1782,  1         // InterfaceMethod net/minecraft/util/RandomSource.m_188505_:()J
+      24: invokevirtual #1784               // Method m_214150_:(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFJ)V
+      27: return
+
+  public void m_6269_(net.minecraft.world.entity.player.Player, net.minecraft.world.entity.Entity, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: getstatic     #1759               // Field net/minecraft/core/registries/BuiltInRegistries.f_256894_:Lnet/minecraft/core/Registry;
+       6: aload_3
+       7: invokeinterface #1765,  2         // InterfaceMethod net/minecraft/core/Registry.m_263177_:(Ljava/lang/Object;)Lnet/minecraft/core/Holder;
+      12: aload         4
+      14: fload         5
+      16: fload         6
+      18: aload_0
+      19: getfield      #1306               // Field f_220348_:Lnet/minecraft/util/RandomSource;
+      22: invokeinterface #1782,  1         // InterfaceMethod net/minecraft/util/RandomSource.m_188505_:()J
+      27: invokevirtual #1796               // Method m_213890_:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V
+      30: return
+
+  public void m_245747_(net.minecraft.core.BlockPos, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float, boolean);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+       5: i2d
+       6: ldc2_w        #503                // double 0.5d
+       9: dadd
+      10: aload_1
+      11: invokevirtual #1405               // Method net/minecraft/core/BlockPos.m_123342_:()I
+      14: i2d
+      15: ldc2_w        #503                // double 0.5d
+      18: dadd
+      19: aload_1
+      20: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      23: i2d
+      24: ldc2_w        #503                // double 0.5d
+      27: dadd
+      28: aload_2
+      29: aload_3
+      30: fload         4
+      32: fload         5
+      34: iload         6
+      36: invokevirtual #1808               // Method m_7785_:(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZ)V
+      39: return
+
+  public void m_7785_(double, double, double, net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundSource, float, float, boolean);
+    Code:
+       0: return
+
+  public void m_7106_(net.minecraft.core.particles.ParticleOptions, double, double, double, double, double, double);
+    Code:
+       0: return
+
+  public void m_6493_(net.minecraft.core.particles.ParticleOptions, boolean, double, double, double, double, double, double);
+    Code:
+       0: return
+
+  public void m_7107_(net.minecraft.core.particles.ParticleOptions, double, double, double, double, double, double);
+    Code:
+       0: return
+
+  public void m_6485_(net.minecraft.core.particles.ParticleOptions, boolean, double, double, double, double, double, double);
+    Code:
+       0: return
+
+  public float m_46490_(float);
+    Code:
+       0: aload_0
+       1: fload_1
+       2: invokevirtual #1863               // Method m_46942_:(F)F
+       5: fstore_2
+       6: fload_2
+       7: ldc_w         #543                // float 6.2831855f
+      10: fmul
+      11: freturn
+
+  public void m_151525_(net.minecraft.world.level.block.entity.TickingBlockEntity);
+    Code:
+       0: aload_0
+       1: getfield      #1868               // Field f_151504_:Z
+       4: ifeq          14
+       7: aload_0
+       8: getfield      #1286               // Field f_151503_:Ljava/util/List;
+      11: goto          18
+      14: aload_0
+      15: getfield      #1284               // Field f_151512_:Ljava/util/List;
+      18: aload_1
+      19: invokeinterface #554,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      24: pop
+      25: return
+
+  protected void m_46463_();
+    Code:
+       0: aload_0
+       1: invokevirtual #1877               // Method m_46473_:()Lnet/minecraft/util/profiling/ProfilerFiller;
+       4: astore_1
+       5: aload_1
+       6: ldc_w         #562                // String blockEntities
+       9: invokeinterface #1882,  2         // InterfaceMethod net/minecraft/util/profiling/ProfilerFiller.m_6180_:(Ljava/lang/String;)V
+      14: aload_0
+      15: iconst_1
+      16: putfield      #1868               // Field f_151504_:Z
+      19: aload_0
+      20: getfield      #1286               // Field f_151503_:Ljava/util/List;
+      23: invokeinterface #569,  1          // InterfaceMethod java/util/List.isEmpty:()Z
+      28: ifne          54
+      31: aload_0
+      32: getfield      #1284               // Field f_151512_:Ljava/util/List;
+      35: aload_0
+      36: getfield      #1286               // Field f_151503_:Ljava/util/List;
+      39: invokeinterface #573,  2          // InterfaceMethod java/util/List.addAll:(Ljava/util/Collection;)Z
+      44: pop
+      45: aload_0
+      46: getfield      #1286               // Field f_151503_:Ljava/util/List;
+      49: invokeinterface #576,  1          // InterfaceMethod java/util/List.clear:()V
+      54: aload_0
+      55: getfield      #1284               // Field f_151512_:Ljava/util/List;
+      58: invokeinterface #580,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      63: astore_2
+      64: aload_2
+      65: invokeinterface #585,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      70: ifeq          123
+      73: aload_2
+      74: invokeinterface #588,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      79: checkcast     #1870               // class net/minecraft/world/level/block/entity/TickingBlockEntity
+      82: astore_3
+      83: aload_3
+      84: invokeinterface #1885,  1         // InterfaceMethod net/minecraft/world/level/block/entity/TickingBlockEntity.m_142220_:()Z
+      89: ifeq          101
+      92: aload_2
+      93: invokeinterface #593,  1          // InterfaceMethod java/util/Iterator.remove:()V
+      98: goto          120
+     101: aload_0
+     102: aload_3
+     103: invokeinterface #1889,  1         // InterfaceMethod net/minecraft/world/level/block/entity/TickingBlockEntity.m_142689_:()Lnet/minecraft/core/BlockPos;
+     108: invokevirtual #1892               // Method m_220393_:(Lnet/minecraft/core/BlockPos;)Z
+     111: ifeq          120
+     114: aload_3
+     115: invokeinterface #1895,  1         // InterfaceMethod net/minecraft/world/level/block/entity/TickingBlockEntity.m_142224_:()V
+     120: goto          64
+     123: aload_0
+     124: iconst_0
+     125: putfield      #1868               // Field f_151504_:Z
+     128: aload_1
+     129: invokeinterface #1898,  1         // InterfaceMethod net/minecraft/util/profiling/ProfilerFiller.m_7238_:()V
+     134: return
+
+  public <T extends net.minecraft.world.entity.Entity> void m_46653_(java.util.function.Consumer<T>, T);
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokeinterface #615,  2          // InterfaceMethod java/util/function/Consumer.accept:(Ljava/lang/Object;)V
+       7: goto          46
+      10: astore_3
+      11: aload_3
+      12: ldc_w         #617                // String Ticking entity
+      15: invokestatic  #1909               // Method net/minecraft/CrashReport.m_127521_:(Ljava/lang/Throwable;Ljava/lang/String;)Lnet/minecraft/CrashReport;
+      18: astore        4
+      20: aload         4
+      22: ldc_w         #623                // String Entity being ticked
+      25: invokevirtual #1913               // Method net/minecraft/CrashReport.m_127514_:(Ljava/lang/String;)Lnet/minecraft/CrashReportCategory;
+      28: astore        5
+      30: aload_2
+      31: aload         5
+      33: invokevirtual #1917               // Method net/minecraft/world/entity/Entity.m_7976_:(Lnet/minecraft/CrashReportCategory;)V
+      36: new           #1919               // class net/minecraft/ReportedException
+      39: dup
+      40: aload         4
+      42: invokespecial #1922               // Method net/minecraft/ReportedException."<init>":(Lnet/minecraft/CrashReport;)V
+      45: athrow
+      46: return
+    Exception table:
+       from    to  target type
+           0     7    10   Class java/lang/Throwable
+
+  public boolean m_183599_(net.minecraft.world.entity.Entity);
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public boolean m_183438_(long);
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public boolean m_220393_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokestatic  #1937               // Method net/minecraft/world/level/ChunkPos.m_151388_:(Lnet/minecraft/core/BlockPos;)J
+       5: invokevirtual #1939               // Method m_183438_:(J)Z
+       8: ireturn
+
+  public net.minecraft.world.level.Explosion m_254849_(net.minecraft.world.entity.Entity, double, double, double, float, net.minecraft.world.level.Level$ExplosionInteraction);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aconst_null
+       3: aconst_null
+       4: dload_2
+       5: dload         4
+       7: dload         6
+       9: fload         8
+      11: iconst_0
+      12: aload         9
+      14: invokevirtual #1946               // Method m_254877_:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)Lnet/minecraft/world/level/Explosion;
+      17: areturn
+
+  public net.minecraft.world.level.Explosion m_255391_(net.minecraft.world.entity.Entity, double, double, double, float, boolean, net.minecraft.world.level.Level$ExplosionInteraction);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aconst_null
+       3: aconst_null
+       4: dload_2
+       5: dload         4
+       7: dload         6
+       9: fload         8
+      11: iload         9
+      13: aload         10
+      15: invokevirtual #1946               // Method m_254877_:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)Lnet/minecraft/world/level/Explosion;
+      18: areturn
+
+  public net.minecraft.world.level.Explosion m_254951_(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, net.minecraft.world.phys.Vec3, float, boolean, net.minecraft.world.level.Level$ExplosionInteraction);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_3
+       4: aload         4
+       6: invokevirtual #1969               // Method net/minecraft/world/phys/Vec3.m_7096_:()D
+       9: aload         4
+      11: invokevirtual #1972               // Method net/minecraft/world/phys/Vec3.m_7098_:()D
+      14: aload         4
+      16: invokevirtual #1975               // Method net/minecraft/world/phys/Vec3.m_7094_:()D
+      19: fload         5
+      21: iload         6
+      23: aload         7
+      25: invokevirtual #1946               // Method m_254877_:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)Lnet/minecraft/world/level/Explosion;
+      28: areturn
+
+  public net.minecraft.world.level.Explosion m_254877_(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level$ExplosionInteraction);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_3
+       4: dload         4
+       6: dload         6
+       8: dload         8
+      10: fload         10
+      12: iload         11
+      14: aload         12
+      16: iconst_1
+      17: invokevirtual #1989               // Method m_255278_:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;Z)Lnet/minecraft/world/level/Explosion;
+      20: areturn
+
+  public net.minecraft.world.level.Explosion m_255278_(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level$ExplosionInteraction, boolean);
+    Code:
+       0: getstatic     #2001               // Field net/minecraft/world/level/Level$2.f_254640_:[I
+       3: aload         12
+       5: invokevirtual #2002               // Method net/minecraft/world/level/Level$ExplosionInteraction.ordinal:()I
+       8: iaload
+       9: tableswitch   { // 1 to 4
+
+                     1: 48
+
+                     2: 54
+
+                     3: 64
+
+                     4: 93
+               default: 40
+          }
+      40: new           #677                // class java/lang/IncompatibleClassChangeError
+      43: dup
+      44: invokespecial #678                // Method java/lang/IncompatibleClassChangeError."<init>":()V
+      47: athrow
+      48: getstatic     #2010               // Field net/minecraft/world/level/Explosion$BlockInteraction.KEEP:Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      51: goto          100
+      54: aload_0
+      55: getstatic     #2014               // Field net/minecraft/world/level/GameRules.f_254629_:Lnet/minecraft/world/level/GameRules$Key;
+      58: invokevirtual #2018               // Method m_255157_:(Lnet/minecraft/world/level/GameRules$Key;)Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      61: goto          100
+      64: aload_0
+      65: invokevirtual #2022               // Method m_46469_:()Lnet/minecraft/world/level/GameRules;
+      68: getstatic     #2025               // Field net/minecraft/world/level/GameRules.f_46132_:Lnet/minecraft/world/level/GameRules$Key;
+      71: invokevirtual #2029               // Method net/minecraft/world/level/GameRules.m_46207_:(Lnet/minecraft/world/level/GameRules$Key;)Z
+      74: ifeq          87
+      77: aload_0
+      78: getstatic     #2032               // Field net/minecraft/world/level/GameRules.f_254692_:Lnet/minecraft/world/level/GameRules$Key;
+      81: invokevirtual #2018               // Method m_255157_:(Lnet/minecraft/world/level/GameRules$Key;)Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      84: goto          100
+      87: getstatic     #2010               // Field net/minecraft/world/level/Explosion$BlockInteraction.KEEP:Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      90: goto          100
+      93: aload_0
+      94: getstatic     #2035               // Field net/minecraft/world/level/GameRules.f_254705_:Lnet/minecraft/world/level/GameRules$Key;
+      97: invokevirtual #2018               // Method m_255157_:(Lnet/minecraft/world/level/GameRules$Key;)Lnet/minecraft/world/level/Explosion$BlockInteraction;
+     100: astore        14
+     102: new           #1199               // class net/minecraft/world/level/Explosion
+     105: dup
+     106: aload_0
+     107: aload_1
+     108: aload_2
+     109: aload_3
+     110: dload         4
+     112: dload         6
+     114: dload         8
+     116: fload         10
+     118: iload         11
+     120: aload         14
+     122: invokespecial #2038               // Method net/minecraft/world/level/Explosion."<init>":(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Explosion$BlockInteraction;)V
+     125: astore        15
+     127: aload         15
+     129: invokevirtual #2041               // Method net/minecraft/world/level/Explosion.m_46061_:()V
+     132: aload         15
+     134: iload         13
+     136: invokevirtual #2044               // Method net/minecraft/world/level/Explosion.m_46075_:(Z)V
+     139: aload         15
+     141: areturn
+
+  private net.minecraft.world.level.Explosion$BlockInteraction m_255157_(net.minecraft.world.level.GameRules$Key<net.minecraft.world.level.GameRules$BooleanValue>);
+    Code:
+       0: aload_0
+       1: invokevirtual #2022               // Method m_46469_:()Lnet/minecraft/world/level/GameRules;
+       4: aload_1
+       5: invokevirtual #2029               // Method net/minecraft/world/level/GameRules.m_46207_:(Lnet/minecraft/world/level/GameRules$Key;)Z
+       8: ifeq          17
+      11: getstatic     #2059               // Field net/minecraft/world/level/Explosion$BlockInteraction.DESTROY_WITH_DECAY:Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      14: goto          20
+      17: getstatic     #2062               // Field net/minecraft/world/level/Explosion$BlockInteraction.DESTROY:Lnet/minecraft/world/level/Explosion$BlockInteraction;
+      20: areturn
+
+  public abstract java.lang.String m_46464_();
+
+  public net.minecraft.world.level.block.entity.BlockEntity m_7702_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          10
+       8: aconst_null
+       9: areturn
+      10: aload_0
+      11: getfield      #1338               // Field f_46443_:Z
+      14: ifne          29
+      17: invokestatic  #225                // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+      20: aload_0
+      21: getfield      #1353               // Field f_46423_:Ljava/lang/Thread;
+      24: if_acmpeq     29
+      27: aconst_null
+      28: areturn
+      29: aload_0
+      30: aload_1
+      31: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      34: aload_1
+      35: getstatic     #2069               // Field net/minecraft/world/level/chunk/LevelChunk$EntityCreationType.IMMEDIATE:Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;
+      38: invokevirtual #2073               // Method net/minecraft/world/level/chunk/LevelChunk.m_5685_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      41: areturn
+
+  public void m_151523_(net.minecraft.world.level.block.entity.BlockEntity);
+    Code:
+       0: aload_1
+       1: invokevirtual #2079               // Method net/minecraft/world/level/block/entity/BlockEntity.m_58899_:()Lnet/minecraft/core/BlockPos;
+       4: astore_2
+       5: aload_0
+       6: aload_2
+       7: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+      10: ifeq          14
+      13: return
+      14: aload_0
+      15: aload_2
+      16: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      19: aload_1
+      20: invokevirtual #2082               // Method net/minecraft/world/level/chunk/LevelChunk.m_142170_:(Lnet/minecraft/world/level/block/entity/BlockEntity;)V
+      23: return
+
+  public void m_46747_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          9
+       8: return
+       9: aload_0
+      10: aload_1
+      11: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      14: aload_1
+      15: invokevirtual #2088               // Method net/minecraft/world/level/chunk/LevelChunk.m_8114_:(Lnet/minecraft/core/BlockPos;)V
+      18: return
+
+  public boolean m_46749_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          10
+       8: iconst_0
+       9: ireturn
+      10: aload_0
+      11: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+      14: aload_1
+      15: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+      18: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      21: aload_1
+      22: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      25: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      28: invokevirtual #2093               // Method net/minecraft/world/level/chunk/ChunkSource.m_5563_:(II)Z
+      31: ireturn
+
+  public boolean m_46578_(net.minecraft.core.BlockPos, net.minecraft.world.entity.Entity, net.minecraft.core.Direction);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1394               // Method m_151570_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          10
+       8: iconst_0
+       9: ireturn
+      10: aload_0
+      11: aload_1
+      12: invokevirtual #1412               // Method net/minecraft/core/BlockPos.m_123341_:()I
+      15: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      18: aload_1
+      19: invokevirtual #1415               // Method net/minecraft/core/BlockPos.m_123343_:()I
+      22: invokestatic  #1424               // Method net/minecraft/core/SectionPos.m_123171_:(I)I
+      25: getstatic     #1435               // Field net/minecraft/world/level/chunk/ChunkStatus.f_62326_:Lnet/minecraft/world/level/chunk/ChunkStatus;
+      28: iconst_0
+      29: invokevirtual #2098               // Method m_6522_:(IILnet/minecraft/world/level/chunk/ChunkStatus;Z)Lnet/minecraft/world/level/chunk/ChunkAccess;
+      32: astore        4
+      34: aload         4
+      36: ifnonnull     41
+      39: iconst_0
+      40: ireturn
+      41: aload         4
+      43: aload_1
+      44: invokevirtual #2099               // Method net/minecraft/world/level/chunk/ChunkAccess.m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+      47: aload_0
+      48: aload_1
+      49: aload_2
+      50: aload_3
+      51: invokevirtual #2103               // Method net/minecraft/world/level/block/state/BlockState.m_60638_:(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Direction;)Z
+      54: ireturn
+
+  public boolean m_46575_(net.minecraft.core.BlockPos, net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: getstatic     #2111               // Field net/minecraft/core/Direction.UP:Lnet/minecraft/core/Direction;
+       6: invokevirtual #2113               // Method m_46578_:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Direction;)Z
+       9: ireturn
+
+  public void m_46465_();
+    Code:
+       0: dconst_1
+       1: aload_0
+       2: fconst_1
+       3: invokevirtual #2119               // Method m_46722_:(F)F
+       6: ldc_w         #752                // float 5.0f
+       9: fmul
+      10: f2d
+      11: ldc2_w        #753                // double 16.0d
+      14: ddiv
+      15: dsub
+      16: dstore_1
+      17: dconst_1
+      18: aload_0
+      19: fconst_1
+      20: invokevirtual #2122               // Method m_46661_:(F)F
+      23: ldc_w         #752                // float 5.0f
+      26: fmul
+      27: f2d
+      28: ldc2_w        #753                // double 16.0d
+      31: ddiv
+      32: dsub
+      33: dstore_3
+      34: ldc2_w        #503                // double 0.5d
+      37: ldc2_w        #757                // double 2.0d
+      40: aload_0
+      41: fconst_1
+      42: invokevirtual #1863               // Method m_46942_:(F)F
+      45: ldc_w         #543                // float 6.2831855f
+      48: fmul
+      49: invokestatic  #2127               // Method net/minecraft/util/Mth.m_14089_:(F)F
+      52: f2d
+      53: ldc2_w        #762                // double -0.25d
+      56: ldc2_w        #764                // double 0.25d
+      59: invokestatic  #2130               // Method net/minecraft/util/Mth.m_14008_:(DDD)D
+      62: dmul
+      63: dadd
+      64: dstore        5
+      66: aload_0
+      67: dconst_1
+      68: dload         5
+      70: dload_1
+      71: dmul
+      72: dload_3
+      73: dmul
+      74: dsub
+      75: ldc2_w        #769                // double 11.0d
+      78: dmul
+      79: d2i
+      80: putfield      #1714               // Field f_46425_:I
+      83: return
+
+  public void m_46703_(boolean, boolean);
+    Code:
+       0: aload_0
+       1: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+       4: iload_1
+       5: iload_2
+       6: invokevirtual #2134               // Method net/minecraft/world/level/chunk/ChunkSource.m_6707_:(ZZ)V
+       9: return
+
+  public net.minecraft.core.BlockPos m_220360_();
+    Code:
+       0: new           #1402               // class net/minecraft/core/BlockPos
+       3: dup
+       4: aload_0
+       5: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       8: invokeinterface #2142,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6789_:()I
+      13: aload_0
+      14: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+      17: invokeinterface #2145,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6527_:()I
+      22: aload_0
+      23: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+      26: invokeinterface #2148,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6526_:()I
+      31: invokespecial #2149               // Method net/minecraft/core/BlockPos."<init>":(III)V
+      34: astore_1
+      35: aload_0
+      36: invokevirtual #2153               // Method m_6857_:()Lnet/minecraft/world/level/border/WorldBorder;
+      39: aload_1
+      40: invokevirtual #2156               // Method net/minecraft/world/level/border/WorldBorder.m_61937_:(Lnet/minecraft/core/BlockPos;)Z
+      43: ifne          72
+      46: aload_0
+      47: getstatic     #2159               // Field net/minecraft/world/level/levelgen/Heightmap$Types.MOTION_BLOCKING:Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+      50: aload_0
+      51: invokevirtual #2153               // Method m_6857_:()Lnet/minecraft/world/level/border/WorldBorder;
+      54: invokevirtual #2162               // Method net/minecraft/world/level/border/WorldBorder.m_6347_:()D
+      57: dconst_0
+      58: aload_0
+      59: invokevirtual #2153               // Method m_6857_:()Lnet/minecraft/world/level/border/WorldBorder;
+      62: invokevirtual #2165               // Method net/minecraft/world/level/border/WorldBorder.m_6345_:()D
+      65: invokestatic  #2169               // Method net/minecraft/core/BlockPos.m_274561_:(DDD)Lnet/minecraft/core/BlockPos;
+      68: invokevirtual #2173               // Method m_5452_:(Lnet/minecraft/world/level/levelgen/Heightmap$Types;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;
+      71: astore_1
+      72: aload_1
+      73: areturn
+
+  public float m_220361_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: invokeinterface #2177,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6790_:()F
+       9: freturn
+
+  protected void m_46466_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: invokeinterface #2181,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6533_:()Z
+       9: ifeq          34
+      12: aload_0
+      13: fconst_1
+      14: putfield      #2183               // Field f_46438_:F
+      17: aload_0
+      18: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+      21: invokeinterface #2186,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6534_:()Z
+      26: ifeq          34
+      29: aload_0
+      30: fconst_1
+      31: putfield      #2188               // Field f_46440_:F
+      34: return
+
+  public void close() throws java.io.IOException;
+    Code:
+       0: aload_0
+       1: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+       4: invokevirtual #2189               // Method net/minecraft/world/level/chunk/ChunkSource.close:()V
+       7: return
+
+  public net.minecraft.world.level.BlockGetter m_7925_(int, int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: getstatic     #1435               // Field net/minecraft/world/level/chunk/ChunkStatus.f_62326_:Lnet/minecraft/world/level/chunk/ChunkStatus;
+       6: iconst_0
+       7: invokevirtual #2098               // Method m_6522_:(IILnet/minecraft/world/level/chunk/ChunkStatus;Z)Lnet/minecraft/world/level/chunk/ChunkAccess;
+      10: areturn
+
+  public java.util.List<net.minecraft.world.entity.Entity> m_6249_(net.minecraft.world.entity.Entity, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super net.minecraft.world.entity.Entity>);
+    Code:
+       0: aload_0
+       1: invokevirtual #1877               // Method m_46473_:()Lnet/minecraft/util/profiling/ProfilerFiller;
+       4: ldc_w         #823                // String getEntities
+       7: invokeinterface #2199,  2         // InterfaceMethod net/minecraft/util/profiling/ProfilerFiller.m_6174_:(Ljava/lang/String;)V
+      12: invokestatic  #136                // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+      15: astore        4
+      17: aload_0
+      18: invokevirtual #2203               // Method m_142646_:()Lnet/minecraft/world/level/entity/LevelEntityGetter;
+      21: aload_2
+      22: aload_1
+      23: aload_3
+      24: aload         4
+      26: invokedynamic #2213,  0           // InvokeDynamic #9:accept:(Lnet/minecraft/world/entity/Entity;Ljava/util/function/Predicate;Ljava/util/List;)Ljava/util/function/Consumer;
+      31: invokeinterface #2219,  3         // InterfaceMethod net/minecraft/world/level/entity/LevelEntityGetter.m_142232_:(Lnet/minecraft/world/phys/AABB;Ljava/util/function/Consumer;)V
+      36: aload         4
+      38: areturn
+
+  public <T extends net.minecraft.world.entity.Entity> java.util.List<T> m_142425_(net.minecraft.world.level.entity.EntityTypeTest<net.minecraft.world.entity.Entity, T>, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super T>);
+    Code:
+       0: invokestatic  #136                // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+       3: astore        4
+       5: aload_0
+       6: aload_1
+       7: aload_2
+       8: aload_3
+       9: aload         4
+      11: invokevirtual #2232               // Method m_261153_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;Ljava/util/List;)V
+      14: aload         4
+      16: areturn
+
+  public <T extends net.minecraft.world.entity.Entity> void m_261153_(net.minecraft.world.level.entity.EntityTypeTest<net.minecraft.world.entity.Entity, T>, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super T>, java.util.List<? super T>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_3
+       4: aload         4
+       6: ldc_w         #858                // int 2147483647
+       9: invokevirtual #2242               // Method m_260826_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;Ljava/util/List;I)V
+      12: return
+
+  public <T extends net.minecraft.world.entity.Entity> void m_260826_(net.minecraft.world.level.entity.EntityTypeTest<net.minecraft.world.entity.Entity, T>, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super T>, java.util.List<? super T>, int);
+    Code:
+       0: aload_0
+       1: invokevirtual #1877               // Method m_46473_:()Lnet/minecraft/util/profiling/ProfilerFiller;
+       4: ldc_w         #823                // String getEntities
+       7: invokeinterface #2199,  2         // InterfaceMethod net/minecraft/util/profiling/ProfilerFiller.m_6174_:(Ljava/lang/String;)V
+      12: aload_0
+      13: invokevirtual #2203               // Method m_142646_:()Lnet/minecraft/world/level/entity/LevelEntityGetter;
+      16: aload_1
+      17: aload_2
+      18: aload_3
+      19: aload         4
+      21: iload         5
+      23: aload_1
+      24: invokedynamic #2260,  0           // InvokeDynamic #10:m_260972_:(Ljava/util/function/Predicate;Ljava/util/List;ILnet/minecraft/world/level/entity/EntityTypeTest;)Lnet/minecraft/util/AbortableIterationConsumer;
+      29: invokeinterface #2264,  4         // InterfaceMethod net/minecraft/world/level/entity/LevelEntityGetter.m_142137_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)V
+      34: return
+
+  public abstract net.minecraft.world.entity.Entity m_6815_(int);
+
+  public void m_151543_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #2275               // Method m_46805_:(Lnet/minecraft/core/BlockPos;)Z
+       5: ifeq          17
+       8: aload_0
+       9: aload_1
+      10: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      13: iconst_1
+      14: invokevirtual #2278               // Method net/minecraft/world/level/chunk/LevelChunk.m_8092_:(Z)V
+      17: return
+
+  public int m_5736_();
+    Code:
+       0: bipush        63
+       2: ireturn
+
+  public void m_7462_();
+    Code:
+       0: return
+
+  public long m_46467_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: invokeinterface #2284,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6793_:()J
+       9: lreturn
+
+  public long m_46468_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: invokeinterface #2288,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_6792_:()J
+       9: lreturn
+
+  public boolean m_7966_(net.minecraft.world.entity.player.Player, net.minecraft.core.BlockPos);
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public void m_7605_(net.minecraft.world.entity.Entity, byte);
+    Code:
+       0: return
+
+  public void m_269196_(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource);
+    Code:
+       0: return
+
+  public void m_7696_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block, int, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+       5: aload_0
+       6: aload_1
+       7: iload_3
+       8: iload         4
+      10: invokevirtual #2306               // Method net/minecraft/world/level/block/state/BlockState.m_60677_:(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;II)Z
+      13: pop
+      14: return
+
+  public net.minecraft.world.level.storage.LevelData m_6106_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: areturn
+
+  public net.minecraft.world.level.GameRules m_46469_();
+    Code:
+       0: aload_0
+       1: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+       4: invokeinterface #2315,  1         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_5470_:()Lnet/minecraft/world/level/GameRules;
+       9: areturn
+
+  public float m_46661_(float);
+    Code:
+       0: fload_1
+       1: aload_0
+       2: getfield      #2317               // Field f_46439_:F
+       5: aload_0
+       6: getfield      #2188               // Field f_46440_:F
+       9: invokestatic  #2320               // Method net/minecraft/util/Mth.m_14179_:(FFF)F
+      12: aload_0
+      13: fload_1
+      14: invokevirtual #2119               // Method m_46722_:(F)F
+      17: fmul
+      18: freturn
+
+  public void m_46707_(float);
+    Code:
+       0: fload_1
+       1: fconst_0
+       2: fconst_1
+       3: invokestatic  #2325               // Method net/minecraft/util/Mth.m_14036_:(FFF)F
+       6: fstore_2
+       7: aload_0
+       8: fload_2
+       9: putfield      #2317               // Field f_46439_:F
+      12: aload_0
+      13: fload_2
+      14: putfield      #2188               // Field f_46440_:F
+      17: return
+
+  public float m_46722_(float);
+    Code:
+       0: fload_1
+       1: aload_0
+       2: getfield      #2328               // Field f_46437_:F
+       5: aload_0
+       6: getfield      #2183               // Field f_46438_:F
+       9: invokestatic  #2320               // Method net/minecraft/util/Mth.m_14179_:(FFF)F
+      12: freturn
+
+  public void m_46734_(float);
+    Code:
+       0: fload_1
+       1: fconst_0
+       2: fconst_1
+       3: invokestatic  #2325               // Method net/minecraft/util/Mth.m_14036_:(FFF)F
+       6: fstore_2
+       7: aload_0
+       8: fload_2
+       9: putfield      #2328               // Field f_46437_:F
+      12: aload_0
+      13: fload_2
+      14: putfield      #2183               // Field f_46438_:F
+      17: return
+
+  public boolean m_46470_();
+    Code:
+       0: aload_0
+       1: invokevirtual #1709               // Method m_6042_:()Lnet/minecraft/world/level/dimension/DimensionType;
+       4: invokevirtual #2335               // Method net/minecraft/world/level/dimension/DimensionType.f_223549_:()Z
+       7: ifeq          20
+      10: aload_0
+      11: invokevirtual #1709               // Method m_6042_:()Lnet/minecraft/world/level/dimension/DimensionType;
+      14: invokevirtual #2338               // Method net/minecraft/world/level/dimension/DimensionType.f_63856_:()Z
+      17: ifeq          22
+      20: iconst_0
+      21: ireturn
+      22: aload_0
+      23: fconst_1
+      24: invokevirtual #2122               // Method m_46661_:(F)F
+      27: f2d
+      28: ldc2_w        #915                // double 0.9d
+      31: dcmpl
+      32: ifle          39
+      35: iconst_1
+      36: goto          40
+      39: iconst_0
+      40: ireturn
+
+  public boolean m_46471_();
+    Code:
+       0: aload_0
+       1: fconst_1
+       2: invokevirtual #2119               // Method m_46722_:(F)F
+       5: f2d
+       6: ldc2_w        #917                // double 0.2d
+       9: dcmpl
+      10: ifle          17
+      13: iconst_1
+      14: goto          18
+      17: iconst_0
+      18: ireturn
+
+  public boolean m_46758_(net.minecraft.core.BlockPos);
+    Code:
+       0: aload_0
+       1: invokevirtual #2342               // Method m_46471_:()Z
+       4: ifne          9
+       7: iconst_0
+       8: ireturn
+       9: aload_0
+      10: aload_1
+      11: invokevirtual #2345               // Method m_45527_:(Lnet/minecraft/core/BlockPos;)Z
+      14: ifne          19
+      17: iconst_0
+      18: ireturn
+      19: aload_0
+      20: getstatic     #2159               // Field net/minecraft/world/level/levelgen/Heightmap$Types.MOTION_BLOCKING:Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+      23: aload_1
+      24: invokevirtual #2173               // Method m_5452_:(Lnet/minecraft/world/level/levelgen/Heightmap$Types;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;
+      27: invokevirtual #1405               // Method net/minecraft/core/BlockPos.m_123342_:()I
+      30: aload_1
+      31: invokevirtual #1405               // Method net/minecraft/core/BlockPos.m_123342_:()I
+      34: if_icmple     39
+      37: iconst_0
+      38: ireturn
+      39: aload_0
+      40: aload_1
+      41: invokevirtual #2349               // Method m_204166_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/Holder;
+      44: invokeinterface #1332,  1         // InterfaceMethod net/minecraft/core/Holder.m_203334_:()Ljava/lang/Object;
+      49: checkcast     #1214               // class net/minecraft/world/level/biome/Biome
+      52: astore_2
+      53: aload_2
+      54: aload_1
+      55: invokevirtual #2353               // Method net/minecraft/world/level/biome/Biome.m_264600_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;
+      58: getstatic     #2357               // Field net/minecraft/world/level/biome/Biome$Precipitation.RAIN:Lnet/minecraft/world/level/biome/Biome$Precipitation;
+      61: if_acmpne     68
+      64: iconst_1
+      65: goto          69
+      68: iconst_0
+      69: ireturn
+
+  public abstract net.minecraft.world.level.saveddata.maps.MapItemSavedData m_7489_(java.lang.String);
+
+  public abstract void m_142325_(java.lang.String, net.minecraft.world.level.saveddata.maps.MapItemSavedData);
+
+  public abstract int m_7354_();
+
+  public void m_6798_(int, net.minecraft.core.BlockPos, int);
+    Code:
+       0: return
+
+  public net.minecraft.CrashReportCategory m_6026_(net.minecraft.CrashReport);
+    Code:
+       0: aload_1
+       1: ldc_w         #937                // String Affected level
+       4: iconst_1
+       5: invokevirtual #2374               // Method net/minecraft/CrashReport.m_127516_:(Ljava/lang/String;I)Lnet/minecraft/CrashReportCategory;
+       8: astore_2
+       9: aload_2
+      10: ldc_w         #942                // String All players
+      13: aload_0
+      14: invokedynamic #2381,  0           // InvokeDynamic #11:call:(Lnet/minecraft/world/level/Level;)Lnet/minecraft/CrashReportDetail;
+      19: invokevirtual #2387               // Method net/minecraft/CrashReportCategory.m_128165_:(Ljava/lang/String;Lnet/minecraft/CrashReportDetail;)Lnet/minecraft/CrashReportCategory;
+      22: pop
+      23: aload_2
+      24: ldc_w         #956                // String Chunk stats
+      27: aload_0
+      28: invokevirtual #1447               // Method m_7726_:()Lnet/minecraft/world/level/chunk/ChunkSource;
+      31: dup
+      32: invokestatic  #962                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      35: pop
+      36: invokedynamic #2394,  0           // InvokeDynamic #12:call:(Lnet/minecraft/world/level/chunk/ChunkSource;)Lnet/minecraft/CrashReportDetail;
+      41: invokevirtual #2387               // Method net/minecraft/CrashReportCategory.m_128165_:(Ljava/lang/String;Lnet/minecraft/CrashReportDetail;)Lnet/minecraft/CrashReportCategory;
+      44: pop
+      45: aload_2
+      46: ldc_w         #970                // String Level dimension
+      49: aload_0
+      50: invokedynamic #2399,  0           // InvokeDynamic #13:call:(Lnet/minecraft/world/level/Level;)Lnet/minecraft/CrashReportDetail;
+      55: invokevirtual #2387               // Method net/minecraft/CrashReportCategory.m_128165_:(Ljava/lang/String;Lnet/minecraft/CrashReportDetail;)Lnet/minecraft/CrashReportCategory;
+      58: pop
+      59: aload_0
+      60: getfield      #1310               // Field f_46442_:Lnet/minecraft/world/level/storage/WritableLevelData;
+      63: aload_2
+      64: aload_0
+      65: invokeinterface #2403,  3         // InterfaceMethod net/minecraft/world/level/storage/WritableLevelData.m_142471_:(Lnet/minecraft/CrashReportCategory;Lnet/minecraft/world/level/LevelHeightAccessor;)V
+      70: goto          82
+      73: astore_3
+      74: aload_2
+      75: ldc_w         #979                // String Level Data Unobtainable
+      78: aload_3
+      79: invokevirtual #2406               // Method net/minecraft/CrashReportCategory.m_128162_:(Ljava/lang/String;Ljava/lang/Throwable;)V
+      82: aload_2
+      83: areturn
+    Exception table:
+       from    to  target type
+          59    70    73   Class java/lang/Throwable
+
+  public abstract void m_6801_(int, net.minecraft.core.BlockPos, int);
+
+  public void m_7228_(double, double, double, double, double, double, net.minecraft.nbt.CompoundTag);
+    Code:
+       0: return
+
+  public abstract net.minecraft.world.scores.Scoreboard m_6188_();
+
+  public void m_46717_(net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block);
+    Code:
+       0: getstatic     #2424               // Field net/minecraft/core/Direction$Plane.HORIZONTAL:Lnet/minecraft/core/Direction$Plane;
+       3: invokevirtual #2425               // Method net/minecraft/core/Direction$Plane.iterator:()Ljava/util/Iterator;
+       6: astore_3
+       7: aload_3
+       8: invokeinterface #585,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      13: ifeq          130
+      16: aload_3
+      17: invokeinterface #588,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      22: checkcast     #1219               // class net/minecraft/core/Direction
+      25: astore        4
+      27: aload_1
+      28: aload         4
+      30: invokevirtual #2429               // Method net/minecraft/core/BlockPos.m_121945_:(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos;
+      33: astore        5
+      35: aload_0
+      36: aload         5
+      38: invokevirtual #2275               // Method m_46805_:(Lnet/minecraft/core/BlockPos;)Z
+      41: ifeq          127
+      44: aload_0
+      45: aload         5
+      47: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+      50: astore        6
+      52: aload         6
+      54: getstatic     #2432               // Field net/minecraft/world/level/block/Blocks.f_50328_:Lnet/minecraft/world/level/block/Block;
+      57: invokevirtual #2436               // Method net/minecraft/world/level/block/state/BlockState.m_60713_:(Lnet/minecraft/world/level/block/Block;)Z
+      60: ifeq          77
+      63: aload_0
+      64: aload         6
+      66: aload         5
+      68: aload_2
+      69: aload_1
+      70: iconst_0
+      71: invokevirtual #2438               // Method m_213960_:(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos;Z)V
+      74: goto          127
+      77: aload         6
+      79: aload_0
+      80: aload         5
+      82: invokevirtual #2442               // Method net/minecraft/world/level/block/state/BlockState.m_60796_:(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z
+      85: ifeq          127
+      88: aload         5
+      90: aload         4
+      92: invokevirtual #2429               // Method net/minecraft/core/BlockPos.m_121945_:(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos;
+      95: astore        5
+      97: aload_0
+      98: aload         5
+     100: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+     103: astore        6
+     105: aload         6
+     107: getstatic     #2432               // Field net/minecraft/world/level/block/Blocks.f_50328_:Lnet/minecraft/world/level/block/Block;
+     110: invokevirtual #2436               // Method net/minecraft/world/level/block/state/BlockState.m_60713_:(Lnet/minecraft/world/level/block/Block;)Z
+     113: ifeq          127
+     116: aload_0
+     117: aload         6
+     119: aload         5
+     121: aload_2
+     122: aload_1
+     123: iconst_0
+     124: invokevirtual #2438               // Method m_213960_:(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos;Z)V
+     127: goto          7
+     130: return
+
+  public net.minecraft.world.DifficultyInstance m_6436_(net.minecraft.core.BlockPos);
+    Code:
+       0: lconst_0
+       1: lstore_2
+       2: fconst_0
+       3: fstore        4
+       5: aload_0
+       6: aload_1
+       7: invokevirtual #2275               // Method m_46805_:(Lnet/minecraft/core/BlockPos;)Z
+      10: ifeq          28
+      13: aload_0
+      14: invokevirtual #2449               // Method m_46940_:()F
+      17: fstore        4
+      19: aload_0
+      20: aload_1
+      21: invokevirtual #1474               // Method m_46745_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+      24: invokevirtual #2452               // Method net/minecraft/world/level/chunk/LevelChunk.m_6319_:()J
+      27: lstore_2
+      28: new           #2454               // class net/minecraft/world/DifficultyInstance
+      31: dup
+      32: aload_0
+      33: invokevirtual #2458               // Method m_46791_:()Lnet/minecraft/world/Difficulty;
+      36: aload_0
+      37: invokevirtual #2460               // Method m_46468_:()J
+      40: lload_2
+      41: fload         4
+      43: invokespecial #2463               // Method net/minecraft/world/DifficultyInstance."<init>":(Lnet/minecraft/world/Difficulty;JJF)V
+      46: areturn
+
+  public int m_7445_();
+    Code:
+       0: aload_0
+       1: getfield      #1714               // Field f_46425_:I
+       4: ireturn
+
+  public void m_6580_(int);
+    Code:
+       0: return
+
+  public net.minecraft.world.level.border.WorldBorder m_6857_();
+    Code:
+       0: aload_0
+       1: getfield      #1346               // Field f_46447_:Lnet/minecraft/world/level/border/WorldBorder;
+       4: areturn
+
+  public void m_5503_(net.minecraft.network.protocol.Packet<?>);
+    Code:
+       0: new           #1027               // class java/lang/UnsupportedOperationException
+       3: dup
+       4: ldc_w         #1029               // String Can\'t send packets to server unless you\'re on the client.
+       7: invokespecial #1030               // Method java/lang/UnsupportedOperationException."<init>":(Ljava/lang/String;)V
+      10: athrow
+
+  public net.minecraft.world.level.dimension.DimensionType m_6042_();
+    Code:
+       0: aload_0
+       1: getfield      #1312               // Field f_204147_:Lnet/minecraft/core/Holder;
+       4: invokeinterface #1332,  1         // InterfaceMethod net/minecraft/core/Holder.m_203334_:()Ljava/lang/Object;
+       9: checkcast     #1334               // class net/minecraft/world/level/dimension/DimensionType
+      12: areturn
+
+  public net.minecraft.resources.ResourceKey<net.minecraft.world.level.dimension.DimensionType> m_220362_();
+    Code:
+       0: aload_0
+       1: getfield      #1329               // Field f_220349_:Lnet/minecraft/resources/ResourceKey;
+       4: areturn
+
+  public net.minecraft.core.Holder<net.minecraft.world.level.dimension.DimensionType> m_204156_();
+    Code:
+       0: aload_0
+       1: getfield      #1312               // Field f_204147_:Lnet/minecraft/core/Holder;
+       4: areturn
+
+  public net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> m_46472_();
+    Code:
+       0: aload_0
+       1: getfield      #1336               // Field f_46421_:Lnet/minecraft/resources/ResourceKey;
+       4: areturn
+
+  public net.minecraft.util.RandomSource m_213780_();
+    Code:
+       0: aload_0
+       1: getfield      #1301               // Field f_46441_:Lnet/minecraft/util/RandomSource;
+       4: areturn
+
+  public boolean m_7433_(net.minecraft.core.BlockPos, java.util.function.Predicate<net.minecraft.world.level.block.state.BlockState>);
+    Code:
+       0: aload_2
+       1: aload_0
+       2: aload_1
+       3: invokevirtual #1490               // Method m_8055_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+       6: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+      11: ireturn
+
+  public boolean m_142433_(net.minecraft.core.BlockPos, java.util.function.Predicate<net.minecraft.world.level.material.FluidState>);
+    Code:
+       0: aload_2
+       1: aload_0
+       2: aload_1
+       3: invokevirtual #1547               // Method m_6425_:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;
+       6: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+      11: ireturn
+
+  public abstract net.minecraft.world.item.crafting.RecipeManager m_7465_();
+
+  public net.minecraft.core.BlockPos m_46496_(int, int, int, int);
+    Code:
+       0: aload_0
+       1: aload_0
+       2: getfield      #1297               // Field f_46435_:I
+       5: iconst_3
+       6: imul
+       7: ldc           #96                 // int 1013904223
+       9: iadd
+      10: putfield      #1297               // Field f_46435_:I
+      13: aload_0
+      14: getfield      #1297               // Field f_46435_:I
+      17: iconst_2
+      18: ishr
+      19: istore        5
+      21: new           #1402               // class net/minecraft/core/BlockPos
+      24: dup
+      25: iload_1
+      26: iload         5
+      28: bipush        15
+      30: iand
+      31: iadd
+      32: iload_2
+      33: iload         5
+      35: bipush        16
+      37: ishr
+      38: iload         4
+      40: iand
+      41: iadd
+      42: iload_3
+      43: iload         5
+      45: bipush        8
+      47: ishr
+      48: bipush        15
+      50: iand
+      51: iadd
+      52: invokespecial #2149               // Method net/minecraft/core/BlockPos."<init>":(III)V
+      55: areturn
+
+  public boolean m_7441_();
+    Code:
+       0: iconst_0
+       1: ireturn
+
+  public net.minecraft.util.profiling.ProfilerFiller m_46473_();
+    Code:
+       0: aload_0
+       1: getfield      #1308               // Field f_46446_:Ljava/util/function/Supplier;
+       4: invokeinterface #1057,  1         // InterfaceMethod java/util/function/Supplier.get:()Ljava/lang/Object;
+       9: checkcast     #1879               // class net/minecraft/util/profiling/ProfilerFiller
+      12: areturn
+
+  public java.util.function.Supplier<net.minecraft.util.profiling.ProfilerFiller> m_46658_();
+    Code:
+       0: aload_0
+       1: getfield      #1308               // Field f_46446_:Ljava/util/function/Supplier;
+       4: areturn
+
+  public net.minecraft.world.level.biome.BiomeManager m_7062_();
+    Code:
+       0: aload_0
+       1: getfield      #1358               // Field f_46420_:Lnet/minecraft/world/level/biome/BiomeManager;
+       4: areturn
+
+  public final boolean m_46659_();
+    Code:
+       0: aload_0
+       1: getfield      #1360               // Field f_46424_:Z
+       4: ireturn
+
+  protected abstract net.minecraft.world.level.entity.LevelEntityGetter<net.minecraft.world.entity.Entity> m_142646_();
+
+  public long m_183596_();
+    Code:
+       0: aload_0
+       1: dup
+       2: getfield      #2510               // Field f_186455_:J
+       5: dup2_x1
+       6: lconst_1
+       7: ladd
+       8: putfield      #2510               // Field f_186455_:J
+      11: lreturn
+
+  public net.minecraft.core.RegistryAccess m_9598_();
+    Code:
+       0: aload_0
+       1: getfield      #1369               // Field f_268710_:Lnet/minecraft/core/RegistryAccess;
+       4: areturn
+
+  public net.minecraft.world.damagesource.DamageSources m_269111_();
+    Code:
+       0: aload_0
+       1: getfield      #1376               // Field f_268497_:Lnet/minecraft/world/damagesource/DamageSources;
+       4: areturn
+
+  public net.minecraft.world.level.chunk.ChunkAccess m_6325_(int, int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: invokevirtual #1428               // Method m_6325_:(II)Lnet/minecraft/world/level/chunk/LevelChunk;
+       6: areturn
+
+  private java.lang.String m_46474_() throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: invokevirtual #2517               // Method m_46472_:()Lnet/minecraft/resources/ResourceKey;
+       4: invokevirtual #2521               // Method net/minecraft/resources/ResourceKey.m_135782_:()Lnet/minecraft/resources/ResourceLocation;
+       7: invokevirtual #2524               // Method net/minecraft/resources/ResourceLocation.toString:()Ljava/lang/String;
+      10: areturn
+
+  private java.lang.String m_268981_() throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: invokevirtual #2527               // Method m_6907_:()Ljava/util/List;
+       4: invokeinterface #1089,  1         // InterfaceMethod java/util/List.size:()I
+       9: aload_0
+      10: invokevirtual #2527               // Method m_6907_:()Ljava/util/List;
+      13: invokedynamic #1101,  0           // InvokeDynamic #6:makeConcatWithConstants:(ILjava/util/List;)Ljava/lang/String;
+      18: areturn
+
+  private static net.minecraft.util.AbortableIterationConsumer$Continuation m_260792_(java.util.function.Predicate, java.util.List, int, net.minecraft.world.level.entity.EntityTypeTest, net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: aload         4
+       3: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+       8: ifeq          34
+      11: aload_1
+      12: aload         4
+      14: invokeinterface #554,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      19: pop
+      20: aload_1
+      21: invokeinterface #1089,  1         // InterfaceMethod java/util/List.size:()I
+      26: iload_2
+      27: if_icmplt     34
+      30: getstatic     #2531               // Field net/minecraft/util/AbortableIterationConsumer$Continuation.ABORT:Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+      33: areturn
+      34: aload         4
+      36: instanceof    #2533               // class net/minecraft/world/entity/boss/enderdragon/EnderDragon
+      39: ifeq          136
+      42: aload         4
+      44: checkcast     #2533               // class net/minecraft/world/entity/boss/enderdragon/EnderDragon
+      47: astore        5
+      49: aload         5
+      51: invokevirtual #2537               // Method net/minecraft/world/entity/boss/enderdragon/EnderDragon.m_31156_:()[Lnet/minecraft/world/entity/boss/EnderDragonPart;
+      54: astore        6
+      56: aload         6
+      58: arraylength
+      59: istore        7
+      61: iconst_0
+      62: istore        8
+      64: iload         8
+      66: iload         7
+      68: if_icmpge     136
+      71: aload         6
+      73: iload         8
+      75: aaload
+      76: astore        9
+      78: aload_3
+      79: aload         9
+      81: invokeinterface #2544,  2         // InterfaceMethod net/minecraft/world/level/entity/EntityTypeTest.m_141992_:(Ljava/lang/Object;)Ljava/lang/Object;
+      86: checkcast     #1582               // class net/minecraft/world/entity/Entity
+      89: astore        10
+      91: aload         10
+      93: ifnull        130
+      96: aload_0
+      97: aload         10
+      99: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+     104: ifeq          130
+     107: aload_1
+     108: aload         10
+     110: invokeinterface #554,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     115: pop
+     116: aload_1
+     117: invokeinterface #1089,  1         // InterfaceMethod java/util/List.size:()I
+     122: iload_2
+     123: if_icmplt     130
+     126: getstatic     #2531               // Field net/minecraft/util/AbortableIterationConsumer$Continuation.ABORT:Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+     129: areturn
+     130: iinc          8, 1
+     133: goto          64
+     136: getstatic     #2547               // Field net/minecraft/util/AbortableIterationConsumer$Continuation.CONTINUE:Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+     139: areturn
+
+  private static void m_151518_(net.minecraft.world.entity.Entity, java.util.function.Predicate, java.util.List, net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_3
+       1: aload_0
+       2: if_acmpeq     23
+       5: aload_1
+       6: aload_3
+       7: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+      12: ifeq          23
+      15: aload_2
+      16: aload_3
+      17: invokeinterface #554,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      22: pop
+      23: aload_3
+      24: instanceof    #2533               // class net/minecraft/world/entity/boss/enderdragon/EnderDragon
+      27: ifeq          92
+      30: aload_3
+      31: checkcast     #2533               // class net/minecraft/world/entity/boss/enderdragon/EnderDragon
+      34: invokevirtual #2537               // Method net/minecraft/world/entity/boss/enderdragon/EnderDragon.m_31156_:()[Lnet/minecraft/world/entity/boss/EnderDragonPart;
+      37: astore        4
+      39: aload         4
+      41: arraylength
+      42: istore        5
+      44: iconst_0
+      45: istore        6
+      47: iload         6
+      49: iload         5
+      51: if_icmpge     92
+      54: aload         4
+      56: iload         6
+      58: aaload
+      59: astore        7
+      61: aload_3
+      62: aload_0
+      63: if_acmpeq     86
+      66: aload_1
+      67: aload         7
+      69: invokeinterface #1048,  2         // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+      74: ifeq          86
+      77: aload_2
+      78: aload         7
+      80: invokeinterface #554,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      85: pop
+      86: iinc          6, 1
+      89: goto          47
+      92: return
+
+  private static java.lang.IllegalArgumentException m_220391_(net.minecraft.core.Holder);
+    Code:
+       0: new           #1122               // class java/lang/IllegalArgumentException
+       3: dup
+       4: aload_0
+       5: invokedynamic #2561,  0           // InvokeDynamic #7:makeConcatWithConstants:(Lnet/minecraft/core/Holder;)Ljava/lang/String;
+      10: invokespecial #1128               // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+      13: areturn
+
+  static {};
+    Code:
+       0: getstatic     #2567               // Field net/minecraft/core/registries/Registries.f_256858_:Lnet/minecraft/resources/ResourceKey;
+       3: invokestatic  #2571               // Method net/minecraft/resources/ResourceKey.m_195966_:(Lnet/minecraft/resources/ResourceKey;)Lcom/mojang/serialization/Codec;
+       6: putstatic     #2573               // Field f_46427_:Lcom/mojang/serialization/Codec;
+       9: getstatic     #2567               // Field net/minecraft/core/registries/Registries.f_256858_:Lnet/minecraft/resources/ResourceKey;
+      12: new           #2523               // class net/minecraft/resources/ResourceLocation
+      15: dup
+      16: ldc_w         #1141               // String overworld
+      19: invokespecial #2574               // Method net/minecraft/resources/ResourceLocation."<init>":(Ljava/lang/String;)V
+      22: invokestatic  #2578               // Method net/minecraft/resources/ResourceKey.m_135785_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceKey;
+      25: putstatic     #2580               // Field f_46428_:Lnet/minecraft/resources/ResourceKey;
+      28: getstatic     #2567               // Field net/minecraft/core/registries/Registries.f_256858_:Lnet/minecraft/resources/ResourceKey;
+      31: new           #2523               // class net/minecraft/resources/ResourceLocation
+      34: dup
+      35: ldc_w         #1149               // String the_nether
+      38: invokespecial #2574               // Method net/minecraft/resources/ResourceLocation."<init>":(Ljava/lang/String;)V
+      41: invokestatic  #2578               // Method net/minecraft/resources/ResourceKey.m_135785_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceKey;
+      44: putstatic     #2582               // Field f_46429_:Lnet/minecraft/resources/ResourceKey;
+      47: getstatic     #2567               // Field net/minecraft/core/registries/Registries.f_256858_:Lnet/minecraft/resources/ResourceKey;
+      50: new           #2523               // class net/minecraft/resources/ResourceLocation
+      53: dup
+      54: ldc_w         #1153               // String the_end
+      57: invokespecial #2574               // Method net/minecraft/resources/ResourceLocation."<init>":(Ljava/lang/String;)V
+      60: invokestatic  #2578               // Method net/minecraft/resources/ResourceKey.m_135785_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceKey;
+      63: putstatic     #2584               // Field f_46430_:Lnet/minecraft/resources/ResourceKey;
+      66: return
+}

@@ -1,0 +1,28 @@
+{
+  "Item": "superbwarfare:medical_kit",
+  "Entity": "superbwarfare:medical_kit",
+  "IsKamikaze": false,
+  "Count": 1,
+  "HitDamage": 0,
+  "Offset": [
+    0,
+    0.1,
+    0
+  ],
+  "Rotation": [
+    0,
+    -180,
+    -90
+  ],
+  "DropPosition": [
+    0,
+    -1,
+    0
+  ],
+  "Scale": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "TickCount": 2
+}

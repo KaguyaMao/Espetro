@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/t80.animation.json",
+    "ID":  "dragonrise_reforge:project640",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/t80.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/project640.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/project640.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/project640.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/project640.png"
+                   }
+               ]
+}

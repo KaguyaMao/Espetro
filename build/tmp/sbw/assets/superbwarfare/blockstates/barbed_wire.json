@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,waterlogged=false": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 90
+    },
+    "facing=east,waterlogged=true": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 90
+    },
+    "facing=north,waterlogged=false": {
+      "model": "superbwarfare:block/barbed_wire"
+    },
+    "facing=north,waterlogged=true": {
+      "model": "superbwarfare:block/barbed_wire"
+    },
+    "facing=south,waterlogged=false": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 180
+    },
+    "facing=south,waterlogged=true": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 180
+    },
+    "facing=west,waterlogged=false": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 270
+    },
+    "facing=west,waterlogged=true": {
+      "model": "superbwarfare:block/barbed_wire",
+      "y": 270
+    }
+  }
+}

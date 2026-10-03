@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: vvp
+Specification-Vendor: zxcnelti
+Specification-Version: 1
+Implementation-Title: extensiontest
+Implementation-Version: 0.2.1
+Implementation-Vendor: zxcnelti
+Implementation-Timestamp: 2026-08-08T01:13:32+0200
+MixinConfigs: vvp.mixins.json
+

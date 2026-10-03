@@ -1,0 +1,103 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.ztq15.fire":  {
+                                                    "animation_length":  1.0833,
+                                                    "bones":  {
+                                                                  "cannon":  {
+                                                                                 "position":  {
+                                                                                                  "0.0":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ],
+                                                                                                  "0.0417":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 4
+                                                                                                             ],
+                                                                                                  "0.2083":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 0
+                                                                                                             ]
+                                                                                              }
+                                                                             }
+                                                              }
+                                                },
+                       "animation.ztq15.idle":  {
+                                                    "loop":  true
+                                                },
+                       "animation.cannon.idle":  {
+                                                     "loop":  true,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.cannon.fire":  {
+                                                     "loop":  "hold_on_last_frame",
+                                                     "animation_length":  1.0833,
+                                                     "bones":  {
+                                                                   
+                                                                   "cannon":  {
+                                                                                  "position":  {
+                                                                                                   "0.0":  [
+                                                                                                               0,
+                                                                                                               0,
+                                                                                                               0
+                                                                                                           ],
+                                                                                                   "0.0417":  [
+                                                                                                                  0,
+                                                                                                                  0,
+                                                                                                                  4
+                                                                                                              ],
+                                                                                                   "0.2083":  [
+                                                                                                                  0,
+                                                                                                                  0,
+                                                                                                                  0
+                                                                                                              ]
+                                                                                               }
+                                                                              }
+                                                               }
+                                                 },
+                       "animation.machine_gun.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.machine_gun.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.passenger_machine_gun.idle":  {
+                                                                    "loop":  true,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                },
+                       "animation.passenger_machine_gun.fire":  {
+                                                                    "loop":  "hold_on_last_frame",
+                                                                    "animation_length":  0.15,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                },
+                       "animation.auto_cannon.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.auto_cannon.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      }
+                   }
+}

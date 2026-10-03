@@ -1,0 +1,70 @@
+﻿Compiled from "LevelEntityGetterAdapter.java"
+public class net.minecraft.world.level.entity.LevelEntityGetterAdapter<T extends net.minecraft.world.level.entity.EntityAccess> implements net.minecraft.world.level.entity.LevelEntityGetter<T> {
+  private final net.minecraft.world.level.entity.EntityLookup<T> f_156940_;
+
+  private final net.minecraft.world.level.entity.EntitySectionStorage<T> f_156941_;
+
+  public net.minecraft.world.level.entity.LevelEntityGetterAdapter(net.minecraft.world.level.entity.EntityLookup<T>, net.minecraft.world.level.entity.EntitySectionStorage<T>);
+    Code:
+       0: aload_0
+       1: invokespecial #20                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #96                 // Field f_156940_:Lnet/minecraft/world/level/entity/EntityLookup;
+       9: aload_0
+      10: aload_2
+      11: putfield      #98                 // Field f_156941_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      14: return
+
+  public T m_142597_(int);
+    Code:
+       0: aload_0
+       1: getfield      #96                 // Field f_156940_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: iload_1
+       5: invokevirtual #109                // Method net/minecraft/world/level/entity/EntityLookup.m_156812_:(I)Lnet/minecraft/world/level/entity/EntityAccess;
+       8: areturn
+
+  public T m_142694_(java.util.UUID);
+    Code:
+       0: aload_0
+       1: getfield      #96                 // Field f_156940_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: aload_1
+       5: invokevirtual #115                // Method net/minecraft/world/level/entity/EntityLookup.m_156819_:(Ljava/util/UUID;)Lnet/minecraft/world/level/entity/EntityAccess;
+       8: areturn
+
+  public java.lang.Iterable<T> m_142273_();
+    Code:
+       0: aload_0
+       1: getfield      #96                 // Field f_156940_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: invokevirtual #120                // Method net/minecraft/world/level/entity/EntityLookup.m_156811_:()Ljava/lang/Iterable;
+       7: areturn
+
+  public <U extends T> void m_142690_(net.minecraft.world.level.entity.EntityTypeTest<T, U>, net.minecraft.util.AbortableIterationConsumer<U>);
+    Code:
+       0: aload_0
+       1: getfield      #96                 // Field f_156940_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: aload_1
+       5: aload_2
+       6: invokevirtual #126                // Method net/minecraft/world/level/entity/EntityLookup.m_260822_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/util/AbortableIterationConsumer;)V
+       9: return
+
+  public void m_142232_(net.minecraft.world.phys.AABB, java.util.function.Consumer<T>);
+    Code:
+       0: aload_0
+       1: getfield      #98                 // Field f_156941_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+       4: aload_1
+       5: aload_2
+       6: invokestatic  #141                // InterfaceMethod net/minecraft/util/AbortableIterationConsumer.m_260908_:(Ljava/util/function/Consumer;)Lnet/minecraft/util/AbortableIterationConsumer;
+       9: invokevirtual #147                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_261111_:(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)V
+      12: return
+
+  public <U extends T> void m_142137_(net.minecraft.world.level.entity.EntityTypeTest<T, U>, net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer<U>);
+    Code:
+       0: aload_0
+       1: getfield      #98                 // Field f_156941_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+       4: aload_1
+       5: aload_2
+       6: aload_3
+       7: invokevirtual #156                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_261191_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)V
+      10: return
+}

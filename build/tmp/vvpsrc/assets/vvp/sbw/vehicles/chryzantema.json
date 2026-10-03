@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:chryzantema",
+  "Model": {
+    "Model": "vvp:geo/chryzantema.geo.json",
+    "Texture": "vvp:textures/entity/brm_green.png"
+  }
+}

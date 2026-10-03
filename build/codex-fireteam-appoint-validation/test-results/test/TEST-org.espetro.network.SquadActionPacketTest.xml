@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.espetro.network.SquadActionPacketTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-08-13T12:30:44" hostname="DESKTOP-1GK3H0A" time="0.791">
+  <properties/>
+  <testcase name="appointFireteamLeaderCarriesTargetAndFireteam()" classname="org.espetro.network.SquadActionPacketTest" time="0.791"/>
+  <system-out><![CDATA[2026-08-13 20:30:45,243 Test worker WARN Advanced terminal features are not available in this environment
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

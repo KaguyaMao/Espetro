@@ -1,0 +1,20 @@
+{
+  "name": "superbwarfare.entry.weapon.control",
+  "icon": "superbwarfare:monitor",
+  "category": "superbwarfare:weapon",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.weapon.control.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.weapon.control.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.weapon.control.3"
+    }
+  ],
+  "sortnum": 10001
+}

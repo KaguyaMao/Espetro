@@ -1,0 +1,35 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package LOL_141.vehicle_addition.soundlibs.net.sourceforge.jaad.aac.ps;
+
+import LOL_141.vehicle_addition.soundlibs.net.sourceforge.jaad.aac.ps.EnvTables;
+import LOL_141.vehicle_addition.soundlibs.net.sourceforge.jaad.aac.ps.Huffman;
+import LOL_141.vehicle_addition.soundlibs.net.sourceforge.jaad.aac.ps.ICMode;
+
+public class ICCMode
+extends ICMode {
+    private static final EnvTables ICC_TABLES = new EnvTables(Huffman.f_huff_icc, Huffman.t_huff_icc);
+    private static final ICCMode[] ICC_MODES = new ICCMode[]{new ICCMode(0, 10), new ICCMode(1, 20), new ICCMode(2, 34), new ICCMode(3, 10), new ICCMode(4, 20), new ICCMode(5, 34)};
+
+    @Override
+    EnvTables tables() {
+        return ICC_TABLES;
+    }
+
+    public ICCMode(int id, int nr_par) {
+        super(id, nr_par);
+    }
+
+    @Override
+    int clip(int idx) {
+        idx = Math.max(idx, 0);
+        idx = Math.min(idx, 7);
+        return idx;
+    }
+
+    static ICCMode mode(int id) {
+        return ICC_MODES[id];
+    }
+}
+

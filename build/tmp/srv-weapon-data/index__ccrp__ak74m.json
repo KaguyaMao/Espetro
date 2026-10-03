@@ -1,0 +1,9 @@
+{
+  "name": "ccrp.gun.ak74m.name",
+  "display": "ccrp:ak74m_display",
+  "data": "ccrp:ak74m_data",
+  "tooltip": "ccrp.gun.ak74m.desc",
+  "type": "rifle",
+  "item_type": "modern_kinetic",
+  "sort": 919
+}

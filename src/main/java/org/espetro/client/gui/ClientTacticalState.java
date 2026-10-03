@@ -111,7 +111,7 @@ public final class ClientTacticalState {
      */
     public static boolean canLocalPlayerOpenTacticalRadial(String playerName) {
         MarkerInfo info = markersByName.get(key(playerName));
-        return hasSquadLeaderAccess(mySquadId, info);
+        return hasSquadLeaderAccess(mySquadId, info) || hasFireteamLeaderAccess(mySquadId, info);
     }
 
     /** ESPoints 标点轮盘仍允许指挥官、小队长和火力组长。 */
@@ -127,6 +127,19 @@ public final class ClientTacticalState {
             && info != null
             && info.squadId == localSquadId
             && info.leader;
+    }
+
+    /** 本地玩家是否是所在火力组的组长（火力组长可开轮盘建工事，但不能建电台/放队包）。 */
+    public static boolean isLocalFireteamLeader(String playerName) {
+        MarkerInfo info = markersByName.get(key(playerName));
+        return hasFireteamLeaderAccess(mySquadId, info);
+    }
+
+    static boolean hasFireteamLeaderAccess(int localSquadId, MarkerInfo info) {
+        return localSquadId != NO_SQUAD
+            && info != null
+            && info.squadId == localSquadId
+            && info.fireteamLeader;
     }
 
     private static String key(String name) {

@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import org.espetro.client.vehicle.SeatSwitchGate;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,6 +36,10 @@ public abstract class MinecraftSeatMixin {
             return;
         }
         if (!SbwVehicleSeatResolver.isSupportedVehicle(player.getVehicle())) {
+            return;
+        }
+        // 白名单载具：不压制热键栏，恢复 SBW 原生 Shift+数字换座与数字键换武器。
+        if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
             return;
         }
         if (SeatSwitchGate.isArmed()) {

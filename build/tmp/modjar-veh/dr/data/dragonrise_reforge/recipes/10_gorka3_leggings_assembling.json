@@ -1,0 +1,10 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "misc",
+  "inputs": [
+    "7 dragonrise_reforge:kevlar"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:gorka3_leggings"
+  }
+}

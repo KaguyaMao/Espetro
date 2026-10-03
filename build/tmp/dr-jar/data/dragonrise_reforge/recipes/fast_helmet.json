@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/yellow"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    }
+  },
+  "pattern": [
+    "KKK",
+    "KDK"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:fast_helmet"
+  },
+  "show_notification": true
+}

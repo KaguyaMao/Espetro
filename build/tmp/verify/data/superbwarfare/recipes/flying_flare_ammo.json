@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "tag": "forge:dusts/iron"
+    }
+  ],
+  "result": {
+    "count": 16,
+    "item": "superbwarfare:flying_flare_ammo"
+  }
+}

@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/hyr0.animation.json",
+    "ID":  "dragonrise_reforge:hyr0",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/hyr0.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/hyr0.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/hyr0.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/hyr0.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/hyr0.png"
+                   }
+               ]
+}

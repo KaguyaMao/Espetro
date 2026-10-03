@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:t26b",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/t26b.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/t26b.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/t26b.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/t26b.png"
+    }
+  ]
+}

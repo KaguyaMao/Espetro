@@ -57,6 +57,10 @@ public class EspetroClient {
             .addListener(org.espetro.client.FortificationPlacementController::onInteraction);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(org.espetro.client.FortificationPlacementController::render);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.FortificationWandOverlay::render);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.FortificationWandOverlay::renderHud);
     }
 
     // ==================== 事件处理方法 ====================
@@ -75,12 +79,17 @@ public class EspetroClient {
             "key.espetro.class", 74, "key.categories.espetro");
         net.minecraft.client.KeyMapping keyRadial = new net.minecraft.client.KeyMapping(
             "key.espetro.radial", org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT, "key.categories.espetro");
+        // 工事预览时按 R 顺时针旋转 90°（非预览状态无作用）
+        net.minecraft.client.KeyMapping keyFortRotate = new net.minecraft.client.KeyMapping(
+            "key.espetro.fort_rotate", org.lwjgl.glfw.GLFW.GLFW_KEY_R, "key.categories.espetro");
         event.register(keyTeam);
         event.register(keyClass);
         event.register(keyRadial);
+        event.register(keyFortRotate);
         Espetro.KEY_TEAM = keyTeam;
         Espetro.KEY_CLASS = keyClass;
         Espetro.KEY_RADIAL = keyRadial;
+        Espetro.KEY_FORT_ROTATE = keyFortRotate;
     }
 
     private static void registerReloadListeners(

@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/t80.animation.json",
+    "ID":  "dragonrise_reforge:t80b",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/t80.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/t80b.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/t80b.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/t80b.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/t80b.png"
+                   }
+               ]
+}

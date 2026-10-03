@@ -45,6 +45,10 @@ public class VehicleConfig {
         /** Type-level SNBT applied to every slot unless a slot overrides it. */
         @Nullable
         public String nbt;
+        /** 部署时写入载具集装箱的物品（"<itemId>[<snbt>] <count>"），slot 未单独指定时使用。 */
+        public List<String> items = new ArrayList<>();
+        /** 未显式配置 items 时，是否套用 data/<ns>/supply_station/ 的补给站弹药配置（默认开）。 */
+        public boolean supplyLoadout = true;
         /** 补给载具：可装载弹药和建材 */
         public boolean supplyVeh;
         /** 步兵战斗载具：仅携带弹药，不携带建材 */
@@ -100,6 +104,8 @@ public class VehicleConfig {
         /** Optional SNBT merged onto the entity at deploy time (e.g. Energy). */
         @Nullable
         public String nbt;
+        /** 部署时写入载具集装箱的物品（"<itemId>[<snbt>] <count>"）。 */
+        public List<String> items = new ArrayList<>();
 
         @Nullable
         public EntityType<?> getEntityType() {
@@ -195,6 +201,8 @@ public class VehicleConfig {
                 cfg.displayName = firstNonBlank(data.displayName, type);
                 cfg.troopValue = Math.max(0, data.troopValue);
                 cfg.nbt = firstNonBlank(data.nbt, null);
+                addVehicleItems(cfg.items, data.items);
+                if (data.supplyLoadout != null) cfg.supplyLoadout = data.supplyLoadout;
                 // 必须复制组员座位配置，否则运行时所有载具都会被当作无需组员装备
                 cfg.vehicleCrewSeats = data.vehicleCrewSeats;
                 applySupplyProfile(cfg, data.supplyVeh, data.fightVeh, data.capacity);
@@ -215,6 +223,7 @@ public class VehicleConfig {
                     slot.attack = fromPose(points.get(i).attack());
                     slot.defend = fromPose(points.get(i).defend());
                     slot.nbt = cfg.nbt;
+                    slot.items = cfg.items;
                     cfg.slots.add(slot);
                 }
                 if (!cfg.slots.isEmpty()) {
@@ -252,6 +261,8 @@ public class VehicleConfig {
         cfg.troopValue = Math.max(0, vd.troopValue);
         cfg.vehicleCrewSeats = vd.vehicleCrewSeats;
         cfg.nbt = firstNonBlank(vd.nbt, null);
+        addVehicleItems(cfg.items, vd.items);
+        if (vd.supplyLoadout != null) cfg.supplyLoadout = vd.supplyLoadout;
         // 载具补给类型和容量
         applySupplyProfile(cfg, vd.supplyVeh, vd.fightVeh, vd.capacity);
         if (vd.initialDeployDelay != null) {
@@ -343,6 +354,14 @@ public class VehicleConfig {
     @Nullable
     private static String firstNonBlank(@Nullable String first, @Nullable String fallback) {
         return first != null && !first.isBlank() ? first : fallback;
+    }
+
+    /** 复制编制里配置的载具集装箱物品（"<itemId>[<snbt>] <count>"），跳过空项。 */
+    private static void addVehicleItems(List<String> target, @Nullable String[] source) {
+        if (source == null) return;
+        for (String item : source) {
+            if (item != null && !item.isBlank()) target.add(item.trim());
+        }
     }
 
     /**

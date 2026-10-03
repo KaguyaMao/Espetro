@@ -23,6 +23,13 @@ public class ClientPacketHandlers {
         org.espetro.client.gui.ResupplyRadialController.onDelta(packet);
     }
 
+    /** 本地玩家是否处于旁观（观战）模式：观战者在投票阶段只显示等待提示。 */
+    private static boolean isLocalSpectator() {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        return mc != null && mc.gameMode != null
+            && mc.gameMode.getPlayerMode() == net.minecraft.world.level.GameType.SPECTATOR;
+    }
+
     // ==================== OpenFactionScreenPacket ====================
 
     public static void handleOpenFactionScreen() {
@@ -283,6 +290,10 @@ public class ClientPacketHandlers {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player == null) return;
 
+        // 装备完全解锁模式状态（包级字段；变化时下面刷新职业按钮）
+        boolean freeUnlockChanged = org.espetro.client.gui.UnifiedDeployScreen
+            .applyFreeUnlock(packet.isFreeUnlock());
+
         // 记录当前阵营/编制ID
         org.espetro.client.gui.ClientGameState.setPlayerFactionId(packet.getFactionId());
         org.espetro.client.gui.ClientGameState.setPlayerTeam(packet.getTeam());
@@ -308,6 +319,9 @@ public class ClientPacketHandlers {
             screen.updateSquadCategories(packet.getSquadCategories());
             screen.updateClasses(packet.getClasses(), packet.getClassCounts(), packet.getVariantCounts());
             screen.updateSelectedClass(packet.getSelectedClassId());
+            if (freeUnlockChanged) {
+                screen.refreshForFreeUnlock();
+            }
         } else if (packet.shouldOpenScreen()) {
             mc.setScreen(new org.espetro.client.gui.UnifiedDeployScreen(packet));
         }
@@ -590,6 +604,11 @@ public class ClientPacketHandlers {
 
     public static void handleFortificationPreview(FortificationPreviewPacket packet) {
         org.espetro.client.FortificationPlacementController.begin(packet);
+    }
+
+    public static void handleFortificationWand(
+            org.espetro.network.FortificationWandPacket packet) {
+        org.espetro.client.FortificationWandOverlay.update(packet);
     }
 
     public static void handleFortificationProgress(FortificationProgressPacket packet) {

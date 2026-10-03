@@ -1,0 +1,240 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.2s38.idle":  {
+                                                   "loop":  true,
+                                                   "animation_length":  0.0417,
+                                                   "override_previous_animation":  true,
+                                                   "bones":  {
+                                                                 "root":  {
+                                                                              "rotation":  {
+                                                                                               "0.0":  [
+                                                                                                           0,
+                                                                                                           0,
+                                                                                                           0
+                                                                                                       ],
+                                                                                               "0.0417":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ]
+                                                                                           },
+                                                                              "position":  {
+                                                                                               "0.0":  [
+                                                                                                           0,
+                                                                                                           0,
+                                                                                                           0
+                                                                                                       ],
+                                                                                               "0.0417":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ]
+                                                                                           },
+                                                                              "scale":  {
+                                                                                            "0.0":  [
+                                                                                                        1,
+                                                                                                        1,
+                                                                                                        1
+                                                                                                    ],
+                                                                                            "0.0417":  [
+                                                                                                           1,
+                                                                                                           1,
+                                                                                                           1
+                                                                                                       ]
+                                                                                        }
+                                                                          },
+                                                                 "sadadsa":  {
+                                                                                 "position":  {
+                                                                                                  "0.0":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ],
+                                                                                                  "0.0417":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 0
+                                                                                                             ]
+                                                                                              }
+                                                                             }
+                                                             }
+                                               },
+                       "animation.2s38.fire":  {
+                                                   "animation_length":  1,
+                                                   "override_previous_animation":  true,
+                                                   "bones":  {
+                                                                 "sadadsa":  {
+                                                                                 "position":  {
+                                                                                                  "0.0":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ],
+                                                                                                  "0.0313":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 17.2
+                                                                                                             ],
+                                                                                                  "0.1563":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 3.8
+                                                                                                             ],
+                                                                                                  "0.3125":  [
+                                                                                                                 0,
+                                                                                                                 0,
+                                                                                                                 0
+                                                                                                             ],
+                                                                                                  "0.5":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ],
+                                                                                                  "0.75":  {
+                                                                                                               "pre":  [
+                                                                                                                           0,
+                                                                                                                           0,
+                                                                                                                           0
+                                                                                                                       ],
+                                                                                                               "post":  [
+                                                                                                                            0,
+                                                                                                                            0,
+                                                                                                                            0
+                                                                                                                        ]
+                                                                                                           },
+                                                                                                  "1.0":  {
+                                                                                                              "pre":  [
+                                                                                                                          0,
+                                                                                                                          0,
+                                                                                                                          0
+                                                                                                                      ],
+                                                                                                              "post":  [
+                                                                                                                           0,
+                                                                                                                           0,
+                                                                                                                           0
+                                                                                                                       ]
+                                                                                                          }
+                                                                                              }
+                                                                             },
+                                                                 "flash":  {
+                                                                               "scale":  {
+                                                                                             "0.0":  [
+                                                                                                         0,
+                                                                                                         0,
+                                                                                                         0
+                                                                                                     ],
+                                                                                             "0.0313":  [
+                                                                                                            3000,
+                                                                                                            3000,
+                                                                                                            6
+                                                                                                        ],
+                                                                                             "0.0938":  [
+                                                                                                            0,
+                                                                                                            0,
+                                                                                                            0
+                                                                                                        ]
+                                                                                         }
+                                                                           }
+                                                             }
+                                               },
+                       "animation.cannon.idle":  {
+                                                     "loop":  true,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.cannon.fire":  {
+                                                     "loop":  "hold_on_last_frame",
+                                                     "animation_length":  1,
+                                                     "bones":  {
+                                                                   
+                                                                   "sadadsa":  {
+                                                                                   "position":  {
+                                                                                                    "0.0":  [
+                                                                                                                0,
+                                                                                                                0,
+                                                                                                                0
+                                                                                                            ],
+                                                                                                    "0.0313":  [
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   17.2
+                                                                                                               ],
+                                                                                                    "0.1563":  [
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   3.8
+                                                                                                               ],
+                                                                                                    "0.3125":  [
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   0
+                                                                                                               ],
+                                                                                                    "0.5":  [
+                                                                                                                0,
+                                                                                                                0,
+                                                                                                                0
+                                                                                                            ],
+                                                                                                    "0.75":  {
+                                                                                                                 "pre":  [
+                                                                                                                             0,
+                                                                                                                             0,
+                                                                                                                             0
+                                                                                                                         ],
+                                                                                                                 "post":  [
+                                                                                                                              0,
+                                                                                                                              0,
+                                                                                                                              0
+                                                                                                                          ]
+                                                                                                             },
+                                                                                                    "1.0":  {
+                                                                                                                "pre":  [
+                                                                                                                            0,
+                                                                                                                            0,
+                                                                                                                            0
+                                                                                                                        ],
+                                                                                                                "post":  [
+                                                                                                                             0,
+                                                                                                                             0,
+                                                                                                                             0
+                                                                                                                         ]
+                                                                                                            }
+                                                                                                }
+                                                                               },
+                                                                   "flash":  {
+                                                                                 "scale":  {
+                                                                                               "0.0":  [
+                                                                                                           0,
+                                                                                                           0,
+                                                                                                           0
+                                                                                                       ],
+                                                                                               "0.0313":  [
+                                                                                                              3000,
+                                                                                                              3000,
+                                                                                                              6
+                                                                                                          ],
+                                                                                               "0.0938":  [
+                                                                                                              0,
+                                                                                                              0,
+                                                                                                              0
+                                                                                                          ]
+                                                                                           }
+                                                                             }
+                                                               }
+                                                 },
+                       "animation.machine_gun.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.machine_gun.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      }
+                   }
+}

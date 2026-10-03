@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "superbwarfare:iron_barrel"
+    },
+    "b": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "c": {
+      "tag": "minecraft:planks"
+    },
+    "d": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "aab",
+    "ccc",
+    " dc"
+  ],
+  "result": {
+    "item": "superbwarfare:homemade_shotgun"
+  },
+  "show_notification": true
+}

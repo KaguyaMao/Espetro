@@ -1,0 +1,314 @@
+[
+  {
+    "id": "dragonrise_reforge:bmp3",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:csk181",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.05,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m1126",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m1128",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m113",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m1296",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m1a2sepv1",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.3,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m1a2sepv2",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.3,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:m3a3",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:mv3_armed",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:mv3_supply",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:t72b3",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:t90mh",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.3,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:uh60",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "jarMods": true
+  },
+  {
+    "id": "dragonrise_reforge:ural4320_supply",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:z20",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:zbd04a",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:zbd05",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:zbl08",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:zlt11",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.25,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:zsl10",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:ztd05",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:ztz96a",
+    "kind": "生效（覆盖里有）",
+    "jarM": null,
+    "kjsM": 0.35,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "dragonrise_reforge:ztz99a",
+    "kind": "覆盖把规则遮掉了（jar 有，覆盖无）",
+    "jarM": 0.3,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": false,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "fcp:bmp1am",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "fcp:btr80",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "fcp:btr82",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "fcp:gaz_tigr_rws",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "fcp:kamaz",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "jarMods": true
+  },
+  {
+    "id": "fcp:matv_crow",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "kjsStrict": true,
+    "jarMods": true,
+    "kjsMods": true
+  },
+  {
+    "id": "superbwarfare:drone",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "jarMods": true
+  },
+  {
+    "id": "vvp:mi_8",
+    "kind": "两边都没有规则（需新增）",
+    "jarM": null,
+    "kjsM": null,
+    "jarStrict": true,
+    "jarMods": true
+  }
+]

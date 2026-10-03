@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:test",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/test.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/test.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/test.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/test.png"
+                   }
+               ]
+}

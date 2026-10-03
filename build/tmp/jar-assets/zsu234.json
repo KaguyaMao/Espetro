@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/zsu234.animation.json",
+    "ID":  "dragonrise_reforge:zsu234",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/zsu234.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/zsu234.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/zsu234.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/zsu234.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/zsu234.png"
+                   }
+               ]
+}

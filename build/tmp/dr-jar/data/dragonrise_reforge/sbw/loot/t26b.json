@@ -1,0 +1,49 @@
+{
+  "ID": "dragonrise_reforge:t26b",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Chance": 1.0,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:light_armament_module"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 2,
+          "Name": "superbwarfare:wheel"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.2,
+          "Count": 1,
+          "Name": "superbwarfare:medium_battery_pack"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "@Default",
+      "Type": "complete"
+    }
+  ]
+}

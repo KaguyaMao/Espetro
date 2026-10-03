@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "a": {
+      "item": "minecraft:paper"
+    },
+    "b": {
+      "tag": "forge:sand"
+    }
+  },
+  "pattern": [
+    "aba"
+  ],
+  "result": {
+    "item": "superbwarfare:sandbag"
+  },
+  "show_notification": true
+}

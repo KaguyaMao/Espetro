@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.minecraftforge.gradle</groupId>
+  <artifactId>net.minecraftforge.gradle.gradle.plugin</artifactId>
+  <version>6.0.54</version>
+  <packaging>pom</packaging>
+  <name>ForgeGradle</name>
+  <description>Forge's Gradle plugin for Mod development</description>
+  <dependencies>
+    <dependency>
+      <groupId>net.minecraftforge.gradle</groupId>
+      <artifactId>ForgeGradle</artifactId>
+      <version>6.0.54</version>
+    </dependency>
+  </dependencies>
+</project>

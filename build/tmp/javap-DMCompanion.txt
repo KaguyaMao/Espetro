@@ -1,0 +1,61 @@
+Compiled from "DamageModifier.kt"
+public final class com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$Companion {
+  private com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$Companion();
+    Code:
+       0: aload_0
+       1: invokespecial #28                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  public final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier createDefaultModifier();
+    Code:
+       0: new           #25                 // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier
+       3: dup
+       4: invokespecial #33                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier."<init>":()V
+       7: getstatic     #39                 // Field net/minecraft/world/entity/EntityType.f_20486_:Lnet/minecraft/world/entity/EntityType;
+      10: dup
+      11: ldc           #41                 // String POTION
+      13: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      16: invokevirtual #51                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/world/entity/EntityType;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      19: getstatic     #54                 // Field net/minecraft/world/entity/EntityType.f_20476_:Lnet/minecraft/world/entity/EntityType;
+      22: dup
+      23: ldc           #56                 // String AREA_EFFECT_CLOUD
+      25: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      28: invokevirtual #51                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/world/entity/EntityType;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      31: getstatic     #62                 // Field net/minecraft/world/damagesource/DamageTypes.f_268671_:Lnet/minecraft/resources/ResourceKey;
+      34: dup
+      35: ldc           #64                 // String FALL
+      37: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      40: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      43: getstatic     #70                 // Field net/minecraft/world/damagesource/DamageTypes.f_268585_:Lnet/minecraft/resources/ResourceKey;
+      46: dup
+      47: ldc           #72                 // String CACTUS
+      49: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      52: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      55: getstatic     #75                 // Field net/minecraft/world/damagesource/DamageTypes.f_268722_:Lnet/minecraft/resources/ResourceKey;
+      58: dup
+      59: ldc           #77                 // String DROWN
+      61: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      64: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      67: getstatic     #80                 // Field net/minecraft/world/damagesource/DamageTypes.f_268482_:Lnet/minecraft/resources/ResourceKey;
+      70: dup
+      71: ldc           #82                 // String DRAGON_BREATH
+      73: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      76: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      79: getstatic     #85                 // Field net/minecraft/world/damagesource/DamageTypes.f_268493_:Lnet/minecraft/resources/ResourceKey;
+      82: dup
+      83: ldc           #87                 // String WITHER
+      85: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      88: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      91: getstatic     #90                 // Field net/minecraft/world/damagesource/DamageTypes.f_268641_:Lnet/minecraft/resources/ResourceKey;
+      94: dup
+      95: ldc           #92                 // String WITHER_SKULL
+      97: invokestatic  #47                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     100: invokevirtual #67                 // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.immuneTo:(Lnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+     103: areturn
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$Companion(kotlin.jvm.internal.DefaultConstructorMarker);
+    Code:
+       0: aload_0
+       1: invokespecial #94                 // Method "<init>":()V
+       4: return
+}

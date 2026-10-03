@@ -1,0 +1,10 @@
+{
+  "ID": "vvp:humvee_mk19",
+  "Animation": "vvp:animations/humvee.animation.json",
+  "Model": {
+    "Model": "vvp:geo/humvee_mk19.geo.json",
+    "Texture": "vvp:textures/entity/humvee_mk19_green.png",
+    "Texture_2": "vvp:textures/entity/humvee_mk19_iraq.png",
+    "Texture_3": "vvp:textures/entity/humvee_mk19_ukr.png"
+  }
+}

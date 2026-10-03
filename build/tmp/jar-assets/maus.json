@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/maus.animation.json",
+  "ID": "dragonrise_reforge:maus",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/maus.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/maus.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/maus.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/maus.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/maus.png"
+    }
+  ]
+}

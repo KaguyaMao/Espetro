@@ -1,0 +1,29 @@
+{
+  "ID": "superbwarfare:mk_42",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:cannon_core"
+        }
+      ],
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Type": "complete"
+    }
+  ]
+}

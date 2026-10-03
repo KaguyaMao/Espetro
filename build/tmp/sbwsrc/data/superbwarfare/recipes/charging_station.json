@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:plates/copper"
+    },
+    "b": {
+      "tag": "forge:ingots/iron"
+    },
+    "c": {
+      "item": "minecraft:blast_furnace"
+    },
+    "d": {
+      "item": "superbwarfare:cell"
+    }
+  },
+  "pattern": [
+    "ada",
+    "dcd",
+    "aba"
+  ],
+  "result": {
+    "item": "superbwarfare:charging_station"
+  },
+  "show_notification": true
+}

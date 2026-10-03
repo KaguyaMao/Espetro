@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:m1a2_hv",
+  "Model": {
+    "Model": "vvp:geo/m1a2_hv.geo.json",
+    "Texture": "vvp:textures/entity/m1a2_hv.png"
+  }
+}

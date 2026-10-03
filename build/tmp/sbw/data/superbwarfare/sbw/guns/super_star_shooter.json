@@ -1,0 +1,37 @@
+{
+  "Spread": 0,
+  "RecoilX": 0,
+  "RecoilY": 0,
+  "Damage": 60,
+  "Headshot": 2,
+  "ExplosionDamage": 45,
+  "Projectile": "superbwarfare:super_star_projectile",
+  "Velocity": 3,
+  "Magazine": 300,
+  "Weight": 20,
+  "EmptyReloadTime": 111,
+  "RPM": 300,
+  "Gravity": 0,
+  "DefaultZoom": 1.25,
+  "DefaultFireMode": "Auto",
+  "AvailableFireModes": "Auto",
+  "GunType": "DirectLauncher",
+  "AmmoType": "100 minecraft:nether_star",
+  "Icon": "superbwarfare:textures/gun_icon/super_star_shooter_icon.png",
+  "AvailablePerks": [
+    "superbwarfare:powerful_attraction",
+    "superbwarfare:intelligent_chip",
+    "superbwarfare:monster_hunter",
+    "superbwarfare:vorpal_weapon",
+    "superbwarfare:brain_storm",
+    "superbwarfare:target_lock"
+  ],
+  "SoundInfo": {
+    "Fire1P": "superbwarfare:star_shoot_1p",
+    "Fire3P": "superbwarfare:star_shoot_3p",
+    "ReloadEmpty": "superbwarfare:super_star_shooter_reload_empty",
+    "CancellableSounds": [
+      "superbwarfare:super_star_shooter_reload_empty"
+    ]
+  }
+}

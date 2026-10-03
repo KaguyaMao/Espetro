@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+MixinConfigs: apricityui.mixins.json
+Specification-Title: apricityui
+Specification-Vendor: Tower of Sighs
+Specification-Version: 1
+Implementation-Title: apricityui-forge-1.20.1
+Implementation-Version: 1.2.3
+Implementation-Vendor: Tower of Sighs
+Implementation-Timestamp: 2026-08-19T09:09:11+0800
+

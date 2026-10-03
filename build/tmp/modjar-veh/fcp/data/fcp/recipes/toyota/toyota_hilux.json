@@ -1,0 +1,12 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "2 #superbwarfare:storage_blocks/steel",
+    "4 superbwarfare:wheel",
+    "superbwarfare:motor"
+  ],
+  "result": {
+    "entity": "fcp:toyota_hilux"
+  }
+}

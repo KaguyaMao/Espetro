@@ -1,0 +1,145 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "fmlearlydisplay",
+    "version": "1.20.1-47.4.20",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "fmlearlydisplay-1.20.1-47.4.20.jar",
+          "url": "fmlearlydisplay-1.20.1-47.4.20.jar",
+          "size": 170513,
+          "sha512": "b1132d7c27740911ea7665c738817e6fb19c4f0d6ea95814c38f14ba14f23b470fb97de588e27847943e9ebd4ecb893cf66109a7d3d185637ad0cf9c3bcbc139",
+          "sha256": "ae4f2216c029995d68a61cfb730b979eae3184e5c72ef16c375317dd8a21d7c4",
+          "sha1": "4dcdfb740aff35b40a3471708ca8a5f1e22a9504",
+          "md5": "bddd8e57abdc41ebaac63f1ae74d9fa3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.minecraftforge",
+          "module": "fmlloader",
+          "version": {
+            "requires": "1.20.1-47.4.20"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "fmlcore",
+          "version": {
+            "requires": "1.20.1-47.4.20"
+          }
+        },
+        {
+          "group": "org.lwjgl",
+          "module": "lwjgl",
+          "version": {
+            "requires": "3.3.1"
+          }
+        },
+        {
+          "group": "org.lwjgl",
+          "module": "lwjgl-glfw",
+          "version": {
+            "requires": "3.3.1"
+          }
+        },
+        {
+          "group": "org.lwjgl",
+          "module": "lwjgl-opengl",
+          "version": {
+            "requires": "3.3.1"
+          }
+        },
+        {
+          "group": "org.lwjgl",
+          "module": "lwjgl-stb",
+          "version": {
+            "requires": "3.3.1"
+          }
+        },
+        {
+          "group": "org.lwjgl",
+          "module": "lwjgl-tinyfd",
+          "version": {
+            "requires": "3.3.1"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.8.0-beta4"
+          }
+        },
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fmlearlydisplay-1.20.1-47.4.20.jar",
+          "url": "fmlearlydisplay-1.20.1-47.4.20.jar",
+          "size": 170513,
+          "sha512": "b1132d7c27740911ea7665c738817e6fb19c4f0d6ea95814c38f14ba14f23b470fb97de588e27847943e9ebd4ecb893cf66109a7d3d185637ad0cf9c3bcbc139",
+          "sha256": "ae4f2216c029995d68a61cfb730b979eae3184e5c72ef16c375317dd8a21d7c4",
+          "sha1": "4dcdfb740aff35b40a3471708ca8a5f1e22a9504",
+          "md5": "bddd8e57abdc41ebaac63f1ae74d9fa3"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "fmlearlydisplay-1.20.1-47.4.20-sources.jar",
+          "url": "fmlearlydisplay-1.20.1-47.4.20-sources.jar",
+          "size": 139002,
+          "sha512": "046e455987d0f13b6f41ff194d16adc0a23d5c3609600dbe6ee5120a2ece9198eb12ef02c1bf8099b85ec3af546899f0fa86ce5a16412a7aeaa19b22cd173288",
+          "sha256": "909f96ded8ca375e84285d719635a59e2a054fd6d01f7350199227764cd97d42",
+          "sha1": "101976723a61286d3de5ec776f738dd1f36da982",
+          "md5": "2e3bf1b9ebb8f4905a52fa58d9fb12ef"
+        }
+      ]
+    }
+  ]
+}

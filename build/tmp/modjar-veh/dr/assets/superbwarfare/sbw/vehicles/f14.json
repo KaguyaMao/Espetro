@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f14.animation.json",
+    "ID":  "dragonrise_reforge:f14",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/f14.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f14.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/f14.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/f14.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/f14.png"
+                   }
+               ]
+}

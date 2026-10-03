@@ -37,6 +37,8 @@ public final class FortificationPlacementController {
     private static Preview preview;
     private static BlockPos anchor;
     private static Direction facing = Direction.NORTH;
+    /** 工事朝向相对玩家朝向的顺时针旋转步数（每步 90°，按 R 增加，仅本次预览有效）。 */
+    private static int rotationSteps;
     private static List<AABB> boxes = List.of();
     private static boolean valid;
     private static long lastWorkTick = Long.MIN_VALUE / 2;
@@ -52,6 +54,7 @@ public final class FortificationPlacementController {
         anchor = null;
         boxes = List.of();
         valid = false;
+        rotationSteps = 0;
     }
 
     public static void clear() {
@@ -59,6 +62,7 @@ public final class FortificationPlacementController {
         anchor = null;
         boxes = List.of();
         valid = false;
+        rotationSteps = 0;
     }
 
     public static boolean isPreviewing() {
@@ -71,6 +75,7 @@ public final class FortificationPlacementController {
             return;
         }
         if (preview != null) {
+            pollRotationKey(minecraft);
             updateOutline(minecraft);
             return;
         }
@@ -89,6 +94,32 @@ public final class FortificationPlacementController {
             && org.espetro.vehicle.VehicleManager.isMappedSupplyStation(entityHit.getEntity())) {
             NetworkManager.sendFortificationEntityWork(entityHit.getEntity().getUUID(), build && !remove);
         }
+    }
+
+    /** 按一次 R：工事朝向相对玩家再顺时针转 90°（0/90/180/270 循环）。 */
+    private static void pollRotationKey(Minecraft mc) {
+        if (!(org.espetro.Espetro.KEY_FORT_ROTATE instanceof net.minecraft.client.KeyMapping key)) {
+            return;
+        }
+        boolean rotated = false;
+        while (key.consumeClick()) {
+            rotationSteps = (rotationSteps + 1) & 3;
+            rotated = true;
+        }
+        if (rotated && mc.player != null) {
+            mc.player.displayClientMessage(Component.literal(
+                "§e工事朝向已顺时针旋转 " + (rotationSteps * 90) + "°（按 R 继续旋转）"), true);
+        }
+    }
+
+    /** 实际工事朝向 = 玩家朝向按 rotationSteps 顺时针旋转后的方向。 */
+    private static Direction rotatedFacing(Minecraft mc) {
+        Direction base = mc.player == null ? Direction.NORTH : mc.player.getDirection();
+        int steps = rotationSteps & 3;
+        for (int i = 0; i < steps; i++) {
+            base = base.getClockWise();
+        }
+        return base;
     }
 
     public static void onInteraction(InputEvent.InteractionKeyMappingTriggered event) {
@@ -150,7 +181,7 @@ public final class FortificationPlacementController {
         }
         anchor = mc.level.getBlockState(hit.getBlockPos()).is(Blocks.SNOW)
             ? hit.getBlockPos() : hit.getBlockPos().relative(hit.getDirection());
-        facing = mc.player.getDirection();
+        facing = rotatedFacing(mc);
         Direction right = facing.getClockWise();
         List<AABB> next = new ArrayList<>(preview.offsets.size());
         boolean clear = true;
@@ -159,10 +190,7 @@ public final class FortificationPlacementController {
             int dz = right.getStepZ() * offset.x() + facing.getStepZ() * offset.z();
             BlockPos pos = anchor.offset(dx, offset.y(), dz);
             next.add(new AABB(pos).inflate(0.002D));
-            var state = mc.level.getBlockState(pos);
-            // 与服务端 spaceIsClear/isReplaceable 一致：空气、雪层及一切可替换方块
-            // （草、花、雪层、地毯等非完整方块）均可被工事覆盖
-            if (!state.isAir() && !state.is(Blocks.SNOW) && !state.canBeReplaced()) clear = false;
+            // 与服务端一致：地图方块不再阻止放置（落地时直接顶掉占位方块），只拦活体实体
             if (!mc.level.getEntities((Entity) null, new AABB(pos), entity -> entity != mc.player
                 && entity instanceof LivingEntity && entity.isAlive()).isEmpty()) clear = false;
         }

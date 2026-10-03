@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:cn21helmet",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/cn21helmet.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/cn21helmet.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/cn21helmet.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/cn21helmet.png"
+                   }
+               ]
+}

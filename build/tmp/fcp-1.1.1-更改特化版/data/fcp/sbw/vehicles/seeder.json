@@ -1,0 +1,47 @@
+{
+  "ID": "fcp:seeder",
+  "MaxHealth": 250,
+  "MaxEnergy": 0,
+  "OBB": [
+    {"Size": [1.2, 0.6, 2.2], "Position": [0, 0.8, 0], "Part": "Body"},
+    { "Size": [0.4, 0.4, 2], "Position": [0, 1.5, 3.5], "Part": "Interactive" }
+  ],
+  "Seats": [],
+  "EngineType": "Empty",
+  "UpStep": 1,
+  "Mass": 8,
+  "Gravity": 0.06,
+  "VehicleContainerType": "Empty",
+  "Type": "Special",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true],
+      [0.15, 0.09, false]
+    ]
+  },
+  "HudType": "@Empty",
+  "TerrainCompat": [
+    [
+      1,
+      0,
+      1.6
+    ],
+    [
+      -1,
+      0,
+      1.6
+    ],
+    [
+      1,
+      0,
+      -1.6
+    ],
+    [
+      -1,
+      0,
+      -1.6
+    ]
+  ]
+}

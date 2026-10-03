@@ -256,6 +256,7 @@ public class RadioRadialPacket {
             ? SquadManager.getInstance().getSquadMemberUuids(team, squadId).size()
             : 0;
         int cooldown = counts.getClassSwitchCooldownRemaining(player.getUUID());
+        boolean freeUnlock = org.espetro.team.FreeUnlockManager.isEnabled();
         if (kits != null) {
             for (FactionDataLoader.ClassKitData kit : kits) {
                 if (kit == null) continue;
@@ -271,15 +272,15 @@ public class RadioRadialPacket {
                     denial = "职业切换冷却中，还需等待 " + cooldown + " 秒。";
                 } else if (!inSquad) {
                     denial = "请先加入班组小队后再选择职业。";
-                } else if (kit.teammatesNeed > 0 && squadSize < kit.teammatesNeed) {
+                } else if (!freeUnlock && kit.teammatesNeed > 0 && squadSize < kit.teammatesNeed) {
                     denial = "小队达到 " + kit.teammatesNeed + " 人后才能选择该职业。";
-                } else if (kit.teamCount && squadCount >= kit.maxPlayers) {
+                } else if (!freeUnlock && kit.teamCount && squadCount >= kit.maxPlayers) {
                     denial = "本小队该职业人数已满（" + squadCount + "/"
                         + kit.maxPlayers + "）。";
-                } else if (!kit.teamCount && teamCount >= kit.maxPlayers) {
+                } else if (!freeUnlock && !kit.teamCount && teamCount >= kit.maxPlayers) {
                     denial = "该职业全队人数已满（" + teamCount + "/"
                         + kit.maxPlayers + "）。";
-                } else if (!kit.teamCount && kit.maxPerSquad > 0
+                } else if (!freeUnlock && !kit.teamCount && kit.maxPerSquad > 0
                     && squadCount >= kit.maxPerSquad) {
                     denial = "本小队该职业人数已满（" + squadCount + "/"
                         + kit.maxPerSquad + "）。";
@@ -301,7 +302,8 @@ public class RadioRadialPacket {
                                 team, squadId, kit.id, variant.id)
                             : counts.getVariantCount(team, kit.id, variant.id);
                         boolean variantEnabled = enabled
-                            && (!kit.strictCount || variantCount < variant.maxPlayers);
+                            && (freeUnlock || !kit.strictCount
+                                || variantCount < variant.maxPlayers);
                         String variantDenial = denial;
                         if (enabled && !variantEnabled) {
                             variantDenial = "该装备变体人数已满（" + variantCount + "/"

@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "8 superbwarfare:steel_block",
+    "superbwarfare:heavy_armament_module",
+    "superbwarfare:medium_battery_pack",
+    "8 superbwarfare:wheel",
+    "superbwarfare:large_motor",
+    "superbwarfare:armor_plate"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:m1128"
+  }
+}

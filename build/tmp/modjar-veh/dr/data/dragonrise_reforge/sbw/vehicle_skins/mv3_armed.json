@@ -1,0 +1,11 @@
+{
+  "Skins": [
+    {
+      "Id": "yellow",
+      "Name": "yellow",
+      "Description": "使用喷漆罐喷涂的 yellow涂装",
+      "Texture": "dragonrise_reforge:textures/entity/mv3_armed_yellow.png",
+      "Priority": 0
+    }
+  ]
+}

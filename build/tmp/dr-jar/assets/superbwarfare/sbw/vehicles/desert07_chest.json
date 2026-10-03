@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:desert07_chest",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/desert07_chest.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/desert07_chest.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/desert07_chest.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/desert07_chest.png"
+                   }
+               ]
+}

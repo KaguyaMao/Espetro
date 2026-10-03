@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:gorka3",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/gorka3.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/gorka3.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/gorka3.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/gorka3.png"
+                   }
+               ]
+}

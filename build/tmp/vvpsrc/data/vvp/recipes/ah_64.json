@@ -1,0 +1,16 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "aircraft",
+  "inputs": [
+    "superbwarfare:large_battery_pack",
+    "superbwarfare:heavy_armament_module",
+    "superbwarfare:light_armament_module",
+    "7 #forge:storage_blocks/steel",
+    "superbwarfare:large_propeller",
+    "superbwarfare:propeller",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "vvp:ah_64"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:empty_perk"
+    },
+    "b": {
+      "item": "superbwarfare:cell"
+    },
+    "c": {
+      "item": "minecraft:lightning_rod"
+    },
+    "d": {
+      "tag": "forge:dusts/coal_coke"
+    },
+    "e": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "cec",
+    "bab",
+    "bdb"
+  ],
+  "result": {
+    "item": "superbwarfare:volt_overload"
+  },
+  "show_notification": true
+}

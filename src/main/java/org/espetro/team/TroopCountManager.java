@@ -280,12 +280,29 @@ public class TroopCountManager {
         // ServerPlayer kill grants a kill.
         PlayerMatchStatsManager.getInstance().onPlayerDeath(player, event.getSource());
 
+        applyDeathTicketCost(player);
+    }
+
+    /**
+     * 按阵亡规则扣除所属队伍兵力（职业兵力值 + 指挥官额外惩罚），并广播战报、检查胜负。
+     * <p>
+     * 正常阵亡由 {@link #onPlayerDeath(LivingDeathEvent)} 调用；玩家主动「重新部署」
+     * （{@link org.espetro.team.RedeployService}）在战斗阶段但不在战场地图内时也复用此方法，
+     * 避免换地图规避扣票。调用方负责保证同一名玩家只扣一次。
+     *
+     * @return 是否真的扣除了兵力（未选编制/无队伍时为 false）
+     */
+    public static boolean applyDeathTicketCost(ServerPlayer player) {
+        if (player == null) {
+            return false;
+        }
+
         // 获取玩家当前职业（未选择则使用默认值）
         String classId = ClassCountManager.getInstance().getPlayerClass(player.getUUID());
 
         // 获取玩家的队伍
         String team = Espetro.getPlayerTeam(player);
-        if (team == null) return;
+        if (team == null) return false;
 
         // 计算兵力消耗（未选择职业默认扣1）
         int troopValue = (classId != null) ? getInstance().getTroopValueForClass(classId) : 1;
@@ -314,6 +331,7 @@ public class TroopCountManager {
 
         // 检查胜负条件
         manager.checkVictoryCondition();
+        return true;
     }
 
     /**

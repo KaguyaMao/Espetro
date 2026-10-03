@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_m18_smoke_grenade": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:m18_smoke_grenade"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "superbwarfare:vehicle_smoke_ammo_from_m18_smoke_grenade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_m18_smoke_grenade",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "superbwarfare:vehicle_smoke_ammo_from_m18_smoke_grenade"
+    ]
+  },
+  "sends_telemetry_event": false
+}

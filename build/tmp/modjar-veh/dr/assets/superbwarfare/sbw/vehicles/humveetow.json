@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/humveetow.animation.json",
+    "ID":  "dragonrise_reforge:humveetow",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/humveetow.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/humveetow.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/humveetow.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/humveetow.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/humveetow.png"
+                   }
+               ]
+}

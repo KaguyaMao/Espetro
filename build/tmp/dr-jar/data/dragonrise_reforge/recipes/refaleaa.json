@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "aircraft",
+  "inputs": [
+    "11 superbwarfare:steel_block",
+    "superbwarfare:heavy_armament_module",
+    "2 superbwarfare:large_battery_pack",
+    "2 superbwarfare:large_propeller"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:refaleaa"
+  }
+}

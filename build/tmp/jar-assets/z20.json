@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:z20",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/z20.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/z20.png"
+              },
+    "MouseSpeed":  [
+                       0.3,
+                       0.3
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/z20.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/z20.png"
+                   }
+               ]
+}

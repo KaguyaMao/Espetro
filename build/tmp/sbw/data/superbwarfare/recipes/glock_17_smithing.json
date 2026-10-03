@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "forge:plates/plastic"
+  },
+  "base": {
+    "item": "superbwarfare:common_material_pack"
+  },
+  "result": {
+    "item": "superbwarfare:glock_17"
+  },
+  "template": {
+    "item": "superbwarfare:glock_17_blueprint"
+  }
+}

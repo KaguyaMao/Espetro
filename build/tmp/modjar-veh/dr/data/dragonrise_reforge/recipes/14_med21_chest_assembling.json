@@ -1,0 +1,10 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "misc",
+  "inputs": [
+    "8 dragonrise_reforge:kevlar"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:med21_chest"
+  }
+}

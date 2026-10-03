@@ -1,0 +1,206 @@
+{
+  "MaxHealth": 175,
+  "MaxEnergy": 5000000,
+  "TurretPos": [0, 1.766, -1.5],
+  "TurretTurnSpeed": [10, 10],
+  "TurretPitchRange": [-20, 40],
+  "BarrelPos": [0, 0.206, 0],
+  "TurretControllerIndex": 2,
+  "OBB": [
+    {
+      "Part": "Collision",
+      "Size": [1.25, 0.729, 3.375],
+      "Position": [0, 0.719, 0.563]
+    },
+    {
+      "Size": [0.25, 0.5, 0.5],
+      "Position": [1, 0.5, 2.875],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.25, 0.5, 0.5],
+      "Position": [-1, 0.5, 2.875],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.25, 0.5, 0.5],
+      "Position": [1, 0.5, -1.28],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.25, 0.5, 0.5],
+      "Position": [-1, 0.5, -1.28],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [1.1875, 0.5, 3.41],
+      "Position": [0, 1, 0.593]
+    },
+    {
+      "Size": [1.1875, 0.375, 0.1875],
+      "Position": [0, 1.875, 0.375]
+    },
+    {
+      "Size": [1.1875, 0.094, 0.34375],
+      "Position": [0, 2.15625, 0.9]
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.61,
+        0.11,
+        0.81
+      ],
+      "RotateWithVehicle": true,
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -80,
+      "MaxYaw": 80,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [1.5, 0.11, 0.81]
+      }
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.61,
+        0.11,
+        0.81
+      ],
+      "RotateWithVehicle": true,
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -80,
+      "MaxYaw": 80,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [-1.5, 0.11, 0.81]
+      }
+    },
+    {
+      "Transform": "Turret",
+      "Position": [0.3, -1.3689, -0.6],
+      "MinPitch": -20,
+      "MaxPitch": 40,
+      "Pose": "Tow",
+      "CameraPos": {
+        "Transform": "Turret",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0.2535875, 0.36360625, 0.121875
+        ],
+        "Direction": "Barrel"
+      },
+      "Weapons": ["Missile"],
+      "Sensitivity": [0.55, 0.75, 1],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [0, 0.75, -3]
+      }
+    }
+  ],
+  "Weapons": {
+    "Missile": {
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Name": "weapon.superbwarfare.tow_missile",
+      "AmmoType": "superbwarfare:medium_anti_ground_missile",
+      "Projectile": "superbwarfare:wire_guide_missile",
+      "DefaultZoom": 3,
+      "Magazine": 1,
+      "Damage": 600,
+      "ExplosionDamage": 60,
+      "ExplosionRadius": 8,
+      "EmptyReloadTime": 150,
+      "Velocity": 3,
+      "ShootShake": [6, 6, 14],
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [[0, 0.035, 0]],
+        "Directions": ["Barrel"]
+      },
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:bmp_2_missile_fire_1p",
+        "Fire3P": "superbwarfare:bmp_2_missile_fire_3p",
+        "VehicleReload3p": "superbwarfare:ty63_reload",
+        "VehicleReloadSoundTime": 24
+      },
+      "SoundRadius": 12,
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/missile_tow.png",
+      "Crosshair": "@Custom"
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 32,
+    "WheelRotSpeed": 1.1,
+    "WheelDifferential": 0.5,
+    "MaxForwardSpeedRate": 1.48,
+    "MaxBackwardSpeedRate": 1.1,
+    "Increment": 0.024,
+    "Decrement": 0.012,
+    "SteeringSpeed": 0.075,
+    "EngineSoundVolume" : 0.6
+  },
+  "UpStep": 1.1,
+  "Mass": 3,
+  "RotateOffsetHeight": 2.2,
+  "DamageModifiers": [
+    "All - 2",
+    "minecraft:lava + 2",
+    "All * 0.6",
+    "minecraft:arrow * 0.2",
+    "minecraft:trident * 0.4",
+    "minecraft:mob_attack * 0.4",
+    "minecraft:mob_attack_no_aggro * 0.4",
+    "minecraft:mob_projectile * 0.4",
+    "minecraft:player_attack * 0.4",
+    "minecraft:lava * 4",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3",
+    "minecraft:explosion * 5",
+    "minecraft:player_explosion * 5",
+    "superbwarfare:projectile_hit * 1.1",
+    "superbwarfare:grapeshot_hit * 0.8",
+    "@#superbwarfare:aerial_bomb * 2",
+    "#superbwarfare:projectile * 0.4",
+    "#superbwarfare:projectile_absolute * 0.6",
+    "superbwarfare:vehicle_strike * 1.4",
+    "@superbwarfare:cannon_shell * 1.3",
+    "@superbwarfare:c4 * 2",
+    "@superbwarfare:small_cannon_shell * 1.3",
+    "@superbwarfare:gun_grenade * 3",
+    "@superbwarfare:rgo_grenade * 6",
+    "@superbwarfare:hand_grenade * 5",
+    "@superbwarfare:mortar_shell * 4",
+    "@#superbwarfare:aa_missile * 1.5",
+    "$entity.getSourceAngle(source, 0.25) * damage"
+  ],
+  "VehicleContainerType": "Small",
+  "DestroyInfo": {
+    "ExplosionDamage": 40,
+    "ExplosionRadius": 5
+  },
+  "ThirdPersonCameraPos": [0, 0.5, 3],
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/sodayo_pick_up_tow_icon.png",
+  "ContainerIcon": "superbwarfare:textures/gui/vehicle/type/civilian.png",
+  "Type": "Car",
+  "CollisionLevel": {
+    "Level": 2,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true]
+    ]
+  },
+  "EngineSound": "superbwarfare:sodayo_pick_up_engine",
+  "HornSound": "superbwarfare:car_horn",
+  "TerrainCompat": [[1, 0, 2.875], [-1, 0, 2.875], [1, 0, -1.28], [-1, 0, -1.28]],
+  "TerrainCompatRotateRate" : 1.5,
+  "InertiaRotateRate": 0.6
+}

@@ -1,0 +1,101 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.siegmar",
+    "module": "fastcsv",
+    "version": "2.2.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.9",
+      "buildId": "gr4ds3jo4bh5pl2dnhdnxsrldy"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "fastcsv-2.2.1.jar",
+          "url": "fastcsv-2.2.1.jar",
+          "size": 32009,
+          "sha512": "18d8cfd25ed070552979cc7633dacb8940ac15fd56e1e8a13777a55f81e3fdebc1967cff3cee9626421e7484f7512e155ca60b4c96cf2a7d7f68b8680fcea5e3",
+          "sha256": "8a2ffdeff6a8134befef3fa9aa0e7d4506626826434d6bc45d0c3d7b6330c0f7",
+          "sha1": "eb4810305e70a7b2452ff469c630299acc2b1880",
+          "md5": "d55dd3ab2e05f91f02a7d84b52a1de5c"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "fastcsv-2.2.1.jar",
+          "url": "fastcsv-2.2.1.jar",
+          "size": 32009,
+          "sha512": "18d8cfd25ed070552979cc7633dacb8940ac15fd56e1e8a13777a55f81e3fdebc1967cff3cee9626421e7484f7512e155ca60b4c96cf2a7d7f68b8680fcea5e3",
+          "sha256": "8a2ffdeff6a8134befef3fa9aa0e7d4506626826434d6bc45d0c3d7b6330c0f7",
+          "sha1": "eb4810305e70a7b2452ff469c630299acc2b1880",
+          "md5": "d55dd3ab2e05f91f02a7d84b52a1de5c"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "fastcsv-2.2.1-javadoc.jar",
+          "url": "fastcsv-2.2.1-javadoc.jar",
+          "size": 67972,
+          "sha512": "e4e2bc733502f6d410c1c77353faf85b13af0e41c18d76db356943df15b9209a2bac05401045e928dca290c38904d786766de8c641a79ad979b83b98b59efc0e",
+          "sha256": "cb4dac85064847cc9219f7ae3c79001499427cee87d36d18fc45a49a344fd85e",
+          "sha1": "785668154559f93e83e9e7b9313c2a8155c63b7a",
+          "md5": "7fc48717e27c00eea3fac4d04a969a6e"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "fastcsv-2.2.1-sources.jar",
+          "url": "fastcsv-2.2.1-sources.jar",
+          "size": 20111,
+          "sha512": "17a2592dd3c30e0013dfc8a863454d853403871b5bd42e34e6656f1c66b573cb417226d7de1806d89b59e0787d893485c506970bd5ab580170e224afa02aa054",
+          "sha256": "a17d961e4ca7932c4c067b57ca4c4497ba97e09b88d31600b0ac4e6131878d9b",
+          "sha1": "75da8bdcb8acdf9cef1d7145f9c2ef02bd03d9b2",
+          "md5": "af96046f04245e70b25d128c84c2a521"
+        }
+      ]
+    }
+  ]
+}

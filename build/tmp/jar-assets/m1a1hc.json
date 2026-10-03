@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/m1a1hc.animation.json",
+  "ID": "dragonrise_reforge:m1a1hc",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/m1a1hc.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/m1a1hc.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/m1a1hc.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/m1a1hc.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/m1a1hc.png"
+    }
+  ]
+}

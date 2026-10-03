@@ -66,6 +66,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int CLASS_BORDER_UNAVAILABLE = 0xFF8A3A42;
     private static final int BTN_BORDER      = 0xFF59605E;
     private static final int BTN_TEXT        = 0xFFFFFF;
+    /** 重新部署按钮：红色系（警示性操作，需二次确认）。 */
+    private static final int REDEPLOY_BG_NORMAL = 0xFF7A1B1B;
+    private static final int REDEPLOY_BG_HOVER  = 0xFFA32626;
     /** J 键主 GUI 的所有非地图背景统一使用不透明纯黑，避免世界画面穿透或色块交替闪烁。 */
     private static final int CHROME_BG       = 0xFF000000;
     private static final int PANEL_LEFT_BG   = 0xFF000000;
@@ -1510,6 +1513,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     /**
+     * 红色「重新部署」按钮（载具信息右侧）：二次确认后请求服务端立刻击杀自己。
+     * 对战阶段按阵亡规则扣除兵力，部署阶段不扣。
+     */
+    private void openRedeployConfirm() {
+        boolean battle = ClientGameState.getCurrentPhase() == GamePhase.BATTLE;
+        openSquadConfirm("重新部署",
+            battle
+                ? "对战阶段重新部署会立刻阵亡，并按本职业扣除兵力。确定重新部署？"
+                : "部署阶段重新部署不会扣除兵力，会立刻阵亡并重选部署点。确定？",
+            NetworkManager::requestRedeploy);
+    }
+
+    /**
      * 打开居中确认框；默认高亮"取消"以防误触（Enter 不会命中确定）。
      */
     private void openSquadConfirm(String title, String body, Runnable onConfirm) {
@@ -2094,7 +2110,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private String buildRedeployLabel() {
         int remaining = getRedeployCooldownRemaining();
-        return remaining > 0 ? "\u00a77重新部署 " + remaining + "s" : "\u00a7c重新部署";
+        // 与地图页脚新的通用「重新部署」按钮区分：此按钮仅防守方、仅布防期、走 /outpost redeploy
+        return remaining > 0 ? "\u00a77前哨重部署 " + remaining + "s" : "\u00a7c前哨重部署";
     }
 
     @Override
@@ -2183,6 +2200,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             sectionRoot.addChild(vehicleInfo);
             nextX += 68;
         }
+
+        // 重新部署（红色，载具信息右侧）：立刻阵亡并重选部署点；
+        // 对战阶段按阵亡规则扣兵力，部署阶段不扣。需二次确认。
+        EspButton redeploy = new EspButton(nextX, by, 72, BTN_H, "\u00a7f\u00a7l重新部署",
+            this::openRedeployConfirm);
+        redeploy.setTextScale(UI_TEXT_SCALE);
+        redeploy.normalColor = REDEPLOY_BG_NORMAL;
+        redeploy.hoverColor = REDEPLOY_BG_HOVER;
+        redeploy.setEnabled(!waitingForDeploySelection);
+        sectionRoot.addChild(redeploy);
+        nextX += 76;
 
         if (idle) {
             return;
@@ -2356,7 +2384,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         boolean hasOutpost = bastions.stream().anyMatch(UnifiedDeployScreenPacket.BastionItem::isOutpost);
         if (deployTimeRemaining >= 0 && "DEFEND".equals(team) && hasOutpost) {
-            int redeployW = 66;
+            // 「前哨重部署」：比地图页脚的通用「重新部署」更长，宽度放宽避免文案被裁
+            int redeployW = 78;
             outpostRedeployButton = new EspButton(
                 this.width - redeployW - 4, barY + 1, redeployW, STATUS_BAR_H - 2,
                 buildRedeployLabel(),
@@ -3095,6 +3124,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (!inSquad()) {
             return "请先加入班组小队后再选择职业。";
         }
+        // 装备完全解锁模式：不再报人数类拒绝原因
+        if (freeUnlockMode) {
+            return "";
+        }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
             return "小队达到 " + cls.teammatesNeed + " 人后才能选择该职业。";
         }
@@ -3143,8 +3176,30 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /**
      * 未入队全部禁用；入队后 team_count 看小队满，非 team_count 看编制总限 + max_per_squad。
      */
-    private boolean isClassButtonDisabled(UnifiedDeployScreenPacket.ClassInfo cls) {
-        if (!isClassSelectionLocationAllowed()) {
+    /** 服务端下发的"装备完全解锁模式"状态（包级字段）。 */
+    private static volatile boolean freeUnlockMode;
+
+    /**
+     * 更新完全解锁状态。
+     *
+     * @return 状态是否发生变化（变化时调用方应刷新职业按钮）
+     */
+    public static boolean applyFreeUnlock(boolean value) {
+        if (freeUnlockMode == value) return false;
+        freeUnlockMode = value;
+        return true;
+    }
+
+    public static boolean isFreeUnlockMode() {
+        return freeUnlockMode;
+    }
+
+    /** 开关状态变化后刷新职业格子（置灰/提示文案）。 */
+    public void refreshForFreeUnlock() {
+        refreshClassButtons();
+    }
+
+    private boolean isClassButtonDisabled(UnifiedDeployScreenPacket.ClassInfo cls) {        if (!isClassSelectionLocationAllowed()) {
             return true;
         }
         if (getClassSwitchCooldownRemaining() > 0) {
@@ -3152,6 +3207,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         if (!inSquad()) {
             return true;
+        }
+        // 装备完全解锁模式：人数类限制一律放行（位置/冷却/入队仍如上保留）
+        if (freeUnlockMode) {
+            return false;
         }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
             return true;

@@ -1,0 +1,19 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/z10me.animation.json",
+    "ID":  "dragonrise_reforge:z10me",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/z10me.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/z10me.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/z10me.png"
+              },
+    "MouseSpeed":  [
+                       0.3,
+                       0.3
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/z10me.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/z10me.png"
+                   }
+               ]
+}

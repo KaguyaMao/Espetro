@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "superbwarfare:medium_battery_pack",
+    "3 #forge:storage_blocks/steel",
+    "6 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "vvp:fmtv"
+  }
+}

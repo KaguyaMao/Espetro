@@ -1,0 +1,88 @@
+{
+  "jars": [
+    {
+      "identifier": {
+        "group": "top.theillusivec4.curios",
+        "artifact": "curios-forge"
+      },
+      "version": {
+        "range": "[5.14,6.0)",
+        "artifactVersion": "5.14.1+1.20.1"
+      },
+      "path": "META-INF/jarjar/curios-forge-5.14.1+1.20.1.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "software.bernie.geckolib",
+        "artifact": "geckolib-forge-1.20.1"
+      },
+      "version": {
+        "range": "[4.4.6,5.0.0)",
+        "artifactVersion": "4.4.6"
+      },
+      "path": "META-INF/jarjar/geckolib-forge-1.20.1-4.4.6.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "org.ywzj",
+        "artifact": "rhino"
+      },
+      "version": {
+        "range": "[1.8.0,2.0.0)",
+        "artifactVersion": "1.8.1-SNAPSHOT"
+      },
+      "path": "META-INF/jarjar/rhino-1.8.1-SNAPSHOT.jar",
+      "isObfuscated": false
+    },
+    {
+      "identifier": {
+        "group": "com.github.mcmodderanchor",
+        "artifact": "simplebedrockmodel"
+      },
+      "version": {
+        "range": "[2.5,3.0)",
+        "artifactVersion": "2.5.1-forge-mc1.20.1"
+      },
+      "path": "META-INF/jarjar/simplebedrockmodel-2.5.1-forge-mc1.20.1.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "net.createmod.ponder",
+        "artifact": "Ponder-Forge-1.20.1"
+      },
+      "version": {
+        "range": "[1.0.91,2.0.0)",
+        "artifactVersion": "1.0.91"
+      },
+      "path": "META-INF/jarjar/Ponder-Forge-1.20.1-1.0.91.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "dev.engine-room.flywheel",
+        "artifact": "flywheel-forge-1.20.1"
+      },
+      "version": {
+        "range": "[1.0.5,2.0.0)",
+        "artifactVersion": "1.0.5"
+      },
+      "path": "META-INF/jarjar/flywheel-forge-1.20.1-1.0.5.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "me.shedaniel.cloth",
+        "artifact": "cloth-config-forge"
+      },
+      "version": {
+        "range": "[11.1.106,12.0.0)",
+        "artifactVersion": "11.1.106"
+      },
+      "path": "META-INF/jarjar/cloth-config-forge-11.1.106.jar",
+      "isObfuscated": true
+    }
+  ]
+}

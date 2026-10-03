@@ -1,0 +1,96 @@
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[47,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+# The mod license
+license="DSMSLv3.1 (DON'T SNATCH MA STUFF LICENSE v3.1)"
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+# The modid of the mod
+modId="fancymenu" #mandatory
+# The version number of the mod - there's a few well known null variables useable here or just hardcode it
+version="3.9.9" #mandatory
+# A display name for the mod
+displayName="FancyMenu" #mandatory
+# A text field displayed in the mod UI
+authors="Keksuccino" #optional
+logoFile="fancymenu_logo_128x128.png"
+# The description text for the mod (multi line!) (#mandatory)
+description='''Customize Minecraft's menus with ease!'''
+
+[[dependencies.fancymenu]]
+modId="konkrete"
+mandatory=true
+ordering="NONE"
+versionRange="[1.6.1,)"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="melody"
+mandatory=true
+ordering="NONE"
+versionRange="[1.0.0,)"
+side="CLIENT"
+
+[[dependencies.fancymenu]]
+modId="findme"
+mandatory=false
+ordering="AFTER"
+versionRange="[1.0.0,)"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="fmextension_audio"
+mandatory=false
+ordering="BEFORE"
+versionRange="[99999.0 §cFancyMenu v3+ does not support the audio extension. Please remove the extension.§r]"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="fmextension_video"
+mandatory=false
+ordering="BEFORE"
+versionRange="[99999.0 §cFancyMenu v3+ does not support the video extension. Please remove the extension.§r]"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="fancymenu_video"
+mandatory=false
+ordering="BEFORE"
+versionRange="[99999.0 §cFancyMenu v3+ does not support the video extension. Please remove the extension.§r]"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="drippyloadingscreen"
+mandatory=false
+ordering="NONE"
+versionRange="[3.0.0,)"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="rrls"
+mandatory=false
+ordering="NONE"
+versionRange="[4.0.6.1,)"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="watermedia"
+mandatory=false
+ordering="NONE"
+versionRange="[3.0.0.22,)"
+side="CLIENT"
+
+[[dependencies.fancymenu]]
+modId="forge"
+mandatory=true
+versionRange="[47.1.47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.fancymenu]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,)"
+ordering="NONE"
+side="BOTH"

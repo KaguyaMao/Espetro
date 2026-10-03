@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:type97q",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/type97q.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/type97q.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/type97q.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/type97q.png"
+                   }
+               ]
+}

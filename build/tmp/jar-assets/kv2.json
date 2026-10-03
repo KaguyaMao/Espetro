@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:kv2",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/kv2.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/kv2.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/kv2.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/kv2.png"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "suffuse.gun.qlz87.name",
+  "tooltip": "suffuse.gun.qlz87.desc",
+  "data": "suffuse:qlz87_data",
+  "display": "suffuse:qlz87_display",
+  "type": "rpg",
+  "item_type": "modern_kinetic",
+  "sort": 1
+}

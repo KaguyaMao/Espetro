@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "b": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "c": {
+      "item": "minecraft:green_concrete"
+    }
+  },
+  "pattern": [
+    "cac",
+    "bbb",
+    "bbb"
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:tm_62"
+  },
+  "show_notification": true
+}

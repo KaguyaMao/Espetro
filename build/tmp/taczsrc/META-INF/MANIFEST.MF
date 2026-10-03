@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Title: tacz
+Implementation-Version: 1.1.8
+MixinConfigs: tacz.mixins.json,tacz.compat.acceleratedrendering.mixins.j
+ son
+

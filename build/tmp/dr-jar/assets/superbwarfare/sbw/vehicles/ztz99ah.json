@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/ztz99ah.animation.json",
+    "ID":  "dragonrise_reforge:ztz99ah",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/ztz99ah.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ztz99ah.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ztz99ah.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ztz99ah.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ztz99ah.png"
+                   }
+               ]
+}

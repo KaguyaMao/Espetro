@@ -2,6 +2,7 @@ package org.espetro.mixin.sbw;
 
 import net.minecraft.world.entity.player.Player;
 import org.espetro.vehicle.VehicleInteractionConfig;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +20,10 @@ public abstract class ClickDismountMixin {
         require = 0, remap = false)
     private void espetro$blockNativeDismount(Player player, CallbackInfo ci) {
         if (VehicleInteractionConfig.dismountDelayTicks() <= 0) {
+            return;
+        }
+        // 白名单载具：不拦截，恢复 SBW 原生双击 DISMOUNT 下车。
+        if (player != null && VehicleNativeWhitelist.isNative(player.getVehicle())) {
             return;
         }
         ci.cancel();

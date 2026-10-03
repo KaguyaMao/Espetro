@@ -1,0 +1,242 @@
+{
+  "ID": "fcp:huey_door_gunner_m134",
+  "MaxHealth": 280,
+  "MaxEnergy": 8000000,
+  "TurretPos": [-1.75108125, 1.42324375, -0.3831375],
+  "BarrelPos": [0, 0, 0],
+  "TurretTurnSpeed": [15, 15],
+  "TurretPitchRange": [-60, 60],
+  "TurretControllerIndex": 1,
+  "OBB": [
+    {"Size": [1.125, 0.9375, 3], "Position": [0, 1.5, 0], "Part":  "Body"},
+    {"Size": [1.125, 0.9375, 0.375], "Position": [0, 1.5, 3.375], "Part":  "Body"},
+    {"Size": [1.125, 0.5625, 0.375], "Position": [0, 1.125, 4.125], "Part":  "Body"},
+    {"Size": [0.375, 0.75, 1.6875], "Position": [0, 1.7625, -4.6875], "Part":  "Body"},
+    {"Size": [0.375, 0.5625, 1.875], "Position": [0, 2.175, -8.25], "Part":  "Body"},
+    {"Size": [0.5625, 1.125, 1.125], "Position": [0, 3.8625, -9.9375], "Part":  "SubEngine"},
+    {"Size": [0.375, 0.2625, 1.875], "Position": [0, 2.7, -1.5], "Part":  "Body"},
+    {"Size": [0.1875, 0.45, 0.1875], "Position": [0, 3.4125, -0.375], "Part":  "MainEngine"}
+  ],
+  "PassengerRenderScale": 0.85,
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "Position": [-0.55, 0.7, 2.4],
+      "Sensitivity": [0, 0, 0],
+      "Weapons": ["Rocket"],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [-0.55, 2.15, 2.55],
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [-3, 3, -10]
+      },
+      "CanRotateHead": false
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-0.7, 0.7, -0.4],
+      "CameraPos": {
+        "Transform": "Barrel",
+        "UseFixedCameraPos": true,
+        "Position": [0, 0.5, -0.5]
+      },
+      "Weapons": ["m134"],
+      "Crosshair": "@Empty",
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0.55, 0.7, 2.4],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0.55, 2.15, 2.55]
+      },
+      "CanRotateHead": true,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0.55, 0.7, 1.1],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0.55, 1.79, 1.1]
+      },
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0, 0.7, 1.1],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0, 1.79, 1.1]
+      },
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-0.55, 0.7, 1.1],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [-0.55, 1.79, 1.1]
+      },
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75,
+      "BanHand": true
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-0.7, 0.7, 0.35],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [-0.75, 1.79, 0.35]
+      },
+      "Orientation": 90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0.7, 0.7, 0.35],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0.75, 1.79, 0.35]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0.7, 0.7, -0.4],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0.75, 1.79, -0.4]
+      },
+      "Orientation": -90,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    }
+  ],
+  "Weapons": {
+    "m134": {
+      "Icon": "fcp:textures/screens/vehicle_weapon/7_62mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Spread": 0.75,
+      "CrosshairColor": "0x00ff66",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 3,
+      "RPM": 1000,
+      "Damage": 3,
+      "BypassesArmor": 0.2,
+      "Velocity": 25,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 2.5,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "AmmoType": "superbwarfare:rifle_ammo",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [[-0.075325, 0.2, 0.9279375]],
+        "Directions": ["Barrel"]
+      },
+      "Crosshair": "@Empty",
+      "Name": "weapon.fcp.m60",
+      "SoundInfo": {
+        "Fire1P": "fcp:m134_fire_1p",
+        "Fire3P": "fcp:m134_fire_3p",
+        "Fire3PFar": "fcp:m134_fire_3p_far",
+        "Change": "fcp:into_coax"
+      },
+      "SoundRadius": 16
+    },
+    "Rocket": {
+      "AmmoType": "superbwarfare:small_rocket",
+      "Icon": "fcp:textures/screens/vehicle_weapon/hydra_70.png",
+      "DefaultZoom": 2,
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Magazine": 20,
+      "EmptyReloadTime": 180,
+      "Projectile": "superbwarfare:small_rocket",
+      "Spread": 0.3,
+      "Name": "weapon.fcp.hydra_rocket",
+      "RPM": 400,
+      "Damage": 80,
+      "ExplosionDamage": 40,
+      "ExplosionRadius": 5,
+      "Gravity": 0.02,
+      "Velocity": 16,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [[-2.4, 1.17, -0.97], [2.4, 1.17, -0.97]],
+        "Directions": [[0, 0.02, 1], [0, 0.02, 1]]
+      },
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:small_rocket_fire_1p",
+        "Fire3P": "superbwarfare:small_rocket_fire_3p"
+      },
+      "Crosshair": "@Empty",
+      "SoundRadius": 12
+    }
+  },
+  "EngineType": "Helicopter",
+  "EngineInfo": {
+    "EnergyCostRate": 280,
+    "Increment": 0.9,
+    "Decrement": 0.9,
+    "PitchSpeed": 0.85,
+    "YawSpeed": 0.9,
+    "RollSpeed": 0.7,
+    "LiftSpeed": 0.95,
+    "EngineStartSound": "superbwarfare:ah_6_engine_start",
+    "EngineSoundVolume": 1.5
+  },
+  "EngineSound": "superbwarfare:ah_6_engine",
+  "ThirdPersonCameraPos": [2.5, 3.5, 10],
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1.5,
+  "Mass": 1.0,
+  "AllowFreeCam": true,
+  "HasDecoy": true,
+  "DamageModifiers": [
+    "minecraft:arrow * 0.15",
+    "minecraft:explosion * 4",
+    "superbwarfare:projectile_hit * 0.7",
+    "#superbwarfare:projectile * 0.05",
+    "superbwarfare:vehicle_strike * 6",
+    "@#superbwarfare:at_rocket * 2",
+    "All * 0.8",
+    "All - 8"
+  ],
+  "DestroyInfo": {"ParticleType": "Medium", "ExplosionDamage": 350, "ExplosionRadius": 12, "CrashPassengers": true},
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/air_us.png",
+  "Type": "Helicopter",
+  "HudType": "@Helicopter",
+  "TerrainCompat": [[-1.4, 0, 3], [1.4, 0, 3],[-1.4, 0, 2.5],[1.4, 0, 2.5],[-1.4, 0, 2],[-1.4, 0, 2]]
+}

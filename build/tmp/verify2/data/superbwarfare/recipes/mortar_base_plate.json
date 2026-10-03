@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:plates/steel"
+    },
+    "b": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "b",
+    "a"
+  ],
+  "result": {
+    "item": "superbwarfare:mortar_base_plate"
+  },
+  "show_notification": true
+}

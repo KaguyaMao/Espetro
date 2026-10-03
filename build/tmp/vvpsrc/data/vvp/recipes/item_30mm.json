@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "superbwarfare:storage_blocks/steel"
+    },
+    "b": {
+      "tag": "forge:plates/copper"
+    },
+    "c": {
+      "item": "minecraft:gunpowder"
+    },
+    "d": {
+      "item": "superbwarfare:primer"
+    },
+    "e": {
+      "item": "superbwarfare:high_energy_explosives"
+    }
+  },
+  "pattern": [
+    " a ",
+    "beb",
+    "cdc"
+  ],
+  "result": {
+    "count": 8,
+    "item": "vvp:item_30mm"
+  }
+}

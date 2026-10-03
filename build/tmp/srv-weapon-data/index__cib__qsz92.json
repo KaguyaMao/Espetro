@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.qsz92.name",
+  "display": "cib:qsz92_display",
+  "data": "cib:qsz92_data",
+  "type": "pistol",
+  "tooltip": "cib.gun.qsz92.desc",
+  "item_type": "modern_kinetic",
+  "sort": 2461600
+}

@@ -77,6 +77,14 @@ public final class FortificationManager {
         return INSTANCE;
     }
 
+    /**
+     * 是否存在任何在建或已建工事。热重载会替换工事定义对象，
+     * 已有工事会失效，因此 {@code /espetro fort reload} 以此为门槛。
+     */
+    public boolean hasActiveConstructions() {
+        return !constructions.isEmpty() || !placed.isEmpty();
+    }
+
     public record PlacedFort(String fortId, String team, @Nullable UUID radioId,
                              String dimension, BlockPos pos, @Nullable UUID entityId,
                              UUID mapId) {
@@ -219,7 +227,7 @@ public final class FortificationManager {
         String common = validateCommon(player);
         if (common != null) return common;
         if (facing == null || !facing.getAxis().isHorizontal()) return "§c无效的工事方向。";
-        if (facing != player.getDirection()) return "§c工事方向已变化，请重新对准后确认。";
+        // 朝向可以是玩家用 R 键旋转过的 4 个水平方向之一，因此不再要求等于视线方向。
         BlockPos serverTarget = raycastPlacePos(player);
         if (serverTarget == null || !serverTarget.equals(anchor)
             || player.getEyePosition().distanceToSqr(Vec3.atCenterOf(anchor)) > 64.0D) {
@@ -230,7 +238,7 @@ public final class FortificationManager {
 
         List<WorldSlot> finalSlots = transform(preview.blueprint.slots, anchor, facing);
         List<BlockPos> footprint = footprint(finalSlots);
-        if (!spaceIsClear(player.serverLevel(), finalSlots, player)) return "§c红色范围内存在方块或实体。";
+        if (!spaceIsClear(player.serverLevel(), finalSlots, player)) return "§c红色范围内存在实体（工事可以顶掉方块，但不能压在玩家/生物身上）。";
         for (WorldSlot slot : finalSlots) {
             if (positionIndex.containsKey(posKey(player.serverLevel(), slot.pos))) {
                 return "§c该空间已被其他工事占用。";
@@ -249,6 +257,23 @@ public final class FortificationManager {
         }
         registerConstruction(player.serverLevel(), construction);
         previews.remove(player.getUUID());
+        // instant 工事（如电台）：放置即建成，不走施工阶段
+        if (preview.blueprint.definition.construction.instant) {
+            construction.progress = construction.required();
+            if (complete(player.serverLevel(), construction, player)) {
+                sendProgress(player, construction, true);
+                player.sendSystemMessage(Component.literal("§a"
+                    + preview.blueprint.displayName + "§a 已直接建成，可立即使用。"));
+                return null;
+            }
+            // 最终空间被占用 → 退化为普通施工
+            construction.progress = 0;
+            updateFoundationStage(player.serverLevel(), construction);
+            sendProgress(player, construction, true);
+            player.sendSystemMessage(Component.literal(
+                "§e最终空间被占用，已改为普通施工：清空后按住工兵铲左键修建。"));
+            return null;
+        }
         sendProgress(player, construction, true);
         player.sendSystemMessage(Component.literal("§a施工范围已确认，按住工兵铲左键开始修建。"));
         return null;
@@ -264,6 +289,7 @@ public final class FortificationManager {
         UUID constructionId = positionIndex.get(posKey(level, target));
         Construction construction = constructionId == null ? null : constructions.get(constructionId);
         if (construction == null) return;
+        if (!canWork(player, construction, build)) return;
         applyWork(player, level, construction, build);
     }
 
@@ -276,7 +302,22 @@ public final class FortificationManager {
         Entity entity = level.getEntity(target);
         if (construction == null || entity == null || player.distanceToSqr(entity) > 49.0D
             || !player.hasLineOfSight(entity)) return;
+        if (!canWork(player, construction, build)) return;
         applyWork(player, level, construction, build);
+    }
+
+    /**
+     * 施工权限：己方可以修/建也可以拆；敌方只能拆（{@code build == false}）。
+     *
+     * <p>无队伍玩家（旁观者/管理员）不受限制，便于观战与地图编辑。</p>
+     */
+    private static boolean canWork(ServerPlayer player, Construction construction, boolean build) {
+        if (construction == null) return false;
+        if (!build) return true; // 拆除：敌我皆可
+        if (!isEnemyOf(player, construction.team)) return true;
+        player.displayClientMessage(
+            Component.literal("§c这是敌方工事，只能拆除，不能修复或继续建造。"), true);
+        return false;
     }
 
     private void applyWork(ServerPlayer player, ServerLevel level, Construction construction,
@@ -504,6 +545,54 @@ public final class FortificationManager {
         return entityId != null && entityIndex.containsKey(entityId);
     }
 
+    /**
+     * 该位置工事的归属队伍（已是归一化写法）；不属于任何工事时返回 {@code null}。
+     */
+    @Nullable
+    public String teamAt(@Nullable ServerLevel level, @Nullable BlockPos pos) {
+        if (level == null || pos == null) {
+            return null;
+        }
+        UUID id = positionIndex.get(posKey(level, pos));
+        Construction c = id == null ? null : constructions.get(id);
+        return c == null ? null : c.team;
+    }
+
+    /**
+     * 该实体所属工事的队伍：结构实体查索引，工事生成的载具补给站读 PersistentData。
+     * 无归属时返回 {@code null}。
+     */
+    @Nullable
+    public String teamOfEntity(@Nullable Entity entity) {
+        if (entity == null) {
+            return null;
+        }
+        UUID id = entityIndex.get(entity.getUUID());
+        Construction c = id == null ? null : constructions.get(id);
+        if (c != null) {
+            return c.team;
+        }
+        CompoundTag data = entity.getPersistentData();
+        if (data.contains(VehicleManager.SUPPLY_STATION_TEAM_KEY)) {
+            String team = data.getString(VehicleManager.SUPPLY_STATION_TEAM_KEY);
+            return team == null || team.isBlank() ? null : team;
+        }
+        return null;
+    }
+
+    /**
+     * 玩家是否是给定工事队伍以外的敌方。
+     *
+     * <p>无队伍的玩家（旁观者/管理员）一律按"非敌方"处理，避免影响观战与地图编辑。</p>
+     */
+    public static boolean isEnemyOf(@Nullable ServerPlayer player, @Nullable String ownerTeam) {
+        if (player == null || ownerTeam == null || ownerTeam.isBlank()) {
+            return false;
+        }
+        String myTeam = normalizeTeam(Espetro.getPlayerTeam(player));
+        return myTeam != null && !myTeam.equals(ownerTeam);
+    }
+
     public boolean isFoundation(ServerLevel level, BlockPos pos) {
         UUID id = positionIndex.get(posKey(level, pos));
         Construction c = id == null ? null : constructions.get(id);
@@ -560,12 +649,41 @@ public final class FortificationManager {
     }
 
     public static boolean canUse(ServerPlayer player, FortificationConfig.FortificationDef def) {
+        if (player == null || def == null) {
+            return false;
+        }
         UUID uuid = player.getUUID();
+        boolean roleOk = false;
         for (String raw : def.usableBy == null ? List.<String>of() : def.usableBy) {
             String role = raw.toLowerCase(Locale.ROOT);
-            if ("commander".equals(role) && VoteManager.getInstance().isCommander(uuid)) return true;
-            if ("squad_leader".equals(role) && SquadManager.getInstance().isSquadLeader(uuid)) return true;
-            if ("fireteam_leader".equals(role) && SquadManager.getInstance().isFireteamLeader(uuid)) return true;
+            if ("commander".equals(role) && VoteManager.getInstance().isCommander(uuid)) { roleOk = true; break; }
+            if ("squad_leader".equals(role) && SquadManager.getInstance().isSquadLeader(uuid)) { roleOk = true; break; }
+            if ("fireteam_leader".equals(role) && SquadManager.getInstance().isFireteamLeader(uuid)) { roleOk = true; break; }
+        }
+        return roleOk && factionAllowed(player, def);
+    }
+
+    /**
+     * 编制限定检查：{@code requirements.factions} 为空 = 所有编制可用；
+     * 非空时只有列表内的编制可用（与角色 {@code usable_by} 是与关系）。
+     */
+    public static boolean factionAllowed(ServerPlayer player, FortificationConfig.FortificationDef def) {
+        if (player == null || def == null || def.requirements == null) {
+            return true;
+        }
+        List<String> allowed = def.requirements.factions;
+        if (allowed == null || allowed.isEmpty()) {
+            return true;
+        }
+        String factionId = org.espetro.team.ClassCountManager.getInstance()
+            .getPlayerFaction(player.getUUID());
+        if (factionId == null || factionId.isBlank()) {
+            return false;
+        }
+        for (String raw : allowed) {
+            if (raw != null && raw.equalsIgnoreCase(factionId)) {
+                return true;
+            }
         }
         return false;
     }
@@ -644,7 +762,21 @@ public final class FortificationManager {
 
     @Nullable
     private String validateSelectionRole(ServerPlayer player, Blueprint blueprint) {
-        return canUse(player, blueprint.definition) ? null : "§c你没有权限建造该工事。";
+        if (!canUse(player, blueprint.definition)) {
+            return factionAllowed(player, blueprint.definition)
+                ? "§c你没有权限建造该工事。"
+                : "§c你的编制无法部署该工事。";
+        }
+        // 电台始终只允许指挥官/小队长：火力组长虽可建其它工事，但不能建电台
+        // （与 config/espetro/fortifications.json 的 usable_by 互为双保险）。
+        if (blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO) {
+            UUID uuid = player.getUUID();
+            if (!VoteManager.getInstance().isCommander(uuid)
+                && !SquadManager.getInstance().isSquadLeader(uuid)) {
+                return "§c只有小队长或指挥官才能部署电台。";
+            }
+        }
+        return null;
     }
 
     private record PlacementBacking(@Nullable BastionData radio, @Nullable UUID radioId,
@@ -908,21 +1040,23 @@ public final class FortificationManager {
         return List.copyOf(result);
     }
 
+    /**
+     * 放置空间是否可用。
+     *
+     * <p>地图方块不再阻止放置：工事落地时会直接顶掉占位方块（见 {@link #placeFinalBlocks}），
+     * 因此这里只拦活体实体（放置者本人除外）。</p>
+     */
     private static boolean spaceIsClear(ServerLevel level, List<WorldSlot> slots, ServerPlayer placer) {
         for (WorldSlot slot : slots) {
-            BlockState state = level.getBlockState(slot.pos);
-            if (!isReplaceable(state)) return false;
             if (!level.getEntities((Entity) null, new AABB(slot.pos), entity -> entity != placer
                 && entity instanceof LivingEntity && entity.isAlive()).isEmpty()) return false;
         }
         return true;
     }
 
+    /** 完工空间是否可用：同样忽略地图方块，只拦活体实体。 */
     private static boolean completionSpaceAvailable(ServerLevel level, Construction c) {
         for (WorldSlot slot : c.finalSlots) {
-            BlockState state = level.getBlockState(slot.pos);
-            boolean foundation = c.footprint.contains(slot.pos) && state.is(BastionItems.ON_BUILDING_BLOCK);
-            if (!foundation && !isReplaceable(state)) return false;
             if (!level.getEntities((Entity) null, new AABB(slot.pos), entity -> entity instanceof LivingEntity
                 && entity.isAlive()).isEmpty()) return false;
         }
@@ -948,11 +1082,7 @@ public final class FortificationManager {
         BlockState state = BastionItems.ON_BUILDING_BLOCK.defaultBlockState()
             .setValue(OnBuildingBlock.STAGE, Math.max(0, Math.min(6, stage)));
         for (BlockPos pos : c.footprint) {
-            BlockState old = level.getBlockState(pos);
-            if (!isReplaceable(old)) {
-                restore(level, snapshots);
-                return false;
-            }
+            // 不再因为地图方块而拒绝：直接顶掉占位方块。先做快照，任何失败都整体回滚。
             snapshots.add(snapshot(level, pos));
             if (!level.setBlock(pos, state, 3)) {
                 restore(level, snapshots);

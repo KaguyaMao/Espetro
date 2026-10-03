@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.vehicle.SeatSwitchServer;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.espetro.vehicle.VehicleSeatAccessPolicy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -30,6 +31,10 @@ public abstract class ChangeVehicleSeatMessageMixin {
         NetworkEvent.Context context = contextSupplier == null ? null : contextSupplier.get();
         ServerPlayer player = context == null ? null : context.getSender();
         if (player == null) return;
+        // 白名单载具：不校验读条 token、不消费 token、不做座位策略，让 SBW 原生换座生效。
+        if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
+            return;
+        }
         if (!SeatSwitchServer.isReady(player)) {
             ci.cancel();
             return;
@@ -50,6 +55,10 @@ public abstract class ChangeVehicleSeatMessageMixin {
         NetworkEvent.Context context = contextSupplier == null ? null : contextSupplier.get();
         ServerPlayer player = context == null ? null : context.getSender();
         if (player != null) {
+            // 白名单载具：不消费任何读条 token。
+            if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
+                return;
+            }
             SeatSwitchServer.consumeReady(player);
         }
     }

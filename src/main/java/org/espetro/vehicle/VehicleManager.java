@@ -1,7 +1,18 @@
 package org.espetro.vehicle;
 
+import com.mojang.brigadier.StringReader;
+import com.atsuishio.superbwarfare.data.gun.AmmoConsumer;
+import com.atsuishio.superbwarfare.data.gun.GunData;
+import com.atsuishio.superbwarfare.data.gun.GunProp;
+import com.atsuishio.superbwarfare.data.vehicle.subdata.SeatInfo;
+import com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity;
+import com.redabysslucia.dragonrise_reforge.config.SupplyStationConfig;
+import com.redabysslucia.dragonrise_reforge.config.SupplyStationDataLoader;
+import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
@@ -19,6 +30,8 @@ import net.minecraft.server.level.TicketType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -26,6 +39,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.IItemHandler;
 import org.espetro.Espetro;
 import org.espetro.api.EspetroAPI;
 import org.espetro.mapconfig.VehSpawnSnapshot;
@@ -34,6 +48,7 @@ import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
 import org.espetro.team.SpawnPointConfig;
 import org.espetro.team.TroopCountManager;
+import org.espetro.util.ChunkTickets;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -78,6 +93,10 @@ public class VehicleManager {
     private static final int INITIAL_SPAWN_INTERVAL_TICKS = 20;
     /** 等待已选队玩家进入战场的超时兜底（tick）：超时后强制启动刷新队列。 */
     private static final int INITIAL_SPAWN_ARM_TIMEOUT_TICKS = 20 * 30;
+    /** 修 B：部署点弹药箱/主重生点补给站放置失败后的重试间隔（tick）：2s。 */
+    private static final int DEFERRED_SUPPLY_RETRY_INTERVAL_TICKS = 40;
+    /** 修 B：放置重试上限（约 5 分钟）。 */
+    private static final int DEFERRED_SUPPLY_MAX_RETRIES = 150;
     /** 方案 B：实体生成后向在线玩家重发 spawn 包的延迟点（tick）：1s / 3s / 10s。 */
     private static final long[] SPAWN_RESEND_DELAYS_TICKS = {20L, 60L, 200L};
 
@@ -122,6 +141,14 @@ public class VehicleManager {
     private long initialSpawnArmStartedTick = -1;
     /** 战场激活时置位：等玩家进入战场后再放置部署点弹药箱与主重生点补给站。 */
     private boolean deferredSupplyPlacementPending;
+    /** 修 B：首次「等玩家进入战场」的门禁是否已通过（通过后重试不再等待）。 */
+    private boolean deferredSupplyPlacementArmed;
+    /** 修 B：弹药箱与补给站是否已全部放置完成。 */
+    private boolean deferredSupplyPlacementDone;
+    /** 修 B：已重试次数。 */
+    private int deferredSupplyRetryCount;
+    /** 修 B：下一次重试的服务器 tick。 */
+    private long deferredSupplyNextAttemptTick;
     /** 方案 B：待重发 spawn 包的实体：entityId -> 重发 tick 队列（升序）。 */
     private final Map<Integer, ArrayDeque<Long>> spawnResendPlans = new HashMap<>();
     @Nullable
@@ -918,40 +945,87 @@ public class VehicleManager {
      */
     public void scheduleDeferredSupplyPlacement() {
         deferredSupplyPlacementPending = true;
+        deferredSupplyPlacementArmed = false;
+        deferredSupplyPlacementDone = false;
+        deferredSupplyRetryCount = 0;
+        deferredSupplyNextAttemptTick = 0L;
     }
 
     /**
-     * 每 tick 由 {@link #processInitialVehicleDeployments()} 调用：
-     * 满足「所有已选队玩家进入战场（或超时兜底）」后执行一次延迟补给站放置。
+     * 每 tick 由 {@link #processInitialVehicleDeployments()} 调用。
+     *
+     * <p>首次尝试仍然等「所有已选队玩家进入战场（或超时兜底）」；此后若未能全部放满
+     * （例如目标区块当时未加载），按 {@link #DEFERRED_SUPPLY_RETRY_INTERVAL_TICKS} 重试，
+     * 直到弹药箱与补给站都放满或达到 {@link #DEFERRED_SUPPLY_MAX_RETRIES} 上限（修 B）。</p>
      */
     private void processDeferredSupplyPlacement(ServerLevel level) {
-        if (!deferredSupplyPlacementPending || !initialDeploymentActive) {
+        if (!deferredSupplyPlacementPending || !initialDeploymentActive
+            || deferredSupplyPlacementDone) {
             return;
         }
         long tick = level.getGameTime();
-        if (initialSpawnArming && !allAssignedPlayersInBattlefield(level)) {
-            long waited = tick - initialSpawnArmStartedTick;
-            if (waited < INITIAL_SPAWN_ARM_TIMEOUT_TICKS) {
-                return; // 还有已选队玩家未进入战场，继续等待
+        if (!deferredSupplyPlacementArmed) {
+            if (initialSpawnArming && !allAssignedPlayersInBattlefield(level)) {
+                long waited = tick - initialSpawnArmStartedTick;
+                if (waited < INITIAL_SPAWN_ARM_TIMEOUT_TICKS) {
+                    return; // 还有已选队玩家未进入战场，继续等待
+                }
+                Espetro.LOGGER.warn(
+                    "等待玩家进入战场超时({}s)，强制放置部署点弹药箱/补给站",
+                    waited / 20L);
             }
-            Espetro.LOGGER.warn(
-                "等待玩家进入战场超时({}s)，强制放置部署点弹药箱/补给站",
-                waited / 20L);
+            deferredSupplyPlacementArmed = true;
+            deferredSupplyNextAttemptTick = tick;
         }
-        deferredSupplyPlacementPending = false;
+        if (tick < deferredSupplyNextAttemptTick) {
+            return;
+        }
+
+        int expected = 0;
+        for (String team : new String[]{"ATTACK", "DEFEND"}) {
+            if (SpawnPointConfig.getSpawnPoint(team) != null) {
+                expected++;
+            }
+        }
+
+        int deployStations = 0;
         try {
-            int deployStations = org.espetro.logistics.DeploySupplyStationPlacer
+            deployStations = org.espetro.logistics.DeploySupplyStationPlacer
                 .placeAtSpawnPoints(level);
             Espetro.LOGGER.info("原部署点无限弹药箱: {} 个", deployStations);
         } catch (Exception e) {
             Espetro.LOGGER.error("预放原部署点无限弹药箱失败", e);
         }
+        int mainBaseStations = 0;
         try {
-            int mainBaseStations = spawnMainBaseSupplyStations(level);
+            mainBaseStations = spawnMainBaseSupplyStations(level);
             Espetro.LOGGER.info("主重生点弹药补给站: {} 个", mainBaseStations);
         } catch (Exception e) {
             Espetro.LOGGER.error("生成主重生点弹药补给站失败", e);
         }
+
+        if (deployStations >= expected && mainBaseStations >= expected) {
+            deferredSupplyPlacementDone = true;
+            deferredSupplyPlacementPending = false;
+            Espetro.LOGGER.info("部署点弹药箱/主重生点补给站放置完成: 弹药箱 {} 个, 补给站 {} 个",
+                deployStations, mainBaseStations);
+            return;
+        }
+        deferredSupplyRetryCount++;
+        if (deferredSupplyRetryCount >= DEFERRED_SUPPLY_MAX_RETRIES) {
+            Espetro.LOGGER.warn(
+                "部署点弹药箱/主重生点补给站重试 {} 次仍未放满（弹药箱 {}/{}，补给站 {}/{}），放弃",
+                deferredSupplyRetryCount, deployStations, expected, mainBaseStations, expected);
+            deferredSupplyPlacementPending = false;
+            return;
+        }
+        if (deferredSupplyRetryCount <= 3 || deferredSupplyRetryCount % 30 == 0) {
+            Espetro.LOGGER.warn(
+                "部署点弹药箱/主重生点补给站未放满（弹药箱 {}/{}，补给站 {}/{}），{} tick 后第 {} 次重试",
+                deployStations, expected, mainBaseStations, expected,
+                DEFERRED_SUPPLY_RETRY_INTERVAL_TICKS, deferredSupplyRetryCount + 1);
+        }
+        deferredSupplyNextAttemptTick = tick + DEFERRED_SUPPLY_RETRY_INTERVAL_TICKS;
     }
 
     /**
@@ -1509,6 +1583,8 @@ public class VehicleManager {
      */
     public void reset() {
         removeAllDeployedVehicles(Espetro.getServer());
+        // 对局重置：所有载具已被删除，其认领申请队列也一并作废。
+        VehicleEventHandler.clearAllClaims();
     }
 
     /**
@@ -1582,6 +1658,10 @@ public class VehicleManager {
         initialSpawnArming = false;
         initialSpawnArmStartedTick = -1;
         deferredSupplyPlacementPending = false;
+        deferredSupplyPlacementArmed = false;
+        deferredSupplyPlacementDone = false;
+        deferredSupplyRetryCount = 0;
+        deferredSupplyNextAttemptTick = 0L;
         initialDeploymentLevel = null;
         initialChunksInFlight = 0;
         initialDeploymentActive = false;
@@ -1780,6 +1860,16 @@ public class VehicleManager {
             ? slot.nbt
             : config.nbt;
         applyVehicleSpawnNbt(entity, spawnNbt);
+        List<String> spawnItems = slot != null && slot.items != null && !slot.items.isEmpty()
+            ? slot.items
+            : config.items;
+        if (spawnItems != null && !spawnItems.isEmpty()) {
+            // 编制里显式写了 items → 以它为准
+            applyVehicleSpawnItems(entity, spawnItems);
+        } else if (config.supplyLoadout) {
+            // 否则套用服务端 data/<ns>/supply_station/ 的补给站弹药配置
+            applyVehicleSupplyLoadout(entity);
+        }
         return entity;
     }
 
@@ -1834,6 +1924,213 @@ public class VehicleManager {
             Espetro.LOGGER.warn("载具满电失败 (type={}): {}", entity.getType(), e.getMessage());
         }
     }
+
+    /**
+     * 部署时把编制里写的物品塞进载具集装箱（让生成的载具自带弹药）。
+     * <p>
+     * 走 Forge {@code ITEM_HANDLER} 能力（SBW 载具已注册，无需依赖载具模组 API）；
+     * 物品字符串语法与职业技能 commands 完全一致：{@code <itemId>[<snbt>] <count>}，
+     * 例：{@code "superbwarfare:large_shell_ap 12"}、{@code "superbwarfare:repair_tool{Energy:100000}"}。
+     * 载具没有集装箱（getContainerSize()<=0）或槽位放不下时只记一条日志，不影响生成。
+     */
+    private void applyVehicleSpawnItems(Entity entity, @Nullable List<String> items) {
+        if (items == null || items.isEmpty()) return;
+        IItemHandler handler;
+        try {
+            handler = entity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+        } catch (Exception e) {
+            Espetro.LOGGER.warn("载具部署：读取物品栏能力失败 (type={}): {}", entity.getType(), e.getMessage());
+            return;
+        }
+        if (handler == null || handler.getSlots() <= 0) {
+            Espetro.LOGGER.warn("载具部署：该载具没有集装箱，忽略 items (type={}, 条目数={})",
+                entity.getType(), items.size());
+            return;
+        }
+        for (String raw : items) {
+            if (raw == null || raw.isBlank()) continue;
+            ItemStack stack = parseSpawnItem(entity, raw.trim());
+            if (stack.isEmpty()) continue;
+            insertIntoVehicle(entity, stack);
+        }
+    }
+
+    /** 解析 {@code <itemId>[<snbt>] <count>}（与 /give、职业技能 commands 语法一致）。 */
+    private ItemStack parseSpawnItem(Entity entity, String raw) {
+        try {
+            var itemLookup = entity.level().registryAccess().lookupOrThrow(Registries.ITEM);
+            StringReader reader = new StringReader(raw);
+            ItemParser.ItemResult result = ItemParser.parseForItem(itemLookup, reader);
+            Holder<Item> holder = result.item();
+            if (holder == null) return ItemStack.EMPTY;
+            ItemStack stack = new ItemStack(holder);
+            CompoundTag nbt = result.nbt();
+            if (nbt != null) stack.setTag(nbt);
+            reader.skipWhitespace();
+            int count = reader.canRead() ? reader.readInt() : 1;
+            stack.setCount(Math.max(1, count));
+            return stack;
+        } catch (Exception e) {
+            if (WARNED_SPAWN_ITEM_KEYS.add(raw)) {
+                Espetro.LOGGER.warn("载具部署：物品参数解析失败 {} ({})", raw, e.getMessage());
+            }
+            return ItemStack.EMPTY;
+        }
+    }
+
+    private static final Set<String> WARNED_SPAWN_ITEM_KEYS = new HashSet<>();
+
+    /**
+     * 部署时套用服务端 {@code data/<ns>/supply_station/} 的补给站弹药配置，
+     * 让编制载具一出生就带着和补给站一样多的弹药（含 BonusItem）。
+     * <p>
+     * 直接调用 DragonRise 的 {@code SupplyStationDataLoader.getConfig()} —— 与补给站实体用的是
+     * 同一份配置，所以 {@code /reload} 热更新后立刻生效，不会出现两份数据不一致。
+     * 只会给该载具武器**实际用到**的弹药（遍历座位→武器→弹药消费者），避免塞进用不上的弹药。
+     */
+    private void applyVehicleSupplyLoadout(Entity entity) {
+        ResourceLocation typeKey = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        if (typeKey == null) return;
+
+        SupplyStationConfig config;
+        try {
+            config = SupplyStationDataLoader.getConfig();
+        } catch (Throwable t) {
+            // 未装载具数据包（dragonrise_reforge）时静默跳过
+            return;
+        }
+        if (config == null) return;
+
+        SupplyStationConfig.ResupplyRule rule = config.getRuleForVehicle(typeKey.toString());
+        if (rule == null) return;
+
+        // 遍历该载具武器实际用到的弹药（与补给站一致：座位→武器→弹药消费者），
+        // 未在 AmmoOverrides 里列出的弹药走 getAmmoRule 的规则回退（FIXED / rule.fixedAmount）。
+        Map<String, Integer> ammoMagazines = collectVehicleAmmo(entity);
+        for (Map.Entry<String, Integer> entry : ammoMagazines.entrySet()) {
+            String ammoKey = entry.getKey();
+            int magazine = entry.getValue();
+            SupplyStationConfig.AmmoTypeRule ammoRule = config.getAmmoRule(rule, ammoKey);
+            if (ammoRule == null) continue;
+
+            String itemId = ammoRule.customItem != null && !ammoRule.customItem.isBlank()
+                ? ammoRule.customItem : ammoKey;
+            int count;
+            if ("PACKAGE".equalsIgnoreCase(ammoRule.mode)) {
+                count = Math.max(1, ammoRule.customItemCount);
+            } else if ("MAGAZINE".equalsIgnoreCase(ammoRule.mode) && magazine > 0) {
+                count = magazine;   // 补满一匣（本包弹药 loadAmount = 1，故发数即物品数）
+            } else {
+                int rounds = ammoRule.fixedAmount > 0 ? ammoRule.fixedAmount
+                    : (rule.fixedAmount > 0 ? rule.fixedAmount : 100);
+                count = Math.max(1, rounds);
+            }
+            giveVehicleItem(entity, itemId, count);
+        }
+
+        String bonus = config.getEffectiveBonusItem(rule);
+        if (bonus != null && !bonus.isBlank()) {
+            giveVehicleItem(entity, bonus, Math.max(1, config.getEffectiveBonusItemCount(rule)));
+        }
+    }
+
+    /** 该载具武器实际使用的弹药物品 id → 该弹药的弹匣容量（0 表示无弹匣）。取不到时返回空表。 */
+    private Map<String, Integer> collectVehicleAmmo(Entity entity) {
+        Map<String, Integer> ammo = new LinkedHashMap<>();
+        try {
+            if (!(entity instanceof VehicleEntity vehicle)) return ammo;
+            for (int seat = 0; seat < vehicle.getMaxPassengers(); seat++) {
+                SeatInfo seatInfo = vehicle.getSeat(seat);
+                if (seatInfo == null) continue;
+                List<String> weapons = seatInfo.weapons();
+                if (weapons == null || weapons.isEmpty()) continue;
+                for (int w = 0; w < weapons.size(); w++) {
+                    GunData gunData = vehicle.getGunData(seat, w);
+                    if (gunData == null) continue;
+                    int magazine = 0;
+                    try {
+                        Integer mag = gunData.get(GunProp.MAGAZINE);
+                        if (mag != null) magazine = mag;
+                    } catch (Throwable ignored) {
+                    }
+                    List<AmmoConsumer> consumers = gunData.get(GunProp.AMMO_CONSUMER);
+                    if (consumers == null) continue;
+                    for (AmmoConsumer consumer : consumers) {
+                        ItemStack ammoStack = consumer.stack();
+                        if (ammoStack.isEmpty()) continue;
+                        ResourceLocation id = BuiltInRegistries.ITEM.getKey(ammoStack.getItem());
+                        if (id == null) continue;
+                        ammo.merge(id.toString(), magazine, Math::max);
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            // 载具模组 API 不可用：退化为"只发 BonusItem"
+        }
+        return ammo;
+    }
+
+    /** 往载具集装箱塞指定物品（数量超单格堆叠会自动分格，装不下只记日志）。 */
+    private void giveVehicleItem(Entity entity, String itemId, int count) {
+        if (count <= 0) return;
+        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(itemId));
+        if (item == null || item == net.minecraft.world.item.Items.AIR) {
+            if (WARNED_SUPPLY_ITEM_KEYS.add(itemId)) {
+                Espetro.LOGGER.warn("载具部署：补给站配置里的物品不存在 {} (type={})", itemId, entity.getType());
+            }
+            return;
+        }
+        insertIntoVehicle(entity, new ItemStack(item, count));
+    }
+
+    /**
+     * 把物品放进载具集装箱。
+     * <p>
+     * 关键：SBW 的 {@code VehicleEntity.canPlaceItem} 要求
+     * {@code 该格现有数量 + 本次数量 <= min(载具上限, 物品堆叠上限)}，
+     * 所以整摞 500 发直接 insert 会被**整体拒绝**（一发都进不去）。
+     * 这里按 {@code min(物品堆叠上限, 载具上限)} 分块插入，块内逐格填。
+     */
+    private void insertIntoVehicle(Entity entity, ItemStack stack) {
+        if (stack.isEmpty()) return;
+        IItemHandler handler;
+        try {
+            handler = entity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+        } catch (Throwable t) {
+            return;
+        }
+        if (handler == null || handler.getSlots() <= 0) return;
+
+        int chunkSize = Math.max(1, stack.getMaxStackSize());
+        try {
+            if (entity instanceof VehicleEntity vehicle) {
+                chunkSize = Math.max(1, Math.min(chunkSize, vehicle.getMaxStackSize()));
+            }
+        } catch (Throwable ignored) {
+            // 拿不到载具上限时用物品自身堆叠上限
+        }
+
+        int remaining = stack.getCount();
+        int guard = 0;
+        while (remaining > 0 && guard++ < 1024) {
+            int chunk = Math.min(remaining, chunkSize);
+            ItemStack piece = stack.copy();
+            piece.setCount(chunk);
+            for (int slot = 0; slot < handler.getSlots() && !piece.isEmpty(); slot++) {
+                piece = handler.insertItem(slot, piece, false);
+            }
+            int moved = chunk - piece.getCount();
+            if (moved <= 0) break;   // 集装箱已满
+            remaining -= moved;
+        }
+        if (remaining > 0) {
+            Espetro.LOGGER.warn("载具部署：集装箱装不下 {} x{} (type={}, 剩余={})",
+                BuiltInRegistries.ITEM.getKey(stack.getItem()), stack.getCount(),
+                entity.getType(), remaining);
+        }
+    }
+
+    private static final Set<String> WARNED_SUPPLY_ITEM_KEYS = new HashSet<>();
 
     /**
      * After a battlefield map is activated, spawn one Dragonrise ammo supply station
@@ -1952,40 +2249,48 @@ public class VehicleManager {
     private boolean spawnOneMainBaseSupply(ServerLevel level, EntityType<?> stationType,
                                            SpawnPointConfig.SpawnPoint spawn, String team) {
         BlockPos stationPos = getMainBaseSupplyPosition(spawn);
+        // 修 A：同 placeOne —— 放置时目标区块可能已被常规卸载，先临时补票加载，
+        // 放置结束后释放（失败路径也会释放）。
+        ChunkPos ticket = ChunkTickets.acquire(level, stationPos);
         if (!level.hasChunkAt(stationPos)) {
+            ChunkTickets.release(level, ticket);
             Espetro.LOGGER.warn("主重生点补给站区块尚未预载，跳过 {} ({})",
                 stationPos, team);
             return false;
         }
 
-        Entity entity = stationType.create(level);
-        if (entity == null) {
-            Espetro.LOGGER.warn("无法创建主重生点补给站实体 at {} ({})", stationPos, team);
-            return false;
+        try {
+            Entity entity = stationType.create(level);
+            if (entity == null) {
+                Espetro.LOGGER.warn("无法创建主重生点补给站实体 at {} ({})", stationPos, team);
+                return false;
+            }
+
+            double x = stationPos.getX() + 0.5;
+            double y = stationPos.getY();
+            double z = stationPos.getZ() + 0.5;
+            entity.setPos(x, y, z);
+            entity.setYRot(spawn.yaw);
+            entity.setYHeadRot(spawn.yaw);
+            entity.setCustomName(Component.literal(SUPPLY_STATION_DISPLAY_NAME));
+            entity.setCustomNameVisible(false);
+            entity.addTag(MAIN_BASE_SUPPLY_TAG);
+            entity.addTag(MAIN_BASE_SUPPLY_TAG + "_team_" + team);
+            applySupplyStationMapTags(entity, team, "main_base_" + team);
+
+            // Full FE if the station exposes energy — never Entity#load partial NBT.
+            fillVehicleEnergy(entity, Integer.MAX_VALUE);
+
+            if (!level.addFreshEntity(entity)) {
+                entity.discard();
+                Espetro.LOGGER.warn("主重生点补给站未能加入世界 at {} ({})", stationPos, team);
+                return false;
+            }
+            // 方案 B：稍后重发 spawn 包，兜底客户端区块未就绪导致的丢失
+            scheduleSpawnResend(entity);
+        } finally {
+            ChunkTickets.release(level, ticket);
         }
-
-        double x = stationPos.getX() + 0.5;
-        double y = stationPos.getY();
-        double z = stationPos.getZ() + 0.5;
-        entity.setPos(x, y, z);
-        entity.setYRot(spawn.yaw);
-        entity.setYHeadRot(spawn.yaw);
-        entity.setCustomName(Component.literal(SUPPLY_STATION_DISPLAY_NAME));
-        entity.setCustomNameVisible(false);
-        entity.addTag(MAIN_BASE_SUPPLY_TAG);
-        entity.addTag(MAIN_BASE_SUPPLY_TAG + "_team_" + team);
-        applySupplyStationMapTags(entity, team, "main_base_" + team);
-
-        // Full FE if the station exposes energy — never Entity#load partial NBT.
-        fillVehicleEnergy(entity, Integer.MAX_VALUE);
-
-        if (!level.addFreshEntity(entity)) {
-            entity.discard();
-            Espetro.LOGGER.warn("主重生点补给站未能加入世界 at {} ({})", stationPos, team);
-            return false;
-        }
-        // 方案 B：稍后重发 spawn 包，兜底客户端区块未就绪导致的丢失
-        scheduleSpawnResend(entity);
         return true;
     }
 

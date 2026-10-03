@@ -1,0 +1,20 @@
+{
+  "values": [
+    "superbwarfare:gunfire",
+    "superbwarfare:gunfire_headshot",
+    "superbwarfare:gunfire_absolute",
+    "superbwarfare:gunfire_headshot_absolute",
+    "superbwarfare:laser",
+    "superbwarfare:laser_headshot",
+    "superbwarfare:shock",
+    "superbwarfare:burn",
+    "superbwarfare:repair_tool",
+    "superbwarfare:projectile_hit",
+    "superbwarfare:projectile_explosion",
+    "superbwarfare:super_star_hit",
+    "superbwarfare:super_star_slash",
+    "superbwarfare:phosphorus_fire",
+    "superbwarfare:custom_explosion",
+    "superbwarfare:projectile_explosion"
+  ]
+}

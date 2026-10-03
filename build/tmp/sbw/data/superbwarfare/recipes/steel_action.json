@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "  A"
+  ],
+  "result": {
+    "item": "superbwarfare:steel_action"
+  },
+  "show_notification": true
+}

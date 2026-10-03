@@ -1,0 +1,481 @@
+/* ============================================================
+ *  弹药补给站配置文件 (Ammo Supply Station Config)
+ * ============================================================
+ *
+ * 文件位置: data/<namespace>/supply_station/<任意名称>.json
+ * 支持通过数据包添加多个配置文件，重载时自动合并生效
+ * 热重载: 将配置文件放入 config/dragonrise_reforge/supply_station/
+ *         服务端执行 /reload 即可使修改生效，无需重启游戏
+ *
+ * ====================== 实体参数 (实体 NBT) ==================
+ *
+ * 可在游戏中用命令调整每个补给站的运行参数:
+ *   /data merge entity @e[type=dragonrise_reforge:ammo_supply_station,limit=1,sort=nearest] {SupplyTime:160}
+ *
+ *   SupplyRange   - 感应检测半径 (方块, 默认 10)
+ *   SupplyTime    - 补给充电时间 (tick, 默认 160 = 8秒, 设为1可瞬时)
+ *   SupplyInterval - 充电完成后再次检测的间隔 (tick, 默认 20 = 1秒)
+ *
+ * ========================= 三层规则体系 ======================
+ *
+ * 优先级: 弹药覆盖 > 载具覆盖 > 全局默认
+ * 查询流程: 载具ID → VehicleOverrides (未匹配则用 Default)
+ *           → 该规则的 AmmoOverrides (未匹配则继承规则的 Mode)
+ *
+ * ========================= 载具血量恢复 ======================
+ *
+ * 补给完成时会同时恢复载具血量
+ * HealPercent - 恢复最大血量的百分比 (0=不恢复, 50=恢复一半, 100=回满)
+ * 每次补给触发, 恢复量 = MaxHealth × HealPercent / 100 (不超过满血)
+ * 可在 Default 中设置全局值, 也可在 VehicleOverrides 中为特定载具单独设置
+ *
+ * ========================= 三种补给模式 ======================
+ *
+ * MAGAZINE  - 弹匣制: 将武器的当前弹匣补满(ammo = magazine)
+ *             若武器本身无弹匣(Magazine<=0)则自动降级为 FIXED 模式
+ *
+ * FIXED     - 固定数量: 当备用弹药 < FixedAmount 时触发
+ *             补充 (FixedAmount - 当前数量), 补到恰好 FixedAmount
+ *             例如 FixedAmount=100, 当前30 → 补充70
+ *
+ * PACKAGE   - 物品包: 不通过弹药系统, 直接向载具物品栏塞入
+ *             指定的任意物品 CustomItem × CustomItemCount 个
+ *             适用于自定义弹药、特殊消耗品等场景
+ *
+ * BonusItem - 额外补给物品 (仅 ResupplyRule 顶层)
+ *             每次补给完成后额外向载具物品栏塞入指定物品
+ *             不参与弹药类型匹配, 对所有载具统一生效
+ *             优先级: 载具覆盖 > Default, 设为 "" 即可禁用
+ *
+ * ========================= 补给进度指示 ======================
+ *
+ * 补给并非瞬间完成，而是有充电时间 (默认 160 tick = 8秒)
+ *
+ * 只有正在驾驶载具、且载具在补给站感应范围内的玩家才会看到圆环
+ *
+ * ======================== 弹药键 (Ammo Key) ==================
+ *
+ * 弹药键 = 武器的 AmmoConsumer.stack() 返回物品的注册ID
+ * 即 superbwarfare 注册的 AmmoSupplierItem ID:
+ *   superbwarfare:large_shell_ap       - 大口径穿甲弹
+ *   superbwarfare:large_shell_he       - 大口径高爆弹/破甲弹
+ *   superbwarfare:small_shell_ap       - 小口径穿甲弹
+ *   superbwarfare:small_shell_he       - 小口径高爆弹
+ *   superbwarfare:medium_anti_ground_missile - 线控反坦克导弹
+ *   superbwarfare:heavy_ammo           - 重型弹药 (坦克炮/机炮等)
+ *   superbwarfare:rifle_ammo           - 步枪弹药
+ *   superbwarfare:handgun_ammo         - 手枪弹药
+ *   superbwarfare:shotgun_ammo         - 霰弹弹药
+ *   superbwarfare:sniper_ammo          - 狙击弹药
+ *   superbwarfare:grenade_40mm         - 40mm榴弹
+ *   minecraft:arrow                    - 箭矢 (若武器消耗箭矢)
+ *
+ * ======================== 载具键 (Vehicle Key) ===============
+ *
+ * 载具键 = 实体类型的注册ID, 格式: <modid>:<实体名>
+ * 示例: dragonrise_reforge:t80
+ *       dragonrise_reforge:ztz99a
+ *       dragonrise_reforge:j20
+ */
+
+{
+  /* ==========================================================
+   * "Default" - 全局默认规则
+   * 应用于所有未在 VehicleOverrides 中单独配置的载具
+   * ========================================================== */
+  "Default": {
+    "Mode": "MAGAZINE",
+    "FixedAmount": 24,
+    "HealPercent": 50,
+    "BonusItem": "superbwarfare:medical_kit",
+    "BonusItemCount": 2,
+    "AmmoOverrides": {
+      "superbwarfare:large_shell_ap": {
+        "Mode": "FIXED",
+        "FixedAmount": 12
+      },
+      "superbwarfare:large_shell_he": {
+        "Mode": "FIXED",
+        "FixedAmount": 12
+      },
+      "superbwarfare:heavy_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 240
+      },
+      "superbwarfare:rifle_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 240
+      },
+      "superbwarfare:handgun_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 120
+      },
+      "superbwarfare:shotgun_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 30
+      },
+      "superbwarfare:sniper_ammo": {
+        "Mode": "FIXED",
+        "FixedAmount": 20
+      },
+      "superbwarfare:grenade_40mm": {
+        "Mode": "FIXED",
+        "FixedAmount": 30
+      }
+    }
+  },
+
+  /* ==========================================================
+   * "VehicleOverrides" - 载具专属覆盖规则
+   * ========================================================== */
+  "VehicleOverrides": {
+
+    /* ====== ZTZ99A 主战坦克 ======
+     * 21穿甲弹, 18高爆弹, 4发线控导弹, 2000发步枪弹, 450发重型子弹 */
+    "dragonrise_reforge:ztz99a": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 18
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    /* ====== ZBD04A 步兵战车 ======
+     * 200小口径穿甲弹, 300小口径高爆弹, 3000发步枪弹, 22发高爆弹, 4发线控导弹 */
+    "dragonrise_reforge:zbd04a": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 22
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        }
+      }
+    },
+
+    /* ====== ZBL08 步兵战车 ======
+     * 160发小口径穿甲弹, 300发小口径高爆弹, 3000发步枪弹, 2发线控导弹 */
+    "dragonrise_reforge:zbl08": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 160
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 2
+        }
+      }
+    },
+
+    /* ====== ZLT11 轮式突击炮 ======
+     * 10发穿甲弹, 10发高爆弹, 2000发步枪弹, 500发重型子弹 */
+    "dragonrise_reforge:zlt11": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 10
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 10
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    /* ====== ZSL10 装甲输送车 ======
+     * 1000发重型子弹 */
+    "dragonrise_reforge:zsl10": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    },
+
+    /* ====== CSK181 防护型突击车 ======
+     * 1000发重型子弹, 60发榴弹 */
+    "dragonrise_reforge:csk181": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        },
+        "superbwarfare:grenade_40mm": {
+          "Mode": "FIXED",
+          "FixedAmount": 60
+        }
+      }
+    },
+
+    /* ====== M1A2SEPV2 主战坦克 ======
+     * 21发穿甲弹, 21发破甲弹, 2000发步枪弹, 400发重型子弹 */
+    "dragonrise_reforge:m1a2sepv2": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 400
+        }
+      }
+    },
+
+    /* ====== M3A3 布雷德利步兵战车 ======
+     * 70发小口径穿甲弹, 230发小口径高爆弹, 2发线控导弹, 1600发步枪弹 */
+    "dragonrise_reforge:m3a3": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 70
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 230
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 2
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    /* ====== Stryker Dragoon (fcp附属) ======
+     * 100发小口径穿甲弹, 200发小口径高爆弹 */
+    "fcp:stryker_dragoon": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 100
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    /* ====== Stryker M2 (fcp附属) ======
+     * 600发重型子弹 */
+    "fcp:stryker_m2": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 600
+        }
+      }
+    },
+
+    /* ====== Stryker MGS (fcp附属) ======
+     * 9发穿甲弹, 9发高爆弹, 600发重型子弹, 2000发步枪弹 */
+    "fcp:stryker_mgs": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 9
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 9
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 600
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+
+    /* ====== BMP2D 步兵战车 ======
+     * 200小口径穿甲弹, 300小口径高爆弹, 3000发步枪弹, 22发高爆弹, 4发线控导弹 */
+    "fcp:bmp2d": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 200
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 22
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        }
+      }
+    },
+    /* ====== BTR82 步兵战车 ======
+     * 160发小口径穿甲弹, 300发小口径高爆弹, 3000发步枪弹, 2发线控导弹 */
+    "fcp:btr82": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:small_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 160
+        },
+        "superbwarfare:small_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 300
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+    /* ====== T90M 主战坦克 ======
+     * 21穿甲弹, 18高爆弹, 4发线控导弹, 2000发步枪弹, 450发重型子弹 */
+    "dragonrise_reforge:t90mh": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:large_shell_ap": {
+          "Mode": "FIXED",
+          "FixedAmount": 21
+        },
+        "superbwarfare:large_shell_he": {
+          "Mode": "FIXED",
+          "FixedAmount": 18
+        },
+        "superbwarfare:medium_anti_ground_missile": {
+          "Mode": "FIXED",
+          "FixedAmount": 4
+        },
+        "superbwarfare:rifle_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        },
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 500
+        }
+      }
+    },
+    /* ====== BTR80 装甲输送车 ======
+     * 1000发重型子弹 */
+    "fcp:btr80": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    },
+    /* ====== 虎式 防护型突击车 ======
+     * 1000发重型子弹, 60发榴弹 */
+    "fcp:gaz_tigr_rws": {
+      "Mode": "FIXED",
+      "HealPercent": 50,
+      "AmmoOverrides": {
+        "superbwarfare:heavy_ammo": {
+          "Mode": "FIXED",
+          "FixedAmount": 1000
+        }
+      }
+    }
+  }
+}

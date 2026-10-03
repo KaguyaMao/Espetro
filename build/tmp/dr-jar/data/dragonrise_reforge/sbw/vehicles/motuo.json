@@ -1,0 +1,124 @@
+{
+    "ID":  "dragonrise_reforge:motuo",
+    "MaxHealth":  100,
+    "MaxEnergy":  5000000,
+    "OBB":  [
+
+            ],
+    "Seats":  [
+                  {
+                      "IsEnclosed":  false,
+                      "BanHand":  true,
+                      "Transform":  "Vehicle",
+                      "Position":  [
+                                       0,
+                                       0.4402375,
+                                       -0.1251625
+                                   ],
+                      "MinPitch":  -60,
+                      "MaxPitch":  60,
+                      "MinYaw":  -95,
+                      "MaxYaw":  95
+                  },
+                  {
+                      "IsEnclosed":  false,
+                      "Transform":  "Vehicle",
+                      "Position":  [
+                                       -0.7402375,
+                                       0.0780375,
+                                       -0.909175
+                                   ],
+                      "MinPitch":  -60,
+                      "MaxPitch":  60,
+                      "MinYaw":  -95,
+                      "MaxYaw":  95
+                  }
+              ],
+    "EngineType":  "Wheel",
+    "EngineInfo":  {
+                       "Buoyancy":  0,
+                       "EnergyCostRate":  64,
+                       "WheelRotSpeed":  1.25,
+                       "WheelDifferential":  -0.3,
+                       "MaxForwardSpeedRate":  0.98,
+                       "MaxBackwardSpeedRate":  0.7,
+                       "Increment":  0.015,
+                       "Decrement":  0.02,
+                       "SteeringSpeed":  0.12,
+                       "EngineSoundVolume":  0.6
+                   },
+    "UpStep":  1.5,
+    "Mass":  0.9,
+    "RotateOffsetHeight":  0.5,
+    "DamageModifiers":  [
+                            "minecraft:arrow * 0.2",
+                            "minecraft:trident * 0.4",
+                            "minecraft:mob_attack * 0.4",
+                            "minecraft:mob_attack_no_aggro * 0.4",
+                            "minecraft:mob_projectile * 0.4",
+                            "minecraft:player_attack * 0.4",
+                            "minecraft:lava - -4",
+                            "minecraft:lava * 4",
+                            "@minecraft:tnt * 3",
+                            "@minecraft:tnt_minecart * 3",
+                            "minecraft:explosion * 4",
+                            "minecraft:player_explosion * 4",
+                            "superbwarfare:projectile_hit * 0.8",
+                            "superbwarfare:grapeshot_hit * 0.2",
+                            "@#superbwarfare:aerial_bomb * 1.4",
+                            "#superbwarfare:projectile * 1.0",
+                            "@superbwarfare:cannon_shell * 1.6",
+                            "@superbwarfare:small_cannon_shell * 1.8",
+                            "@superbwarfare:gun_grenade * 1.4",
+                            "@superbwarfare:rgo_grenade * 3",
+                            "@superbwarfare:hand_grenade * 2.5",
+                            "@superbwarfare:mortar_shell * 2",
+                            "All * 0.9",
+                            "$entity.getSourceAngle(source, 0.05) * damage"
+                        ],
+    "VehicleContainerType":  "Huge",
+    "DestroyInfo":  {
+                        "ParticleType":  "Huge",
+                        "ExplosionDamage":  40,
+                        "ExplosionRadius":  5
+                    },
+    "ThirdPersonCameraPos":  [
+                                 0,
+                                 1,
+                                 5
+                             ],
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/motuo_icon.png",
+    "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/civilian.png",
+    "Type":  "Car",
+    "EngineSound":  "dragonrise_reforge:wheel_loop1",
+    "HornSound":  "superbwarfare:truck_horn",
+    "TerrainCompat":  [
+                          [
+                              1.1875,
+                              0,
+                              3.1875
+                          ],
+                          [
+                              -1.1875,
+                              0,
+                              3.1875
+                          ],
+                          [
+                              1.1875,
+                              0,
+                              -1.0625
+                          ],
+                          [
+                              -1.1875,
+                              0,
+                              -1.0625
+                          ]
+                      ],
+    "InertiaRotateRate":  0.9,
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/motuo.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/motuo.png"
+                   }
+               ]
+}

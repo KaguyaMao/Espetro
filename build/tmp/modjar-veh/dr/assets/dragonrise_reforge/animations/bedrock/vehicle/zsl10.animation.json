@@ -1,0 +1,29 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.zsl10.splash_on": {
+			"loop":  "hold_on_last_frame",
+			"animation_length": 1.125,
+			"bones": {
+				"FLB": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.125": [110, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.zsl10.splash_off": {
+			"loop":  "hold_on_last_frame",
+			"animation_length": 1.25,
+			"bones": {
+				"FLB": {
+					"rotation": {
+						"0.0": [110, 0, 0],
+						"1.25": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

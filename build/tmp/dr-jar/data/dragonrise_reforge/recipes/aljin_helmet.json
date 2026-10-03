@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/iron"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    }
+  },
+  "pattern": [
+    "KKK",
+    "KFK"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:aljin_helmet"
+  },
+  "show_notification": true
+}

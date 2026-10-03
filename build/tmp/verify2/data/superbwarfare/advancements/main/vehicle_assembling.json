@@ -1,0 +1,38 @@
+{
+  "parent": "superbwarfare:main/physics_excalibur",
+  "criteria": {
+    "0": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:vehicle_assembling_table"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "superbwarfare.advancement.main.vehicle_assembling.des"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "superbwarfare:vehicle_assembling_table"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "superbwarfare.advancement.main.vehicle_assembling"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

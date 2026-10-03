@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:terrorist",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/terrorist.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/terrorist.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/terrorist.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/terrorist.png"
+                   }
+               ]
+}

@@ -1,0 +1,295 @@
+{
+  "ID": "fcp:aavp",
+  "MaxHealth": 290,
+  "MaxEnergy": 5500000,
+  "OBB": [
+    {"Size": [0.255, 0.527, 3.1], "Position": [1.2155, 0.53125, -0.5], "Part": "WheelLeft"},
+    {"Size": [0.255, 0.527, 3.1], "Position": [-1.2155, 0.53125, -0.5], "Part": "WheelRight"},
+    {"Size": [1, 0.35, 3.25], "Position": [0.0, 0.9, -0.5], "Part": "Body"},
+    {"Size": [1.5, 0.65, 3.75], "Position": [0.0, 1.775, 0], "Part": "Body"},
+    {"Size": [1.6, 0.35, 1.15], "Position": [0.0, 1, 1.5], "Part": "Body"},
+    {"Size": [0.7, 0.35, 0.8], "Position": [0.0, 0, 0], "Part": "Turret", "Transform": "Turret", "Rotation": "Turret"}
+  ],
+  "Seats": [
+    {
+      "BanHand": true,
+      "HidePassenger": true,
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [0.745023, 2.812547, 2.287095]
+      },
+      "Transform": "Vehicle",
+      "Position": [0, 0, 0],
+      "MinYaw": -65,
+      "MaxYaw": 65,
+      "MinPitch": -15,
+      "MaxPitch": 32.5
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "CameraPos": {
+        "Transform": "Barrel",
+        "UseFixedCameraPos": true,
+        "Position": [-0.305, 0.4, 0.05],
+        "Direction": "Barrel"
+      },
+      "CanRotateHead": false,
+      "Weapons": ["Cannon", "Coax"],
+      "Transform": "Turret",
+      "Position": [0, 0, 0],
+      "MinPitch": -15,
+      "MaxPitch": 25
+    }
+  ,
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    },
+    {
+      "HidePassenger": true,
+      "IsEnclosed": true,
+      "BanHand": true,
+      "CameraPos": {
+        "UseSimulate3P": true
+      },
+      "CanRotateHead": true,
+      "Transform": "Vehicle",
+      "Position": [0, 1, 0]
+    }
+  ],
+  "Weapons": {
+    "Coax": {
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 3,
+      "RPM": 500,
+      "Damage": 15,
+      "BypassesArmor": 2,
+      "IsArmorPiercingProjectile": true,
+      "IsHighExplosiveProjectile": false,
+      "Velocity": 25,
+      "RecoilTime": 32,
+      "EmptyReloadTime": 200,
+      "Magazine": 200,
+      "RecoilForce": 0.1,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "Spread": 0.25,
+      "CrosshairColor": "0x66FF00",
+      "Crosshair": "@VehicleRuApc",
+      "Name": "weapon.fcp.m2a1_browning",
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:m_2_hb_fire_1p",
+        "Fire3P": "superbwarfare:m_2_hb_fire_3p",
+        "Fire3PFar": "superbwarfare:m_2_hb_far",
+        "Fire3PVeryFar": "superbwarfare:m_2_hb_veryfar",
+        "Change": "fcp:into_coax",
+        "VehicleReload": "fcp:m2_reload"
+      },
+      "SoundRadius": 16,
+      "AmmoType": "superbwarfare:rifle_ammo",
+      "Icon": "fcp:textures/screens/vehicle_weapon/50_bmg.png",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [[-0.61, 0.01, 0.9]],
+        "Directions": ["Barrel"]
+      }
+    },
+    "Empty": {
+      "Magazine": 0,
+      "RPM": 0,
+      "Crosshair": "@Empty",
+      "Damage": 0
+    },
+    "Cannon": {
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:gun_grenade",
+      "DefaultZoom": 2,
+      "RPM": 325,
+      "Magazine": 32,
+      "EmptyReloadTime": 200,
+      "Velocity": 7,
+      "Damage": 0,
+      "ExplosionDamage": 15,
+      "ExplosionRadius": 3,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "RecoilTime": 30,
+      "RecoilForce": 0.31,
+      "ShootAnimationTime": 3,
+      "Spread": 0.8,
+      "IsArmorPiercingProjectile": false,
+      "IsHighExplosiveProjectile": true,
+      "Crosshair": "@VehicleRuApc",
+      "CrosshairColor": "0x66FF00",
+      "Name": "weapon.fcp.mk19",
+      "SoundInfo": {
+        "Fire1P": "fcp:mk19_fire_1p",
+        "Fire3P": "fcp:mk19_fire_3p",
+        "Fire3PFar": "fcp:mk19_fire_3p_far",
+        "VehicleRelaod": "fcp:mk19_reload"
+      },
+      "SoundRadius": 16,
+      "AmmoType": "superbwarfare:grenade_40mm",
+      "Icon": "fcp:textures/screens/vehicle_weapon/40mm.png",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [[0, 0, 0.9]],
+        "Directions": ["Barrel"]
+      }
+    }
+  },
+  "EngineType": "Track",
+  "EngineInfo": {
+    "Buoyancy": 0.05,
+    "EnergyCostRate": 96,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "TrackRotSpeed": 1.7,
+    "TrackDifferential": 0.8,
+    "MaxForwardSpeedRate": 0.57,
+    "MaxBackwardSpeedRate": 0.22,
+    "Increment": 0.020,
+    "Decrement": 0.014,
+    "SteeringSpeed": 0.085
+  },
+  "TurretPos": [-0.5805, 2.72, 1.04058125],
+  "TurretTurnSpeed": [2.5, 1.8],
+  "TurretPitchRange": [-10, 60],
+  "BarrelPos": [0.32395625, 0, 0.466575],
+  "ThirdPersonCameraPos": [0, 3, 5],
+  "TurretControllerIndex": 1,
+  "HasDecoy": true,
+  "UpStep": 1.5,
+  "RotateOffsetHeight": 2.2,
+  "Mass": 19,
+  "DamageModifiers": [
+    "minecraft:lava - -11",
+    "minecraft:lava * 10",
+    "All * 0.34",
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 2",
+    "superbwarfare:mine * 0.75",
+    "superbwarfare:projectile_hit * 1.25",
+    "superbwarfare:grapeshot_hit * 0.3",
+    "superbwarfare:laser * 1.25",
+    "@#superbwarfare:aerial_bomb * 3",
+    "#superbwarfare:projectile * 0.25",
+    "#superbwarfare:projectile_absolute * 0.95",
+    "superbwarfare:vehicle_strike * 4",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:gun_grenade * 0.5",
+    "@superbwarfare:javelin_missile * 0.8",
+    "@superbwarfare:igla_9k38_missile * 0.75",
+    "@superbwarfare:wire_guide_missile * 1",
+    "All - 8"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Medium",
+    "ExplosionDamage": 120,
+    "ExplosionRadius": 7,
+    "SympatheticDetonation": true,
+    "SympatheticDetonationForce": 1.5,
+    "SympatheticDetonationChance": 0.0
+  },
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/land_us.png",
+  "Type": "APC",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true],
+      [0.15, 0.09, false]
+    ]
+  },
+  "EngineSound": "fcp:lav25_engine",
+  "HudType": "@Land",
+  "TerrainCompat": [[0.9826, 0, 1.3549], [-0.9826, 0, 1.3549], [0.9826, 0, -1.3549], [-0.9826, 0, -1.3549]],
+  "InertiaRotateRate": 1.1
+}

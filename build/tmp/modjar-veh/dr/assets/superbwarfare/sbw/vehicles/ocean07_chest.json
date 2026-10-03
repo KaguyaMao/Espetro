@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:ocean07_chest",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ocean07_chest.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ocean07_chest.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ocean07_chest.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ocean07_chest.png"
+                   }
+               ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "misc",
+  "inputs": [
+    "superbwarfare:small_battery_pack",
+    "superbwarfare:medium_armament_module",
+    "2 #forge:storage_blocks/steel",
+    "superbwarfare:small_motor"
+  ],
+  "result": {
+    "item": "vvp:kornet_item"
+  }
+}

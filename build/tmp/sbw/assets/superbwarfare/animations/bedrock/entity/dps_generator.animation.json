@@ -1,0 +1,27 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.target.idle": {
+      "loop": true,
+      "animation_length": 0.0417
+    },
+    "animation.target.down": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 2,
+      "bones": {
+        "move_ba": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.125": [-90, 0, 0],
+            "0.25": [-80, 0, 0],
+            "0.375": [-90, 0, 0],
+            "0.5": [-88, 0, 0],
+            "0.625": [-90, 0, 0],
+            "1.5": [-90, 0, 0],
+            "2.0": [0, 0, 0]
+          }
+        }
+      }
+    }
+  }
+}

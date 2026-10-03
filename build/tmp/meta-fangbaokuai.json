@@ -1,0 +1,34 @@
+{
+  "name": "fangbaokuai",
+  "author": "ly01_lin",
+  "time": "20260923-152123",
+  "dimension": "minecraft:overworld",
+  "size": [
+    2,
+    2,
+    2
+  ],
+  "blocks": 8,
+  "entities": 0,
+  "ignored_blocks": 0,
+  "nbt_bytes": 347,
+  "include_entities": true,
+  "carve": false,
+  "region": {
+    "a": [
+      51,
+      -60,
+      340
+    ],
+    "b": [
+      50,
+      -59,
+      341
+    ],
+    "anchor": [
+      50,
+      -60,
+      340
+    ]
+  }
+}

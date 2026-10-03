@@ -1,0 +1,145 @@
+FILE pla_112th_brigade.json (第112中型合成旅):
+  [mbt] ZTZ-99A 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:600 d:600)
+  [mgs] ZLT-11 轮式坦克歼击车 -> assault_gun delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [apc] ZBL-08 轮式步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [acv] ZSL-10 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: a:0 d:0)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: a:0 d:0)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 15 个
+
+FILE pla_112th_brigade_mesh.json (第112合成旅机械化营):
+  [mbt] ZTZ-99A 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:600 d:600)
+  [ifv] ZBD-04A 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [acv] ZSL-10 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: a:0 d:0)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: a:0 d:0)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 15 个
+
+FILE pla_118th_brigade.json (第118混合合成旅):
+  [mbt] ZTZ-99A 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:0 d:600)
+  [ifv] ZBD-04A 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] ZBL-08 轮式步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 15 个
+
+FILE pla_195th.json (第195合成旅坦克营):
+  [mbt] ZTZ-99A 主战坦克 -> tank#1 delay 0/300 troop 15 respawn 15 (was: a:0 d:600)
+  [mgs] ZTZ-99A 主战坦克 -> tank#2 delay 600/900 troop 15 respawn 15 (was: a:600 d:1200)
+  [acv] ZSL-10 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 15 个
+
+FILE plamc_5th.json (第5海军陆战联合兵种旅):
+  [mgs] ZTD-05 两栖突击炮 -> assault_gun delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [ifv] ZBD-05 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [apc] ZSD-05 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [acv] ZSD-05 装甲输送车补给型 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:300 d:300)
+  职业 troopValue->1: 15 个
+
+FILE plamc_5th_at.json (第5海军陆战联合兵种旅):
+  [mgs] ZTD-05 两栖突击炮 -> assault_gun delay 0/600 troop 10 respawn 10 (was: a:0 d:0)
+  [ifv] ZBD-05 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:0)
+  [apc] ZSD-05 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [acv] ZSD-05 装甲输送车补给型 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:0 d:0)
+  职业 troopValue->1: 15 个
+
+FILE plamc_7th.json (第七海军陆战队中型营):
+  [mgs] ZTD-05 两栖突击炮 -> assault_gun delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [apc] ZBL-08 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [acv] ZSL-10 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [truck] CTM-131 武装运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] CTM-131 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] Z20 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:0 d:0)
+  职业 troopValue->1: 15 个
+
+FILE ru_205th.json (第205独立摩托化步兵旅):
+  [mbt] T-72B3 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:300 d:600)
+  [ifv] BMP-3M 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] BMP-2M 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [transport_helicopter] MI-8 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  [truck] 乌拉尔4320 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] 乌拉尔4320 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 13 个
+
+FILE ru_3th.json (第3摩托化步兵旅):
+  [mbt] T-72B3 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:300 d:600)
+  [apc] BTR-82 轮式步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] BTR-80 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [transport_helicopter] MI-8 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  [truck] 乌拉尔4320 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] 乌拉尔4320 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 13 个
+
+FILE ru_49th.json (第49联合兵种军):
+  [mbt] T-72B3 主战坦克 -> tank delay 600/600 troop 15 respawn 15 (was: a:300 d:600)
+  [ifv] BMP-2 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] BTR-82 轮式步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [transport_helicopter] MI-8 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  [truck] 乌拉尔4320 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] 乌拉尔4320 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 13 个
+
+FILE ru_6th_tank.json (第六独立坦克旅):
+  [mbt] T-90M 主战坦克 -> tank#2 delay 600/900 troop 15 respawn 15 (was: a:600 d:1200)
+  [mgs] T-72B3 主战坦克 -> tank#1 delay 0/300 troop 15 respawn 15 (was: a:0 d:600)
+  [ifv] BMP-1AM 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] BTR-80 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:300)
+  [truck] 乌拉尔4320 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] 乌拉尔4320 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 13 个
+
+FILE us_1th_ar.json (第一装甲师):
+  [mbt] M1A2 主战坦克 Sepv2 -> tank#1 delay 0/300 troop 15 respawn 15 (was: a:300 d:600)
+  [mgs] M1A2 主战坦克 Sepv2 -> tank#2 delay 600/900 troop 15 respawn 15 (was: a:600 d:1200)
+  [acv] M113 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [apc] M113 装甲输送车 补给型 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [truck] M939 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] M939 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] UH60 黑鹰 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 13 个
+
+FILE us_1th_ri.json (第一骑兵团):
+  [mbt] M1A2 主战坦克 Sepv2 -> tank delay 600/600 troop 15 respawn 15 (was: a:0 d:600)
+  [ifv] M3A3 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] M113 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [apc] M113 装甲输送车 补给型 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:0)
+  [truck] M939 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] UH60 黑鹰 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 13 个
+
+FILE us_2nd_stryker.json (第二骑兵斯崔克旅战斗队):
+  [mbt] M1A2 主战坦克 SEPv2 -> tank delay 600/600 troop 15 respawn 15 (was: a:600 d:600)
+  [mgs] M1128 斯崔克自行火炮系统 -> assault_gun delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [apc] M1126 龙式步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] 斯崔克 M2 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: NONE)
+  [truck] M939 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] M939 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [transport_helicopter] UH60 黑鹰 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  职业 troopValue->1: 13 个
+
+FILE us_redone.json (第一步兵师第三战斗旅):
+  [mbt] M1A2 主战坦克 Sepv2 -> tank delay 600/600 troop 15 respawn 15 (was: a:0 d:600)
+  [ifv] M3A3 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [acv] 龙式 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:300)
+  [transport_helicopter] UH60 黑鹰 通用直升机 -> heli delay 600/600 troop 10 respawn 5 (was: a:600 d:600)
+  [truck] M939 运兵卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  [supply_truck] M939 补给卡车 -> truck delay 0/0 troop 5 respawn 3 (was: NONE)
+  职业 troopValue->1: 13 个
+
+FILE usmc.json (第6独立坦克旅):
+  [mbt] T-90M 主战坦克 -> tank#2 delay 600/900 troop 15 respawn 15 (was: a:300 d:1200)
+  [mgs] T-72B3 主战坦克 -> tank#1 delay 0/300 troop 15 respawn 15 (was: a:0 d:600)
+  [ifv] BMP-1AM 步兵战车 -> ifv delay 0/600 troop 10 respawn 10 (was: a:0 d:600)
+  [acv] BTR-80 装甲输送车 -> apc delay 0/0 troop 7 respawn 5 (was: a:0 d:300)
+  职业 troopValue->1: 13 个

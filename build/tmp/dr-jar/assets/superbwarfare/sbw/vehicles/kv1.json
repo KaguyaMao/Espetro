@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/kv1.animation.json",
+  "ID": "dragonrise_reforge:kv1",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/kv1.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/kv1.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/kv1.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/kv1.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/kv1.png"
+    }
+  ]
+}

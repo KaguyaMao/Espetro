@@ -1,0 +1,47 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.Container
+ *  net.minecraft.world.entity.player.Player
+ *  net.minecraft.world.item.ItemStack
+ */
+package dev.latvian.mods.kubejs.item;
+
+import dev.latvian.mods.kubejs.core.InventoryKJS;
+import dev.latvian.mods.kubejs.player.PlayerEventJS;
+import dev.latvian.mods.kubejs.typings.Info;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
+@Info(value="Invoked when a player crafts an item.\n")
+public class ItemCraftedEventJS
+extends PlayerEventJS {
+    private final Player player;
+    private final ItemStack crafted;
+    private final Container container;
+
+    public ItemCraftedEventJS(Player player, ItemStack crafted, Container container) {
+        this.player = player;
+        this.crafted = crafted;
+        this.container = container;
+    }
+
+    @Override
+    @Info(value="The player that crafted the item.")
+    public Player getEntity() {
+        return this.player;
+    }
+
+    @Info(value="The item that was crafted.")
+    public ItemStack getItem() {
+        return this.crafted;
+    }
+
+    @Info(value="The inventory that the item was crafted in.")
+    public InventoryKJS getInventory() {
+        return this.container;
+    }
+}
+

@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:npds114",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/npds114.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/npds114.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/npds114.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/npds114.png"
+                   }
+               ]
+}

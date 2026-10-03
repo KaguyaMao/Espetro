@@ -1,0 +1,18 @@
+{
+  "Skins": [
+    {
+      "Id": "vanilla",
+      "Name": "Vanilla",
+      "Description": "Vanilla",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/mortar.png",
+      "Priority": 1
+    },
+    {
+      "Id": "firework",
+      "Name": "Firework",
+      "Description": "Component#skin.superbwarfare.mortar.firework",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/mortar_firework.png",
+      "Priority": 2
+    }
+  ]
+}

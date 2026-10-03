@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:string"
+    },
+    "b": {
+      "tag": "forge:plates/steel"
+    }
+  },
+  "pattern": [
+    "aba"
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:armor_plate"
+  },
+  "show_notification": true
+}

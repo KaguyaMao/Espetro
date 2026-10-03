@@ -1,0 +1,35 @@
+{
+  "name": "superbwarfare.entry.vehicle.intro",
+  "icon": "superbwarfare:crowbar",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.intro.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:crowbar",
+      "text": "superbwarfare.page.vehicle.intro.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.intro.3"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:vehicle_assembling_table",
+      "text": "superbwarfare.page.vehicle.intro.4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.intro.5"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:charging_station",
+      "text": "superbwarfare.page.vehicle.intro.6"
+    }
+  ],
+  "sortnum": 20000
+}

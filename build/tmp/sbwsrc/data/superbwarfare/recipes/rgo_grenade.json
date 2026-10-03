@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/iron"
+    },
+    "b": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "c": {
+      "item": "minecraft:tripwire_hook"
+    },
+    "d": {
+      "item": "minecraft:stone_button"
+    }
+  },
+  "pattern": [
+    "abc",
+    "aba",
+    " da"
+  ],
+  "result": {
+    "count": 4,
+    "item": "superbwarfare:rgo_grenade"
+  },
+  "show_notification": true
+}

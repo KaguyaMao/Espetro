@@ -1,0 +1,15 @@
+login status=200 token len=45
+待上传 12 个文件 → EsFactions/
+OK  pla_112th_brigade.json (78148 B)
+OK  pla_112th_brigade_mesh.json (77908 B)
+OK  pla_118th_brigade.json (78047 B)
+OK  pla_195th.json (77301 B)
+OK  ru_205th.json (68162 B)
+OK  ru_3th.json (68490 B)
+OK  ru_49th.json (68726 B)
+OK  ru_6th_tank.json (68415 B)
+OK  us_1th_ar.json (90085 B)
+OK  us_1th_ri.json (90037 B)
+OK  us_2nd_stryker.json (90393 B)
+OK  us_redone.json (90282 B)
+完成: 12/12

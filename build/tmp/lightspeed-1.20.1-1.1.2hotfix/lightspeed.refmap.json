@@ -1,0 +1,90 @@
+{
+  "mappings": {
+    "com/ccr4ft3r/lightspeed/mixin/misc/MaterialMixin": {
+      "hashCode": "Lnet/minecraft/client/resources/model/Material;hashCode()I"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/misc/StateDefinitonMixin": {
+      "getProperty": "Lnet/minecraft/world/level/block/state/StateDefinition;m_61081_(Ljava/lang/String;)Lnet/minecraft/world/level/block/state/properties/Property;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/misc/KeyValueConditionMixin": {
+      "getPredicate": "Lnet/minecraft/client/renderer/block/model/multipart/KeyValueCondition;m_7289_(Lnet/minecraft/world/level/block/state/StateDefinition;)Ljava/util/function/Predicate;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/model/BlockModelMixin": {
+      "getMaterial": "Lnet/minecraft/client/renderer/block/model/BlockModel;m_111480_(Ljava/lang/String;)Lnet/minecraft/client/resources/model/Material;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/misc/ResourceLocationMixin": {
+      "hashCode": "Lnet/minecraft/resources/ResourceLocation;hashCode()I"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/model/MultivariantMixin": {
+      "getDependencies": "Lnet/minecraft/client/renderer/block/model/MultiVariant;m_7970_()Ljava/util/Collection;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/resources/PathResourcePackMixin": {
+      "getNamespaces": "Lnet/minecraftforge/resource/PathPackResources;m_5698_(Lnet/minecraft/server/packs/PackType;)Ljava/util/Set;",
+      "getRootResource": "Lnet/minecraftforge/resource/PathPackResources;m_8017_([Ljava/lang/String;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/resources/FilePackResourcesMixin": {
+      "listResources": "Lnet/minecraft/server/packs/FilePackResources;m_8031_(Lnet/minecraft/server/packs/PackType;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/server/packs/PackResources$ResourceOutput;)V"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/resources/DelegatingResourcePackMixin": {
+      "getResource(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;": "Lnet/minecraftforge/resource/DelegatingPackResources;m_214146_(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/resources/VanillaPackResourcesMixin": {
+      "getResource": "Lnet/minecraft/server/packs/VanillaPackResources;m_214146_(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/misc/SelectorMixin": {
+      "getPredicate": "Lnet/minecraft/client/renderer/block/model/multipart/Selector;m_112021_(Lnet/minecraft/world/level/block/state/StateDefinition;)Ljava/util/function/Predicate;"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/MinecraftMainMixin": {
+      "Lnet/minecraft/SharedConstants;tryDetectVersion()V": "Lnet/minecraft/SharedConstants;m_142977_()V",
+      "main": "Lnet/minecraft/client/main/Main;main([Ljava/lang/String;)V"
+    },
+    "com/ccr4ft3r/lightspeed/mixin/model/MultiPartMixin": {
+      "getDependencies": "Lnet/minecraft/client/renderer/block/model/multipart/MultiPart;m_7970_()Ljava/util/Collection;"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/ccr4ft3r/lightspeed/mixin/misc/MaterialMixin": {
+        "hashCode": "Lnet/minecraft/client/resources/model/Material;hashCode()I"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/misc/StateDefinitonMixin": {
+        "getProperty": "Lnet/minecraft/world/level/block/state/StateDefinition;m_61081_(Ljava/lang/String;)Lnet/minecraft/world/level/block/state/properties/Property;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/misc/KeyValueConditionMixin": {
+        "getPredicate": "Lnet/minecraft/client/renderer/block/model/multipart/KeyValueCondition;m_7289_(Lnet/minecraft/world/level/block/state/StateDefinition;)Ljava/util/function/Predicate;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/model/BlockModelMixin": {
+        "getMaterial": "Lnet/minecraft/client/renderer/block/model/BlockModel;m_111480_(Ljava/lang/String;)Lnet/minecraft/client/resources/model/Material;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/misc/ResourceLocationMixin": {
+        "hashCode": "Lnet/minecraft/resources/ResourceLocation;hashCode()I"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/model/MultivariantMixin": {
+        "getDependencies": "Lnet/minecraft/client/renderer/block/model/MultiVariant;m_7970_()Ljava/util/Collection;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/resources/PathResourcePackMixin": {
+        "getNamespaces": "Lnet/minecraftforge/resource/PathPackResources;m_5698_(Lnet/minecraft/server/packs/PackType;)Ljava/util/Set;",
+        "getRootResource": "Lnet/minecraftforge/resource/PathPackResources;m_8017_([Ljava/lang/String;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/resources/FilePackResourcesMixin": {
+        "listResources": "Lnet/minecraft/server/packs/FilePackResources;m_8031_(Lnet/minecraft/server/packs/PackType;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/server/packs/PackResources$ResourceOutput;)V"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/resources/DelegatingResourcePackMixin": {
+        "getResource(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;": "Lnet/minecraftforge/resource/DelegatingPackResources;m_214146_(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/resources/VanillaPackResourcesMixin": {
+        "getResource": "Lnet/minecraft/server/packs/VanillaPackResources;m_214146_(Lnet/minecraft/server/packs/PackType;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/server/packs/resources/IoSupplier;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/misc/SelectorMixin": {
+        "getPredicate": "Lnet/minecraft/client/renderer/block/model/multipart/Selector;m_112021_(Lnet/minecraft/world/level/block/state/StateDefinition;)Ljava/util/function/Predicate;"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/MinecraftMainMixin": {
+        "Lnet/minecraft/SharedConstants;tryDetectVersion()V": "Lnet/minecraft/SharedConstants;m_142977_()V",
+        "main": "Lnet/minecraft/client/main/Main;main([Ljava/lang/String;)V"
+      },
+      "com/ccr4ft3r/lightspeed/mixin/model/MultiPartMixin": {
+        "getDependencies": "Lnet/minecraft/client/renderer/block/model/multipart/MultiPart;m_7970_()Ljava/util/Collection;"
+      }
+    }
+  }
+}

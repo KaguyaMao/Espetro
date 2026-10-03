@@ -1,0 +1,12 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "11 superbwarfare:steel_block",
+    "45 superbwarfare:wheel",
+    "14superbwarfare:motor"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:wlsc"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:wlsc",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/wlsc.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/wlsc.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/wlsc.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/wlsc.png"
+                   }
+               ]
+}

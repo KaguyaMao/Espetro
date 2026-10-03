@@ -19,6 +19,7 @@ import org.espetro.logistics.LogisticsConfig;
 import org.espetro.team.SpawnPointConfig;
 import org.espetro.vehicle.VehicleConfig;
 import org.espetro.vehicle.VehicleManager;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -68,6 +69,14 @@ public final class VehicleSupplyActionPacket {
         if (player == null) return;
         Interaction interaction = resolveInteraction(player, vehicleId);
         if (interaction == null) {
+            // 白名单载具的轮盘入口：后续做专属轮盘时改这里。
+            // 未在 activeVehicleData 中的白名单载具只回"空壳"快照让轮盘能打开，
+            // 不执行任何补给/建造/换装写操作。
+            VehicleSupplySyncPacket shell = nativeWhitelistSync(player, vehicleId);
+            if (shell != null) {
+                NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player), shell);
+                return;
+            }
             player.displayClientMessage(Component.literal("§c请正对五格内的己方载具。"), true);
             return;
         }
@@ -217,7 +226,49 @@ public final class VehicleSupplyActionPacket {
     @Nullable
     public static VehicleSupplySyncPacket createSyncResponse(ServerPlayer player, UUID vehicleId) {
         Interaction interaction = resolveInteraction(player, vehicleId);
-        return interaction == null ? null : toPacket(interaction);
+        if (interaction != null) {
+            return toPacket(interaction);
+        }
+        // 白名单载具的轮盘入口：后续做专属轮盘时改这里。
+        return nativeWhitelistSync(player, vehicleId);
+    }
+
+    /**
+     * 非 Espetro 部署的白名单载具的"最小交互对象"轮盘快照。
+     *
+     * <p>未部署载具不在 {@code VehicleManager.activeVehicleData} 中，正常路径返回 null
+     * 会让客户端 {@code snapshotReady} 恒为 false、轮盘永不打开。这里按最小合法值构造
+     * 空壳 {@link Interaction}（阵营 id 空串、补给/战斗属性全 false、弹药/建材/容量全 0），
+     * 使 {@code client/gui/VehicleWheelController} 能照常 {@code open(ROOT)}。</p>
+     *
+     * <p><b>不</b>写 {@code activeVehicleData}、<b>不</b>调用
+     * {@code getOrCreateVehicleSupply}，因此不会产生任何补给/建造/换装写操作；
+     * 该快照的所有装卸/换装标志均为 false，唯一可用项是"补给步兵"
+     * （见 {@link VehicleSupplySyncPacket#hasAnyAction()}），而
+     * {@link #handleServer} 对白名单空壳只回快照、不派发任何 action。</p>
+     */
+    @Nullable
+    private static VehicleSupplySyncPacket nativeWhitelistSync(ServerPlayer player, UUID vehicleId) {
+        Interaction shell = nativeWhitelistInteraction(player, vehicleId);
+        return shell == null ? null : toPacket(shell);
+    }
+
+    @Nullable
+    private static Interaction nativeWhitelistInteraction(ServerPlayer player, UUID vehicleId) {
+        if (player == null || vehicleId == null) return null;
+        Entity entity = player.serverLevel().getEntity(vehicleId);
+        if (entity == null || entity.isRemoved() || !VehicleNativeWhitelist.isNative(entity)) {
+            return null;
+        }
+        // 空壳配置：max/respawn 无意义，supplyVeh/fightVeh 保持 false。
+        VehicleConfig.VehicleTypeConfig config = new VehicleConfig.VehicleTypeConfig(0, 0);
+        VehicleManager.VehicleSupplyState supply =
+            new VehicleManager.VehicleSupplyState(0, false);
+        boolean ridingThisVehicle = player.getVehicle() != null
+            && (vehicleId.equals(player.getVehicle().getUUID())
+                || vehicleId.equals(player.getVehicle().getRootVehicle().getUUID()));
+        return new Interaction(vehicleId, "", config, supply, false, null,
+            ridingThisVehicle, false, false);
     }
 
     private static void sendSync(ServerPlayer player, Interaction interaction) {

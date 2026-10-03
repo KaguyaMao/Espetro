@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/zbl08.animation.json",
+    "ID":  "dragonrise_reforge:zbl08",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/zbl08.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/zbl08.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/zbl08.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/zbl08.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/zbl08.png"
+                   }
+               ]
+}

@@ -1,0 +1,9 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"抛壳": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1.6667
+		}
+	}
+}

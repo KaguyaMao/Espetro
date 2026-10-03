@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:empty_perk"
+    },
+    "b": {
+      "item": "minecraft:slime_block"
+    },
+    "c": {
+      "item": "minecraft:cobweb"
+    }
+  },
+  "pattern": [
+    "cbc",
+    "bab",
+    "cbc"
+  ],
+  "result": {
+    "item": "superbwarfare:riot_bullet"
+  },
+  "show_notification": true
+}

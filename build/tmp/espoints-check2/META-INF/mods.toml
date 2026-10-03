@@ -1,0 +1,69 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+issueTrackerURL="https://github.com/Hydroceder/espoints/issues"
+
+[[mods]]
+modId="espoints"
+version="1.2.0"
+displayName="EsPoints"
+displayURL=""
+credits="Hydroceder"
+authors="Hydroceder"
+description='''AI-Generated Mod: A mod that enables attack and defense in Minecraft.'''
+
+[[dependencies.espoints]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="tetrachordlib"
+    mandatory=true
+    versionRange="[1.20+1.0.3]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="espetro"
+    mandatory=true
+    versionRange="[1.2.0]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="pingwheel"
+    mandatory=true
+    versionRange="[1.12.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="auratip"
+    mandatory=true
+    versionRange="[1.1.1-beta]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="apricityui"
+    mandatory=true
+    versionRange="[1.2.3.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.espoints]]
+    modId="oelib"
+    mandatory=true
+    versionRange="[0.2.4,)"
+    ordering="AFTER"
+    side="BOTH"

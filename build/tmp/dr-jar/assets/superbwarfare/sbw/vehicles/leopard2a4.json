@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/leopard2a4.animation.json",
+    "ID":  "dragonrise_reforge:leopard2a4",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/leopard2a4.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/leopard2a4.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/leopard2a4.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/leopard2a4.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/leopard2a4.png"
+                   }
+               ]
+}

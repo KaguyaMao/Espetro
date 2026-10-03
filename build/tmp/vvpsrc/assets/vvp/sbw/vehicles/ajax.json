@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:ajax",
+  "Model": {
+    "Model": "vvp:geo/ajax.geo.json",
+    "Texture": "vvp:textures/entity/ajax.png"
+  }
+}

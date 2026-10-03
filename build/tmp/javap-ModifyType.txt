@@ -1,0 +1,187 @@
+Compiled from "DamageModify.kt"
+public final class com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType extends java.lang.Enum<com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType> {
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType$Companion Companion;
+
+  private static final kotlin.Lazy<kotlinx.serialization.KSerializer<java.lang.Object>> $cachedSerializer$delegate;
+
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType IMMUNITY;
+
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType REDUCE;
+
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType MULTIPLY;
+
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType CUSTOM;
+
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType INVALID;
+
+  private static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType[] $VALUES;
+
+  private static final kotlin.enums.EnumEntries $ENTRIES;
+
+  private com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType();
+    Code:
+       0: aload_0
+       1: aload_1
+       2: iload_2
+       3: invokespecial #54                 // Method java/lang/Enum."<init>":(Ljava/lang/String;I)V
+       6: return
+
+  public static com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType[] values();
+    Code:
+       0: getstatic     #63                 // Field $VALUES:[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       3: invokevirtual #69                 // Method java/lang/Object.clone:()Ljava/lang/Object;
+       6: checkcast     #70                 // class "[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;"
+       9: areturn
+
+  public static com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType valueOf(java.lang.String);
+    Code:
+       0: ldc           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+       2: aload_0
+       3: invokestatic  #75                 // Method java/lang/Enum.valueOf:(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+       6: checkcast     #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+       9: areturn
+
+  public static kotlin.enums.EnumEntries<com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType> getEntries();
+    Code:
+       0: getstatic     #80                 // Field $ENTRIES:Lkotlin/enums/EnumEntries;
+       3: areturn
+
+  private static final kotlinx.serialization.KSerializer _init_$_anonymous_();
+    Code:
+       0: ldc           #84                 // String com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify.ModifyType
+       2: invokestatic  #86                 // Method values:()[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       5: checkcast     #88                 // class "[Ljava/lang/Enum;"
+       8: iconst_5
+       9: anewarray     #90                 // class java/lang/String
+      12: astore_0
+      13: aload_0
+      14: iconst_0
+      15: ldc           #91                 // String Immunity
+      17: aastore
+      18: aload_0
+      19: iconst_1
+      20: ldc           #92                 // String Reduce
+      22: aastore
+      23: aload_0
+      24: iconst_2
+      25: ldc           #93                 // String Multiply
+      27: aastore
+      28: aload_0
+      29: iconst_3
+      30: ldc           #94                 // String Custom
+      32: aastore
+      33: aload_0
+      34: iconst_4
+      35: ldc           #95                 // String Invalid
+      37: aastore
+      38: aload_0
+      39: iconst_5
+      40: anewarray     #97                 // class "[Ljava/lang/annotation/Annotation;"
+      43: astore_0
+      44: aload_0
+      45: iconst_0
+      46: aconst_null
+      47: aastore
+      48: aload_0
+      49: iconst_1
+      50: aconst_null
+      51: aastore
+      52: aload_0
+      53: iconst_2
+      54: aconst_null
+      55: aastore
+      56: aload_0
+      57: iconst_3
+      58: aconst_null
+      59: aastore
+      60: aload_0
+      61: iconst_4
+      62: aconst_null
+      63: aastore
+      64: aload_0
+      65: aconst_null
+      66: invokestatic  #103                // Method kotlinx/serialization/internal/EnumsKt.createAnnotatedEnumSerializer:(Ljava/lang/String;[Ljava/lang/Enum;[Ljava/lang/String;[[Ljava/lang/annotation/Annotation;[Ljava/lang/annotation/Annotation;)Lkotlinx/serialization/KSerializer;
+      69: areturn
+
+  private static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType[] $values();
+    Code:
+       0: iconst_5
+       1: anewarray     #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+       4: astore_0
+       5: aload_0
+       6: iconst_0
+       7: getstatic     #106                // Field IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      10: aastore
+      11: aload_0
+      12: iconst_1
+      13: getstatic     #108                // Field REDUCE:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      16: aastore
+      17: aload_0
+      18: iconst_2
+      19: getstatic     #110                // Field MULTIPLY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      22: aastore
+      23: aload_0
+      24: iconst_3
+      25: getstatic     #112                // Field CUSTOM:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      28: aastore
+      29: aload_0
+      30: iconst_4
+      31: getstatic     #114                // Field INVALID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      34: aastore
+      35: aload_0
+      36: areturn
+
+  public static final kotlin.Lazy access$get$cachedSerializer$delegate$cp();
+    Code:
+       0: getstatic     #118                // Field $cachedSerializer$delegate:Lkotlin/Lazy;
+       3: areturn
+
+  static {};
+    Code:
+       0: new           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+       3: dup
+       4: ldc           #120                // String IMMUNITY
+       6: iconst_0
+       7: invokespecial #121                // Method "<init>":(Ljava/lang/String;I)V
+      10: putstatic     #106                // Field IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      13: new           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+      16: dup
+      17: ldc           #122                // String REDUCE
+      19: iconst_1
+      20: invokespecial #121                // Method "<init>":(Ljava/lang/String;I)V
+      23: putstatic     #108                // Field REDUCE:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      26: new           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+      29: dup
+      30: ldc           #123                // String MULTIPLY
+      32: iconst_2
+      33: invokespecial #121                // Method "<init>":(Ljava/lang/String;I)V
+      36: putstatic     #110                // Field MULTIPLY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      39: new           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+      42: dup
+      43: ldc           #124                // String CUSTOM
+      45: iconst_3
+      46: invokespecial #121                // Method "<init>":(Ljava/lang/String;I)V
+      49: putstatic     #112                // Field CUSTOM:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      52: new           #2                  // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType
+      55: dup
+      56: ldc           #125                // String INVALID
+      58: iconst_4
+      59: invokespecial #121                // Method "<init>":(Ljava/lang/String;I)V
+      62: putstatic     #114                // Field INVALID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      65: invokestatic  #127                // Method $values:()[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      68: putstatic     #63                 // Field $VALUES:[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      71: getstatic     #63                 // Field $VALUES:[Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      74: checkcast     #88                 // class "[Ljava/lang/Enum;"
+      77: invokestatic  #133                // Method kotlin/enums/EnumEntriesKt.enumEntries:([Ljava/lang/Enum;)Lkotlin/enums/EnumEntries;
+      80: putstatic     #80                 // Field $ENTRIES:Lkotlin/enums/EnumEntries;
+      83: new           #34                 // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType$Companion
+      86: dup
+      87: aconst_null
+      88: invokespecial #136                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType$Companion."<init>":(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+      91: putstatic     #138                // Field Companion:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType$Companion;
+      94: getstatic     #144                // Field kotlin/LazyThreadSafetyMode.PUBLICATION:Lkotlin/LazyThreadSafetyMode;
+      97: invokedynamic #160,  0            // InvokeDynamic #0:invoke:()Lkotlin/jvm/functions/Function0;
+     102: invokestatic  #166                // Method kotlin/LazyKt.lazy:(Lkotlin/LazyThreadSafetyMode;Lkotlin/jvm/functions/Function0;)Lkotlin/Lazy;
+     105: putstatic     #118                // Field $cachedSerializer$delegate:Lkotlin/Lazy;
+     108: return
+}

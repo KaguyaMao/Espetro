@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "minecraft:gunpowder"
+    },
+    "b": {
+      "item": "superbwarfare:large_shell_ap"
+    },
+    "c": {
+      "item": "minecraft:calibrated_sculk_sensor"
+    },
+    "d": {
+      "tag": "forge:ingots/iron"
+    },
+    "e": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    " b ",
+    "dad",
+    "ece"
+  ],
+  "result": {
+    "item": "superbwarfare:ptkm_1r"
+  },
+  "show_notification": true
+}

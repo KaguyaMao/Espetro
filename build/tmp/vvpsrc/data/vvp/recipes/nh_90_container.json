@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "aircraft",
+  "inputs": [
+    "superbwarfare:large_battery_pack",
+    "8 #forge:storage_blocks/steel",
+    "superbwarfare:large_propeller",
+    "superbwarfare:propeller",
+    "superbwarfare:large_motor",
+    "superbwarfare:advanced_electronics"
+  ],
+  "result": {
+    "entity": "vvp:nh_90"
+  }
+}

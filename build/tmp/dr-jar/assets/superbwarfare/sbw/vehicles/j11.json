@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j11.animation.json",
+    "ID":  "dragonrise_reforge:j11",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/j11.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j11.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/j11.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/j11.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/j11.png"
+                   }
+               ]
+}

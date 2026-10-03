@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:spacebag",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/spacebag.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/spacebag.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/spacebag.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/spacebag.png"
+                   }
+               ]
+}

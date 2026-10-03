@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:ik_locust",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ik_locust.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ik_locust.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ik_locust.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ik_locust.png"
+    }
+  ]
+}

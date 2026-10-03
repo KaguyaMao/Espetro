@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Specification-Title: FancyMenu
+Specification-Vendor: Keksuccino
+Specification-Version: 3.9.9
+Implementation-Title: FancyMenu
+Implementation-Version: 3.9.9
+Implementation-Vendor: Keksuccino
+Built-On-Java: 21.0.11+10-LTS (Amazon.com Inc.)
+Built-On-Minecraft: 1.20.1
+MixinConfigs: fancymenu.mixins.json,fancymenu.forge.mixins.json
+

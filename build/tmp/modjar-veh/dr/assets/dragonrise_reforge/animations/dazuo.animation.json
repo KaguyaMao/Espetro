@@ -1,0 +1,27 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"dazuo": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"Head": {
+					"rotation": [22.5, 0, 0]
+				},
+				"Right Arm": {
+					"rotation": [-45, 0, 0]
+				},
+				"Left Arm": {
+					"rotation": [-45, 0, 0]
+				},
+				"Right Leg": {
+					"rotation": [-90, -45, 0],
+					"position": [-6, 0, 0]
+				},
+				"Left Leg": {
+					"rotation": [-90, 45, 0],
+					"position": [6, 0, 0]
+				}
+			}
+		}
+	}
+}

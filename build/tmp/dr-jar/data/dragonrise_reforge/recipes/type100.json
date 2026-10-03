@@ -1,0 +1,14 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "8 superbwarfare:steel_block",
+    "superbwarfare:heavy_armament_module",
+    "5 superbwarfare:battery",
+    "2 superbwarfare:track",
+    "2 superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:type100"
+  }
+}

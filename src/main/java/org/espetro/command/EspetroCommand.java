@@ -28,8 +28,40 @@ import static org.espetro.Espetro.MOD_ID;
 public class EspetroCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        // 工事可视化编辑器（/espetro fort ...，仅管理员）。Brigadier 会自动合并到下面的子树。
+        FortCommand.register(dispatcher);
         dispatcher.register(Commands.literal("espetro")
             .requires(source -> source.hasPermission(2)) // 需要管理员权限
+            .then(Commands.literal("freeunlock")
+                .executes(ctx -> {
+                    ctx.getSource().sendSystemMessage(Component.literal(
+                        org.espetro.team.FreeUnlockManager.statusText()));
+                    ctx.getSource().sendSystemMessage(Component.literal(
+                        "§7用法：/espetro freeunlock <on|off|status>（仅本局有效，对局结束自动关闭）"));
+                    return 1;
+                })
+                .then(Commands.literal("on").executes(ctx -> {
+                    boolean changed = org.espetro.team.FreeUnlockManager.setEnabled(true,
+                        ctx.getSource().getTextName());
+                    ctx.getSource().sendSystemMessage(Component.literal(changed
+                        ? "§a装备完全解锁模式已开启（本局有效）"
+                        : "§7装备完全解锁模式本来就是开启状态"));
+                    return 1;
+                }))
+                .then(Commands.literal("off").executes(ctx -> {
+                    boolean changed = org.espetro.team.FreeUnlockManager.setEnabled(false,
+                        ctx.getSource().getTextName());
+                    ctx.getSource().sendSystemMessage(Component.literal(changed
+                        ? "§e装备完全解锁模式已关闭"
+                        : "§7装备完全解锁模式本来就是关闭状态"));
+                    return 1;
+                }))
+                .then(Commands.literal("status").executes(ctx -> {
+                    ctx.getSource().sendSystemMessage(Component.literal(
+                        org.espetro.team.FreeUnlockManager.statusText()));
+                    return 1;
+                }))
+            )
             .then(Commands.literal("reload")
                 .executes(ctx -> {
                     Espetro.reloadAllConfigs();
@@ -258,6 +290,8 @@ public class EspetroCommand {
                 .then(Commands.argument("faction", StringArgumentType.string())
                     .then(Commands.argument("class", StringArgumentType.string())
                         .then(Commands.argument("player", StringArgumentType.string())
+                    .suggests((ctx, builder) -> net.minecraft.commands.SharedSuggestionProvider
+                        .suggest(ctx.getSource().getServer().getPlayerNames(), builder))
                             .executes(ctx -> {
                                 String factionId = StringArgumentType.getString(ctx, "faction");
                                 String classId = StringArgumentType.getString(ctx, "class");
@@ -299,6 +333,8 @@ public class EspetroCommand {
                         .then(Commands.literal("variant")
                             .then(Commands.argument("variant", StringArgumentType.string())
                                 .then(Commands.argument("player", StringArgumentType.string())
+                    .suggests((ctx, builder) -> net.minecraft.commands.SharedSuggestionProvider
+                        .suggest(ctx.getSource().getServer().getPlayerNames(), builder))
                                     .executes(ctx -> {
                                         String factionId = StringArgumentType.getString(ctx, "faction");
                                         String classId = StringArgumentType.getString(ctx, "class");
@@ -444,6 +480,8 @@ public class EspetroCommand {
             // 管理员跳边：/espetro changeteam <玩家名>
             .then(Commands.literal("changeteam")
                 .then(Commands.argument("player", StringArgumentType.string())
+                    .suggests((ctx, builder) -> net.minecraft.commands.SharedSuggestionProvider
+                        .suggest(ctx.getSource().getServer().getPlayerNames(), builder))
                     .executes(ctx -> {
                         String playerName = StringArgumentType.getString(ctx, "player");
                         var target = ctx.getSource().getServer().getPlayerList()
@@ -469,6 +507,8 @@ public class EspetroCommand {
             // 管理员观战：/espetro observer <玩家名>
             .then(Commands.literal("observer")
                 .then(Commands.argument("player", StringArgumentType.string())
+                    .suggests((ctx, builder) -> net.minecraft.commands.SharedSuggestionProvider
+                        .suggest(ctx.getSource().getServer().getPlayerNames(), builder))
                     .executes(ctx -> {
                         String playerName = StringArgumentType.getString(ctx, "player");
                         var target = ctx.getSource().getServer().getPlayerList()

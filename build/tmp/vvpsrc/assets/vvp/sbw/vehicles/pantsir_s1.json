@@ -1,0 +1,8 @@
+{
+  "ID": "vvp:pantsir_s1",
+  "Model": {
+    "Model": "vvp:geo/pantsir_s1.geo.json",
+    "Texture": "vvp:textures/entity/pantsir_s1.png",
+    "Animation": "vvp:animations/pantsir_s1.animation.json"
+  }
+}

@@ -1,0 +1,109 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.fh_77bw.open": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"cover": {
+					"rotation": [0, 0, 67.5]
+				},
+				"cover2": {
+					"rotation": [0, 0, -67.5]
+				},
+				"cover3": {
+					"rotation": [0, 0, 67.5]
+				},
+				"cover4": {
+					"rotation": [0, 0, -67.5]
+				}
+			}
+		},
+		"animation.fh_77bw.out": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"shensuo": {
+					"position": [0, 0, -18]
+				}
+			}
+		},
+		"animation.fh_77bw.hoe_up": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"hoe": {
+					"rotation": [45, 0, 0]
+				}
+			}
+		},
+		"animation.main.fire": {
+			"animation_length": 1,
+			"bones": {
+				"tube": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0167": [0, 0, 18],
+						"0.2917": [0, 0, 0],
+						"0.6583": [0, 0, 0]
+					}
+				},
+				"barrelBase": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.05": [-1, 0, 0],
+						"0.2": [-0.75, 0, 0],
+						"0.4667": [0.5, 0, 0],
+						"0.8": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.main.idle": {
+			"animation_length": 1
+		},
+		"animation.machine_gun.idle": {
+			"animation_length": 0.1,
+			"bones": {
+				"flare": {
+					"scale": 0
+				}
+			}
+		},
+		"animation.machine_gun.fire": {
+			"animation_length": 0.15,
+			"bones": {
+				"mg2": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.0417": [0, 0, 0],
+						"0.0583": [-0.5, 0, 0],
+						"0.1083": [-0.2, 0, 0],
+						"0.1417": [0, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0417": [0, 0, 0.085],
+						"0.0583": [0, 0, 0.235],
+						"0.0833": [0, 0, 0.06],
+						"0.1417": [0, 0, 0]
+					}
+				},
+				"action": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0083": [0, 0, 0.85],
+						"0.0667": [0, 0, 0]
+					}
+				},
+				"flare": {
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.0083": [8, 8, 8],
+						"0.05": [8, 8, 8],
+						"0.075": [1, 1, 1],
+						"0.0917": [0, 0, 0],
+						"0.15": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

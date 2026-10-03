@@ -1,0 +1,74 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.m1a2sepv2.fire":  {
+                                                        "animation_length":  0.5417,
+                                                        "bones":  {
+                                                                      "1":  {
+                                                                                "position":  {
+                                                                                                 "0.0":  [
+                                                                                                             0,
+                                                                                                             0,
+                                                                                                             0
+                                                                                                         ],
+                                                                                                 "0.0833":  [
+                                                                                                                0,
+                                                                                                                0,
+                                                                                                                1
+                                                                                                            ],
+                                                                                                 "0.5":  [
+                                                                                                             0,
+                                                                                                             0,
+                                                                                                             0
+                                                                                                         ]
+                                                                                             }
+                                                                            }
+                                                                  }
+                                                    },
+                       "animation.cannon.idle":  {
+                                                     "loop":  true,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.cannon.fire":  {
+                                                     "loop":  "hold_on_last_frame",
+                                                     "animation_length":  0.5417,
+                                                     "bones":  {
+                                                                   
+                                                                   "1":  {
+                                                                             "position":  {
+                                                                                              "0.0":  [
+                                                                                                          0,
+                                                                                                          0,
+                                                                                                          0
+                                                                                                      ],
+                                                                                              "0.0833":  [
+                                                                                                             0,
+                                                                                                             0,
+                                                                                                             1
+                                                                                                         ],
+                                                                                              "0.5":  [
+                                                                                                          0,
+                                                                                                          0,
+                                                                                                          0
+                                                                                                      ]
+                                                                                          }
+                                                                         }
+                                                               }
+                                                 },
+                       "animation.machine_gun.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.machine_gun.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      }
+                   }
+}

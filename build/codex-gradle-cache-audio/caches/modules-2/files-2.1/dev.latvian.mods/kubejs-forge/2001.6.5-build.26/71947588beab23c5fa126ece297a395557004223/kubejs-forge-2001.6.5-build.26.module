@@ -1,0 +1,138 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "dev.latvian.mods",
+    "module": "kubejs-forge",
+    "version": "2001.6.5-build.26",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "dev.architectury",
+          "module": "architectury-forge",
+          "version": {
+            "requires": "9.1.12"
+          }
+        },
+        {
+          "group": "dev.latvian.mods",
+          "module": "rhino-forge",
+          "version": {
+            "requires": "2001.2.2-build.17"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "kubejs-forge-2001.6.5-build.26.jar",
+          "url": "kubejs-forge-2001.6.5-build.26.jar",
+          "size": 1658792,
+          "sha512": "e5f53b5871a9f5660f4482b9bfe951d4a24be330de56bf6fb5c1436b584851071a4e43ac9c38dfcd3b64685afdd6624cc60f7f0ca0d94ec8051dab393e4d75fe",
+          "sha256": "e9cc7fb745d5edeca7c0edb3cbf2313ff080f705ba18b7865e4d64f7be831e08",
+          "sha1": "6986aef8f4a918b8df0e2ed9dc82244c5ac740da",
+          "md5": "fa3ff691f488b42a3b8aa113e08e6fec"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.llamalad7",
+          "module": "mixinextras-common",
+          "version": {
+            "requires": "0.2.0-rc.2"
+          }
+        },
+        {
+          "group": "io.github.llamalad7",
+          "module": "mixinextras-forge",
+          "version": {
+            "requires": "0.2.0-rc.2"
+          }
+        },
+        {
+          "group": "dev.architectury",
+          "module": "architectury-forge",
+          "version": {
+            "requires": "9.1.12"
+          }
+        },
+        {
+          "group": "dev.latvian.mods",
+          "module": "rhino-forge",
+          "version": {
+            "requires": "2001.2.2-build.17"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "kubejs-forge-2001.6.5-build.26.jar",
+          "url": "kubejs-forge-2001.6.5-build.26.jar",
+          "size": 1658792,
+          "sha512": "e5f53b5871a9f5660f4482b9bfe951d4a24be330de56bf6fb5c1436b584851071a4e43ac9c38dfcd3b64685afdd6624cc60f7f0ca0d94ec8051dab393e4d75fe",
+          "sha256": "e9cc7fb745d5edeca7c0edb3cbf2313ff080f705ba18b7865e4d64f7be831e08",
+          "sha1": "6986aef8f4a918b8df0e2ed9dc82244c5ac740da",
+          "md5": "fa3ff691f488b42a3b8aa113e08e6fec"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "kubejs-forge-2001.6.5-build.26-sources.jar",
+          "url": "kubejs-forge-2001.6.5-build.26-sources.jar",
+          "size": 697237,
+          "sha512": "472a384fb99dd683ec4307fefb92550cf4719597937d500e9f20d2e5fc8ee73110b3dc79ab4d38114b8d780217fdc52e2491ab4abebd262ded9268e47c695a34",
+          "sha256": "895d2f31f0e5611e63736340406006c7b2ab448a5e04a0f593346258ae86d47b",
+          "sha1": "6985539669bdaf61203e4477ada5f54a884d42d2",
+          "md5": "2c34356161b2014ea0f6576ead27231c"
+        }
+      ]
+    }
+  ]
+}

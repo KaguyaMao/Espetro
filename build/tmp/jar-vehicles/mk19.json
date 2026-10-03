@@ -1,0 +1,133 @@
+{
+    "ID":  "dragonrise_reforge:mk19",
+    "MaxHealth":  40,
+    "MaxEnergy":  0,
+    "TurretPos":  [
+                      0,
+                      0.9689,
+                      0
+                  ],
+    "TurretTurnSpeed":  [
+                            10,
+                            10
+                        ],
+    "TurretPitchRange":  [
+                             -40,
+                             60
+                         ],
+    "BarrelPos":  [
+                      0,
+                      0.206,
+                      0
+                  ],
+    "Seats":  {
+                  "Transform":  "Turret",
+                  "Position":  [
+                                   0,
+                                   -1.3689,
+                                   -1
+                               ],
+                  "MinPitch":  -9,
+                  "MaxPitch":  60,
+                  "CameraPos":  {
+                                    "Transform":  "Turret",
+                                    "UseFixedCameraPos":  true,
+                                    "Position":  [
+                                                     0,
+                                                     0.35,
+                                                     0
+                                                 ],
+                                    "Direction":  "Barrel"
+                                },
+                  "Weapons":  [
+                                  "Cannon"
+                              ],
+                  "Sensitivity":  [
+                                      0.55,
+                                      0.75,
+                                      1
+                                  ],
+                  "DismountInfo":  {
+                                       "Transform":  "Turret",
+                                       "Position":  [
+                                                        0,
+                                                        0.25,
+                                                        0
+                                                    ]
+                                   }
+              },
+    "UsePassengerCreativeAmmoBox":  true,
+    "Weapons":  {
+                    "Cannon":  {
+                                   "DefaultFireMode":  "Auto",
+                                   "AvailableFireModes":  "Auto",
+                                   "Projectile":  "superbwarfare:gun_grenade",
+                                   "DefaultZoom":  3,
+                                   "RPM":  280,
+                                   "Magazine":  20,
+                                   "EmptyReloadTime":  100,
+                                   "Velocity":  8,
+                                   "Gravity":  0.05,
+                                   "Damage":  55,
+                                   "ExplosionDamage":  10,
+                                   "ExplosionRadius":  5,
+                                   "HeatPerShoot":  6,
+                                   "NaturalCooldown":  1,
+                                   "RecoilTime":  31,
+                                   "RecoilForce":  1.62,
+                                   "ShootAnimationTime":  3,
+                                   "Spread":  1.2,
+                                   "Crosshair":  "@VehicleCommonGun",
+                                   "CrosshairColor":  "0xFFC700",
+                                   "Name":  "dragonrise_reforge:mk19",
+                                   "SoundInfo":  {
+                                                     "Fire1P":  "dragonrise_reforge:zbd04a_30mm_fire_1p",
+                                                     "Fire3P":  "dragonrise_reforge:zbd04a_30mm_fire_3p",
+                                                     "Fire3PFar":  "dragonrise_reforge:zbd04a_30mm_fire_3p_far",
+                                                     "Fire3PVeryFar":  "superbwarfare:mi_28_cannon_veryfar",
+                                                     "Change":  "dragonrise_reforge:change_weapon"
+                                                 },
+                                   "SoundRadius":  24,
+                                   "AmmoType":  "superbwarfare:grenade_40mm",
+                                   "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/grenade.png",
+                                   "ShootPos":  {
+                                                    "Transform":  "Barrel",
+                                                    "Positions":  [
+                                                                      [
+                                                                          0,
+                                                                          -0.2,
+                                                                          0
+                                                                      ]
+                                                                  ],
+                                                    "Directions":  [
+                                                                       "Barrel"
+                                                                   ]
+                                                }
+                               }
+                },
+    "ThirdPersonCameraPos":  [
+                                 -0.3,
+                                 1,
+                                 -1
+                             ],
+    "Mass":  0.05,
+    "DamageModifiers":  [
+                            "minecraft:lava * 2.667",
+                            "All * 1.75",
+                            "@minecraft:tnt * 3",
+                            "@minecraft:tnt_minecart * 3"
+                        ],
+    "VehicleContainerType":  "Mini",
+    "EngineType":  "Fixed",
+    "HasLowHealthWarning":  false,
+    "SelfHurtPercent":  0,
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/mk19_icon.png",
+    "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+    "Type":  "Defense",
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/mk19.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/mk19.png"
+                   }
+               ]
+}

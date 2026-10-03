@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/m3a3.animation.json",
+    "ID":  "dragonrise_reforge:m3a3",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/m3a3.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/m3a3.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/m3a3.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/m3a3.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/m3a3.png"
+                   }
+               ]
+}

@@ -1,0 +1,18 @@
+{
+  "Skins": [
+    {
+      "Id": "sand",
+      "Name": "沙漠涂装",
+      "Description": "使用喷漆罐喷涂的沙漠色涂装",
+      "Texture": "dragonrise_reforge:textures/entity/aavc7c1_sand.png",
+      "Priority": 0
+    },
+    {
+      "Id": "green",
+      "Name": "绿色涂装",
+      "Description": "使用喷漆罐喷涂的 绿色涂装涂装",
+      "Texture": "dragonrise_reforge:textures/entity/aavc7c1_green.png",
+      "Priority": 0
+    }
+  ]
+}

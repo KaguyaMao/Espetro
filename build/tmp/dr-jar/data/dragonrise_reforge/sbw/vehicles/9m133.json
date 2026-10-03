@@ -1,0 +1,129 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/9m133.animation.json",
+    "ID":  "dragonrise_reforge:9m133",
+    "MaxHealth":  60,
+    "MaxEnergy":  0,
+    "TurretPos":  [
+                      0,
+                      0,
+                      0
+                  ],
+    "TurretTurnSpeed":  [
+                            10,
+                            10
+                        ],
+    "TurretPitchRange":  [
+                             -40,
+                             40
+                         ],
+    "BarrelPos":  [
+                      0.0,
+                      1.268525,
+                      0.0
+                  ],
+    "Seats":  {
+                  "Transform":  "Turret",
+                  "Position":  [
+                                   -0.3,
+                                   -0.6,
+                                   -0.6
+                               ],
+                  "MinPitch":  -40,
+                  "MaxPitch":  40,
+                  "CameraPos":  {
+                                    "Transform":  "Barrel",
+                                    "UseFixedCameraPos":  true,
+                                    "Position":  [
+                                                     0.1546875,
+                                                     0.043975,
+                                                     0.5
+                                                 ],
+                                    "Direction":  "Barrel"
+                                },
+                  "Weapons":  [
+                                  "Missile"
+                              ],
+                  "Sensitivity":  [
+                                      0.55,
+                                      0.75,
+                                      1
+                                  ],
+                  "DismountInfo":  {
+                                       "Transform":  "Turret",
+                                       "Position":  [
+                                                        0.3,
+                                                        1,
+                                                        -0.6
+                                                    ]
+                                   }
+              },
+    "UsePassengerCreativeAmmoBox":  false,
+    "Weapons":  {
+                    "Missile":  {
+                                    "DefaultFireMode":  "Semi",
+                                    "AvailableFireModes":  "Semi",
+                                    "Name":  "dragonrise_reforge:9m133",
+                                    "AmmoType":  "superbwarfare:medium_anti_ground_missile",
+                                    "Projectile":  "superbwarfare:wire_guide_missile",
+                                    "DefaultZoom":  3,
+                                    "Magazine":  1,
+                                    "Damage":  1000,
+                                    "ExplosionDamage":  60,
+                                    "ExplosionRadius":  6,
+                                    "RPM":  8,
+                                    "Velocity":  8.3333,
+                                    "Gravity":  0.05,
+                                    "ShootShake":  [
+                                                       6,
+                                                       6,
+                                                       14
+                                                   ],
+                                    "ShootPos":  {
+                                                     "Transform":  "Barrel",
+                                                     "Positions":  [
+                                                                       [
+                                                                           0.1005,
+                                                                           -0.220375,
+                                                                           -0.0858375
+                                                                       ]
+                                                                   ],
+                                                     "Directions":  [
+                                                                        "Barrel"
+                                                                    ]
+                                                 },
+                                    "SoundInfo":  {
+                                                      "Fire1P":  "superbwarfare:bmp_2_missile_fire_1p",
+                                                      "Fire3P":  "superbwarfare:bmp_2_missile_fire_3p"
+                                                  },
+                                    "SoundRadius":  12,
+                                    "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/he.png",
+                                    "Crosshair":  "@VehicleCommonMissile"
+                                }
+                },
+    "ThirdPersonCameraPos":  [
+                                 -0.3,
+                                 1,
+                                 -1
+                             ],
+    "Mass":  0.05,
+    "DamageModifiers":  [
+                            "minecraft:lava * 2.667",
+                            "All * 0.75",
+                            "@minecraft:tnt * 3",
+                            "@minecraft:tnt_minecart * 3"
+                        ],
+    "EngineType":  "Fixed",
+    "HudType":  "@Land",
+    "VehicleContainerType":  "Empty",
+    "HasLowHealthWarning":  false,
+    "SelfHurtPercent":  0,
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/9m133_icon.png",
+    "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+    "Type":  "Defense",
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/9m133.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/9m133.png"
+                   }
+               ]
+}

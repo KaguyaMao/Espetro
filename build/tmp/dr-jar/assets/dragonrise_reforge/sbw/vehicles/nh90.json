@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:nh90",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/nh90.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/nh90.png"
+              },
+    "MouseSpeed":  [
+                       0.3,
+                       0.3
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/nh90.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/nh90.png"
+                   }
+               ]
+}

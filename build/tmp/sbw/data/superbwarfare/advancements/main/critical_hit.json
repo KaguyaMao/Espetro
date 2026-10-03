@@ -1,0 +1,44 @@
+{
+  "parent": "superbwarfare:main/delete_your_gun",
+  "criteria": {
+    "0": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "tags": [
+              {
+                "expected": true,
+                "id": "superbwarfare:sbw_gun_fire_damage"
+              }
+            ]
+          },
+          "dealt": {
+            "min": 514.0
+          }
+        }
+      },
+      "trigger": "superbwarfare:vehicle_hurt"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "superbwarfare.advancement.main.critical_hit.des"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "item": "superbwarfare:ntw_20"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "superbwarfare.advancement.main.critical_hit"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

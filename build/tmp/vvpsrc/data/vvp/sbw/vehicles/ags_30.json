@@ -1,0 +1,127 @@
+{
+  "ID": "vvp:ags_30",
+  "MaxHealth": 80,
+  "MaxEnergy": 0,
+  "TurretPos": [
+    -0.0011,
+    0.7001,
+    -0.113
+  ],
+  "TurretTurnSpeed": [
+    8,
+    8
+  ],
+  "TurretPitchRange": [
+    -15,
+    45
+  ],
+  "BarrelPos": [
+    0.0011,
+    0.123,
+    -0.1197
+  ],
+  "Seats": {
+    "Transform": "Vehicle",
+    "Position": [
+      0,
+      -0.25,
+      -1.5
+    ],
+    "BanHand": true,
+    "MinYaw": -90,
+    "MaxYaw": 90,
+    "MinPitch": -15,
+    "MaxPitch": 45,
+    "CameraPos": {
+      "Transform": "Barrel",
+      "UseFixedCameraPos": true,
+      "Position": [
+        0,
+        0.3,
+        -0.1
+      ],
+      "Direction": "Barrel"
+    },
+    "Weapons": [
+      "Grenade"
+    ],
+    "Sensitivity": [
+      0.6,
+      0.8,
+      1
+    ],
+    "DismountInfo": {
+      "Transform": "Vehicle",
+      "Position": [
+        1.0,
+        0,
+        0
+      ]
+    }
+  },
+  "UsePassengerCreativeAmmoBox": false,
+  "Weapons": {
+    "Grenade": {
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:small_cannon_shell",
+      "DefaultZoom": 2,
+      "RPM": 350,
+      "Magazine": 32,
+      "EmptyReloadTime": 80,
+      "Velocity": 7,
+      "Damage": 10,
+      "ExplosionDamage": 40,
+      "ExplosionRadius": 2.2,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "RecoilTime": 30,
+      "RecoilForce": 3.0,
+      "ShootAnimationTime": 3,
+      "Spread": 0.8,
+      "Crosshair": "@VehicleCommon",
+      "CrosshairColor": "0x66FF00",
+      "Name": "weapon.vvp.ags_30",
+      "SoundInfo": {
+        "Fire1P": "vvp:hk_gmg_1p",
+        "Fire3P": "vvp:hk_gmg_1p",
+        "Fire3PFar": "vvp:hk_gmg_3p"
+      },
+      "SoundRadius": 16,
+      "AmmoType": "vvp:item_40_mm",
+      "Icon": "vvp:textures/screens/vehicle_weapon/40_mm.png",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            0,
+            -0.0268,
+            1.4419
+          ]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      }
+    }
+  },
+  "ThirdPersonCameraPos": [
+    0,
+    1.2,
+    -1.5
+  ],
+  "Mass": 0.03,
+  "DamageModifiers": [
+    "minecraft:lava * 2",
+    "All * 0.5",
+    "@minecraft:tnt * 4",
+    "@minecraft:tnt_minecart * 4"
+  ],
+  "EngineType": "Fixed",
+  "VehicleContainerType": "Empty",
+  "HasLowHealthWarning": false,
+  "SelfHurtPercent": 0,
+  "VehicleIcon": "vvp:textures/vehicle_icon/ags_30_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/defense.png",
+  "Type": "Defense"
+}

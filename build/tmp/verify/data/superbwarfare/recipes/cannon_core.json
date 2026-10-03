@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/steel"
+    },
+    "b": {
+      "item": "minecraft:dispenser"
+    },
+    "c": {
+      "item": "superbwarfare:cemented_carbide_action"
+    },
+    "d": {
+      "item": "minecraft:piston"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "bcd",
+    "aaa"
+  ],
+  "result": {
+    "item": "superbwarfare:cannon_core"
+  },
+  "show_notification": true
+}

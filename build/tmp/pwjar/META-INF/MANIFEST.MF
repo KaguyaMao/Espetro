@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: Ping Wheel
+Specification-Vendor: Luken
+Specification-Version: 1.12.1
+Implementation-Title: forge
+Implementation-Version: 1.12.1
+Implementation-Vendor: Luken
+Built-On-Minecraft: 1.20.1
+

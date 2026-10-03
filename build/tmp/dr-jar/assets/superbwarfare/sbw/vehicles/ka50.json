@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:ka50",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ka50.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ka50.png"
+              },
+    "MouseSpeed":  [
+                       0.3,
+                       0.3
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ka50.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ka50.png"
+                   }
+               ]
+}

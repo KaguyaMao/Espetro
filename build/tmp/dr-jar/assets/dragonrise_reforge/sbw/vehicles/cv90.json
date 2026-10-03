@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/cv90.animation.json",
+    "ID":  "dragonrise_reforge:cv90",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/cv90.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/cv90.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/cv90.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/cv90.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/cv90.png"
+                   }
+               ]
+}

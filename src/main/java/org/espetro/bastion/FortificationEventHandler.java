@@ -137,6 +137,63 @@ public final class FortificationEventHandler {
         }
     }
 
+    /**
+     * 敌方不得与己方工事的<strong>方块</strong>做任何交互（右键使用、开关、容器等都拦掉）。
+     *
+     * <p>拆除不算交互：破坏方块走 {@link #onBlockBroken} 的完整度伤害流程，
+     * 铁镐的左/右键施工由 {@link #guardShovelWork} 处理，都不受这里影响。</p>
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onEnemyInteractBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getLevel().isClientSide()
+            || !(event.getLevel() instanceof ServerLevel level)
+            || !(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player)) {
+            return;
+        }
+        // 铁镐是施工工具：右键=拆除、左键=修复，交给 guardShovelWork / work 流程处理，
+        // 这里不能拦，否则敌方无法拆除己方工事。
+        if (player.getMainHandItem().getItem() == Items.IRON_SHOVEL) {
+            return;
+        }
+        String owner = FortificationManager.getInstance().teamAt(level, event.getPos());
+        if (!FortificationManager.isEnemyOf(player, owner)) {
+            return;
+        }
+        denyEnemyInteraction(event, player);
+    }
+
+    /** 敌方不得与己方工事的<strong>实体</strong>交互（结构实体、载具补给站等）。 */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onEnemyInteractEntity(PlayerInteractEvent.EntityInteract event) {
+        guardEnemyEntityInteraction(event, event.getTarget());
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onEnemyInteractEntitySpecific(PlayerInteractEvent.EntityInteractSpecific event) {
+        guardEnemyEntityInteraction(event, event.getTarget());
+    }
+
+    private static void guardEnemyEntityInteraction(PlayerInteractEvent event,
+                                                    net.minecraft.world.entity.Entity target) {
+        if (event.getLevel().isClientSide()
+            || !(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player)) {
+            return;
+        }
+        String owner = FortificationManager.getInstance().teamOfEntity(target);
+        if (!FortificationManager.isEnemyOf(player, owner)) {
+            return;
+        }
+        denyEnemyInteraction(event, player);
+    }
+
+    private static void denyEnemyInteraction(PlayerInteractEvent event,
+                                             net.minecraft.server.level.ServerPlayer player) {
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.FAIL);
+        player.displayClientMessage(net.minecraft.network.chat.Component.literal(
+            "§c这是敌方工事，无法交互（只可拆除）。"), true);
+    }
+
     @SubscribeEvent
     public static void onBastionBuilt(BastionLifecycleEvent.Built event) {
         org.espetro.network.NetworkManager.refreshDeployPointsForTeam(event.team());

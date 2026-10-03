@@ -1,0 +1,178 @@
+---- Minecraft Crash Report ----
+// I blame Dinnerbone.
+
+Time: 2026-08-24 04:44:59
+Description: Mod loading error has occurred
+
+java.lang.Exception: Mod Loading has failed
+	at net.minecraftforge.logging.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:60) ~[forge-1.20.1-47.4.22-universal.jar%23184!/:?] {re:classloading}
+	at net.minecraftforge.server.loading.ServerModLoader.load(ServerModLoader.java:37) ~[forge-1.20.1-47.4.22-universal.jar%23184!/:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:125) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:569) ~[?:?] {re:mixin}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.22.jar%2369!/:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.22.jar%2369!/:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.22.jar%2369!/:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: main
+Suspected Mods: NONE
+Stacktrace:
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?] {}
+-- MOD apricityui --
+Details:
+	Caused by 0: java.lang.NoClassDefFoundError: net/minecraft/client/renderer/MultiBufferSource
+		at com.sighs.apricityui.forge.AuiServicesBootstrap.<clinit>(AuiServicesBootstrap.java:20) ~[ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar%23150!/:1.2.2-hotfix1] {re:classloading}
+		at com.sighs.apricityui.forge.ApricityUIForge.<init>(ApricityUIForge.java:33) ~[ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar%23150!/:1.2.2-hotfix1] {re:classloading}
+		at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?] {}
+		at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?] {}
+		at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?] {}
+		at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?] {}
+		at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?] {}
+		at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:77) ~[javafmllanguage-1.20.1-47.4.22.jar%23181!/:?] {}
+		at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126) ~[fmlcore-1.20.1-47.4.22.jar%23180!/:?] {}
+		at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+		at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?] {}
+		at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?] {}
+		at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1193) ~[?:?] {}
+		at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1666) ~[?:?] {re:computing_frames}
+		at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1633) ~[?:?] {re:computing_frames}
+		at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?] {}
+
+	Mod File: /data/mods/ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar
+	Failure message: ApricityUI (apricityui) has failed to load correctly
+		java.lang.NoClassDefFoundError: net/minecraft/client/renderer/MultiBufferSource
+	Mod Version: 1.2.2-hotfix1
+	Mod Issue URL: NOT PROVIDED
+	Exception message: java.lang.ClassNotFoundException: net.minecraft.client.renderer.MultiBufferSource
+Stacktrace:
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	at com.sighs.apricityui.forge.AuiServicesBootstrap.<clinit>(AuiServicesBootstrap.java:20) ~[ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar%23150!/:1.2.2-hotfix1] {re:classloading}
+	at com.sighs.apricityui.forge.ApricityUIForge.<init>(ApricityUIForge.java:33) ~[ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar%23150!/:1.2.2-hotfix1] {re:classloading}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?] {}
+	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:77) ~[javafmllanguage-1.20.1-47.4.22.jar%23181!/:?] {}
+	at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126) ~[fmlcore-1.20.1-47.4.22.jar%23180!/:?] {}
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?] {}
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?] {}
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1193) ~[?:?] {}
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1666) ~[?:?] {re:computing_frames}
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1633) ~[?:?] {re:computing_frames}
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?] {}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Linux (amd64) version 7.0.0-28-generic
+	Java Version: 17.0.16, Azul Systems, Inc.
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Azul Systems, Inc.
+	Memory: 1094329000 bytes (1043 MiB) / 2147483648 bytes (2048 MiB) up to 17179869184 bytes (16384 MiB)
+	CPUs: 48
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen Threadripper PRO 5995WX 64-Cores
+	Identifier: AuthenticAMD Family 25 Model 8 Stepping 2
+	Microarchitecture: Zen 3
+	Frequency (GHz): -0.00
+	Number of physical packages: 1
+	Number of physical CPUs: 48
+	Number of logical CPUs: 48
+	Graphics card #0 name: unknown
+	Graphics card #0 vendor: unknown
+	Graphics card #0 VRAM (MB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MB): 193373.48
+	Virtual memory used (MB): 224680.69
+	Swap memory total (MB): 0.00
+	Swap memory used (MB): 0.00
+	JVM Flags: 20 total; -Xmx16G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeserver
+	ModLauncher naming: srg
+	ModLauncher services: 
+		mixin-0.8.5.jar mixin PLUGINSERVICE 
+		eventbus-6.2.33.jar eventbus PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar slf4jfixer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar object_holder_definalize PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtime_enum_extender PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar capability_token_subclass PLUGINSERVICE 
+		accesstransformers-8.0.4.jar accesstransformer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar taczexpands_coremod TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		minecraft@1.0
+		kotlinforforge@4.12.0
+		javafml@null
+		lowcodefml@null
+	Mod List: 
+		rhino-forge-2001.2.3-build.10.jar                 |Rhino                         |rhino                         |2001.2.3-build.10   |COMMON_SET|Manifest: NOSIGNATURE
+		ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar         |ApricityUI                    |apricityui                    |1.2.2-hotfix1       |ERROR     |Manifest: NOSIGNATURE
+		geckolib-forge-1.20.1-4.8.3.jar                   |GeckoLib 4                    |geckolib                      |4.8.3               |COMMON_SET|Manifest: NOSIGNATURE
+		player-animation-lib-forge-1.0.2-rc1+1.20.jar     |Player Animator               |playeranimator                |1.0.2-rc1+1.20      |COMMON_SET|Manifest: NOSIGNATURE
+		CustomSkinLoader_ForgeV2-14.28.jar                |CustomSkinLoader              |customskinloader              |14.28               |COMMON_SET|Manifest: 4a:31:8b:cf:34:eb:d0:13:f3:19:39:d5:d2:b9:12:78:b5:f2:8d:91:3e:6f:8f:ed:97:48:00:69:e1:30:3a:54
+		tetrachordlib-1.20+1.0.3.jar                      |Tetrachord Lib                |tetrachordlib                 |1.20+1.0.3          |COMMON_SET|Manifest: NOSIGNATURE
+		[n�UI] auratip-forge-1.20.1-1.1.1-beta.jar        |AuraTip                       |auratip                       |1.1.1-beta          |COMMON_SET|Manifest: NOSIGNATURE
+		snassets_particles-1.0.1.jar                      |SnAssets Particles            |snassets_particles            |1.0.1               |COMMON_SET|Manifest: NOSIGNATURE
+		xaerolib-forge-1.20.1-1.7.1.jar                   |XaeroLib                      |xaerolib                      |1.7.1               |COMMON_SET|Manifest: NOSIGNATURE
+		[8R���J�] tacz-1.20.1-1.1.8-release.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8               |COMMON_SET|Manifest: NOSIGNATURE
+		tacz_tactical_breaching-forge-1.20.1-1.0.1.jar    |TaCZ Tactical Breaching       |tacz_tactical_breaching       |1.0.1               |COMMON_SET|Manifest: NOSIGNATURE
+		Ping-Wheel-1.12.1-forge-1.20.1.jar                |Ping Wheel                    |pingwheel                     |1.12.1              |COMMON_SET|Manifest: NOSIGNATURE
+		[Xaero�L0�] xaeroworldmap-forge-1.20.1-1.44.2.jar|Xaero's World Map             |xaeroworldmap                 |1.44.2              |COMMON_SET|Manifest: NOSIGNATURE
+		taczmagazines-1.20.1-0.1.6-Beta.jar               |TaCZ: Magazines               |taczmagazines                 |0.1.6               |COMMON_SET|Manifest: NOSIGNATURE
+		mixinextras-forge-0.4.1.jar                       |MixinExtras                   |mixinextras                   |0.4.1               |COMMON_SET|Manifest: NOSIGNATURE
+		OELib-forge-1.20.1-0.2.4.1.jar                    |OELib                         |oelib                         |0.2.4.1             |COMMON_SET|Manifest: NOSIGNATURE
+		[S�M�] superbwarfare-0.8.9-final-mc1.20.1-6effe438|Superb Warfare                |superbwarfare                 |0.8.9               |COMMON_SET|Manifest: NOSIGNATURE
+		vvp-alpha-beta-1.20.1-0.2.1.jar                   |Vintage Vehicle Pack          |vvp                           |0.2.0               |COMMON_SET|Manifest: NOSIGNATURE
+		[�X��] memoryleakfix-forge-1.17+-1.1.5.jar      |Memory Leak Fix               |memoryleakfix                 |1.1.5               |COMMON_SET|Manifest: NOSIGNATURE
+		cloth-config-11.1.136-forge.jar                   |Cloth Config v10 API          |cloth_config                  |11.1.136            |COMMON_SET|Manifest: NOSIGNATURE
+		forge-1.20.1-47.4.22-universal.jar                |Forge                         |forge                         |47.4.22             |COMMON_SET|Manifest: NOSIGNATURE
+		server-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |COMMON_SET|Manifest: NOSIGNATURE
+		voicechat-forge-1.20.1-2.6.20.jar                 |Simple Voice Chat             |voicechat                     |1.20.1-2.6.20       |COMMON_SET|Manifest: NOSIGNATURE
+		fcp-1.1.1.jar                                     |Frontline Combat Pack         |fcp                           |1.1.1               |COMMON_SET|Manifest: NOSIGNATURE
+		[k�] spark-1.10.53-forge.jar                      |spark                         |spark                         |1.10.53             |COMMON_SET|Manifest: NOSIGNATURE
+		kffmod-4.12.0.jar                                 |Kotlin For Forge              |kotlinforforge                |4.12.0              |COMMON_SET|Manifest: NOSIGNATURE
+		disablef5-1.2(1).jar                              |Disable F5                    |disablef5                     |1.0.0               |COMMON_SET|Manifest: NOSIGNATURE
+		curios-forge-5.14.1+1.20.1.jar                    |Curios API                    |curios                        |5.14.1+1.20.1       |COMMON_SET|Manifest: NOSIGNATURE
+		flywheel-forge-1.20.1-1.0.5.jar                   |Flywheel                      |flywheel                      |1.0.5               |COMMON_SET|Manifest: NOSIGNATURE
+		Ponder-Forge-1.20.1-1.0.91.jar                    |Ponder                        |ponder                        |1.0.91              |COMMON_SET|Manifest: NOSIGNATURE
+		[:���] create-1.20.1-6.0.8.jar                    |Create                        |create                        |6.0.8               |COMMON_SET|Manifest: NOSIGNATURE
+		mutil-1.20.1-6.3.0.jar                            |mutil                         |mutil                         |6.3.0               |COMMON_SET|Manifest: NOSIGNATURE
+		simplebedrockmodel-2.3.3-forge-mc1.20.1.jar       |SimpleBedrockModel            |simplebedrockmodel            |2.3.3-forge-mc1.20.1|COMMON_SET|Manifest: NOSIGNATURE
+		tmp_17062968355354752238.tmp                      |TACZExpands                   |taczexpands                   |1.1.5               |COMMON_SET|Manifest: NOSIGNATURE
+		taczadditions-1.20.1-1.0.0-hotfix.jar             |TaCZ: Additions               |taczadditions                 |1.0.0-hotfix        |COMMON_SET|Manifest: NOSIGNATURE
+		architectury-9.2.14-forge.jar                     |Architectury                  |architectury                  |9.2.14              |COMMON_SET|Manifest: NOSIGNATURE
+		kubejs-forge-2001.6.5-build.26.jar                |KubeJS                        |kubejs                        |2001.6.5-build.26   |COMMON_SET|Manifest: NOSIGNATURE
+		taczjs-forge-1.4.2+mc1.20.1.jar                   |TaCZ JS                       |taczjs                        |1.4.2+mc1.20.1      |COMMON_SET|Manifest: NOSIGNATURE
+		[�'S��] ferritecore-6.0.1-forge.jar               |Ferrite Core                  |ferritecore                   |6.0.1               |COMMON_SET|Manifest: 41:ce:50:66:d1:a0:05:ce:a1:0e:02:85:9b:46:64:e0:bf:2e:cf:60:30:9a:fe:0c:27:e0:63:66:9a:84:ce:8a
+		mm_armor-1.1.0-forge-1.20.1.jar                   |miklos_military_armor_r       |mm_armor                      |1.1.0               |COMMON_SET|Manifest: NOSIGNATURE
+		[+��p] doomsday_decoration-1.1.3-forge-1.20.1.jar |Doomsday Decoration           |doomsday_decoration           |1.0.0               |COMMON_SET|Manifest: NOSIGNATURE
+		dragonrise_reforge-1.4.1.01-20260728.jar          |DragonRise:Reforge            |dragonrise_reforge            |1.4.1.01-20260728   |COMMON_SET|Manifest: NOSIGNATURE
+		espetro-1.2.0.jar                                 |Espetro                       |espetro                       |1.2.0               |COMMON_SET|Manifest: NOSIGNATURE
+		esvoice-1.0.0-final.jar                           |Esvoice                       |esvoice                       |1.0.0-final         |COMMON_SET|Manifest: NOSIGNATURE
+		espoints-1.2.0.jar                                |EsPoints                      |espoints                      |1.2.0               |COMMON_SET|Manifest: NOSIGNATURE
+	Crash Report UUID: d30e2c9b-3a94-4f48-9fc6-cfeeba619940
+	FML: 47.4
+	Forge: net.minecraftforge:47.4.22

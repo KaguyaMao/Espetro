@@ -1,0 +1,315 @@
+{
+  "ID": "vvp:bushmaster",
+  "MaxHealth": 200,
+  "MaxEnergy": 6000000,
+  "OBB": [
+    {
+      "Size": [
+        0.25,
+        0.7,
+        0.7
+      ],
+      "Position": [
+        1.1,
+        0.7,
+        2.5
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.25,
+        0.7,
+        0.7
+      ],
+      "Position": [
+        1.1,
+        0.7,
+        -2
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.25,
+        0.7,
+        0.7
+      ],
+      "Position": [
+        -1.1,
+        0.7,
+        2.5
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.25,
+        0.7,
+        0.7
+      ],
+      "Position": [
+        -1.1,
+        0.7,
+        -2
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        1.5,
+        1.2,
+        2.8
+      ],
+      "Position": [
+        0,
+        1.8,
+        0.5
+      ]
+    },
+    {
+      "Size": [
+        1.5,
+        1,
+        1.2
+      ],
+      "Position": [
+        0,
+        2.1,
+        -1.8
+      ]
+    },
+    {
+      "Size": [
+        1.5,
+        0.5,
+        1
+      ],
+      "Position": [
+        0,
+        1.8,
+        3
+      ],
+      "Part": "MainEngine"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.6173,
+        1.1,
+        1.5252
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.5963,
+        1.1,
+        1.5252
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.6361,
+        1.1,
+        -0.8254
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Orientation": 90,
+      "Transform": "Vehicle",
+      "Position": [
+        0.5786,
+        1.1,
+        -1.5346
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Orientation": 90,
+      "Transform": "Vehicle",
+      "Position": [
+        0.5786,
+        1.1,
+        -1.9106
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Orientation": -90,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.6011,
+        1.1,
+        -0.8966
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Orientation": -90,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.6011,
+        1.1,
+        -1.5701
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Orientation": -90,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.5581,
+        1.1,
+        -2.3229
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 80,
+    "WheelRotSpeed": 1.1,
+    "WheelDifferential": 0.5,
+    "TrackRotSpeed": 1.9,
+    "TrackDifferential": 0.8,
+    "MaxForwardSpeedRate": 0.95,
+    "MaxBackwardSpeedRate": 0.45,
+    "Increment": 0.022,
+    "Decrement": 0.012,
+    "SteeringSpeed": 0.085,
+    "EngineSoundVolume": 0.7
+  },
+  "ThirdPersonCameraPos": [
+    0,
+    1.5,
+    4.5
+  ],
+  "HasDecoy": false,
+  "UpStep": 2,
+  "RotateOffsetHeight": 2,
+  "Mass": 15,
+  "DamageModifiers": [
+    "minecraft:lava - -12",
+    "minecraft:lava * 12",
+    "All * 0.25",
+    "minecraft:arrow * 1.2",
+    "minecraft:trident * 1.2",
+    "minecraft:mob_attack * 2.0",
+    "minecraft:mob_attack_no_aggro * 1.8",
+    "minecraft:mob_projectile * 1.2",
+    "minecraft:explosion * 5",
+    "minecraft:player_explosion * 5",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 2.5",
+    "superbwarfare:mine * 0.9",
+    "superbwarfare:projectile_hit * 1.0",
+    "superbwarfare:grapeshot_hit * 0.4",
+    "superbwarfare:laser * 1.0",
+    "@#superbwarfare:aerial_bomb * 3",
+    "#superbwarfare:projectile * 0.3",
+    "#superbwarfare:projectile_absolute * 0.9",
+    "superbwarfare:vehicle_strike * 3.5",
+    "@superbwarfare:mortar_shell * 1.5",
+    "@superbwarfare:gun_grenade * 1.8",
+    "@superbwarfare:javelin_missile * 0.85",
+    "@superbwarfare:igla_9k38_missile * 0.8",
+    "@superbwarfare:wire_guide_missile * 1.2",
+    "All - 12"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 140,
+    "ExplosionRadius": 4,
+    "ExplodeBlocks": false
+  },
+  "VehicleIcon": "vvp:textures/vehicle_icon/bushmaster_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/land.png",
+  "Type": "APC",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.15,
+        0.09,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "vvp:bushmaster_engine",
+  "HornSound": "superbwarfare:truck_horn",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [
+      1.15,
+      0,
+      2.5
+    ],
+    [
+      -1.15,
+      0,
+      2.5
+    ],
+    [
+      1.15,
+      0,
+      -2
+    ],
+    [
+      -1.15,
+      0,
+      -2
+    ]
+  ],
+  "InertiaRotateRate": 1.5
+}

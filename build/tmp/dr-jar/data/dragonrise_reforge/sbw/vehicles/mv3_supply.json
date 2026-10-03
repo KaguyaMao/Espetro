@@ -1,0 +1,223 @@
+{
+  "ID": "dragonrise_reforge:mv3_supply",
+  "TurretControllerIndex": 20,
+  "OBB": [
+    {
+      "Size": [0.098,0.481,2.07],
+      "Position": [1.219,1.758,-2.304]
+    },
+    {
+      "Size": [1.067,0.388,0.602],
+      "Position": [0.0,1.689,2.83],
+      "CustomRotate": [15.0,0.0,0.0],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [1.005,0.45,0.727],
+      "Position": [0.0,1.428,2.761]
+    },
+    {
+      "Size": [1.192,0.388,1.07],
+      "Position": [0.0,1.851,1.258]
+    },
+    {
+      "Size": [0.098,0.481,2.07],
+      "Position": [-1.219,1.758,-2.304]
+    },
+    {
+      "Size": [1.13,0.481,0.164],
+      "Position": [0.0,1.758,-0.398]
+    },
+    {
+      "Size": [1.13,0.388,0.039],
+      "Position": [0.0,1.039,-4.398]
+    },
+    {
+      "Size": [1.192,0.106,1.07],
+      "Position": [0.0,2.82,1.258]
+    },
+    {
+      "Size": [0.411,0.231,3.695],
+      "Position": [0.0,1.133,-0.179]
+    },
+    {
+      "Size": [0.317,0.255,0.578],
+      "Position": [0.719,0.969,0.938]
+    },
+    {
+      "Size": [0.348,0.317,0.234],
+      "Position": [-0.75,1.031,0.844]
+    },
+    {
+      "Size": [0.348,0.161,0.328],
+      "Position": [0.75,1.062,-0.312]
+    },
+    {
+      "Size": [0.348,0.161,0.234],
+      "Position": [-0.75,1.062,-0.531]
+    },
+    {
+      "Size": [0.973,1.106,0.977],
+      "Position": [0.016,2.57,-1.648]
+    },
+    {
+      "Size": [1.223,0.95,3.695],
+      "Position": [0.0,0.883,0.04],
+      "Part": "Collision"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [-1.014,0.586,2.353],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [-1.014,0.586,-1.522],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [-1.014,0.586,-2.897],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [1.014,0.617,2.353],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [1.014,0.617,-1.522],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.225,0.58,0.547],
+      "Position": [1.014,0.617,-2.959],
+      "Part": "WheelRight"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [0.659,0.935,1.542]
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [-0.659,0.935,1.542]
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [-0.659,0.935,0.73]
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [0.659,0.935,0.73]
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [0.0,0.935,0.73]
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [-0.847,1.123,-2.958],
+      "Orientation": 90.0
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [-0.847,1.123,-3.833],
+      "Orientation": 90.0
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [0.847,1.123,-2.958],
+      "Orientation": -90.0
+    },
+    {
+      "IsEnclosed": false,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [0.847,1.123,-3.833],
+      "Orientation": -90.0
+    }
+  ],
+  "UpStep": 1.5,
+  "MaxHealth": 250,
+  "MaxEnergy": 100000,
+  "HudType": "@Land",
+  "Type": "Car",
+  "EngineType": "Wheel",
+  "EngineSound": "superbwarfare:wheel_engine",
+  "ContainerIcon": "dragonrise_reforge:textures/gui/vehicle/type/cn_land.png",
+  "VehicleIcon": "dragonrise_reforge:textures/vehicle_icon/mv3_supply_icon.png",
+  "VehicleContainerType": "Medium",
+  "EngineInfo": {
+    "Buoyancy": 0.052,
+    "EnergyCostRate": 12,
+    "WheelRotSpeed": 1.75,
+    "WheelDifferential": 0.3,
+    "MaxForwardSpeedRate": 1.35,
+    "MaxBackwardSpeedRate": 0.5,
+    "Increment": 0.015,
+    "Decrement": 0.015,
+    "SteeringSpeed": 0.065,
+    "EngineSoundVolume": 1.0
+  },
+  "DamageModifiers": [
+    "minecraft:arrow * 0.1",
+    "minecraft:trident * 0.2",
+    "minecraft:mob_attack * 0.2",
+    "minecraft:mob_attack_no_aggro * 0.2",
+    "minecraft:mob_projectile * 0.2",
+    "minecraft:player_attack * 0.2",
+    "minecraft:lava - -4",
+    "minecraft:lava * 4",
+    "@minecraft:tnt * 1.5",
+    "@minecraft:tnt_minecart * 1.5",
+    "minecraft:explosion * 2",
+    "minecraft:player_explosion * 2",
+    "superbwarfare:projectile_hit * 0.4",
+    "superbwarfare:grapeshot_hit * 0.1",
+    "@#superbwarfare:aerial_bomb * 0.7",
+    "#superbwarfare:projectile * 0.5",
+    "@superbwarfare:cannon_shell * 0.8",
+    "@superbwarfare:small_cannon_shell * 0.9",
+    "@superbwarfare:gun_grenade * 0.7",
+    "@superbwarfare:rgo_grenade * 1.5",
+    "@superbwarfare:hand_grenade * 1.25",
+    "@superbwarfare:mortar_shell * 1"
+  ],
+  "TerrainCompat": [
+    [1.031,0.038,2.359],
+    [-1.044,0.038,-2.984],
+    [-1.044,0.038,2.359],
+    [1.031,0.038,-2.922],
+    [-1.044,0.038,-1.547],
+    [1.031,0.038,-1.484]
+  ],
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_supply.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/mv3_supply.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_supply.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/mv3_supply.png"
+    }
+  ]
+}

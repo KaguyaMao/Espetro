@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:empty_perk"
+    },
+    "b": {
+      "item": "minecraft:trident"
+    },
+    "c": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "d": {
+      "tag": "minecraft:fishes"
+    }
+  },
+  "pattern": [
+    "dbd",
+    "cac",
+    "dcd"
+  ],
+  "result": {
+    "item": "superbwarfare:aqua_bullet"
+  },
+  "show_notification": true
+}

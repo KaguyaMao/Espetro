@@ -1,0 +1,29 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.mv3_armed.canggai_open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.05,
+			"bones": {
+				"canggai": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.05": [-112.5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.mv3_armed.canggai_close": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.05,
+			"bones": {
+				"canggai": {
+					"rotation": {
+						"0.0": [-112.5, 0, 0],
+						"0.05": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

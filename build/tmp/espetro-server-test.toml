@@ -1,0 +1,20 @@
+
+[vehicle]
+	#Ticks holding INTERACT on wheel center to mount (0 = instant)
+	#Range: 0 ~ 1200
+	mountDelayTicks = 60
+	#Ticks holding INTERACT to dismount (0 = native SBW)
+	#Range: 0 ~ 1200
+	dismountDelayTicks = 60
+	#Ticks holding Shift before a seat change is allowed
+	#Range: 0 ~ 1200
+	seatSwitchDelayTicks = 100
+	#Max distance from vehicle while mounting
+	#Range: 1.0 ~ 16.0
+	mountMaxDistance = 5.0
+	#杞藉叿鍘熺増鎿嶄綔鐧藉悕鍗曟€诲紑鍏炽€?	#寮€鍚悗锛宯ativeVehicles 涓垪鍑虹殑杞藉叿涓嶅彈鏈ā缁勪换浣曚氦浜掔被淇敼锛?	#璇绘潯涓婅溅/涓嬭溅/鎹㈠骇銆佸骇浣嶆潈闄愪笌杞藉叿缁勫憳搴т綅銆佹晫瀵归樀钀ョ涔樸€佸皬闃熷綊灞炲噯鍏ャ€?	#娈嬮鍔犻€熸秷澶便€佽浇鍏峰唴鏍囩偣搴т綅瑙勫垯銆佹崲鑱屼笟/閫€闃熻涪涓嬪骇浣嶅叏閮ㄨ眮鍏嶏紝
+	#瀹屽叏浣跨敤 Superb Warfare锛圫BW锛夊強鍏惰浇鍏峰寘鐨勫師鐢熶氦浜掓柟寮忋€?	#浠嶇劧淇濈暀锛氫富鍩哄湴鏃犳晫淇濇姢銆侀樀钀ュ綊灞炰笌閮ㄧ讲璁拌处锛堝叺鎹?鑷姩鍒锋柊/鍥炲悎娓呯悊/veh 璁ら锛夈€?	nativeWhitelistEnabled = true
+	#杞藉叿鍘熺増鎿嶄綔鐧藉悕鍗曪細鍏冪礌鏄疄浣撶被鍨嬫敞鍐屽悕锛坋ntity type registry name锛夛紝
+	#濡?fcp:bmp2銆乻uperbwarfare:ztz_99a锛涗笉甯﹀疄渚?UUID 姒傚康銆?	#鏀寔鏁村懡鍚嶇┖闂撮€氶厤锛?fcp:*" 琛ㄧず fcp 鍛藉悕绌洪棿涓嬬殑鍏ㄩ儴瀹炰綋绫诲瀷銆?	#绀轰緥: ["fcp:bmp2", "superbwarfare:ztz_99a"]
+	nativeVehicles = ["fcp:bmp2"]
+

@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/zsl10.animation.json",
+  "ID": "dragonrise_reforge:zsl10",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/zsl10.geo.json",
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/zsl10.animation.json",
+    "Texture": "dragonrise_reforge:textures/entity/zsl10.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/zsl10.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/zsl10.png"
+    }
+  ]
+}

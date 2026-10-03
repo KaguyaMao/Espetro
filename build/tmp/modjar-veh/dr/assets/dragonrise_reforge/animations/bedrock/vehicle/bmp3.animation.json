@@ -1,0 +1,190 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.bmp3.mine_cannon":  {
+                                                             "animation_length":  1.1667,
+                                                             "bones":  {
+                                                                           "maincannon":  {
+                                                                                              "position":  {
+                                                                                                               "0.0":  [
+                                                                                                                           0,
+                                                                                                                           0,
+                                                                                                                           0
+                                                                                                                       ],
+                                                                                                               "0.0417":  [
+                                                                                                                              0,
+                                                                                                                              0,
+                                                                                                                              2
+                                                                                                                          ],
+                                                                                                               "0.25":  [
+                                                                                                                            0,
+                                                                                                                            0,
+                                                                                                                            0
+                                                                                                                        ]
+                                                                                                           }
+                                                                                          },
+                                                                           "as":  {
+                                                                                      "rotation":  {
+                                                                                                       "0.3333":  [
+                                                                                                                      0,
+                                                                                                                      0,
+                                                                                                                      0
+                                                                                                                  ],
+                                                                                                       "0.4167":  [
+                                                                                                                      7.47631,
+                                                                                                                      7.49131,
+                                                                                                                      87.1381
+                                                                                                                  ],
+                                                                                                       "1.0833":  [
+                                                                                                                      7.47631,
+                                                                                                                      7.49131,
+                                                                                                                      87.1381
+                                                                                                                  ],
+                                                                                                       "1.1667":  [
+                                                                                                                      0,
+                                                                                                                      0,
+                                                                                                                      0
+                                                                                                                  ]
+                                                                                                   }
+                                                                                  },
+                                                                           "shell":  {
+                                                                                         "rotation":  {
+                                                                                                          "0.5833":  [
+                                                                                                                         0,
+                                                                                                                         0,
+                                                                                                                         0
+                                                                                                                     ],
+                                                                                                          "0.625":  [
+                                                                                                                        -17.5,
+                                                                                                                        0,
+                                                                                                                        0
+                                                                                                                    ],
+                                                                                                          "0.8333":  [
+                                                                                                                         -55,
+                                                                                                                         0,
+                                                                                                                         0
+                                                                                                                     ],
+                                                                                                          "1.1667":  [
+                                                                                                                         -92.5,
+                                                                                                                         0,
+                                                                                                                         0
+                                                                                                                     ]
+                                                                                                      },
+                                                                                         "position":  {
+                                                                                                          "0.5833":  [
+                                                                                                                         0,
+                                                                                                                         0,
+                                                                                                                         0
+                                                                                                                     ],
+                                                                                                          "0.6667":  [
+                                                                                                                         0,
+                                                                                                                         5,
+                                                                                                                         2
+                                                                                                                     ],
+                                                                                                          "0.75":  [
+                                                                                                                       0,
+                                                                                                                       7,
+                                                                                                                       6
+                                                                                                                   ],
+                                                                                                          "0.8333":  [
+                                                                                                                         0,
+                                                                                                                         7,
+                                                                                                                         9
+                                                                                                                     ],
+                                                                                                          "0.9167":  [
+                                                                                                                         0,
+                                                                                                                         5,
+                                                                                                                         13
+                                                                                                                     ],
+                                                                                                          "1.0":  [
+                                                                                                                      0,
+                                                                                                                      1,
+                                                                                                                      15
+                                                                                                                  ],
+                                                                                                          "1.0417":  [
+                                                                                                                         0,
+                                                                                                                         -6,
+                                                                                                                         16
+                                                                                                                     ]
+                                                                                                      },
+                                                                                         "scale":  {
+                                                                                                       "0.8333":  [
+                                                                                                                      1,
+                                                                                                                      1,
+                                                                                                                      1
+                                                                                                                  ],
+                                                                                                       "1.125":  [
+                                                                                                                     0,
+                                                                                                                     0,
+                                                                                                                     0.1
+                                                                                                                 ]
+                                                                                                   }
+                                                                                     }
+                                                                       }
+                                                         },
+                       "animation.bmp3.sub_cannon":  {
+                                                            "loop":  true,
+                                                            "animation_length":  0.125,
+                                                            "bones":  {
+                                                                          "mcannon":  {
+                                                                                          "position":  {
+                                                                                                           "0.0":  [
+                                                                                                                       0,
+                                                                                                                       0,
+                                                                                                                       0
+                                                                                                                   ],
+                                                                                                           "0.0417":  [
+                                                                                                                          0,
+                                                                                                                          0,
+                                                                                                                          1
+                                                                                                                      ],
+                                                                                                           "0.125":  [
+                                                                                                                         0,
+                                                                                                                         0,
+                                                                                                                         0
+                                                                                                                     ]
+                                                                                                       }
+                                                                                      }
+                                                                      }
+                                                        },
+                       "animation.cannon.idle":  {
+                                                     "loop":  true,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.cannon.fire":  {
+                                                     "loop":  "hold_on_last_frame",
+                                                     "animation_length":  0.15,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.100_m_m__cannon.idle":  {
+                                                              "loop":  true,
+                                                              "bones":  {
+                                                                            
+                                                                        }
+                                                          },
+                       "animation.100_m_m__cannon.fire":  {
+                                                              "loop":  "hold_on_last_frame",
+                                                              "animation_length":  0.15,
+                                                              "bones":  {
+                                                                            
+                                                                        }
+                                                          },
+                       "animation.main_machine_gun.idle":  {
+                                                               "loop":  true,
+                                                               "bones":  {
+                                                                             
+                                                                         }
+                                                           },
+                       "animation.main_machine_gun.fire":  {
+                                                               "loop":  "hold_on_last_frame",
+                                                               "animation_length":  0.15,
+                                                               "bones":  {
+                                                                             
+                                                                         }
+                                                           }
+                   }
+}

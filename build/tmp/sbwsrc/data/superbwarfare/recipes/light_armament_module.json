@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:steel_barrel"
+    },
+    "b": {
+      "item": "superbwarfare:rare_material_pack"
+    },
+    "c": {
+      "item": "minecraft:dispenser"
+    },
+    "d": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "abc",
+    "ddd"
+  ],
+  "result": {
+    "item": "superbwarfare:light_armament_module"
+  },
+  "show_notification": true
+}

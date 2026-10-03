@@ -1,0 +1,11 @@
+{
+  "ID": "vvp:varta",
+  "Model": {
+    "Model": "vvp:geo/varta.geo.json",
+    "Texture": "vvp:textures/entity/varta_basic.png",
+    "Texture_2": "vvp:textures/entity/varta.png",
+    "Texture_3": "vvp:textures/entity/varta_black.png",
+    "Texture_4": "vvp:textures/entity/varta_sandy.png",
+    "Texture_5": "vvp:textures/entity/varta_snow.png"
+  }
+}

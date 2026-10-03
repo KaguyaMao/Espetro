@@ -220,6 +220,11 @@ dependencies {
 
     // SBW 仅编译 mixin 目标；运行时软依赖。DragonRise/FCP 载具继承 SBW VehicleEntity。
     compileOnly fg.deobf("curse.maven:superb-warfare-1218165:8104849")
+    // DragonRise（载具数据包）仅编译补给站配置 API；运行时由 mods 里的 dragonrise_reforge 提供。
+    def localDragonriseJar = file("libs/dragonrise_reforge-1.5.0-beta-20260921.jar")
+    if (localDragonriseJar.exists()) {
+        compileOnly files(localDragonriseJar)
+    }
     // EsICO optional：体力与上车/换座读条；运行时可不装。
     def localEsicoJar = file("../../../IdeaProjects/EsICO/build/libs/esico-1.0.0.jar")
     if (localEsicoJar.exists()) {

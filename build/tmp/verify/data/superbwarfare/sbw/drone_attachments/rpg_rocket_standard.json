@@ -1,0 +1,13 @@
+{
+  "Item": "superbwarfare:rpg_rocket_standard",
+  "Entity": "superbwarfare:rpg_rocket_standard",
+  "HitDamage": 340,
+  "ExplosionDamage": 80,
+  "ExplosionRadius": 5,
+  "Offset": [
+    0,
+    -0.23,
+    -1
+  ],
+  "TickCount": 2
+}

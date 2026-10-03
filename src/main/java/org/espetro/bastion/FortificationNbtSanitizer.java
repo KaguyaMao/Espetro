@@ -7,10 +7,22 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Converts untrusted structure/entity NBT into a small visual-only DTO tag. */
+/**
+ * Converts untrusted structure/entity NBT into a small visual-only DTO tag.
+ *
+ * <p>模板文件本身由管理员导出时是**无损**的；本类只在编译（加载）阶段做过滤。
+ * 过滤强度由 {@link FortificationConfig.EntityPolicy} 决定：</p>
+ * <ul>
+ *   <li>{@code filter}（默认）：不允许的类型/字段被剔除并记入 {@code warnings}，
+ *       不会让整份工事 registry 冻结失败。</li>
+ *   <li>{@code reject}：直接抛异常（旧行为）。</li>
+ * </ul>
+ */
 final class FortificationNbtSanitizer {
 
     private static final Set<String> BLOCK_ENTITY_TYPES = Set.of(
@@ -54,12 +66,47 @@ final class FortificationNbtSanitizer {
     private FortificationNbtSanitizer() {
     }
 
+    /** 内置允许的方块实体类型（供管理员指令展示）。 */
+    static Set<String> baseBlockEntityTypes() {
+        return BLOCK_ENTITY_TYPES;
+    }
+
+    /** 内置允许的结构实体类型（供管理员指令展示）。 */
+    static Set<String> baseEntityTypes() {
+        return ENTITY_TYPES;
+    }
+
+    static boolean allowsBlockEntity(String id, FortificationConfig.EntityPolicy policy) {
+        if (id == null) return false;
+        return BLOCK_ENTITY_TYPES.contains(id)
+            || (policy != null && policy.extraBlockEntityTypes().contains(id));
+    }
+
+    static boolean allowsEntity(String id, FortificationConfig.EntityPolicy policy) {
+        if (id == null) return false;
+        if ("minecraft:player".equals(id)) {
+            return policy != null && policy.allowPlayerEntities();
+        }
+        return ENTITY_TYPES.contains(id)
+            || (policy != null && policy.extraEntityTypes().contains(id));
+    }
+
+    /**
+     * 方块实体 NBT 过滤。
+     *
+     * @return 过滤后的 NBT；类型不允许且策略为 filter 时返回 {@code null}
+     *         （方块本体保留，只是不再带 NBT）
+     */
     @Nullable
-    static CompoundTag sanitizeBlockEntity(@Nullable CompoundTag input, int maxBytes) {
+    static CompoundTag sanitizeBlockEntity(@Nullable CompoundTag input,
+                                           FortificationConfig.EntityPolicy policy,
+                                           int maxBytes, List<String> warnings) {
         if (input == null) return null;
         String id = canonicalId(input.getString("id"));
-        if (!BLOCK_ENTITY_TYPES.contains(id)) {
-            throw new IllegalArgumentException("不允许的方块实体类型: " + id);
+        if (!allowsBlockEntity(id, policy)) {
+            if (strict(policy)) throw new IllegalArgumentException("不允许的方块实体类型: " + id);
+            warnings.add("方块实体 " + id + " 的 NBT 已被 entity_policy 剔除（方块本体保留）");
+            return null;
         }
         Set<String> allowed = switch (id) {
             case "minecraft:banner" -> BANNER_VISUAL;
@@ -68,19 +115,29 @@ final class FortificationNbtSanitizer {
             case "minecraft:decorated_pot" -> POT_VISUAL;
             default -> BLOCK_ENTITY_COMMON;
         };
-        CompoundTag output = copyAllowed(input, allowed);
+        CompoundTag output = copyAllowed(input, withExtras(allowed, id, policy));
         output.putString("id", id);
         ensureSize(output, maxBytes, "方块实体 " + id);
         return output;
     }
 
-    static CompoundTag sanitizeEntity(CompoundTag input, int depth, int maxDepth, int maxBytes) {
+    /**
+     * 结构实体 NBT 过滤。
+     *
+     * @return 过滤后的 NBT；类型不允许且策略为 filter 时返回 {@code null}（该实体整体剔除）
+     */
+    @Nullable
+    static CompoundTag sanitizeEntity(CompoundTag input, int depth, int maxDepth, int maxBytes,
+                                      FortificationConfig.EntityPolicy policy,
+                                      List<String> warnings) {
         if (depth > maxDepth) throw new IllegalArgumentException("实体乘客深度超过 " + maxDepth);
         String id = canonicalId(input.getString("id"));
-        if ("minecraft:player".equals(id) || !ENTITY_TYPES.contains(id)) {
-            throw new IllegalArgumentException("不允许的结构实体类型: " + id);
+        if (!allowsEntity(id, policy)) {
+            if (strict(policy)) throw new IllegalArgumentException("不允许的结构实体类型: " + id);
+            warnings.add("实体 " + id + " 已被 entity_policy 剔除");
+            return null;
         }
-        CompoundTag output = copyAllowed(input, COMMON_ENTITY_VISUAL);
+        CompoundTag output = copyAllowed(input, withExtras(COMMON_ENTITY_VISUAL, id, policy));
         Set<String> specific = switch (id) {
             case "minecraft:armor_stand" -> ARMOR_STAND_VISUAL;
             case "minecraft:item_frame", "minecraft:glow_item_frame" -> ITEM_FRAME_VISUAL;
@@ -88,14 +145,15 @@ final class FortificationNbtSanitizer {
             case "minecraft:text_display", "minecraft:item_display", "minecraft:block_display" -> DISPLAY_VISUAL;
             default -> Set.of("width", "height", "response");
         };
-        mergeAllowed(input, output, specific);
+        mergeAllowed(input, output, withExtras(specific, id, policy));
         output.putString("id", id);
         if (input.contains("Passengers", Tag.TAG_LIST)) {
             ListTag cleanPassengers = new ListTag();
             ListTag passengers = input.getList("Passengers", Tag.TAG_COMPOUND);
             for (Tag passenger : passengers) {
-                cleanPassengers.add(sanitizeEntity((CompoundTag) passenger, depth + 1,
-                    maxDepth, maxBytes));
+                CompoundTag cleaned = sanitizeEntity((CompoundTag) passenger, depth + 1,
+                    maxDepth, maxBytes, policy, warnings);
+                if (cleaned != null) cleanPassengers.add(cleaned);
             }
             if (!cleanPassengers.isEmpty()) output.put("Passengers", cleanPassengers);
         }
@@ -116,7 +174,8 @@ final class FortificationNbtSanitizer {
             ListTag passengers = input.getList("Passengers", Tag.TAG_COMPOUND);
             ListTag clean = new ListTag();
             for (Tag passenger : passengers) {
-                clean.add(sanitizeEntity((CompoundTag) passenger, 1, maxDepth, maxBytes));
+                clean.add(sanitizeEntity((CompoundTag) passenger, 1, maxDepth, maxBytes,
+                    new FortificationConfig.EntityPolicy(), new ArrayList<>()));
             }
             if (!clean.isEmpty()) output.put("Passengers", clean);
         }
@@ -128,6 +187,19 @@ final class FortificationNbtSanitizer {
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("id"));
         if (id == null) throw new IllegalArgumentException("实体缺少合法 id");
         return id;
+    }
+
+    private static boolean strict(@Nullable FortificationConfig.EntityPolicy policy) {
+        return policy != null && policy.strict();
+    }
+
+    private static Set<String> withExtras(Set<String> base, String id,
+                                          @Nullable FortificationConfig.EntityPolicy policy) {
+        List<String> extras = policy == null ? List.of() : policy.extraFieldsFor(id);
+        if (extras.isEmpty()) return base;
+        Set<String> merged = new LinkedHashSet<>(base);
+        merged.addAll(extras);
+        return merged;
     }
 
     private static CompoundTag copyAllowed(CompoundTag input, Set<String> allowed) {

@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
@@ -46,7 +47,9 @@ final class FortificationTemplateCompiler {
 
     static Map<String, CompiledTemplate> compile(MinecraftServer server,
                                                  FortificationConfig.FortificationDef def,
-                                                 FortificationConfig.Limits limits) throws Exception {
+                                                 FortificationConfig.Limits limits,
+                                                 FortificationConfig.EntityPolicy policy,
+                                                 List<String> warnings) throws Exception {
         FortificationConfig.Placement placement = def.placement;
         if ("entity".equals(placement.type)) {
             ResourceLocation entityId = ResourceLocation.tryParse(placement.entityId);
@@ -64,7 +67,7 @@ final class FortificationTemplateCompiler {
             if (placement.fallbackTemplate == null) return Map.of();
             CompiledTemplate fallback = compileOne(server,
                 requireId(placement.fallbackTemplate, "fallback_template"), placement, def,
-                limits, false);
+                limits, policy, warnings, false);
             return Map.of("default", fallback);
         }
 
@@ -79,18 +82,38 @@ final class FortificationTemplateCompiler {
         Map<String, CompiledTemplate> result = new LinkedHashMap<>();
         for (Map.Entry<String, ResourceLocation> entry : sources.entrySet()) {
             result.put(entry.getKey(), compileOne(server, entry.getValue(), placement, def,
-                limits, placement.includeEntities));
+                limits, policy, warnings, placement.includeEntities));
         }
         return Map.copyOf(result);
+    }
+
+    /**
+     * 模板解析：管理员导出目录优先（{@code config/espetro/fortification_templates/<name>.nbt}），
+     * 找不到再回退到数据包/内置模板。
+     */
+    private static StructureTemplate resolveTemplate(MinecraftServer server, ResourceLocation id) {
+        java.nio.file.Path file = FortificationTemplateStore.pathFor(id);
+        if (file != null && java.nio.file.Files.isRegularFile(file)) {
+            try (java.io.InputStream input = java.nio.file.Files.newInputStream(file)) {
+                CompoundTag tag = NbtIo.readCompressed(input);
+                return server.getStructureManager().readStructure(tag);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("读取模板文件失败 " + file.getFileName()
+                    + ": " + e.getMessage());
+            }
+        }
+        return server.getStructureManager().get(id)
+            .orElseThrow(() -> new IllegalArgumentException("缺少 Structure NBT " + id));
     }
 
     private static CompiledTemplate compileOne(MinecraftServer server, ResourceLocation id,
                                                FortificationConfig.Placement placement,
                                                FortificationConfig.FortificationDef def,
                                                FortificationConfig.Limits limits,
+                                               FortificationConfig.EntityPolicy policy,
+                                               List<String> warnings,
                                                boolean includeEntities) throws Exception {
-        StructureTemplate template = server.getStructureManager().get(id)
-            .orElseThrow(() -> new IllegalArgumentException("缺少 Structure NBT " + id));
+        StructureTemplate template = resolveTemplate(server, id);
         CompoundTag serialized = template.save(new CompoundTag());
         int estimatedBytes = serialized.toString().getBytes(StandardCharsets.UTF_8).length;
         if (estimatedBytes > limits.maxTemplateNbtBytes) {
@@ -128,7 +151,7 @@ final class FortificationTemplateCompiler {
             BlockPos local = new BlockPos(pos.getInt(0), pos.getInt(1), pos.getInt(2));
             CompoundTag blockEntity = block.contains("nbt", Tag.TAG_COMPOUND)
                 ? FortificationNbtSanitizer.sanitizeBlockEntity(block.getCompound("nbt"),
-                    Math.min(65_536, limits.maxTemplateNbtBytes)) : null;
+                    policy, Math.min(65_536, limits.maxTemplateNbtBytes), warnings) : null;
             Touch touch;
             if (state.is(Blocks.STRUCTURE_VOID)) touch = Touch.IGNORE;
             else if (state.isAir()) touch = Touch.EXPLICIT_AIR;
@@ -155,7 +178,8 @@ final class FortificationTemplateCompiler {
                 }
                 CompoundTag sanitized = FortificationNbtSanitizer.sanitizeEntity(
                     entry.getCompound("nbt"), 0, limits.maxPassengerDepth,
-                    Math.min(65_536, limits.maxTemplateNbtBytes));
+                    Math.min(65_536, limits.maxTemplateNbtBytes), policy, warnings);
+                if (sanitized == null) continue;   // filter 模式：该实体被策略剔除
                 ResourceLocation type = FortificationNbtSanitizer.requireEntityType(sanitized);
                 if (!BuiltInRegistries.ENTITY_TYPE.containsKey(type)) {
                     throw new IllegalArgumentException("结构实体类型未注册: " + type);

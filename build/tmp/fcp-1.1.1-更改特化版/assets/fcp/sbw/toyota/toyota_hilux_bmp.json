@@ -1,0 +1,7 @@
+﻿{
+  "ID": "fcp:toyota_hilux_bmp",
+  "Model": {
+    "Model": "fcp:geo/toyota_hilux_bmp.geo.json",
+    "Texture": "fcp:textures/entity/toyota.png"
+  }
+}

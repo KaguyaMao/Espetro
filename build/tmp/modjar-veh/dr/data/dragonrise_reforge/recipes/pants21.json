@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/green"
+    },
+    "G": {
+      "tag": "forge:dyes/gray"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    }
+  },
+  "pattern": [
+    "KGK",
+    "KDK",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:pants21"
+  },
+  "show_notification": true
+}

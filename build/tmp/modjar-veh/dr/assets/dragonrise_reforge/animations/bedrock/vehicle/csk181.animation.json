@@ -1,0 +1,31 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.passenger_machine_gun.idle":  {
+                                                                    "loop":  true,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                },
+                       "animation.passenger_machine_gun.fire":  {
+                                                                    "loop":  "hold_on_last_frame",
+                                                                    "animation_length":  0.15,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                },
+                       "animation.auto_cannon.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.auto_cannon.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      }
+                   }
+}

@@ -1,0 +1,25 @@
+{
+  "Skins": [
+    {
+      "Id": "vanilla",
+      "Name": "原版涂装",
+      "Description": "使用喷漆罐喷涂的原版涂装",
+      "Texture": "dragonrise_reforge:textures/entity/amx56.png",
+      "Priority": 0
+    },
+    {
+      "Id": "nato",
+      "Name": "NATO 涂装",
+      "Description": "使用喷漆罐喷涂的 NATO 涂装",
+      "Texture": "dragonrise_reforge:textures/entity/amx56nato.png",
+      "Priority": 0
+    },
+    {
+      "Id": "un",
+      "Name": "UN 涂装",
+      "Description": "使用喷漆罐喷涂的 UN 涂装",
+      "Texture": "dragonrise_reforge:textures/entity/amx56un.png",
+      "Priority": 0
+    }
+  ]
+}

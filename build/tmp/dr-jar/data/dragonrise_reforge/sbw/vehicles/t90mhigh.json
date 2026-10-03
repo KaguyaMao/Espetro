@@ -1,0 +1,19 @@
+{
+    "ID":  "dragonrise_reforge:t90mhigh",
+    "TurretPos":  [
+                      0.0,
+                      0.0,
+                      0.0
+                  ],
+    "BarrelPos":  [
+                      -0.022,
+                      1.959,
+                      1.465
+                  ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/t90mhigh.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/t90mhight.png"
+                   }
+               ]
+}

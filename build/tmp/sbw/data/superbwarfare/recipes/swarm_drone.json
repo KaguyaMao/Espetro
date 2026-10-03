@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "superbwarfare:seeker"
+    },
+    "b": {
+      "item": "superbwarfare:propeller"
+    },
+    "c": {
+      "item": "superbwarfare:motor"
+    },
+    "d": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "e": {
+      "item": "superbwarfare:cell"
+    }
+  },
+  "pattern": [
+    " a ",
+    "bcb",
+    "ded"
+  ],
+  "result": {
+    "count": 4,
+    "item": "superbwarfare:swarm_drone"
+  },
+  "show_notification": true
+}

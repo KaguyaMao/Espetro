@@ -1,0 +1,370 @@
+{
+  "ID": "dragonrise_reforge:silverhand_mk_iv",
+  "MaxHealth": 620,
+  "MaxEnergy": 20000000,
+  "OBB": [
+    {
+      "Size": [2.125,1.366,3.813],
+      "Position": [0.0,1.447,0.438],
+      "Part": "Collision"
+    },
+    {
+      "Size": [1.75,1.35,1.5],
+      "Position": [0.0,1.9,1.313]
+    },
+    {
+      "Size": [1.25,1.35,2.031],
+      "Position": [0.0,1.9,1.344]
+    },
+    {
+      "Size": [0.354,1.35,0.469],
+      "Position": [1.169,1.9,-0.106],
+      "CustomRotate": [0.0,-45.0,0.0]
+    },
+    {
+      "Size": [0.354,1.35,0.469],
+      "Position": [-1.169,1.9,-0.106],
+      "CustomRotate": [0.0,45.0,0.0]
+    },
+    {
+      "Size": [0.354,1.35,0.469],
+      "Position": [-1.169,1.9,2.731],
+      "CustomRotate": [0.0,-45.0,0.0]
+    },
+    {
+      "Size": [0.354,1.35,0.469],
+      "Position": [1.169,1.9,2.731],
+      "CustomRotate": [0.0,45.0,0.0]
+    },
+    {
+      "Size": [0.438,1.319,0.438],
+      "Position": [0.625,1.994,3.375]
+    },
+    {
+      "Size": [0.469,0.819,0.688],
+      "Position": [-0.594,2.431,3.625]
+    },
+    {
+      "Size": [0.406,0.819,0.688],
+      "Position": [-0.835,2.431,3.474],
+      "CustomRotate": [0.0,22.5,0.0]
+    },
+    {
+      "Size": [0.406,0.819,0.688],
+      "Position": [-0.353,2.431,3.474],
+      "CustomRotate": [0.0,-22.5,0.0]
+    },
+    {
+      "Size": [1.75,0.631,0.75],
+      "Position": [0.0,1.369,3.563]
+    },
+    {
+      "Size": [1.219,0.875,1.594],
+      "Position": [0.0,1.438,-2.531],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [1.219,0.375,0.531],
+      "Position": [0.0,1.211,-3.985],
+      "CustomRotate": [45.0,0.0,0.0],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [1.219,0.313,0.656],
+      "Position": [0.0,2.011,-3.464],
+      "CustomRotate": [50.0,0.0,0.0],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [1.219,1.063,1.594],
+      "Position": [0.0,1.652,-2.052],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [1.031,1.219,0.563],
+      "Position": [0.0,1.808,-1.021],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [0.481,1.259,4.469],
+      "Position": [1.706,1.25,0.281],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.481,1.259,4.469],
+      "Position": [-1.706,1.25,0.281],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [1.344,0.453,1.344],
+      "Position": [0.016,0.497,0.025],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    }
+  ],
+  "Seats": [
+    {
+      "HidePassenger": true,
+      "Transform": "Turret",
+      "Position": [0.438,-1.067,1.432],
+      "Weapons": [
+        "Cannon"
+      ],
+      "CanRotateHead": false,
+      "MinPitch": -35,
+      "MaxPitch": 15,
+      "Sensitivity": [0.42,0.7,0.9]
+    },
+    {
+      "HidePassenger": true,
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.6,1.328,3.875],
+      "Weapons": [
+        "MachineGun"
+      ],
+      "MinYaw": -30,
+      "MaxYaw": 30,
+      "MinPitch": -12,
+      "MaxPitch": 25,
+      "Sensitivity": [0.58,0.77,0.9]
+    }
+  ],
+  "Weapons": {
+    "Cannon": {
+      "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/aphe.png",
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Projectile": "superbwarfare:small_cannon_shell",
+      "IsArmorPiercingProjectile": true,
+      "DefaultZoom": 3,
+      "Magazine": 1,
+      "EmptyReloadTime": 110,
+      "Velocity": 16.6667,
+      "Damage": 160,
+      "ExplosionDamage": 70,
+      "ExplosionRadius": 5.0,
+      "RecoilTime": 32,
+      "RecoilForce": 0.07,
+      "ShootShake": [5,7,40],
+      "Spread": 0.04,
+      "ShootAnimationTime": 32,
+      "Crosshair": "@VehicleDynamicCross",
+      "CrosshairColor": "0x3A6EA5",
+      "Name": "dragonrise_reforge:silverhand_40mm_ap",
+      "AmmoType": [
+        "superbwarfare:medium_shell_ap",
+        {
+          "Ammo": "superbwarfare:medium_shell_he",
+          "Override": {
+            "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/he.png",
+            "IsArmorPiercingProjectile": false,
+            "IsHighExplosiveProjectile": true,
+            "Velocity": 13.3333,
+            "Damage": 100,
+            "ExplosionDamage": 80,
+            "ExplosionRadius": 6.0,
+            "Name": "dragonrise_reforge:silverhand_40mm_he"
+          }
+        }
+      ],
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:bofos_fire_1p",
+        "Fire3P": "superbwarfare:bofos_fire_3p",
+        "Fire3PFar": "superbwarfare:bofos_fire_far",
+        "Fire3PVeryFar": "superbwarfare:bofos_fire_veryfar",
+        "VehicleReload": "dragonrise_reforge:ztz99a_reload",
+        "Change": "dragonrise_reforge:change_weapon",
+        "CancellableSounds": [
+          "dragonrise_reforge:into_cannon"
+        ]
+      },
+      "SoundRadius": 24,
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [0.0,0.038,2.457]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      }
+    },
+    "MachineGun": {
+      "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/aphe.png",
+      "BoundBonesYaw": [
+        "move_hullGunYaw"
+      ],
+      "BoundBonesPitch": [
+        "move_hullGunPitch"
+      ],
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Projectile": "superbwarfare:cannon_shell",
+      "IsArmorPiercingProjectile": true,
+      "DefaultZoom": 3,
+      "Magazine": 1,
+      "EmptyReloadTime": 90,
+      "Velocity": 20.0,
+      "Damage": 260,
+      "ExplosionDamage": 50,
+      "ExplosionRadius": 4.0,
+      "RecoilTime": 38,
+      "RecoilForce": 0.09,
+      "ShootShake": [7,9,50],
+      "Spread": 0.02,
+      "ShootAnimationTime": 38,
+      "Crosshair": "@VehicleDynamicCross",
+      "CrosshairColor": "0x3A6EA5",
+      "Name": "dragonrise_reforge:silverhand_68mm_ap",
+      "AmmoType": [
+        "superbwarfare:large_shell_ap",
+        {
+          "Ammo": "superbwarfare:large_shell_he",
+          "Override": {
+            "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/he.png",
+            "IsArmorPiercingProjectile": false,
+            "IsHighExplosiveProjectile": true,
+            "Velocity": 13.3333,
+            "Damage": 140,
+            "ExplosionDamage": 110,
+            "ExplosionRadius": 8.0,
+            "Name": "dragonrise_reforge:silverhand_68mm_he"
+          }
+        }
+      ],
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:fire_sound_57mm",
+        "Fire3P": "dragonrise_reforge:fire_sound_57mm",
+        "Fire3PFar": "dragonrise_reforge:fire_sound_57mm_far",
+        "Fire3PVeryFar": "dragonrise_reforge:fire_sound_57mm_far",
+        "VehicleReload": "dragonrise_reforge:m1a2_reload",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 30,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [
+          [-0.587,2.406,5.5]
+        ],
+        "DefaultTransform": "Default",
+        "DefaultBarrelDirection": [0,0,1],
+        "Directions": [
+          "Passenger"
+        ]
+      }
+    }
+  },
+  "HUDColor": "0x3A6EA5",
+  "EngineType": "Track",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 140,
+    "WheelRotSpeed": 1.15,
+    "WheelDifferential": 0.75,
+    "TrackRotSpeed": 1.2,
+    "TrackDifferential": 0.6,
+    "MaxForwardSpeedRate": 0.35,
+    "MaxBackwardSpeedRate": 0.18,
+    "Increment": 0.008,
+    "Decrement": 0.01,
+    "SteeringSpeed": 0.04,
+    "EngineSoundVolume": 1.0
+  },
+  "TurretPos": [0.0,3.269,1.506],
+  "BarrelPos": [0.0,0.693,0.85],
+  "TurretTurnSpeed": [0.6,1.0],
+  "TurretPitchRange": [-10,50],
+  "HasDecoy": true,
+  "UpStep": 2.25,
+  "RotateOffsetHeight": 1.5,
+  "Mass": 70,
+  "DamageModifiers": [
+    "minecraft:arrow 0",
+    "minecraft:trident 0",
+    "minecraft:mob_attack 0",
+    "minecraft:mob_attack_no_aggro 0",
+    "minecraft:mob_projectile 0",
+    "minecraft:player_attack 0",
+    "#superbwarfare:projectile 0",
+    "minecraft:on_fire 0",
+    "minecraft:in_fire 0",
+    "All - 20",
+    "minecraft:lava + 20",
+    "minecraft:lava * 10",
+    "@minecraft:tnt * 4",
+    "@minecraft:tnt_minecart * 4",
+    "@#superbwarfare:aerial_bomb * 12",
+    "All * 0.2",
+    "minecraft:explosion * 2",
+    "superbwarfare:custom_explosion * 0.65",
+    "superbwarfare:projectile_explosion * 0.65",
+    "superbwarfare:mine * 0.5",
+    "superbwarfare:lunge_mine * 0.5",
+    "superbwarfare:projectile_hit * 1.3",
+    "superbwarfare:grapeshot_hit * 0.1",
+    "#superbwarfare:projectile_absolute * 0.15",
+    "@#superbwarfare:aa_missile * 0.3",
+    "@superbwarfare:small_cannon_shell * 0.25",
+    "@superbwarfare:c4 * 4",
+    "@#superbwarfare:at_rocket * 1.1",
+    "@superbwarfare:gun_grenade * 1.25",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:tm_62 * 2.5",
+    "$entity.getSourceAngle(source, 0.3) * damage"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Giant",
+    "ExplosionDamage": 300,
+    "ExplosionRadius": 22
+  },
+  "ThirdPersonCameraPos": [0,2.6,5.8],
+  "VehicleIcon": "dragonrise_reforge:textures/vehicle_icon/silverhand_mk_iv_icon.png",
+  "ContainerIcon": "dragonrise_reforge:textures/gui/vehicle/type/blue_land.png",
+  "Type": "Tank",
+  "CollisionLevel": {
+    "Level": 4,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.1,
+        0.05,
+        false
+      ],
+      [
+        1,
+        0.3,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "dragonrise_reforge:m2a3_engine_loop",
+  "HudType": "@Land",
+  "InertiaRotateRate": 1.7,
+  "TerrainCompat": [
+    [1.875,-0.7,4.375],
+    [-1.875,-0.7,4.375],
+    [1.875,-0.7,-4.062],
+    [-1.875,-0.7,-4.062]
+  ],
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/silverhand_mk_iv.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/silverhand_mk_iv.png"
+    }
+  ],
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/silverhand_mk_iv.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/silverhand_mk_iv.png"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "ccrp.gun.rpk74m.name",
+  "display": "ccrp:rpk74m_display",
+  "data": "ccrp:rpk74m_data",
+  "tooltip": "ccrp.gun.rpk74m.desc",
+  "type": "mg",
+  "item_type": "modern_kinetic",
+  "sort": 919
+}

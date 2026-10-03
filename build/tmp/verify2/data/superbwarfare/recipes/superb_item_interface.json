@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "a": {
+      "item": "minecraft:hopper"
+    },
+    "b": {
+      "item": "minecraft:dropper"
+    },
+    "c": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    "cac",
+    "aba",
+    "cac"
+  ],
+  "result": {
+    "item": "superbwarfare:superb_item_interface"
+  },
+  "show_notification": true
+}

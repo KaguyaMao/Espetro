@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/625e.animation.json",
+    "ID":  "dragonrise_reforge:625e",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/625e.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/625e.png",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/625e.animation.json"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/625e.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/625e.png"
+                   }
+               ]
+}

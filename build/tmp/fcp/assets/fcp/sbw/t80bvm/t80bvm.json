@@ -1,0 +1,7 @@
+﻿{
+  "ID": "fcp:t80bvm",
+  "Model": {
+    "Model": "fcp:geo/t80bvm.geo.json",
+    "Texture": "fcp:textures/entity/toyota.png"
+  }
+}

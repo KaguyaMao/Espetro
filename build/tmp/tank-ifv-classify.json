@@ -1,0 +1,231 @@
+{
+  "tank": [
+    {
+      "id": "dragonrise_reforge:challenger_ds",
+      "name": "挑战者DS 主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:cyborg_tank",
+      "name": "湮灭坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 2
+      }
+    },
+    {
+      "id": "dragonrise_reforge:darkbear",
+      "name": "灰熊坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "subcannon": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:kv2",
+      "name": "KV-2 重型坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:leopard2a4",
+      "name": "豹2A4 主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:silverhand_mk_iv",
+      "name": "银手 - Mk. IV 突击坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:t26b",
+      "name": "T-26B 轻型坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:t72b3",
+      "name": "T-72B3 主战坦克",
+      "type": "Tank",
+      "source": "kubejs",
+      "hasKjs": true,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:ztz96a",
+      "name": "ZTZ-96A 主战坦克",
+      "type": "Tank",
+      "source": "kubejs",
+      "hasKjs": true,
+      "zooms": {
+        "Cannon": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "dragonrise_reforge:ztz99ah",
+      "name": "ZTZ-99AH 主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "superbwarfare:m_1a_2",
+      "name": "M1A2主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "superbwarfare:prism_tank",
+      "name": "光棱坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Laser": 3
+      }
+    },
+    {
+      "id": "superbwarfare:t_90a",
+      "name": "T-90A主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    },
+    {
+      "id": "superbwarfare:yx_100",
+      "name": "YX-100 主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerCannon": 3,
+        "SwarmDrone": 2
+      }
+    },
+    {
+      "id": "superbwarfare:ztz_99a",
+      "name": "ZTZ-99A主战坦克",
+      "type": "Tank",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "PassengerMachineGun": 3
+      }
+    }
+  ],
+  "ifv": [
+    {
+      "id": "superbwarfare:bmp_2",
+      "name": "BMP-2 履带式步兵战车",
+      "type": "APC",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "Missile": 3,
+        "@MG": 2
+      }
+    },
+    {
+      "id": "superbwarfare:bradley",
+      "name": "M2 “布拉德利”履带式步兵战车",
+      "type": "APC",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "Missile": 3,
+        "@MG": 2
+      }
+    },
+    {
+      "id": "superbwarfare:lav_150",
+      "name": "LAV-150 轮式步兵战车",
+      "type": "APC",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3
+      }
+    },
+    {
+      "id": "superbwarfare:lav_25",
+      "name": "LAV-25 轮式步兵战车",
+      "type": "APC",
+      "source": "jar",
+      "hasKjs": false,
+      "zooms": {
+        "Cannon": 3,
+        "MachineGun": 3,
+        "Missile": 3
+      }
+    }
+  ]
+}

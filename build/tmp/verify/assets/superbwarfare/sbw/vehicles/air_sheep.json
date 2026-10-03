@@ -1,0 +1,9 @@
+{
+  "Models": [
+    {
+      "Model": "superbwarfare:models/bedrock/vehicle/air_sheep.geo.json",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/air_sheep.png",
+      "EmissiveTexture": "superbwarfare:textures/bedrock/vehicle/air_sheep_layer.png"
+    }
+  ]
+}

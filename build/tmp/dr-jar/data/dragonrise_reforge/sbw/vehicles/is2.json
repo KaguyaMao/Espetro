@@ -1,0 +1,470 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/is2.animation.json",
+    "ID":  "dragonrise_reforge:is2",
+    "MaxHealth":  400,
+    "MaxEnergy":  20000000,
+    "OBB":  [
+                {
+                    "Size":  [
+                                 1.21875,
+                                 0.53125,
+                                 2.59375
+                             ],
+                    "Position":  [
+                                     -0.03125,
+                                     0.90625,
+                                     0.28125
+                                 ]
+                },
+                {
+                    "Size":  [
+                                 1.375,
+                                 0.375,
+                                 1.96875
+                             ],
+                    "Position":  [
+                                     -0.03125,
+                                     1.5625,
+                                     0.28125
+                                 ]
+                },
+                {
+                    "Part":  "MainEngine",
+                    "Size":  [
+                                 1.375,
+                                 0.65625,
+                                 1.21875
+                             ],
+                    "Position":  [
+                                     -0.03125,
+                                     1.15625,
+                                     -2.78125
+                                 ]
+                },
+                {
+                    "Part":  "Turret",
+                    "Size":  [
+                                 1.375,
+                                 0.46875,
+                                 1.75
+                             ],
+                    "Position":  [
+                                     -0.03125,
+                                     2.40625,
+                                     0.375
+                                 ],
+                    "Rotation":  "Turret"
+                },
+                {
+                    "Part":  "WheelLeft",
+                    "Size":  [
+                                 0.375,
+                                 0.625,
+                                 3.59375
+                             ],
+                    "Position":  [
+                                     1.28125,
+                                     0.625,
+                                     -0.46875
+                                 ]
+                },
+                {
+                    "Part":  "WheelRight",
+                    "Size":  [
+                                 0.375,
+                                 0.625,
+                                 3.59375
+                             ],
+                    "Position":  [
+                                     -1.28125,
+                                     0.625,
+                                     -0.46875
+                                 ]
+                }
+            ],
+    "Seats":  [
+                  {
+                      "HidePassenger":  true,
+                      "CameraPos":  {
+                                        "UseFixedCameraPos":  true,
+                                        "Position":  [
+                                                         0.5125,
+                                                         0.725,
+                                                         1.8375
+                                                     ],
+                                        "Transform":  "Turret",
+                                        "ZoomPosition":  [
+                                                             0.5125,
+                                                             0.725,
+                                                             1.8375
+                                                         ],
+                                        "Direction":  "Barrel"
+                                    },
+                      "Transform":  "Turret",
+                      "Position":  [
+                                       0,
+                                       -0.73,
+                                       1.812
+                                   ],
+                      "Weapons":  [
+                                      "Cannon",
+                                      "MachineGun"
+                                  ],
+                      "CanRotateHead":  false,
+                      "MinPitch":  -5,
+                      "MaxPitch":  25,
+                      "Sensitivity":  [
+                                          0.42,
+                                          0.7,
+                                          0.9
+                                      ],
+                      "HasThermalImaging":  true
+                  }
+              ],
+    "Weapons":  {
+                    "Cannon":  {
+                                   "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/aphe.png",
+                                   "DefaultFireMode":  "Semi",
+                                   "AvailableFireModes":  "Semi",
+                                   "Projectile":  "superbwarfare:cannon_shell",
+                                   "IsArmorPiercingProjectile":  true,
+                                   "DefaultZoom":  3,
+                                   "Magazine":  1,
+                                   "EmptyReloadTime":  180,
+                                   "Velocity":  26.6667,
+                                   "Gravity":  0.05,
+                                   "Damage":  400,
+                                   "ExplosionDamage":  90,
+                                   "ExplosionRadius":  5,
+                                   "RecoilTime":  45,
+                                   "RecoilForce":  0.12,
+                                   "ShootShake":  [
+                                                      9,
+                                                      12,
+                                                      65
+                                                  ],
+                                   "Spread":  0.025,
+                                   "ShootAnimationTime":  45,
+                                   "Crosshair":  "@VehicleDynamicCross",
+                                   "CrosshairColor":  "0x00ff66",
+                                   "Name":  "dragonrise_reforge:122mmAPHE",
+                                   "AmmoType":  [
+                                                    "superbwarfare:large_shell_ap",
+                                                    {
+                                                        "Ammo":  "superbwarfare:large_shell_he",
+                                                        "Override":  {
+                                                                         "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/he.png",
+                                                                         "IsArmorPiercingProjectile":  false,
+                                                                         "IsHighExplosiveProjectile":  true,
+                                                                         "Velocity":  26.6667,
+                                                                         "Gravity":  0.05,
+                                                                         "Damage":  180,
+                                                                         "ExplosionDamage":  140,
+                                                                         "ExplosionRadius":  12,
+                                                                         "Name":  "dragonrise_reforge:122mmHE"
+                                                                     }
+                                                    }
+                                                ],
+                                   "SoundInfo":  {
+                                                     "Fire1P":  "dragonrise_reforge:m1a2_fire_1p",
+                                                     "Fire3P":  "dragonrise_reforge:m1a2_fire_3p",
+                                                     "Fire3PFar":  "dragonrise_reforge:m1a2_fire_3p_far",
+                                                     "Fire3PVeryFar":  "dragonrise_reforge:m1a2_fire_3p_far",
+                                                     "VehicleReload":  "dragonrise_reforge:ztz99a_reload",
+                                                     "Change":  "dragonrise_reforge:change_weapon",
+                                                     "CancellableSounds":  [
+                                                                               "dragonrise_reforge:into_cannon"
+                                                                           ]
+                                                 },
+                                   "SoundRadius":  35,
+                                   "ShootPos":  {
+                                                    "Transform":  "Barrel",
+                                                    "Positions":  [
+                                                                      [
+                                                                          0.1,
+                                                                          -0.5,
+                                                                          11.5
+                                                                      ]
+                                                                  ],
+                                                    "Directions":  [
+                                                                       "Barrel"
+                                                                   ]
+                                                }
+                               },
+                    "MachineGun":  {
+                                       "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_7_62mm.png",
+                                       "DefaultFireMode":  "Auto",
+                                       "AvailableFireModes":  "Auto",
+                                       "Spread":  0.25,
+                                       "CrosshairColor":  "0x00ff66",
+                                       "Projectile":  "superbwarfare:projectile",
+                                       "DefaultZoom":  3,
+                                       "RPM":  600,
+                                       "Damage":  7,
+                                       "BypassesArmor":  0.2,
+                                       "Velocity":  16.6667,
+                                       "Gravity":  0.05,
+                                       "RecoilTime":  16,
+                                       "RecoilForce":  0.05,
+                                       "HeatPerShoot":  4,
+                                       "NaturalCooldown":  1,
+                                       "ShootAnimationTime":  1,
+                                       "AmmoType":  "@HeavyAmmo",
+                                       "ShootPos":  {
+                                                        "Transform":  "Barrel",
+                                                        "Positions":  [
+                                                                          [
+                                                                              0.4,
+                                                                              0.15,
+                                                                              11.85
+                                                                          ]
+                                                                      ],
+                                                        "Directions":  [
+                                                                           "Barrel"
+                                                                       ]
+                                                    },
+                                       "Crosshair":  "@VehicleDynamicCross",
+                                       "Name":  "dragonrise_reforge:dtm",
+                                       "SoundInfo":  {
+                                                         "Fire1P":  "superbwarfare:m_2_hb_fire_1p",
+                                                         "Fire3P":  "superbwarfare:m_2_hb_fire_3p",
+                                                         "Fire3PFar":  "superbwarfare:m_2_hb_far",
+                                                         "Fire3PVeryFar":  "superbwarfare:m_2_hb_veryfar",
+                                                         "Change":  "dragonrise_reforge:change_weapon"
+                                                     },
+                                       "SoundRadius":  16
+                                   },
+                    "PassengerMachineGun":  {
+                                                "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+                                                "DefaultFireMode":  "Auto",
+                                                "AvailableFireModes":  "Auto",
+                                                "Spread":  0.25,
+                                                "CrosshairColor":  "0x00ff66",
+                                                "Projectile":  "superbwarfare:projectile",
+                                                "DefaultZoom":  3,
+                                                "RPM":  600,
+                                                "Damage":  40,
+                                                "BypassesArmor":  0.2,
+                                                "Velocity":  28,
+                                                "Gravity":  0.05,
+                                                "RecoilTime":  16,
+                                                "RecoilForce":  0.05,
+                                                "HeatPerShoot":  3.75,
+                                                "NaturalCooldown":  1,
+                                                "ShootAnimationTime":  1,
+                                                "AmmoType":  "@HeavyAmmo",
+                                                "ShootPos":  {
+                                                                 "Transform":  "WeaponStationBarrel",
+                                                                 "Positions":  [
+                                                                                   [
+                                                                                       0,
+                                                                                       -0.01,
+                                                                                       1.8
+                                                                                   ]
+                                                                               ],
+                                                                 "Directions":  [
+                                                                                    "WeaponStationBarrel"
+                                                                                ]
+                                                             },
+                                                "Crosshair":  "@VehicleDynamicCross",
+                                                "Name":  "dragonrise_reforge:dshk",
+                                                "SoundInfo":  {
+                                                                  "Fire1P":  "superbwarfare:m_2_hb_fire_1p",
+                                                                  "Fire3P":  "superbwarfare:m_2_hb_fire_3p",
+                                                                  "Fire3PFar":  "superbwarfare:m_2_hb_far",
+                                                                  "Fire3PVeryFar":  "superbwarfare:m_2_hb_veryfar",
+                                                                  "Change":  "dragonrise_reforge:change_weapon"
+                                                              },
+                                                "SoundRadius":  16
+                                            }
+                },
+    "HUDColor":  "0x00ff66",
+    "EngineType":  "Track",
+    "EngineInfo":  {
+                       "Buoyancy":  0,
+                       "EnergyCostRate":  128,
+                       "WheelRotSpeed":  1.2,
+                       "WheelDifferential":  0.75,
+                       "TrackRotSpeed":  1.25,
+                       "TrackDifferential":  0.6,
+                       "MaxForwardSpeedRate":  0.3,
+                       "MaxBackwardSpeedRate":  0.22,
+                       "Increment":  0.007,
+                       "Decrement":  0.01,
+                       "SteeringSpeed":  0.05,
+                       "EngineSoundVolume":  1.0
+                   },
+    "TurretPos":  [
+                      0,
+                      1.6584375,
+                      0.3631375
+                  ],
+    "BarrelPos":  [
+                      0,
+                      0.36,
+                      0.75
+                  ],
+    "TurretTurnSpeed":  [
+                            0.18,
+                            0.3
+                        ],
+    "TurretPitchRange":  [
+                             -5,
+                             25
+                         ],
+    "HasDecoy":  true,
+    "UpStep":  2.25,
+    "RotateOffsetHeight":  0.5,
+    "Mass":  46,
+    "DamageModifiers":  [
+                            "minecraft:arrow 0",
+                            "minecraft:trident 0",
+                            "minecraft:mob_attack 0",
+                            "minecraft:mob_attack_no_aggro 0",
+                            "minecraft:mob_projectile 0",
+                            "minecraft:player_attack 0",
+                            "#superbwarfare:projectile 0",
+                            "All - 20",
+                            "minecraft:lava + 20",
+                            "minecraft:lava * 10",
+                            "@minecraft:tnt * 4",
+                            "@minecraft:tnt_minecart * 4",
+                            "@#superbwarfare:aerial_bomb * 12",
+                            "All * 0.2",
+                            "minecraft:explosion * 2",
+                            "superbwarfare:custom_explosion * 0.65",
+                            "superbwarfare:projectile_explosion * 0.65",
+                            "superbwarfare:mine * 0.5",
+                            "superbwarfare:lunge_mine * 0.5",
+                            "superbwarfare:projectile_hit * 1.3",
+                            "superbwarfare:grapeshot_hit * 0.1",
+                            "#superbwarfare:projectile_absolute * 0.15",
+                            "@#superbwarfare:aa_missile * 0.3",
+                            "@superbwarfare:small_cannon_shell * 0.25",
+                            "@superbwarfare:c4 * 4",
+                            "@#superbwarfare:at_rocket * 1.1",
+                            "@superbwarfare:gun_grenade * 1.25",
+                            "@superbwarfare:mortar_shell * 1.25",
+                            "@superbwarfare:tm_62 * 2.5",
+                            "$entity.getSourceAngle(source, 0.25) * damage"
+                        ],
+    "DestroyInfo":  {
+                        "ParticleType":  "Giant",
+                        "ExplosionDamage":  220,
+                        "ExplosionRadius":  18
+                    },
+    "ThirdPersonCameraPos":  [
+                                 -0.8669625,
+                                 1.5,
+                                 4
+                             ],
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/is2_icon.png",
+    "ContainerIcon":  "dragonrise_reforge:textures/gui/vehicle/type/ussr_land.png",
+    "Type":  "Tank",
+    "CollisionLevel":  {
+                           "Level":  4,
+                           "PowerLimits":  [
+                                               [
+                                                   0,
+                                                   0,
+                                                   true
+                                               ],
+                                               [
+                                                   0,
+                                                   0,
+                                                   true
+                                               ],
+                                               [
+                                                   0.1,
+                                                   0.05,
+                                                   false
+                                               ],
+                                               [
+                                                   1,
+                                                   0.3,
+                                                   false
+                                               ]
+                                           ]
+                       },
+    "EngineSound":  "dragonrise_reforge:m2a3_engine_loop",
+    "HudType":  "@Land",
+    "InertiaRotateRate":  1.3,
+    "TerrainCompat":  [
+                          [
+                              2,
+                              0,
+                              3.0625
+                          ],
+                          [
+                              -2,
+                              0,
+                              3.0625
+                          ],
+                          [
+                              2,
+                              0,
+                              1.0625
+                          ],
+                          [
+                              -2,
+                              0,
+                              1.0625
+                          ],
+                          [
+                              2,
+                              0,
+                              1.125
+                          ],
+                          [
+                              -2,
+                              0,
+                              1.125
+                          ],
+                          [
+                              2,
+                              0,
+                              0.1875
+                          ],
+                          [
+                              -2,
+                              0,
+                              0.1875
+                          ],
+                          [
+                              2,
+                              0,
+                              -0.8125
+                          ],
+                          [
+                              -2,
+                              0,
+                              -0.8125
+                          ],
+                          [
+                              2,
+                              0,
+                              -1.8125
+                          ],
+                          [
+                              -2,
+                              0,
+                              -1.8125
+                          ],
+                          [
+                              2,
+                              0,
+                              -2.8125
+                          ],
+                          [
+                              -2,
+                              0,
+                              -2.8125
+                          ]
+                      ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/is2.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/is2.png"
+                   }
+               ]
+}

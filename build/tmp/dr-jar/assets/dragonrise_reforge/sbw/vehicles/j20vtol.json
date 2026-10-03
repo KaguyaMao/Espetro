@@ -1,0 +1,19 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j20vtol.animation.json",
+    "ID":  "dragonrise_reforge:j20vtol",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/j20.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j20vtol.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/j20.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/j20.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/j20.png"
+                   }
+               ]
+}

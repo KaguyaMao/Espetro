@@ -1,0 +1,20 @@
+{
+  "name": "superbwarfare.entry.vehicle.bmp_2",
+  "icon": "superbwarfare:container",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.bmp_2.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.bmp_2.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.bmp_2.3"
+    }
+  ],
+  "sortnum": 20102
+}

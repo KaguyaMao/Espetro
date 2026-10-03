@@ -1,0 +1,19 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j10c.animation.json",
+    "ID":  "dragonrise_reforge:j10c",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/j10c.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/j10c.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/j10c.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/j10c.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/j10c.png"
+                   }
+               ]
+}

@@ -1,0 +1,7 @@
+{
+  "ID": "fcp:bmp2_noatgm",
+  "Model": {
+    "Model": "fcp:geo/bmp2_noatgm.geo.json",
+    "Texture": "fcp:textures/entity/bmp1_2/bmp_2_rem_tex_1_1_1.png"
+  }
+}

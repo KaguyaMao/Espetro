@@ -1,0 +1,26 @@
+OK   ccrp:ak74m                         → tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/ak74m_data.json
+OK   ccrp:rpk74m                        → tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/rpk74m_data.json
+OK   ccrp:sr25                          → tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/sr25_data.json
+OK   cib:pkp                            → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/pkp_data.json
+OK   cib:qbu191                         → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbu191_data.json
+OK   cib:qbz191                         → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz191_data.json
+OK   cib:qbz192                         → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz192_data.json
+OK   cib:qcw05                          → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qcw05_data.json
+OK   cib:qjb201                         → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjb201_data.json
+OK   cib:qjy201                         → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjy201_data.json
+OK   cib:qsz92                          → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qsz92_data.json
+OK   cib:svd                            → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/svd_data.json
+OK   suffuse:aks74u                     → tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/aks74u_data.json
+OK   suffuse:tt33                       → tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/tt33_data.json
+OK   tacz:m249                          → tacz/tacz_default_gun/data/tacz/data/guns/m249_data.json
+OK   tacz:m4a1                          → tacz/VanguardArmament/data/tacz/data/guns/m4a1_data.json
+OK   tacz:p320                          → tacz/tacz_default_gun/data/tacz/data/guns/p320_data.json
+OK   cib:dzj08                          → tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/dzj08_data.json
+OK   murasamet:rpg7_og7he               → tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_og7he_data.json
+OK   murasamet:rpg7_pg7heat             → tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7heat_data.json
+OK   murasamet:rpg7_pg7vr_tandem_heat   → tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7vr_tandem_heat_data.json
+OK   suffuse:pf98a                      → tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/pf98a_data.json
+OK   suffuse:qlz87                      → tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/qlz87_data.json
+OK   tacz:m320                          → tacz/VanguardArmament/data/tacz/data/guns/m320_data.json
+OK   ts:at4                             → tacz/VanguardArmament/data/ts/data/guns/at4_data.json
+OK   ts:gustavm4                        → tacz/VanguardArmament/data/ts/data/guns/gustavm4_data.json

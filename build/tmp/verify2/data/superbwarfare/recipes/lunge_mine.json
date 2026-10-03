@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "minecraft:tnt"
+    },
+    "b": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "c": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " ba",
+    " cb",
+    "c  "
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:lunge_mine"
+  },
+  "show_notification": true
+}

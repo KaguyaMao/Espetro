@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/steel"
+    },
+    "b": {
+      "tag": "forge:dyes/black"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba"
+  ],
+  "result": {
+    "item": "superbwarfare:ge_helmet_m_35"
+  },
+  "show_notification": true
+}

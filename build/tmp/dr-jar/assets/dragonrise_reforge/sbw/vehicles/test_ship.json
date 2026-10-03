@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:test_ship",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ah64.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ah64.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ah64.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ah64.png"
+                   }
+               ]
+}

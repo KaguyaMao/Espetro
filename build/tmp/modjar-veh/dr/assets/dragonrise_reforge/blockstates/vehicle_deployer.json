@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dragonrise_reforge:block/vehicle_deployer",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "dragonrise_reforge:block/vehicle_deployer",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "dragonrise_reforge:block/vehicle_deployer",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "dragonrise_reforge:block/vehicle_deployer"
+    }
+  }
+}

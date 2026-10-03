@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/npds810.animation.json",
+    "ID":  "dragonrise_reforge:npds810",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/npds810.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/npds810.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/npds810.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/npds810.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/npds810.png"
+                   }
+               ]
+}

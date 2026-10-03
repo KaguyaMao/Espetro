@@ -1,0 +1,4 @@
+local=D:\minecraft\modp\Espetro\build\tmp\zz_mcsm_test.txt target=zz_mcsm_test.txt dir=mods maxAttempts=2
+===== attempt 1 @ 13:42:10 =====
+result: login status=200 token len=45 cookie len=399 | task status=200 body={"status":200,"data":{"password":"e2270c5dcbb744689dc062cd22cc30261789018929608","addr":"wss://localhost:20443","remoteMappings":[]},"time":1789018929609} | password=e2270c5dcbb744689dc062cd22cc30261789018929608 daemon=https://www.derpydoge.fun:20443 | file size=20 | upload status=200 body=OK | UPLOAD_OK zz_mcsm_test.txt
+SUCCESS on attempt 1

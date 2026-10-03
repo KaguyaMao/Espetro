@@ -1,0 +1,89 @@
+{
+  "ammo": "murasamet:pg7heat",
+  "rpm": 150,
+  "ammo_amount": 1,
+  "bolt": "open_bolt",
+  "bullet": {
+    "life": 3,
+    "bullet_amount": 1,
+    "damage": 20,
+    "extra_damage": {
+      "armor_ignore": 0.0,
+      "head_shot_multiplier": 1
+    },
+    "speed": 100,
+    "gravity": 0.073,
+    "knockback": 0,
+    "friction": 0,
+    "ignite": false,
+    "pierce": 0,
+    "explosion": {
+      "explode": true,
+      "damage": 150,
+      "radius": 2,
+      "knockback": false,
+      "destroy_block": true,
+      "delay": 30
+    }
+  },
+  "script": "murasamet:rpg_spread_logic",
+  "heat":  {
+    "max": 480,
+    "per_shot": 480,
+    "cooling_delay": 0,
+    "cooling_multiplier": 5,
+    "over_heat_time": 0
+  },
+
+  "reload": {
+    "type": "magazine",
+    "feed": {
+      "empty": 6.66,
+      "tactical": 6.66
+    },
+    "cooldown": {
+      "empty": 7.62,
+      "tactical": 7.62
+    }
+  },
+  "draw_time": 0.7,
+  "put_away_time": 2.17,
+  "aim_time": 0.25,
+  "sprint_time": 0.4,
+  "weight": 9.1,
+  "movement_speed": {
+    "base": 0.0,
+    "aim": -0.5,
+    "reload": -0.5
+  },
+  "crawl_recoil_multiplier": 0.5,
+  "fire_mode": [
+    "semi"
+  ],
+  "recoil": {
+    "pitch": [
+      {"time": 0, "value": [-2.5, -2.5]},
+      {"time": 0.3, "value": [-2.5, -2.5]},
+      {"time": 0.55, "value": [0.75, 0.75]},
+      {"time": 0.8, "value": [-0.25, -0.25]},
+      {"time": 2.4, "value": [-0.20, -0.20]},
+      {"time": 4.9, "value": [-0.1, -0.1]}
+    ],
+    "yaw": [
+      {"time": 0, "value": [-0.4, 0.4]},
+      {"time": 0.55, "value": [0, 0]}
+    ]
+  },
+  "inaccuracy": {
+    "stand": 3,
+    "move": 8,
+    "sneak": 2,
+    "lie": 1.5,
+    "aim": 0
+  },
+  "allow_attachment_types": [
+	"scope"
+  ],
+  "melee": {
+  }
+}

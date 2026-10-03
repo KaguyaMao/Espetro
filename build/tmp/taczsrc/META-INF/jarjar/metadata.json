@@ -1,0 +1,76 @@
+{
+  "jars": [
+    {
+      "identifier": {
+        "group": "com.github.mcmodderanchor",
+        "artifact": "simplebedrockmodel"
+      },
+      "version": {
+        "range": "[2.2.2,)",
+        "artifactVersion": "2.2.2-forge+mc1.20.1"
+      },
+      "path": "META-INF/jarjar/simplebedrockmodel-2.2.2-forge+mc1.20.1.jar",
+      "isObfuscated": true
+    },
+    {
+      "identifier": {
+        "group": "org.apache.commons",
+        "artifact": "commons-math3"
+      },
+      "version": {
+        "range": "[3.6.1,)",
+        "artifactVersion": "3.6.1"
+      },
+      "path": "META-INF/jarjar/commons-math3-3.6.1.jar",
+      "isObfuscated": false
+    },
+    {
+      "identifier": {
+        "group": "com.github.FiguraMC.luaj",
+        "artifact": "luaj-core"
+      },
+      "version": {
+        "range": "[3.0.8,)",
+        "artifactVersion": "3.0.8-figura"
+      },
+      "path": "META-INF/jarjar/luaj-core-3.0.8-figura.jar",
+      "isObfuscated": false
+    },
+    {
+      "identifier": {
+        "group": "com.github.FiguraMC.luaj",
+        "artifact": "luaj-jse"
+      },
+      "version": {
+        "range": "[3.0.8,)",
+        "artifactVersion": "3.0.8-figura"
+      },
+      "path": "META-INF/jarjar/luaj-jse-3.0.8-figura.jar",
+      "isObfuscated": false
+    },
+    {
+      "identifier": {
+        "group": "org.apache.bcel",
+        "artifact": "bcel"
+      },
+      "version": {
+        "range": "[6.6.1,)",
+        "artifactVersion": "6.6.1"
+      },
+      "path": "META-INF/jarjar/bcel-6.6.1.jar",
+      "isObfuscated": false
+    },
+    {
+      "identifier": {
+        "group": "io.github.llamalad7",
+        "artifact": "mixinextras-forge"
+      },
+      "version": {
+        "range": "[0.3.6,)",
+        "artifactVersion": "0.3.6"
+      },
+      "path": "META-INF/jarjar/mixinextras-forge-0.3.6.jar",
+      "isObfuscated": false
+    }
+  ]
+}

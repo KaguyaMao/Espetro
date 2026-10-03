@@ -1,0 +1,25 @@
+{
+  "Skins": [
+    {
+      "Id": "sand",
+      "Name": "沙漠涂装",
+      "Description": "使用喷漆罐喷涂的沙漠色涂装",
+      "Texture": "dragonrise_reforge:textures/entity/brdm2_sand.png",
+      "Priority": 0
+    },
+    {
+      "Id": "ttsko",
+      "Name": "TTSKO 涂装",
+      "Description": "使用喷漆罐喷涂的 TTSKO 迷彩涂装",
+      "Texture": "dragonrise_reforge:textures/entity/brdm2_ttsko.png",
+      "Priority": 0
+    },
+    {
+      "Id": "ttsko1960",
+      "Name": "TTSKO 1960 涂装",
+      "Description": "使用喷漆罐喷涂的 TTSKO 1960 迷彩涂装",
+      "Texture": "dragonrise_reforge:textures/entity/brdm2_ttsko1960.png",
+      "Priority": 0
+    }
+  ]
+}

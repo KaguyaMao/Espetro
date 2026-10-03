@@ -1,0 +1,326 @@
+{
+  "ID": "vvp:humvee_mk19",
+  "MaxHealth": 150,
+  "MaxEnergy": 5250000,
+  "OBB": [
+    {
+      "Part": "Body",
+      "Size": [1.428, 0.9148, 3.025],
+      "Position": [0.0156, 1.2995, -0.2333]
+    },
+    {
+      "Part": "Body",
+      "Size": [1.3257, 0.2467, 0.2915],
+      "Position": [0, 0.8402, 3.1603]
+    },
+    {
+      "Part": "Turret",
+      "Size": [0.6048, 0.4147, 0.4075],
+      "Position": [-0.0295, 0.0959, 0.6909],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Turret",
+      "Size": [0.7628, 0.7117, 0.9107],
+      "Position": [-0.0276, 0.1933, -0.65],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Body",
+      "Size": [1.2231, 0.3013, 2.2197],
+      "Position": [0.0144, 0.6279, 0.0717]
+    },
+    {
+      "Part": "WheelLeft",
+      "Size": [0.1993, 0.5451, 0.5451],
+      "Position": [1.188, 0.5344, 2.1258]
+    },
+    {
+      "Part": "WheelRight",
+      "Size": [0.1993, 0.5451, 0.5451],
+      "Position": [-1.138, 0.5344, 2.1258]
+    },
+    {
+      "Part": "WheelLeft",
+      "Size": [0.1993, 0.5451, 0.5451],
+      "Position": [1.188, 0.5344, -1.9742]
+    },
+    {
+      "Part": "WheelRight",
+      "Size": [0.1993, 0.5451, 0.5451],
+      "Position": [-1.138, 0.5344, -1.9742]
+    },
+    {
+      "Size": [
+        1.6,
+        0.6,
+        1
+      ],
+      "Position": [
+        0,
+        1,
+        1.6
+      ],
+      "Part": "MainEngine"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.8662,
+        0.3,
+        0.45
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95,
+      "DismountInfo": {
+        "Transform": "Default",
+        "Position": [
+          2.2099,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "IsEnclosed": false,
+      "CanRotateBody": true,
+      "CameraPos": {
+        "Transform": "Barrel",
+        "ZoomPosition": [
+          0,
+          0.1,
+          0
+        ],
+        "Direction": "Barrel"
+      },
+      "Transform": "Vehicle",
+      "Pose": "MachineGunStand",
+      "Position": [
+        0,
+        1.3964,
+        -0.1791
+      ],
+      "MinPitch": -15,
+      "MaxPitch": 45,
+      "Weapons": [
+        "Mk19"
+      ]
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.8085,
+        0.3,
+        0.45
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.8021,
+        0.3,
+        -0.5138
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.8001,
+        0.3,
+        -0.5138
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "Weapons": {
+    "Mk19": {
+      "Icon": "vvp:textures/screens/vehicle_weapon/40_mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Spread": 0.8,
+      "CrosshairColor": "0x66FF00",
+      "Projectile": "superbwarfare:small_cannon_shell",
+      "DefaultZoom": 2,
+      "RPM": 350,
+      "Magazine": 32,
+      "EmptyReloadTime": 80,
+      "Velocity": 7,
+      "Damage": 10,
+      "ExplosionDamage": 40,
+      "ExplosionRadius": 2.2,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "RecoilTime": 30,
+      "RecoilForce": 3,
+      "ShootAnimationTime": 3,
+      "Name": "weapon.vvp.mk19",
+      "SoundInfo": {
+        "Fire1P": "vvp:hk_gmg_1p",
+        "Fire3P": "vvp:hk_gmg_1p",
+        "Fire3PFar": "vvp:hk_gmg_3p"
+      },
+      "SoundRadius": 16,
+      "AmmoType": "vvp:item_40_mm",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            -0.0176,
+            0.1562,
+            1.242
+          ]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      }
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 64,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "TrackRotSpeed": 1.9,
+    "TrackDifferential": 0.8,
+    "MaxForwardSpeedRate": 0.95,
+    "MaxBackwardSpeedRate": 0.5,
+    "Increment": 0.03,
+    "Decrement": 0.015,
+    "SteeringSpeed": 0.1
+  },
+  "TurretPos": [
+    0.013,
+    2.23,
+    0.107
+  ],
+  "BarrelPos": [
+    0.031,
+    0.341,
+    -0.009
+  ],
+  "TurretTurnSpeed": [
+    12,
+    12
+  ],
+  "TurretPitchRange": [
+    -15,
+    45
+  ],
+  "TurretControllerIndex": 1,
+  "ThirdPersonCameraPos": [
+    0,
+    1.2,
+    3.2
+  ],
+  "HasDecoy": false,
+  "UpStep": 1.5,
+  "RotateOffsetHeight": 1.5,
+  "Mass": 3.5,
+  "DamageModifiers": [
+    "minecraft:lava - -11",
+    "minecraft:lava * 10",
+    "All * 0.35",
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 2",
+    "superbwarfare:mine * 0.75",
+    "superbwarfare:projectile_hit * 1.25",
+    "superbwarfare:grapeshot_hit * 0.3",
+    "superbwarfare:laser * 1.25",
+    "@#superbwarfare:aerial_bomb * 3",
+    "#superbwarfare:projectile * 0.25",
+    "#superbwarfare:projectile_absolute * 0.85",
+    "superbwarfare:vehicle_strike * 4",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:gun_grenade * 1.5",
+    "@superbwarfare:javelin_missile * 0.8",
+    "@superbwarfare:igla_9k38_missile * 0.75",
+    "@superbwarfare:wire_guide_missile * 1",
+    "All - 11"
+  ],
+  "VehicleContainerType": "Small",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 100,
+    "ExplosionRadius": 3.2,
+    "ExplodeBlocks": false
+  },
+  "VehicleIcon": "vvp:textures/vehicle_icon/humvee_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/land.png",
+  "Type": "APC",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.15,
+        0.09,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "superbwarfare:lav_150_engine",
+  "HornSound": "superbwarfare:truck_horn",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [
+      1.18,
+      0,
+      2.13
+    ],
+    [
+      -1.13,
+      0,
+      2.13
+    ],
+    [
+      1.18,
+      0,
+      -1.97
+    ],
+    [
+      -1.13,
+      0,
+      -1.97
+    ]
+  ],
+  "InertiaRotateRate": 1.5
+}

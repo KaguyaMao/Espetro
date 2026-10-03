@@ -1,0 +1,560 @@
+{
+  "ID": "dragonrise_reforge:aav7a1",
+  "TurretControllerIndex": 1,
+  "MaxHealth": 300,
+  "MaxEnergy": 5000000,
+  "OBB": [
+    {
+      "Size": [1.192,1.075,3.727],
+      "Position": [0.0,1.726,-0.648],
+      "CustomRotate": [-2.5,0.0,0.0]
+    },
+    {
+      "Size": [1.192,0.419,0.664],
+      "Position": [0.0,2.333,3.412],
+      "CustomRotate": [22.5,0.0,0.0]
+    },
+    {
+      "Size": [1.192,0.325,0.445],
+      "Position": [0.0,2.14,3.74]
+    },
+    {
+      "Size": [1.192,0.325,0.977],
+      "Position": [0.0,1.522,3.199],
+      "CustomRotate": [-35.0,0.0,0.0]
+    },
+    {
+      "Size": [0.536,0.419,2.414],
+      "Position": [1.275,2.077,-1.789],
+      "CustomRotate": [0.0,0.0,-45.0]
+    },
+    {
+      "Size": [0.442,0.419,3.164],
+      "Position": [1.531,1.585,-1.017],
+      "CustomRotate": [0.0,0.0,-90.0]
+    },
+    {
+      "Size": [0.348,0.419,0.945],
+      "Position": [1.531,2.472,1.165],
+      "CustomRotate": [0.0,0.0,-90.0]
+    },
+    {
+      "Size": [0.786,0.356,0.852],
+      "Position": [1.295,2.104,2.778],
+      "CustomRotate": [22.5,0.0,-90.0]
+    },
+    {
+      "Size": [0.442,0.356,0.852],
+      "Position": [-1.295,1.761,2.793],
+      "CustomRotate": [22.5,0.0,90.0]
+    },
+    {
+      "Size": [0.348,0.419,0.945],
+      "Position": [-1.531,2.347,1.165],
+      "CustomRotate": [0.0,0.0,45.0]
+    },
+    {
+      "Size": [0.442,0.419,3.164],
+      "Position": [-1.531,1.585,-1.017],
+      "CustomRotate": [0.0,0.0,90.0]
+    },
+    {
+      "Size": [0.536,0.419,2.414],
+      "Position": [-1.275,2.077,-1.789],
+      "CustomRotate": [0.0,0.0,45.0]
+    },
+    {
+      "Size": [1.192,0.325,0.977],
+      "Position": [0.0,1.522,3.199],
+      "CustomRotate": [-35.0,0.0,0.0]
+    },
+    {
+      "Size": [0.442,0.356,0.852],
+      "Position": [-1.103,2.26,2.692],
+      "CustomRotate": [14.546,17.529,46.757]
+    },
+    {
+      "Size": [0.348,0.419,0.945],
+      "Position": [-1.162,2.541,1.157],
+      "CustomRotate": [0.0,2.5,90.0]
+    },
+    {
+      "Size": [0.348,0.481,0.508],
+      "Position": [1.156,2.73,1.415],
+      "CustomRotate": [0.0,0.0,-90.0]
+    },
+    {
+      "Size": [0.411,0.356,0.383],
+      "Position": [1.156,2.792,1.412],
+      "CustomRotate": [0.0,0.0,-90.0]
+    },
+    {
+      "Size": [0.442,0.231,0.289],
+      "Position": [0.469,2.828,1.505],
+      "CustomRotate": [0.0,-2.5,-90.0]
+    },
+    {
+      "Size": [0.411,0.575,0.258],
+      "Position": [0.894,2.798,0.538],
+      "CustomRotate": [0.0,-2.5,-90.0]
+    },
+    {
+      "Size": [1.973,1.294,4.227],
+      "Position": [0.0,1.383,-0.148],
+      "Part": "Collision"
+    },
+    {
+      "Size": [0.541,0.82,1.166],
+      "Position": [0.0,1.952,1.578],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [0.288,0.611,3.453],
+      "Position": [-1.452,0.617,-0.678],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.288,0.611,3.453],
+      "Position": [1.452,0.617,-0.678],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.698,0.186,0.956],
+      "Position": [0.059,0.257,-0.182],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    }
+  ],
+  "Seats": [
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.0,1.14,2.938],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel",
+        "ZoomPosition": [1.0,2.75,2.938]
+      }
+    },
+    {
+      "HidePassenger": true,
+      "Transform": "Barrel",
+      "Position": [-0.044,-1.383,-0.175],
+      "CanRotateHead": false,
+      "MinPitch": -12,
+      "MaxPitch": 40,
+      "Weapons": [
+        "Mk19",
+        "M2HB"
+      ],
+      "Sensitivity": [0.53,0.71,0.9],
+      "HasThermalImaging": true,
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel",
+        "ZoomPosition": [-1.0,3.313,1.375]
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel",
+        "ZoomPosition": [1.125,3.188,1.375]
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    },
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [1.125,1.578,1.375],
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Turret",
+        "Direction": "Barrel"
+      }
+    }
+  ],
+  "Weapons": {
+    "Mk19": {
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:gun_grenade",
+      "DefaultZoom": 3,
+      "RPM": 350,
+      "Magazine": 96,
+      "EmptyReloadTime": 100,
+      "Velocity": 8,
+      "Gravity": 0.05,
+      "Damage": 55,
+      "ExplosionDamage": 10,
+      "ExplosionRadius": 5,
+      "HeatPerShoot": 6,
+      "NaturalCooldown": 1,
+      "RecoilTime": 31,
+      "RecoilForce": 1.62,
+      "ShootAnimationTime": 3,
+      "Spread": 1.2,
+      "Crosshair": "@VehicleCommonGun",
+      "CrosshairColor": "0xFFC700",
+      "Name": "dragonrise_reforge:mk19",
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:zbd04a_30mm_fire_1p",
+        "Fire3P": "dragonrise_reforge:zbd04a_30mm_fire_3p",
+        "Fire3PFar": "dragonrise_reforge:zbd04a_30mm_fire_3p_far",
+        "Fire3PVeryFar": "superbwarfare:mi_28_cannon_veryfar",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 24,
+      "AmmoType": "superbwarfare:grenade_40mm",
+      "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/grenade.png",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [0.0,-0.1,1.5]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      }
+    },
+    "M2HB": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Spread": 0.25,
+      "CrosshairColor": "0x00ff66",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 3,
+      "RPM": 600,
+      "Damage": 40,
+      "BypassesArmor": 0.2,
+      "Velocity": 28.4333,
+      "Gravity": 0.05,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 3.75,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "Magazine": 200,
+      "EmptyReloadTime": 100,
+      "AmmoType": "@HeavyAmmo",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [0.15,0.1,1.5]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      },
+      "Crosshair": "@VehicleCommonGun",
+      "Name": "dragonrise_reforge:M2HB",
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:m2_fire_1p",
+        "Fire3P": "dragonrise_reforge:m2_fire_3p",
+        "Fire3PFar": "dragonrise_reforge:m2_fire_3p_far",
+        "Fire3PVeryFar": "dragonrise_reforge:m2_fire_3p_very_far",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 16
+    }
+  },
+  "HUDColor": "0xFFC700",
+  "EngineType": "Track",
+  "EngineInfo": {
+    "Buoyancy": 0.052,
+    "EnergyCostRate": 96,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "TrackRotSpeed": 1.9,
+    "TrackDifferential": 0.8,
+    "MaxForwardSpeedRate": 0.82,
+    "MaxBackwardSpeedRate": 0.35,
+    "Increment": 0.025,
+    "Decrement": 0.015,
+    "SteeringSpeed": 0.1
+  },
+  "TurretPos": [-1.059,2.849,1.103],
+  "TurretTurnSpeed": [6.125,3.295],
+  "TurretPitchRange": [-6,60],
+  "BarrelPos": [0.103,0.237,0.447],
+  "HasDecoy": true,
+  "UpStep": 2.25,
+  "RotateOffsetHeight": 0.5,
+  "Mass": 22.9,
+  "DamageModifiers": [
+    "All - 13",
+    "minecraft:lava + 13",
+    "minecraft:lava * 10",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3",
+    "All * 0.2",
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 2",
+    "superbwarfare:projectile_explosion * 2",
+    "superbwarfare:mine * 0.7",
+    "superbwarfare:lunge_mine * 0.9",
+    "superbwarfare:projectile_hit * 1.35",
+    "superbwarfare:grapeshot_hit * 0.25",
+    "superbwarfare:laser * 1.25",
+    "@#superbwarfare:aerial_bomb * 3",
+    "@#superbwarfare:aa_missile * 0.5",
+    "#superbwarfare:projectile * 0.1",
+    "#superbwarfare:projectile_absolute * 0.7",
+    "@superbwarfare:mortar_shell * 1.1",
+    "@superbwarfare:gun_grenade * 1.5",
+    "@superbwarfare:javelin_missile * 0.8"
+  ],
+  "ThirdPersonCameraPos": [0,1,3],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 160,
+    "ExplosionRadius": 8
+  },
+  "VehicleIcon": "dragonrise_reforge:textures/vehicle_icon/aav7a1_icon.png",
+  "ContainerIcon": "dragonrise_reforge:textures/gui/vehicle/type/us_land.png",
+  "Type": "APC",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.12,
+        0.07,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "superbwarfare:bmp_2_engine",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [1.344,0.038,1.484],
+    [-1.356,0.038,-2.984],
+    [-1.356,0.038,1.484],
+    [1.344,0.038,-3.109]
+  ],
+  "InertiaRotateRate": 1.75,
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/aav7a1.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/aav7a1.png"
+    }
+  ],
+  "TurretCustomPitch": -1.5,
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/aav7a1.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/aav7a1.png"
+  }
+}

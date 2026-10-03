@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:kr06_helmet",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/kr06_helmet.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/kr06_helmet.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/kr06_helmet.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/kr06_helmet.png"
+                   }
+               ]
+}

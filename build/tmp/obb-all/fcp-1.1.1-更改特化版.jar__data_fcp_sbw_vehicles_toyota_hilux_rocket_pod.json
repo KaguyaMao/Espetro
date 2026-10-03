@@ -1,0 +1,205 @@
+{
+  "ID": "fcp:toyota_hilux_rocket_pod",
+  "MaxHealth": 150,
+  "MaxEnergy": 5000000,
+  "TurretPos": [0.002277, 2.673525, -1.966404],
+  "BarrelPos": [0, 0, 0],
+  "TurretPitchRange": [6.63, 45.0],
+  "TurretYawRange": [-45, 45],
+  "TurretControllerIndex": 1,
+  "PassengerRenderScale": 0.85,
+  "OBB": [
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [0.816, 0.4335, 1.6575], "Part": "WheelLeft"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [-0.816, 0.4335, 1.6575], "Part": "WheelRight"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [0.816, 0.4335, -1.785], "Part": "WheelLeft"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [-0.816, 0.4335, -1.6575], "Part": "WheelRight"},
+    {"Size": [0.9078, 0.44625, 2.125], "Position": [0.0, 0.96475, -0.8415], "Part": "Body"},
+    {"Size": [0.9078, 0.44625, 0.6375], "Position": [0.0, 0.96475, 1.921], "Part": "MainEngine"},
+    {"Size": [0.9078, 0.2975, 1.21125], "Position": [0.0, 1.7085, 0.0425], "Part": "Body"}
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [0.425, 0.255, 0.2125],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Weapons": ["Rocket"],
+      "BanHand": true,
+      "Sensitivity": [0.5, 0.3, 0.5],
+      "Position": [-0.425, 0.255, 0.2125],
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Position": [0.0, 0.3825, 0.0],
+        "Transform": "Barrel",
+        "Direction": "Barrel"
+      },
+      "MinPitch": 6.63,
+      "MaxPitch": 45.0,
+      "MinYaw": -45,
+      "MaxYaw": 45
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [0.425, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [0.0, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [-0.425, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 96,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "MaxForwardSpeedRate": 1.62,
+    "MaxBackwardSpeedRate": 0.33,
+    "Increment": 0.025,
+    "Decrement": 0.020,
+    "SteeringSpeed": 0.1,
+    "EngineSoundVolume": 0.6
+  },
+  "UpStep": 2.2,
+  "Mass": 10,
+  "RotateOffsetHeight": 2.2,
+  "DamageModifiers": [
+    "All * 0.55",
+    "minecraft:lava - -4",
+    "minecraft:lava * 4",
+    "minecraft:arrow * 0.2",
+    "minecraft:trident * 0.4",
+    "minecraft:mob_attack * 0.4",
+    "minecraft:mob_attack_no_aggro * 0.4",
+    "minecraft:mob_projectile * 0.4",
+    "minecraft:explosion * 1",
+    "minecraft:player_explosion * 1",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 0.5",
+    "superbwarfare:mine * 1.0",
+    "superbwarfare:projectile_hit * 0.8",
+    "superbwarfare:grapeshot_hit * 0.2",
+    "superbwarfare:laser * 1.0",
+    "@#superbwarfare:aerial_bomb * 1.4",
+    "#superbwarfare:projectile * 0.16",
+    "#superbwarfare:projectile_absolute * 1.0",
+    "superbwarfare:vehicle_strike * 0.7",
+    "@superbwarfare:mortar_shell * 2.0",
+    "@superbwarfare:gun_grenade * 0.5",
+    "@superbwarfare:javelin_missile * 1.0",
+    "@superbwarfare:igla_9k38_missile * 1.0",
+    "@superbwarfare:wire_guide_missile * 1.0",
+    "All - 4"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Medium",
+    "ExplosionDamage": 120,
+    "ExplosionRadius": 7
+  },
+  "Weapons": {
+    "Rocket": {
+      "AmmoType": "superbwarfare:small_rocket",
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/small_rocket.png",
+      "DefaultZoom": 2,
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Magazine": 32,
+      "EmptyReloadTime": 1000,
+      "Projectile": "superbwarfare:small_rocket",
+      "ProjectileLife": 600,
+      "Spread": 2.5,
+      "Name": "weapon.fcp.ub32",
+      "RPM": 400,
+      "Damage": 80,
+      "ExplosionDamage": 40,
+      "ExplosionRadius": 5,
+      "Gravity": 0.214011,
+      "Velocity": 16,
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:small_rocket_fire_1p",
+        "Fire3P": "superbwarfare:small_rocket_fire_3p"
+      },
+      "SoundRadius": 12,
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [-0.0438, 0.203838, 0.800765],
+          [0.050209, 0.203838, 0.800765],
+          [-0.128922, 0.101929, 0.800765],
+          [0.125456, 0.101929, 0.800765],
+          [-0.06355, 0.043864, 0.800765],
+          [0.060084, 0.043864, 0.800765],
+          [-0.205946, -0.00867, 0.800765],
+          [0.208009, -0.00867, 0.800765],
+          [-0.06355, -0.050144, 0.800765],
+          [0.055146, -0.050144, 0.800765],
+          [-0.128922, -0.108208, 0.800765],
+          [0.125456, -0.108208, 0.800765],
+          [-0.0438, -0.185431, 0.800765],
+          [0.050209, -0.185431, 0.800765]
+        ],
+        "Directions": [
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1]
+        ]
+      }
+    }
+  },
+  "ThirdPersonCameraPos": [0, 1, 5],
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/land_ter.png",
+  "Type": "Car",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true],
+      [0.15, 0.09, false]
+    ]
+  },
+  "EngineSound": "fcp:toyota_engine",
+  "HudType": "@Land",
+  "TerrainCompat": [[0.9826, 0, 1.3549], [-0.9826, 0, 1.3549], [0.9826, 0, -1.3549], [-0.9826, 0, -1.3549]],
+  "InertiaRotateRate": 1.8
+}

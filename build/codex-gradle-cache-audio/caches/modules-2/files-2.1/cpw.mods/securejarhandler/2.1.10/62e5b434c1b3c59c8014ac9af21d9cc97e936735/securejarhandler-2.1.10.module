@@ -1,0 +1,106 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "cpw.mods",
+    "module": "securejarhandler",
+    "version": "2.1.10",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.3"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.3"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "securejarhandler-2.1.10.jar",
+          "url": "securejarhandler-2.1.10.jar",
+          "size": 88749,
+          "sha512": "2ae63ab66902cb665234b7a918d3bd10833cf44efba5bd56c0366f0aec3ff0a8b5bdd0d910e1d68ecfe780ee318c5c0e9be0a470dffe663d84ffe0dfdae766f0",
+          "sha256": "7ec9207f47bc8847a16566b9a3b4ced8d073c49592897eb30ce2aaf643fdfcab",
+          "sha1": "51e6a22c6c716beb11e244bf5b8be480f51dd6b5",
+          "md5": "d9ff48d1c68388270388b803fa42611e"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.3"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.3"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "securejarhandler-2.1.10.jar",
+          "url": "securejarhandler-2.1.10.jar",
+          "size": 88749,
+          "sha512": "2ae63ab66902cb665234b7a918d3bd10833cf44efba5bd56c0366f0aec3ff0a8b5bdd0d910e1d68ecfe780ee318c5c0e9be0a470dffe663d84ffe0dfdae766f0",
+          "sha256": "7ec9207f47bc8847a16566b9a3b4ced8d073c49592897eb30ce2aaf643fdfcab",
+          "sha1": "51e6a22c6c716beb11e244bf5b8be480f51dd6b5",
+          "md5": "d9ff48d1c68388270388b803fa42611e"
+        }
+      ]
+    }
+  ]
+}

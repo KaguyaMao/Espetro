@@ -1,0 +1,38 @@
+{
+  "parent": "superbwarfare:main/ancient_technology",
+  "criteria": {
+    "0": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:reforging_table"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "superbwarfare.advancement.main.enclave.des"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "superbwarfare:reforging_table"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "superbwarfare.advancement.main.enclave"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

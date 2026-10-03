@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.espetro.network.CurrentMapPacketTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-08-11T03:59:32" hostname="DESKTOP-1GK3H0A" time="0.849">
+  <properties/>
+  <testcase name="gamePhaseRoundTripsCurrentMapFolder()" classname="org.espetro.network.CurrentMapPacketTest" time="0.845"/>
+  <testcase name="gameStateRoundTripsCurrentMapFolder()" classname="org.espetro.network.CurrentMapPacketTest" time="0.002"/>
+  <system-out><![CDATA[2026-08-11 11:59:32,811 Test worker WARN Advanced terminal features are not available in this environment
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:rafaleaa",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/rafaleaa.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/rafaleaa.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/rafaleaa.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/rafaleaa.png"
+                   }
+               ]
+}

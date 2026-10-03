@@ -1,0 +1,59 @@
+{
+  "weight": 2,
+  "extras": {
+    "advanced_rendering": false,
+    "ammo_types": [
+      {
+        "ammo":"ts:84mm_gcgm",
+        "ammo_amount":1,
+        "bullet": {
+          "life": 10,
+          "bullet_amount": 1,
+          "damage": 80,
+          "extra_damage": {
+            "armor_ignore": 0.25,
+            "head_shot_multiplier": 1.0
+          },
+          "speed": 10,
+          "gravity": 0.01,
+          "knockback": 0.15,
+          "friction": 0.01,
+          "ignite": false,
+          "pierce": 1,
+          "explosion": {
+            "explode": true,
+            "damage": 120,
+            "radius": 3,
+            "knockback": true,
+            "destroy_block": true,
+            "delay": 30
+          },
+          "extras": {
+            "missile":{
+            "is_missile": true,
+            "guidance_type": "semi_active_laser_2",
+            "guidance_stability": 1.0,
+            "guidance_delay": 0,
+            "flight_profile_type": "pure_pursuit",
+            "height_offset": 0.0,
+            "navigation_gain": 1.0,
+            "max_speed": 2.5,
+            "thrust": 0.3,
+            "acceleration_limit": 0.05,
+            "proximity_fuze_range": 0.0,
+            "targetable_entity_types": ["any"],
+            "is_simple_locking": true,
+            "must_locking": false,
+            "locking_time": 0,
+            "max_locking_distance": 512.0,
+            "jammable_angle": 0,
+            "max_jammable_distance": 128.0,
+            "max_off_axis_angle_on_locking": 30,
+            "max_off_axis_angle_on_guidance": 45
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -20,6 +20,7 @@ public class BastionItems {
     public static RadioBlock RADIO_BLOCK;
     public static BlockItem RADIO_BLOCK_ITEM;
     public static OnBuildingBlock ON_BUILDING_BLOCK;
+    public static FortificationWandItem FORTIFICATION_WAND;
 
     @SubscribeEvent
     public static void registerAll(RegisterEvent event) {
@@ -53,7 +54,14 @@ public class BastionItems {
                     Espetro.MOD_ID, RadioBlock.BLOCK_ID),
                 RADIO_BLOCK_ITEM
             );
-            Espetro.LOGGER.info("注册 Radio 方块（部署走 Alt 轮盘）");
+            // 工事建筑选定棒：管理员专用（所有交互在 FortificationWandHandler 里按 permission 2 校验）
+            FORTIFICATION_WAND = new FortificationWandItem(new Item.Properties().stacksTo(1));
+            helper.register(
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                    Espetro.MOD_ID, FortificationWandItem.ITEM_ID),
+                FORTIFICATION_WAND
+            );
+            Espetro.LOGGER.info("注册 Radio 方块（部署走 Alt 轮盘）与工事选定棒");
         });
     }
 }

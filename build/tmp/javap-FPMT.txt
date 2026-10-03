@@ -1,0 +1,122 @@
+Compiled from "FastProjectileManualTicker.kt"
+public final class com.atsuishio.superbwarfare.entity.projectile.FastProjectileManualTicker {
+  public static final com.atsuishio.superbwarfare.entity.projectile.FastProjectileManualTicker INSTANCE;
+
+  private com.atsuishio.superbwarfare.entity.projectile.FastProjectileManualTicker();
+    Code:
+       0: aload_0
+       1: invokespecial #58                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  public final void onServerTick(net.minecraftforge.event.TickEvent$ServerTickEvent);
+    Code:
+       0: aload_1
+       1: ldc           #64                 // String event
+       3: invokestatic  #70                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_1
+       7: getfield      #74                 // Field net/minecraftforge/event/TickEvent$ServerTickEvent.phase:Lnet/minecraftforge/event/TickEvent$Phase;
+      10: getstatic     #77                 // Field net/minecraftforge/event/TickEvent$Phase.END:Lnet/minecraftforge/event/TickEvent$Phase;
+      13: if_acmpeq     17
+      16: return
+      17: getstatic     #83                 // Field com/atsuishio/superbwarfare/config/server/ProjectileConfig.PROJECTILE_CHUNK_LOADING:Lnet/minecraftforge/common/ForgeConfigSpec$BooleanValue;
+      20: invokevirtual #87                 // Method net/minecraftforge/common/ForgeConfigSpec$BooleanValue.get:()Ljava/lang/Object;
+      23: checkcast     #89                 // class java/lang/Boolean
+      26: invokevirtual #93                 // Method java/lang/Boolean.booleanValue:()Z
+      29: ifne          33
+      32: return
+      33: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+      36: invokevirtual #100                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.manualTickRegistered$superbwarfare:()Ljava/util/Set;
+      39: invokeinterface #105,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+      44: ifeq          48
+      47: return
+      48: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+      51: invokevirtual #100                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.manualTickRegistered$superbwarfare:()Ljava/util/Set;
+      54: invokeinterface #109,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      59: astore_2
+      60: aload_2
+      61: invokeinterface #114,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      66: ifeq          234
+      69: aload_2
+      70: invokeinterface #117,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      75: checkcast     #32                 // class com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile
+      78: astore_3
+      79: aload_3
+      80: getfield      #123                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+      83: iconst_1
+      84: if_icmplt     60
+      87: aload_3
+      88: invokevirtual #126                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.forceLoadChunk:()Z
+      91: ifne          97
+      94: goto          60
+      97: aload_3
+      98: invokevirtual #130                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_20186_:()D
+     101: aload_3
+     102: invokevirtual #134                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_9236_:()Lnet/minecraft/world/level/Level;
+     105: invokevirtual #140                // Method net/minecraft/world/level/Level.m_151558_:()I
+     108: i2d
+     109: dcmpg
+     110: ifgt          123
+     113: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+     116: aload_3
+     117: invokevirtual #144                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.unregisterForManualTickInternal$superbwarfare:(Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile;)V
+     120: goto          60
+     123: aload_3
+     124: invokevirtual #147                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_213877_:()Z
+     127: ifne          140
+     130: aload_3
+     131: invokevirtual #134                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_9236_:()Lnet/minecraft/world/level/Level;
+     134: getfield      #151                // Field net/minecraft/world/level/Level.f_46443_:Z
+     137: ifeq          150
+     140: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+     143: aload_3
+     144: invokevirtual #144                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.unregisterForManualTickInternal$superbwarfare:(Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile;)V
+     147: goto          60
+     150: aload_3
+     151: getfield      #123                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+     154: istore        4
+     156: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+     159: aload_3
+     160: invokevirtual #154                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_19879_:()I
+     163: invokevirtual #158                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.lastManualTickCount$superbwarfare:(I)Ljava/lang/Integer;
+     166: astore        6
+     168: aload         6
+     170: dup
+     171: ifnull        180
+     174: invokevirtual #163                // Method java/lang/Integer.intValue:()I
+     177: goto          183
+     180: pop
+     181: iload         4
+     183: istore        5
+     185: iload         4
+     187: iload         5
+     189: if_icmpne     202
+     192: nop
+     193: aload_3
+     194: invokevirtual #166                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_8119_:()V
+     197: goto          202
+     200: astore        6
+     202: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+     205: invokevirtual #100                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.manualTickRegistered$superbwarfare:()Ljava/util/Set;
+     208: aload_3
+     209: invokeinterface #170,  2          // InterfaceMethod java/util/Set.contains:(Ljava/lang/Object;)Z
+     214: ifeq          60
+     217: getstatic     #96                 // Field com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.Companion:Lcom/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion;
+     220: aload_3
+     221: invokevirtual #154                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_19879_:()I
+     224: aload_3
+     225: getfield      #123                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+     228: invokevirtual #174                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile$Companion.setLastManualTickCount$superbwarfare:(II)V
+     231: goto          60
+     234: return
+    Exception table:
+       from    to  target type
+         192   197   200   Class java/lang/Exception
+
+  static {};
+    Code:
+       0: new           #2                  // class com/atsuishio/superbwarfare/entity/projectile/FastProjectileManualTicker
+       3: dup
+       4: invokespecial #180                // Method "<init>":()V
+       7: putstatic     #182                // Field INSTANCE:Lcom/atsuishio/superbwarfare/entity/projectile/FastProjectileManualTicker;
+      10: return
+}

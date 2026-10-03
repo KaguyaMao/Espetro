@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    },
+    "L": {
+      "item": "minecraft:oak_leaves"
+    },
+    "O": {
+      "item": "minecraft:oak_log"
+    }
+  },
+  "pattern": [
+    "LOL",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:sniper21_helmet"
+  },
+  "show_notification": true
+}

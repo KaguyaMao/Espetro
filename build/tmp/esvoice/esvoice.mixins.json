@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.esvoice.mixin",
+  "refmap": "esvoice.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ForgePermissionMixin"
+  ],
+  "client": [
+    "ChatComponentMixin",
+    "KeyEventsMixin",
+    "ForgeVoicechatClientModMixin",
+    "MinecraftScreenMixin",
+    "MicrophoneProcessorMixin",
+    "RenderEventsMixin",
+    "VoicechatKeyRegistrationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

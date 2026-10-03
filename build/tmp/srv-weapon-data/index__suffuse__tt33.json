@@ -1,0 +1,8 @@
+{
+  "name": "suffuse.gun.tt33.name",
+  "tooltip": "suffuse.gun.tt33.desc",
+  "display": "suffuse:tt33_display",
+  "data": "suffuse:tt33_data",
+  "type": "pistol",
+  "sort": 5
+}

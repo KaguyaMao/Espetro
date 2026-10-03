@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.pkp.name",
+  "display": "cib:pkp_display",
+  "data": "cib:pkp_data",
+  "type": "mg",
+  "item_type": "modern_kinetic",
+  "tooltip": "cib.gun.pkp.desc",
+  "sort": 2461600
+}

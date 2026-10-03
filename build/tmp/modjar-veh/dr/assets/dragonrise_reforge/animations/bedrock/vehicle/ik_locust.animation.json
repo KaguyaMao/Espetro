@@ -1,0 +1,61 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.ik_locust.gear_up": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone39": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [-5, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, 7.5, 3]
+					}
+				},
+				"bone37": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [6, 6, 0]
+					}
+				},
+				"bone38": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [-6, 6, 0]
+					}
+				}
+			}
+		},
+		"animation.ik_locust.gear_down": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone39": {
+					"rotation": {
+						"0.0": [-5, 0, 0],
+						"1.0": [0, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 7.5, 3],
+						"1.0": [0, 0, 0]
+					}
+				},
+				"bone37": {
+					"position": {
+						"0.0": [6, 6, 0],
+						"1.0": [0, 0, 0]
+					}
+				},
+				"bone38": {
+					"position": {
+						"0.0": [-6, 6, 0],
+						"1.0": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

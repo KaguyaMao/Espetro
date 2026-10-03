@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/flarakpz1.animation.json",
+  "ID": "dragonrise_reforge:flarakpz1",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/flarakpz1.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/flarakpz1.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/flarakpz1.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/flarakpz1.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/flarakpz1.png"
+    }
+  ]
+}

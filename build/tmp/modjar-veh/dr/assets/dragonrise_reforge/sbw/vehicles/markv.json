@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:markv",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/markv.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/markv.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/markv.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/markv.png"
+    }
+  ]
+}

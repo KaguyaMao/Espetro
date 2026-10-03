@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: esvoice
+Specification-Vendor: 
+Specification-Version: 1
+Implementation-Title: Esvoice
+Implementation-Version: 1.0.0-final
+Implementation-Vendor: 
+Implementation-Timestamp: 2026-07-28T02:26:15+0800
+MixinConfigs: esvoice.mixins.json
+

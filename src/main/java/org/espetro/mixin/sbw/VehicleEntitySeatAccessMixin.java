@@ -2,6 +2,7 @@ package org.espetro.mixin.sbw;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.espetro.vehicle.VehicleSeatAccessPolicy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -19,6 +20,10 @@ public abstract class VehicleEntitySeatAccessMixin {
         require = 1, remap = false)
     private void espetro$checkSeatRole(Entity passenger, int seatIndex,
                                        CallbackInfoReturnable<Boolean> cir) {
+        // 白名单载具：不做任何座位策略拦截，保持 SBW 原返回值。
+        if (VehicleNativeWhitelist.isNative((Entity) (Object) this)) {
+            return;
+        }
         if (passenger instanceof ServerPlayer player
             && !VehicleSeatAccessPolicy.checkSeatChange(
                 player, (Entity) (Object) this, seatIndex)) {

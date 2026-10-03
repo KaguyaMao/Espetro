@@ -1,0 +1,123 @@
+{
+  "ID": "fcp:bigbird",
+  "MaxHealth": 280,
+  "MaxEnergy": 8000000,
+  "OBB": [
+    {"Size": [11, 12, 28.5], "Position": [0, 20, -5], "Part":  "Body"},
+    {"Size": [2.5, 2.5, 22.5], "Position": [0, 24.5, -55.5], "Part":  "Body"},
+    {"Size": [4, 11.5, 5], "Position": [1, 26.5, -78], "Part":  "SubEngine"},
+    {"Size": [4, 3.5, 12.5], "Position": [0, 35.5, -14], "Part":  "MainEngine"}
+  ],
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "Position": [0.5, 1, 0.8],
+      "Sensitivity": [0, 0, 0],
+      "Weapons": ["Empty"],
+      "CameraPos": {
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [-30, 15, -50]
+      },
+      "CanRotateHead": false,
+      "DismountInfo": {"Transform": "Vehicle", "Position": [2, 0.5, 1]}
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-0.5, 1, 0.8],
+      "Weapons": ["Empty"],
+      "CameraPos": {
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [-3, 3, -10]
+      },
+      "DismountInfo": {"Transform": "Vehicle", "Position": [-2, 0.5, 1]},
+      "BanHand": true,
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [1.4, 0.5, 0.4],
+      "Orientation": -90,
+      "DismountInfo": {"Transform": "Vehicle", "Position": [2, 0.5, 1]},
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-1.4, 0.5, 0.4],
+      "Orientation": 90,
+      "DismountInfo": {"Transform": "Vehicle", "Position": [2, 0.5, 1]},
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [1.4, 0.5, -0.8],
+      "Orientation": -90,
+      "DismountInfo": {"Transform": "Vehicle", "Position": [2, 0.5, 1]},
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [-1.4, 0.5, -0.8],
+      "Orientation": 90,
+      "DismountInfo": {"Transform": "Vehicle", "Position": [2, 0.5, 1]},
+      "MinPitch": -50,
+      "MaxPitch": 15,
+      "MinYaw": -75,
+      "MaxYaw": 75
+    }
+  ],
+  "Weapons": {
+    "Empty": {
+      "Name": "",
+      "Crosshair": "@Empty",
+      "RPM": 0,
+      "Magazine": 0,
+      "Damage": 0
+    }
+  },
+  "EngineType": "Helicopter",
+  "EngineInfo": {
+    "EnergyCostRate": 280,
+    "Increment": 0.9,
+    "Decrement": 0.9,
+    "PitchSpeed": 0.85,
+    "YawSpeed": 0.9,
+    "RollSpeed": 0.7,
+    "LiftSpeed": 0.95,
+    "EngineStartSound": "fcp:littlebird_engine_start",
+    "EngineSoundVolume": 5
+  },
+  "EngineSound": "fcp:littlebird_engine_idle",
+  "ThirdPersonCameraPos": [2.5, 3.5, 10],
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1.5,
+  "Mass": 1.0,
+  "AllowFreeCam": true,
+  "HasDecoy": true,
+  "DamageModifiers": [
+    "minecraft:arrow * 0.15",
+    "minecraft:explosion * 4",
+    "superbwarfare:projectile_hit * 0.7",
+    "#superbwarfare:projectile * 0.05",
+    "superbwarfare:vehicle_strike * 6",
+    "@#superbwarfare:at_rocket * 2",
+    "All * 0.8",
+    "All - 8"
+  ],
+  "DestroyInfo": {"ParticleType": "Huge", "ExplosionDamage": 3500, "ExplosionRadius": 120, "CrashPassengers": true},
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/air_us.png",
+  "Type": "Helicopter",
+  "HudType": "@Helicopter",
+  "TerrainCompat": [[-1.4, 0, 3], [1.4, 0, 3],[-1.4, 0, 2.5],[1.4, 0, 2.5],[-1.4, 0, 2],[-1.4, 0, 2]]
+}

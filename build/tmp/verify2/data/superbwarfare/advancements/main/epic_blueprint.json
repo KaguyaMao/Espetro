@@ -1,0 +1,36 @@
+{
+  "parent": "superbwarfare:main/rare_blueprint",
+  "criteria": {
+    "0": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "superbwarfare:blueprint/epic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "superbwarfare.advancement.main.epic_blueprint.des"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "superbwarfare:qbz_191_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "superbwarfare.advancement.main.epic_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

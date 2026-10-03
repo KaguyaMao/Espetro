@@ -10,8 +10,10 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.ChunkPos;
 import org.espetro.Espetro;
 import org.espetro.team.SpawnPointConfig;
+import org.espetro.util.ChunkTickets;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -97,32 +99,41 @@ public final class DeploySupplyStationPlacer {
 
     private static boolean placeOne(ServerLevel level, SpawnPointConfig.SpawnPoint spawn, String team) {
         BlockPos pos = resolveOffset(spawn);
+        // 修 A：地图激活时预载主基地用的 PORTAL 票已在预载结束时释放，而放置被推迟到
+        // 「玩家进入战场」之后，此刻目标区块可能已被常规卸载；这里临时补票同步加载，
+        // 放置结束后释放（失败路径也会释放，见 ChunkTickets）。
+        ChunkPos ticket = ChunkTickets.acquire(level, pos);
         if (!level.hasChunkAt(pos)) {
+            ChunkTickets.release(level, ticket);
             Espetro.LOGGER.warn("部署点弹药箱区块尚未预载，跳过 {} ({})", pos, team);
             return false;
         }
 
-        if (!level.setBlock(pos, Blocks.SHULKER_BOX.defaultBlockState(), 3)) {
-            Espetro.LOGGER.warn("无法放置部署点弹药箱 at {} ({})", pos, team);
-            return false;
-        }
-        // 在潜影盒 BlockEntity 上打标记，供交互逻辑识别为「主出生点无限弹药箱」
-        BlockEntity be = level.getBlockEntity(pos);
-        if (be != null) {
-            be.getPersistentData().putBoolean(MAIN_BASE_AMMO_KEY, true);
-            be.setChanged();
-        } else {
-            Espetro.LOGGER.warn("部署点弹药箱缺少 BlockEntity at {} ({})", pos, team);
-        }
+        try {
+            if (!level.setBlock(pos, Blocks.SHULKER_BOX.defaultBlockState(), 3)) {
+                Espetro.LOGGER.warn("无法放置部署点弹药箱 at {} ({})", pos, team);
+                return false;
+            }
+            // 在潜影盒 BlockEntity 上打标记，供交互逻辑识别为「主出生点无限弹药箱」
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be != null) {
+                be.getPersistentData().putBoolean(MAIN_BASE_AMMO_KEY, true);
+                be.setChanged();
+            } else {
+                Espetro.LOGGER.warn("部署点弹药箱缺少 BlockEntity at {} ({})", pos, team);
+            }
 
-        UUID labelId = spawnLabel(level, pos, team);
-        if (labelId == null) {
-            Espetro.LOGGER.warn("部署点弹药箱标题生成失败 at {} ({})", pos, team);
-            labelId = UUID.randomUUID();
+            UUID labelId = spawnLabel(level, pos, team);
+            if (labelId == null) {
+                Espetro.LOGGER.warn("部署点弹药箱标题生成失败 at {} ({})", pos, team);
+                labelId = UUID.randomUUID();
+            }
+            PLACED.computeIfAbsent(
+                level.dimension().location().toString(), ignored -> new java.util.ArrayList<>())
+                .add(new PlacedStation(pos.immutable(), labelId));
+        } finally {
+            ChunkTickets.release(level, ticket);
         }
-        PLACED.computeIfAbsent(
-            level.dimension().location().toString(), ignored -> new java.util.ArrayList<>())
-            .add(new PlacedStation(pos.immutable(), labelId));
         return true;
     }
 

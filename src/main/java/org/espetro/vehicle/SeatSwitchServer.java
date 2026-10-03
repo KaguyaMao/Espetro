@@ -29,6 +29,10 @@ public final class SeatSwitchServer {
         if (player == null) {
             return VehicleInteractionConfig.seatSwitchDelayTicks() <= 0;
         }
+        // 白名单载具：不要求读条 token，直接放行 SBW 原生换座。
+        if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
+            return true;
+        }
         if (VehicleInteractionConfig.seatSwitchDelayTicks() <= 0) {
             return true;
         }

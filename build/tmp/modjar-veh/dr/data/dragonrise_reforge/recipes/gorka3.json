@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/iron"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    }
+  },
+  "pattern": [
+    "KFK",
+    "KKK",
+    "KKK"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:gorka3"
+  },
+  "show_notification": true
+}

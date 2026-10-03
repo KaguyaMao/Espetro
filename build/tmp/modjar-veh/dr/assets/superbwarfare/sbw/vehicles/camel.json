@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:camel",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/camel.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/camel.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/camel.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/camel.png"
+                   }
+               ]
+}

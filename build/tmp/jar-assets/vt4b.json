@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/vt4b.animation.json",
+    "ID":  "dragonrise_reforge:vt4b",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/vt4b.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/vt4b.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/vt4b.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/vt4b.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/vt4b.png"
+                   }
+               ]
+}
