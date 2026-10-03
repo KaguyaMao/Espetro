@@ -163,6 +163,7 @@ public final class RadioRadialController {
         return new RadialMenuBuilder(ROOT)
             .title(Component.literal("弹药箱交互"))
             .radii(44, 96)
+            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"))
             .persistentSlot("espetro.radio.resupply", ICON_RESUPPLY,
@@ -189,6 +190,7 @@ public final class RadioRadialController {
         var builder = new RadialMenuBuilder(CLASS_MENU)
             .title(Component.literal("更换职业"))
             .radii(44, 100)
+            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"))
             .persistentSlot("espetro.radio.back", ICON_BACK,
@@ -231,6 +233,7 @@ public final class RadioRadialController {
         var builder = new RadialMenuBuilder(variantMenuId(entry.classId))
             .title(Component.literal("选择职业装备"))
             .radii(44, 100)
+            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"))
             .persistentSlot("espetro.radio.variant.back", ICON_BACK,

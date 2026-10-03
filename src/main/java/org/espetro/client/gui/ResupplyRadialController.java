@@ -197,6 +197,7 @@ public final class ResupplyRadialController {
         RadialMenuBuilder builder = new RadialMenuBuilder(MENU)
             .title(Component.literal("步兵补给 · 弹药余额 " + balance))
             .radii(44, 108)
+            .squadLayout()
             .animationSpeed(1.25F)
             .ringColors(List.of("#B824292B", "#C832383A"));
         int first = page * PAGE_SIZE;

@@ -472,6 +472,7 @@ public final class TacticalRadialController {
             .title(Component.literal(menuId.equals(ROOT_MENU) ? "指挥菜单"
                 : menuId.equals(BUILD_MENU) ? "建造工事" : "指挥技能"))
             .radii(44, 96)
+            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"));
     }
