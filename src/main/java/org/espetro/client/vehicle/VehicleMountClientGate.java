@@ -87,7 +87,9 @@ public final class VehicleMountClientGate {
 
         boolean interactDown = VehicleWheelController.isInteractHeld();
         boolean wheelActive = VehicleWheelController.isWheelActive();
-        boolean centerHovered = VehicleWheelController.isCenterHovered();
+        boolean centerHovered = VehicleWheelController.isCenterHovered()
+            && org.lwjgl.glfw.GLFW.glfwGetMouseButton(mc.getWindow().getWindow(),
+                org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
         if (!interactDown || !wheelActive) {
             resetMount(true);

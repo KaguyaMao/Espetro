@@ -36,7 +36,7 @@ public class EspetroClient {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onRenderNameTag);
 
-        org.espetro.client.gui.AuraTipRadialController.initialize();
+        org.espetro.client.gui.TacticalRadialController.initialize();
         org.espetro.client.gui.RadioRadialController.initialize();
         org.espetro.client.gui.VehicleWheelController.initialize();
         org.espetro.client.gui.ResupplyRadialController.initialize();
@@ -96,7 +96,7 @@ public class EspetroClient {
 
         net.minecraft.client.KeyMapping radialKey =
             Espetro.KEY_RADIAL instanceof net.minecraft.client.KeyMapping key ? key : null;
-        org.espetro.client.gui.AuraTipRadialController.tick(mc, radialKey);
+        org.espetro.client.gui.TacticalRadialController.tick(mc, radialKey);
         org.espetro.client.gui.RadioRadialController.tick(mc);
         org.espetro.client.gui.VehicleWheelController.tick(mc);
         org.espetro.client.gui.ResupplyRadialController.tick();

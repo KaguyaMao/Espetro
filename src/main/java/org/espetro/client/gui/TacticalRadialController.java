@@ -1,10 +1,10 @@
 package org.espetro.client.gui;
 
-import cc.sighs.auratip.api.action.Actions;
-import cc.sighs.auratip.api.client.RadialMenuClientApi;
-import cc.sighs.auratip.api.radiamenu.RadialMenuBuilder;
-import cc.sighs.auratip.api.radiamenu.RadialMenuRegistry;
-import cc.sighs.auratip.client.render.RadialMenuOverlay;
+import org.esradial.client.Actions;
+import org.esradial.client.RadialMenuClientApi;
+import org.esradial.client.RadialMenuBuilder;
+import org.esradial.client.RadialMenuRegistry;
+import org.esradial.client.RadialMenuOverlay;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Hold-key state machine for Espetro's AuraTip tactical radial.
+ * Hold-key state machine for Espetro's EsRadial tactical radial.
  *
  * <p>设计约束：
  * <ul>
@@ -33,7 +33,7 @@ import java.util.Map;
  *   <li>每次开始按住 Alt 会请求一次技能同步，避免「后成为队长」仍无入口。</li>
  * </ul>
  */
-public final class AuraTipRadialController {
+public final class TacticalRadialController {
 
     private static final String OWNER = "espetro";
     private static final int OPEN_DELAY_TICKS = 6;
@@ -57,10 +57,8 @@ public final class AuraTipRadialController {
     private static boolean initialized;
     private static boolean keyWasDown;
     private static boolean ownsOverlay;
-    private static boolean submenuActive;
     private static boolean consumedUntilRelease;
     private static int heldTicks;
-    private static ResourceLocation pendingMenu;
 
     // === 已确认的技能缓存（仅在客户端线程中读写） ===
     private static boolean cachedIsCommander;
@@ -83,7 +81,7 @@ public final class AuraTipRadialController {
     /** 是否有待延迟执行的菜单重建 */
     private static boolean pendingRebuild;
 
-    private AuraTipRadialController() {
+    private TacticalRadialController() {
     }
 
     public static void initialize() {
@@ -94,12 +92,13 @@ public final class AuraTipRadialController {
 
         Actions.register(OPEN_SUBMENU_ACTION, params -> {
             String menu = params.getString("menu", "");
-            pendingMenu = switch (menu) {
+            ResourceLocation target = switch (menu) {
                 case "build" -> BUILD_MENU;
                 case "skills" -> SKILLS_MENU;
                 default -> null;
             };
-            submenuActive = false;
+            var data = target == null ? null : RadialMenuRegistry.getRuntimeMenu(target);
+            if (data != null) RadialMenuClientApi.navigate(data);
         });
         Actions.register(EXECUTE_ACTION, params -> {
             try {
@@ -111,8 +110,6 @@ public final class AuraTipRadialController {
             }
             consumedUntilRelease = true;
             ownsOverlay = false;
-            submenuActive = false;
-            pendingMenu = null;
         });
         Actions.register(BUILD_FORT_ACTION, params -> {
             String fortId = params.getString("fortId", "");
@@ -121,8 +118,6 @@ public final class AuraTipRadialController {
             }
             consumedUntilRelease = true;
             ownsOverlay = false;
-            submenuActive = false;
-            pendingMenu = null;
         });
         Actions.register(SKILL_ACTIVATE_ACTION, params -> {
             String skillId = params.getString("skillId", "");
@@ -136,8 +131,6 @@ public final class AuraTipRadialController {
             NetworkManager.sendCommanderSkillActivate(skillId);
             consumedUntilRelease = true;
             ownsOverlay = false;
-            submenuActive = false;
-            pendingMenu = null;
         });
 
         rebuildMenus();
@@ -244,7 +237,7 @@ public final class AuraTipRadialController {
 
     private static void rebuildMenus() {
         lastMenuSignature = computeSignature();
-        List<cc.sighs.auratip.data.RadialMenuData> menus = new ArrayList<>();
+        List<org.esradial.client.RadialMenuData> menus = new ArrayList<>();
         menus.add(rootMenu());
         menus.add(buildMenu());
         menus.add(skillsMenu());
@@ -255,6 +248,8 @@ public final class AuraTipRadialController {
 
     public static void tick(Minecraft minecraft, KeyMapping key) {
         if (!initialized || minecraft == null || key == null || minecraft.player == null) {
+            closeOwnedOverlay();
+            keyWasDown = false;
             reset(false);
             return;
         }
@@ -266,7 +261,7 @@ public final class AuraTipRadialController {
         boolean down = key.isDown();
         if (!down) {
             if (keyWasDown) {
-                finishSelection(minecraft);
+                finishSelection();
             }
             keyWasDown = false;
             heldTicks = 0;
@@ -284,8 +279,8 @@ public final class AuraTipRadialController {
         keyWasDown = true;
 
         /*
-         * 普通队员必须在 AuraTip.open() 之前被拦截。过去依赖服务端回传空目录，
-         * 会先打开一个空轮盘再迅速关闭，AuraTip 已经接管的鼠标状态因此可能吞掉左键。
+         * 普通队员必须在 EsRadial.open() 之前被拦截。过去依赖服务端回传空目录，
+         * 会先打开一个空轮盘再迅速关闭，EsRadial 已经接管的鼠标状态因此可能吞掉左键。
          */
         if (!ClientTacticalState.canLocalPlayerOpenTacticalRadial(
                 minecraft.player.getName().getString())) {
@@ -305,26 +300,18 @@ public final class AuraTipRadialController {
             return;
         }
 
-        if (pendingMenu != null) {
-            if (!RadialMenuOverlay.INSTANCE.isActive()) {
-                ResourceLocation next = pendingMenu;
-                pendingMenu = null;
-                RadialMenuClientApi.open(next);
-                ownsOverlay = true;
-                submenuActive = true;
-            }
-            return;
-        }
-
         if (ownsOverlay || RadialMenuOverlay.INSTANCE.isActive()) {
             return;
         }
 
         heldTicks++;
         if (heldTicks >= OPEN_DELAY_TICKS) {
-            RadialMenuClientApi.open(ROOT_MENU);
-            ownsOverlay = true;
-            submenuActive = false;
+            var data = RadialMenuRegistry.getRuntimeMenu(ROOT_MENU);
+            ownsOverlay = data != null && RadialMenuClientApi.open(data,
+                new RadialMenuClientApi.OpenOptions(OWNER, key::isDown, false, reason -> {
+                    ownsOverlay = false;
+                    consumedUntilRelease = true;
+                }));
         }
     }
 
@@ -340,41 +327,22 @@ public final class AuraTipRadialController {
 
     // ==================== Overlay 生命周期 ====================
 
-    private static void finishSelection(Minecraft minecraft) {
-        if (!ownsOverlay) {
-            reset(false);
-            return;
-        }
-
-        if (submenuActive && RadialMenuOverlay.INSTANCE.isActive()) {
-            double mouseX = minecraft.mouseHandler.xpos()
-                * minecraft.getWindow().getGuiScaledWidth()
-                / minecraft.getWindow().getScreenWidth();
-            double mouseY = minecraft.mouseHandler.ypos()
-                * minecraft.getWindow().getGuiScaledHeight()
-                / minecraft.getWindow().getScreenHeight();
-            RadialMenuOverlay.INSTANCE.mouseClicked(
-                mouseX, mouseY, GLFW.GLFW_MOUSE_BUTTON_LEFT);
-        } else {
-            closeOwnedOverlay();
-        }
+    private static void finishSelection() {
+        // Squad: releasing the opening key cancels; only a left click executes.
+        closeOwnedOverlay();
         reset(true);
     }
 
     private static void closeOwnedOverlay() {
         if (ownsOverlay && RadialMenuOverlay.INSTANCE.isActive()) {
-            RadialMenuOverlay.INSTANCE.close();
+            RadialMenuClientApi.close(OWNER);
         }
         ownsOverlay = false;
-        submenuActive = false;
-        pendingMenu = null;
     }
 
     private static void reset(boolean keepConsumed) {
         heldTicks = 0;
         ownsOverlay = false;
-        submenuActive = false;
-        pendingMenu = null;
         if (!keepConsumed) {
             consumedUntilRelease = false;
         }
@@ -382,7 +350,7 @@ public final class AuraTipRadialController {
 
     // ==================== 菜单数据 ====================
 
-    private static cc.sighs.auratip.data.RadialMenuData rootMenu() {
+    private static org.esradial.client.RadialMenuData rootMenu() {
         var builder = base(ROOT_MENU);
         if (!cachedFortifications.isEmpty()) {
             builder = builder.slot("espetro.build", BUILD_ICON,
@@ -409,7 +377,7 @@ public final class AuraTipRadialController {
      * 建造工事二级菜单：Rally 仍是部署点，其余工事只来自 JSON 目录。
      * Radio / 兵站已在 fortifications.json 中，不能再硬编码一份。
      */
-    private static cc.sighs.auratip.data.RadialMenuData buildMenu() {
+    private static org.esradial.client.RadialMenuData buildMenu() {
         var builder = base(BUILD_MENU)
             .slot("espetro.rally", RALLY, action(RadialActionPacket.Action.DEPLOY_RALLY),
                 Component.translatable("radial.espetro.rally"), "#FF7DAE82");
@@ -434,20 +402,20 @@ public final class AuraTipRadialController {
         return builder.build();
     }
 
-    private static cc.sighs.auratip.data.RadialMenuData skillsMenu() {
+    private static org.esradial.client.RadialMenuData skillsMenu() {
         var builder = base(SKILLS_MENU);
 
         if (!hasSkillSnapshot) {
             builder = builder.slot("espetro.skills_loading", UNAVAILABLE_ICON,
                 Actions.script(EXECUTE_ACTION, Map.of("action", "FOB_STATUS")),
-                Component.literal("§7加载中…"), "#FF4A3030");
+                Component.literal("加载中…"), "#FF4A3030").disabledLast(Component.literal("等待服务端技能列表"));
             return builder.build();
         }
         // 服务端已按 usableBy 过滤；列表空 = 当前角色无可用技能
         if (cachedSkills.isEmpty()) {
             builder = builder.slot("espetro.no_skills", UNAVAILABLE_ICON,
                 Actions.script(EXECUTE_ACTION, Map.of("action", "FOB_STATUS")),
-                Component.literal("§7无可用技能"), "#FF4A3030");
+                Component.literal("无可用技能"), "#FF4A3030").disabledLast(Component.literal("当前身份没有可用技能"));
             return builder.build();
         }
 
@@ -466,6 +434,7 @@ public final class AuraTipRadialController {
             builder = builder.slot("espetro.skill." + skill.id(), icon,
                 Actions.script(SKILL_ACTIVATE_ACTION, Map.of("skillId", skill.id())),
                 Component.literal(label), color);
+            if (onCooldown) builder.disabledLast(Component.literal("冷却剩余 " + cooldown + " 秒"));
         }
         return builder.build();
     }
@@ -500,12 +469,14 @@ public final class AuraTipRadialController {
 
     private static RadialMenuBuilder base(ResourceLocation menuId) {
         return new RadialMenuBuilder(menuId)
+            .title(Component.literal(menuId.equals(ROOT_MENU) ? "指挥菜单"
+                : menuId.equals(BUILD_MENU) ? "建造工事" : "指挥技能"))
             .radii(44, 96)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#E6141719", "#F02A2D2F"));
+            .ringColors(List.of("#B824292B", "#C832383A"));
     }
 
-    private static cc.sighs.auratip.data.action.Action action(
+    private static Runnable action(
             RadialActionPacket.Action action) {
         return Actions.script(EXECUTE_ACTION, Map.of("action", action.name()));
     }

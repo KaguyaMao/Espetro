@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VehicleWheelControllerTest {
@@ -25,8 +26,16 @@ class VehicleWheelControllerTest {
         UUID id = UUID.fromString("00000000-0000-0000-0000-000000000001");
         VehicleSupplySyncPacket supply = VehicleSupplySyncPacket.state(
             id, 100, 50, 200, true, false, true, true, 10);
-        assertEquals("ACRS", VehicleWheelController.layoutSignature(supply));
+        assertEquals("ACRS-:10", VehicleWheelController.layoutSignature(supply));
         assertEquals("", VehicleWheelController.layoutSignature(null));
+        VehicleSupplySyncPacket differentInterval = VehicleSupplySyncPacket.state(
+            id, 100, 50, 200, true, false, true, true, 8);
+        assertNotEquals(VehicleWheelController.layoutSignature(supply),
+            VehicleWheelController.layoutSignature(differentInterval));
+        VehicleSupplySyncPacket differentAmmo = VehicleSupplySyncPacket.state(
+            id, 90, 50, 200, true, false, true, true, 10);
+        assertEquals(VehicleWheelController.layoutSignature(supply),
+            VehicleWheelController.layoutSignature(differentAmmo));
     }
 
     @Test

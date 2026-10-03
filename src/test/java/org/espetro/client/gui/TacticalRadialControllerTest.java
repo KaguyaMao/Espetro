@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class AuraTipRadialControllerTest {
+class TacticalRadialControllerTest {
 
     @Test
     void buildWheelUsesCatalogRadioAndHabOnceAndKeepsRally() {
@@ -21,7 +21,7 @@ class AuraTipRadialControllerTest {
             entry("espetro:vehicle_supply_station", "载具补给站"),
             entry("espetro:sandbag_wall", "沙袋掩体墙"));
 
-        List<String> slotIds = AuraTipRadialController.buildMenuSlotIds(catalog);
+        List<String> slotIds = TacticalRadialController.buildMenuSlotIds(catalog);
         assertEquals("espetro.rally", slotIds.get(0));
         assertEquals(6, slotIds.size());
         assertFalse(slotIds.contains("espetro.radio"));

@@ -1,13 +1,12 @@
 package org.espetro.client.gui;
 
-import cc.sighs.auratip.api.action.Actions;
-import cc.sighs.auratip.api.client.RadialMenuClientApi;
-import cc.sighs.auratip.api.radiamenu.RadialMenuBuilder;
-import cc.sighs.auratip.api.radiamenu.RadialMenuRegistry;
-import cc.sighs.auratip.api.radiamenu.icon.IRadialIcon;
-import cc.sighs.auratip.api.radiamenu.icon.ItemIcon;
-import cc.sighs.auratip.data.RadialMenuData;
-import com.mojang.serialization.Codec;
+import org.esradial.client.Actions;
+import org.esradial.client.RadialMenuClientApi;
+import org.esradial.client.RadialMenuBuilder;
+import org.esradial.client.RadialMenuRegistry;
+import org.esradial.client.IRadialIcon;
+import org.esradial.client.ItemIcon;
+import org.esradial.client.RadialMenuData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Dynamic, persistent AuraTip pages for server-authoritative per-item resupply. */
+/** Dynamic, persistent EsRadial pages for server-authoritative per-item resupply. */
 public final class ResupplyRadialController {
     private static final String OWNER = "espetro_resupply";
     private static final ResourceLocation MENU = id("resupply/items");
@@ -91,6 +90,17 @@ public final class ResupplyRadialController {
 
     public static void onCatalog(ResupplyCatalogPacket packet) {
         initialize();
+        // A late vehicle reply must not reopen a wheel after F was released.
+        if (packet.source().kind() == ResupplySourceRef.Kind.VEHICLE
+            && !VehicleWheelController.isWheelActive()) {
+            NetworkManager.NET.sendToServer(new CloseResupplySessionPacket(packet.token()));
+            return;
+        }
+        if (RadialMenuClientApi.isActive() && !VehicleWheelController.isWheelActive()
+            && !RadialMenuClientApi.isOwnedBy("espetro_radio") && !isActive()) {
+            NetworkManager.NET.sendToServer(new CloseResupplySessionPacket(packet.token()));
+            return;
+        }
         token = packet.token();
         catalogRevision = packet.catalogRevision();
         stateRevision = packet.stateRevision();
@@ -107,8 +117,8 @@ public final class ResupplyRadialController {
         if (token == null || !token.equals(packet.token())) return;
         if (packet.close()) {
             EspetroTipNotifier.showDenial("补给会话已关闭", packet.message());
-            if (RadialMenuClientApi.isActive()) {
-                cc.sighs.auratip.client.render.RadialMenuOverlay.INSTANCE.close();
+            if (isActive()) {
+                RadialMenuClientApi.close();
             }
             clear(false);
             return;
@@ -131,7 +141,7 @@ public final class ResupplyRadialController {
         if (!packet.success() && !packet.message().isBlank()) {
             EspetroTipNotifier.showDenial("无法补给", packet.message());
         }
-        if (changed) replacePage();
+        if (changed && isActive()) replacePage();
     }
 
     public static void tick() {
@@ -154,9 +164,12 @@ public final class ResupplyRadialController {
     private static void replacePage() {
         if (token == null) return;
         RadialMenuData data = buildPage();
-        if (!RadialMenuClientApi.replace(data)) {
+        boolean existing = RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        boolean changed = existing ? RadialMenuClientApi.replace(data)
+            : RadialMenuClientApi.isActive() && RadialMenuClientApi.navigate(data);
+        if (!changed) {
             RadialMenuRegistry.setMenus(OWNER, List.of(data));
-            RadialMenuClientApi.open(MENU);
+            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
         }
         rebuildCount++;
         menuWasActive = true;
@@ -182,9 +195,10 @@ public final class ResupplyRadialController {
         int pages = pageCount();
         if (page >= pages) page = Math.max(0, pages - 1);
         RadialMenuBuilder builder = new RadialMenuBuilder(MENU)
+            .title(Component.literal("步兵补给 · 弹药余额 " + balance))
             .radii(44, 108)
             .animationSpeed(1.25F)
-            .ringColors(List.of("#E6141719", "#F02A2D2F"));
+            .ringColors(List.of("#B824292B", "#C832383A"));
         int first = page * PAGE_SIZE;
         int end = Math.min(entries.size(), first + PAGE_SIZE);
         for (int i = first; i < end; i++) {
@@ -204,6 +218,7 @@ public final class ResupplyRadialController {
                 Actions.script(SELECT, Map.of("index", Integer.toString(entry.index()))),
                 Component.literal(label), HOVER,
                 entry.selectable() ? AVAILABLE : UNAVAILABLE);
+            if (!entry.selectable()) builder.disabledLast(Component.literal(entry.reason()));
         }
         builder = builder.persistentSlot("espetro.resupply.back", GlyphIcon.BACK,
             Actions.script(NAVIGATE, Map.of("action", "back")),
@@ -264,8 +279,8 @@ public final class ResupplyRadialController {
     private static void returnToRoot() {
         ResupplySourceRef previousSource = source;
         clear(true);
-        if (previousSource == null) return;
-        if (previousSource.kind() == ResupplySourceRef.Kind.RADIO) {
+        if (previousSource == null || RadialMenuClientApi.back()) return;
+        if (previousSource.kind() != ResupplySourceRef.Kind.VEHICLE) {
             RadioRadialController.replaceRoot();
         } else {
             VehicleWheelController.replaceRoot();
@@ -291,8 +306,6 @@ public final class ResupplyRadialController {
     private enum GlyphIcon implements IRadialIcon {
         BACK("↩"), PREVIOUS("‹"), NEXT("›");
 
-        private static final Codec<GlyphIcon> CODEC = Codec.STRING.xmap(GlyphIcon::valueOf,
-            GlyphIcon::name);
         private final String glyph;
 
         GlyphIcon(String glyph) {
@@ -312,9 +325,5 @@ public final class ResupplyRadialController {
             graphics.pose().popPose();
         }
 
-        @Override
-        public Codec<? extends IRadialIcon> codec() {
-            return CODEC;
-        }
     }
 }
