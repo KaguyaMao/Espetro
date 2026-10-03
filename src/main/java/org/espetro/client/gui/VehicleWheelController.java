@@ -3,6 +3,7 @@ package org.espetro.client.gui;
 import org.esradial.client.Actions;
 import org.esradial.client.RadialMenuClientApi;
 import org.esradial.client.RadialMenuBuilder;
+import org.esradial.client.RadialMenuData;
 import org.esradial.client.RadialMenuRegistry;
 import org.esradial.client.RadialMenuOverlay;
 import net.minecraft.client.Minecraft;
@@ -173,35 +174,41 @@ public final class VehicleWheelController {
             .title(Component.literal("载具交互"))
             .radii(WHEEL_INNER, WHEEL_OUTER)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"));
+            .ringColors(List.of("#B824292B", "#C832383A"))
+            .gap(130, 40).gap(260, 35)
+            .progress(() -> {
+                float value = org.espetro.client.vehicle.VehicleInteractionState.progress();
+                return value < 0 ? RadialMenuData.Progress.NONE : new RadialMenuData.Progress(null, value,
+                    String.format(java.util.Locale.ROOT, "#%08X", org.espetro.client.vehicle.VehicleInteractionState.color()));
+            });
 
         if (cachedSupply.canTransferAmmo()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_ammo", ICON_AMMO_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_AMMO")),
-                    Component.literal("装载弹药"), COLOR_LOAD, "#FF3D4650").repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
+                    Component.literal("装载弹药"), COLOR_LOAD, "#FF3D4650").sectorLast(-30, 55).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_ammo", ICON_AMMO_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_AMMO")),
-                    Component.literal("卸下弹药"), COLOR_UNLOAD, "#FF5C2525").repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+                    Component.literal("卸下弹药"), COLOR_UNLOAD, "#FF5C2525").sectorLast(25, 45).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canTransferConstruction()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_construction", ICON_CONSTRUCTION_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_CONSTRUCTION")),
-                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650").repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
+                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650").sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_construction", ICON_CONSTRUCTION_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_CONSTRUCTION")),
-                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525").repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525").sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canResupplyInfantry()) {
             builder = builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,
                 Actions.script(ACTION_ID, Map.of("action", "RESUPPLY_INFANTRY")),
-                Component.literal("补给步兵"), COLOR_LOAD, "#FF725E19");
+                Component.literal("补给步兵"), COLOR_LOAD, "#FF725E19").sectorLast(205, 55);
         }
         if (cachedSupply.isSupplyVehicle() || cachedSupply.isFightVehicle()) {
             builder = builder.persistentSlot("espetro.veh.change_class", ICON_AMMO_WHITE,
                 Actions.script(ACTION_ID, Map.of("action", "CHANGE_CLASS")),
-                Component.literal("更换职业"), COLOR_LOAD, "#FF3D4650");
+                Component.literal("更换职业"), COLOR_LOAD, "#FF3D4650").sectorLast(295, 35);
         }
         return builder.build();
     }
