@@ -1,10 +1,7 @@
 package org.espetro.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
@@ -12,7 +9,6 @@ import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.espetro.network.VehicleSupplySyncPacket;
-import org.joml.Matrix4f;
 
 /**
  * 载具 HUD 渲染器：
@@ -44,9 +40,6 @@ public final class VehicleSupplyHud {
     private static final int COLOR_HINT = 0xFFDDBB66;
     private static final double HINT_RANGE = 5.0;
     private static final int HINT_Y_OFFSET = 20;
-    private static final int PROGRESS_RING_RADIUS = 38;
-    private static final int PROGRESS_RING_THICKNESS = 3;
-    private static final int PROGRESS_SEGMENTS = 64;
 
     private static boolean registered;
 
@@ -69,12 +62,10 @@ public final class VehicleSupplyHud {
         if (VehicleWheelController.isWheelActive()) {
             VehicleSupplySyncPacket supply = VehicleWheelController.getCachedSupply();
             if (supply != null) drawCapacityBar(graphics, mc, supply);
-            // 上车/换座/下车：中央图标 + 百分比文字（无圆环）。补给 hold 圆环仍可用。
+            // EsRadial owns the ring and transfer progress. Keep only the center icon/text here.
             if (interactionProgress >= 0f) {
                 drawInteractionCenterProgress(graphics, mc, interactionProgress);
-            } else if (VehicleWheelController.isHolding()) {
-                drawProgressRing(graphics, mc);
-            } else if (VehicleWheelController.isCenterHovered()) {
+            } else if (!VehicleWheelController.isHolding() && VehicleWheelController.isCenterHovered()) {
                 drawCenterMountHint(graphics, mc);
             }
             return;
@@ -218,51 +209,4 @@ public final class VehicleSupplyHud {
         graphics.drawString(mc.font, text, cx - mc.font.width(text) / 2, cy + 16, 0xFFFFFF);
     }
 
-    private static void drawProgressRing(GuiGraphics graphics, Minecraft mc) {
-        int progress = VehicleWheelController.getHoldProgress();  // 0..20
-        float fill = Math.min(1.0f, (float)progress / 20.0f);
-        int color = VehicleWheelController.getHoldColor();
-
-        int cx = mc.getWindow().getGuiScaledWidth() / 2;
-        int cy = mc.getWindow().getGuiScaledHeight() / 2;
-        drawRingAt(graphics, cx, cy, fill, color);
-    }
-
-    private static void drawRingAt(GuiGraphics graphics, int cx, int cy, float fill, int color) {
-        int r = PROGRESS_RING_RADIUS;
-        int thick = PROGRESS_RING_THICKNESS;
-
-        HudRenderState.begin(graphics);
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
-        Matrix4f matrix = graphics.pose().last().pose();
-        BufferBuilder builder = Tesselator.getInstance().getBuilder();
-        builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-
-        float a = (color >> 24) & 0xFF;
-        float red = ((color >> 16) & 0xFF) / 255f;
-        float green = ((color >> 8) & 0xFF) / 255f;
-        float blue = (color & 0xFF) / 255f;
-        float alpha = a / 255f;
-
-        int segments = PROGRESS_SEGMENTS;
-        int filledSegments = (int)(fill * segments);
-
-        // 从顶部 (-90°) 顺时针绘制弧
-        for (int i = 0; i <= filledSegments; i++) {
-            float angle = (float)(-Math.PI / 2 + 2 * Math.PI * i / segments);
-            float cos = (float)Math.cos(angle);
-            float sin = (float)Math.sin(angle);
-            float innerX = cx + (r - thick) * cos;
-            float innerY = cy + (r - thick) * sin;
-            float outerX = cx + (r + thick) * cos;
-            float outerY = cy + (r + thick) * sin;
-
-            builder.vertex(matrix, innerX, innerY, 0).color(red, green, blue, alpha).endVertex();
-            builder.vertex(matrix, outerX, outerY, 0).color(red, green, blue, alpha).endVertex();
-        }
-
-        BufferUploader.drawWithShader(builder.end());
-        HudRenderState.restore(graphics);
-    }
 }

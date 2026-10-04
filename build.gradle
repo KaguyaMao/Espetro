@@ -139,6 +139,9 @@ if (!fixedAuraTipJar.isFile()) {
 }
 
 repositories {
+    mavenLocal {
+        content { includeGroup 'org.esradial' }
+    }
     // Consume only the reproducibly published Tetrachord artifact. Upstream's
     // generated publication metadata exposes its Forge userdev runtime as a
     // transitive dependency, which is not a consumer dependency.
@@ -204,6 +207,7 @@ dependencies {
     implementation fg.deobf("cc.sighs.oelib:OELib-forge-1.20.1:${oelib_version}")
     implementation fg.deobf("local:auratip-forge-1.20.1:${auratip_version}")
     implementation fg.deobf("com.sighs:ApricityUI-forge-1.20.1:${apricityui_version}")
+    implementation fg.deobf("org.esradial:esradial-forge-1.20.1:${esradial_version}")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
@@ -257,6 +261,7 @@ tasks.named('processResources', ProcessResources).configure {
                              oelib_version       : oelib_version,
                              auratip_version     : auratip_version,
                              apricityui_version  : apricityui_version,
+                             esradial_version    : esradial_version,
                              tetrachord_version  : tetrachord_version,
                              taczmagazines_version_range: taczmagazines_version_range,
                              pingwheel_version   : pingwheel_version,]
@@ -318,7 +323,7 @@ tasks.register('syncRunMods') {
                 throw new GradleException("前置源目录不存在: ${sourceDir}")
             }
             logger.warn("syncRunMods: 使用生产 jar 源 {}（勿用于 userdev runClient）", sourceDir)
-            def patterns = [~/tetrachordlib-.*\.jar/, ~/.*apricityui.*\.jar/,
+            def patterns = [~/esradial-.*\.jar/, ~/tetrachordlib-.*\.jar/, ~/.*apricityui.*\.jar/,
                             ~/rhino-.*\.jar/, ~/architectury-.*\.jar/, ~/kubejs-.*\.jar/]
             int n = 0
             sourceDir.listFiles()?.each { File f ->
@@ -333,7 +338,7 @@ tasks.register('syncRunMods') {
             return
         }
 
-        def wanted = ['oelib', 'auratip', 'apricityui', 'tetrachordlib', 'rhino', 'architectury', 'kubejs']
+        def wanted = ['esradial', 'oelib', 'auratip', 'apricityui', 'tetrachordlib', 'rhino', 'architectury', 'kubejs']
         int copied = 0
         configurations.runtimeClasspath.files.findAll { File f ->
             def n = f.name.toLowerCase()

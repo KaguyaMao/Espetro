@@ -1,10 +1,11 @@
 package org.espetro.client.gui;
 
-import cc.sighs.auratip.api.action.Actions;
-import cc.sighs.auratip.api.client.RadialMenuClientApi;
-import cc.sighs.auratip.api.radiamenu.RadialMenuBuilder;
-import cc.sighs.auratip.api.radiamenu.RadialMenuRegistry;
-import cc.sighs.auratip.client.render.RadialMenuOverlay;
+import org.esradial.client.Actions;
+import org.esradial.client.RadialMenuClientApi;
+import org.esradial.client.RadialMenuBuilder;
+import org.esradial.client.RadialMenuData;
+import org.esradial.client.RadialMenuRegistry;
+import org.esradial.client.RadialMenuOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Hold SBW INTERACT AuraTip wheel for the vehicle under the crosshair. */
+/** Hold SBW INTERACT EsRadial wheel for the vehicle under the crosshair. */
 public final class VehicleWheelController {
 
     private static final String OWNER = "espetro_vehicle";
@@ -65,7 +66,7 @@ public final class VehicleWheelController {
     }
 
     public static boolean isWheelActive() {
-        return ownsOverlay;
+        return ownsOverlay && RadialMenuClientApi.isActive() && RadialMenuClientApi.isOwnedBy(OWNER);
     }
 
     /**
@@ -73,7 +74,7 @@ public final class VehicleWheelController {
      * is inside the inner radius (center icon zone used by the mount channel).
      */
     public static boolean isCenterHovered() {
-        if (!ownsOverlay || !RadialMenuClientApi.isActive()) {
+        if (!isWheelActive() || !RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
             return false;
         }
         if (RadialMenuClientApi.hoveredSlotIndex() >= 0) {
@@ -83,15 +84,7 @@ public final class VehicleWheelController {
         if (mc == null) {
             return false;
         }
-        double mx = mc.mouseHandler.xpos()
-            * mc.getWindow().getGuiScaledWidth() / mc.getWindow().getScreenWidth();
-        double my = mc.mouseHandler.ypos()
-            * mc.getWindow().getGuiScaledHeight() / mc.getWindow().getScreenHeight();
-        double cx = mc.getWindow().getGuiScaledWidth() * 0.5;
-        double cy = mc.getWindow().getGuiScaledHeight() * 0.5;
-        double dx = mx - cx;
-        double dy = my - cy;
-        return dx * dx + dy * dy <= (double) WHEEL_INNER * (double) WHEEL_INNER;
+        return RadialMenuClientApi.isCenterHovered();
     }
 
     public static boolean isInteractHeld() {
@@ -176,39 +169,46 @@ public final class VehicleWheelController {
         RadialMenuRegistry.setMenus(OWNER, List.of(buildRootMenu()));
     }
 
-    private static cc.sighs.auratip.data.RadialMenuData buildRootMenu() {
+    private static org.esradial.client.RadialMenuData buildRootMenu() {
         RadialMenuBuilder builder = new RadialMenuBuilder(ROOT)
+            .title(Component.literal("载具交互"))
             .radii(WHEEL_INNER, WHEEL_OUTER)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#E6141719", "#F02A2D2F"));
+            .ringColors(List.of("#B824292B", "#C832383A"))
+            .gap(130, 40).gap(260, 35)
+            .progress(() -> {
+                float value = org.espetro.client.vehicle.VehicleInteractionState.progress();
+                return value < 0 ? RadialMenuData.Progress.NONE : new RadialMenuData.Progress(null, value,
+                    String.format(java.util.Locale.ROOT, "#%08X", org.espetro.client.vehicle.VehicleInteractionState.color()));
+            });
 
         if (cachedSupply.canTransferAmmo()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_ammo", ICON_AMMO_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_AMMO")),
-                    Component.literal("装载弹药"), COLOR_LOAD, "#FF3D4650")
+                    Component.literal("装载弹药"), COLOR_LOAD, "#FF3D4650").sectorLast(-30, 55).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_ammo", ICON_AMMO_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_AMMO")),
-                    Component.literal("卸下弹药"), COLOR_UNLOAD, "#FF5C2525");
+                    Component.literal("卸下弹药"), COLOR_UNLOAD, "#FF5C2525").sectorLast(25, 45).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canTransferConstruction()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_construction", ICON_CONSTRUCTION_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_CONSTRUCTION")),
-                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650")
+                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650").sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_construction", ICON_CONSTRUCTION_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_CONSTRUCTION")),
-                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525");
+                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525").sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canResupplyInfantry()) {
             builder = builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,
                 Actions.script(ACTION_ID, Map.of("action", "RESUPPLY_INFANTRY")),
-                Component.literal("补给步兵"), COLOR_LOAD, "#FF725E19");
+                Component.literal("补给步兵"), COLOR_LOAD, "#FF725E19").sectorLast(205, 55);
         }
         if (cachedSupply.isSupplyVehicle() || cachedSupply.isFightVehicle()) {
             builder = builder.persistentSlot("espetro.veh.change_class", ICON_AMMO_WHITE,
                 Actions.script(ACTION_ID, Map.of("action", "CHANGE_CLASS")),
-                Component.literal("更换职业"), COLOR_LOAD, "#FF3D4650");
+                Component.literal("更换职业"), COLOR_LOAD, "#FF3D4650").sectorLast(295, 35);
         }
         return builder.build();
     }
@@ -234,7 +234,8 @@ public final class VehicleWheelController {
         return (packet.canTransferAmmo() ? "A" : "-")
             + (packet.canTransferConstruction() ? "C" : "-")
             + (packet.canResupplyInfantry() ? "R" : "-")
-            + (packet.isSupplyVehicle() ? "S" : "-");
+            + (packet.isSupplyVehicle() ? "S" : "-")
+            + (packet.isFightVehicle() ? "F" : "-") + ":" + packet.getTransferIntervalTicks();
     }
 
     public static void tick(Minecraft minecraft) {
@@ -287,8 +288,9 @@ public final class VehicleWheelController {
         heldTicks++;
         if (heldTicks >= OPEN_DELAY_TICKS && snapshotReady) {
             publishMenu();
-            RadialMenuClientApi.open(ROOT);
-            ownsOverlay = true;
+            var data = RadialMenuRegistry.getRuntimeMenu(ROOT);
+            ownsOverlay = data != null && RadialMenuClientApi.open(data,
+                new RadialMenuClientApi.OpenOptions(OWNER, () -> isInteractKeyDown(window), false, reason -> { ownsOverlay = false; consumedUntilRelease = true; }));
         }
     }
 
@@ -327,14 +329,10 @@ public final class VehicleWheelController {
             holdProgress = 0;
             return;
         }
-        if (!action.equals(holdAction)) holdProgress = 0;
         holdAction = action;
-        holdProgress++;
         int interval = Math.max(1, cachedSupply == null ? 20 : cachedSupply.getTransferIntervalTicks());
-        if (holdProgress >= interval) {
-            holdProgress = 0;
-            sendSupplyAction(action);
-        }
+        // EsRadial owns the one and only repeat clock; HUD only reads its progress.
+        holdProgress = (int) Math.round(RadialMenuClientApi.repeatProgress() * interval);
     }
 
     @Nullable
@@ -355,7 +353,7 @@ public final class VehicleWheelController {
 
     private static void closeOwnedOverlay() {
         if (ownsOverlay && RadialMenuOverlay.INSTANCE.isActive()) {
-            RadialMenuOverlay.INSTANCE.close();
+            RadialMenuClientApi.close(OWNER);
         }
         ownsOverlay = false;
     }
@@ -365,7 +363,10 @@ public final class VehicleWheelController {
         if (cachedSupply == null || !cachedSupply.hasAnyAction()) return;
         if (!RadialMenuClientApi.replace(buildRootMenu())) {
             publishMenu();
-            RadialMenuClientApi.open(ROOT);
+            var data = RadialMenuRegistry.getRuntimeMenu(ROOT);
+            if (data != null) RadialMenuClientApi.open(data,
+                new RadialMenuClientApi.OpenOptions(OWNER,
+                    () -> isInteractKeyDown(Minecraft.getInstance().getWindow().getWindow()), false, reason -> { ownsOverlay = false; consumedUntilRelease = true; }));
         }
         ownsOverlay = true;
         consumedUntilRelease = true;

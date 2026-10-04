@@ -420,7 +420,7 @@ public class ClientPacketHandlers {
         if (mc.player == null) return;
 
         // 更新 MUtil 轮盘技能缓存。
-        org.espetro.client.gui.AuraTipRadialController.updateSkills(
+        org.espetro.client.gui.TacticalRadialController.updateSkills(
             packet.isCommander(), packet.getCooldowns(), packet.getSkills());
 
         // 如果 CommanderSkillScreen 恰好已打开，同步更新数据
@@ -598,7 +598,7 @@ public class ClientPacketHandlers {
     }
 
     public static void handleFortificationCatalog(FortificationCatalogPacket packet) {
-        org.espetro.client.gui.AuraTipRadialController
+        org.espetro.client.gui.TacticalRadialController
             .updateFortifications(packet.entries());
     }
 
