@@ -21,7 +21,7 @@
 - 库和这四个控制器不再依赖 AuraTip 的轮盘 API。Espetro 其他页面及通知仍有 AuraTip/OELib 依赖，需要继续安装。
 - 选择职业、补给子页和载具根菜单共享一次打开会话，松开 F 会一起关闭。
 - 晚到的车辆换职/补给答复不应在 F 已松开后重新打开轮盘。补给增量答复不抢占其他菜单。
-- `mods.toml` 新增客户端前置 EsRadial 0.1.0。服务器启动引导仍不直接加载客户端轮盘类。
+- `mods.toml` 新增客户端前置 EsRadial 0.2.0。服务器启动引导仍不直接加载客户端轮盘类。
 
 ## 开发构建
 
@@ -54,3 +54,11 @@ Espetro 原工程要求作者提供固定 AuraTip 构建产物，还依赖 Tetra
 ## ES 系列后续
 
 这次只修改 Espetro。EsPoints、EsVoice、EsWeather 源码不改；它们原有功能照旧。以后某个模组要使用这套轮盘，再给它加按钮数据和事件适配，不需要为了装 EsRadial 把整个系列一起重写。
+
+## 玩家调整轮盘
+
+EsRadial 0.2.0 自动接管各页布局。轮盘打开后按 F6，拖动扇区（包括空槽）调整顺序，
+拖动分界线调整大小，滚轮旋转。Enter 保存、Esc 取消、R 恢复默认（Enter 保存后生效）。
+编辑界面不会触发建造、补给、换职或上车。客户端 `config/esradial/layouts.json` 可手工修改，
+下次打开生效；每个菜单及不同选项集合分别保存，通过稳定按钮 ID 匹配。
+无需修改地图服务端 JSON。格式见 [EsRadial 布局配置](https://github.com/RositaOVO/EsRadial/blob/1.20.1/docs/LAYOUTS.md)。
