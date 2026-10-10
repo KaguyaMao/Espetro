@@ -368,71 +368,75 @@ public final class TacticalRadialController {
 
     private static org.esradial.client.RadialMenuData rootMenu() {
         var builder = base(ROOT_MENU);
-        if (!cachedFortifications.isEmpty()) {
-            builder = builder.slot("espetro.build", BUILD_ICON,
-                Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "build")),
-                Component.literal("工事建造"), "#FFD5B25C").submenuLast();
-        }
-        // 载具部署不是工事建造：让指挥官在根轮盘直接看到入口，避免首次
-        // 冷却已经结束却误以为没有可部署载具。
-        if (cachedIsCommander) {
-            builder = builder.slot("espetro.vehicle", VEHICLE,
-                action(RadialActionPacket.Action.DEPLOY_VEHICLE),
-                Component.literal("载具信息"), "#FFB0A070");
-        }
-        // 指挥官或同步到了可用技能（含小队长 usableBy）时显示入口
-        if (cachedIsCommander || (hasSkillSnapshot && !cachedSkills.isEmpty())) {
-            builder = builder.slot("espetro.skills", COMMAND_ICON,
-                Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "skills")),
-                Component.translatable("radial.espetro.skills"), "#FFD5A25C").submenuLast();
-        }
+        if (!isFireteamLeaderOnly()) builder.slot("espetro.rally", RALLY,
+            action(RadialActionPacket.Action.DEPLOY_RALLY), Component.literal("队包获取"), "#FFD5B25C")
+            .sectorLast(0,60);
+        cachedFortifications.stream().filter(f -> f != null && FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
+            .filter(f -> !isFireteamLeaderOnly()).findFirst().ifPresent(f -> {
+                addFort(builder, f); builder.sectorLast(300,60);
+            });
+        if (!cachedFortifications.isEmpty()) builder.slot("espetro.build", BUILD_ICON,
+            Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "build")),
+            Component.literal("工事建造"), "#FFD5B25C", false).submenuLast().tintLast(0xFFD5B25C).sectorLast(270,30);
         return builder.build();
     }
 
-    /**
-     * 建造工事二级菜单：Rally 仍是部署点，其余工事只来自 JSON 目录。
-     * Radio / 兵站已在 fortifications.json 中，不能再硬编码一份。
-     */
+    /** Radio and team pack live on the home page; three construction categories fill this page. */
     private static List<org.esradial.client.RadialMenuData> buildDirectoryMenus() {
-        boolean fireteamOnly = isFireteamLeaderOnly();
         var pages = new ArrayList<org.esradial.client.RadialMenuData>();
         var root = base(BUILD_MENU).title(Component.literal("工事建造"));
+        int quarter = 0;
         for (var category : FortificationMenuCategory.values()) {
             var entries = cachedFortifications.stream().filter(f -> f != null && f.id() != null && !f.id().isBlank())
-                .filter(f -> !fireteamOnly || !FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
+                .filter(f -> !FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
                 .filter(f -> FortificationMenuCategory.classify(f.id(), f.displayName(), f.icon()) == category).toList();
-            if (entries.isEmpty() && (category != FortificationMenuCategory.FOUNDATION || fireteamOnly)) continue;
             String path = "tactical_build_" + category.name().toLowerCase(java.util.Locale.ROOT);
             root.slot("espetro.build.directory." + category.name(), ui(category.icon),
                 Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", path)),
-                Component.literal(category.title), "#FFD5B25C", false).submenuLast();
+                Component.literal(category.title), "#FFD5B25C", false).submenuLast().sectorLast(quarter++*90,90);
             var group = base(id(path)).title(Component.literal(category.title));
-            if (category == FortificationMenuCategory.FOUNDATION && !fireteamOnly) group.slot("espetro.rally", RALLY,
-                action(RadialActionPacket.Action.DEPLOY_RALLY),
-                Component.translatable("radial.espetro.rally"), "#FFD5B25C");
-            // Large custom catalogues get nested folders instead of a crowded 64-slot wheel.
-            if (entries.size() > 6) {
-                for (int first = 0; first < entries.size(); first += 6) {
-                    String childPath = path + "_" + first / 6;
-                    String title = category.title + " · " + (first / 6 + 1);
-                    group.slot("espetro.build.group." + childPath, ui(category.icon),
-                        Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", childPath)),
-                        Component.literal(title), "#FFD5B25C", false).submenuLast();
-                    var child = base(id(childPath)).title(Component.literal(title));
-                    for (var fort : entries.subList(first, Math.min(first + 6, entries.size()))) addFort(child, fort);
-                    pages.add(child.build());
+            if (category == FortificationMenuCategory.FOUNDATION) {
+                String[][] functional = {{"espetro:hab", "兵站", "radialhab"},
+                    {"espetro:ammo_crate", "弹药箱", "radialammocrateicon"},
+                    {"espetro:vehicle_supply_station", "维修站", "radialrepairdepoticon"}};
+                for (int i=0; i<functional.length; i++) {
+                    var item = functional[i];
+                    var fort = entries.stream().filter(f -> item[0].equals(f.id())).findFirst().orElse(null);
+                    if (fort != null) addFort(group, fort, item[1]);
+                    else group.slot("espetro.unavailable."+item[0],ui(item[2]),()->{},Component.literal(item[1]),"#FFD5B25C")
+                        .disabledLast(Component.literal("当前建造目录未开放"));
+                    group.sectorLast(i*90,90);
                 }
-            } else for (var fort : entries) addFort(group, fort);
+                group.backSlot(() -> RadialMenuClientApi.back()).sectorLast(270,90);
+            } else {
+                // More than eleven actions get folders; each leaf still uses thirty-degree sectors.
+                if (entries.size() > 11) {
+                    for (int first=0; first<entries.size(); first+=11) {
+                        String childPath=path+"_"+first/11;
+                        String title=category.title+" · "+(first/11+1);
+                        group.slot("espetro.build.group."+childPath,ui(category.icon),
+                            Actions.script(OPEN_SUBMENU_ACTION,Map.of("menu",childPath)),Component.literal(title),"#FFD5B25C",false).submenuLast();
+                        var child=base(id(childPath)).title(Component.literal(title));
+                        for (var fort:entries.subList(first,Math.min(first+11,entries.size()))) addFort(child,fort);
+                        child.backSlot(() -> RadialMenuClientApi.back()); pages.add(child.build());
+                    }
+                } else for (var fort:entries) addFort(group,fort);
+                group.backSlot(() -> RadialMenuClientApi.back());
+            }
             pages.add(group.build());
         }
-        pages.add(0, root.build());
+        root.backSlot(() -> RadialMenuClientApi.back()).sectorLast(270,90);
+        pages.add(0,root.build());
         return pages;
     }
 
     private static void addFort(RadialMenuBuilder builder, FortificationCatalogPacket.Entry fort) {
+        addFort(builder,fort,fort.displayName());
+    }
+    private static void addFort(RadialMenuBuilder builder, FortificationCatalogPacket.Entry fort, String displayName) {
         ResourceLocation icon = ResourceLocation.tryParse(fort.icon());
         if (icon == null) icon = UNAVAILABLE_ICON;
-        StringBuilder label = new StringBuilder(fort.displayName());
+        StringBuilder label = new StringBuilder(displayName);
         if (fort.constructionCost() > 0 || fort.ammunitionCost() > 0) {
             label.append(" §7(");
             if (fort.constructionCost() > 0) label.append("建材 ").append(fort.constructionCost());
@@ -446,7 +450,7 @@ public final class TacticalRadialController {
     }
 
     private static org.esradial.client.RadialMenuData skillsMenu() {
-        var builder = base(SKILLS_MENU);
+        var builder = base(SKILLS_MENU).backSlot(() -> RadialMenuClientApi.back());
 
         if (!hasSkillSnapshot) {
             builder = builder.slot("espetro.skills_loading", UNAVAILABLE_ICON,
