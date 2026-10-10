@@ -1,6 +1,6 @@
 # Espetro 接入 EsRadial
 
-只处理 `1.20.1` 分支。最新接入补丁基于 `427dbbd`；已通过 Java 编译与适配测试的完整源码基于同分支的历史提交 `32d67bbff60a59c3842c786843b34e18f29eeb4d`，版本同为 `1.1.3-j`。没有修改 main 分支。
+只处理 `1.20.1` 分支。最新接入补丁基于 `4ae5012`；已通过 Java 编译与适配测试的完整源码基于同分支的历史提交 `32d67bbff60a59c3842c786843b34e18f29eeb4d`，版本同为 `1.1.3-j`。没有修改 main 分支。
 
 ## 接入后的操作
 
@@ -39,9 +39,9 @@ Espetro 原工程要求作者提供固定 AuraTip 构建产物，还依赖 Tetra
 
 ## 已验证及未验证
 
-独立库 Java 编译通过，39 项核心及布局测试通过。历史基线 32d67bb 的完整源码接入后也已用真实 Forge 映射 jar、AUI 1.2.3.1 及既有依赖通过 Java 编译；按仓库自己的 accesstransformer.cfg 开放了 5 个编译期字段。13 项 Espetro 轮盘适配测试通过。
+独立库 Java 编译通过，39 项核心及布局测试通过。历史基线 32d67bb 的完整源码接入后也已用真实 Forge 映射 jar、AUI 1.2.6 及既有依赖通过 Java 编译；按仓库自己的 accesstransformer.cfg 开放了 5 个编译期字段。15 项 Espetro 轮盘适配与权限分类测试通过。
 
-最新 427dbbd 仍缺 HitboxPolicyPacket、TeamAssignPacket、MapRevealPacket 等既有源码，未通过完整编译。附带对应补丁，便于以后补齐该分支后使用。没有删除它们的引用或重写相关游戏功能来掩盖问题。
+最新4ae5012仍缺FixedWeaponWheelPacket源码及DragonRise的SupplyStationConfig、SupplyStationDataLoader依赖，未通过完整编译。附带对应补丁，便于以后补齐该分支后使用。没有删除它们的引用或重写相关游戏功能来掩盖问题。
 
 本机 ForgeGradle 仍有依赖解析问题。历史基线测试包已完成 Mixin 注解处理和 Forge 名称映射，基础联机轮盘操作已测试。独立客户端的实际游戏截图已确认建造、载具图标及悬停和空白区域显示；完整目录及业务场景仍需进一步验收。历史基线测试包不能等同于最新分支的正式发行产物。
 
