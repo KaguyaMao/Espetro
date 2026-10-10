@@ -71,8 +71,7 @@ public class ClientPacketHandlers {
             // 已在编制选择界面，刷新本方/对方倒计时和当前权限
             screen.updateFromPacket(packet);
         } else {
-            // 职业部署菜单：由淡入改为从下方滑入（0.2s）
-            org.espetro.client.aui.AuiScreen.openWithSlideUp(
+            org.espetro.client.aui.AuiScreen.openWithFade(
                 new org.espetro.client.gui.ClassSelectScreen(
                     packet.getTeam(), packet.isCommander(), packet.getFactions(),
                     packet.getTimeRemaining(), packet.getOpponentTeamName(),
@@ -88,7 +87,8 @@ public class ClientPacketHandlers {
         org.espetro.client.gui.ClientGameState.setPlayerFactionId(packet.getFactionId());
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player != null) {
-            mc.setScreen(new org.espetro.client.gui.ClassSelectionScreen(
+            // 部署后按 J 打开的职业面板：从下方滑入（0.2s），不动前一屏
+            org.espetro.client.aui.AuiScreen.showWithSlideUp(new org.espetro.client.gui.ClassSelectionScreen(
                 packet.getFactionId(),
                 packet.getFactionName(),
                 packet.getFactionDescription(),

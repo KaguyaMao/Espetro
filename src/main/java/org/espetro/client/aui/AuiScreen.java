@@ -185,6 +185,13 @@ public abstract class AuiScreen extends Screen {
         if (next instanceof AuiScreen n) n.useSlideFromBottom();
     }
 
+    /** 只让【下一个】界面从下方滑入，不改变当前界面的切换方式（投票页仍走淡入淡出）。 */
+    public static void showWithSlideUp(Screen next) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        mc.setScreen(next);
+        if (next instanceof AuiScreen n) n.useSlideFromBottom();
+    }
+
     /** 淡出并关闭（screen = null）。 */
     public static void closeWithFade(Screen current) {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();

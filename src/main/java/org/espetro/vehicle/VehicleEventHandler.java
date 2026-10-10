@@ -185,6 +185,7 @@ public class VehicleEventHandler {
         }
         if (entity.getTags().contains("espetro_vehicle")) {
             VehicleManager.getInstance().updateVehicleLocation(entity);
+            Espetro.LOGGER.info("载具 {} 离开已加载世界（reason={}），追踪保留", entity.getUUID(), entity.getRemovalReason());
             if (entity.getRemovalReason() == Entity.RemovalReason.KILLED) {
                 VehicleManager.getInstance().onVehicleDeath(entity.getUUID());
                 Espetro.LOGGER.debug("载具 {} 已被杀毁，移除追踪并处理兵力扣除", entity.getUUID());
@@ -197,7 +198,7 @@ public class VehicleEventHandler {
                     Espetro.LOGGER.debug("载具 {} 残骸已移除，确保自动刷新已登记", entity.getUUID());
                 } else {
                     VehicleManager.getInstance().onVehicleRemoved(entity.getUUID());
-                    Espetro.LOGGER.debug("载具 {} 已被主动移除，清除追踪", entity.getUUID());
+                    Espetro.LOGGER.info("载具 {} 被 DISCARDED 移除（reason={}）—— 会清除追踪且【不排重生】", entity.getUUID(), entity.getRemovalReason());
                 }
             } else {
                 Espetro.LOGGER.debug("载具 {} 暂时离开已加载世界，保留停服清理追踪", entity.getUUID());
