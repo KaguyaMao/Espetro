@@ -87,8 +87,7 @@ public class ClientPacketHandlers {
         org.espetro.client.gui.ClientGameState.setPlayerFactionId(packet.getFactionId());
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player != null) {
-            // 部署后按 J 打开的职业面板：从下方滑入（0.2s），不动前一屏
-            org.espetro.client.aui.AuiScreen.showWithSlideUp(new org.espetro.client.gui.ClassSelectionScreen(
+            mc.setScreen(new org.espetro.client.gui.ClassSelectionScreen(
                 packet.getFactionId(),
                 packet.getFactionName(),
                 packet.getFactionDescription(),
@@ -324,7 +323,9 @@ public class ClientPacketHandlers {
                 screen.refreshForFreeUnlock();
             }
         } else if (packet.shouldOpenScreen()) {
-            mc.setScreen(new org.espetro.client.gui.UnifiedDeployScreen(packet));
+            // J 菜单（统一部署面板，含职业/班组/载具/地图）：从下方滑入，关闭时滑出
+            org.espetro.client.aui.AuiScreen.showWithSlideUp(
+                new org.espetro.client.gui.UnifiedDeployScreen(packet));
         }
     }
 
