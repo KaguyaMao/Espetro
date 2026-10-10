@@ -1399,6 +1399,32 @@ public class VehicleManager {
         return activeVehicleIds.contains(entityId);
     }
 
+    /** Team-filterable map data; unloaded vehicles use last known positions without loading chunks. */
+    public record TacticalVehicleSnapshot(UUID id, String type, String name, String team,
+            double x, double z, float yaw, int passengers, int squadId, boolean loaded) { }
+    public List<TacticalVehicleSnapshot> tacticalVehicleSnapshots(ServerLevel level) {
+        List<TacticalVehicleSnapshot> result = new ArrayList<>();
+        for (var entry : activeVehicleData.entrySet()) {
+            var data = entry.getValue();
+            if (!level.dimension().equals(data.dimension()) || data.team() == null) continue;
+            Entity vehicle = level.getEntity(entry.getKey());
+            if (vehicle != null && !vehicle.isAlive()) continue;
+            BlockPos position = vehicle == null ? data.lastKnownPosition() : vehicle.blockPosition();
+            if (position == null) continue;
+            int passengers = 0;
+            if (vehicle != null) for (Entity passenger : vehicle.getIndirectPassengers())
+                if (passenger instanceof ServerPlayer) passengers++;
+            result.add(new TacticalVehicleSnapshot(entry.getKey(), data.vehicleType(),
+                getDisplayName(data.factionId(), data.vehicleType()), data.team(),
+                vehicle == null ? position.getX() + .5 : vehicle.getX(),
+                vehicle == null ? position.getZ() + .5 : vehicle.getZ(),
+                vehicle == null ? 0 : vehicle.getYRot(), passengers,
+                vehicle == null ? -1 : VehicleSquadOwnership.getSquadId(vehicle), vehicle != null));
+        }
+        result.sort(Comparator.comparing(v -> v.id().toString()));
+        return List.copyOf(result);
+    }
+
     /**
      * 返回 Espetro 追踪载具的所属阵营；不会加载区块或遍历实体。
      */
