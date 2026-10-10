@@ -31,10 +31,10 @@ public abstract class AuiScreen extends Screen {
     /** 淡出进行中（阻止投票类页面的 onClose 重开自身把淡出后的切屏顶掉）。 */
     private boolean fadeOutClosing;
 
-    /** 滑入/滑出（职业部署菜单）：0.2 秒 = 12 ticks，整个菜单层上下平移。 */
-    private static final int SLIDE_TICKS = 12;
-    private int slideInTicksLeft;
-    private int slideOutTicksLeft;
+    /** 滑入/滑出（J 菜单）：0.2 秒，毫秒计时（与帧率无关）+ easeOutCubic 逐帧插值。 */
+    private static final long SLIDE_MS = 200L;
+    private long slideStartMs;
+    private boolean slideOutPending;
     private Runnable slideOutAction;
     private boolean slideFromBottom;
 
@@ -114,7 +114,8 @@ public abstract class AuiScreen extends Screen {
     /** 切到「从下方滑入/滑出」模式（职业部署菜单用）。 */
     public final void useSlideFromBottom() {
         this.slideFromBottom = true;
-        this.slideInTicksLeft = SLIDE_TICKS;
+        this.slideOutPending = false;
+        this.slideStartMs = System.currentTimeMillis();
         this.fadeInTicksLeft = 0;
     }
 
@@ -126,8 +127,9 @@ public abstract class AuiScreen extends Screen {
     /** 滑出：动画结束后执行 action。 */
     public final void startSlideOut(Runnable action) {
         slideFromBottom = true;
-        if (slideOutTicksLeft <= 0) {
-            slideOutTicksLeft = SLIDE_TICKS;
+        if (!slideOutPending) {
+            slideOutPending = true;
+            slideStartMs = System.currentTimeMillis();
             slideOutAction = action;
         } else {
             Runnable previous = slideOutAction;
@@ -141,7 +143,8 @@ public abstract class AuiScreen extends Screen {
     private void completeSlideOut() {
         Runnable action = slideOutAction;
         slideOutAction = null;
-        slideOutTicksLeft = 0;
+        slideOutPending = false;
+        slideStartMs = 0L;
         if (action != null && net.minecraft.client.Minecraft.getInstance().screen == this) {
             action.run();
         }
@@ -152,18 +155,13 @@ public abstract class AuiScreen extends Screen {
      * 入场：+高度 → 0（自下方滑入）；出场：0 → +高度（向下滑出）。
      * 用 partialTick 做子帧插值，避免 20Hz 的顿感。
      */
-    public final double currentSlideOffset(float partialTick) {
+    public final double currentSlideOffset() {
         if (!slideFromBottom) return 0.0D;
         double span = this.height + 12.0D;
-        if (slideInTicksLeft > 0) {
-            double t = Math.min(1.0D, (SLIDE_TICKS - slideInTicksLeft + partialTick) / SLIDE_TICKS);
-            return span * (1.0D - easeOutCubic(t));
-        }
-        if (slideOutTicksLeft > 0) {
-            double t = Math.min(1.0D, (SLIDE_TICKS - slideOutTicksLeft + partialTick) / SLIDE_TICKS);
-            return span * easeOutCubic(t);
-        }
-        return 0.0D;
+        if (slideStartMs <= 0L) return slideOutPending ? span : 0.0D;
+        double t = Math.min(1.0D, (System.currentTimeMillis() - slideStartMs) / (double) SLIDE_MS);
+        double e = easeOutCubic(t);
+        return slideOutPending ? span * e : span * (1.0D - e);
     }
 
     private static double easeOutCubic(double t) {
@@ -280,10 +278,9 @@ public abstract class AuiScreen extends Screen {
         if (root != null) {
             root.updateAnimations();
         }
-        if (slideInTicksLeft > 0) slideInTicksLeft--;
-        if (slideOutTicksLeft > 0) {
-            slideOutTicksLeft--;
-            if (slideOutTicksLeft <= 0) completeSlideOut();
+        if (slideOutPending && slideStartMs > 0L
+                && System.currentTimeMillis() - slideStartMs >= SLIDE_MS) {
+            completeSlideOut();
         }
         if (fadeInTicksLeft > 0) {
             fadeInTicksLeft--;
@@ -310,10 +307,11 @@ public abstract class AuiScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         graphics.pose().pushPose();
         try {
-            renderBeforeMenu(graphics, mouseX, mouseY, partialTick);
+            // 整屏一起平移：背景遮罩、地图、控件、菜单后层都跟着滑，避免"瞬间出现"
             graphics.pose().pushPose();
-            graphics.pose().translate(0.0D, currentSlideOffset(partialTick), 0.0D);
+            graphics.pose().translate(0.0D, currentSlideOffset(), 0.0D);
             try {
+                renderBeforeMenu(graphics, mouseX, mouseY, partialTick);
                 if (root != null) {
                     root.updateFocusState(0, 0, mouseX, mouseY);
                     root.draw(graphics, 0, 0, this.width, this.height, mouseX, mouseY, partialTick);
@@ -396,7 +394,7 @@ public abstract class AuiScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (slideFromBottom && slideOutTicksLeft <= 0) {
+        if (slideFromBottom && !slideOutPending) {
             net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
             if (mc.screen == this) {
                 startSlideOut(() -> mc.setScreen(null));
