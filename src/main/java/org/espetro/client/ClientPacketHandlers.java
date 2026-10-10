@@ -71,7 +71,8 @@ public class ClientPacketHandlers {
             // 已在编制选择界面，刷新本方/对方倒计时和当前权限
             screen.updateFromPacket(packet);
         } else {
-            org.espetro.client.aui.AuiScreen.openWithFade(
+            // 职业部署菜单：由淡入改为从下方滑入（0.2s）
+            org.espetro.client.aui.AuiScreen.openWithSlideUp(
                 new org.espetro.client.gui.ClassSelectScreen(
                     packet.getTeam(), packet.isCommander(), packet.getFactions(),
                     packet.getTimeRemaining(), packet.getOpponentTeamName(),

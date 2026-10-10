@@ -31,6 +31,13 @@ public abstract class AuiScreen extends Screen {
     /** 淡出进行中（阻止投票类页面的 onClose 重开自身把淡出后的切屏顶掉）。 */
     private boolean fadeOutClosing;
 
+    /** 滑入/滑出（职业部署菜单）：0.2 秒 = 12 ticks，整个菜单层上下平移。 */
+    private static final int SLIDE_TICKS = 12;
+    private int slideInTicksLeft;
+    private int slideOutTicksLeft;
+    private Runnable slideOutAction;
+    private boolean slideFromBottom;
+
     protected AuiScreen(Component title) {
         super(title);
         fadeInTicksLeft = FADE_IN_TICKS;
@@ -104,6 +111,80 @@ public abstract class AuiScreen extends Screen {
         if (next instanceof AuiScreen n) n.fadeInTicksLeft = FADE_IN_TICKS;
     }
 
+    /** 切到「从下方滑入/滑出」模式（职业部署菜单用）。 */
+    public final void useSlideFromBottom() {
+        this.slideFromBottom = true;
+        this.slideInTicksLeft = SLIDE_TICKS;
+        this.fadeInTicksLeft = 0;
+    }
+
+    /** 是否处于滑动模式。 */
+    public final boolean isSlideMode() {
+        return slideFromBottom;
+    }
+
+    /** 滑出：动画结束后执行 action。 */
+    public final void startSlideOut(Runnable action) {
+        slideFromBottom = true;
+        if (slideOutTicksLeft <= 0) {
+            slideOutTicksLeft = SLIDE_TICKS;
+            slideOutAction = action;
+        } else {
+            Runnable previous = slideOutAction;
+            slideOutAction = () -> {
+                if (previous != null) previous.run();
+                if (action != null) action.run();
+            };
+        }
+    }
+
+    private void completeSlideOut() {
+        Runnable action = slideOutAction;
+        slideOutAction = null;
+        slideOutTicksLeft = 0;
+        if (action != null && net.minecraft.client.Minecraft.getInstance().screen == this) {
+            action.run();
+        }
+    }
+
+    /**
+     * 菜单层当前应平移的像素（正数=向下）。
+     * 入场：+高度 → 0（自下方滑入）；出场：0 → +高度（向下滑出）。
+     * 用 partialTick 做子帧插值，避免 20Hz 的顿感。
+     */
+    public final double currentSlideOffset(float partialTick) {
+        if (!slideFromBottom) return 0.0D;
+        double span = this.height + 12.0D;
+        if (slideInTicksLeft > 0) {
+            double t = Math.min(1.0D, (SLIDE_TICKS - slideInTicksLeft + partialTick) / SLIDE_TICKS);
+            return span * (1.0D - easeOutCubic(t));
+        }
+        if (slideOutTicksLeft > 0) {
+            double t = Math.min(1.0D, (SLIDE_TICKS - slideOutTicksLeft + partialTick) / SLIDE_TICKS);
+            return span * easeOutCubic(t);
+        }
+        return 0.0D;
+    }
+
+    private static double easeOutCubic(double t) {
+        double u = 1.0D - t;
+        return 1.0D - u * u * u;
+    }
+
+    /** 从下方滑入并切屏（职业部署菜单的开关都走它）。 */
+    public static void openWithSlideUp(Screen next, Screen current) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (current instanceof AuiScreen aui && current != next) {
+            aui.startSlideOut(() -> {
+                mc.setScreen(next);
+                if (next instanceof AuiScreen n) n.useSlideFromBottom();
+            });
+            return;
+        }
+        mc.setScreen(next);
+        if (next instanceof AuiScreen n) n.useSlideFromBottom();
+    }
+
     /** 淡出并关闭（screen = null）。 */
     public static void closeWithFade(Screen current) {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
@@ -116,6 +197,7 @@ public abstract class AuiScreen extends Screen {
 
     /** 当前 fade 黑幕 alpha（1=全黑，0=透明）。 */
     public float currentFadeAlpha() {
+        if (slideFromBottom) return 0f;
         if (fadeInTicksLeft > 0) {
             return Math.max(0f, fadeInTicksLeft / (float) FADE_IN_TICKS);
         }
@@ -191,6 +273,11 @@ public abstract class AuiScreen extends Screen {
         if (root != null) {
             root.updateAnimations();
         }
+        if (slideInTicksLeft > 0) slideInTicksLeft--;
+        if (slideOutTicksLeft > 0) {
+            slideOutTicksLeft--;
+            if (slideOutTicksLeft <= 0) completeSlideOut();
+        }
         if (fadeInTicksLeft > 0) {
             fadeInTicksLeft--;
         } else if (fadeOutTicksLeft > 0) {
@@ -217,15 +304,21 @@ public abstract class AuiScreen extends Screen {
         graphics.pose().pushPose();
         try {
             renderBeforeMenu(graphics, mouseX, mouseY, partialTick);
-            if (root != null) {
-                root.updateFocusState(0, 0, mouseX, mouseY);
-                root.draw(graphics, 0, 0, this.width, this.height, mouseX, mouseY, partialTick);
-                var tooltip = root.getTooltipLines();
-                if (tooltip != null && !tooltip.isEmpty()) {
-                    graphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0D, currentSlideOffset(partialTick), 0.0D);
+            try {
+                if (root != null) {
+                    root.updateFocusState(0, 0, mouseX, mouseY);
+                    root.draw(graphics, 0, 0, this.width, this.height, mouseX, mouseY, partialTick);
+                    var tooltip = root.getTooltipLines();
+                    if (tooltip != null && !tooltip.isEmpty()) {
+                        graphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+                    }
                 }
+                renderAfterMenu(graphics, mouseX, mouseY, partialTick);
+            } finally {
+                graphics.pose().popPose();
             }
-            renderAfterMenu(graphics, mouseX, mouseY, partialTick);
             // 投票页淡入淡出黑幕层
             float alpha = currentFadeAlpha();
             if (alpha > 0.001f) {
@@ -292,6 +385,18 @@ public abstract class AuiScreen extends Screen {
             return true;
         }
         return super.charTyped(codePoint, modifiers);
+    }
+
+    @Override
+    public void onClose() {
+        if (slideFromBottom && slideOutTicksLeft <= 0) {
+            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+            if (mc.screen == this) {
+                startSlideOut(() -> mc.setScreen(null));
+                return;
+            }
+        }
+        super.onClose();
     }
 
     @Override
