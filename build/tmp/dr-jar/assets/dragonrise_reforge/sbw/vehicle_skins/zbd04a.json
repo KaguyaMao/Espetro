@@ -1,0 +1,11 @@
+{
+  "Skins": [
+    {
+      "Id": "sand",
+      "Name": "沙漠涂装",
+      "Description": "使用喷漆罐喷涂的 沙漠涂装涂装",
+      "Texture": "dragonrise_reforge:textures/entity/zbd04a_sand.png",
+      "Priority": 0
+    }
+  ]
+}

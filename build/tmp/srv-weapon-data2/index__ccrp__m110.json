@@ -1,0 +1,9 @@
+{
+  "name": "ccrp.gun.m110.name",
+  "display": "ccrp:m110_display",
+  "data": "ccrp:sr25_data",
+  "tooltip": "ccrp.gun.m110.desc",
+  "type": "sniper",
+  "item_type": "modern_kinetic",
+  "sort": 919
+}

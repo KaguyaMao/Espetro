@@ -1,0 +1,30 @@
+﻿Compiled from "AuiServicesBootstrap.java"
+public final class com.sighs.apricityui.forge.AuiServicesBootstrap {
+  private com.sighs.apricityui.forge.AuiServicesBootstrap();
+    Code:
+       0: aload_0
+       1: invokespecial #9                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void init();
+    Code:
+       0: return
+
+  static {};
+    Code:
+       0: getstatic     #19                 // Field com/sighs/apricityui/forge/NetworkService.INSTANCE:Lcom/sighs/apricityui/forge/NetworkService;
+       3: invokestatic  #25                 // Method com/sighs/apricityui/spi/AuiServices.setNetwork:(Lcom/sighs/apricityui/spi/AuiNetworkService;)V
+       6: new           #27                 // class com/sighs/apricityui/dom/ForgeDocumentExpander
+       9: dup
+      10: invokespecial #28                 // Method com/sighs/apricityui/dom/ForgeDocumentExpander."<init>":()V
+      13: invokestatic  #32                 // Method com/sighs/apricityui/spi/AuiServices.setExpander:(Lcom/sighs/apricityui/dom/DocumentExpander;)V
+      16: getstatic     #37                 // Field com/sighs/apricityui/forge/ConfigService.INSTANCE:Lcom/sighs/apricityui/forge/ConfigService;
+      19: invokestatic  #41                 // Method com/sighs/apricityui/spi/AuiServices.setConfig:(Lcom/sighs/apricityui/spi/AuiConfigService;)V
+      22: getstatic     #46                 // Field com/sighs/apricityui/forge/ScriptService.INSTANCE:Lcom/sighs/apricityui/forge/ScriptService;
+      25: invokestatic  #50                 // Method com/sighs/apricityui/spi/AuiServices.setScript:(Lcom/sighs/apricityui/spi/AuiScriptService;)V
+      28: getstatic     #55                 // Field com/sighs/apricityui/forge/RenderService.INSTANCE:Lcom/sighs/apricityui/forge/RenderService;
+      31: invokestatic  #59                 // Method com/sighs/apricityui/spi/AuiServices.setRender:(Lcom/sighs/apricityui/spi/AuiRenderService;)V
+      34: getstatic     #64                 // Field com/sighs/apricityui/forge/ItemRenderService.INSTANCE:Lcom/sighs/apricityui/forge/ItemRenderService;
+      37: invokestatic  #68                 // Method com/sighs/apricityui/spi/AuiServices.setItems:(Lcom/sighs/apricityui/spi/AuiItemRenderService;)V
+      40: return
+}

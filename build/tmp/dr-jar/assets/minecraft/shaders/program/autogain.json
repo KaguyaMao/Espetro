@@ -1,0 +1,26 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "srcalpha",
+        "dstrgb": "1-srcalpha"
+    },
+    "vertex": "blit",
+    "fragment": "autogain",
+    "attributes": [ "Position" ],
+    "samplers": [
+        { "name": "DiffuseSampler" },
+        { "name": "PreviousGainSampler" }
+    ],
+    "uniforms": [
+        { "name": "AutoGainEnabled",    "type": "float",     "count": 1,  "values": [1.0] },
+        { "name": "AutoGainSpeed",      "type": "float",     "count": 1,  "values": [0.05] },
+        { "name": "TargetBrightness",   "type": "float",     "count": 1,  "values": [0.5] },
+        { "name": "MinGain",            "type": "float",     "count": 1,  "values": [0.1] },
+        { "name": "MaxGain",            "type": "float",     "count": 1,  "values": [10.0] },
+        { "name": "ProjMat",            "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "InSize",             "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "OutSize",            "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "BlurDir",            "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "ColorModulate",      "type": "float",     "count": 4,  "values": [ 1.0, 1.0, 1.0, 1.0 ] }
+    ]
+}

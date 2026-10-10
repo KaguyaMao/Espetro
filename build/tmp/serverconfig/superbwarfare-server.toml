@@ -1,0 +1,421 @@
+
+[spawn]
+	#Set true to allow Senpai to spawn naturally
+	#是否允许野兽先辈自然生成（喜）
+	spawn_senpai = false
+	#Set true to allow Steel Coil to spawn naturally
+	#是否允许钢卷自然生成
+	spawn_steel_coil = false
+	#this feature is under development, DO NOT TURN THIS ON!
+	#是否允许生成持枪生物，测试功能，不要开启
+	spawn_mob_with_guns = false
+
+[projectile]
+	#Set true to allow projectiles to destroy certain blocks
+	#是否允许子弹破坏方块
+	allow_projectile_destroy_blocks = false
+	#Set true to allow projectiles to load chunks
+	#是否允许投射物加载区块
+	projectile_chunk_loading = true
+	#Maximum chunks force-loaded by projectiles at once. Set to 0 for unlimited.
+	#投射物同时强制加载的最大区块数，设为0表示无限制
+	max_projectile_chunks_force_loaded = 256
+	#Maximum new chunks loaded per tick for projectiles.
+	#每tick最多为投射物加载的新区块数
+	max_projectile_chunks_loaded_each_tick = 32
+	#Ticks before a force-loaded projectile chunk expires without entity activity.
+	#投射物强制加载的区块在无实体活动后的存活tick数
+	projectile_chunk_age = 20
+
+[explosion]
+	#The percentage of explosion damage you take behind cover
+	#躲在掩体后时受到的爆炸伤害比例
+	#Range: 0 ~ 100
+	explosion_penetration_ratio = 15
+	#Set true to allow Explosion to destroy blocks
+	#是否开启爆炸破坏方块
+	explosion_destroy = true
+	#Set true to enable extra explosion effect. For example, C4 and RPG will destroy blocks before explosion
+	#是否开启额外破坏效果，例如C4和RPG弹头的破坏方块效果
+	extra_explosion_effect = true
+	#Set true to allow mines to ignore friendly entities
+	#地雷等爆炸物是否会无视友方
+	friendly_mines = true
+
+	[explosion."RGO Grenade"]
+		#The explosion damage of RGO grenade
+		#RGO手榴弹的爆炸伤害
+		#Range: 1 ~ 10000000
+		rgo_grenade_explosion_damage = 90
+		#The explosion radius of RGO grenade
+		#RGO手榴弹的爆炸半径
+		#Range: 1 ~ 50
+		rgo_grenade_explosion_radius = 5
+
+	[explosion."M67 Grenade"]
+		#The explosion damage of M67 grenade
+		#M67手榴弹的爆炸伤害
+		#Range: 1 ~ 10000000
+		m67_grenade_explosion_damage = 120
+		#The explosion radius of M67 grenade
+		#M67手榴弹的爆炸半径
+		#Range: 1 ~ 50
+		m67_grenade_explosion_radius = 6
+
+	[explosion.C4]
+		#The explosion countdown of C4
+		#定时C4炸弹的爆炸倒计时
+		#Range: > 1
+		c4_explosion_countdown = 514
+		#The explosion damage of C4
+		#C4炸弹的爆炸伤害
+		#Range: > 1
+		c4_explosion_damage = 300
+		#The explosion radius of C4
+		#C4炸弹的爆炸半径
+		#Range: > 1
+		c4_explosion_radius = 10
+
+	[explosion.Claymore]
+		#The explosion damage of Claymore
+		#阔剑地雷的爆炸伤害
+		#Range: > 1
+		claymore_explosion_damage = 140
+		#The explosion radius of Claymore
+		#阔剑地雷的爆炸半径
+		#Range: > 1
+		claymore_explosion_radius = 4
+
+	[explosion."Blu 43"]
+		#The explosion damage of Blu 43
+		#蝴蝶雷的爆炸伤害
+		#Range: > 1
+		blu_43_explosion_damage = 10
+		#The explosion radius of Blu 43
+		#蝴蝶雷的爆炸半径
+		#Range: > 1
+		blu_43_explosion_radius = 2
+
+	[explosion.EDD]
+		#The explosion damage of EDD
+		#防止攻入装置的爆炸伤害
+		#Range: > 1
+		edd_explosion_damage = 60
+		#The explosion radius of EDD
+		#防止攻入装置的爆炸半径
+		#Range: > 1
+		edd_explosion_radius = 3
+		#The trace range of EDD
+		#防止攻入装置的触发距离
+		#Range: > 1
+		edd_trace_range = 2
+
+	[explosion."Tm 62"]
+		#The explosion damage of Tm 62
+		#TM62反坦克地雷的爆炸伤害
+		#Range: > 1
+		tm_62_explosion_damage = 450
+		#The explosion radius of Tm 62
+		#TM62反坦克地雷的爆炸半径
+		#Range: > 1
+		tm_62_explosion_radius = 13
+
+	[explosion."Lunge Mine"]
+		#The explosion damage of Lunge Mine
+		#突刺爆雷的爆炸伤害
+		#Range: > 1
+		lunge_mine_explosion_damage = 60
+		#The attack damage of Lunge Mine
+		#突刺爆雷的直击伤害
+		#Range: > 1
+		lunge_mine_attack_damage = 600
+		#The explosion radius of Lunge Mine
+		#突刺爆雷的爆炸半径
+		#Range: > 1
+		lunge_mine_explosion_radius = 4
+
+	[explosion."Ptkm 1r"]
+		#The explosion damage of Ptkm 1r
+		#PTKM1R地雷的爆炸伤害
+		#Range: > 1
+		ptkm_1r_explosion_damage = 100
+		#The explosion radius of Ptkm 1r
+		#PTKM1R地雷的爆炸半径
+		#Range: > 1
+		ptkm_1r_explosion_radius = 6
+		#The hit damage of projectile launched by Ptkm 1r
+		#PTKM1R地雷发射的投射物的直击伤害
+		#Range: > 1
+		ptkm_1r_projectile_hit_damage = 500
+		#The explosion damage of projectile launched by Ptkm 1r
+		#PTKM1R地雷发射的投射物的爆炸伤害
+		#Range: > 1
+		ptkm_1r_projectile_explosion_damage = 80
+		#The explosion radius of projectile launched by Ptkm 1r
+		#PTKM1R地雷发射的投射物的爆炸半径
+		#Range: > 1
+		ptkm_1r_projectile_explosion_radius = 7
+
+[vehicle]
+	#Allow vehicles to pick up items
+	#是否允许载具拾取物品
+	vehicle_item_pickup = true
+	#Allow certain vehicles to load chunks
+	#是否允许部分载具加载区块
+	vehicle_chunk_loading = true
+	#Set true to allow only entities in same team to enter vehicle
+	#是否仅允许同队伍玩家进入同一辆载具
+	same_team_enter_vehicle = true
+	#Allow vehicles to collect drops after killing other entities by crashing
+	#是否允许载具撞击击杀生物后，自动拾取掉落物
+	collect_drops_by_crashing = true
+	#Within this distance, the vehicle info will be displayed at client side
+	#载具信息显示的最大距离
+	#Range: 0 ~ 1024
+	vehicle_info_display_distance = 196
+	#The damage of self explosion when a vehicle is destroyed
+	#载具被击毁时，乘客受到的伤害
+	#Range: > 0
+	self_explosion_damage = 114514
+	#The damage count of self explosion when a vehicle is destroyed
+	#载具被击毁时，对乘客造成的伤害次数
+	#Range: 0 ~ 100
+	self_explosion_count = 5
+	#The air crash damage when an aircraft is destroyed
+	#飞行载具坠机时，乘客受到的伤害
+	#Range: > 0
+	air_crash_explosion_damage = 114514
+	#The air crash damage count when an aircraft is destroyed
+	#飞行载具坠机时，对乘客造成的伤害次数
+	#Range: 0 ~ 100
+	air_crash_explosion_count = 5
+	#The rate of recycling loot items from turret wreckage
+	#从载具炮塔残骸中回收的材料比例
+	#Range: 0.0 ~ 1.0
+	turret_wreckage_loot_rate = 0.3
+	#List of entity types that can be scanned by radar
+	#能够被雷达扫描的实体类型白名单
+	scan_white_list = ["ywzj_vehicle:*"]
+	#Per-entity Y offset for passenger seating position
+	#各实体在载具座位上的Y轴偏移量
+	#Format: "entity_registry_name, offset"
+	#格式: "entity_registry_name, offset"
+	#Example: ["touhou_little_maid:maid, 0.75", "minecraft:player, -0.2"]
+	passenger_y_offset = ["touhou_little_maid:maid, 0.75"]
+
+	[vehicle.collision]
+		#Allows vehicles to destroy soft blocks via collision
+		#是否允许载具撞坏柔软方块
+		collision_destroy_soft_blocks = false
+		#Allows vehicles to destroy normal blocks via collision
+		#是否允许载具撞坏普通方块
+		collision_destroy_normal_blocks = false
+		#Allows vehicles to destroy hard blocks via collision
+		#是否允许载具撞坏坚硬方块
+		collision_destroy_hard_blocks = false
+		#Allows vehicles to destroy blocks via collision like a beast
+		#是否开启载具野兽撞击模式（只看方块硬度）
+		collision_destroy_blocks_beastly = false
+		#List of entities that can be damaged by collision
+		#能够被载具撞击的实体白名单
+		collision_entity_whitelist = []
+
+	[vehicle.towing]
+		#Maximum straight-line distance for towing two vehicles together
+		#两个载具能被拖绳连接的最大直线距离（格）
+		#Range: 1 ~ 512
+		tow_max_distance = 16
+		#Minimum distance before a towing vehicle starts pulling the towed vehicle
+		#牵引载具开始拉动被牵引载具的最小距离（格）
+		#Range: 5 ~ 512
+		tow_pull_distance = 10
+		#Maximum distance that towline breaks when a vehicle is pulling the towed vehicle. Set to 0 to make it unbreakable
+		#拖绳会断裂的最大距离（格），设置成0则不会断裂
+		#Range: > 0
+		tow_break_distance = 0
+		#List of entity types that can not be towed by vehicle
+		#不能被载具牵引的实体类型名单
+		tow_black_list = ["minecraft:experience_orb", "minecraft:primed_tnt", "minecraft:ender_pearl", "minecraft:interaction", "minecraft:marker", "minecraft:end_crystal", "minecraft:evoker_fangs", "minecraft:eye_of_ender", "minecraft:falling_block", "mts:builder_rendering", "evilcraft:vengeance_spirit", "touhou_little_maid:power_point", "create:carriage_contraption", "create:stationary_contraption", "create:gantry_contraption", "create:super_glue", "zombiekit:flares"]
+		#The extra length of tow bar
+		#牵引杆的额外长度（格）
+		#Range: 0 ~ 512
+		tow_bar_extra_length = 2
+
+	[vehicle.repair]
+		#The default cooldown of vehicle repair. Set a negative value to disable vehicle repair
+		#载具自动回血的触发时间，设置为负数时禁用自动回血
+		#Range: -1 ~ 100000000
+		repair_cooldown = 200
+		#The default amount of health restored per tick when a vehicle is self-repairing
+		#载具每游戏刻自动回血的数值
+		#Range: -1.0E8 ~ 1.0E8
+		repair_amount = 0.05
+
+[misc]
+	#Set true to enable kill feedback sending
+	#是否在服务端启用击杀提示播报
+	send_kill_feedback = true
+	#Set true to enable force damage
+	#是否开启强制伤害模式
+	force_damage_mode = false
+	#Whether to drop an ammo box after the player dies
+	#玩家在死亡时，是否掉落弹药
+	drop_ammo_box = false
+	#The default maximum armor level for normal armors
+	#普通护甲能加的防弹插板数量
+	#Range: 0 ~ 10000000
+	default_armor_level = 1
+	#The maximum armor level for armors with superbwarfare:military_armor tag
+	#军事护甲能加的防弹插板数量
+	#Range: 0 ~ 10000000
+	military_armor_level = 2
+	#The maximum armor level for armors with superbwarfare:military_armor_heavy tag(will override superbwarfare:military_armor tag!)
+	#重型护甲能加的防弹插板数量
+	#Range: 0 ~ 10000000
+	heavy_military_armor_level = 3
+	#The points per level for armor plate
+	#防弹插板提供的伤害吸收量
+	#Range: 0 ~ 10000000
+	armor_point_per_level = 15
+	#Max energy storage of charging station
+	#充电站的最大存储能量
+	#Range: > 1
+	charging_station_max_energy = 4000000
+	#How much FE energy can charging station generate per tick
+	#充电站每游戏刻的发电数量
+	#Range: > 1
+	charging_station_generate_speed = 128
+	#How much FE energy can charging station transfer per tick
+	#充电站每游戏刻的最大传输能量数值
+	#Range: > 1
+	charging_station_transfer_speed = 100000
+	#The charging radius of the charging station
+	#充电站的最大传输能量范围
+	#Range: 0 ~ 128
+	charging_station_charge_radius = 8
+	#The default fuel time of the charging station
+	#充电站的默认燃料燃烧时长
+	#Range: > 1
+	charging_station_default_fuel_time = 1600
+	#The max size of artillery indicator binding list
+	#火炮指示器的最大绑定数量
+	#Range: > 1
+	artillery_indicator_list_size = 32
+	#Set true to make mine hitbox invisible
+	#是否隐藏地雷的碰撞箱
+	mine_hitbox_invisible = false
+	#The max fuel count of blueprint research table
+	#蓝图研究台的最大燃料值
+	#Range: 1 ~ 128
+	blueprint_research_table_max_fuel = 8
+	#The minimum health percentage for activating steel coils
+	#激怒钢卷所需的最小生命值比例
+	#Range: 0.0 ~ 1.0
+	steel_coil_awake_percentage = 0.99
+	#Set true to hide all combat HUD elements (crosshair, hit markers, kill indicators, lock-on frames)
+	#是否隐藏所有战斗HUD元素（准星、命中标记、击杀指示器、锁定框）
+	hide_combat_hud = false
+	#Set true to allow smoke to prevent entities from being set as target
+	#是否允许烟雾弹消除生物仇恨
+	smoke_hide_target = false
+
+	[misc."medical kit"]
+		#Set true to enable player throwing medical kits
+		#是否允许玩家投掷医疗包
+		throw_medical_kit = true
+		#The healing value of using medical kits
+		#使用医疗包的固定治疗数值
+		#Range: > 0
+		medical_kit_heal_amount = 5
+		#The percentage of the player's health restored using the medical kit
+		#使用医疗包治疗的玩家生命值比例
+		#Range: 0.0 ~ 1.0
+		medical_kit_heal_percentage = 0.25
+		#The healing value of picking up medical kit entity
+		#拾取医疗包实体的固定治疗数值
+		#Range: > 0
+		medical_kit_entity_heal_amount = 5
+		#The percentage of the player's health restored picking up medical kit entity
+		#拾取医疗包实体治疗的玩家生命值比例
+		#Range: 0.0 ~ 1.0
+		medical_kit_entity_heal_percentage = 0.25
+
+[ammo]
+	#The max ammo limit of HandgunAmmo
+	#玩家身上能存储的最大弹药数量
+	#Range: > 0
+	handgun_ammo_limit = 2147483647
+	#The max ammo limit of RifleAmmo
+	#玩家身上能存储的最大弹药数量
+	#Range: > 0
+	rifle_ammo_limit = 2147483647
+	#The max ammo limit of ShotgunAmmo
+	#玩家身上能存储的最大弹药数量
+	#Range: > 0
+	shotgun_ammo_limit = 2147483647
+	#The max ammo limit of SniperAmmo
+	#玩家身上能存储的最大弹药数量
+	#Range: > 0
+	sniper_ammo_limit = 2147483647
+	#The max ammo limit of HeavyAmmo
+	#玩家身上能存储的最大弹药数量
+	#Range: > 0
+	heavy_ammo_limit = 2147483647
+	#The max ammo limit for ammo boxes of HandgunAmmo
+	#弹药箱能存储的最大弹药数量
+	#Range: > 0
+	handgun_ammo_box_limit = 2147483647
+	#The max ammo limit for ammo boxes of RifleAmmo
+	#弹药箱能存储的最大弹药数量
+	#Range: > 0
+	rifle_ammo_box_limit = 2147483647
+	#The max ammo limit for ammo boxes of ShotgunAmmo
+	#弹药箱能存储的最大弹药数量
+	#Range: > 0
+	shotgun_ammo_box_limit = 2147483647
+	#The max ammo limit for ammo boxes of SniperAmmo
+	#弹药箱能存储的最大弹药数量
+	#Range: > 0
+	sniper_ammo_box_limit = 2147483647
+	#The max ammo limit for ammo boxes of HeavyAmmo
+	#弹药箱能存储的最大弹药数量
+	#Range: > 0
+	heavy_ammo_box_limit = 2147483647
+
+[map]
+	#Set true to enable tactical map (Experimental)
+	#是否启用战术地图（测试功能，慎用）
+	enable_tactical_map = false
+
+[sync]
+	#Set true to enable synchronizing client entities with the server
+	#是否允许服务端同步超视距的客户端实体
+	sync_entity_over_range = true
+	#The interval for synchronizing client entities with the server (tick)
+	#服务端同步客户端实体的间隔（单位为刻）
+	#Range: > 1
+	sync_entity_interval = 1
+	#The expire time for synchronized client entities (ms)
+	#同步到客户端的实体的数据失效时间（单位为毫秒）
+	#Range: > 1
+	client_sync_expire_time = 1000
+	#The expire time for synchronized server entities (ms)
+	#需要同步的服务端实体的数据失效时间（单位为毫秒）
+	#Range: > 1
+	server_sync_expire_time = 10000
+	#The interval for cleaning synchronized server entities (ms)
+	#清理需要同步的服务端的实体数据的间隔（单位为毫秒）
+	#Range: > 1
+	server_sync_clean_interval = 200
+	#Set true to allow rendering synchronized entities
+	#是否允许渲染超视距同步实体
+	enable_render_synced_entities = false
+	#The maximum distance for rendering synchronized entities
+	#允许渲染超视距同步实体的最大距离
+	#Range: > 1
+	max_render_distance = 2048
+	#The minimum height for rendering synchronized entities
+	#允许渲染超视距同步实体的最小高度
+	#Range: > 1
+	min_render_height = 256
+

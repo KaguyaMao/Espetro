@@ -1,0 +1,82 @@
+{
+  "modes": ["AAS"],
+  "totalBatches": 5,
+  "endBehavior": "terminate",
+  "attackBatchCompletionReinforcement": 50,
+  "teamReinforcements": {
+    "ATTACK": 75,
+    "DEFEND": 350
+  },
+  "plannedPoints": [
+    {
+      "name": "A",
+      "batch": 1,
+      "pos1": {
+        "x": -292,
+        "y": 66,
+        "z": -823
+      },
+      "pos2": {
+        "x": 387,
+        "y": 96,
+        "z": -957
+      }
+    },
+    {
+      "name": "B",
+      "batch": 2,
+      "pos1": {
+        "x": 629,
+        "y": 66,
+        "z": -975
+      },
+      "pos2": {
+        "x": 668,
+        "y": 91,
+        "z": -999
+      }
+    },
+    {
+      "name": "C",
+      "batch": 3,
+      "pos1": {
+        "x": 568,
+        "y": 66,
+        "z": -1194
+      },
+      "pos2": {
+        "x": 720,
+        "y": 97,
+        "z": -1276
+      }
+    },
+    {
+      "name": "D",
+      "batch": 4,
+      "pos1": {
+        "x": 942,
+        "y": 66,
+        "z": -1214
+      },
+      "pos2": {
+        "x": 986,
+        "y": 87,
+        "z": -1272
+      }
+    },
+    {
+      "name": "E",
+      "batch": 5,
+      "pos1": {
+        "x": 949,
+        "y": 66,
+        "z": -1428
+      },
+      "pos2": {
+        "x": 1039,
+        "y": 89,
+        "z": -1524
+      }
+    }
+  ]
+}

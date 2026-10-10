@@ -37,6 +37,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int INNER_PADDING = 3;
     private static final int SCROLLBAR_RESERVED_W = 6;
     private static final int SQUAD_ROW_H = 11;
+    /** 班组标题（组名框）行高：比动作按钮略高，便于容纳右侧"加入"按钮与更清晰的文字。 */
+    private static final int SQUAD_TITLE_ROW_H = SQUAD_ROW_H + 3;
+    /** 未入队时标题行右端"加入"按钮宽度。 */
+    private static final int SQUAD_JOIN_BTN_W = 32;
     private static final int SQUAD_MEMBER_ROW_H = 9;
     private static final int SQUAD_ACTION_ROW_H = 10;
     /** 身份色条与火力组色块同宽（像素），事件驱动静态绘制。 */
@@ -62,6 +66,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int CLASS_BORDER_UNAVAILABLE = 0xFF8A3A42;
     private static final int BTN_BORDER      = 0xFF59605E;
     private static final int BTN_TEXT        = 0xFFFFFF;
+    /** 重新部署按钮：红色系（警示性操作，需二次确认）。 */
+    private static final int REDEPLOY_BG_NORMAL = 0xFF7A1B1B;
+    private static final int REDEPLOY_BG_HOVER  = 0xFFA32626;
     /** J 键主 GUI 的所有非地图背景统一使用不透明纯黑，避免世界画面穿透或色块交替闪烁。 */
     private static final int CHROME_BG       = 0xFF000000;
     private static final int PANEL_LEFT_BG   = 0xFF000000;
@@ -125,6 +132,28 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /** MUtil 弹出层；必须始终作为根节点最后一个子元素以拦截下层点击。 */
     private GuiElement fireteamContextRoot;
 
+    // ===== 班组栏底部动作按钮（三行：解散 / 锁定·解锁 / 创建·退出）=====
+    /** 动作按钮专用容器：数据原地刷新时只重建这一小块。 */
+    private GuiElement squadActionRoot;
+    private int squadActionX;
+    private int squadActionY;
+    private int squadActionW;
+    private EspButton squadDisbandButton;
+    private EspButton squadLockButton;
+    private EspButton squadCreateLeaveButton;
+
+    // ===== 班组弹层：创建小窗 / 通用确认框 =====
+    /** 创建小队小窗（屏幕正中）：名称输入 + 队伍类型。 */
+    private GuiElement squadCreateRoot;
+    private SquadNameField squadCreateNameField;
+    private String squadCreateCategoryId = "none";
+    private final Map<String, EspButton> squadCreateCategoryButtons = new HashMap<>();
+    /** 通用确认框（退出/解散/踢人复用）；默认高亮"取消"以防误触。 */
+    private GuiElement squadConfirmRoot;
+    private String squadConfirmTitle = "";
+    private String squadConfirmBody = "";
+    private Runnable squadConfirmAction;
+
     // ===== 按钮引用 =====
     private final List<EspButton> classButtons = new ArrayList<>();
     private final Map<EspButton, Integer> classButtonToClassIndex = new HashMap<>();
@@ -152,9 +181,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private PlainText phaseTitleText;
     private PlainText governanceTimerText;
     /** 指挥官空缺治理小窗是否已关闭（最小化为「载具信息」右侧的按钮）。 */
-    private boolean vacancyWindowMinimized;
+    private boolean governanceWindowMinimized;
     /** 指挥官空缺治理小窗宽度/标题区高度。 */
     private static final int VACANCY_WINDOW_W = 186;
+    /** 弹劾投票小窗（"原指挥官 / 挑战者"两行按钮，略宽）。 */
+    private static final int IMPEACH_WINDOW_W = 210;
     private static final int VACANCY_WINDOW_HEADER_H = 26;
     private String pendingDeployPosition;
     private String pendingDeployCommand;
@@ -909,6 +940,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         fireteamContextRoot = new GuiElement(0, 0, this.width, this.height);
         fireteamContextRoot.setVisible(false);
         root.addChild(fireteamContextRoot);
+        // 班组弹层：创建小窗 / 确认框（始终最后添加，保证在最上层拦截点击）
+        squadCreateRoot = new GuiElement(0, 0, this.width, this.height);
+        squadConfirmRoot = new GuiElement(0, 0, this.width, this.height);
+        root.addChild(squadCreateRoot);
+        root.addChild(squadConfirmRoot);
+        closeSquadCreateDialog();
+        closeSquadConfirm();
     }
 
     private void invalidateSections(Section... sections) {
@@ -1106,14 +1144,23 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaH = squadAreaH;
 
         sectionRoot.addChild(new PlainText(sx, sy, "\u00a76\u00a7l班组", 0xFFFFC766));
-        int manageH = SQUAD_ROW_H;
+        // 底部动作按钮：行数随身份变化（队长 3 行 / 其他 1 行）
+        int actionRows = squadActionRowCount();
+        int actionsH = actionRows * SQUAD_ROW_H + Math.max(0, actionRows - 1) * SQUAD_ROW_GAP;
         int listY = sy + SECTION_TITLE_H + 1;
-        int listH = areaH - SECTION_TITLE_H - manageH - 5;
+        int listH = areaH - SECTION_TITLE_H - actionsH - 5;
 
         squadScrollList = new ScrollableList(sx, listY, areaW, Math.max(SQUAD_ROW_H, listH))
-            .setScrollStep(SQUAD_ROW_H + SQUAD_ROW_GAP)
+            .setScrollStep(SQUAD_TITLE_ROW_H + SQUAD_ROW_GAP)
             .setAlwaysShowScrollbar(false);
         sectionRoot.addChild(squadScrollList);
+
+        squadActionRoot = new GuiElement(0, 0, this.width, this.height);
+        sectionRoot.addChild(squadActionRoot);
+        squadActionX = sx;
+        squadActionY = sy + areaH - actionsH;
+        squadActionW = areaW;
+        rebuildSquadActions();
 
         int rowW = areaW - 6;
         int rowY = 0;
@@ -1121,11 +1168,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             boolean mine = squad.id == mySquadId;
             boolean unavailable = squad.isLocked || squad.memberCount >= squad.maxMembers;
             boolean expanded = expandedSquadIds.contains(squad.id);
+            // 未入队时，每个班组标题行右端提供"加入"按钮（锁定/满员灰显并提示原因）
+            boolean showJoin = !inSquad();
+            int titleW = showJoin ? Math.max(40, rowW - SQUAD_JOIN_BTN_W - 2) : rowW;
             String disclosure = expanded ? "\u00a7f\u25bc" : "\u00a7f\u25b6";
             String state = mine ? "\u00a7a\u25cf" : squad.isLocked ? "\u00a7c\u25a0" : "\u00a77\u25cb";
             String label = disclosure + " " + state + " \u00a7f" + squad.displayId + ". " + squad.name
                 + " \u00a77" + squad.memberCount + "/" + squad.maxMembers;
-            EspButton button = new EspButton(0, rowY, rowW, SQUAD_ROW_H,
+            EspButton button = new EspButton(0, rowY, titleW, SQUAD_TITLE_ROW_H,
                 label, () -> toggleSquadExpanded(squad.id));
             button.setTextScale(SQUAD_TEXT_SCALE);
             button.setCenteredText(false);
@@ -1141,7 +1191,25 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 button.hoverColor = 0xFF3C5542;
             }
             squadScrollList.addChild(button);
-            rowY += SQUAD_ROW_H + SQUAD_ROW_GAP;
+            if (showJoin) {
+                // 后添加 → 优先响应点击，避免与标题按钮抢事件
+                EspButton join = new EspButton(rowW - SQUAD_JOIN_BTN_W, rowY,
+                    SQUAD_JOIN_BTN_W, SQUAD_TITLE_ROW_H, "\u00a7a加入",
+                    () -> NetworkManager.joinSquad(squad.id));
+                join.setTextScale(SQUAD_TEXT_SCALE);
+                join.setEnabled(!unavailable);
+                if (unavailable) {
+                    String reason = squad.isLocked
+                        ? "该班组已锁定，无法加入。"
+                        : "该班组人数已满。";
+                    join.setDisabledAction(() -> EspetroTipNotifier.showDenial("无法加入班组", reason));
+                } else {
+                    join.normalColor = 0xFF25352B;
+                    join.hoverColor = 0xFF3C5542;
+                }
+                squadScrollList.addChild(join);
+            }
+            rowY += SQUAD_TITLE_ROW_H + SQUAD_ROW_GAP;
 
             if (!expanded) {
                 continue;
@@ -1185,25 +1253,100 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     rowY += SQUAD_MEMBER_ROW_H + SQUAD_ROW_GAP;
                 }
             }
-
-            if (!mine && !unavailable) {
-                EspButton join = new EspButton(3, rowY, rowW - 3, SQUAD_ACTION_ROW_H,
-                    "\u00a7a+ 加入班组", () -> NetworkManager.joinSquad(squad.id));
-                join.setTextScale(SQUAD_MEMBER_TEXT_SCALE);
-                join.normalColor = 0xFF25352B;
-                join.hoverColor = 0xFF3C5542;
-                squadScrollList.addChild(join);
-                rowY += SQUAD_ACTION_ROW_H + SQUAD_ROW_GAP;
-            }
         }
         if (squads.isEmpty()) {
             squadScrollList.addChild(new PlainText(2, 3, "\u00a77暂无班组", 0xFFABB0B3));
         }
+    }
 
-        EspButton manage = new EspButton(sx, sy + areaH - manageH, areaW, manageH,
-            "\u00a7e管理班组", this::openSquadManagement);
-        manage.setTextScale(SQUAD_TEXT_SCALE);
-        sectionRoot.addChild(manage);
+    /** 底部动作按钮可见行数：队长 3 行（解散/锁定/创建·退出），其他 1 行（创建·退出）。 */
+    private int squadActionRowCount() {
+        return inSquad() && isLocalPlayerLeader() ? 3 : 1;
+    }
+
+    /**
+     * 重建底部动作按钮。
+     * 队长（且已入队）显示 3 行：解散 / 锁定·解锁 / 创建·退出；
+     * 其余情况只显示最后一行（创建小队或退出小队）——解散与锁定对非队长/未入队完全隐藏。
+     */
+    private void rebuildSquadActions() {
+        if (squadActionRoot == null) {
+            return;
+        }
+        squadActionRoot.clearChildren();
+        boolean inSquadNow = inSquad();
+        boolean leader = inSquadNow && isLocalPlayerLeader();
+        boolean locked = isMySquadLocked();
+        int rowH = SQUAD_ROW_H;
+        int gap = SQUAD_ROW_GAP;
+        int rows = squadActionRowCount();
+        // 创建/退出永远在最底一行
+        int bottomY = squadActionY + Math.max(0, rows - 1) * (rowH + gap);
+
+        if (leader) {
+            // 第 1 行：解散小队（仅队长可见）
+            squadDisbandButton = new EspButton(squadActionX, squadActionY, squadActionW, rowH,
+                "\u00a7c解散小队", this::openDisbandSquadConfirm);
+            squadDisbandButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadActionRoot.addChild(squadDisbandButton);
+
+            // 第 2 行：锁定/解锁（仅队长可见）
+            squadLockButton = new EspButton(squadActionX, squadActionY + rowH + gap,
+                squadActionW, rowH,
+                locked ? "\u00a7e解锁小队" : "\u00a7e锁定小队",
+                () -> {
+                    if (isMySquadLocked()) {
+                        NetworkManager.unlockSquad();
+                    } else {
+                        NetworkManager.lockSquad();
+                    }
+                });
+            squadLockButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadActionRoot.addChild(squadLockButton);
+        }
+
+        // 最后一行：创建小队 / 退出小队（两态；退出需二次确认）
+        squadCreateLeaveButton = new EspButton(squadActionX, bottomY, squadActionW, rowH,
+            inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
+            inSquadNow ? this::openLeaveSquadConfirm : this::openSquadCreateDialog);
+        squadCreateLeaveButton.setTextScale(SQUAD_TEXT_SCALE);
+        squadActionRoot.addChild(squadCreateLeaveButton);
+    }
+
+    /** 本地玩家是否是自己小队的队长（成员列表 leader 标记 + 本地 UUID）。 */
+    private boolean isLocalPlayerLeader() {
+        if (!inSquad()) {
+            return false;
+        }
+        var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return false;
+        }
+        UUID localId = player.getUUID();
+        for (UnifiedDeployScreenPacket.SquadInfo squad : squads) {
+            if (squad.id != mySquadId) {
+                continue;
+            }
+            for (UnifiedDeployScreenPacket.SquadMemberInfo member : squad.members) {
+                if (localId.equals(member.uuid)) {
+                    return member.leader;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** 本地玩家所在小队是否已锁定。 */
+    private boolean isMySquadLocked() {
+        if (!inSquad()) {
+            return false;
+        }
+        for (UnifiedDeployScreenPacket.SquadInfo squad : squads) {
+            if (squad.id == mySquadId) {
+                return squad.isLocked;
+            }
+        }
+        return false;
     }
 
     private void toggleSquadExpanded(int squadId) {
@@ -1213,20 +1356,282 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         invalidateSections(Section.SQUAD);
     }
 
-    private void openSquadManagement() {
-        try {
-            Minecraft.getInstance().setScreen(
-                new SquadScreen(new ArrayList<>(squads), mySquadId, team,
-                    new ArrayList<>(squadCategories), this));
-        } catch (Throwable t) {
-            // 避免班组界面类加载失败时拖垮整局客户端。
-            org.espetro.Espetro.LOGGER.error("打开班组管理界面失败", t);
-            var player = Minecraft.getInstance().player;
-            if (player != null) {
-                player.displayClientMessage(
-                    Component.literal("§c无法打开班组管理界面，请查看日志。"), false);
+    /** 打开创建小队小窗（屏幕正中，命名 + 队伍类型）。 */
+    private void openSquadCreateDialog() {
+        if (squadCreateRoot == null || inSquad()) {
+            return;
+        }
+        closeVariantPopup();
+        closeFireteamContextMenu();
+        closeSquadConfirm();
+        squadCreateCategoryId = defaultSquadCategoryId();
+        rebuildSquadCreateDialog("");
+    }
+
+    /**
+     * 重建创建小窗内容。{@code keepName} 用于类别切换时保留已输入的名称。
+     */
+    private void rebuildSquadCreateDialog(String keepName) {
+        if (squadCreateRoot == null) {
+            return;
+        }
+        String name = keepName == null ? "" : keepName;
+        boolean nameActive = false;
+        if (squadCreateNameField != null) {
+            if (keepName == null) {
+                name = squadCreateNameField.getRawValue();
+            }
+            nameActive = squadCreateNameField.isActive();
+        }
+        squadCreateRoot.clearChildren();
+        squadCreateCategoryButtons.clear();
+
+        int w = Math.min(260, Math.max(180, this.width - 40));
+        int rows = Math.max(1, Math.min(6, squadCategoryOptions().size()));
+        int h = 20 + BTN_H + 6 + rows * (BTN_H + 2) + 4 + BTN_H + 10;
+        int x = (this.width - w) / 2;
+        int y = (this.height - h) / 2;
+
+        // 全屏遮罩：点击窗外 = 取消
+        squadCreateRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
+            @Override
+            public boolean onMouseClick(int mx, int my, int button) {
+                closeSquadCreateDialog();
+                return true;
+            }
+        });
+        squadCreateRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xF0121518));
+        squadCreateRoot.addChild(new GuiRect(x, y, w, h, 0xFF1A1E22));
+        squadCreateRoot.addChild(new PlainText(x + 8, y + 5, "\u00a76\u00a7l创建小队", 0xFFFFC766));
+
+        squadCreateNameField = new SquadNameField(x + 8, y + 20, w - 16, BTN_H,
+            "小队名称", this::confirmSquadCreate);
+        squadCreateNameField.setValue(name);
+        squadCreateNameField.setActive(nameActive);
+        squadCreateRoot.addChild(squadCreateNameField);
+
+        int listY = y + 20 + BTN_H + 6;
+        int listH = rows * (BTN_H + 2);
+        ScrollableList list = new ScrollableList(x + 8, listY, w - 16, listH)
+            .setScrollStep(BTN_H + 2)
+            .setAlwaysShowScrollbar(squadCategoryOptions().size() > rows);
+        squadCreateRoot.addChild(list);
+        int cy = 0;
+        for (var option : squadCategoryOptions()) {
+            final String categoryId = option.id;
+            EspButton btn = new EspButton(0, cy, list.getWidth() - 10, BTN_H,
+                categoryLabel(option), () -> selectSquadCreateCategory(categoryId));
+            btn.setTextScale(UI_TEXT_SCALE);
+            btn.setCenteredText(false);
+            boolean selected = categoryId.equals(squadCreateCategoryId);
+            if (selected) {
+                btn.normalColor = 0xFF3A4A38;
+            }
+            list.addChild(btn);
+            squadCreateCategoryButtons.put(categoryId, btn);
+            cy += BTN_H + 2;
+        }
+
+        int by = y + h - BTN_H - 5;
+        EspButton ok = new EspButton(x + w - 8 - 64, by, 64, BTN_H, "\u00a7a确定",
+            this::confirmSquadCreate);
+        ok.setTextScale(UI_TEXT_SCALE);
+        squadCreateRoot.addChild(ok);
+        EspButton cancel = new EspButton(x + w - 8 - 64 - 68, by, 60, BTN_H, "\u00a7c取消",
+            this::closeSquadCreateDialog);
+        cancel.setTextScale(UI_TEXT_SCALE);
+        squadCreateRoot.addChild(cancel);
+
+        squadCreateRoot.setVisible(true);
+    }
+
+    private void closeSquadCreateDialog() {
+        squadCreateNameField = null;
+        squadCreateCategoryButtons.clear();
+        if (squadCreateRoot != null) {
+            squadCreateRoot.clearChildren();
+            squadCreateRoot.setVisible(false);
+        }
+    }
+
+    private boolean hasSquadCreateDialog() {
+        return squadCreateRoot != null && squadCreateRoot.isVisible();
+    }
+
+    /** 切换类型：就地更新选中态，保留已输入名称。 */
+    private void selectSquadCreateCategory(String categoryId) {
+        if (categoryId == null) {
+            return;
+        }
+        squadCreateCategoryId = categoryId;
+        String keepName = squadCreateNameField == null ? "" : squadCreateNameField.getRawValue();
+        rebuildSquadCreateDialog(keepName);
+    }
+
+    private void confirmSquadCreate() {
+        if (!hasSquadCreateDialog()) {
+            return;
+        }
+        String name = squadCreateNameField == null ? "" : squadCreateNameField.getValue();
+        String categoryId = squadCreateCategoryId == null ? "none" : squadCreateCategoryId;
+        // 先关窗，避免连点重复创建
+        closeSquadCreateDialog();
+        NetworkManager.sendSquadCreateWithCategory(name, categoryId);
+    }
+
+    /** 创建小窗的类型选项：地图 squadCategories（含"无"兜底）。 */
+    private List<UnifiedDeployScreenPacket.SquadCategoryInfo> squadCategoryOptions() {
+        if (squadCategories == null || squadCategories.isEmpty()) {
+            return List.of(new UnifiedDeployScreenPacket.SquadCategoryInfo("none", "无"));
+        }
+        return squadCategories;
+    }
+
+    private String defaultSquadCategoryId() {
+        List<UnifiedDeployScreenPacket.SquadCategoryInfo> options = squadCategoryOptions();
+        return options.get(0).id;
+    }
+
+    private String categoryLabel(UnifiedDeployScreenPacket.SquadCategoryInfo option) {
+        boolean selected = option.id.equals(squadCreateCategoryId);
+        return (selected ? "\u00a7a\u25b6 " : "\u00a7f   ") + option.displayName;
+    }
+
+    // ===== 通用确认框（退出 / 解散 / 踢人）=====
+
+    private void openLeaveSquadConfirm() {
+        openSquadConfirm("退出小队",
+            "退出后将清空你的职业与装备。确定退出当前小队？",
+            () -> NetworkManager.leaveSquad());
+    }
+
+    private void openDisbandSquadConfirm() {
+        if (!inSquad() || !isLocalPlayerLeader()) {
+            return;
+        }
+        openSquadConfirm("解散小队",
+            "解散后全队成员都会离队，且所有成员的职业与装备都会被清空。确定解散？",
+            () -> NetworkManager.deleteSquad(mySquadId));
+    }
+
+    /**
+     * 红色「重新部署」按钮（载具信息右侧）：二次确认后请求服务端立刻击杀自己。
+     * 对战阶段按阵亡规则扣除兵力，部署阶段不扣。
+     */
+    private void openRedeployConfirm() {
+        boolean battle = ClientGameState.getCurrentPhase() == GamePhase.BATTLE;
+        openSquadConfirm("重新部署",
+            battle
+                ? "对战阶段重新部署会立刻阵亡，并按本职业扣除兵力。确定重新部署？"
+                : "部署阶段重新部署不会扣除兵力，会立刻阵亡并重选部署点。确定？",
+            NetworkManager::requestRedeploy);
+    }
+
+    /**
+     * 打开居中确认框；默认高亮"取消"以防误触（Enter 不会命中确定）。
+     */
+    private void openSquadConfirm(String title, String body, Runnable onConfirm) {
+        if (squadConfirmRoot == null) {
+            return;
+        }
+        closeVariantPopup();
+        closeFireteamContextMenu();
+        closeSquadCreateDialog();
+        squadConfirmTitle = title == null ? "" : title;
+        squadConfirmBody = body == null ? "" : body;
+        squadConfirmAction = onConfirm;
+
+        squadConfirmRoot.clearChildren();
+        int w = Math.min(320, Math.max(200, this.width - 40));
+        int h = 46 + BTN_H + 10;
+        int x = (this.width - w) / 2;
+        int y = (this.height - h) / 2;
+        squadConfirmRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
+            @Override
+            public boolean onMouseClick(int mx, int my, int button) {
+                closeSquadConfirm();
+                return true;
+            }
+        });
+        squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xF0121518));
+        squadConfirmRoot.addChild(new GuiRect(x, y, w, h, 0xFF1A1E22));
+        squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
+            "\u00a7c\u00a7l" + squadConfirmTitle, 0xFFFFC766));
+        squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
+            EspetroAuiWidgets.trimToWidth("\u00a7f" + squadConfirmBody,
+                Math.max(60, (int) ((w - 16) / UI_TEXT_SCALE))),
+            0xFFE6E6E6));
+
+        int by = y + h - BTN_H - 5;
+        EspButton ok = new EspButton(x + w - 8 - 64, by, 64, BTN_H, "\u00a7c确定",
+            () -> {
+                Runnable action = squadConfirmAction;
+                closeSquadConfirm();
+                if (action != null) {
+                    action.run();
+                }
+            });
+        ok.setTextScale(UI_TEXT_SCALE);
+        squadConfirmRoot.addChild(ok);
+        // 默认高亮"取消"：视觉上加亮 + 置于左侧（Enter 无绑定，避免误确认）
+        EspButton cancel = new EspButton(x + 8, by, 64, BTN_H, "\u00a7e取消",
+            this::closeSquadConfirm);
+        cancel.setTextScale(UI_TEXT_SCALE);
+        cancel.normalColor = 0xFF3A4A38;
+        cancel.hoverColor = 0xFF4A5F47;
+        squadConfirmRoot.addChild(cancel);
+
+        squadConfirmRoot.setVisible(true);
+    }
+
+    private void closeSquadConfirm() {
+        squadConfirmTitle = "";
+        squadConfirmBody = "";
+        squadConfirmAction = null;
+        if (squadConfirmRoot != null) {
+            squadConfirmRoot.clearChildren();
+            squadConfirmRoot.setVisible(false);
+        }
+    }
+
+    private boolean hasSquadConfirm() {
+        return squadConfirmRoot != null && squadConfirmRoot.isVisible();
+    }
+
+    /** 供外部（数据包）刷新队伍类型列表；小窗打开时保留已输入名称。 */
+    public void updateSquadCategories(List<UnifiedDeployScreenPacket.SquadCategoryInfo> updated) {
+        if (updated == null) {
+            return;
+        }
+        boolean changed = !sameSquadCategories(squadCategories, updated);
+        squadCategories.clear();
+        squadCategories.addAll(updated);
+        if (changed && hasSquadCreateDialog()) {
+            String keepName = squadCreateNameField == null ? "" : squadCreateNameField.getRawValue();
+            boolean active = squadCreateNameField != null && squadCreateNameField.isActive();
+            rebuildSquadCreateDialog(keepName);
+            if (squadCreateNameField != null) {
+                squadCreateNameField.setActive(active);
             }
         }
+    }
+
+    private static boolean sameSquadCategories(
+            List<UnifiedDeployScreenPacket.SquadCategoryInfo> a,
+            List<UnifiedDeployScreenPacket.SquadCategoryInfo> b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null || b == null || a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            if (!Objects.equals(a.get(i).id, b.get(i).id)
+                || !Objects.equals(a.get(i).displayName, b.get(i).displayName)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // ---------- 职业选择（中上，5行网格）----------
@@ -1707,7 +2112,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private String buildRedeployLabel() {
         int remaining = getRedeployCooldownRemaining();
-        return remaining > 0 ? "\u00a77重新部署 " + remaining + "s" : "\u00a7c重新部署";
+        // 与地图页脚新的通用「重新部署」按钮区分：此按钮仅防守方、仅布防期、走 /outpost redeploy
+        return remaining > 0 ? "\u00a77前哨重部署 " + remaining + "s" : "\u00a7c前哨重部署";
     }
 
     @Override
@@ -1761,6 +2167,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     public void removed() {
         clearPendingDeploySelection();
         previewRenderer.clear();
+        closeSquadCreateDialog();
+        closeSquadConfirm();
         super.removed();
     }
 
@@ -1795,43 +2203,49 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             nextX += 68;
         }
 
+        // 重新部署（红色，载具信息右侧）：立刻阵亡并重选部署点；
+        // 对战阶段按阵亡规则扣兵力，部署阶段不扣。需二次确认。
+        EspButton redeploy = new EspButton(nextX, by, 72, BTN_H, "\u00a7f\u00a7l重新部署",
+            this::openRedeployConfirm);
+        redeploy.setTextScale(UI_TEXT_SCALE);
+        redeploy.normalColor = REDEPLOY_BG_NORMAL;
+        redeploy.hoverColor = REDEPLOY_BG_HOVER;
+        redeploy.setEnabled(!waitingForDeploySelection);
+        sectionRoot.addChild(redeploy);
+        nextX += 76;
+
         if (idle) {
             return;
         }
 
-        // 指挥官空缺（志愿/公投）：不再整块盖住地图，改为屏幕右侧可关闭的小窗；
-        // 关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
-        boolean vacancy = "VACANCY_VOLUNTEER".equals(state.state)
-            || "VACANCY_VOTE".equals(state.state);
-        if (battle && vacancy) {
-            if (vacancyWindowMinimized) {
-                EspButton restore = new EspButton(nextX, by, 60, BTN_H, "\u00a7a指挥官补位",
-                    () -> {
-                        vacancyWindowMinimized = false;
-                        invalidateSections(Section.MAP_CONTROLS);
-                    });
-                restore.setTextScale(UI_TEXT_SCALE);
-                sectionRoot.addChild(restore);
-            } else {
-                buildVacancyWindow(sectionRoot, state);
-            }
-            return;
+        // 所有指挥官治理投票（弹劾 / 空缺志愿 / 空缺公投）一律使用地图右侧可关闭的小窗，
+        // 不再整块盖住战术地图；关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
+        boolean impeachment = "IMPEACHMENT_VOTE".equals(state.state);
+        if (governanceWindowMinimized) {
+            EspButton restore = new EspButton(nextX, by, 60, BTN_H,
+                impeachment ? "\u00a7c弹劾投票" : "\u00a7a指挥官补位",
+                () -> {
+                    governanceWindowMinimized = false;
+                    invalidateSections(Section.MAP_CONTROLS);
+                });
+            restore.setTextScale(UI_TEXT_SCALE);
+            sectionRoot.addChild(restore);
+        } else {
+            buildGovernanceWindow(sectionRoot, state);
         }
-
-        // 其余治理（弹劾投票等）保留旧式覆盖层。
-        buildLegacyGovernanceOverlay(sectionRoot, state);
     }
 
-    /** 指挥官空缺治理：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
-    private void buildVacancyWindow(GuiElement sectionRoot, GovernanceStatePacket.TeamState state) {
+    /** 指挥官治理（弹劾 / 空缺志愿 / 空缺公投）：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
+    private void buildGovernanceWindow(GuiElement sectionRoot, GovernanceStatePacket.TeamState state) {
         boolean volunteerPhase = "VACANCY_VOLUNTEER".equals(state.state);
-        int w = Math.min(VACANCY_WINDOW_W, Math.max(120, mapW - 16));
+        boolean impeachment = "IMPEACHMENT_VOTE".equals(state.state);
+        int w = Math.min(impeachment ? IMPEACH_WINDOW_W : VACANCY_WINDOW_W, Math.max(120, mapW - 16));
         int x = mapX + mapW - w - 6;
         int y = mapY + 6;
 
-        // 高度按内容行数估算：标题区 + 志愿/候选人行 + 已志愿文本
+        // 高度按内容行数估算：标题区 + 投票/志愿行 + 已志愿文本
         int bodyH = 10 + BTN_H + 2
-            + (volunteerPhase ? 10 : Math.max(1, state.volunteers.size()) * 18);
+            + (impeachment ? 36 : volunteerPhase ? 10 : Math.max(1, state.volunteers.size()) * 18);
         int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
             Math.max(64, mapH - MAP_FOOTER_H - 16));
 
@@ -1839,7 +2253,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(new GuiRect(x, y, w, h, 0xFF141719));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
-            "\u00a76\u00a7l" + (volunteerPhase ? "指挥官空缺" : "空缺公投"), 0xFFFFC766));
+            "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
+            0xFFFFC766));
         governanceTimerText = new PlainText(x + 6, y + 17,
             "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
         sectionRoot.addChild(governanceTimerText);
@@ -1847,7 +2262,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 关闭：最小化为「载具信息」右侧按钮
         EspButton close = new EspButton(x + w - 36, y + 3, 32, BTN_H, "\u00a7c关闭",
             () -> {
-                vacancyWindowMinimized = true;
+                governanceWindowMinimized = true;
                 invalidateSections(Section.MAP_CONTROLS);
             });
         close.setTextScale(UI_TEXT_SCALE);
@@ -1856,7 +2271,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int contentX = x + 6;
         int contentW = w - 12;
         int cy = y + VACANCY_WINDOW_HEADER_H;
-        if (volunteerPhase) {
+        if (impeachment) {
+            int y2 = cy;
+            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官",
+                contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+            y2 += 18;
+            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
+                contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+        } else if (volunteerPhase) {
             EspButton volunteer = new EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
                 () -> NetworkManager.sendGovernanceAction(
                     GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
@@ -1879,55 +2301,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_VACANCY);
                 y2 += 18;
                 if (y2 + 16 > y + h - 4) break;
-            }
-        }
-    }
-
-    /** 弹劾投票等旧式治理覆盖层：整块覆盖战术地图上部。 */
-    private void buildLegacyGovernanceOverlay(GuiElement sectionRoot,
-                                              GovernanceStatePacket.TeamState state) {
-        if (state == null || "IDLE".equals(state.state)) {
-            return;
-        }
-        int governanceH = Math.max(20, mapH - MAP_FOOTER_H - 6);
-        sectionRoot.addChild(new GuiRect(mapX + 3, mapY + 3, mapW - 6, governanceH, 0xE0181818));
-        String stateTitle = switch (state.state) {
-            case "IMPEACHMENT_VOTE" -> "弹劾投票";
-            case "VACANCY_VOLUNTEER" -> "指挥官空缺";
-            case "VACANCY_VOTE" -> "空缺公投";
-            default -> state.state;
-        };
-        sectionRoot.addChild(new PlainText(mapX + 10, mapY + 30,
-            "\u00a76\u00a7l指挥官治理：" + stateTitle, 0xFFFFC766));
-        governanceTimerText = new PlainText(mapX + 10, mapY + 43,
-            "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
-        sectionRoot.addChild(governanceTimerText);
-        int rowY = mapY + 60;
-        if ("IMPEACHMENT_VOTE".equals(state.state)) {
-            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官",
-                mapX + 10, rowY, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
-            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
-                mapX + 10, rowY + 18, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
-        } else if ("VACANCY_VOLUNTEER".equals(state.state)) {
-            EspButton volunteer = new EspButton(mapX + 10, rowY, Math.max(80, mapW - 20), BTN_H,
-                "\u00a7a志愿补位", () -> NetworkManager.sendGovernanceAction(
-                    GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
-            volunteer.setTextScale(UI_TEXT_SCALE);
-            sectionRoot.addChild(volunteer);
-            if (!state.volunteers.isEmpty()) {
-                String names = state.volunteers.stream()
-                    .map(MatchScoreboardScreen::nameFor)
-                    .reduce((a, b) -> a + ", " + b).orElse("");
-                sectionRoot.addChild(new PlainText(mapX + 10, rowY + 18,
-                    "\u00a77已志愿: " + names, 0xFFB0B0B0));
-            }
-        } else if ("VACANCY_VOTE".equals(state.state)) {
-            int y = rowY;
-            for (UUID volunteer : state.volunteers) {
-                addGovernanceVoteButton(sectionRoot, state, volunteer, "志愿者",
-                    mapX + 10, y, mapW - 20, GovernanceActionPacket.Action.VOTE_VACANCY);
-                y += 18;
-                if (y > mapY + mapH - MAP_FOOTER_H - 18) break;
             }
         }
     }
@@ -1967,7 +2340,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         boolean hasOutpost = bastions.stream().anyMatch(UnifiedDeployScreenPacket.BastionItem::isOutpost);
         if (deployTimeRemaining >= 0 && "DEFEND".equals(team) && hasOutpost) {
-            int redeployW = 66;
+            // 「前哨重部署」：比地图页脚的通用「重新部署」更长，宽度放宽避免文案被裁
+            int redeployW = 78;
             outpostRedeployButton = new EspButton(
                 this.width - redeployW - 4, barY + 1, redeployW, STATUS_BAR_H - 2,
                 buildRedeployLabel(),
@@ -2596,6 +2970,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         lastMouseX = (int) mx;
         lastMouseY = (int) my;
+        // 班组弹层打开时：交由弹层容器（含全屏遮罩）处理，避免穿透到下层按钮。
+        if (hasSquadCreateDialog() || hasSquadConfirm()) {
+            return super.mouseClicked(mx, my, button);
+        }
         if (hasVariantPopup()) {
             if (button == 0 && handleVariantPopupClick((int) mx, (int) my)) {
                 return true;
@@ -2609,6 +2987,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     public boolean mouseScrolled(double mx, double my, double delta) {
+        // 弹层打开时吞掉滚轮，避免滚动下层列表
+        if (hasSquadCreateDialog() || hasSquadConfirm()) {
+            return true;
+        }
         if (hasVariantPopup() && inside((int) mx, (int) my,
             variantPopupX, variantPopupY, VARIANT_POPUP_W, variantPopupH)) {
             int maxScroll = Math.max(0,
@@ -2622,6 +3004,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // 弹层优先级：创建小窗 → 确认框 → 成员右键菜单 → 职业变体弹窗
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasSquadCreateDialog()) {
+            closeSquadCreateDialog();
+            return true;
+        }
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasSquadConfirm()) {
+            closeSquadConfirm();
+            return true;
+        }
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasFireteamContextMenu()) {
             closeFireteamContextMenu();
             return true;
@@ -2689,6 +3080,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (!inSquad()) {
             return "请先加入班组小队后再选择职业。";
         }
+        // 装备完全解锁模式：不再报人数类拒绝原因
+        if (freeUnlockMode) {
+            return "";
+        }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
             return "小队达到 " + cls.teammatesNeed + " 人后才能选择该职业。";
         }
@@ -2737,8 +3132,30 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /**
      * 未入队全部禁用；入队后 team_count 看小队满，非 team_count 看编制总限 + max_per_squad。
      */
-    private boolean isClassButtonDisabled(UnifiedDeployScreenPacket.ClassInfo cls) {
-        if (!isClassSelectionLocationAllowed()) {
+    /** 服务端下发的"装备完全解锁模式"状态（包级字段）。 */
+    private static volatile boolean freeUnlockMode;
+
+    /**
+     * 更新完全解锁状态。
+     *
+     * @return 状态是否发生变化（变化时调用方应刷新职业按钮）
+     */
+    public static boolean applyFreeUnlock(boolean value) {
+        if (freeUnlockMode == value) return false;
+        freeUnlockMode = value;
+        return true;
+    }
+
+    public static boolean isFreeUnlockMode() {
+        return freeUnlockMode;
+    }
+
+    /** 开关状态变化后刷新职业格子（置灰/提示文案）。 */
+    public void refreshForFreeUnlock() {
+        refreshClassButtons();
+    }
+
+    private boolean isClassButtonDisabled(UnifiedDeployScreenPacket.ClassInfo cls) {        if (!isClassSelectionLocationAllowed()) {
             return true;
         }
         if (getClassSwitchCooldownRemaining() > 0) {
@@ -2746,6 +3163,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         if (!inSquad()) {
             return true;
+        }
+        // 装备完全解锁模式：人数类限制一律放行（位置/冷却/入队仍如上保留）
+        if (freeUnlockMode) {
+            return false;
         }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
             return true;
@@ -3053,6 +3474,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean sameFireteam = self.fireteam == target.fireteam;
         final UUID targetId = target.uuid;
         final byte targetFt = target.fireteam;
+        final String targetName = target.playerName == null ? "" : target.playerName;
         boolean isSelf = targetId.equals(self.uuid);
 
         List<FireteamContextEntry> entries = new ArrayList<>();
@@ -3083,6 +3505,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                         closeFireteamContextMenu();
                     }));
             }
+            // 踢出小队：队长对非自己成员可用；二次确认后执行（被踢者职业与装备会被清空）
+            entries.add(new FireteamContextEntry("\u00a7c踢出小队", true, () -> {
+                closeFireteamContextMenu();
+                openSquadConfirm("踢出队员",
+                    "确定将 " + targetName + " 踢出小队？其职业与装备会被清空。",
+                    () -> NetworkManager.sendMatchStatsAction(
+                        org.espetro.network.MatchStatsActionPacket.Action.KICK_FROM_SQUAD,
+                        targetId));
+            }));
         }
         // 小队长只交接“队长”；不能通过火力组菜单卸掉 A 组长身份。
         if (!selfIsSquadLeader && selfIsFtLeader && sameFireteam && !isSelf) {

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "b": {
+      "tag": "forge:plates/steel"
+    },
+    "c": {
+      "item": "minecraft:gunpowder"
+    },
+    "e": {
+      "item": "superbwarfare:fusee"
+    }
+  },
+  "pattern": [
+    " e ",
+    "bab",
+    " c "
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:he_head"
+  },
+  "show_notification": true
+}

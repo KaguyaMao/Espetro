@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 
 /**
  * 缓存玩家在载具上的座位权限（上下车事件驱动，禁止 tick 扫描）。
@@ -31,7 +32,14 @@ public final class VehicleSeatPingCache {
 
     public static boolean canPingFromVehicle(UUID playerId) {
         SbwVehicleSeatResolver.SeatState state = CACHE.get(playerId);
-        return state != null && allowsPing(state.kind(), state.seatIndex());
+        if (state == null) {
+            return false;
+        }
+        // 白名单载具：任何座位都允许标点。
+        if (VehicleNativeWhitelist.isNative(state.vehicle())) {
+            return true;
+        }
+        return allowsPing(state.kind(), state.seatIndex());
     }
 
     /**
@@ -45,6 +53,10 @@ public final class VehicleSeatPingCache {
             return false;
         }
         CACHE.put(player.getUUID(), state);
+        // 白名单载具：任何座位都允许标点。
+        if (VehicleNativeWhitelist.isNative(state.vehicle())) {
+            return true;
+        }
         return allowsPing(state.kind(), state.seatIndex());
     }
 

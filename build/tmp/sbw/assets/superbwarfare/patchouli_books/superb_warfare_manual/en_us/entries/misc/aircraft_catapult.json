@@ -1,0 +1,17 @@
+{
+  "name": "superbwarfare.entry.misc.aircraft_catapult",
+  "icon": "superbwarfare:aircraft_catapult",
+  "category": "superbwarfare:misc",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.misc.aircraft_catapult.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:aircraft_catapult",
+      "text": "superbwarfare.page.misc.aircraft_catapult.2"
+    }
+  ],
+  "sortnum": 40000
+}

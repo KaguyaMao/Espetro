@@ -1,0 +1,44 @@
+{
+  "ID": "dragonrise_reforge:wlhgzu23",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Chance": 1.0,
+          "Count": 2,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 2,
+          "Name": "superbwarfare:cannon_core"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:track"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_motor"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 2,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "@Default",
+      "Type": "complete"
+    }
+  ]
+}

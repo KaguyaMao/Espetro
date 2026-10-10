@@ -1,0 +1,382 @@
+{
+  "ID": "fcp:toyota_hilux_mortar",
+  "MaxHealth": 150,
+  "MaxEnergy": 5000000,
+  "PassengerRenderScale": 0.85,
+  "OBB": [
+    {
+      "Size": [
+        0.1785,
+        0.39525,
+        0.39525
+      ],
+      "Position": [
+        0.816,
+        0.4335,
+        1.6575
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.1785,
+        0.39525,
+        0.39525
+      ],
+      "Position": [
+        -0.816,
+        0.4335,
+        1.6575
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.1785,
+        0.39525,
+        0.39525
+      ],
+      "Position": [
+        0.816,
+        0.4335,
+        -1.785
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.1785,
+        0.39525,
+        0.39525
+      ],
+      "Position": [
+        -0.816,
+        0.4335,
+        -1.6575
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.9078,
+        0.44625,
+        2.125
+      ],
+      "Position": [
+        0.0,
+        0.96475,
+        -0.8415
+      ],
+      "Part": "Body"
+    },
+    {
+      "Size": [
+        0.9078,
+        0.44625,
+        0.6375
+      ],
+      "Position": [
+        0.0,
+        0.96475,
+        1.921
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.9078,
+        0.2975,
+        1.21125
+      ],
+      "Position": [
+        0.0,
+        1.7085,
+        0.0425
+      ],
+      "Part": "Body"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Weapons": [],
+      "BanHand": true,
+      "Position": [
+        0.425,
+        0.255,
+        0.2125
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "Sensitivity": [
+        0.5,
+        0.3,
+        0.5
+      ],
+      "IsEnclosed": false,
+      "Transform": "Turret",
+      "Weapons": [
+        "Mortar"
+      ],
+      "BanHand": true,
+      "CameraPos": {
+        "UseFixedCameraPos": true,
+        "Transform": "Barrel",
+        "Position": [
+          0.34,
+          0.0,
+          1.275
+        ],
+        "Direction": "Barrel"
+      },
+      "Position": [
+        0.225,
+        -0.5,
+        -0.5
+      ],
+      "MinPitch": 45,
+      "MaxPitch": 85,
+      "Pose": "Tow"
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [
+        -0.425,
+        0.255,
+        0.2125
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [
+        0.425,
+        0.255,
+        -0.765
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [
+        0.0,
+        0.255,
+        -0.765
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "BanHand": true,
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.425,
+        0.255,
+        -0.765
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "Weapons": {
+    "Empty": {
+      "Name": "",
+      "Crosshair": "@Empty",
+      "RPM": 0,
+      "Magazine": 0,
+      "Damage": 0
+    },
+    "Mortar": {
+      "AmmoType": "superbwarfare:mortar_shell",
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/mortar_shell.png",
+      "DefaultZoom": 2,
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Magazine": 1,
+      "EmptyReloadTime": 0,
+      "ShellType": "HE",
+      "Projectile": "superbwarfare:mortar_shell",
+      "ProjectileLife": 1200,
+      "Spread": 0.1,
+      "Name": "weapon.fcp.stryker_mortar",
+      "RPM": 45,
+      "Damage": 60,
+      "ExplosionDamage": 100,
+      "ExplosionRadius": 8,
+      "Gravity": 0.05,
+      "Velocity": 10,
+      "SoundInfo": {
+        "Fire3P": "superbwarfare:mortar_fire",
+        "Fire3PFar": "superbwarfare:mortar_distant",
+        "VehicleReload": "superbwarfare:mortar_load"
+      },
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            -0.005695,
+            0.085,
+            1.7
+          ]
+        ],
+        "Directions": [
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "Crosshair": "@Empty",
+      "SoundRadius": 32,
+      "ShootShake": [
+        8,
+        6,
+        14
+      ]
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineSound": "fcp:toyota_engine",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 96,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "MaxForwardSpeedRate": 1.62,
+    "MaxBackwardSpeedRate": 0.33,
+    "Increment": 0.025,
+    "Decrement": 0.02,
+    "SteeringSpeed": 0.1,
+    "EngineSoundVolume": 1.0
+  },
+  "UpStep": 2.2,
+  "Mass": 10,
+  "RotateOffsetHeight": 2.2,
+  "DamageModifiers": [
+    "All * 0.55",
+    "minecraft:lava - -4",
+    "minecraft:lava * 4",
+    "minecraft:arrow * 0.2",
+    "minecraft:trident * 0.4",
+    "minecraft:mob_attack * 0.4",
+    "minecraft:mob_attack_no_aggro * 0.4",
+    "minecraft:mob_projectile * 0.4",
+    "minecraft:explosion * 1",
+    "minecraft:player_explosion * 1",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 0.5",
+    "superbwarfare:mine * 1.0",
+    "superbwarfare:projectile_hit * 0.8",
+    "superbwarfare:grapeshot_hit * 0.2",
+    "superbwarfare:laser * 1.0",
+    "@#superbwarfare:aerial_bomb * 1.4",
+    "#superbwarfare:projectile * 0.16",
+    "#superbwarfare:projectile_absolute * 1.0",
+    "superbwarfare:vehicle_strike * 0.7",
+    "@superbwarfare:mortar_shell * 2.0",
+    "@superbwarfare:gun_grenade * 0.5",
+    "@superbwarfare:javelin_missile * 1.0",
+    "@superbwarfare:igla_9k38_missile * 1.0",
+    "@superbwarfare:wire_guide_missile * 1.0",
+    "All - 4"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Medium",
+    "ExplosionDamage": 120,
+    "ExplosionRadius": 7
+  },
+  "ThirdPersonCameraPos": [
+    0,
+    1,
+    5
+  ],
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/civ_ter.png",
+  "Type": "Car",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.15,
+        0.09,
+        false
+      ]
+    ]
+  },
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [
+      0.9826,
+      0,
+      1.3549
+    ],
+    [
+      -0.9826,
+      0,
+      1.3549
+    ],
+    [
+      0.9826,
+      0,
+      -1.3549
+    ],
+    [
+      -0.9826,
+      0,
+      -1.3549
+    ]
+  ],
+  "InertiaRotateRate": 1.8,
+  "TurretPos": [
+    0.0044,
+    0.9646,
+    -2.0031
+  ],
+  "BarrelPos": [
+    0.0,
+    0.0,
+    -0.5312
+  ],
+  "TurretControllerIndex": 1,
+  "TurretPitchRange": [
+    45,
+    85
+  ],
+  "TurretTurnSpeed": [
+    5,
+    5
+  ]
+}

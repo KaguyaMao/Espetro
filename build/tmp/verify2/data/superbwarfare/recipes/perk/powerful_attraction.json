@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:empty_perk"
+    },
+    "b": {
+      "tag": "forge:ender_pearls"
+    },
+    "c": {
+      "tag": "forge:ingots/iron"
+    },
+    "d": {
+      "tag": "forge:dusts/redstone"
+    },
+    "e": {
+      "tag": "forge:gems/lapis"
+    }
+  },
+  "pattern": [
+    "dbe",
+    "cac",
+    " c "
+  ],
+  "result": {
+    "item": "superbwarfare:powerful_attraction"
+  },
+  "show_notification": true
+}

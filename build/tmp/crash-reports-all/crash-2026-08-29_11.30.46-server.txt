@@ -1,0 +1,207 @@
+---- Minecraft Crash Report ----
+// On the bright side, I bought you a teddy bear!
+
+Time: 2026-08-29 11:30:46
+Description: Ticking entity
+
+java.lang.NoClassDefFoundError: net/minecraft/world/level/BlockGetter
+	at com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.checkBottomSupportRatio(VehicleMotionUtils.kt) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:classloading,xf:vehicle_addition_sbw_coremod:default}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vCollide(VehicleEntity.kt:4607) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vMove(VehicleEntity.kt:4637) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.m_6478_(VehicleEntity.kt:4700) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.m_6075_(VehicleEntity.kt:2712) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at net.minecraft.world.entity.Entity.m_8119_(Entity.java:422) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_8647_(ServerLevel.java:694) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.world.level.Level.m_46653_(Level.java:479) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.superbwarfare.json:LevelMixin,pl:mixin:APP:kubejs-common.mixins.json:LevelMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_184063_(ServerLevel.java:343) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.world.level.entity.EntityTickList.m_156910_(EntityTickList.java:54) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading}
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:323) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at java.lang.Thread.run(Thread.java:840) ~[?:?] {}
+Caused by: java.lang.ClassNotFoundException: net.minecraft.world.level.BlockGetter
+	at jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641) ~[?:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:137) ~[securejarhandler-2.1.10.jar:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:137) ~[securejarhandler-2.1.10.jar:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	... 17 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Server thread
+Suspected Mod: 
+	Superb Warfare (superbwarfare), Version: 0.8.9.1
+		at TRANSFORMER/superbwarfare@0.8.9.1/com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.checkBottomSupportRatio(VehicleMotionUtils.kt)
+Stacktrace:
+	at com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.checkBottomSupportRatio(VehicleMotionUtils.kt) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:classloading,xf:vehicle_addition_sbw_coremod:default}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vCollide(VehicleEntity.kt:4607) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vMove(VehicleEntity.kt:4637) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.m_6478_(VehicleEntity.kt:4700) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.m_6075_(VehicleEntity.kt:2712) ~[superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23178!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,xf:vehicle_addition_sbw_coremod:default,pl:runtimedistcleaner:A,re:classloading,xf:vehicle_addition_sbw_coremod:default,pl:mixin:A,pl:runtimedistcleaner:A}
+	at net.minecraft.world.entity.Entity.m_8119_(Entity.java:422) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_8647_(ServerLevel.java:694) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.world.level.Level.m_46653_(Level.java:479) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.superbwarfare.json:LevelMixin,pl:mixin:APP:kubejs-common.mixins.json:LevelMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_184063_(ServerLevel.java:343) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.world.level.entity.EntityTickList.m_156910_(EntityTickList.java:54) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading}
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:323) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+-- Entity being ticked --
+Details:
+	Entity Type: dragonrise_reforge:ural4320_supply (com.redabysslucia.dragonrise_reforge.entities.Ural4320SupplyEntity)
+	Entity ID: 17116
+	Entity Name: L�4320 e�af
+	Entity's Exact location: 1320.74, -44.02, -307.64
+	Entity's Block location: World: (1320,-45,-308), Section: (at 8,3,12 in 82,-3,-20; chunk contains blocks 1312,-64,-320 to 1327,319,-305), Region: (2,-1; contains chunks 64,-32 to 95,-1, blocks 1024,-64,-512 to 1535,319,-1)
+	Entity's Momentum: 0.00, -0.06, 0.00
+	Entity's Passengers: [ServerPlayer['ly01_lin'/66, l='ServerLevel[world]', x=1319.14, y=-43.18, z=-306.97]]
+	Entity's Vehicle: null
+Stacktrace:
+	at net.minecraft.world.level.Level.m_46653_(Level.java:479) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.superbwarfare.json:LevelMixin,pl:mixin:APP:kubejs-common.mixins.json:LevelMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_184063_(ServerLevel.java:343) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.world.level.entity.EntityTickList.m_156910_(EntityTickList.java:54) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading}
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:323) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at java.lang.Thread.run(Thread.java:840) ~[?:?] {}
+
+
+-- Affected level --
+Details:
+	All players: 19 total; [ServerPlayer['ZTY_less'/57, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['ly01_lin'/66, l='ServerLevel[world]', x=1319.14, y=-43.18, z=-306.97], ServerPlayer['kuloujun78'/273, l='ServerLevel[world]', x=1315.33, y=-43.00, z=-324.74], ServerPlayer['FRost_Ice1'/497, l='ServerLevel[world]', x=1318.66, y=-43.00, z=-327.45], ServerPlayer['AkashiSCO'/1902, l='ServerLevel[world]', x=1320.52, y=-40.79, z=-307.97], ServerPlayer['Dyingfire_'/2406, l='ServerLevel[world]', x=1314.23, y=-43.00, z=-322.19], ServerPlayer['deshijie'/2516, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['Sai_bALa'/2520, l='ServerLevel[world]', x=1313.67, y=-43.00, z=-320.06], ServerPlayer['qwert_yuiop'/2650, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['rregrett'/2977, l='ServerLevel[world]', x=1314.78, y=-43.00, z=-323.22], ServerPlayer['Yuan_Chovy_1111'/3385, l='ServerLevel[world]', x=1323.10, y=-42.00, z=-308.51], ServerPlayer['q2262'/14851, l='ServerLevel[world]', x=1321.38, y=-42.00, z=-312.56], ServerPlayer['mqllxs'/17203, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['EinoTamik'/17220, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['heiziqwq'/17244, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['icemc7'/17259, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['Bssgbv'/17262, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['FreeEpic'/17263, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['QKDream'/17264, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50]]
+	Chunk stats: 20338
+	Level dimension: espetro:map_6280f66
+	Derived: true
+	Level spawn location: World: (26,-60,47), Section: (at 10,4,15 in 1,-4,2; chunk contains blocks 16,-64,32 to 31,319,47), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,-64,0 to 511,319,511)
+	Level time: 19758597 game time, 6000 day time
+	Level name: world
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: true
+	Level weather: Rain time: 37033 (now: false), thunder time: 2541 (now: true)
+	Known server brands: forge, mohist
+	Removed feature flags: 
+	Level was modded: true
+	Level storage version: 0x04ABD - Anvil
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23187!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at java.lang.Thread.run(Thread.java:840) ~[?:?] {}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Linux (amd64) version 7.0.0-28-generic
+	Java Version: 17.0.16, Azul Systems, Inc.
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Azul Systems, Inc.
+	Memory: 1943033472 bytes (1853 MiB) / 5200936960 bytes (4960 MiB) up to 17179869184 bytes (16384 MiB)
+	CPUs: 48
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen Threadripper PRO 5995WX 64-Cores
+	Identifier: AuthenticAMD Family 25 Model 8 Stepping 2
+	Microarchitecture: Zen 3
+	Frequency (GHz): -0.00
+	Number of physical packages: 1
+	Number of physical CPUs: 48
+	Number of logical CPUs: 48
+	Graphics card #0 name: unknown
+	Graphics card #0 vendor: unknown
+	Graphics card #0 VRAM (MB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MB): 193373.48
+	Virtual memory used (MB): 114694.31
+	Swap memory total (MB): 0.00
+	Swap memory used (MB): 0.00
+	JVM Flags: 20 total; -Xmx16G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99
+	Server Running: true
+	Player Count: 19 / 60; [ServerPlayer['ZTY_less'/57, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['ly01_lin'/66, l='ServerLevel[world]', x=1319.14, y=-43.18, z=-306.97], ServerPlayer['kuloujun78'/273, l='ServerLevel[world]', x=1315.33, y=-43.00, z=-324.74], ServerPlayer['FRost_Ice1'/497, l='ServerLevel[world]', x=1318.66, y=-43.00, z=-327.45], ServerPlayer['AkashiSCO'/1902, l='ServerLevel[world]', x=1320.52, y=-40.79, z=-307.97], ServerPlayer['Dyingfire_'/2406, l='ServerLevel[world]', x=1314.23, y=-43.00, z=-322.19], ServerPlayer['deshijie'/2516, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['Sai_bALa'/2520, l='ServerLevel[world]', x=1313.67, y=-43.00, z=-320.06], ServerPlayer['qwert_yuiop'/2650, l='ServerLevel[world]', x=1324.50, y=-41.90, z=-303.50], ServerPlayer['rregrett'/2977, l='ServerLevel[world]', x=1314.78, y=-43.00, z=-323.22], ServerPlayer['Yuan_Chovy_1111'/3385, l='ServerLevel[world]', x=1323.10, y=-42.00, z=-308.51], ServerPlayer['q2262'/14851, l='ServerLevel[world]', x=1321.38, y=-42.00, z=-312.56], ServerPlayer['mqllxs'/17203, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['EinoTamik'/17220, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['heiziqwq'/17244, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['icemc7'/17259, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['Bssgbv'/17262, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['FreeEpic'/17263, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50], ServerPlayer['QKDream'/17264, l='ServerLevel[world]', x=-378.50, y=-42.90, z=-350.50]]
+	Data Packs: vanilla, mod:geckolib, mod:playeranimator (incompatible), mod:superbwarfare, mod:curios (incompatible), mod:simplebedrockmodel, mod:architectury (incompatible), mod:doomsday_decoration, mod:rhino (incompatible), mod:kubejs (incompatible), mod:tacz, mod:forge, mod:kotlinforforge (incompatible), mod:flywheel, mod:ponder (incompatible), mod:create, mod:ferritecore (incompatible), mod:dragonrise_reforge, create:dynamic_data, superbwarfare:resourcepacks/sbw_legacy, tacz_resources, mod:customskinloader (incompatible), mod:auratip, mod:tacz_tactical_breaching, mod:taczmagazines, mod:oelib, mod:memoryleakfix (incompatible), mod:cloth_config (incompatible), mod:voicechat (incompatible), mod:fcp, mod:disablef5, mod:mutil, mod:taczexpands, mod:taczadditions, mod:taczjs, mod:espetro, mod:mm_armor, espetro_dimensions_runtime, mod:esvoice, mod:mixinextras (incompatible), mod:pingwheel (incompatible), mod:espoints, mod:spark (incompatible), mod:snassets_particles, mod:xaerolib (incompatible), mod:xaeroworldmap (incompatible), mod:vvp, mod:tetrachordlib (incompatible), mod:apricityui, mod:esico, mod:realgrisly
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Experimental
+	Is Modded: Definitely; Server brand changed to 'forge'
+	Type: Dedicated Server (map_server.txt)
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeserver
+	ModLauncher naming: srg
+	ModLauncher services: 
+		mixin-0.8.5.jar mixin PLUGINSERVICE 
+		eventbus-6.2.33.jar eventbus PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar slf4jfixer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar object_holder_definalize PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtime_enum_extender PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar capability_token_subclass PLUGINSERVICE 
+		accesstransformers-8.0.4.jar accesstransformer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar vehicle_addition_sbw_coremod TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar taczexpands_coremod TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		minecraft@1.0
+		kotlinforforge@4.12.0
+		javafml@null
+		lowcodefml@null
+	Mod List: 
+		rhino-forge-2001.2.3-build.10.jar                 |Rhino                         |rhino                         |2001.2.3-build.10   |DONE      |Manifest: NOSIGNATURE
+		[t�UI] ApricityUI-forge-1.20.1-1.2.2-hotfix1.jar  |ApricityUI                    |apricityui                    |1.2.2-hotfix1       |DONE      |Manifest: NOSIGNATURE
+		geckolib-forge-1.20.1-4.8.3.jar                   |GeckoLib 4                    |geckolib                      |4.8.3               |DONE      |Manifest: NOSIGNATURE
+		player-animation-lib-forge-1.0.2-rc1+1.20.jar     |Player Animator               |playeranimator                |1.0.2-rc1+1.20      |DONE      |Manifest: NOSIGNATURE
+		CustomSkinLoader_ForgeV2-14.28.jar                |CustomSkinLoader              |customskinloader              |14.28               |DONE      |Manifest: 4a:31:8b:cf:34:eb:d0:13:f3:19:39:d5:d2:b9:12:78:b5:f2:8d:91:3e:6f:8f:ed:97:48:00:69:e1:30:3a:54
+		tetrachordlib-1.20+1.0.3.jar                      |Tetrachord Lib                |tetrachordlib                 |1.20+1.0.3          |DONE      |Manifest: NOSIGNATURE
+		auratip-forge-1.20.1-1.1.3-beta-espetro.1.jar     |AuraTip                       |auratip                       |1.1.3-beta-espetro.1|DONE      |Manifest: NOSIGNATURE
+		snassets_particles-1.0.1.jar                      |SnAssets Particles            |snassets_particles            |1.0.1               |DONE      |Manifest: NOSIGNATURE
+		xaerolib-forge-1.20.1-1.7.1.jar                   |XaeroLib                      |xaerolib                      |1.7.1               |DONE      |Manifest: NOSIGNATURE
+		[8R���J�] tacz-1.20.1-1.1.8-release.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8               |DONE      |Manifest: NOSIGNATURE
+		tacz_tactical_breaching-forge-1.20.1-1.0.1.jar    |TaCZ Tactical Breaching       |tacz_tactical_breaching       |1.0.1               |DONE      |Manifest: NOSIGNATURE
+		Ping-Wheel-1.12.1-forge-1.20.1.jar                |Ping Wheel                    |pingwheel                     |1.12.1              |DONE      |Manifest: NOSIGNATURE
+		[Xaero�L0�] xaeroworldmap-forge-1.20.1-1.44.2.jar|Xaero's World Map             |xaeroworldmap                 |1.44.2              |DONE      |Manifest: NOSIGNATURE
+		taczmagazines-1.20.1-0.1.6-Beta.jar               |TaCZ: Magazines               |taczmagazines                 |0.1.6               |DONE      |Manifest: NOSIGNATURE
+		realgrisly-1.0.0.jar                              |RealGrisly                    |realgrisly                    |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		mixinextras-forge-0.4.1.jar                       |MixinExtras                   |mixinextras                   |0.4.1               |DONE      |Manifest: NOSIGNATURE
+		OELib-forge-1.20.1-0.2.4.1.jar                    |OELib                         |oelib                         |0.2.4.1             |DONE      |Manifest: NOSIGNATURE
+		superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-al|Superb Warfare                |superbwarfare                 |0.8.9.1             |DONE      |Manifest: NOSIGNATURE
+		vvp-alpha-beta-1.20.1-0.2.1-�9yH.jar             |Vintage Vehicle Pack          |vvp                           |0.2.0               |DONE      |Manifest: NOSIGNATURE
+		[�X��] memoryleakfix-forge-1.17+-1.1.5.jar      |Memory Leak Fix               |memoryleakfix                 |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		cloth-config-11.1.136-forge.jar                   |Cloth Config v10 API          |cloth_config                  |11.1.136            |DONE      |Manifest: NOSIGNATURE
+		forge-1.20.1-47.4.22-universal.jar                |Forge                         |forge                         |47.4.22             |DONE      |Manifest: NOSIGNATURE
+		server-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |DONE      |Manifest: NOSIGNATURE
+		voicechat-forge-1.20.1-2.6.20.jar                 |Simple Voice Chat             |voicechat                     |1.20.1-2.6.20       |DONE      |Manifest: NOSIGNATURE
+		fcp-1.1.1-�9yH.jar                               |Frontline Combat Pack         |fcp                           |1.1.1               |DONE      |Manifest: NOSIGNATURE
+		[k�] spark-1.10.53-forge.jar                      |spark                         |spark                         |1.10.53             |DONE      |Manifest: NOSIGNATURE
+		kffmod-4.12.0.jar                                 |Kotlin For Forge              |kotlinforforge                |4.12.0              |DONE      |Manifest: NOSIGNATURE
+		disablef5-1.2(1).jar                              |Disable F5                    |disablef5                     |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		curios-forge-5.14.1+1.20.1.jar                    |Curios API                    |curios                        |5.14.1+1.20.1       |DONE      |Manifest: NOSIGNATURE
+		flywheel-forge-1.20.1-1.0.5.jar                   |Flywheel                      |flywheel                      |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		Ponder-Forge-1.20.1-1.0.91.jar                    |Ponder                        |ponder                        |1.0.91              |DONE      |Manifest: NOSIGNATURE
+		[:���] create-1.20.1-6.0.8.jar                    |Create                        |create                        |6.0.8               |DONE      |Manifest: NOSIGNATURE
+		mutil-1.20.1-6.3.0.jar                            |mutil                         |mutil                         |6.3.0               |DONE      |Manifest: NOSIGNATURE
+		simplebedrockmodel-2.5.1-forge-mc1.20.1.jar       |SimpleBedrockModel            |simplebedrockmodel            |2.5.1-forge-mc1.20.1|DONE      |Manifest: NOSIGNATURE
+		tmp_4833253499966724160.tmp                       |TACZExpands                   |taczexpands                   |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		taczadditions-1.20.1-1.0.0-hotfix.jar             |TaCZ: Additions               |taczadditions                 |1.0.0-hotfix        |DONE      |Manifest: NOSIGNATURE
+		esico-1.0.0.jar                                   |EsICO                         |esico                         |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		architectury-9.2.14-forge.jar                     |Architectury                  |architectury                  |9.2.14              |DONE      |Manifest: NOSIGNATURE
+		kubejs-forge-2001.6.5-build.26.jar                |KubeJS                        |kubejs                        |2001.6.5-build.26   |DONE      |Manifest: NOSIGNATURE
+		taczjs-forge-1.4.2+mc1.20.1.jar                   |TaCZ JS                       |taczjs                        |1.4.2+mc1.20.1      |DONE      |Manifest: NOSIGNATURE
+		[�'S��] ferritecore-6.0.1-forge.jar               |Ferrite Core                  |ferritecore                   |6.0.1               |DONE      |Manifest: 41:ce:50:66:d1:a0:05:ce:a1:0e:02:85:9b:46:64:e0:bf:2e:cf:60:30:9a:fe:0c:27:e0:63:66:9a:84:ce:8a
+		mm_armor-1.1.0-forge-1.20.1.jar                   |miklos_military_armor_r       |mm_armor                      |1.1.0               |DONE      |Manifest: NOSIGNATURE
+		[+��p] doomsday_decoration-1.1.3-forge-1.20.1.jar |Doomsday Decoration           |doomsday_decoration           |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		dragonrise_reforge-1.5.0-beta.jar                 |DragonRise:Reforge            |dragonrise_reforge            |1.5.0-beta          |DONE      |Manifest: NOSIGNATURE
+		espetro-1.1.3-i.jar                               |Espetro                       |espetro                       |1.1.3-i             |DONE      |Manifest: NOSIGNATURE
+		esvoice-1.0.0-final.jar                           |Esvoice                       |esvoice                       |1.0.0-final         |DONE      |Manifest: NOSIGNATURE
+		espoints-1.1.1b.jar                               |EsPoints                      |espoints                      |1.1.1b              |DONE      |Manifest: NOSIGNATURE
+	Crash Report UUID: 5dfd1d4c-4aa5-471f-a7fd-559ad4ab0342
+	FML: 47.4
+	Forge: net.minecraftforge:47.4.22

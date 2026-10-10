@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "8 #superbwarfare:storage_blocks/steel",
+    "superbwarfare:medium_armament_module",
+    "superbwarfare:medium_battery_pack",
+    "superbwarfare:armor_plate",
+    "8 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "fcp:stryker_m2"
+  }
+}

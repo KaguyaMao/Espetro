@@ -1,0 +1,542 @@
+[
+  {
+    "key": "dragonrise_reforge:ah64",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ah64.json",
+    "size": 14031,
+    "ok": true,
+    "parseError": null,
+    "modCount": 26,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:bmp3",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/bmp3.json",
+    "size": 13688,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:csk181",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/csk181.json",
+    "size": 9048,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m1126",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1126.json",
+    "size": 11273,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m1128",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1128.json",
+    "size": 13129,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m113",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m113.json",
+    "size": 8193,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m1296",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1296.json",
+    "size": 14581,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m1a2sepv1",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1a2sepv1.json",
+    "size": 12522,
+    "ok": true,
+    "parseError": null,
+    "modCount": 35,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m1a2sepv2",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1a2sepv2.json",
+    "size": 12828,
+    "ok": true,
+    "parseError": null,
+    "modCount": 35,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:m3a3",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m3a3.json",
+    "size": 11900,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:mv3",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/mv3.json",
+    "size": 8795,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:mv3_armed",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/mv3_armed.json",
+    "size": 8268,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:mv3_supply",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/mv3_supply.json",
+    "size": 5474,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:sx1",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/sx1.json",
+    "size": 6336,
+    "ok": true,
+    "parseError": null,
+    "modCount": 23,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:sx1_a",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/sx1_a.json",
+    "size": 167,
+    "ok": true,
+    "parseError": null,
+    "modCount": null,
+    "dollar": [],
+    "angle": [],
+    "warnings": [
+      "无 DamageModifiers 数组"
+    ]
+  },
+  {
+    "key": "dragonrise_reforge:t72b3",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/t72b3.json",
+    "size": 12450,
+    "ok": true,
+    "parseError": null,
+    "modCount": 35,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:t90mh",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/t90mh.json",
+    "size": 11856,
+    "ok": true,
+    "parseError": null,
+    "modCount": 35,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ural4320",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ural4320.json",
+    "size": 10154,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ural4320_supply",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ural4320_supply.json",
+    "size": 8471,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ural4320_zu23",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ural4320_zu23.json",
+    "size": 7370,
+    "ok": true,
+    "parseError": null,
+    "modCount": 22,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:z20",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/z20.json",
+    "size": 6637,
+    "ok": true,
+    "parseError": null,
+    "modCount": 26,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:zbd04a",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbd04a.json",
+    "size": 14158,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:zbd05",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbd05.json",
+    "size": 13477,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:zbl08",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbl08.json",
+    "size": 11651,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:zlt11",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zlt11.json",
+    "size": 11176,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:zsl10",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zsl10.json",
+    "size": 8905,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ztd05",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ztd05.json",
+    "size": 12170,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ztz96a",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ztz96a.json",
+    "size": 15388,
+    "ok": true,
+    "parseError": null,
+    "modCount": 36,
+    "dollar": [
+      "$entity.getSourceAngle(source, 0.35) * damage"
+    ],
+    "angle": [
+      {
+        "m": 0.35,
+        "gate": null,
+        "raw": "$entity.getSourceAngle(source, 0.35) * damage"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "key": "dragonrise_reforge:ztz99a",
+    "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ztz99a.json",
+    "size": 13063,
+    "ok": false,
+    "parseError": "Unexpected token ']', ...\"n\",\n      ],\n      \"\"... is not valid JSON",
+    "modCount": null,
+    "dollar": [],
+    "angle": [],
+    "warnings": [
+      "JSON 解析失败: Unexpected token ']', ...\"n\",\n      ],\n      \"\"... is not valid JSON"
+    ]
+  },
+  {
+    "key": "fcp:bmp1am",
+    "rel": "kubejs/data/fcp/sbw/vehicles/bmp1am.json",
+    "size": 7878,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:bmp2",
+    "rel": "kubejs/data/fcp/sbw/vehicles/bmp2.json",
+    "size": 9367,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:bmp2d",
+    "rel": "kubejs/data/fcp/sbw/vehicles/bmp2d.json",
+    "size": 9365,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:bmp2m",
+    "rel": "kubejs/data/fcp/sbw/vehicles/bmp2m.json",
+    "size": 9368,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:btr80",
+    "rel": "kubejs/data/fcp/sbw/vehicles/btr80.json",
+    "size": 11663,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:btr82",
+    "rel": "kubejs/data/fcp/sbw/vehicles/btr82.json",
+    "size": 12318,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:gaz_tigr_gl",
+    "rel": "kubejs/data/fcp/sbw/vehicles/gaz_tigr_gl.json",
+    "size": 8245,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:gaz_tigr_mg",
+    "rel": "kubejs/data/fcp/sbw/vehicles/gaz_tigr_mg.json",
+    "size": 8179,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:gaz_tigr_rws",
+    "rel": "kubejs/data/fcp/sbw/vehicles/gaz_tigr_rws.json",
+    "size": 8218,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:humveem2",
+    "rel": "kubejs/data/fcp/sbw/vehicles/humveem2.json",
+    "size": 5258,
+    "ok": true,
+    "parseError": null,
+    "modCount": 25,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:matv",
+    "rel": "kubejs/data/fcp/sbw/vehicles/matv.json",
+    "size": 7667,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:matv_9in1",
+    "rel": "kubejs/data/fcp/sbw/vehicles/matv_9in1.json",
+    "size": 7392,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:matv_crow",
+    "rel": "kubejs/data/fcp/sbw/vehicles/matv_crow.json",
+    "size": 7526,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:matv_tow",
+    "rel": "kubejs/data/fcp/sbw/vehicles/matv_tow.json",
+    "size": 7549,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:stryker_dragoon",
+    "rel": "kubejs/data/fcp/sbw/vehicles/stryker_dragoon.json",
+    "size": 11604,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:stryker_m2",
+    "rel": "kubejs/data/fcp/sbw/vehicles/stryker_m2.json",
+    "size": 9670,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:stryker_mgs",
+    "rel": "kubejs/data/fcp/sbw/vehicles/stryker_mgs.json",
+    "size": 11375,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:stryker_mortar",
+    "rel": "kubejs/data/fcp/sbw/vehicles/stryker_mortar.json",
+    "size": 8064,
+    "ok": true,
+    "parseError": null,
+    "modCount": 34,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  },
+  {
+    "key": "fcp:t72av",
+    "rel": "kubejs/data/fcp/sbw/vehicles/t72av.json",
+    "size": 7055,
+    "ok": true,
+    "parseError": null,
+    "modCount": 26,
+    "dollar": [],
+    "angle": [],
+    "warnings": []
+  }
+]

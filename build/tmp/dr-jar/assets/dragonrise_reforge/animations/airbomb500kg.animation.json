@@ -1,0 +1,20 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.airbomb500kg.start": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.1,
+			"bones": {
+				"bomb": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.1": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.unknown.new": {
+			"loop": true
+		}
+	}
+}

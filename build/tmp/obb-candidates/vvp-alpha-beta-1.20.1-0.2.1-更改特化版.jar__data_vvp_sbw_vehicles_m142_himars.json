@@ -1,0 +1,272 @@
+{
+  "ID": "vvp:m142_himars",
+  "MaxHealth": 185,
+  "MaxEnergy": 5500000,
+  "OBB": [
+    {
+      "Size": [1.3792, 1.1005, 1.4465],
+      "Position": [-0.007, 2.5897, 3.119]
+    },
+    {
+      "Size": [1.4475, 0.2562, 4.3831],
+      "Position": [0.02, 1.2777, 0.0468]
+    },
+    {
+      "Size": [1.4452, 0.8665, 3.1154],
+      "Position": [0.0406, 0.6, 1.35],
+      "Part": "Turret",
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [1.2172, 0.7542, 2.8474],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [-1.1584, 0.7542, 2.8474],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [1.2172, 0.7542, -1.4241],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [1.2172, 0.7542, -3.0961],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [-1.1584, 0.7542, -1.4241],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.297, 0.7573, 0.7573],
+      "Position": [-1.1584, 0.7542, -3.0961],
+      "Part": "WheelRight"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [0.7181, 1.4673, 3.35],
+      "MinPitch": -45,
+      "MaxPitch": 45,
+      "MinYaw": -90,
+      "MaxYaw": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [1.9612, 1.3197, 2.55]
+      }
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [0.0264, 1.5987, 3.0774],
+      "MinPitch": -45,
+      "MaxPitch": 45,
+      "MinYaw": -90,
+      "MaxYaw": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [-2.223, 2.2577, 3.6939]
+      }
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [-0.7138, 1.3969, 3.3546],
+      "MinPitch": -45,
+      "MaxPitch": 45,
+      "MinYaw": -90,
+      "MaxYaw": 90,
+      "Weapons": ["GMLRS"],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [-2.1076, 2.3251, 4.2216]
+      }
+    }
+  ],
+  "TurretControllerIndex": 2,
+  "Weapons": {
+    "GMLRS": {
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": [
+        {
+          "Mode": "Semi",
+          "Name": "SINGLE"
+        },
+        {
+          "Mode": "Auto",
+          "Name": "RIPPLE",
+          "Override": {
+            "RPM": 75
+          }
+        },
+        {
+          "Mode": "Burst",
+          "Name": "SALVO",
+          "Override": {
+            "BurstAmount": 6,
+            "BurstCooldown": 70,
+            "RPM": 500
+          }
+        }
+      ],
+      "BurstAmount": 6,
+      "BurstCooldown": 70,
+      "DefaultZoom": 5,
+      "HeatPerShoot": 1.5,
+      "Spread": 0.25,
+      "CrosshairColor": "0xFFAA00",
+      "Name": "weapon.vvp.gmlrs_m31",
+      "AmmoType": [
+        {
+          "Ammo": "vvp:gmlrs_m31",
+          "ShouldUnload": false
+        },
+        {
+          "Ammo": "vvp:gmlrs_m30a1",
+          "ShouldUnload": false,
+          "Override": {
+            "Name": "weapon.vvp.gmlrs_m30a1",
+            "ShellType": "CM",
+            "SpreadAmount": 141,
+            "SpreadAngle": 83,
+            "Damage": 95,
+            "ExplosionDamage": 60,
+            "ExplosionRadius": 6.1
+          }
+        }
+      ],
+      "Projectile": "superbwarfare:medium_rocket",
+      "ShellType": "HE",
+      "Magazine": 6,
+      "EmptyReloadTime": 320,
+      "Damage": 280,
+      "ExplosionDamage": 200,
+      "ExplosionRadius": 17.6,
+      "Velocity": 20,
+      "Gravity": 0.08,
+      "RPM": 40,
+      "RecoilTime": 0,
+      "RecoilForce": 0,
+      "ShootShake": [5, 5, 10],
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [0.5143, 0.8057, 3.0804],
+          [0.0506, 0.8443, 3.048],
+          [-0.4177, 0.789, 3.1109],
+          [-0.4212, 0.4358, 3.028],
+          [0.0637, 0.4494, 3.0465],
+          [0.5033, 0.3796, 2.8966]
+        ],
+        "Directions": [
+          "Barrel",
+          "Barrel",
+          "Barrel",
+          "Barrel",
+          "Barrel",
+          "Barrel"
+        ],
+        "ViewDirection": "Barrel",
+        "BoundUpWithAmmoAmount": true
+      },
+      "Crosshair": "@VehicleCommonMissile",
+      "SoundInfo": {
+        "Fire1P": "vvp:rocket_sound",
+        "Fire3P": "superbwarfare:medium_rocket_fire",
+        "Fire3PFar": "vvp:tow_far",
+        "Fire3PVeryFar": "vvp:yx_100_veryfar",
+        "VehicleReload3p": "superbwarfare:medium_missile_reload",
+        "VehicleReloadSoundTime": 45
+      },
+      "SoundRadius": 128,
+      "Icon": "vvp:textures/screens/vehicle_weapon/himars_missile.png"
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 58,
+    "WheelRotSpeed": 1.05,
+    "WheelDifferential": 0.5,
+    "MaxForwardSpeedRate": 1.05,
+    "MaxBackwardSpeedRate": 0.45,
+    "Increment": 0.018,
+    "Decrement": 0.011,
+    "SteeringSpeed": 0.065,
+    "EngineSoundVolume": 0.65
+  },
+  "TurretPos": [0, 2.25, -3.05],
+  "TurretTurnSpeed": [14, 12],
+  "TurretYawRange": [-360, 360],
+  "TurretPitchRange": [-5, 60],
+  "BarrelPos": [0, 0.15, 0.4],
+  "ThirdPersonCameraPos": [0, 1.2, 5.5],
+  "UpStep": 1.4,
+  "RotateOffsetHeight": 2.3,
+  "Mass": 16.3,
+  "DamageModifiers": [
+    "minecraft:lava - -4",
+    "minecraft:lava * 4",
+    "All * 0.45",
+    "minecraft:arrow * 0.15",
+    "minecraft:trident * 0.3",
+    "minecraft:mob_attack * 0.35",
+    "minecraft:mob_attack_no_aggro * 0.35",
+    "minecraft:mob_projectile * 0.35",
+    "minecraft:player_attack * 0.35",
+    "minecraft:explosion * 5",
+    "minecraft:player_explosion * 5",
+    "superbwarfare:custom_explosion * 1.8",
+    "superbwarfare:projectile_explosion * 1.6",
+    "superbwarfare:mine * 0.6",
+    "superbwarfare:projectile_hit * 0.9",
+    "superbwarfare:grapeshot_hit * 0.2",
+    "#superbwarfare:projectile * 0.2",
+    "#superbwarfare:projectile_absolute * 0.75",
+    "superbwarfare:vehicle_strike * 0.8",
+    "@superbwarfare:cannon_shell * 0.55",
+    "@superbwarfare:small_cannon_shell * 0.7",
+    "@superbwarfare:gun_grenade * 1.2",
+    "@superbwarfare:mortar_shell * 1.8",
+    "@superbwarfare:wire_guide_missile * 0.9",
+    "@#superbwarfare:at_rocket * 1.1",
+    "All - 4"
+  ],
+  "VehicleContainerType": "Huge",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 140,
+    "ExplosionRadius": 4.5,
+    "ExplodeBlocks": false
+  },
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/truck_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/land.png",
+  "Type": "Artillery",
+  "CollisionLevel": {
+    "Level": 4,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true],
+      [0.15, 0.09, false],
+      [1, 0.3, false]
+    ]
+  },
+  "EngineSound": "superbwarfare:truck_engine",
+  "HornSound": "superbwarfare:truck_horn",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [1.15, 0, 3],
+    [-1.15, 0, 3],
+    [1.15, 0, -1],
+    [-1.15, 0, -1]
+  ],
+  "InertiaRotateRate": 0.75
+}

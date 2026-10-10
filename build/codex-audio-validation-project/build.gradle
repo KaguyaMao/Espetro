@@ -1,0 +1,337 @@
+buildscript {
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+group = mod_group_id
+version = mod_version
+
+base {
+    archivesName = mod_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    // The mappings can be changed at any time and must be in the following format.
+    // Channel:   Version:
+    // official   MCVersion             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
+    //
+    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
+    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+    //
+    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
+    // Additional setup is needed to use their mappings: https://parchmentmc.org/docs/getting-started
+    //
+    // Use non-default mappings at your own risk. They may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    mappings channel: mapping_channel, version: mapping_version
+
+    // Battlefield world rebuild needs access to MinecraftServer level map / storage.
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
+    // In most cases, it is not necessary to enable.
+    // enableEclipsePrepareRuns = true
+    enableIdeaPrepareRuns = true
+
+    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
+    // It is REQUIRED to be set to true for this template to function.
+    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+    copyIdeResources = true
+    runs {
+        // Allows isolated fixture/server runs without touching the tracked run/
+        // directory: ./gradlew runServer -PespetroRunDir=/tmp/example
+        def espetroRunDir = providers.gradleProperty('espetroRunDir').orElse('run').get()
+        // applies to all the run configs below
+        configureEach {
+            workingDirectory project.file(espetroRunDir)
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', mod_id
+
+            // Hybrid GPU workaround (Intel + broken/mismatched NVIDIA userspace):
+            // force Mesa / Intel so GLFW can create an OpenGL context.
+            // Safe no-op on pure Intel/AMD; override by unsetting env in the IDE if needed.
+            environment '__GLX_VENDOR_LIBRARY_NAME', 'mesa'
+            environment 'DRI_PRIME', '1'
+            environment '__EGL_VENDOR_LIBRARY_FILENAMES', '/usr/share/glvnd/egl_vendor.d/50_mesa.json'
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        data {
+            // example of overriding the workingDirectory set in configureEach above
+            workingDirectory project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.java.exclude 'com/example/hcrpoints/**'
+sourceSets.main.resources.exclude 'assets/hcrpoints/**'
+sourceSets.main.resources.exclude 'data/hcrpoints/**'
+
+repositories {
+    flatDir {
+        // 本地 ESPoints 与可选的 OELib/AuraTip 开发 jar
+        dirs '../../../IdeaProjects/espetro-HCR/build/libs'
+        dirs 'run/mods'
+    }
+    maven {
+        name = 'LatvianMods'
+        url = 'https://maven.latvian.dev/releases'
+        content {
+            includeGroup 'dev.latvian.mods'
+            includeGroup 'dev.latvian.apps'
+        }
+    }
+    maven {
+        name = 'Architectury'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup 'dev.architectury'
+        }
+    }
+    maven {
+        name = 'Sighs Releases'
+        url = 'https://maven.sighs.cc/repository/maven-releases/'
+        content {
+            includeGroup 'cc.sighs.auratip'
+            includeGroup 'cc.sighs.oelib'
+        }
+    }
+    repositories {
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf("curse.maven:mutil-351914:7772906")
+    implementation fg.deobf("cc.sighs.oelib:OELib-forge-1.20.1:${oelib_version}")
+    implementation fg.deobf("cc.sighs.auratip:auratip-forge-1.20.1:${auratip_version}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+
+    // ESPoints depends on Espetro, so Espetro integrates through reflection.
+    // Keep the sibling jar opt-in: older ESPoints builds still require AuraTip
+    // and must not silently make Espetro's standalone dev server fail.
+    def localEspointsJar = file("../../../IdeaProjects/espetro-HCR/build/libs/espoints-${espoints_version}.jar")
+    def includeLocalEspoints = providers.gradleProperty("espetroIncludeLocalEspoints")
+        .map { it.toBoolean() }
+        .getOrElse(false)
+    if (includeLocalEspoints && localEspointsJar.exists()) {
+        runtimeOnly fg.deobf("local:espoints:${espoints_version}")
+    }
+
+    // SBW 仅编译 mixin 目标；运行时软依赖。DragonRise/FCP 载具继承 SBW VehicleEntity。
+    compileOnly fg.deobf("curse.maven:superb-warfare-1218165:8104849")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // 单元测试：仅用于不依赖运行时 Minecraft 服务端的纯解析器测试。
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showStandardStreams = true
+    }
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+                             forge_version       : forge_version, forge_version_range: forge_version_range,
+                             loader_version_range: loader_version_range,
+                             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+                             mod_authors         : mod_authors, mod_description: mod_description,
+                             espoints_version    : espoints_version, rhino_version: rhino_version,
+                             architectury_version: architectury_version, kubejs_version: kubejs_version,
+                             oelib_version       : oelib_version,
+                             auratip_version     : auratip_version,
+                             pingwheel_version   : pingwheel_version,]
+
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    exclude 'com/example/hcrpoints/**'
+    exclude 'assets/hcrpoints/**'
+    exclude 'data/hcrpoints/**'
+
+    manifest {
+        attributes(["Specification-Title"     : mod_id,
+                    "Specification-Vendor"    : mod_authors,
+                    "Specification-Version"   : "1", // We are version 1 of ourselves
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : project.jar.archiveVersion,
+                    "Implementation-Vendor"   : mod_authors,
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs"            : "${mod_id}.mixins.json"])
+    }
+
+    // This is the preferred method to reobfuscate your jar file
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.compilerArgs << '-Xlint:-removal' << '-Xlint:-dep-ann'
+}
+
+/**
+ * 同步开发用前置到 run/mods。
+ * <p>
+ * userdev 必须用 ForgeGradle {@code fg.deobf} 产物（official 映射），
+ * 不能把整合包里的生产 reobf jar 丢进 run/mods，否则 KubeJS 等 mixin 会因
+ * SRG 方法名对不上而在 BootstrapLauncher 阶段崩溃。
+ * <p>
+ * 默认：从 runtimeClasspath 复制已 deobf 的 mutil/oelib/auratip/rhino/architectury/kubejs。
+ * 可选：{@code -PespetroDevModsSource=/path/to/mods} 仅在明确需要生产 jar 时使用（非 userdev）。
+ */
+tasks.register('syncRunMods') {
+    group = 'espetro'
+    description = 'Sync deobf runtime deps into run/mods for Forge userdev'
+    doLast {
+        def destDir = file('run/mods')
+        destDir.mkdirs()
+        destDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.each { it.delete() }
+
+        def explicitSource = providers.gradleProperty('espetroDevModsSource').orNull
+        if (explicitSource != null) {
+            def sourceDir = file(explicitSource)
+            if (!sourceDir.exists()) {
+                throw new GradleException("前置源目录不存在: ${sourceDir}")
+            }
+            logger.warn("syncRunMods: 使用生产 jar 源 {}（勿用于 userdev runClient）", sourceDir)
+            def patterns = [~/mutil-.*\.jar/, ~/OELib-.*\.jar/, ~/oelib-.*\.jar/,
+                            ~/.*auratip.*\.jar/, ~/rhino-.*\.jar/, ~/architectury-.*\.jar/, ~/kubejs-.*\.jar/]
+            int n = 0
+            sourceDir.listFiles()?.each { File f ->
+                if (!f.isFile() || !f.name.endsWith('.jar')) return
+                if (!patterns.any { f.name ==~ it }) return
+                def name = f.name.toLowerCase().contains('auratip')
+                    ? "auratip-forge-1.20.1-${auratip_version}.jar" : f.name
+                java.nio.file.Files.copy(f.toPath(), new File(destDir, name).toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                n++
+            }
+            logger.lifecycle("syncRunMods: 从外部目录复制了 ${n} 个 jar")
+            return
+        }
+
+        def wanted = ['mutil', 'oelib', 'auratip', 'rhino', 'architectury', 'kubejs']
+        int copied = 0
+        configurations.runtimeClasspath.files.findAll { File f ->
+            def n = f.name.toLowerCase()
+            n.endsWith('.jar') && !n.contains('sources') && !n.contains('javadoc') &&
+                wanted.any { n.contains(it) }
+        }.each { File f ->
+            // 去重：同一前缀只保留一个（优先 mapped_official）
+            project.copy {
+                from f
+                into destDir
+            }
+            logger.lifecycle("syncRunMods(deobf): ${f.name}")
+            copied++
+        }
+        if (copied == 0) {
+            throw new GradleException("runtimeClasspath 中未找到前置 jar，请先成功解析 dependencies")
+        }
+        logger.lifecycle("syncRunMods: 已同步 ${copied} 个 deobf jar 到 ${destDir}")
+    }
+}
+
+// userdev 启动前确保 run/mods 为 deobf 前置
+['runClient', 'runServer', 'prepareRunClient', 'prepareRunServer'].each { taskName ->
+    tasks.matching { it.name == taskName }.configureEach {
+        dependsOn 'syncRunMods'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            groupId = project.group
+            artifactId = mod_id
+            version = project.version
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}

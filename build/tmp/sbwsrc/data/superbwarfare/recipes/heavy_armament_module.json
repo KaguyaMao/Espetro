@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:cannon_core"
+    },
+    "b": {
+      "item": "superbwarfare:legendary_material_pack"
+    },
+    "c": {
+      "item": "superbwarfare:medium_armament_module"
+    },
+    "d": {
+      "tag": "forge:ingots/netherite"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "abc",
+    "ddd"
+  ],
+  "result": {
+    "item": "superbwarfare:heavy_armament_module"
+  },
+  "show_notification": true
+}

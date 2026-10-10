@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:leopard_2a7v",
+  "Model": {
+    "Model": "vvp:geo/leopard_2a7v.geo.json",
+    "Texture": "vvp:textures/entity/leopard_2a7v_camo.png"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:ac130",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ac130.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ac130.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ac130.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ac130.png"
+                   }
+               ]
+}

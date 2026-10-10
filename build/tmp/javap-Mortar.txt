@@ -1,0 +1,1036 @@
+Compiled from "MortarShellEntity.kt"
+public class com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity extends com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile implements com.atsuishio.superbwarfare.entity.projectile.BasicGeoProjectileEntity {
+  private com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity$Type type;
+
+  private int smokeCount;
+
+  private net.minecraft.world.item.alchemy.Potion potion;
+
+  private float red;
+
+  private float green;
+
+  private float blue;
+
+  public final float getRed();
+    Code:
+       0: aload_0
+       1: getfield      #116                // Field red:F
+       4: freturn
+
+  public final float getGreen();
+    Code:
+       0: aload_0
+       1: getfield      #119                // Field green:F
+       4: freturn
+
+  public final float getBlue();
+    Code:
+       0: aload_0
+       1: getfield      #121                // Field blue:F
+       4: freturn
+
+  public com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity(net.minecraft.world.entity.EntityType<? extends com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity>, net.minecraft.world.level.Level);
+    Code:
+       0: aload_1
+       1: ldc           #123                // String type
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_2
+       7: ldc           #130                // String level
+       9: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: aload_0
+      13: aload_1
+      14: aload_2
+      15: invokespecial #132                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile."<init>":(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+      18: aload_0
+      19: getstatic     #135                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.NORMAL:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      22: putfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      25: aload_0
+      26: bipush        12
+      28: putfield      #139                // Field smokeCount:I
+      31: aload_0
+      32: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      35: dup
+      36: ldc           #146                // String EMPTY
+      38: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      41: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      44: aload_0
+      45: fconst_1
+      46: putfield      #116                // Field red:F
+      49: aload_0
+      50: fconst_1
+      51: putfield      #119                // Field green:F
+      54: aload_0
+      55: fconst_1
+      56: putfield      #121                // Field blue:F
+      59: nop
+      60: aload_0
+      61: ldc           #152                // float 60.0f
+      63: invokevirtual #156                // Method setDamageValue:(F)V
+      66: aload_0
+      67: ldc           #157                // float 100.0f
+      69: invokevirtual #160                // Method setExplosionDamageValue:(F)V
+      72: aload_0
+      73: ldc           #161                // float 8.0f
+      75: invokevirtual #164                // Method setExplosionRadiusValue:(F)V
+      78: nop
+      79: return
+
+  public com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity(net.minecraft.world.entity.EntityType<? extends com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity>, double, double, double, net.minecraft.world.level.Level, float);
+    Code:
+       0: aload_1
+       1: ldc           #123                // String type
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload         8
+       8: ldc           #130                // String level
+      10: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      13: aload_0
+      14: aload_1
+      15: dload_2
+      16: dload         4
+      18: dload         6
+      20: aload         8
+      22: invokespecial #168                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile."<init>":(Lnet/minecraft/world/entity/EntityType;DDDLnet/minecraft/world/level/Level;)V
+      25: aload_0
+      26: getstatic     #135                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.NORMAL:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      29: putfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      32: aload_0
+      33: bipush        12
+      35: putfield      #139                // Field smokeCount:I
+      38: aload_0
+      39: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      42: dup
+      43: ldc           #146                // String EMPTY
+      45: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      48: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      51: aload_0
+      52: fconst_1
+      53: putfield      #116                // Field red:F
+      56: aload_0
+      57: fconst_1
+      58: putfield      #119                // Field green:F
+      61: aload_0
+      62: fconst_1
+      63: putfield      #121                // Field blue:F
+      66: nop
+      67: aload_0
+      68: ldc           #152                // float 60.0f
+      70: invokevirtual #156                // Method setDamageValue:(F)V
+      73: aload_0
+      74: ldc           #157                // float 100.0f
+      76: invokevirtual #160                // Method setExplosionDamageValue:(F)V
+      79: aload_0
+      80: ldc           #161                // float 8.0f
+      82: invokevirtual #164                // Method setExplosionRadiusValue:(F)V
+      85: nop
+      86: aload_0
+      87: fload         9
+      89: invokevirtual #171                // Method setGravityValue:(F)V
+      92: return
+
+  public com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity(net.minecraft.world.entity.LivingEntity, net.minecraft.world.level.Level, float, float, float);
+    Code:
+       0: aload_2
+       1: ldc           #130                // String level
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_0
+       7: getstatic     #178                // Field com/atsuishio/superbwarfare/init/ModEntities.MORTAR_SHELL:Lnet/minecraftforge/registries/RegistryObject;
+      10: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+      13: dup
+      14: ldc           #186                // String get(...)
+      16: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      19: checkcast     #188                // class net/minecraft/world/entity/EntityType
+      22: aload_1
+      23: checkcast     #190                // class net/minecraft/world/entity/Entity
+      26: aload_2
+      27: invokespecial #193                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile."<init>":(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/Level;)V
+      30: aload_0
+      31: getstatic     #135                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.NORMAL:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      34: putfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      37: aload_0
+      38: bipush        12
+      40: putfield      #139                // Field smokeCount:I
+      43: aload_0
+      44: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      47: dup
+      48: ldc           #146                // String EMPTY
+      50: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      53: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      56: aload_0
+      57: fconst_1
+      58: putfield      #116                // Field red:F
+      61: aload_0
+      62: fconst_1
+      63: putfield      #119                // Field green:F
+      66: aload_0
+      67: fconst_1
+      68: putfield      #121                // Field blue:F
+      71: nop
+      72: aload_0
+      73: ldc           #152                // float 60.0f
+      75: invokevirtual #156                // Method setDamageValue:(F)V
+      78: aload_0
+      79: ldc           #157                // float 100.0f
+      81: invokevirtual #160                // Method setExplosionDamageValue:(F)V
+      84: aload_0
+      85: ldc           #161                // float 8.0f
+      87: invokevirtual #164                // Method setExplosionRadiusValue:(F)V
+      90: nop
+      91: aload_0
+      92: fload_3
+      93: invokevirtual #156                // Method setDamageValue:(F)V
+      96: aload_0
+      97: fload         4
+      99: invokevirtual #160                // Method setExplosionDamageValue:(F)V
+     102: aload_0
+     103: fload         5
+     105: invokevirtual #164                // Method setExplosionRadiusValue:(F)V
+     108: return
+
+  public void setRGB(float[]);
+    Code:
+       0: aload_1
+       1: ldc           #195                // String rgb
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_0
+       7: aload_1
+       8: iconst_0
+       9: faload
+      10: ldc           #196                // float 255.0f
+      12: fdiv
+      13: putfield      #116                // Field red:F
+      16: aload_0
+      17: aload_1
+      18: iconst_1
+      19: faload
+      20: ldc           #196                // float 255.0f
+      22: fdiv
+      23: putfield      #119                // Field green:F
+      26: aload_0
+      27: aload_1
+      28: iconst_2
+      29: faload
+      30: ldc           #196                // float 255.0f
+      32: fdiv
+      33: putfield      #121                // Field blue:F
+      36: return
+
+  public final void setEffectsFromItem(net.minecraft.world.item.ItemStack);
+    Code:
+       0: aload_1
+       1: ldc           #199                // String pStack
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_1
+       7: getstatic     #204                // Field com/atsuishio/superbwarfare/init/ModItems.POTION_MORTAR_SHELL:Lnet/minecraftforge/registries/RegistryObject;
+      10: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+      13: checkcast     #206                // class net/minecraft/world/item/Item
+      16: invokevirtual #212                // Method net/minecraft/world/item/ItemStack.m_150930_:(Lnet/minecraft/world/item/Item;)Z
+      19: ifeq          93
+      22: aload_0
+      23: aload_1
+      24: invokestatic  #218                // Method net/minecraft/world/item/alchemy/PotionUtils.m_43579_:(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/alchemy/Potion;
+      27: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      30: aload_1
+      31: invokestatic  #222                // Method net/minecraft/world/item/alchemy/PotionUtils.m_43571_:(Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;
+      34: astore_2
+      35: aload_2
+      36: invokeinterface #228,  1          // InterfaceMethod java/util/List.isEmpty:()Z
+      41: ifne          109
+      44: aload_2
+      45: invokeinterface #232,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      50: astore_3
+      51: aload_3
+      52: invokeinterface #237,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      57: ifeq          109
+      60: aload_3
+      61: invokeinterface #240,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      66: checkcast     #242                // class net/minecraft/world/effect/MobEffectInstance
+      69: astore        4
+      71: aload_0
+      72: invokevirtual #246                // Method getEffectsValue:()Ljava/util/Set;
+      75: new           #242                // class net/minecraft/world/effect/MobEffectInstance
+      78: dup
+      79: aload         4
+      81: invokespecial #249                // Method net/minecraft/world/effect/MobEffectInstance."<init>":(Lnet/minecraft/world/effect/MobEffectInstance;)V
+      84: invokeinterface #255,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+      89: pop
+      90: goto          51
+      93: aload_0
+      94: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      97: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+     100: aload_0
+     101: invokevirtual #246                // Method getEffectsValue:()Ljava/util/Set;
+     104: invokeinterface #259,  1          // InterfaceMethod java/util/Set.clear:()V
+     109: return
+
+  public void setType(com.atsuishio.superbwarfare.entity.projectile.MortarShellEntity$Type);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+       5: aload_1
+       6: getstatic     #267                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.SMOKE:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+       9: if_acmpne     36
+      12: aload_0
+      13: aload_0
+      14: invokevirtual #270                // Method getDamageValue:()F
+      17: ldc_w         #271                // float 10.0f
+      20: fdiv
+      21: invokevirtual #156                // Method setDamageValue:(F)V
+      24: aload_0
+      25: aload_0
+      26: invokevirtual #274                // Method getExplosionDamageValue:()F
+      29: ldc_w         #271                // float 10.0f
+      32: fdiv
+      33: invokevirtual #160                // Method setExplosionDamageValue:(F)V
+      36: return
+
+  protected net.minecraft.world.item.Item m_7881_();
+    Code:
+       0: getstatic     #277                // Field com/atsuishio/superbwarfare/init/ModItems.MORTAR_SHELL:Lnet/minecraftforge/registries/RegistryObject;
+       3: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+       6: dup
+       7: ldc           #186                // String get(...)
+       9: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: checkcast     #206                // class net/minecraft/world/item/Item
+      15: areturn
+
+  public void m_7380_(net.minecraft.nbt.CompoundTag);
+    Code:
+       0: aload_1
+       1: ldc_w         #280                // String compound
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: aload_1
+       9: invokespecial #282                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_7380_:(Lnet/minecraft/nbt/CompoundTag;)V
+      12: aload_0
+      13: getfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      16: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      19: if_acmpeq     50
+      22: aload_1
+      23: ldc_w         #284                // String Potion
+      26: getstatic     #290                // Field net/minecraftforge/registries/ForgeRegistries.POTIONS:Lnet/minecraftforge/registries/IForgeRegistry;
+      29: aload_0
+      30: getfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      33: invokeinterface #296,  2          // InterfaceMethod net/minecraftforge/registries/IForgeRegistry.getKey:(Ljava/lang/Object;)Lnet/minecraft/resources/ResourceLocation;
+      38: ldc_w         #298                // String empty
+      41: invokestatic  #304                // Method java/util/Objects.requireNonNullElse:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      44: invokestatic  #310                // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+      47: invokevirtual #316                // Method net/minecraft/nbt/CompoundTag.m_128359_:(Ljava/lang/String;Ljava/lang/String;)V
+      50: aload_1
+      51: ldc_w         #318                // String RColor
+      54: aload_0
+      55: getfield      #116                // Field red:F
+      58: invokevirtual #322                // Method net/minecraft/nbt/CompoundTag.m_128350_:(Ljava/lang/String;F)V
+      61: aload_1
+      62: ldc_w         #324                // String GColor
+      65: aload_0
+      66: getfield      #119                // Field green:F
+      69: invokevirtual #322                // Method net/minecraft/nbt/CompoundTag.m_128350_:(Ljava/lang/String;F)V
+      72: aload_1
+      73: ldc_w         #326                // String BColor
+      76: aload_0
+      77: getfield      #121                // Field blue:F
+      80: invokevirtual #322                // Method net/minecraft/nbt/CompoundTag.m_128350_:(Ljava/lang/String;F)V
+      83: return
+
+  public void m_7378_(net.minecraft.nbt.CompoundTag);
+    Code:
+       0: aload_1
+       1: ldc_w         #280                // String compound
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: aload_1
+       9: invokespecial #329                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_7378_:(Lnet/minecraft/nbt/CompoundTag;)V
+      12: aload_1
+      13: ldc_w         #284                // String Potion
+      16: bipush        8
+      18: invokevirtual #333                // Method net/minecraft/nbt/CompoundTag.m_128425_:(Ljava/lang/String;I)Z
+      21: ifeq          32
+      24: aload_0
+      25: aload_1
+      26: invokestatic  #337                // Method net/minecraft/world/item/alchemy/PotionUtils.m_43577_:(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/item/alchemy/Potion;
+      29: putfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      32: aload_1
+      33: ldc_w         #318                // String RColor
+      36: invokevirtual #341                // Method net/minecraft/nbt/CompoundTag.m_128441_:(Ljava/lang/String;)Z
+      39: ifeq          53
+      42: aload_0
+      43: aload_1
+      44: ldc_w         #318                // String RColor
+      47: invokevirtual #345                // Method net/minecraft/nbt/CompoundTag.m_128457_:(Ljava/lang/String;)F
+      50: putfield      #116                // Field red:F
+      53: aload_1
+      54: ldc_w         #324                // String GColor
+      57: invokevirtual #341                // Method net/minecraft/nbt/CompoundTag.m_128441_:(Ljava/lang/String;)Z
+      60: ifeq          74
+      63: aload_0
+      64: aload_1
+      65: ldc_w         #324                // String GColor
+      68: invokevirtual #345                // Method net/minecraft/nbt/CompoundTag.m_128457_:(Ljava/lang/String;)F
+      71: putfield      #119                // Field green:F
+      74: aload_1
+      75: ldc_w         #326                // String BColor
+      78: invokevirtual #341                // Method net/minecraft/nbt/CompoundTag.m_128441_:(Ljava/lang/String;)Z
+      81: ifeq          95
+      84: aload_0
+      85: aload_1
+      86: ldc_w         #326                // String BColor
+      89: invokevirtual #345                // Method net/minecraft/nbt/CompoundTag.m_128457_:(Ljava/lang/String;)F
+      92: putfield      #121                // Field blue:F
+      95: return
+
+  public void afterHitEntity(net.minecraft.world.phys.EntityHitResult);
+    Code:
+       0: aload_1
+       1: ldc_w         #347                // String result
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: getfield      #352                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+      11: iconst_1
+      12: if_icmpgt     16
+      15: return
+      16: aload_0
+      17: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+      20: ifnonnull     24
+      23: return
+      24: aload_0
+      25: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+      28: invokevirtual #365                // Method net/minecraft/world/level/Level.m_5776_:()Z
+      31: ifne          147
+      34: aload_0
+      35: getfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      38: dup
+      39: ifnonnull     47
+      42: pop
+      43: iconst_m1
+      44: goto          55
+      47: getstatic     #369                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$WhenMappings.$EnumSwitchMapping$0:[I
+      50: swap
+      51: invokevirtual #373                // Method com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.ordinal:()I
+      54: iaload
+      55: tableswitch   { // 1 to 2
+
+                     1: 76
+
+                     2: 102
+               default: 106
+          }
+      76: aload_0
+      77: aload_1
+      78: invokevirtual #379                // Method net/minecraft/world/phys/EntityHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+      81: dup
+      82: ldc_w         #381                // String getLocation(...)
+      85: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      88: aload_0
+      89: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+      92: dup
+      93: invokestatic  #385                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+      96: invokevirtual #388                // Method causeWPEffect:(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/Entity;)V
+      99: goto          106
+     102: aload_0
+     103: invokevirtual #390                // Method releaseSmoke:()V
+     106: aload_0
+     107: aload_1
+     108: invokevirtual #379                // Method net/minecraft/world/phys/EntityHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+     111: dup
+     112: ldc_w         #381                // String getLocation(...)
+     115: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     118: invokevirtual #394                // Method causeExplode:(Lnet/minecraft/world/phys/Vec3;)V
+     121: aload_0
+     122: aload_0
+     123: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+     126: dup
+     127: ldc_w         #396                // String level(...)
+     130: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     133: aload_1
+     134: invokevirtual #379                // Method net/minecraft/world/phys/EntityHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+     137: dup
+     138: ldc_w         #381                // String getLocation(...)
+     141: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     144: invokevirtual #399                // Method createAreaCloud:(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;)V
+     147: aload_0
+     148: invokevirtual #402                // Method m_146870_:()V
+     151: return
+
+  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult);
+    Code:
+       0: aload_1
+       1: ldc_w         #347                // String result
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+      11: invokevirtual #365                // Method net/minecraft/world/level/Level.m_5776_:()Z
+      14: ifne          98
+      17: aload_0
+      18: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+      21: ifnull        98
+      24: aload_0
+      25: getfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      28: dup
+      29: ifnonnull     37
+      32: pop
+      33: iconst_m1
+      34: goto          45
+      37: getstatic     #369                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$WhenMappings.$EnumSwitchMapping$0:[I
+      40: swap
+      41: invokevirtual #373                // Method com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.ordinal:()I
+      44: iaload
+      45: tableswitch   { // 1 to 2
+
+                     1: 68
+
+                     2: 94
+               default: 98
+          }
+      68: aload_0
+      69: aload_1
+      70: invokevirtual #406                // Method net/minecraft/world/phys/BlockHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+      73: dup
+      74: ldc_w         #381                // String getLocation(...)
+      77: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      80: aload_0
+      81: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+      84: dup
+      85: invokestatic  #385                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+      88: invokevirtual #388                // Method causeWPEffect:(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/Entity;)V
+      91: goto          98
+      94: aload_0
+      95: invokevirtual #390                // Method releaseSmoke:()V
+      98: aload_0
+      99: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+     102: invokevirtual #365                // Method net/minecraft/world/level/Level.m_5776_:()Z
+     105: ifne          157
+     108: aload_0
+     109: getfield      #352                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+     112: iconst_1
+     113: if_icmple     157
+     116: aload_0
+     117: aload_1
+     118: invokevirtual #406                // Method net/minecraft/world/phys/BlockHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+     121: dup
+     122: ldc_w         #381                // String getLocation(...)
+     125: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     128: invokevirtual #394                // Method causeExplode:(Lnet/minecraft/world/phys/Vec3;)V
+     131: aload_0
+     132: aload_0
+     133: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+     136: dup
+     137: ldc_w         #396                // String level(...)
+     140: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     143: aload_1
+     144: invokevirtual #406                // Method net/minecraft/world/phys/BlockHitResult.m_82450_:()Lnet/minecraft/world/phys/Vec3;
+     147: dup
+     148: ldc_w         #381                // String getLocation(...)
+     151: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     154: invokevirtual #399                // Method createAreaCloud:(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;)V
+     157: aload_0
+     158: invokevirtual #402                // Method m_146870_:()V
+     161: return
+
+  public void causeWPEffect(net.minecraft.world.phys.Vec3, net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_1
+       1: ldc_w         #407                // String pos
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_2
+       8: ldc_w         #408                // String shooter
+      11: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      14: aload_0
+      15: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+      18: instanceof    #410                // class net/minecraft/server/level/ServerLevel
+      21: ifeq          205
+      24: new           #95                 // class com/atsuishio/superbwarfare/tools/SeekTool$Builder
+      27: dup
+      28: aload_2
+      29: iconst_0
+      30: iconst_2
+      31: aconst_null
+      32: invokespecial #413                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder."<init>":(Lnet/minecraft/world/entity/Entity;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+      35: aload_1
+      36: aload_0
+      37: invokevirtual #416                // Method getExplosionRadiusValue:()F
+      40: f2d
+      41: invokevirtual #420                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder.withinRange:(Lnet/minecraft/world/phys/Vec3;D)Lcom/atsuishio/superbwarfare/tools/SeekTool$Builder;
+      44: invokevirtual #424                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder.notItsVehicle:()Lcom/atsuishio/superbwarfare/tools/SeekTool$Builder;
+      47: invokevirtual #427                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder.baseFilter:()Lcom/atsuishio/superbwarfare/tools/SeekTool$Builder;
+      50: invokevirtual #430                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder.noVehicle:()Lcom/atsuishio/superbwarfare/tools/SeekTool$Builder;
+      53: invokevirtual #434                // Method com/atsuishio/superbwarfare/tools/SeekTool$Builder.build:()Ljava/util/List;
+      56: astore_3
+      57: aload_3
+      58: checkcast     #436                // class java/lang/Iterable
+      61: invokestatic  #442                // Method kotlin/collections/CollectionsKt.asSequence:(Ljava/lang/Iterable;)Lkotlin/sequences/Sequence;
+      64: invokedynamic #462,  0            // InvokeDynamic #0:invoke:()Lkotlin/jvm/functions/Function1;
+      69: invokestatic  #468                // Method kotlin/sequences/SequencesKt.filter:(Lkotlin/sequences/Sequence;Lkotlin/jvm/functions/Function1;)Lkotlin/sequences/Sequence;
+      72: astore        4
+      74: nop
+      75: iconst_0
+      76: istore        5
+      78: aload         4
+      80: invokeinterface #471,  1          // InterfaceMethod kotlin/sequences/Sequence.iterator:()Ljava/util/Iterator;
+      85: astore        6
+      87: aload         6
+      89: invokeinterface #237,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      94: ifeq          204
+      97: aload         6
+      99: invokeinterface #240,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     104: astore        7
+     106: aload         7
+     108: checkcast     #190                // class net/minecraft/world/entity/Entity
+     111: astore        8
+     113: iconst_0
+     114: istore        9
+     116: aload_1
+     117: aload         8
+     119: invokevirtual #476                // Method net/minecraft/world/entity/Entity.m_20182_:()Lnet/minecraft/world/phys/Vec3;
+     122: invokevirtual #480                // Method net/minecraft/world/phys/Vec3.m_82554_:(Lnet/minecraft/world/phys/Vec3;)D
+     125: dstore        10
+     127: aload_0
+     128: aload         8
+     130: aload_1
+     131: invokevirtual #484                // Method checkNoClip:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;)Z
+     134: ifeq          200
+     137: aload         8
+     139: ldc_w         #486                // String null cannot be cast to non-null type net.minecraft.world.entity.LivingEntity
+     142: invokestatic  #488                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;Ljava/lang/String;)V
+     145: aload         8
+     147: checkcast     #490                // class net/minecraft/world/entity/LivingEntity
+     150: new           #242                // class net/minecraft/world/effect/MobEffectInstance
+     153: dup
+     154: getstatic     #495                // Field com/atsuishio/superbwarfare/init/ModMobEffects.PHOSPHORUS_FIRE:Lnet/minecraftforge/registries/RegistryObject;
+     157: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+     160: checkcast     #497                // class net/minecraft/world/effect/MobEffect
+     163: sipush        300
+     166: i2d
+     167: bipush        30
+     169: i2d
+     170: dload         10
+     172: dmul
+     173: dsub
+     174: d2i
+     175: aload_0
+     176: invokevirtual #416                // Method getExplosionRadiusValue:()F
+     179: f2d
+     180: dload         10
+     182: dsub
+     183: dconst_0
+     184: invokestatic  #503                // Method java/lang/Math.max:(DD)D
+     187: d2i
+     188: invokespecial #506                // Method net/minecraft/world/effect/MobEffectInstance."<init>":(Lnet/minecraft/world/effect/MobEffect;II)V
+     191: aload_0
+     192: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+     195: invokevirtual #510                // Method net/minecraft/world/entity/LivingEntity.m_147207_:(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z
+     198: pop
+     199: nop
+     200: nop
+     201: goto          87
+     204: nop
+     205: return
+
+  public void releaseSmoke();
+    Code:
+       0: aload_0
+       1: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+       4: astore_1
+       5: aload_1
+       6: instanceof    #410                // class net/minecraft/server/level/ServerLevel
+       9: ifeq          162
+      12: new           #473                // class net/minecraft/world/phys/Vec3
+      15: dup
+      16: dconst_1
+      17: ldc2_w        #522                // double 0.05d
+      20: dconst_0
+      21: invokespecial #526                // Method net/minecraft/world/phys/Vec3."<init>":(DDD)V
+      24: astore_2
+      25: iconst_0
+      26: istore_3
+      27: aload_0
+      28: getfield      #139                // Field smokeCount:I
+      31: istore        4
+      33: iload_3
+      34: iload         4
+      36: if_icmpge     162
+      39: new           #528                // class com/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity
+      42: dup
+      43: getstatic     #531                // Field com/atsuishio/superbwarfare/init/ModEntities.SMOKE_DECOY:Lnet/minecraftforge/registries/RegistryObject;
+      46: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+      49: dup
+      50: ldc           #186                // String get(...)
+      52: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      55: checkcast     #188                // class net/minecraft/world/entity/EntityType
+      58: aload_1
+      59: iconst_1
+      60: invokespecial #534                // Method com/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity."<init>":(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Z)V
+      63: aload_0
+      64: getfield      #116                // Field red:F
+      67: aload_0
+      68: getfield      #119                // Field green:F
+      71: aload_0
+      72: getfield      #121                // Field blue:F
+      75: invokevirtual #538                // Method com/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity.setColor:(FFF)Lcom/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity;
+      78: astore        5
+      80: aload         5
+      82: aload_0
+      83: invokevirtual #542                // Method m_20185_:()D
+      86: aload_0
+      87: invokevirtual #545                // Method m_20186_:()D
+      90: aload_0
+      91: invokevirtual #548                // Method m_20206_:()F
+      94: f2d
+      95: dadd
+      96: aload_0
+      97: invokevirtual #551                // Method m_20189_:()D
+     100: invokevirtual #554                // Method com/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity.m_6034_:(DDD)V
+     103: aload         5
+     105: aload_0
+     106: checkcast     #190                // class net/minecraft/world/entity/Entity
+     109: aload_2
+     110: iload_3
+     111: i2f
+     112: ldc_w         #555                // float 360.0f
+     115: aload_0
+     116: getfield      #139                // Field smokeCount:I
+     119: i2f
+     120: fdiv
+     121: fmul
+     122: ldc_w         #556                // float 0.017453292f
+     125: fmul
+     126: invokevirtual #560                // Method net/minecraft/world/phys/Vec3.m_82524_:(F)Lnet/minecraft/world/phys/Vec3;
+     129: dup
+     130: ldc_w         #562                // String yRot(...)
+     133: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     136: fconst_2
+     137: ldc_w         #563                // float 5.0f
+     140: invokevirtual #567                // Method com/atsuishio/superbwarfare/entity/projectile/SmokeDecoyEntity.decoyShoot:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;FF)V
+     143: aload_1
+     144: checkcast     #410                // class net/minecraft/server/level/ServerLevel
+     147: aload         5
+     149: checkcast     #190                // class net/minecraft/world/entity/Entity
+     152: invokevirtual #570                // Method net/minecraft/server/level/ServerLevel.m_7967_:(Lnet/minecraft/world/entity/Entity;)Z
+     155: pop
+     156: iinc          3, 1
+     159: goto          33
+     162: return
+
+  public boolean forceLoadChunk();
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public void m_8119_();
+    Code:
+       0: aload_0
+       1: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+       4: astore_1
+       5: aload_0
+       6: getfield      #352                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19797_:I
+       9: aload_0
+      10: invokevirtual #578                // Method getLife:()I
+      13: if_icmple     39
+      16: aload_1
+      17: instanceof    #410                // class net/minecraft/server/level/ServerLevel
+      20: ifeq          39
+      23: aload_0
+      24: aload_1
+      25: aload_0
+      26: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      29: dup
+      30: ldc_w         #581                // String position(...)
+      33: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      36: invokevirtual #399                // Method createAreaCloud:(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;)V
+      39: aload_0
+      40: invokespecial #583                // Method com/atsuishio/superbwarfare/entity/projectile/FastThrowableProjectile.m_8119_:()V
+      43: aload_0
+      44: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+      47: invokevirtual #589                // Method net/minecraft/world/phys/Vec3.m_82556_:()D
+      50: ldc2_w        #590                // double 25.0d
+      53: dcmpl
+      54: ifle          61
+      57: aload_0
+      58: invokevirtual #594                // Method mediumTrail:()V
+      61: aload_0
+      62: getfield      #137                // Field type:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      65: getstatic     #597                // Field com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type.WP:Lcom/atsuishio/superbwarfare/entity/projectile/MortarShellEntity$Type;
+      68: if_acmpne     135
+      71: aload_0
+      72: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+      75: new           #102                // class net/minecraft/world/level/ClipContext
+      78: dup
+      79: aload_0
+      80: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      83: aload_0
+      84: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      87: aload_0
+      88: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+      91: ldc2_w        #598                // double 8.0d
+      94: invokevirtual #603                // Method net/minecraft/world/phys/Vec3.m_82490_:(D)Lnet/minecraft/world/phys/Vec3;
+      97: invokevirtual #607                // Method net/minecraft/world/phys/Vec3.m_82549_:(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+     100: getstatic     #611                // Field net/minecraft/world/level/ClipContext$Block.VISUAL:Lnet/minecraft/world/level/ClipContext$Block;
+     103: getstatic     #615                // Field net/minecraft/world/level/ClipContext$Fluid.ANY:Lnet/minecraft/world/level/ClipContext$Fluid;
+     106: aload_0
+     107: checkcast     #190                // class net/minecraft/world/entity/Entity
+     110: invokespecial #618                // Method net/minecraft/world/level/ClipContext."<init>":(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;Lnet/minecraft/world/entity/Entity;)V
+     113: invokevirtual #622                // Method net/minecraft/world/level/Level.m_45547_:(Lnet/minecraft/world/level/ClipContext;)Lnet/minecraft/world/phys/BlockHitResult;
+     116: astore_2
+     117: aload_2
+     118: invokevirtual #626                // Method net/minecraft/world/phys/BlockHitResult.m_6662_:()Lnet/minecraft/world/phys/HitResult$Type;
+     121: getstatic     #630                // Field net/minecraft/world/phys/HitResult$Type.BLOCK:Lnet/minecraft/world/phys/HitResult$Type;
+     124: if_acmpne     135
+     127: aload_0
+     128: aload_0
+     129: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+     132: invokespecial #633                // Method releaseWp:(Lnet/minecraft/world/entity/Entity;)V
+     135: return
+
+  private final void releaseWp(net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: invokevirtual #360                // Method m_9236_:()Lnet/minecraft/world/level/Level;
+       4: astore_2
+       5: aload_2
+       6: instanceof    #410                // class net/minecraft/server/level/ServerLevel
+       9: ifeq          164
+      12: aload_2
+      13: aload_0
+      14: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      17: dup
+      18: ldc_w         #581                // String position(...)
+      21: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      24: invokestatic  #639                // Method com/atsuishio/superbwarfare/tools/ParticleTool.spawnMediumExplosionParticles:(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;)V
+      27: bipush        31
+      29: istore_3
+      30: iconst_0
+      31: istore        4
+      33: iload         4
+      35: iload_3
+      36: if_icmpge     160
+      39: iload         4
+      41: istore        5
+      43: iconst_0
+      44: istore        6
+      46: new           #641                // class com/atsuishio/superbwarfare/entity/projectile/WhitePhosphorusProjectileEntity
+      49: dup
+      50: aload_1
+      51: aload_2
+      52: invokespecial #644                // Method com/atsuishio/superbwarfare/entity/projectile/WhitePhosphorusProjectileEntity."<init>":(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/Level;)V
+      55: astore        7
+      57: aload         7
+      59: aload_0
+      60: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      63: getfield      #647                // Field net/minecraft/world/phys/Vec3.f_82479_:D
+      66: aload_0
+      67: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      70: getfield      #650                // Field net/minecraft/world/phys/Vec3.f_82480_:D
+      73: aload_0
+      74: invokevirtual #579                // Method m_20182_:()Lnet/minecraft/world/phys/Vec3;
+      77: getfield      #653                // Field net/minecraft/world/phys/Vec3.f_82481_:D
+      80: invokevirtual #654                // Method com/atsuishio/superbwarfare/entity/projectile/WhitePhosphorusProjectileEntity.m_6034_:(DDD)V
+      83: aload         7
+      85: aload_0
+      86: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+      89: getfield      #647                // Field net/minecraft/world/phys/Vec3.f_82479_:D
+      92: aload_0
+      93: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+      96: getfield      #650                // Field net/minecraft/world/phys/Vec3.f_82480_:D
+      99: aload_0
+     100: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+     103: getfield      #653                // Field net/minecraft/world/phys/Vec3.f_82481_:D
+     106: aload_0
+     107: getfield      #658                // Field net/minecraft/world/entity/projectile/ThrowableItemProjectile.f_19796_:Lnet/minecraft/util/RandomSource;
+     110: invokeinterface #663,  1          // InterfaceMethod net/minecraft/util/RandomSource.m_188501_:()F
+     115: ldc_w         #664                // float 0.05f
+     118: fmul
+     119: f2d
+     120: ldc_w         #665                // float 0.1f
+     123: f2d
+     124: aload_0
+     125: invokevirtual #586                // Method m_20184_:()Lnet/minecraft/world/phys/Vec3;
+     128: invokevirtual #668                // Method net/minecraft/world/phys/Vec3.m_82553_:()D
+     131: dmul
+     132: dadd
+     133: d2f
+     134: ldc_w         #669                // float 35.0f
+     137: invokevirtual #673                // Method com/atsuishio/superbwarfare/entity/projectile/WhitePhosphorusProjectileEntity.m_6686_:(DDDFF)V
+     140: aload_2
+     141: checkcast     #410                // class net/minecraft/server/level/ServerLevel
+     144: aload         7
+     146: checkcast     #190                // class net/minecraft/world/entity/Entity
+     149: invokevirtual #570                // Method net/minecraft/server/level/ServerLevel.m_7967_:(Lnet/minecraft/world/entity/Entity;)Z
+     152: pop
+     153: nop
+     154: iinc          4, 1
+     157: goto          33
+     160: aload_0
+     161: invokevirtual #402                // Method m_146870_:()V
+     164: return
+
+  public void createAreaCloud(net.minecraft.world.level.Level, net.minecraft.world.phys.Vec3);
+    Code:
+       0: aload_1
+       1: ldc           #130                // String level
+       3: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_2
+       7: ldc_w         #407                // String pos
+      10: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      13: aload_0
+      14: getfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      17: getstatic     #144                // Field net/minecraft/world/item/alchemy/Potions.f_43598_:Lnet/minecraft/world/item/alchemy/Potion;
+      20: if_acmpne     36
+      23: aload_0
+      24: invokevirtual #679                // Method getEffects:()Ljava/util/Set;
+      27: invokeinterface #680,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+      32: ifeq          36
+      35: return
+      36: new           #682                // class net/minecraft/world/entity/AreaEffectCloud
+      39: dup
+      40: aload_1
+      41: aload_2
+      42: getfield      #647                // Field net/minecraft/world/phys/Vec3.f_82479_:D
+      45: aload_2
+      46: getfield      #650                // Field net/minecraft/world/phys/Vec3.f_82480_:D
+      49: aload_2
+      50: getfield      #653                // Field net/minecraft/world/phys/Vec3.f_82481_:D
+      53: invokespecial #685                // Method net/minecraft/world/entity/AreaEffectCloud."<init>":(Lnet/minecraft/world/level/Level;DDD)V
+      56: astore_3
+      57: aload_3
+      58: aload_0
+      59: getfield      #151                // Field potion:Lnet/minecraft/world/item/alchemy/Potion;
+      62: invokevirtual #689                // Method net/minecraft/world/entity/AreaEffectCloud.m_19722_:(Lnet/minecraft/world/item/alchemy/Potion;)V
+      65: aload_0
+      66: invokevirtual #679                // Method getEffects:()Ljava/util/Set;
+      69: checkcast     #691                // class java/util/Collection
+      72: invokeinterface #692,  1          // InterfaceMethod java/util/Collection.isEmpty:()Z
+      77: ifne          84
+      80: iconst_1
+      81: goto          85
+      84: iconst_0
+      85: ifeq          149
+      88: aload_0
+      89: invokevirtual #679                // Method getEffects:()Ljava/util/Set;
+      92: checkcast     #436                // class java/lang/Iterable
+      95: astore        4
+      97: iconst_0
+      98: istore        5
+     100: aload         4
+     102: invokeinterface #693,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+     107: astore        6
+     109: aload         6
+     111: invokeinterface #237,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     116: ifeq          148
+     119: aload         6
+     121: invokeinterface #240,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     126: astore        7
+     128: aload         7
+     130: checkcast     #242                // class net/minecraft/world/effect/MobEffectInstance
+     133: astore        8
+     135: iconst_0
+     136: istore        9
+     138: aload_3
+     139: aload         8
+     141: invokevirtual #696                // Method net/minecraft/world/entity/AreaEffectCloud.m_19716_:(Lnet/minecraft/world/effect/MobEffectInstance;)V
+     144: nop
+     145: goto          109
+     148: nop
+     149: aload_3
+     150: aload_0
+     151: invokevirtual #274                // Method getExplosionDamageValue:()F
+     154: f2i
+     155: invokevirtual #700                // Method net/minecraft/world/entity/AreaEffectCloud.m_19734_:(I)V
+     158: aload_3
+     159: aload_0
+     160: invokevirtual #416                // Method getExplosionRadiusValue:()F
+     163: invokevirtual #703                // Method net/minecraft/world/entity/AreaEffectCloud.m_19712_:(F)V
+     166: aload_0
+     167: invokevirtual #356                // Method m_19749_:()Lnet/minecraft/world/entity/Entity;
+     170: astore        4
+     172: aload         4
+     174: instanceof    #490                // class net/minecraft/world/entity/LivingEntity
+     177: ifeq          189
+     180: aload_3
+     181: aload         4
+     183: checkcast     #490                // class net/minecraft/world/entity/LivingEntity
+     186: invokevirtual #707                // Method net/minecraft/world/entity/AreaEffectCloud.m_19718_:(Lnet/minecraft/world/entity/LivingEntity;)V
+     189: aload_1
+     190: aload_3
+     191: checkcast     #190                // class net/minecraft/world/entity/Entity
+     194: invokevirtual #708                // Method net/minecraft/world/level/Level.m_7967_:(Lnet/minecraft/world/entity/Entity;)Z
+     197: pop
+     198: return
+
+  public net.minecraft.sounds.SoundEvent getSound();
+    Code:
+       0: getstatic     #719                // Field com/atsuishio/superbwarfare/init/ModSounds.SHELL_FLY:Lnet/minecraftforge/registries/RegistryObject;
+       3: invokevirtual #184                // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+       6: dup
+       7: ldc           #186                // String get(...)
+       9: invokestatic  #149                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: checkcast     #721                // class net/minecraft/sounds/SoundEvent
+      15: areturn
+
+  public float getVolume();
+    Code:
+       0: ldc_w         #722                // float 0.06f
+       3: freturn
+
+  public net.minecraft.resources.ResourceLocation getModel();
+    Code:
+       0: aload_0
+       1: invokestatic  #730                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getModel:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)Lnet/minecraft/resources/ResourceLocation;
+       4: areturn
+
+  public net.minecraft.resources.ResourceLocation getAnimation();
+    Code:
+       0: aload_0
+       1: invokestatic  #734                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getAnimation:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)Lnet/minecraft/resources/ResourceLocation;
+       4: areturn
+
+  public com.atsuishio.superbwarfare.client.animation.entity.BasicProjectileAnimationInstance<?> getAnimationInstance();
+    Code:
+       0: aload_0
+       1: invokestatic  #740                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getAnimationInstance:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)Lcom/atsuishio/superbwarfare/client/animation/entity/BasicProjectileAnimationInstance;
+       4: areturn
+
+  public net.minecraft.resources.ResourceLocation getEmissiveTexture();
+    Code:
+       0: aload_0
+       1: invokestatic  #743                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getEmissiveTexture:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)Lnet/minecraft/resources/ResourceLocation;
+       4: areturn
+
+  public int getHiddenTicks();
+    Code:
+       0: aload_0
+       1: invokestatic  #747                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getHiddenTicks:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)I
+       4: ireturn
+
+  public int getFlareHiddenTicks();
+    Code:
+       0: aload_0
+       1: invokestatic  #750                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getFlareHiddenTicks:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)I
+       4: ireturn
+
+  public com.github.mcmodderanchor.simplebedrockmodel.v2.common.model.runtime.BakedModelInstance getModelInstance();
+    Code:
+       0: aload_0
+       1: invokestatic  #755                // Method com/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity$DefaultImpls.getModelInstance:(Lcom/atsuishio/superbwarfare/entity/projectile/BasicGeoProjectileEntity;)Lcom/github/mcmodderanchor/simplebedrockmodel/v2/common/model/runtime/BakedModelInstance;
+       4: areturn
+
+  private static final boolean causeWPEffect$lambda$0(net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: ldc_w         #756                // String it
+       4: invokestatic  #129                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: instanceof    #490                // class net/minecraft/world/entity/LivingEntity
+      11: ifeq          35
+      14: aload_0
+      15: instanceof    #758                // class net/minecraft/world/entity/player/Player
+      18: ifeq          31
+      21: aload_0
+      22: checkcast     #758                // class net/minecraft/world/entity/player/Player
+      25: invokevirtual #761                // Method net/minecraft/world/entity/player/Player.m_7500_:()Z
+      28: ifne          35
+      31: iconst_1
+      32: goto          36
+      35: iconst_0
+      36: ireturn
+}

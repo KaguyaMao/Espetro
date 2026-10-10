@@ -31,7 +31,8 @@ public final class ResupplyRadialController {
     private static final ResourceLocation MENU = id("resupply/items");
     private static final ResourceLocation SELECT = id("resupply/select");
     private static final ResourceLocation NAVIGATE = id("resupply/navigate");
-    private static final int PAGE_SIZE = 5;
+    /** 步兵补给不再分页：一次把服务端目录里的全部项目放进同一页（512 项足够）。 */
+    private static final int PAGE_SIZE = 512;
     private static final String AVAILABLE = "#FFFFD54F";
     private static final String UNAVAILABLE = "#FFFF4D4D";
     private static final String HOVER = "#FFFFFFFF";
@@ -197,7 +198,6 @@ public final class ResupplyRadialController {
         RadialMenuBuilder builder = new RadialMenuBuilder(MENU)
             .title(Component.literal("步兵补给 · 弹药余额 " + balance))
             .radii(44, 108)
-            .squadLayout()
             .animationSpeed(1.25F)
             .ringColors(List.of("#B824292B", "#C832383A"));
         int first = page * PAGE_SIZE;

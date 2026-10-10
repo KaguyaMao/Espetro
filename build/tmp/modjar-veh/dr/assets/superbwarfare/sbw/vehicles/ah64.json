@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:ah64",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ah64.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ah64.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ah64.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ah64.png"
+                   }
+               ]
+}

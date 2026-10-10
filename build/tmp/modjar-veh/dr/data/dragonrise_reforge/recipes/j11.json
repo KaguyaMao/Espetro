@@ -1,0 +1,14 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "aircraft",
+  "inputs": [
+    "12 superbwarfare:steel_block",
+    "2 superbwarfare:medium_armament_module",
+    "2 superbwarfare:large_battery_pack",
+    "2 superbwarfare:large_propeller",
+    "3 superbwarfare:wheel"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:j11"
+  }
+}

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Specification-Title: dragonrise_reforge
+Specification-Vendor: red_abyss_lucia, CJY2, LY01, boy1145141919810, two
+ somebody, LOL_141, CHINACAT_2025, XingYu
+Specification-Version: 1
+Implementation-Title: dragonrise_reforge
+Implementation-Version: 1.5.0-beta-20260921
+Implementation-Vendor: red_abyss_lucia, CJY2, LY01, boy1145141919810, tw
+ osomebody, LOL_141, CHINACAT_2025, XingYu
+Implementation-Timestamp: 2026-09-21T11:24:12.966596Z
+MixinConfigs: dragonrise_reforge.mixins.json
+

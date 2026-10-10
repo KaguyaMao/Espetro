@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "a": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "c": {
+      "item": "minecraft:smithing_table"
+    },
+    "d": {
+      "tag": "forge:glass_panes"
+    },
+    "e": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "bcd",
+    "eee"
+  ],
+  "result": {
+    "item": "superbwarfare:vehicle_assembling_table"
+  },
+  "show_notification": true
+}

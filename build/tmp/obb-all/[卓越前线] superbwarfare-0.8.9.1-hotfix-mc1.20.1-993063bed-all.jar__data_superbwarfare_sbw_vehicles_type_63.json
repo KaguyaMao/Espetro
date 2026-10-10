@@ -1,0 +1,214 @@
+{
+  "MaxHealth": 100,
+  "MaxEnergy": 0,
+  "OBB": [
+    {
+      "Size": [0.125, 0.390625, 0.390625],
+      "Position": [0.90625, 0.390625, 0.1071875],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [0.125, 0.390625, 0.390625],
+      "Position": [-0.90625, 0.390625, 0.1071875],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [0.771875, 0.109375, 0.296875],
+      "Position": [0, 0.42546875, -0.090625],
+      "Rotation": "Barrel"
+    },
+    {
+      "Size": [0.4765625, 0.3515625, 0.7578125],
+      "Position": [0, 0, 0.3740625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.3659375, 0.244375, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.1221875, 0.244375, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.1215625, 0.244375, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.3653125, 0.244375, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.3659375, 0.000625, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.1221875, 0.000625, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.1215625, 0.000625, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.3653125, 0.000625, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.3659375, -0.243125, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [-0.1221875, -0.243125, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.1215625, -0.243125, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.09375, 0.09375, 0.0625],
+      "Position": [0.3653125, -0.243125, -0.44625],
+      "Transform": "Barrel",
+      "Rotation": "Barrel"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.15625, 0.21875, 0.21875],
+      "Position": [0.7825, 0.5771875, -0.024375],
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.125, 0.125, 0.125],
+      "Position": [0.62625, 0.0396875, -0.5],
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.125, 0.125, 0.875],
+      "Position": [0.875, 0.1875, -1.625]
+    },
+    {
+      "Part": "Interactive",
+      "Size": [0.125, 0.125, 0.875],
+      "Position": [-0.875, 0.1875, -1.625]
+    }
+  ],
+  "Mass": 0.45,
+  "KeepChunkLoaded": false,
+  "TurretPos": [0, 0.45703125, -0.1625],
+  "TurretYawRange": [-15, 15],
+  "TurretPitchRange": [-5, 60],
+  "BarrelPos": [0, 0.65, -0.203125],
+  "Weapons": {
+    "Main": {
+      "Velocity": 10,
+      "Gravity": 0.05,
+      "Spread": 0.5,
+      "ShootShake": [8, 8, 20],
+      "AmmoType": "superbwarfare:medium_rocket_ap",
+      "SoundInfo": {
+        "Fire3P": "superbwarfare:medium_rocket_fire",
+        "VehicleReload3p": "ty63_reload"
+      },
+      "SoundRadius": 8
+    },
+    "AP": {
+      "Template": "Main",
+      "ApDurability": 100,
+      "Damage": 500,
+      "ExplosionDamage": 100,
+      "ExplosionRadius": 5,
+      "ShellType": "AP"
+    },
+    "HE": {
+      "Template": "Main",
+      "Damage": 200,
+      "ExplosionDamage": 200,
+      "ExplosionRadius": 12,
+      "ShellType": "HE"
+    },
+    "CM": {
+      "Template": "Main",
+      "Damage": 300,
+      "ExplosionDamage": 300,
+      "ExplosionRadius": 6,
+      "ShellType": "CM",
+      "SpreadAmount": 12
+    }
+  },
+  "DamageModifiers": [
+    "All - 1",
+    "minecraft:lava + 1",
+    "minecraft:lava * 2",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3",
+    "minecraft:arrow * 0.1",
+    "minecraft:trident * 0.2",
+    "minecraft:mob_attack * 0.2",
+    "minecraft:mob_attack_no_aggro * 0.2",
+    "minecraft:mob_projectile * 0.4",
+    "minecraft:player_attack * 0.4",
+    "minecraft:explosion * 1.5",
+    "minecraft:player_explosion * 1.5",
+    "superbwarfare:custom_explosion * 0.5",
+    "superbwarfare:projectile_explosion * 0.5",
+    "superbwarfare:mine * 0.5",
+    "superbwarfare:lunge_mine * 0.5",
+    "superbwarfare:projectile_hit * 0.6",
+    "superbwarfare:grapeshot_hit * 0.4",
+    "#superbwarfare:projectile * 0.5",
+    "#superbwarfare:projectile_absolute * 0.8",
+    "superbwarfare:vehicle_strike * 5"
+  ],
+  "VehicleContainerType": "Special",
+  "DestroyInfo": {
+    "ExplosionDamage": 20,
+    "ExplosionRadius": 2,
+    "NoWreck": true
+  },
+  "ForwardTowed": false,
+  "HasLowHealthWarning": false,
+  "SelfHurtPercent": 0,
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/type_63_icon.png",
+  "ContainerIcon": "superbwarfare:textures/gui/vehicle/type/defense.png",
+  "Type": "Artillery"
+}

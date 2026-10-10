@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "0": {
+      "conditions": {},
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "superbwarfare:textures/block/sandbag.png",
+    "description": {
+      "translate": "superbwarfare.advancement.main.root.des"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "superbwarfare:taser"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "superbwarfare.advancement.main.root"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "superbwarfare:grant_manual"
+    ]
+  },
+  "sends_telemetry_event": true
+}

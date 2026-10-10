@@ -1,0 +1,425 @@
+{
+  "_comment": "MTS 37mm HE shell (bullet3700he) impact particles, verbatim MTS values, bound to SBW's small cannon shell (Bradley 25mm). Only texture namespaces changed to sbwparticles; model/casing/3D-light entries omitted (unsupported). bullet_hit* entries fire on impact.",
+  "target": "superbwarfare:small_cannon_shell",
+  "rendering": {
+    "particles": [
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 4,
+        "transparency": 1.0,
+        "fadeOutTransparencyTime": 1,
+        "scale": 1.0,
+        "toScale": 30.0,
+        "ignoreCollision": true,
+        "hitboxSize": 0.1,
+        "textureList": [
+          "sbwparticles:textures/particles/sparkcluster0_translucent.png",
+          "sbwparticles:textures/particles/sparkcluster1_translucent.png"
+        ],
+        "randomTexture": true,
+        "color": "FFD496",
+        "pos": [0.0, 5.3, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, -0.1, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 4,
+        "transparency": 1.0,
+        "fadeOutTransparencyTime": 3,
+        "scale": 8.7,
+        "toScale": 16.0,
+        "hitboxSize": 0.2,
+        "textureList": [
+          "sbwparticles:textures/particles/sparkbullet0_translucent.png",
+          "sbwparticles:textures/particles/sparkbullet1_translucent.png",
+          "sbwparticles:textures/particles/sparkbullet2_translucent.png"
+        ],
+        "textureDelays": [2, 1, 1],
+        "pos": [0.0, 1.4, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, -0.1, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 30,
+        "duration": 7,
+        "transparency": 1.0,
+        "scale": 4.0,
+        "toScale": 2.0000001E-4,
+        "ignoreCollision": true,
+        "hitboxSize": 0.1,
+        "textureList": [
+          "sbwparticles:textures/particles/bang0.png",
+          "sbwparticles:textures/particles/bang0d.png",
+          "sbwparticles:textures/particles/bang0b.png",
+          "sbwparticles:textures/particles/bang0a.png",
+          "sbwparticles:textures/particles/bang0c.png"
+        ],
+        "randomTexture": true,
+        "pos": [0.0, 0.3, 0.0],
+        "spreadRandomness": [35.0, 20.0, 35.0],
+        "initialVelocity": [0.0, 30.0, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 10,
+        "duration": 160,
+        "movementDuration": 10,
+        "transparency": 0.6,
+        "toTransparency": 0.001,
+        "scale": 4.6,
+        "toScale": 21.0,
+        "hitboxSize": 0.2,
+        "textureList": [
+          "sbwparticles:textures/particles/big_smoke_0.png",
+          "sbwparticles:textures/particles/big_smoke_1.png",
+          "sbwparticles:textures/particles/big_smoke_2.png",
+          "sbwparticles:textures/particles/big_smoke_3.png",
+          "sbwparticles:textures/particles/big_smoke_4.png",
+          "sbwparticles:textures/particles/big_smoke_5.png",
+          "sbwparticles:textures/particles/big_smoke_6.png",
+          "sbwparticles:textures/particles/big_smoke_7.png",
+          "sbwparticles:textures/particles/big_smoke_8.png"
+        ],
+        "randomTexture": true,
+        "colorList": ["4E4C49", "3A3733", "43413D", "4D4942", "676259", "494641", "53504B"],
+        "randomColor": true,
+        "pos": [0.0, 1.7, 0.0],
+        "spreadRandomness": [6.0, 10.0, 6.0],
+        "initialVelocity": [0.0, 10.0, 0.0],
+        "movementVelocity": [0.0, 5.0E-4, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 3,
+        "duration": 210,
+        "movementDuration": 20,
+        "transparency": 0.7,
+        "toTransparency": 0.001,
+        "scale": 10.0,
+        "toScale": 26.0,
+        "hitboxSize": 0.2,
+        "textureList": [
+          "sbwparticles:textures/particles/smokecluster0_translucent.png",
+          "sbwparticles:textures/particles/smokecluster1_translucent.png",
+          "sbwparticles:textures/particles/smokecluster2_translucent.png",
+          "sbwparticles:textures/particles/smokecluster3_translucent.png",
+          "sbwparticles:textures/particles/smokecluster4_translucent.png"
+        ],
+        "randomTexture": true,
+        "colorList": ["4E4C49", "3A3733", "43413D", "4D4942", "676259", "494641", "53504B", "363432", "2e2a28", "7a7772", "58544d"],
+        "randomColor": true,
+        "pos": [0.0, 1.7, 0.0],
+        "spreadRandomness": [3.0, 0.4, 3.0],
+        "initialVelocity": [0.0, 0.0, 0.0],
+        "movementVelocity": [0.0, 0.0, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 2,
+        "transparency": 0.4,
+        "scale": 90.0,
+        "toScale": 2.0,
+        "hitboxSize": 0.2,
+        "texture": "sbwparticles:textures/particles/bombflare_translucent.png",
+        "color": "FFD496",
+        "pos": [0.0, 5.3, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, -0.1, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "daytimeReductionFactor": 0.2,
+        "isBright": true,
+        "isBlended": true,
+        "color": "FFFFFF",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 4,
+        "transparency": 1.0,
+        "toTransparency": 0.1,
+        "scale": 524.0,
+        "toScale": 1.2,
+        "hitboxSize": 0.2,
+        "texture": "sbwparticles:textures/particles/flash64_translucent.png",
+        "pos": [0.0, 8.3, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, 0.0, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "daytimeReductionFactor": 0.4,
+        "isBright": true,
+        "isBlended": false,
+        "color": "FAB774",
+        "spawningOrientation": "entity",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 4,
+        "transparency": 0.4,
+        "toTransparency": 0.1,
+        "scale": 524.0,
+        "toScale": 1.2,
+        "hitboxSize": 0.2,
+        "texture": "sbwparticles:textures/particles/flash64_translucent.png",
+        "pos": [0.0, 8.3, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, 0.0, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 1,
+        "duration": 8,
+        "transparency": 1.0,
+        "scale": 17.5,
+        "toScale": 1.2,
+        "hitboxSize": 0.2,
+        "textureList": [
+          "sbwparticles:textures/particles/bang0.png",
+          "sbwparticles:textures/particles/bang1.png",
+          "sbwparticles:textures/particles/bang2.png",
+          "sbwparticles:textures/particles/bang3.png"
+        ],
+        "textureDelays": [2, 2, 2, 2],
+        "pos": [0.0, 1.3, 0.0],
+        "initialVelocity": [0.0, 1.0, 0.0],
+        "movementVelocity": [0.0, -0.1, 0.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "isBright": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 30,
+        "duration": 50,
+        "movementDuration": 15,
+        "transparency": 1.0,
+        "scale": 1.3,
+        "toScale": 0.1,
+        "hitboxSize": 0.2,
+        "textureList": [
+          "sbwparticles:textures/particles/bang0.png",
+          "sbwparticles:textures/particles/bang0d.png",
+          "sbwparticles:textures/particles/bang0b.png",
+          "sbwparticles:textures/particles/bang0a.png",
+          "sbwparticles:textures/particles/bang0c.png"
+        ],
+        "randomTexture": true,
+        "pos": [0.0, 1.3, 0.0],
+        "spreadRandomness": [20.0, 20.0, 20.0],
+        "initialVelocity": [0.0, 25.0, 0.0],
+        "movementVelocity": [0.0, -0.008, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "break",
+        "stopsOnGround": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 10,
+        "duration": 90,
+        "fadeOutTransparencyTime": 25,
+        "scale": 0.8,
+        "fadeOutScaleTime": 25,
+        "hitboxSize": 0.1,
+        "colorList": ["7E7E7E", "989898", "ABABAB", "676767"],
+        "randomColor": true,
+        "getBlockPropertiesFromGround": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [5.5, 6.0, 5.5],
+        "initialVelocity": [0.0, 7.0, 0.0],
+        "movementVelocity": [0.0, -0.08, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "break",
+        "stopsOnGround": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 10,
+        "duration": 90,
+        "fadeOutTransparencyTime": 25,
+        "scale": 0.6,
+        "fadeOutScaleTime": 25,
+        "hitboxSize": 0.1,
+        "color": "7E7E7E",
+        "getBlockPropertiesFromGround": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [4.5, 4.0, 4.5],
+        "initialVelocity": [0.0, 9.0, 0.0],
+        "movementVelocity": [0.0, -0.08, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "break",
+        "stopsOnGround": true,
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 10,
+        "duration": 90,
+        "fadeOutTransparencyTime": 25,
+        "ignoreCollision": true,
+        "scale": 0.5,
+        "fadeOutScaleTime": 25,
+        "hitboxSize": 0.1,
+        "getBlockPropertiesFromGround": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [6.5, 9.0, 6.5],
+        "initialVelocity": [0.0, 12.0, 0.0],
+        "movementVelocity": [0.0, -0.08, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 6,
+        "duration": 40,
+        "transparency": 1.0,
+        "fadeOutTransparencyTime": 10,
+        "scale": 6.2,
+        "toScale": 7.0,
+        "ignoreCollision": true,
+        "hitboxSize": 0.1,
+        "textureList": [
+          "sbwparticles:textures/particles/ground/dirt0.png",
+          "sbwparticles:textures/particles/ground/dirt1.png",
+          "sbwparticles:textures/particles/ground/dirt2.png",
+          "sbwparticles:textures/particles/ground/dirt3.png"
+        ],
+        "randomTexture": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [1.2, 8.4, 1.2],
+        "initialVelocity": [0.0, 9.5, 0.0],
+        "movementVelocity": [0.0, -0.085, 0.0],
+        "terminalVelocity": [5700.0, 20.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "blockmaterial_dirt", "clampMin": 1.0, "clampMax": 1.0},
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 6,
+        "duration": 40,
+        "transparency": 1.0,
+        "fadeOutTransparencyTime": 10,
+        "scale": 6.2,
+        "toScale": 7.0,
+        "ignoreCollision": true,
+        "hitboxSize": 0.1,
+        "textureList": [
+          "sbwparticles:textures/particles/ground/dirt0.png",
+          "sbwparticles:textures/particles/ground/dirt1.png",
+          "sbwparticles:textures/particles/ground/dirt2.png",
+          "sbwparticles:textures/particles/ground/dirt3.png"
+        ],
+        "randomTexture": true,
+        "colorList": ["FFFFFF", "CCCCCC", "ABABAB", "DDDDDD"],
+        "randomColor": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [1.2, 8.4, 1.2],
+        "initialVelocity": [0.0, 9.5, 0.0],
+        "movementVelocity": [0.0, -0.085, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "blockmaterial_grass", "clampMin": 1.0, "clampMax": 1.0},
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      },
+      {
+        "type": "generic",
+        "spawningOrientation": "facing",
+        "renderingOrientation": "player",
+        "quantity": 6,
+        "duration": 40,
+        "transparency": 1.0,
+        "fadeOutTransparencyTime": 10,
+        "scale": 6.2,
+        "toScale": 7.0,
+        "ignoreCollision": true,
+        "hitboxSize": 0.1,
+        "textureList": [
+          "sbwparticles:textures/particles/ground/gravel0.png",
+          "sbwparticles:textures/particles/ground/gravel1.png",
+          "sbwparticles:textures/particles/ground/gravel2.png"
+        ],
+        "randomTexture": true,
+        "pos": [0.0, 0.0, 0.0],
+        "spreadRandomness": [1.8, 8.4, 1.8],
+        "initialVelocity": [0.0, 9.5, 0.0],
+        "movementVelocity": [0.0, -0.085, 0.0],
+        "terminalVelocity": [5700.0, 6000.0, 6200.0],
+        "activeAnimations": [
+          {"animationType": "visibility", "variable": "blockmaterial_gravel", "clampMin": 1.0, "clampMax": 1.0},
+          {"animationType": "visibility", "variable": "bullet_hit_block", "clampMin": 1.0, "clampMax": 1.0}
+        ]
+      }
+    ]
+  }
+}

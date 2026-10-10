@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "12 #forge:storage_blocks/steel",
+    "superbwarfare:cannon_core",
+    "superbwarfare:heavy_armament_module",
+    "superbwarfare:medium_battery_pack",
+    "6 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "superbwarfare:fh_77bw"
+  }
+}

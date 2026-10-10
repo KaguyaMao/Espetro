@@ -1,0 +1,1254 @@
+{
+  "server_battlefield": {
+    "presets": {
+      "CapturePointsA.json": {
+        "totalBatches": 6,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 100,
+          "DEFEND": 400
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": -184,
+              "y": 8,
+              "z": -309
+            },
+            "pos2": {
+              "x": -67,
+              "y": 52,
+              "z": -197
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 108,
+              "y": 8,
+              "z": 88
+            },
+            "pos2": {
+              "x": 214,
+              "y": 45,
+              "z": 201
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": -15,
+              "y": 8,
+              "z": 679
+            },
+            "pos2": {
+              "x": 106,
+              "y": 45,
+              "z": 878
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": -59,
+              "y": 0,
+              "z": 902
+            },
+            "pos2": {
+              "x": -204,
+              "y": 38,
+              "z": 813
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": -1061,
+              "y": 6,
+              "z": 844
+            },
+            "pos2": {
+              "x": -823,
+              "y": 60,
+              "z": 551
+            }
+          },
+          {
+            "name": "F",
+            "batch": 6,
+            "pos1": {
+              "x": -1957,
+              "y": 8,
+              "z": -68
+            },
+            "pos2": {
+              "x": -1673,
+              "y": 49,
+              "z": 218
+            }
+          }
+        ]
+      },
+      "CapturePointsB.json": {
+        "totalBatches": 6,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 280,
+          "DEFEND": 1400
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": -184,
+              "y": 8,
+              "z": -309
+            },
+            "pos2": {
+              "x": -67,
+              "y": 52,
+              "z": -197
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 108,
+              "y": 8,
+              "z": 88
+            },
+            "pos2": {
+              "x": 214,
+              "y": 45,
+              "z": 201
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": -116,
+              "y": 8,
+              "z": 202
+            },
+            "pos2": {
+              "x": 53,
+              "y": 56,
+              "z": 351
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": -509,
+              "y": 8,
+              "z": 257
+            },
+            "pos2": {
+              "x": -343,
+              "y": 84,
+              "z": 397
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": -959,
+              "y": 8,
+              "z": 70
+            },
+            "pos2": {
+              "x": -785,
+              "y": 30,
+              "z": 239
+            }
+          },
+          {
+            "name": "F",
+            "batch": 6,
+            "pos1": {
+              "x": -1957,
+              "y": 8,
+              "z": -68
+            },
+            "pos2": {
+              "x": -1673,
+              "y": 49,
+              "z": 218
+            }
+          }
+        ]
+      }
+    },
+    "game": {
+      "game": {
+        "team_select_seconds": 60,
+        "deploy_timeout_seconds": 180,
+        "deploy_warning_seconds": 30,
+        "defend_commander_vote_seconds": 30,
+        "attack_commander_vote_seconds": 30,
+        "defend_faction_select_seconds": 30,
+        "attack_faction_select_seconds": 30,
+        "faction_pool_size": 3,
+        "faction_reveal_seconds": 8,
+        "round_end_seconds": 15,
+        "respawn_invincibility_ticks": 60,
+        "teammate_name_tag_distance": 100,
+        "waiting_y": 200
+      },
+      "troops": {
+        "initial_attack": 180,
+        "initial_defend": 500,
+        "commander_death_penalty": 5
+      },
+      "stamina": {
+        "player_stamina": 500,
+        "sprint_cost_per_second": 5,
+        "jump_cost": 15,
+        "regen_delay_seconds": 2,
+        "regen_per_second": 2
+      },
+      "governance": {
+        "impeachment_vote_seconds": 60,
+        "impeachment_cooldown_seconds": 600,
+        "commander_vacancy_seconds": 180
+      }
+    },
+    "logistics": {
+      "logistics": {
+        "max_construction": 20000,
+        "max_ammunition": 20000,
+        "pickup_cooldown_seconds": 5,
+        "deposit_radius": 8,
+        "radio_build_radius": 150,
+        "radio_exclusion_radius": 400,
+        "radio_teammate_count": 2,
+        "radio_teammate_radius": 30,
+        "require_teammate": false,
+        "radio": {
+          "allowed_phases": [
+            "BATTLE"
+          ],
+          "require_commander": false,
+          "allow_squad_leader": true,
+          "cooldown_seconds": -1,
+          "required_planks": 0,
+          "creative_bypasses_planks": true,
+          "max_active_per_team": -1,
+          "build_radius": 150,
+          "require_target_block": false,
+          "exclusion_radius": 400,
+          "teammate_count": 0,
+          "teammate_radius": 30
+        },
+        "hab_construction_cost": 500,
+        "ammo_crate_construction_cost": 100,
+        "default_resupply_ammo_cost": 50,
+        "hab_activation_seconds": 30,
+        "hab_reactivation_seconds": 30,
+        "hab_disable_radio_health": 75,
+        "sources": [
+          {
+            "id": "default",
+            "blocks": [
+              "espetro:supply_source"
+            ],
+            "source_ids": [
+              "default"
+            ],
+            "construction": [
+              {
+                "id": "minecraft:oak_planks",
+                "count": 64,
+                "points_per_item": 1,
+                "supply_id": "construction_material"
+              }
+            ],
+            "ammunition": [
+              {
+                "id": "minecraft:arrow",
+                "count": 64,
+                "points_per_item": 1,
+                "supply_id": "ammunition"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "bastion": {
+      "bastion": {
+        "cooldown_seconds": 60,
+        "required_planks": 0,
+        "armor_stand_health": 500,
+        "destroy_troop_penalty": 20
+      }
+    },
+    "legacy": {
+      "totalBatches": 6,
+      "endBehavior": "terminate",
+      "attackBatchCompletionReinforcement": 50,
+      "teamReinforcements": {
+        "ATTACK": 280,
+        "DEFEND": 1400
+      },
+      "plannedPoints": [
+        {
+          "name": "A",
+          "batch": 1,
+          "pos1": {
+            "x": -184,
+            "y": 8,
+            "z": -309
+          },
+          "pos2": {
+            "x": -67,
+            "y": 52,
+            "z": -197
+          }
+        },
+        {
+          "name": "B",
+          "batch": 2,
+          "pos1": {
+            "x": 108,
+            "y": 8,
+            "z": 88
+          },
+          "pos2": {
+            "x": 214,
+            "y": 45,
+            "z": 201
+          }
+        },
+        {
+          "name": "C",
+          "batch": 3,
+          "pos1": {
+            "x": -116,
+            "y": 8,
+            "z": 202
+          },
+          "pos2": {
+            "x": 53,
+            "y": 56,
+            "z": 351
+          }
+        },
+        {
+          "name": "D",
+          "batch": 4,
+          "pos1": {
+            "x": -509,
+            "y": 8,
+            "z": 257
+          },
+          "pos2": {
+            "x": -343,
+            "y": 84,
+            "z": 397
+          }
+        },
+        {
+          "name": "E",
+          "batch": 5,
+          "pos1": {
+            "x": -959,
+            "y": 8,
+            "z": 70
+          },
+          "pos2": {
+            "x": -785,
+            "y": 30,
+            "z": 239
+          }
+        },
+        {
+          "name": "F",
+          "batch": 6,
+          "pos1": {
+            "x": -1957,
+            "y": 8,
+            "z": -68
+          },
+          "pos2": {
+            "x": -1673,
+            "y": 49,
+            "z": 218
+          }
+        }
+      ]
+    }
+  },
+  "越南": {
+    "presets": {
+      "CapturePointsA.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": 917,
+              "y": -46,
+              "z": -339
+            },
+            "pos2": {
+              "x": 861,
+              "y": -14,
+              "z": -414
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 559,
+              "y": -46,
+              "z": -374
+            },
+            "pos2": {
+              "x": 509,
+              "y": -24,
+              "z": -316
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 431,
+              "y": -46,
+              "z": -185
+            },
+            "pos2": {
+              "x": 384,
+              "y": -27,
+              "z": -129
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 187,
+              "y": -44,
+              "z": -256
+            },
+            "pos2": {
+              "x": 99,
+              "y": -31,
+              "z": -156
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": -77,
+              "y": -44,
+              "z": -154
+            },
+            "pos2": {
+              "x": -174,
+              "y": -24,
+              "z": -75
+            }
+          }
+        ]
+      },
+      "CapturePointsB.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": 917,
+              "y": -46,
+              "z": -339
+            },
+            "pos2": {
+              "x": 861,
+              "y": -14,
+              "z": -414
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 818,
+              "y": -46,
+              "z": -35
+            },
+            "pos2": {
+              "x": 711,
+              "y": -24,
+              "z": 40
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 258,
+              "y": -46,
+              "z": -107
+            },
+            "pos2": {
+              "x": 312,
+              "y": -27,
+              "z": -44
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 198,
+              "y": -47,
+              "z": 52
+            },
+            "pos2": {
+              "x": 73,
+              "y": -18,
+              "z": 180
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": -77,
+              "y": -44,
+              "z": -154
+            },
+            "pos2": {
+              "x": -174,
+              "y": -24,
+              "z": -75
+            }
+          }
+        ]
+      },
+      "CapturePointsC.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": 863,
+              "y": -41,
+              "z": -536
+            },
+            "pos2": {
+              "x": 707,
+              "y": 12,
+              "z": -711
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 559,
+              "y": -46,
+              "z": -374
+            },
+            "pos2": {
+              "x": 509,
+              "y": -24,
+              "z": -316
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 431,
+              "y": -46,
+              "z": -185
+            },
+            "pos2": {
+              "x": 384,
+              "y": -27,
+              "z": -129
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 187,
+              "y": -44,
+              "z": -256
+            },
+            "pos2": {
+              "x": 99,
+              "y": -31,
+              "z": -156
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": -77,
+              "y": -44,
+              "z": -154
+            },
+            "pos2": {
+              "x": -174,
+              "y": -24,
+              "z": -75
+            }
+          }
+        ]
+      }
+    },
+    "game": {
+      "game": {
+        "team_select_seconds": 60,
+        "deploy_timeout_seconds": 180,
+        "deploy_warning_seconds": 30,
+        "defend_commander_vote_seconds": 30,
+        "attack_commander_vote_seconds": 30,
+        "defend_faction_select_seconds": 30,
+        "attack_faction_select_seconds": 30,
+        "faction_pool_size": 3,
+        "faction_reveal_seconds": 8,
+        "round_end_seconds": 15,
+        "respawn_invincibility_ticks": 60,
+        "teammate_name_tag_distance": 100,
+        "waiting_y": 200
+      },
+      "troops": {
+        "initial_attack": 75,
+        "initial_defend": 350,
+        "commander_death_penalty": 5
+      },
+      "stamina": {
+        "player_stamina": 500,
+        "sprint_cost_per_second": 5,
+        "jump_cost": 15,
+        "regen_delay_seconds": 2,
+        "regen_per_second": 2
+      },
+      "governance": {
+        "impeachment_vote_seconds": 60,
+        "impeachment_cooldown_seconds": 600,
+        "commander_vacancy_seconds": 180
+      }
+    },
+    "logistics": {
+      "logistics": {
+        "max_construction": 20000,
+        "max_ammunition": 20000,
+        "pickup_cooldown_seconds": 5,
+        "deposit_radius": 8,
+        "radio_build_radius": 50,
+        "radio_exclusion_radius": 100,
+        "radio_teammate_count": 2,
+        "radio_teammate_radius": 30,
+        "require_teammate": false,
+        "radio": {
+          "allowed_phases": [
+            "BATTLE"
+          ],
+          "require_commander": false,
+          "allow_squad_leader": true,
+          "cooldown_seconds": -1,
+          "required_planks": 0,
+          "creative_bypasses_planks": true,
+          "max_active_per_team": -1,
+          "build_radius": 50,
+          "require_target_block": false,
+          "exclusion_radius": 100,
+          "teammate_count": 0,
+          "teammate_radius": 30
+        },
+        "hab_construction_cost": 500,
+        "ammo_crate_construction_cost": 100,
+        "default_resupply_ammo_cost": 50,
+        "hab_activation_seconds": 30,
+        "hab_reactivation_seconds": 30,
+        "hab_disable_radio_health": 75,
+        "sources": [
+          {
+            "id": "default",
+            "blocks": [
+              "espetro:supply_source"
+            ],
+            "source_ids": [
+              "default"
+            ],
+            "construction": [
+              {
+                "id": "minecraft:oak_planks",
+                "count": 64,
+                "points_per_item": 1,
+                "supply_id": "construction_material"
+              }
+            ],
+            "ammunition": [
+              {
+                "id": "minecraft:arrow",
+                "count": 64,
+                "points_per_item": 1,
+                "supply_id": "ammunition"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "bastion": {
+      "bastion": {
+        "cooldown_seconds": 60,
+        "required_planks": 0,
+        "armor_stand_health": 500,
+        "destroy_troop_penalty": 20
+      }
+    },
+    "legacy": {
+      "modes": [
+        "AAS"
+      ],
+      "totalBatches": 5,
+      "endBehavior": "terminate",
+      "attackBatchCompletionReinforcement": 50,
+      "teamReinforcements": {
+        "ATTACK": 75,
+        "DEFEND": 350
+      },
+      "plannedPoints": [
+        {
+          "name": "A",
+          "batch": 1,
+          "pos1": {
+            "x": 917,
+            "y": -46,
+            "z": -339
+          },
+          "pos2": {
+            "x": 861,
+            "y": -14,
+            "z": -414
+          }
+        },
+        {
+          "name": "B",
+          "batch": 2,
+          "pos1": {
+            "x": 559,
+            "y": -46,
+            "z": -374
+          },
+          "pos2": {
+            "x": 509,
+            "y": -24,
+            "z": -316
+          }
+        },
+        {
+          "name": "C",
+          "batch": 3,
+          "pos1": {
+            "x": 431,
+            "y": -46,
+            "z": -185
+          },
+          "pos2": {
+            "x": 384,
+            "y": -27,
+            "z": -129
+          }
+        },
+        {
+          "name": "D",
+          "batch": 4,
+          "pos1": {
+            "x": 187,
+            "y": -44,
+            "z": -256
+          },
+          "pos2": {
+            "x": 99,
+            "y": -31,
+            "z": -156
+          }
+        },
+        {
+          "name": "E",
+          "batch": 5,
+          "pos1": {
+            "x": -77,
+            "y": -44,
+            "z": -154
+          },
+          "pos2": {
+            "x": -174,
+            "y": -24,
+            "z": -75
+          }
+        }
+      ]
+    }
+  },
+  "CREATE_PLUS": {
+    "presets": {
+      "CapturePointsA.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": -4,
+              "y": 76,
+              "z": -953
+            },
+            "pos2": {
+              "x": 208,
+              "y": 102,
+              "z": -1106
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 335,
+              "y": 66,
+              "z": -1368
+            },
+            "pos2": {
+              "x": 430,
+              "y": 89,
+              "z": -1282
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 646,
+              "y": 66,
+              "z": -1173
+            },
+            "pos2": {
+              "x": 793,
+              "y": 84,
+              "z": -1070
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 794,
+              "y": 66,
+              "z": -1220
+            },
+            "pos2": {
+              "x": 885,
+              "y": 100,
+              "z": -1286
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": 949,
+              "y": 66,
+              "z": -1428
+            },
+            "pos2": {
+              "x": 1039,
+              "y": 89,
+              "z": -1524
+            }
+          }
+        ]
+      },
+      "CapturePointsB.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": 557,
+              "y": 80,
+              "z": -514
+            },
+            "pos2": {
+              "x": 402,
+              "y": 114,
+              "z": -711
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 906,
+              "y": 66,
+              "z": -793
+            },
+            "pos2": {
+              "x": 1019,
+              "y": 100,
+              "z": -864
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 1016,
+              "y": 66,
+              "z": -1110
+            },
+            "pos2": {
+              "x": 918,
+              "y": 90,
+              "z": -1187
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 1152,
+              "y": 67,
+              "z": -1331
+            },
+            "pos2": {
+              "x": 1231,
+              "y": 100,
+              "z": -1379
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": 949,
+              "y": 66,
+              "z": -1428
+            },
+            "pos2": {
+              "x": 1039,
+              "y": 89,
+              "z": -1524
+            }
+          }
+        ]
+      },
+      "CapturePointsC.json": {
+        "modes": [
+          "AAS"
+        ],
+        "totalBatches": 5,
+        "endBehavior": "terminate",
+        "attackBatchCompletionReinforcement": 50,
+        "teamReinforcements": {
+          "ATTACK": 75,
+          "DEFEND": 350
+        },
+        "plannedPoints": [
+          {
+            "name": "A",
+            "batch": 1,
+            "pos1": {
+              "x": 292,
+              "y": 66,
+              "z": -823
+            },
+            "pos2": {
+              "x": 387,
+              "y": 96,
+              "z": -957
+            }
+          },
+          {
+            "name": "B",
+            "batch": 2,
+            "pos1": {
+              "x": 629,
+              "y": 66,
+              "z": -975
+            },
+            "pos2": {
+              "x": 668,
+              "y": 91,
+              "z": -999
+            }
+          },
+          {
+            "name": "C",
+            "batch": 3,
+            "pos1": {
+              "x": 568,
+              "y": 66,
+              "z": -1194
+            },
+            "pos2": {
+              "x": 720,
+              "y": 97,
+              "z": -1276
+            }
+          },
+          {
+            "name": "D",
+            "batch": 4,
+            "pos1": {
+              "x": 942,
+              "y": 66,
+              "z": -1214
+            },
+            "pos2": {
+              "x": 986,
+              "y": 87,
+              "z": -1272
+            }
+          },
+          {
+            "name": "E",
+            "batch": 5,
+            "pos1": {
+              "x": 949,
+              "y": 66,
+              "z": -1428
+            },
+            "pos2": {
+              "x": 1039,
+              "y": 89,
+              "z": -1524
+            }
+          }
+        ]
+      }
+    },
+    "game": {
+      "game": {
+        "team_select_seconds": 60,
+        "deploy_timeout_seconds": 180,
+        "deploy_warning_seconds": 30,
+        "defend_commander_vote_seconds": 30,
+        "attack_commander_vote_seconds": 30,
+        "defend_faction_select_seconds": 30,
+        "attack_faction_select_seconds": 30,
+        "faction_pool_size": 3,
+        "faction_reveal_seconds": 8,
+        "round_end_seconds": 15,
+        "respawn_invincibility_ticks": 60,
+        "teammate_name_tag_distance": 100,
+        "waiting_y": 200
+      },
+      "troops": {
+        "initial_attack": 75,
+        "initial_defend": 350,
+        "commander_death_penalty": 5
+      },
+      "stamina": {
+        "player_stamina": 500,
+        "sprint_cost_per_second": 5,
+        "jump_cost": 15,
+        "regen_delay_seconds": 2,
+        "regen_per_second": 2
+      },
+      "governance": {
+        "impeachment_vote_seconds": 60,
+        "impeachment_cooldown_seconds": 600,
+        "commander_vacancy_seconds": 180
+      }
+    },
+    "logistics": {
+      "logistics": {
+        "max_construction": 20000,
+        "max_ammunition": 20000,
+        "pickup_cooldown_seconds": 5,
+        "deposit_radius": 8,
+        "radio_build_radius": 50,
+        "radio_exclusion_radius": 100,
+        "radio_teammate_count": 2,
+        "radio_teammate_radius": 30,
+        "require_teammate": false,
+        "radio": {
+          "allowed_phases": [
+            "BATTLE"
+          ],
+          "require_commander": false,
+          "allow_squad_leader": true,
+          "cooldown_seconds": -1,
+          "required_planks": 0,
+          "creative_bypasses_planks": true,
+          "max_active_per_team": -1,
+          "build_radius": 50,
+          "require_target_block": false,
+          "exclusion_radius": 100,
+          "teammate_count": 0,
+          "teammate_radius": 30
+        },
+        "hab_construction_cost": 500,
+        "ammo_crate_construction_cost": 100,
+        "default_resupply_ammo_cost": 50,
+        "hab_activation_seconds": 30,
+        "hab_reactivation_seconds": 30,
+        "hab_disable_radio_health": 75,
+        "sources": []
+      }
+    },
+    "bastion": {
+      "bastion": {
+        "cooldown_seconds": 60,
+        "required_planks": 0,
+        "armor_stand_health": 500,
+        "destroy_troop_penalty": 20
+      }
+    },
+    "legacy": {
+      "totalBatches": 5,
+      "endBehavior": "terminate",
+      "attackBatchCompletionReinforcement": 50,
+      "teamReinforcements": {
+        "ATTACK": 75,
+        "DEFEND": 350
+      },
+      "plannedPoints": [
+        {
+          "name": "A",
+          "batch": 1,
+          "pos1": {
+            "x": -4,
+            "y": 76,
+            "z": -953
+          },
+          "pos2": {
+            "x": 208,
+            "y": 102,
+            "z": -1106
+          }
+        },
+        {
+          "name": "B",
+          "batch": 2,
+          "pos1": {
+            "x": 335,
+            "y": 66,
+            "z": -1368
+          },
+          "pos2": {
+            "x": 430,
+            "y": 89,
+            "z": -1282
+          }
+        },
+        {
+          "name": "C",
+          "batch": 3,
+          "pos1": {
+            "x": 646,
+            "y": 66,
+            "z": -1173
+          },
+          "pos2": {
+            "x": 793,
+            "y": 84,
+            "z": -1070
+          }
+        },
+        {
+          "name": "D",
+          "batch": 4,
+          "pos1": {
+            "x": 794,
+            "y": 66,
+            "z": -1220
+          },
+          "pos2": {
+            "x": 885,
+            "y": 100,
+            "z": -1286
+          }
+        },
+        {
+          "name": "E",
+          "batch": 5,
+          "pos1": {
+            "x": 949,
+            "y": 66,
+            "z": -1428
+          },
+          "pos2": {
+            "x": 1039,
+            "y": 89,
+            "z": -1524
+          }
+        }
+      ]
+    }
+  }
+}

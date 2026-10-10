@@ -1,0 +1,7 @@
+{
+  "parent": "superbwarfare:item/hammer_base",
+  "textures": {
+    "0": "superbwarfare:item/hammer",
+    "particle": "superbwarfare:item/hammer"
+  }
+}

@@ -1,0 +1,37 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sighs.apricityui.forge;
+
+import com.sighs.apricityui.event.Event;
+import com.sighs.apricityui.script.ApricityJS;
+import com.sighs.apricityui.spi.AuiScriptService;
+
+public final class ScriptService
+implements AuiScriptService {
+    public static final ScriptService INSTANCE = new ScriptService();
+
+    private ScriptService() {
+    }
+
+    @Override
+    public void eval(String code, Event event, String source) {
+        ApricityJS.eval(code, event, source);
+    }
+
+    @Override
+    public void evalGlobal(String code, String documentUuid) {
+        ApricityJS.evalGlobal(code, documentUuid);
+    }
+
+    @Override
+    public void reload() {
+        ApricityJS.reload();
+    }
+
+    @Override
+    public void warmUp() {
+        ApricityJS.warmUp();
+    }
+}
+

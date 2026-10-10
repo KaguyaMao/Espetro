@@ -21,15 +21,18 @@ public class PartyListPacket {
         public final boolean hasPassword;
         /** 当前客户端玩家是否在此队伍中（由服务端写入）。 */
         public final UUID myPartyId;
+        /** 只有"自己所在的队伍"才带成员名单，其它队伍为空（不泄露信息）。 */
+        public final List<String> memberNames;
 
         public PartyInfo(UUID partyId, String ownerName, int memberCount, boolean locked,
-                         boolean hasPassword, UUID myPartyId) {
+                         boolean hasPassword, UUID myPartyId, List<String> memberNames) {
             this.partyId = partyId;
             this.ownerName = ownerName;
             this.memberCount = memberCount;
             this.locked = locked;
             this.hasPassword = hasPassword;
             this.myPartyId = myPartyId;
+            this.memberNames = memberNames != null ? List.copyOf(memberNames) : List.of();
         }
     }
 
@@ -58,11 +61,27 @@ public class PartyListPacket {
                 myPartyId = p.partyId;
                 isOwner = isViewerOwner;
             }
+            List<String> memberNames = List.of();
+            if (viewerInParty) {
+                memberNames = resolveMemberNames(p);
+            }
             list.add(new PartyInfo(p.partyId, p.ownerName, p.members.size(),
                 p.locked, p.password != null && !p.password.isEmpty(),
-                viewerInParty ? p.partyId : null));
+                viewerInParty ? p.partyId : null, memberNames));
         }
         return new PartyListPacket(list, PartyManager.getMaxPartySize(), myPartyId, isOwner);
+    }
+
+    /** 解析队伍成员名（在线玩家取名字，离线的标为"离线"）。 */
+    private static List<String> resolveMemberNames(PartyManager.PartyData party) {
+        List<String> names = new ArrayList<>();
+        net.minecraft.server.MinecraftServer server = org.espetro.Espetro.getServer();
+        for (UUID id : party.members) {
+            net.minecraft.server.level.ServerPlayer sp =
+                server == null ? null : server.getPlayerList().getPlayer(id);
+            names.add(sp != null ? sp.getName().getString() : "离线");
+        }
+        return names;
     }
 
     public static PartyListPacket read(FriendlyByteBuf buf) {
@@ -76,7 +95,10 @@ public class PartyListPacket {
             boolean locked = buf.readBoolean();
             boolean hasPw = buf.readBoolean();
             UUID myPid = buf.readBoolean() ? buf.readUUID() : null;
-            list.add(new PartyInfo(id, owner, count, locked, hasPw, myPid));
+            int nm = buf.readVarInt();
+            List<String> names = new ArrayList<>(nm);
+            for (int k = 0; k < nm; k++) names.add(buf.readUtf(32));
+            list.add(new PartyInfo(id, owner, count, locked, hasPw, myPid, names));
         }
         UUID myPid = buf.readBoolean() ? buf.readUUID() : null;
         boolean isOwner = buf.readBoolean();
@@ -94,6 +116,8 @@ public class PartyListPacket {
             buf.writeBoolean(p.hasPassword);
             buf.writeBoolean(p.myPartyId != null);
             if (p.myPartyId != null) buf.writeUUID(p.myPartyId);
+            buf.writeVarInt(p.memberNames.size());
+            for (String nm : p.memberNames) buf.writeUtf(nm, 32);
         }
         buf.writeBoolean(myPartyId != null);
         if (myPartyId != null) buf.writeUUID(myPartyId);

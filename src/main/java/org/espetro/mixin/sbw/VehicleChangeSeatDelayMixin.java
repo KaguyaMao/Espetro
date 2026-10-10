@@ -2,6 +2,7 @@ package org.espetro.mixin.sbw;
 
 import net.minecraft.world.entity.Entity;
 import org.espetro.client.vehicle.SeatSwitchGate;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +22,13 @@ public abstract class VehicleChangeSeatDelayMixin {
     private void espetro$gateClientSeat(Entity entity, int index,
                                         CallbackInfoReturnable<Boolean> cir) {
         if (entity == null || entity.level() == null || !entity.level().isClientSide) {
+            return;
+        }
+        // 白名单载具：不做预测门控，保持 SBW 原返回值。
+        // changeSeat 的首参在 SBW 里是被移动的乘客，因此同时检查其所在载具。
+        if (VehicleNativeWhitelist.isNative(entity)
+            || VehicleNativeWhitelist.isNative(entity.getVehicle())
+            || VehicleNativeWhitelist.isNative(entity.getRootVehicle())) {
             return;
         }
         if (SeatSwitchGate.isArmed()) {

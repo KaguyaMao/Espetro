@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/yellow"
+    },
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    }
+  },
+  "pattern": [
+    "KDK",
+    "K K",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:msv_chest"
+  },
+  "show_notification": true
+}

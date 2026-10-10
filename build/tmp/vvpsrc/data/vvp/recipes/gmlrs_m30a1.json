@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TNT",
+    "GRG",
+    "GSG"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "N": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "G": {
+      "tag": "forge:ingots/steel"
+    },
+    "R": {
+      "item": "superbwarfare:medium_rocket_cm"
+    },
+    "S": {
+      "item": "minecraft:gunpowder"
+    }
+  },
+  "result": {
+    "item": "vvp:gmlrs_m30a1",
+    "count": 2
+  }
+}

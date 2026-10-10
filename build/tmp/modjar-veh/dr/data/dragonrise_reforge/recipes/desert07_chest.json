@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    },
+    "S": {
+      "item": "minecraft:sand"
+    }
+  },
+  "pattern": [
+    "KSK",
+    "K K",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:desert07_chest"
+  },
+  "show_notification": true
+}

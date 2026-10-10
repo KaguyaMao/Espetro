@@ -1,0 +1,14 @@
+{
+  "ID": "dragonrise_reforge:mv3_armed",
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/mv3_armed.animation.json",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_armed.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/mv3_armed.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/mv3_armed.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/mv3_armed.png"
+    }
+  ]
+}

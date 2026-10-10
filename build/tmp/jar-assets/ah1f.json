@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/ah1f.animation.json",
+  "ID": "dragonrise_reforge:ah1f",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/ah1f.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ah1f.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ah1f.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ah1f.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ah1f.png"
+    }
+  ]
+}

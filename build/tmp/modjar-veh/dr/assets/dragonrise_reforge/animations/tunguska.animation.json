@@ -1,0 +1,36 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.tunguska.idle": {
+      "animation_length": 0.25,
+      "bones": {
+        
+        
+      }
+    },
+    "animation.tunguska.fire": {
+      "animation_length": 2,
+      "bones": {
+        "barrel": {
+          "position": {
+            "0.0417": [
+              0,
+              0,
+              0
+            ],
+            "0.0833": [
+              0,
+              0,
+              15
+            ],
+            "0.25": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

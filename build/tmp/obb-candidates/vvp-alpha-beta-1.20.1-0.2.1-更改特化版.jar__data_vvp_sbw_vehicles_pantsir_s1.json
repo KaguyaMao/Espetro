@@ -1,0 +1,509 @@
+{
+  "ID": "vvp:pantsir_s1",
+  "MaxHealth": 380,
+  "MaxEnergy": 5800000,
+  "OBB": [
+    {
+      "Size": [
+        1.4375,
+        1.0625,
+        1.15625
+      ],
+      "Position": [
+        0,
+        2.5,
+        2.34375
+      ]
+    },
+    {
+      "Size": [
+        1.4375,
+        0.90625,
+        1.4375
+      ],
+      "Position": [
+        0,
+        2.46875,
+        -0.3125
+      ]
+    },
+    {
+      "Size": [
+        1.625,
+        0.65625,
+        2.75
+      ],
+      "Position": [
+        0,
+        2.40625,
+        -4.5
+      ]
+    },
+    {
+      "Size": [
+        1.5,
+        0.6875,
+        1.8125
+      ],
+      "Position": [
+        0,
+        0.34375,
+        0
+      ],
+      "Transform": "Turret",
+      "Part": "Turret"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        1.21875,
+        0.71875,
+        1.9375
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        1.21875,
+        0.71875,
+        0.046875
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        1.21875,
+        0.71875,
+        -3.828125
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        1.21875,
+        0.71875,
+        -5.34375
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        -1.21875,
+        0.71875,
+        1.9375
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        -1.21875,
+        0.71875,
+        0.046875
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        -1.21875,
+        0.71875,
+        -3.828125
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.28125,
+        0.71875,
+        0.6875
+      ],
+      "Position": [
+        -1.21875,
+        0.71875,
+        -5.34375
+      ],
+      "Part": "WheelRight"
+    }
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.75,
+        1.3,
+        2.4125
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -90,
+      "MaxYaw": 90
+    },
+    {
+      "IsEnclosed": true,
+      "CanRotateBody": true,
+      "CameraPos": {
+        "Transform": "Barrel",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0,
+          1.5,
+          0.95
+        ],
+        "ZoomPosition": [
+          0,
+          0,
+          0.75
+        ],
+        "Direction": "Barrel"
+      },
+      "Transform": "Vehicle",
+      "Position": [
+        -0.75,
+        1.3,
+        2.4125
+      ],
+      "MinPitch": -10,
+      "MaxPitch": 60,
+      "Weapons": [
+        "Cannon",
+        "Missile57E6"
+      ]
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -0.0479,
+        1.3,
+        2.4125
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -90,
+      "MaxYaw": 90
+    }
+  ],
+  "Weapons": {
+    "Cannon": {
+      "Icon": "vvp:textures/screens/vehicle_weapon/30_mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:small_cannon_shell",
+      "ShellType": "AA",
+      "DefaultZoom": 3,
+      "RPM": 900,
+      "Velocity": 23,
+      "Gravity": 0.03,
+      "Damage": 26,
+      "ExplosionDamage": 14,
+      "ExplosionRadius": 1.7,
+      "ProjectileLife": 25,
+      "Spread": 0.35,
+      "RecoilTime": 25,
+      "RecoilForce": 0.4,
+      "HeatPerShoot": 0,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 3,
+      "Crosshair": "@VehicleCommonGunDynamic",
+      "CrosshairColor": "0x66FF00",
+      "Name": "weapon.vvp.2a42_30mm",
+      "SoundInfo": {
+        "Fire1P": "vvp:bushmaster_1p",
+        "Fire3P": "vvp:bushmaster_3p",
+        "Fire3PFar": "vvp:bushmaster_far",
+        "Fire3PVeryFar": "vvp:bushmaster_veryfar",
+        "Change": "vvp:into_atgm"
+      },
+      "SoundRadius": 24,
+      "AmmoType": "superbwarfare:small_shell_aa",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            -0.8636,
+            0.0904,
+            2.9101
+          ],
+          [
+            0.8636,
+            0.0904,
+            2.9101
+          ]
+        ],
+        "Directions": [
+          "Barrel"
+        ],
+        "AlternateShoot": true
+      }
+    },
+    "Missile57E6": {
+      "AmmoType": "superbwarfare:medium_anti_air_missile",
+      "Icon": "vvp:textures/screens/vehicle_weapon/57e6.png",
+      "DefaultZoom": 3,
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Magazine": 12,
+      "EmptyReloadTime": 240,
+      "Projectile": "vvp:pantsir_missile",
+      "Name": "weapon.vvp.57e6_missile",
+      "Damage": 312,
+      "RPM": 30,
+      "ExplosionDamage": 150,
+      "ExplosionRadius": 4.4,
+      "Velocity": 8,
+      "ProjectileLife": 400,
+      "SeekWeaponInfo": {
+        "SeekDirection": "Barrel",
+        "CanGuidedByRadar": false,
+        "AffectedByStealthTarget": false,
+        "SeekRange": 1100,
+        "SeekAngle": 25,
+        "SeekTime": 8,
+        "MinTargetHeight": 8,
+        "OnlyLockEntity": true
+      },
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Directions": [
+          "Barrel"
+        ],
+        "ShootPositionForHud": [
+          0,
+          0.6,
+          1.5
+        ],
+        "Positions": [
+          [
+            -1.4261,
+            0.0279,
+            2.9101
+          ],
+          [
+            1.4261,
+            0.0279,
+            2.9101
+          ],
+          [
+            -1.4261,
+            0.2279,
+            2.9101
+          ],
+          [
+            1.4261,
+            0.2279,
+            2.9101
+          ],
+          [
+            -1.4261,
+            0.4279,
+            2.9101
+          ],
+          [
+            1.4261,
+            0.4279,
+            2.9101
+          ],
+          [
+            -1.4261,
+            -0.1721,
+            2.9101
+          ],
+          [
+            1.4261,
+            -0.1721,
+            2.9101
+          ],
+          [
+            -1.4261,
+            -0.3721,
+            2.9101
+          ],
+          [
+            1.4261,
+            -0.3721,
+            2.9101
+          ],
+          [
+            -1.4261,
+            -0.5721,
+            2.9101
+          ],
+          [
+            1.4261,
+            -0.5721,
+            2.9101
+          ]
+        ],
+        "BoundUpWithAmmoAmount": true
+      },
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:bomb_release",
+        "Fire3P": "superbwarfare:bomb_release",
+        "VehicleReload3p": "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime": 11,
+        "Change": "vvp:into_atgm",
+        "Locking": "superbwarfare:missile_locking",
+        "Locked": "superbwarfare:missile_locked"
+      },
+      "CrosshairColor": "0x66FF00",
+      "Crosshair": "@VehicleCommonSeekMissile",
+      "SoundRadius": 12
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 80,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.3,
+    "MaxForwardSpeedRate": 1,
+    "MaxBackwardSpeedRate": 0.5,
+    "Increment": 0.03,
+    "Decrement": 0.02,
+    "SteeringSpeed": 0.07
+  },
+  "TurretPos": [
+    0.0295,
+    3.123,
+    -3.9891
+  ],
+  "TurretTurnSpeed": [
+    15,
+    15
+  ],
+  "TurretPitchRange": [
+    -7,
+    75
+  ],
+  "BarrelPos": [
+    -0.03,
+    0.6444,
+    -0.4835
+  ],
+  "TurretControllerIndex": 1,
+  "ThirdPersonCameraPos": [
+    0,
+    1,
+    3
+  ],
+  "UpStep": 1.5,
+  "RotateOffsetHeight": 2.2,
+  "Mass": 30,
+  "DamageModifiers": [
+    "minecraft:lava - -11",
+    "minecraft:lava * 10",
+    "All * 0.2",
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 2",
+    "superbwarfare:mine * 0.75",
+    "superbwarfare:projectile_hit * 1.25",
+    "superbwarfare:grapeshot_hit * 0.3",
+    "superbwarfare:laser * 1.25",
+    "@#superbwarfare:aerial_bomb * 3",
+    "#superbwarfare:projectile * 0.25",
+    "#superbwarfare:projectile_absolute * 0.85",
+    "superbwarfare:vehicle_strike * 4",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:gun_grenade * 1.5",
+    "@superbwarfare:javelin_missile * 0.8",
+    "@superbwarfare:igla_9k38_missile * 0.75",
+    "@superbwarfare:wire_guide_missile * 1",
+    "All - 11"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 150,
+    "ExplosionRadius": 4.4,
+    "ExplodeBlocks": false
+  },
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/bmp2_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/land_ru.png",
+  "Type": "AA",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.15,
+        0.09,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "superbwarfare:truck_engine",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [
+      1.2,
+      0,
+      1.5
+    ],
+    [
+      -1.2,
+      0,
+      1.5
+    ],
+    [
+      1.2,
+      0,
+      -1.5
+    ],
+    [
+      -1.2,
+      0,
+      -1.5
+    ]
+  ],
+  "InertiaRotateRate": 1
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>org.spongepowered</groupId>
+  <artifactId>mixingradle</artifactId>
+  <version>0.7-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20230803.124500</timestamp>
+      <buildNumber>15</buildNumber>
+    </snapshot>
+    <lastUpdated>20230803124500</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.7-20230803.124500-15</value>
+        <updated>20230803124500</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>0.7-20230803.124500-15</value>
+        <updated>20230803124500</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.7-20230803.124500-15</value>
+        <updated>20230803124500</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>groovydoc</classifier>
+        <extension>jar</extension>
+        <value>0.7-20200916.104125-6</value>
+        <updated>20200916104125</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

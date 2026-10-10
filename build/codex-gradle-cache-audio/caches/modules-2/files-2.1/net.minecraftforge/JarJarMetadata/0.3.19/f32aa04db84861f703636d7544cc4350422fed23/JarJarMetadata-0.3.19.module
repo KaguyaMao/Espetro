@@ -1,0 +1,161 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "JarJarMetadata",
+    "version": "0.3.19",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.apache.maven",
+          "module": "maven-artifact",
+          "version": {
+            "requires": "3.8.1"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.5"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "31.0.1-jre"
+          }
+        },
+        {
+          "group": "com.machinezoo.noexception",
+          "module": "noexception",
+          "version": {
+            "requires": "1.7.1"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.30"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "JarJarMetadata-0.3.19.jar",
+          "url": "JarJarMetadata-0.3.19.jar",
+          "size": 15895,
+          "sha512": "3e7797b0aaaa57810706685a977a970568c5703524141c7e6818860275353f59dfe506539b11f0289dbb34aa5a039b6a601711d1a519d13122867a0eef1955d2",
+          "sha256": "6141c710b5b7b673bd544740a31339f0754d7a794cc46b952b7ef7897b7ce265",
+          "sha1": "0083feaa9b770e6ac0e96ee4fc23fa89325c5fe2",
+          "md5": "9633546d299d4282ca68d10582be1c8f"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.apache.maven",
+          "module": "maven-artifact",
+          "version": {
+            "requires": "3.8.1"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.5"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "31.0.1-jre"
+          }
+        },
+        {
+          "group": "com.machinezoo.noexception",
+          "module": "noexception",
+          "version": {
+            "requires": "1.7.1"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.30"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-simple",
+          "version": {
+            "requires": "1.7.30"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "JarJarMetadata-0.3.19.jar",
+          "url": "JarJarMetadata-0.3.19.jar",
+          "size": 15895,
+          "sha512": "3e7797b0aaaa57810706685a977a970568c5703524141c7e6818860275353f59dfe506539b11f0289dbb34aa5a039b6a601711d1a519d13122867a0eef1955d2",
+          "sha256": "6141c710b5b7b673bd544740a31339f0754d7a794cc46b952b7ef7897b7ce265",
+          "sha1": "0083feaa9b770e6ac0e96ee4fc23fa89325c5fe2",
+          "md5": "9633546d299d4282ca68d10582be1c8f"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "JarJarMetadata-0.3.19-sources.jar",
+          "url": "JarJarMetadata-0.3.19-sources.jar",
+          "size": 8599,
+          "sha512": "6e276329e92eab7b1632333d4887a88b63dc3a22caad6d7303458589e344d6777415b73ebf9ba1ccb30f0a49287685559f0693e639fa325d75ee1a89a4aebc47",
+          "sha256": "6e67666194c3877f07a8f183b59dbcc9d850affe91b4ac10836d3fc5a5b8b847",
+          "sha1": "2be05c62a2daa0f29f73ec4291d7381a003a6d0b",
+          "md5": "7f5fcabb97c85de096b4043944300059"
+        }
+      ]
+    }
+  ]
+}

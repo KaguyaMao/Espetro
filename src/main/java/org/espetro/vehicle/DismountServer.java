@@ -24,6 +24,11 @@ public final class DismountServer {
         if (player == null) {
             return VehicleInteractionConfig.dismountDelayTicks() <= 0;
         }
+        // 白名单载具：不要求读条 token，直接放行原生下车。
+        if (VehicleNativeWhitelist.isNative(player.getVehicle())) {
+            READY_UNTIL.remove(player.getUUID());
+            return true;
+        }
         if (VehicleInteractionConfig.dismountDelayTicks() <= 0) {
             return true;
         }

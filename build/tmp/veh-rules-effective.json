@@ -1,0 +1,2944 @@
+{
+  "summary": {
+    "jarKeys": 301,
+    "kjsKeys": 48,
+    "withRules": 96,
+    "ruleTotal": 96,
+    "mDist": {
+      "3": 1,
+      "0.25": 40,
+      "0.2": 3,
+      "0.3": 40,
+      "0.28": 1,
+      "0.05": 4,
+      "0.32": 1,
+      "0.35": 1,
+      "0.1": 1,
+      "0.15": 4
+    },
+    "lost": [
+      "dragonrise_reforge:bmp3",
+      "dragonrise_reforge:csk181",
+      "dragonrise_reforge:m1126",
+      "dragonrise_reforge:m1128",
+      "dragonrise_reforge:m1296",
+      "dragonrise_reforge:m1a2sepv1",
+      "dragonrise_reforge:m1a2sepv2",
+      "dragonrise_reforge:m3a3",
+      "dragonrise_reforge:sx1",
+      "dragonrise_reforge:t90mh",
+      "dragonrise_reforge:zbd04a",
+      "dragonrise_reforge:zbl08",
+      "dragonrise_reforge:zlt11",
+      "dragonrise_reforge:ztz99a"
+    ],
+    "gained": [
+      "dragonrise_reforge:ztz96a"
+    ],
+    "badParse": [
+      [
+        "fcp:example_trailer",
+        "Unexpected token '﻿', \"﻿{\n  \"ID\":\"... is not valid JSON"
+      ]
+    ],
+    "noRule": [
+      "dragonrise_reforge:2s25m",
+      "dragonrise_reforge:2s38",
+      "dragonrise_reforge:9m133",
+      "dragonrise_reforge:aav7a1",
+      "dragonrise_reforge:aavc7c1",
+      "dragonrise_reforge:ah1f",
+      "dragonrise_reforge:ah64",
+      "dragonrise_reforge:bmp3",
+      "dragonrise_reforge:brdm2",
+      "dragonrise_reforge:camel",
+      "dragonrise_reforge:challenger_ds",
+      "dragonrise_reforge:csk181",
+      "dragonrise_reforge:dshk",
+      "dragonrise_reforge:ec665",
+      "dragonrise_reforge:f4u",
+      "dragonrise_reforge:fav_a",
+      "dragonrise_reforge:flarakpz1",
+      "dragonrise_reforge:hj8",
+      "dragonrise_reforge:humveetow",
+      "dragonrise_reforge:ik_fightcat",
+      "dragonrise_reforge:ik_locust",
+      "dragonrise_reforge:ka50",
+      "dragonrise_reforge:leopard2a4",
+      "dragonrise_reforge:m10booker",
+      "dragonrise_reforge:m1126",
+      "dragonrise_reforge:m1128",
+      "dragonrise_reforge:m113",
+      "dragonrise_reforge:m1296",
+      "dragonrise_reforge:m1a1hc",
+      "dragonrise_reforge:m1a2sepv1",
+      "dragonrise_reforge:m1a2sepv2",
+      "dragonrise_reforge:m2",
+      "dragonrise_reforge:m270",
+      "dragonrise_reforge:m3a3",
+      "dragonrise_reforge:markv",
+      "dragonrise_reforge:mi24p",
+      "dragonrise_reforge:mi24v",
+      "dragonrise_reforge:mk19",
+      "dragonrise_reforge:mv3",
+      "dragonrise_reforge:mv3_armed",
+      "dragonrise_reforge:mv3_supply",
+      "dragonrise_reforge:nh90",
+      "dragonrise_reforge:pak40",
+      "dragonrise_reforge:qjz89",
+      "dragonrise_reforge:sd905",
+      "dragonrise_reforge:shield",
+      "dragonrise_reforge:spacebag",
+      "dragonrise_reforge:strv103",
+      "dragonrise_reforge:su24m",
+      "dragonrise_reforge:sx1",
+      "dragonrise_reforge:t3476",
+      "dragonrise_reforge:t72b3",
+      "dragonrise_reforge:t90mh",
+      "dragonrise_reforge:t90mhigh",
+      "dragonrise_reforge:test_ship",
+      "dragonrise_reforge:type100",
+      "dragonrise_reforge:uh60",
+      "dragonrise_reforge:ural4320",
+      "dragonrise_reforge:ural4320_supply",
+      "dragonrise_reforge:ural4320_zu23",
+      "dragonrise_reforge:z10a",
+      "dragonrise_reforge:z10me",
+      "dragonrise_reforge:z20",
+      "dragonrise_reforge:z9",
+      "dragonrise_reforge:zbd04a",
+      "dragonrise_reforge:zbd05",
+      "dragonrise_reforge:zbl08",
+      "dragonrise_reforge:zlt11",
+      "dragonrise_reforge:zsl10",
+      "dragonrise_reforge:ztd05",
+      "dragonrise_reforge:ztz59a",
+      "dragonrise_reforge:ztz99a",
+      "dragonrise_reforge:zu23",
+      "fcp:aavp",
+      "fcp:bigbird",
+      "fcp:bmp1",
+      "fcp:bmp1am",
+      "fcp:bmp1p",
+      "fcp:bmp1u",
+      "fcp:bmp2",
+      "fcp:bmp2d",
+      "fcp:bmp2m",
+      "fcp:bmp2_noatgm",
+      "fcp:btr3e",
+      "fcp:btr4mv1",
+      "fcp:btr80",
+      "fcp:btr80_cope",
+      "fcp:btr82",
+      "fcp:btr82_cope",
+      "fcp:fmtv",
+      "fcp:gaz_tigr",
+      "fcp:gaz_tigr_gl",
+      "fcp:gaz_tigr_mg",
+      "fcp:gaz_tigr_rws",
+      "fcp:huey",
+      "fcp:huey_door_gunner_m134",
+      "fcp:huey_door_gunner_m60",
+      "fcp:huey_rockets",
+      "fcp:humvee",
+      "fcp:humveem2",
+      "fcp:humveemk19",
+      "fcp:humvee_tow",
+      "fcp:john_deere",
+      "fcp:kamaz",
+      "fcp:lav25",
+      "fcp:la_humvee",
+      "fcp:littlebird",
+      "fcp:littlebird_armed",
+      "fcp:matv",
+      "fcp:matv_9in1",
+      "fcp:matv_crow",
+      "fcp:matv_tow",
+      "fcp:mi17",
+      "fcp:novator",
+      "fcp:seeder",
+      "fcp:stryker_dragoon",
+      "fcp:stryker_m2",
+      "fcp:stryker_mgs",
+      "fcp:stryker_mk19",
+      "fcp:stryker_mortar",
+      "fcp:stryker_tow",
+      "fcp:t14_armata",
+      "fcp:t72av",
+      "fcp:toyota_hilux",
+      "fcp:toyota_hilux_bmp",
+      "fcp:toyota_hilux_mortar",
+      "fcp:toyota_hilux_rocket_pod",
+      "fcp:toyota_hilux_spg9",
+      "fcp:toyota_hilux_zu23",
+      "fcp:uaz",
+      "fcp:uaz_dshka",
+      "fcp:uaz_spg9",
+      "fcp:ural",
+      "fcp:ural_grad",
+      "fcp:venom",
+      "fcp:viper",
+      "vvp:ags_30",
+      "vvp:ah_64",
+      "vvp:ajax",
+      "vvp:bmpt_3k",
+      "vvp:bmp_2",
+      "vvp:bmp_2m",
+      "vvp:bmp_2_bakhcha",
+      "vvp:bmp_3",
+      "vvp:bradley",
+      "vvp:brm",
+      "vvp:btr_3",
+      "vvp:btr_4",
+      "vvp:bushmaster",
+      "vvp:centauro",
+      "vvp:challenger",
+      "vvp:chryzantema",
+      "vvp:cobra",
+      "vvp:cv_90",
+      "vvp:d30",
+      "vvp:fmtv",
+      "vvp:gaz_tigr",
+      "vvp:humvee_mk19",
+      "vvp:kornet",
+      "vvp:leopard_2a4",
+      "vvp:leopard_2a7v",
+      "vvp:m142_himars",
+      "vvp:m1a2_hv",
+      "vvp:m1a2_sep_ii",
+      "vvp:mi_24",
+      "vvp:mi_28",
+      "vvp:mi_8",
+      "vvp:nh90",
+      "vvp:oplot",
+      "vvp:pantsir_s1",
+      "vvp:pautina",
+      "vvp:puma",
+      "vvp:stryker",
+      "vvp:stryker_m1296",
+      "vvp:t72_b3m",
+      "vvp:t90_m",
+      "vvp:terminator",
+      "vvp:ural",
+      "vvp:varta",
+      "vvp:varta_ptrk",
+      "superbwarfare:ac_130h",
+      "superbwarfare:ah_6",
+      "superbwarfare:air_sheep",
+      "superbwarfare:a_10a",
+      "superbwarfare:bradley",
+      "superbwarfare:drone",
+      "superbwarfare:fh_77bw",
+      "superbwarfare:happiest_ghast",
+      "superbwarfare:hpj_11",
+      "superbwarfare:ju_87",
+      "superbwarfare:j_16",
+      "superbwarfare:kirov",
+      "superbwarfare:kv_16",
+      "superbwarfare:laser_tower",
+      "superbwarfare:mi_28",
+      "superbwarfare:mortar",
+      "superbwarfare:speedboat",
+      "superbwarfare:tiny_speedboat",
+      "superbwarfare:tom_6",
+      "superbwarfare:tow",
+      "superbwarfare:type_63",
+      "superbwarfare:vehicle_assembling_table",
+      "superbwarfare:waveforce_tower",
+      "superbwarfare:wheel_chair",
+      "dragonrise_reforge:sx1_a"
+    ]
+  },
+  "effective": {
+    "dragonrise_reforge:2s25m": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:2s38": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:625e": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:9m133": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:aav7a1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:aavc7c1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ac130": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.2,
+          "gate": ">0.1?0.5:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.2) * damage * (entity.getHealth() > 0.1 ? 0.5 : 0.05)"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ah1f": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ah64": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:akm": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:amx56": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:av8b": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ba10": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:bkan1c": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:bmd4m": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:bmp3": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:bmpt72": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:brdm2": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:camel": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:challenger_ds": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:chonmaho5": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:churchill_vii": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.28,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.28) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:cm34": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:comet": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:csk181": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:cv90": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:cyborg_tank": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:darkbear": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:dshk": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ec665": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:f14": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:f15e": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:f16c": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:f4u": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:fa18e": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:fav_a": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:flarakpz1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:hj8": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:humvee": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.05,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.05) * damage"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:humveetow": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:hyr0": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ik_fightcat": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ik_locust": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:is2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j10": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j10c": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j11": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j15t": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j16": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j20": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j20vtol": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j35": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:j8": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:jas39e": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:jf17": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ka50": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:kv1": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:kv2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:l1a2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:lcm": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:leopard2a4": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:lvt": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m10booker": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1126": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1128": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m113": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1296": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1a1hc": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1a2sepv1": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 35,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m1a2sepv2": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 35,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m2": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m270": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m3a3": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m3stuart": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m4a2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:m4a2_105": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:markv": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:maus": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.2,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.2) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mi24p": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mi24v": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mk19": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:motuo": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.05,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.05) * damage"
+        }
+      ],
+      "modCount": 24,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mv3": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mv3_armed": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:mv3_supply": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:nh90": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:npds114": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:npds514": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:npds810": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:pak40": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:panzer4": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:pershing": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.30) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:project640": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:pzbjy": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:q5": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:qjz89": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:refale": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:refaleaa": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:sd905": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 5,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:shield": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:silverhand_mk_iv": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 32,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:spacebag": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:strv103": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:su24m": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:sx1": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 23,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:syy651": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t26b": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t3476": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t3485": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.32,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.32) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t72b3": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 35,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t80": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t80b": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t90mh": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 35,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:t90mhigh": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:test": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:test_ship": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:tiger": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:tjgc": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": ">0.1?0.4:0.05",
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+        }
+      ],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:toyota_seiki": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.05,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.05) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:tunguska": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:type100": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:type3": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:type97": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:type97q": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:uh60": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ural4320": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ural4320_supply": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ural4320_zu23": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:vt4a1": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:vt4b": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:wlhgzu23": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 23,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:wlsc": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.05,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.05) * damage"
+        }
+      ],
+      "modCount": 24,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:z10a": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:z10me": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:z20": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:z9": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zbd04a": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zbd05": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zbl08": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zlt11": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zsl10": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zsu234": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztd05": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztq15": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztz59a": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztz96a": {
+      "source": "kubejs",
+      "angle": [
+        {
+          "m": 0.35,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.35) * damage"
+        }
+      ],
+      "modCount": 36,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztz99a": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 35,
+      "trailing": 1,
+      "err": null
+    },
+    "dragonrise_reforge:ztz99ah": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:ztz99bh": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:zu23": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:aavp": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bigbird": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp1am": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp1p": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp1u": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp2": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp2d": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp2m": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:bmp2_noatgm": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr3e": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr4mv1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr80": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr80_cope": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr82": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:btr82_cope": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:example_trailer": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": "Unexpected token '﻿', \"﻿{\n  \"ID\":\"... is not valid JSON"
+    },
+    "fcp:fmtv": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:gaz_tigr": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:gaz_tigr_gl": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:gaz_tigr_mg": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:gaz_tigr_rws": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:huey": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:huey_door_gunner_m134": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:huey_door_gunner_m60": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:huey_rockets": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:humvee": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:humveem2": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:humveemk19": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:humvee_tow": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:john_deere": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:kamaz": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:lav25": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:la_humvee": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:littlebird": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:littlebird_armed": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:matv": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:matv_9in1": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:matv_crow": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:matv_tow": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:mi17": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:novator": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:seeder": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_dragoon": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_m2": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_mgs": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_mk19": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_mortar": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 34,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:stryker_tow": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:t14_armata": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 1,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:t72av": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux_bmp": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux_mortar": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux_rocket_pod": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux_spg9": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:toyota_hilux_zu23": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:uaz": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:uaz_dshka": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:uaz_spg9": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:ural": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:ural_grad": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:venom": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "fcp:viper": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:ags_30": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:ah_64": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:ajax": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bmpt_3k": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bmp_2": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bmp_2m": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bmp_2_bakhcha": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bmp_3": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bradley": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:brm": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:btr_3": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:btr_4": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:bushmaster": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:centauro": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:challenger": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:chryzantema": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:cobra": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 8,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:cv_90": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:d30": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:fmtv": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:gaz_tigr": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:humvee_mk19": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:kornet": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:leopard_2a4": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:leopard_2a7v": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:m142_himars": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:m1a2_hv": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:m1a2_sep_ii": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:mi_24": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:mi_28": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:mi_8": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:nh90": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:oplot": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:pantsir_s1": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:pautina": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:puma": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:stryker": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:stryker_m1296": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:t72_b3m": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:t90_m": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:terminator": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:ural": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:varta": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "vvp:varta_ptrk": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:ac_130h": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:ah_6": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:air_sheep": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:annihilator": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 3) * damage"
+        }
+      ],
+      "modCount": 24,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:a_10a": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:bl_132": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.1,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.1) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:bmp_2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.15,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.15) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:bradley": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 30,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:drone": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:fh_77bw": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:happiest_ghast": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:hpj_11": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:ju_87": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:j_16": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:kirov": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:kv_16": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:laser_tower": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:lav_150": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.15,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.15) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:lav_25": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.15,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.15) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:lav_ad": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.15,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.15) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:mi_28": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:mk_42": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:mle_1934": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 25,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:mortar": {
+      "source": "jar",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:m_1a_2": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:plz_05": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:prism_tank": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.2,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.2) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:sodayo_pick_up": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:sodayo_pick_up_hmg": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:sodayo_pick_up_rocket": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:sodayo_pick_up_tow": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:speedboat": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:tiny_speedboat": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 26,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:tom_6": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 5,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:tow": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 4,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:truck": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.25,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.25) * damage"
+        }
+      ],
+      "modCount": 29,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:type_63": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 22,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:t_90a": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:vehicle_assembling_table": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 5,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:waveforce_tower": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 27,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:wheel_chair": {
+      "source": "jar",
+      "angle": [],
+      "modCount": 5,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:yx_100": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 28,
+      "trailing": 0,
+      "err": null
+    },
+    "superbwarfare:ztz_99a": {
+      "source": "jar",
+      "angle": [
+        {
+          "m": 0.3,
+          "gate": null,
+          "raw": "$entity.getSourceAngle(source, 0.3) * damage"
+        }
+      ],
+      "modCount": 31,
+      "trailing": 0,
+      "err": null
+    },
+    "dragonrise_reforge:sx1_a": {
+      "source": "kubejs",
+      "angle": [],
+      "modCount": null,
+      "trailing": 0,
+      "err": null
+    }
+  }
+}

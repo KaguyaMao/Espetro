@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:terminator",
+  "Model": {
+    "Model": "vvp:geo/terminator.geo.json",
+    "Texture": "vvp:textures/entity/terminator.png"
+  }
+}

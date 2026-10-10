@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:m1a2sepv1",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/m1a2sepv1.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/m1a2sepv1.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/m1a2sepv1.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/m1a2sepv1.png"
+    }
+  ]
+}

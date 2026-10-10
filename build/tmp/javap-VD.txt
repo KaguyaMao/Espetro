@@ -1,0 +1,192 @@
+Compiled from "VehicleData.java"
+public class com.atsuishio.superbwarfare.data.vehicle.VehicleData implements com.atsuishio.superbwarfare.data.DefaultDataSupplier<com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData> {
+  public final java.lang.String id;
+
+  public final com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity vehicle;
+
+  private final com.atsuishio.superbwarfare.data.JsonPropertyModifier<com.atsuishio.superbwarfare.data.vehicle.VehicleData, com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData> jsonPropModifier;
+
+  private com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData cache;
+
+  public static final com.google.common.cache.LoadingCache<com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity, com.atsuishio.superbwarfare.data.vehicle.VehicleData> dataCache;
+
+  private com.atsuishio.superbwarfare.data.vehicle.VehicleData(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity);
+    Code:
+       0: aload_0
+       1: invokespecial #32                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: new           #34                 // class com/atsuishio/superbwarfare/data/JsonPropertyModifier
+       8: dup
+       9: invokespecial #35                 // Method com/atsuishio/superbwarfare/data/JsonPropertyModifier."<init>":()V
+      12: putfield      #37                 // Field jsonPropModifier:Lcom/atsuishio/superbwarfare/data/JsonPropertyModifier;
+      15: aload_0
+      16: aconst_null
+      17: putfield      #39                 // Field cache:Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+      20: aload_0
+      21: aload_1
+      22: invokevirtual #45                 // Method com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.m_6095_:()Lnet/minecraft/world/entity/EntityType;
+      25: invokestatic  #49                 // Method getRegistryId:(Lnet/minecraft/world/entity/EntityType;)Ljava/lang/String;
+      28: putfield      #51                 // Field id:Ljava/lang/String;
+      31: aload_0
+      32: aload_1
+      33: putfield      #53                 // Field vehicle:Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;
+      36: return
+
+  public static com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData compute(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity);
+    Code:
+       0: aload_0
+       1: invokestatic  #63                 // Method from:(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;)Lcom/atsuishio/superbwarfare/data/vehicle/VehicleData;
+       4: invokevirtual #66                 // Method compute:()Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       7: areturn
+
+  public com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData compute();
+    Code:
+       0: aload_0
+       1: getfield      #39                 // Field cache:Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       4: ifnull        12
+       7: aload_0
+       8: getfield      #39                 // Field cache:Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+      11: areturn
+      12: aload_0
+      13: invokevirtual #69                 // Method getDefault:()Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+      16: invokevirtual #75                 // Method com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData.copy:()Lcom/atsuishio/superbwarfare/data/IDBasedData;
+      19: checkcast     #71                 // class com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData
+      22: astore_1
+      23: aload_0
+      24: getfield      #53                 // Field vehicle:Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;
+      27: invokevirtual #79                 // Method com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.isInitialized:()Z
+      30: ifeq          60
+      33: aload_0
+      34: getfield      #37                 // Field jsonPropModifier:Lcom/atsuishio/superbwarfare/data/JsonPropertyModifier;
+      37: aload_0
+      38: getfield      #53                 // Field vehicle:Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;
+      41: invokevirtual #83                 // Method com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.getOverride:()Ljava/lang/String;
+      44: invokevirtual #87                 // Method com/atsuishio/superbwarfare/data/JsonPropertyModifier.update:(Ljava/lang/String;)V
+      47: aload_0
+      48: getfield      #37                 // Field jsonPropModifier:Lcom/atsuishio/superbwarfare/data/JsonPropertyModifier;
+      51: aload_0
+      52: aload_1
+      53: invokevirtual #91                 // Method com/atsuishio/superbwarfare/data/JsonPropertyModifier.computeProperties:(Lcom/atsuishio/superbwarfare/data/DefaultDataSupplier;Ljava/lang/Object;)Ljava/lang/Object;
+      56: checkcast     #71                 // class com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData
+      59: astore_1
+      60: aload_1
+      61: invokevirtual #94                 // Method com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData.limit:()V
+      64: aload_0
+      65: aload_1
+      66: putfield      #39                 // Field cache:Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+      69: aload_1
+      70: areturn
+
+  public void update();
+    Code:
+       0: aload_0
+       1: aconst_null
+       2: putfield      #39                 // Field cache:Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       5: return
+
+  public static com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData getDefault(java.lang.String);
+    Code:
+       0: getstatic     #102                // Field com/atsuishio/superbwarfare/data/CustomData.VEHICLE_DATA:Lcom/atsuishio/superbwarfare/data/DataMap;
+       3: aload_0
+       4: invokevirtual #108                // Method com/atsuishio/superbwarfare/data/DataMap.containsKey:(Ljava/lang/Object;)Z
+       7: ifne          14
+      10: iconst_1
+      11: goto          15
+      14: iconst_0
+      15: istore_1
+      16: getstatic     #102                // Field com/atsuishio/superbwarfare/data/CustomData.VEHICLE_DATA:Lcom/atsuishio/superbwarfare/data/DataMap;
+      19: aload_0
+      20: invokedynamic #124,  0            // InvokeDynamic #0:get:()Ljava/util/function/Supplier;
+      25: invokevirtual #128                // Method com/atsuishio/superbwarfare/data/DataMap.getOrElseGet:(Ljava/lang/Object;Ljava/util/function/Supplier;)Ljava/lang/Object;
+      28: checkcast     #71                 // class com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData
+      31: astore_2
+      32: aload_2
+      33: iload_1
+      34: putfield      #132                // Field com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData.isDefaultData:Z
+      37: aload_2
+      38: areturn
+
+  public com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData getDefault();
+    Code:
+       0: aload_0
+       1: getfield      #51                 // Field id:Ljava/lang/String;
+       4: invokestatic  #136                // Method getDefault:(Ljava/lang/String;)Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       7: areturn
+
+  public static com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData getDefault(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity);
+    Code:
+       0: aload_0
+       1: invokevirtual #45                 // Method com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.m_6095_:()Lnet/minecraft/world/entity/EntityType;
+       4: invokestatic  #139                // Method getDefault:(Lnet/minecraft/world/entity/EntityType;)Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       7: areturn
+
+  public static com.atsuishio.superbwarfare.data.vehicle.DefaultVehicleData getDefault(net.minecraft.world.entity.EntityType<?>);
+    Code:
+       0: aload_0
+       1: invokestatic  #49                 // Method getRegistryId:(Lnet/minecraft/world/entity/EntityType;)Ljava/lang/String;
+       4: invokestatic  #136                // Method getDefault:(Ljava/lang/String;)Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       7: areturn
+
+  public static java.lang.String getRegistryId(net.minecraft.world.entity.EntityType<?>);
+    Code:
+       0: aload_0
+       1: invokestatic  #150                // Method net/minecraft/world/entity/EntityType.m_20613_:(Lnet/minecraft/world/entity/EntityType;)Lnet/minecraft/resources/ResourceLocation;
+       4: invokevirtual #155                // Method net/minecraft/resources/ResourceLocation.toString:()Ljava/lang/String;
+       7: areturn
+
+  public static com.atsuishio.superbwarfare.data.vehicle.VehicleData from(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity);
+    Code:
+       0: getstatic     #157                // Field dataCache:Lcom/google/common/cache/LoadingCache;
+       3: aload_0
+       4: invokeinterface #163,  2          // InterfaceMethod com/google/common/cache/LoadingCache.getUnchecked:(Ljava/lang/Object;)Ljava/lang/Object;
+       9: checkcast     #2                  // class com/atsuishio/superbwarfare/data/vehicle/VehicleData
+      12: areturn
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier damageModifier();
+    Code:
+       0: new           #167                // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier
+       3: dup
+       4: invokespecial #168                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier."<init>":()V
+       7: astore_1
+       8: aload_0
+       9: invokevirtual #66                 // Method compute:()Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+      12: astore_2
+      13: aload_2
+      14: getfield      #171                // Field com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData.applyDefaultDamageModifiers:Z
+      17: ifeq          41
+      20: aload_1
+      21: invokestatic  #174                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.createDefaultModifier:()Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      24: invokevirtual #178                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.toList:()Ljava/util/List;
+      27: invokevirtual #182                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.addAll:(Ljava/util/List;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      30: pop
+      31: aload_1
+      32: ldc           #183                // float 5.0f
+      34: getstatic     #189                // Field com/atsuishio/superbwarfare/init/ModDamageTypes.VEHICLE_STRIKE:Lnet/minecraft/resources/ResourceKey;
+      37: invokevirtual #193                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.reduce:(FLnet/minecraft/resources/ResourceKey;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      40: pop
+      41: aload_1
+      42: aload_2
+      43: getfield      #197                // Field com/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData.damageModifiers:Lcom/atsuishio/superbwarfare/data/ObjectToList;
+      46: invokestatic  #202                // Method com/atsuishio/superbwarfare/data/DataLoader.processValue:(Ljava/lang/Object;)Ljava/lang/Object;
+      49: checkcast     #204                // class java/util/List
+      52: invokevirtual #182                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier.addAll:(Ljava/util/List;)Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier;
+      55: areturn
+
+  public java.lang.Object getDefault();
+    Code:
+       0: aload_0
+       1: invokevirtual #69                 // Method getDefault:()Lcom/atsuishio/superbwarfare/data/vehicle/DefaultVehicleData;
+       4: areturn
+
+  static {};
+    Code:
+       0: invokestatic  #213                // Method com/google/common/cache/CacheBuilder.newBuilder:()Lcom/google/common/cache/CacheBuilder;
+       3: invokevirtual #216                // Method com/google/common/cache/CacheBuilder.weakKeys:()Lcom/google/common/cache/CacheBuilder;
+       6: invokevirtual #219                // Method com/google/common/cache/CacheBuilder.weakValues:()Lcom/google/common/cache/CacheBuilder;
+       9: new           #10                 // class com/atsuishio/superbwarfare/data/vehicle/VehicleData$1
+      12: dup
+      13: invokespecial #220                // Method com/atsuishio/superbwarfare/data/vehicle/VehicleData$1."<init>":()V
+      16: invokevirtual #224                // Method com/google/common/cache/CacheBuilder.build:(Lcom/google/common/cache/CacheLoader;)Lcom/google/common/cache/LoadingCache;
+      19: putstatic     #157                // Field dataCache:Lcom/google/common/cache/LoadingCache;
+      22: return
+}

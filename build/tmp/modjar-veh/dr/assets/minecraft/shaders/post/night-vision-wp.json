@@ -1,0 +1,45 @@
+{
+  "targets": [
+    "swap",
+    "autogain_temp",
+    "autogain_buffer"
+  ],
+  "passes": [
+    {
+      "name": "autogain",
+      "intarget": "minecraft:main",
+      "outtarget": "autogain_temp",
+      "auxtargets": [
+        {
+          "name": "PreviousGainSampler",
+          "id": "autogain_buffer"
+        }
+      ],
+      "uniforms": []
+    },
+    {
+      "name": "blit",
+      "intarget": "autogain_temp",
+      "outtarget": "autogain_buffer"
+    },
+    {
+      "name": "night-vision-wp",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "AutoGainSampler",
+          "id": "autogain_buffer"
+        }
+      ],
+      "uniforms": [
+
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

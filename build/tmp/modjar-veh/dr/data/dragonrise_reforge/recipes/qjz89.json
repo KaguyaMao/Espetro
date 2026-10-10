@@ -1,0 +1,10 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "defense",
+  "inputs": [
+    "1 superbwarfare:steel_block"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:qjz89"
+  }
+}

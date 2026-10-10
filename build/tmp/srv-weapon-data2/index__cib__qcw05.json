@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.qcw05.name",
+  "display": "cib:qcw05_display",
+  "data": "cib:qcw05_data",
+  "type": "smg",
+  "tooltip": "cib.gun.qcw05.desc",
+  "item_type": "modern_kinetic",
+  "sort": 2461600
+}

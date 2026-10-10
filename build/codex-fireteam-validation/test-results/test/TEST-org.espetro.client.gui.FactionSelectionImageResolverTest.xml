@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.espetro.client.gui.FactionSelectionImageResolverTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-08-13T05:47:11" hostname="DESKTOP-1GK3H0A" time="0.011">
+  <properties/>
+  <testcase name="ignoresResourceLocationsAndMissingFiles(Path)" classname="org.espetro.client.gui.FactionSelectionImageResolverTest" time="0.002"/>
+  <testcase name="rejectsPathsOutsideClientEsFactions(Path)" classname="org.espetro.client.gui.FactionSelectionImageResolverTest" time="0.004"/>
+  <testcase name="resolvesRelativeImageFromClientEsFactions(Path)" classname="org.espetro.client.gui.FactionSelectionImageResolverTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

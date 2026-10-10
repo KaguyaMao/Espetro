@@ -40,6 +40,7 @@ public class EspetroClient {
         org.espetro.client.gui.RadioRadialController.initialize();
         org.espetro.client.gui.VehicleWheelController.initialize();
         org.espetro.client.gui.ResupplyRadialController.initialize();
+        org.espetro.client.gui.FixedWeaponWheelController.initialize();
         org.espetro.client.gui.VehicleSupplyHud.register();
         org.espetro.client.vehicle.VehicleMountClientGate.register();
         org.espetro.client.vehicle.DismountGate.register();
@@ -57,6 +58,10 @@ public class EspetroClient {
             .addListener(org.espetro.client.FortificationPlacementController::onInteraction);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(org.espetro.client.FortificationPlacementController::render);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.FortificationWandOverlay::render);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.FortificationWandOverlay::renderHud);
     }
 
     // ==================== 事件处理方法 ====================
@@ -75,12 +80,17 @@ public class EspetroClient {
             "key.espetro.class", 74, "key.categories.espetro");
         net.minecraft.client.KeyMapping keyRadial = new net.minecraft.client.KeyMapping(
             "key.espetro.radial", org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT, "key.categories.espetro");
+        // 工事预览时按 R 顺时针旋转 90°（非预览状态无作用）
+        net.minecraft.client.KeyMapping keyFortRotate = new net.minecraft.client.KeyMapping(
+            "key.espetro.fort_rotate", org.lwjgl.glfw.GLFW.GLFW_KEY_R, "key.categories.espetro");
         event.register(keyTeam);
         event.register(keyClass);
         event.register(keyRadial);
+        event.register(keyFortRotate);
         Espetro.KEY_TEAM = keyTeam;
         Espetro.KEY_CLASS = keyClass;
         Espetro.KEY_RADIAL = keyRadial;
+        Espetro.KEY_FORT_ROTATE = keyFortRotate;
     }
 
     private static void registerReloadListeners(
@@ -101,6 +111,8 @@ public class EspetroClient {
         org.espetro.client.gui.VehicleWheelController.tick(mc);
         org.espetro.client.gui.ResupplyRadialController.tick();
         org.espetro.client.FortificationPlacementController.tick(mc);
+        org.espetro.client.FixedWeaponInteractController.tick(mc);
+        org.espetro.client.gui.FixedWeaponWheelController.tick();
         org.espetro.client.gui.TutorialOverlay.tick();
         org.espetro.client.audio.ClientFormationAudioManager.tick(mc);
         // 载具/补给站实体补加：区块未 FULL 时被暂存的实体在此重试补加（方案 A）

@@ -633,7 +633,7 @@ Radio 能足额支付职业变体的 `ammo_cost` 时才会提交；满弹或库�
 | 字段 | 类型 | 默认/说明 |
 | --- | --- | --- |
 | `name`, `description`, `role` | String | GUI 信息 |
-| `icon` | String | 可选；`assets/espetro/textures/gui/roles/` 下不带扩展名的职业图标短名 |
+| `icon` | String | 可选；`assets/espetro/textures/gui/roles/` 下不带扩展名的职业图标短名。当前编制在用的短名：`leader`、`lead_crewman`、`crewman`、`medic`、`rifleman`、`automatic_rifleman`、`machine_gunner`、`grenadier`、`light_at`、`heavy_at`、`marksman`、`raider`、`engineer`、`scout`；另有 `sapper`、`breacher`、`sniper`、`rifleman_scoped`、`unarmed`、`dead`、`pilot`、`lead_pilot`、`medic_alt`、`rank_*`、`incap_*` 等备用图标。改名会让载具组员兼容识别失效（见 `vehicle_crew`） |
 | `row` | Integer | 职业选择界面的行号（1–5）；也接受 `grid_row` / `gridRow`。同一行内按该职业在 `classes` 对象中的 JSON 书写顺序从左到右排列 |
 | `vehicle_crew` | Boolean | 可选；`true` 表示该职业可使用受限载具座位。缺失时为兼容旧编制，仅 `icon: "crewman"` 自动视为载具组员；显式 `false` 可关闭该兼容识别。也接受 `vehicleCrew` |
 | `IconImage` | String | 可选；**文件系统完整路径**的职业图标（优先于 `icon`），例 `/home/shu/图片/Icon/rifleman.png` |

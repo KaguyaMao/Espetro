@@ -1,0 +1,20 @@
+{
+  "mappings": {
+    "org/esvoice/mixin/ChatComponentMixin": {
+      "getHeight()I": "Lnet/minecraft/client/gui/components/ChatComponent;m_93814_()I"
+    },
+    "org/esvoice/mixin/MinecraftScreenMixin": {
+      "setScreen": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "org/esvoice/mixin/ChatComponentMixin": {
+        "getHeight()I": "Lnet/minecraft/client/gui/components/ChatComponent;m_93814_()I"
+      },
+      "org/esvoice/mixin/MinecraftScreenMixin": {
+        "setScreen": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V"
+      }
+    }
+  }
+}

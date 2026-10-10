@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "superbwarfare:large_battery_pack",
+    "superbwarfare:medium_armament_module",
+    "3 #forge:storage_blocks/steel",
+    "6 superbwarfare:wheel",
+    "superbwarfare:large_motor",
+    "6 vvp:gmlrs_m31"
+  ],
+  "result": {
+    "entity": "vvp:m142_himars"
+  }
+}

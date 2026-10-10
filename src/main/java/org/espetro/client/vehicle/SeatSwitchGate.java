@@ -8,6 +8,7 @@ import org.espetro.network.NetworkManager;
 import org.espetro.network.SeatSwitchReadyPacket;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
 import org.espetro.vehicle.VehicleInteractionConfig;
+import org.espetro.vehicle.VehicleNativeWhitelist;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -69,6 +70,11 @@ public final class SeatSwitchGate {
         }
         if (mc.player.getVehicle() == null
             || !SbwVehicleSeatResolver.isSupportedVehicle(mc.player.getVehicle())) {
+            reset();
+            return;
+        }
+        // 白名单载具：不接管换座读条，让 SBW 原生 Shift+数字键生效。
+        if (VehicleNativeWhitelist.isNative(mc.player.getVehicle())) {
             reset();
             return;
         }

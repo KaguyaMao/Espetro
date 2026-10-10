@@ -1,0 +1,9 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.himars_missile.idle": {
+      "loop": true,
+      "animation_length": 1
+    }
+  }
+}

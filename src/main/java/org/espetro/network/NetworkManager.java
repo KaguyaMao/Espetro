@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 public class NetworkManager {
 
-    public static final String PROTOCOL_VERSION = "1.33";
+    public static final String PROTOCOL_VERSION = "1.35";
 
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(
         ResourceLocation.fromNamespaceAndPath(Espetro.MOD_ID, "main"),
@@ -98,6 +98,15 @@ public class NetworkManager {
             TeamSelectPacket::write,
             TeamSelectPacket::read,
             TeamSelectPacket::handle
+        );
+
+        // 观战请求包（中途加入面板"进入观战"）
+        NET.registerMessage(
+            nextId(),
+            SpectateRequestPacket.class,
+            SpectateRequestPacket::write,
+            SpectateRequestPacket::read,
+            SpectateRequestPacket::handle
         );
 
         // 职业选择包（包含结果）
@@ -280,6 +289,15 @@ public class NetworkManager {
             RequestVehicleInfoPacket::handle
         );
 
+        // 主动重新部署请求包（C→S）：立刻阵亡，对战阶段扣兵力、部署阶段不扣
+        NET.registerMessage(
+            nextId(),
+            RedeployRequestPacket.class,
+            RedeployRequestPacket::write,
+            RedeployRequestPacket::read,
+            RedeployRequestPacket::handle
+        );
+
         // 复活点选择界面包（S→C）
         NET.registerMessage(
             nextId(),
@@ -395,6 +413,9 @@ public class NetworkManager {
         NET.registerMessage(nextId(), FortificationProgressPacket.class,
             FortificationProgressPacket::write, FortificationProgressPacket::read,
             FortificationProgressPacket::handle);
+        NET.registerMessage(nextId(), FortificationWandPacket.class,
+            FortificationWandPacket::write, FortificationWandPacket::read,
+            FortificationWandPacket::handle);
         NET.registerMessage(nextId(), AudioCuePacket.class,
             AudioCuePacket::write, AudioCuePacket::read, AudioCuePacket::handle);
         NET.registerMessage(nextId(), TaczGunPackSyncChunkPacket.class,
@@ -467,6 +488,17 @@ public class NetworkManager {
             .decoder(CloseModScreensPacket::read)
             .consumerMainThread(CloseModScreensPacket::handle)
             .add();
+        // 固定武器：F 键用 FOB 弹药兑换（协议 1.12）
+        NET.registerMessage(nextId(), FixedWeaponExchangePacket.class,
+            FixedWeaponExchangePacket::write, FixedWeaponExchangePacket::read,
+            FixedWeaponExchangePacket::handle);
+        // 固定武器：F 打开兑换轮盘（协议 1.13）
+        NET.registerMessage(nextId(), FixedWeaponOpenPacket.class,
+            FixedWeaponOpenPacket::write, FixedWeaponOpenPacket::read,
+            FixedWeaponOpenPacket::handle);
+        NET.registerMessage(nextId(), FixedWeaponWheelPacket.class,
+            FixedWeaponWheelPacket::write, FixedWeaponWheelPacket::read,
+            FixedWeaponWheelPacket::handle);
     }
 
     public static void sendBuildFortification(String fortId) {
@@ -488,8 +520,30 @@ public class NetworkManager {
         NET.sendToServer(FortificationWorkPacket.entity(target, build));
     }
 
+    /** 固定武器：请求打开兑换轮盘（对普通载具会静默无响应）。 */
+    public static void sendFixedWeaponOpen(UUID weaponEntityId) {
+        if (weaponEntityId == null) {
+            return;
+        }
+        NET.sendToServer(new FixedWeaponOpenPacket(weaponEntityId));
+    }
+
+    /** 固定武器：请求用所在 FOB 的弹药兑换一次。 */
+    public static void sendFixedWeaponExchange(UUID weaponEntityId) {
+        if (weaponEntityId == null) {
+            return;
+        }
+        NET.sendToServer(new FixedWeaponExchangePacket(weaponEntityId));
+    }
+
     public static void requestFortificationCatalog() {
         NET.sendToServer(FortificationCatalogPacket.request());
+    }
+
+    /** 工事编辑器选区同步（仅发给对应的管理员）。 */
+    public static void sendFortificationWand(ServerPlayer player, FortificationWandPacket packet) {
+        if (player == null || packet == null) return;
+        NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
     public static void sendRadioOpen(net.minecraft.core.BlockPos pos) {
@@ -508,6 +562,12 @@ public class NetworkManager {
         NET.send(PacketDistributor.PLAYER.with(() -> player), new EquipZoneSyncPacket(zones));
     }
 
+    /** 重发部署界面（不打开面板），用于开关状态变化后让界面立刻按新规则重算。 */
+    public static void resendDeployScreen(ServerPlayer player) {
+        if (player == null) return;
+        sendUnifiedDeployScreen(player, -1, false);
+    }
+
     /** 向玩家发送载具职业选择（不依赖 Radio，战斗载具专用） */
     public static void sendVehicleClassSelect(ServerPlayer player, String factionId) {
         if (factionId == null) return;
@@ -523,6 +583,7 @@ public class NetworkManager {
             ? org.espetro.team.SquadManager.getInstance().getSquadMemberUuids(team, squadId).size()
             : 0;
         int cooldown = counts.getClassSwitchCooldownRemaining(player.getUUID());
+        boolean freeUnlock = org.espetro.team.FreeUnlockManager.isEnabled();
         var list = new java.util.ArrayList<RadioRadialPacket.ClassEntry>();
         if (kits != null) {
             for (var kit : kits) {
@@ -539,13 +600,14 @@ public class NetworkManager {
                     denial = "职业切换冷却中，还需等待 " + cooldown + " 秒。";
                 } else if (!inSquad) {
                     denial = "请先加入班组小队后再选择职业。";
-                } else if (kit.teammatesNeed > 0 && squadSize < kit.teammatesNeed) {
+                } else if (!freeUnlock && kit.teammatesNeed > 0 && squadSize < kit.teammatesNeed) {
                     denial = "小队达到 " + kit.teammatesNeed + " 人后才能选择该职业。";
-                } else if (kit.teamCount && squadCount >= kit.maxPlayers) {
+                } else if (!freeUnlock && kit.teamCount && squadCount >= kit.maxPlayers) {
                     denial = "本小队该职业人数已满（" + squadCount + "/" + kit.maxPlayers + "）。";
-                } else if (!kit.teamCount && teamCount >= kit.maxPlayers) {
+                } else if (!freeUnlock && !kit.teamCount && teamCount >= kit.maxPlayers) {
                     denial = "该职业全队人数已满（" + teamCount + "/" + kit.maxPlayers + "）。";
-                } else if (!kit.teamCount && kit.maxPerSquad > 0 && squadCount >= kit.maxPerSquad) {
+                } else if (!freeUnlock && !kit.teamCount && kit.maxPerSquad > 0
+                    && squadCount >= kit.maxPerSquad) {
                     denial = "本小队该职业人数已满（" + squadCount + "/" + kit.maxPerSquad + "）。";
                 }
                 boolean enabled = denial.isEmpty();
@@ -560,7 +622,7 @@ public class NetworkManager {
                             ? counts.countVariantInSquad(team, squadId, kit.id, variant.id)
                             : counts.getVariantCount(team, kit.id, variant.id);
                         boolean variantEnabled = enabled
-                            && (!kit.strictCount || variantCount < variant.maxPlayers);
+                            && (freeUnlock || !kit.strictCount || variantCount < variant.maxPlayers);
                         String variantDenial = denial;
                         if (enabled && !variantEnabled)
                             variantDenial = "该装备变体人数已满（" + variantCount + "/" + variant.maxPlayers + "）。";
@@ -618,6 +680,11 @@ public class NetworkManager {
      */
     public static void sendFactionSelect(String factionId) {
         NET.sendToServer(new TeamSelectPacket(factionId));
+    }
+
+    /** 请求进入观战（中途加入面板按钮，C→S）。 */
+    public static void sendSpectateRequest() {
+        NET.sendToServer(new SpectateRequestPacket());
     }
 
     /**
@@ -1284,6 +1351,11 @@ public class NetworkManager {
         NET.sendToServer(new RequestVehicleInfoPacket());
     }
 
+    /** 客户端请求重新部署（立刻阵亡；对战阶段扣兵力，部署阶段不扣）。 */
+    public static void requestRedeploy() {
+        NET.sendToServer(new RedeployRequestPacket());
+    }
+
     private static void sendVehicleDeployScreen(ServerPlayer player, String factionId,
                                                 boolean openScreen) {
         java.util.Map<String, org.espetro.vehicle.VehicleConfig.VehicleTypeConfig> configs =
@@ -1483,7 +1555,8 @@ public class NetworkManager {
                 .getClassSwitchCooldownRemaining(player.getUUID()),
             openScreen,
             java.util.Objects.toString(
-                ClassCountManager.getInstance().getPlayerClass(player.getUUID()), "")
+                ClassCountManager.getInstance().getPlayerClass(player.getUUID()), ""),
+            org.espetro.team.FreeUnlockManager.isEnabled()
         );
 
         NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
@@ -1820,6 +1893,10 @@ public class NetworkManager {
 
     public static void sendPartyJoin(java.util.UUID partyId, String password) {
         NET.sendToServer(PartyActionPacket.join(partyId, password));
+    }
+
+    public static void sendPartySetPassword(java.util.UUID partyId, String password) {
+        NET.sendToServer(PartyActionPacket.setPassword(partyId, password));
     }
 
     public static void sendPartyLeave() {

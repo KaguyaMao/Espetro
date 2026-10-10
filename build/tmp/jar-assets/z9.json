@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:z9",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/z9.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/z9.png"
+              },
+    "MouseSpeed":  [
+                       0.3,
+                       0.3
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/z9.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/z9.png"
+                   }
+               ]
+}

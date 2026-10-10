@@ -1,0 +1,66 @@
+Compiled from "LoadingJsonEvent.kt"
+public class com.atsuishio.superbwarfare.api.event.LoadingJsonEvent extends net.minecraftforge.eventbus.api.Event {
+  private final java.lang.String id;
+
+  private java.lang.String jsonStr;
+
+  public com.atsuishio.superbwarfare.api.event.LoadingJsonEvent(java.lang.String, java.lang.String);
+    Code:
+       0: aload_1
+       1: ldc           #55                 // String id
+       3: invokestatic  #61                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_2
+       7: ldc           #62                 // String jsonStr
+       9: invokestatic  #61                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: aload_0
+      13: invokespecial #65                 // Method net/minecraftforge/eventbus/api/Event."<init>":()V
+      16: aload_0
+      17: aload_1
+      18: putfield      #67                 // Field id:Ljava/lang/String;
+      21: aload_0
+      22: aload_2
+      23: putfield      #69                 // Field jsonStr:Ljava/lang/String;
+      26: return
+
+  public final java.lang.String getId();
+    Code:
+       0: aload_0
+       1: getfield      #67                 // Field id:Ljava/lang/String;
+       4: areturn
+
+  public final java.lang.String getJsonStr();
+    Code:
+       0: aload_0
+       1: getfield      #69                 // Field jsonStr:Ljava/lang/String;
+       4: areturn
+
+  public final void setJsonStr(java.lang.String);
+    Code:
+       0: aload_1
+       1: ldc           #72                 // String <set-?>
+       3: invokestatic  #61                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_0
+       7: aload_1
+       8: putfield      #69                 // Field jsonStr:Ljava/lang/String;
+      11: return
+
+  public final com.google.gson.JsonObject getAsGsonObject();
+    Code:
+       0: aload_0
+       1: getfield      #69                 // Field jsonStr:Ljava/lang/String;
+       4: invokestatic  #78                 // Method com/google/gson/JsonParser.parseString:(Ljava/lang/String;)Lcom/google/gson/JsonElement;
+       7: invokevirtual #82                 // Method com/google/gson/JsonElement.getAsJsonObject:()Lcom/google/gson/JsonObject;
+      10: dup
+      11: ldc           #84                 // String getAsJsonObject(...)
+      13: invokestatic  #87                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      16: areturn
+
+  public final kotlinx.serialization.json.JsonObject getAsJsonObject();
+    Code:
+       0: getstatic     #90                 // Field kotlinx/serialization/json/Json.Default:Lkotlinx/serialization/json/Json$Default;
+       3: aload_0
+       4: getfield      #69                 // Field jsonStr:Ljava/lang/String;
+       7: invokevirtual #94                 // Method kotlinx/serialization/json/Json$Default.parseToJsonElement:(Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
+      10: invokestatic  #100                // Method kotlinx/serialization/json/JsonElementKt.getJsonObject:(Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonObject;
+      13: areturn
+}

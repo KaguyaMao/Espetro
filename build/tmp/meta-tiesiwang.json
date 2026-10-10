@@ -1,0 +1,34 @@
+{
+  "name": "tiesiwang",
+  "author": "ly01_lin",
+  "time": "20260923-153002",
+  "dimension": "minecraft:overworld",
+  "size": [
+    1,
+    1,
+    3
+  ],
+  "blocks": 3,
+  "entities": 0,
+  "ignored_blocks": 0,
+  "nbt_bytes": 210,
+  "include_entities": true,
+  "carve": false,
+  "region": {
+    "a": [
+      44,
+      -60,
+      315
+    ],
+    "b": [
+      44,
+      -60,
+      317
+    ],
+    "anchor": [
+      44,
+      -60,
+      316
+    ]
+  }
+}

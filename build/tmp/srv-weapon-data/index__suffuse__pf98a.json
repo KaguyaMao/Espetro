@@ -1,0 +1,8 @@
+{
+  "name": "suffuse.gun.pf98a.name",
+  "tooltip": "suffuse.gun.pf98a.desc",
+  "display": "suffuse:pf98a_display",
+  "data": "suffuse:pf98a_data",
+  "type": "rpg",
+  "sort": 5
+}

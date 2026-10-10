@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/steel"
+    },
+    "b": {
+      "tag": "forge:ingots/copper"
+    },
+    "c": {
+      "item": "minecraft:gunpowder"
+    },
+    "d": {
+      "item": "superbwarfare:primer"
+    }
+  },
+  "pattern": [
+    " a ",
+    "bcb",
+    " d "
+  ],
+  "result": {
+    "count": 12,
+    "item": "superbwarfare:heavy_ammo"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,7 @@
+﻿{
+  "ID": "fcp:ural",
+  "Model": {
+    "Model": "fcp:geo/ural.geo.json",
+    "Texture": "fcp:textures/entity/toyota.png"
+  }
+}

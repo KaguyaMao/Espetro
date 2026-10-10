@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:av8b",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/av8b.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/av8b.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/av8b.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/av8b.png"
+                   }
+               ]
+}

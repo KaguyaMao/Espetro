@@ -1,0 +1,23 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.projectile.start": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone4": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, 90, 0]
+					}
+				},
+				"bone5": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, -90, 0]
+					}
+				}
+			}
+		}
+	}
+}

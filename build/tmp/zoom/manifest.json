@@ -1,0 +1,356 @@
+{
+  "target": 8,
+  "ids": [
+    "dragonrise_reforge:ztz99a",
+    "dragonrise_reforge:ztz96a",
+    "dragonrise_reforge:m1a2sepv1",
+    "dragonrise_reforge:m1a2sepv2",
+    "dragonrise_reforge:t72b3",
+    "dragonrise_reforge:t90mh",
+    "dragonrise_reforge:bmp3",
+    "dragonrise_reforge:m3a3",
+    "dragonrise_reforge:zbd04a",
+    "dragonrise_reforge:zbd05",
+    "dragonrise_reforge:zbl08",
+    "dragonrise_reforge:m1296",
+    "fcp:bmp1am",
+    "fcp:btr82"
+  ],
+  "files": [
+    {
+      "id": "dragonrise_reforge:ztz99a",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ztz99a.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 8,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:ztz96a",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/ztz96a.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:m1a2sepv1",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1a2sepv1.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "hMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:m1a2sepv2",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1a2sepv2.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:t72b3",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/t72b3.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:t90mh",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/t90mh.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:bmp3",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/bmp3.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MainMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "100MM_Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:m3a3",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m3a3.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Missile",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MainMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:zbd04a",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbd04a.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MainMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "100MM_Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:zbd05",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbd05.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Missile",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:zbl08",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/zbl08.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Missile",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "dragonrise_reforge:m1296",
+      "rel": "kubejs/data/dragonrise_reforge/sbw/vehicles/m1296.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "NewWeapon2",
+          "from": null,
+          "to": null,
+          "skipped": "empty"
+        },
+        {
+          "weapon": "NewWeapon1",
+          "from": null,
+          "to": null,
+          "skipped": "empty"
+        },
+        {
+          "weapon": "NewWeapon",
+          "from": null,
+          "to": null,
+          "skipped": "empty"
+        },
+        {
+          "weapon": "PassengerMachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "MachineGun",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "fcp:bmp1am",
+      "rel": "kubejs/data/fcp/sbw/vehicles/bmp1am.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Coax",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    },
+    {
+      "id": "fcp:btr82",
+      "rel": "kubejs/data/fcp/sbw/vehicles/btr82.json",
+      "status": "ok",
+      "weapons": [
+        {
+          "weapon": "Coax",
+          "from": 3,
+          "to": 8
+        },
+        {
+          "weapon": "Cannon",
+          "from": 3,
+          "to": 8
+        }
+      ],
+      "err": null
+    }
+  ]
+}

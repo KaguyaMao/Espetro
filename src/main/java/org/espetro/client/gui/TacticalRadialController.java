@@ -46,6 +46,8 @@ public final class TacticalRadialController {
     private static final ResourceLocation EXECUTE_ACTION = id("execute_tactical_action");
     private static final ResourceLocation SKILL_ACTIVATE_ACTION = id("skill_activate");
     private static final ResourceLocation BUILD_FORT_ACTION = id("build_fortification");
+    /** 火力组长不允许建造的工事 id（电台：仍限指挥官/小队长）。 */
+    private static final String FIRETEAM_FORBIDDEN_FORT_ID = "espetro:radio";
 
     private static final ResourceLocation RALLY = id("textures/gui/squad/rally_deploy.png");
     private static final ResourceLocation BUILD_ICON =
@@ -392,18 +394,20 @@ public final class TacticalRadialController {
      * Radio / 兵站已在 fortifications.json 中，不能再硬编码一份。
      */
     private static List<org.esradial.client.RadialMenuData> buildDirectoryMenus() {
+        boolean fireteamOnly = isFireteamLeaderOnly();
         var pages = new ArrayList<org.esradial.client.RadialMenuData>();
         var root = base(BUILD_MENU).title(Component.literal("工事建造"));
         for (var category : FortificationMenuCategory.values()) {
             var entries = cachedFortifications.stream().filter(f -> f != null && f.id() != null && !f.id().isBlank())
+                .filter(f -> !fireteamOnly || !FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
                 .filter(f -> FortificationMenuCategory.classify(f.id(), f.displayName(), f.icon()) == category).toList();
-            if (entries.isEmpty() && category != FortificationMenuCategory.FOUNDATION) continue;
+            if (entries.isEmpty() && (category != FortificationMenuCategory.FOUNDATION || fireteamOnly)) continue;
             String path = "tactical_build_" + category.name().toLowerCase(java.util.Locale.ROOT);
             root.slot("espetro.build.directory." + category.name(), ui(category.icon),
                 Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", path)),
                 Component.literal(category.title), "#FFD5B25C", false).submenuLast();
             var group = base(id(path)).title(Component.literal(category.title));
-            if (category == FortificationMenuCategory.FOUNDATION) group.slot("espetro.rally", RALLY,
+            if (category == FortificationMenuCategory.FOUNDATION && !fireteamOnly) group.slot("espetro.rally", RALLY,
                 action(RadialActionPacket.Action.DEPLOY_RALLY),
                 Component.translatable("radial.espetro.rally"), "#FFD5B25C");
             // Large custom catalogues get nested folders instead of a crowded 64-slot wheel.
@@ -493,7 +497,10 @@ public final class TacticalRadialController {
     /** Rally plus one slot per catalog fort; radio/HAB must not be hard-coded again. */
     static List<String> buildMenuSlotIds(List<FortificationCatalogPacket.Entry> forts) {
         List<String> ids = new ArrayList<>();
-        ids.add("espetro.rally");
+        boolean fireteamOnly = isFireteamLeaderOnly();
+        if (!fireteamOnly) {
+            ids.add("espetro.rally");
+        }
         if (forts == null) {
             return ids;
         }
@@ -501,9 +508,28 @@ public final class TacticalRadialController {
             if (fort == null || fort.id() == null || fort.id().isBlank()) {
                 continue;
             }
+            if (fireteamOnly && FIRETEAM_FORBIDDEN_FORT_ID.equals(fort.id())) {
+                continue;
+            }
             ids.add("espetro.fort." + fort.id());
         }
         return ids;
+    }
+
+    /**
+     * 当前本地玩家是否"只是火力组长"——非指挥官、非小队长，仅火力组长。
+     * 这类玩家可以开轮盘建工事，但不能建电台，也不能放 Rally/队包。
+     */
+    private static boolean isFireteamLeaderOnly() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.player == null) {
+            return false;
+        }
+        String name = mc.player.getName().getString();
+        if (ClientTacticalState.isCommander(name) || ClientTacticalState.isLocalSquadLeader(name)) {
+            return false;
+        }
+        return ClientTacticalState.isLocalFireteamLeader(name);
     }
 
     private static RadialMenuBuilder base(ResourceLocation menuId) {

@@ -43,6 +43,10 @@ public final class WreckDecayService {
         if (vehicle == null || vehicle.level().isClientSide || vehicle.isRemoved()) {
             return;
         }
+        // 白名单载具：不加速残骸消失，回归 SBW 原生阈值。
+        if (VehicleNativeWhitelist.isNative(vehicle)) {
+            return;
+        }
         if (!vehicle.isWreck()) {
             return;
         }

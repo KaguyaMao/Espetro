@@ -1,0 +1,18 @@
+{
+  "Item": "superbwarfare:c4_bomb",
+  "Entity": "superbwarfare:c4",
+  "HitDamage": 150,
+  "ExplosionDamage": 300,
+  "ExplosionRadius": 10,
+  "Offset": [
+    0,
+    0.1,
+    0
+  ],
+  "Rotation": [
+    0,
+    -180,
+    -90
+  ],
+  "TickCount": 2
+}

@@ -53,8 +53,25 @@ abstract class EspetroMenuScreen extends AuiScreen {
         }
     }
 
+    /** 点到输入框时直接交给它：AUI 层会先消费点击，导致原版输入框无法聚焦、无法输入。 */
+    private net.minecraft.client.gui.components.EditBox editBoxAt(double mouseX, double mouseY) {
+        for (net.minecraft.client.gui.components.events.GuiEventListener child : this.children()) {
+            if (child instanceof net.minecraft.client.gui.components.EditBox box
+                && box.visible && box.isMouseOver(mouseX, mouseY)) {
+                return box;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        net.minecraft.client.gui.components.EditBox box = editBoxAt(mouseX, mouseY);
+        if (box != null) {
+            this.setFocused(box);
+            box.mouseClicked(mouseX, mouseY, button);
+            return true;
+        }
         if (tutorialPreviewMode) {
             return TutorialHudOverlay.mouseClicked(mouseX, mouseY, button) || true;
         }
@@ -79,6 +96,16 @@ abstract class EspetroMenuScreen extends AuiScreen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // 输入框获得焦点时优先处理（AUI 层会吞按键，导致打不了字）。
+        if (this.getFocused() instanceof net.minecraft.client.gui.components.EditBox box) {
+            if (box.keyPressed(keyCode, scanCode, modifiers)) {
+                return true;
+            }
+            if (keyCode == 256) { // ESC：先取消输入框焦点，不关闭界面
+                this.setFocused(null);
+                return true;
+            }
+        }
         if (TutorialClientController.handleKeyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
@@ -98,6 +125,11 @@ abstract class EspetroMenuScreen extends AuiScreen {
 
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
+        if (this.getFocused() instanceof net.minecraft.client.gui.components.EditBox box) {
+            if (box.charTyped(codePoint, modifiers)) {
+                return true;
+            }
+        }
         if (tutorialPreviewMode) {
             return true;
         }

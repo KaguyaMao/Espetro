@@ -1,0 +1,818 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/ztz99a.animation.json",
+  "ID": "dragonrise_reforge:ztz99a",
+  "TurretControllerIndex": 1,
+  "PassengerWeaponStationControllerIndex": 2,
+  "MaxHealth": 550,
+  "MaxEnergy": 20000000,
+  "OBB": [
+    {
+      "Size": [
+        2.067,
+        0.294,
+        3.258
+      ],
+      "Position": [
+        0.0,
+        1.617,
+        -0.62
+      ],
+      "CustomRotate": [
+        2.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "Size": [
+        2.067,
+        0.294,
+        0.516
+      ],
+      "Position": [
+        0.0,
+        1.394,
+        3.083
+      ],
+      "CustomRotate": [
+        12.75,
+        0.0,
+        0.0
+      ],
+      "DamageRate": 0.0
+    },
+    {
+      "Size": [
+        2.067,
+        0.106,
+        0.32
+      ],
+      "Position": [
+        0.0,
+        1.301,
+        3.859
+      ],
+      "CustomRotate": [
+        33.5,
+        0.0,
+        0.0
+      ],
+      "DamageRate": 0.0
+    },
+    {
+      "Size": [
+        1.255,
+        0.222,
+        0.384
+      ],
+      "Position": [
+        0.0,
+        1.06,
+        3.574
+      ],
+      "CustomRotate": [
+        141.0,
+        0.0,
+        0.0
+      ],
+      "DamageRate": 2.5
+    },
+    {
+      "Size": [
+        1.286,
+        0.479,
+        3.714
+      ],
+      "Position": [
+        0.031,
+        1.003,
+        -0.367
+      ],
+      "CustomRotate": [
+        -2.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "Size": [
+        1.286,
+        0.288,
+        0.513
+      ],
+      "Position": [
+        0.031,
+        0.954,
+        -4.249
+      ],
+      "CustomRotate": [
+        44.25,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "Size": [
+        2.067,
+        0.559,
+        0.977
+      ],
+      "Position": [
+        0.0,
+        1.445,
+        -3.526
+      ]
+    },
+    {
+      "Size": [
+        1.973,
+        0.794,
+        4.039
+      ],
+      "Position": [
+        0.0,
+        0.883,
+        -0.234424
+      ],
+      "Part": "Collision"
+    },
+    {
+      "Size": [
+        1.353,
+        0.602,
+        0.906
+      ],
+      "Position": [
+        0.0,
+        1.42,
+        -3.869
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.288,
+        0.611,
+        4.297
+      ],
+      "Position": [
+        -1.639,
+        0.617,
+        -0.334
+      ],
+      "Part": "WheelLeft"
+    },
+    {
+      "Size": [
+        0.288,
+        0.611,
+        4.297
+      ],
+      "Position": [
+        1.452,
+        0.617,
+        -0.334
+      ],
+      "Part": "WheelRight"
+    },
+    {
+      "Size": [
+        0.28,
+        0.28,
+        0.925
+      ],
+      "Position": [
+        -0.003,
+        0.249,
+        0.649
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 3.0,
+      "Health": 50.0
+    },
+    {
+      "Size": [
+        0.28,
+        0.28,
+        0.363
+      ],
+      "Position": [
+        -0.003,
+        0.315,
+        1.181
+      ],
+      "CustomRotate": [
+        20.0,
+        0.0,
+        0.0
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 2.5,
+      "Health": 50.0
+    },
+    {
+      "Size": [
+        1.498,
+        0.373,
+        1.394
+      ],
+      "Position": [
+        0.0,
+        0.649,
+        -1.319
+      ],
+      "CustomRotate": [
+        4.0,
+        0.0,
+        0.0
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Size": [
+        1.498,
+        0.373,
+        1.394
+      ],
+      "Position": [
+        0.0,
+        0.738,
+        -1.315
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Size": [
+        0.748,
+        0.28,
+        0.581
+      ],
+      "Position": [
+        0.683,
+        0.397,
+        0.409
+      ],
+      "CustomRotate": [
+        2.5,
+        -11.735,
+        -4.336
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Size": [
+        0.748,
+        0.28,
+        0.581
+      ],
+      "Position": [
+        -0.683,
+        0.397,
+        0.409
+      ],
+      "CustomRotate": [
+        2.5,
+        11.735,
+        4.336
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret"
+    },
+    {
+      "Size": [
+        0.748,
+        0.28,
+        0.581
+      ],
+      "Position": [
+        0.683,
+        0.579,
+        0.542
+      ],
+      "CustomRotate": [
+        20.446,
+        -11.735,
+        -4.336
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 0.0,
+      "Health": 50.0
+    },
+    {
+      "Size": [
+        0.53,
+        0.28,
+        0.3
+      ],
+      "Position": [
+        0.679,
+        0.308,
+        1.196
+      ],
+      "CustomRotate": [
+        22.31,
+        25.715,
+        10.095
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 0.0,
+      "Health": 50.0
+    },
+    {
+      "Size": [
+        0.748,
+        0.28,
+        0.581
+      ],
+      "Position": [
+        -0.683,
+        0.579,
+        0.542
+      ],
+      "CustomRotate": [
+        20.446,
+        11.735,
+        4.336
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 0.0,
+      "Health": 50.0
+    },
+    {
+      "Size": [
+        0.53,
+        0.28,
+        0.3
+      ],
+      "Position": [
+        -0.679,
+        0.308,
+        1.196
+      ],
+      "CustomRotate": [
+        22.31,
+        -25.715,
+        -10.095
+      ],
+      "Part": "Turret",
+      "Transform": "Turret",
+      "Rotation": "Turret",
+      "DamageRate": 0.0,
+      "Health": 50.0
+    }
+  ],
+  "Seats": [
+    {
+      "HidePassenger": true,
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.563,
+        0.224,
+        2.625
+      ],
+      "MinPitch": -30,
+      "MaxPitch": 30,
+      "MinYaw": -60,
+      "MaxYaw": 60,
+      "Weapons": []
+    },
+    {
+      "HidePassenger": true,
+      "CameraPos": {
+        "UseFixedCameraPos": false,
+        "Transform": "Barrel",
+        "Direction": "Barrel"
+      },
+      "Transform": "Turret",
+      "Position": [
+        0.781,
+        -0.656,
+        0.429
+      ],
+      "Weapons": [
+        "Cannon",
+        "MachineGun"
+      ],
+      "CanRotateHead": false,
+      "MinPitch": -7,
+      "MaxPitch": 15,
+      "Sensitivity": [
+        0.52,
+        0.72,
+        0.9
+      ],
+      "HasThermalImaging": true
+    },
+    {
+      "HidePassenger": true,
+      "Transform": "WeaponStation",
+      "CameraPos": {
+        "Transform": "WeaponStationBarrel",
+        "Direction": "WeaponStationBarrel",
+        "UseFixedCameraPos": true,
+        "UseSimulate3P": false
+      },
+      "Position": [0,-1.1,0],
+      "Weapons": [
+        "PassengerMachineGun"
+      ],
+      "CanRotateHead": false,
+      "MinPitch": -10,
+      "MaxPitch": 85,
+      "Sensitivity": [
+        0.57,
+        0.75,
+        0.9
+      ],
+      "HasThermalImaging": true
+    },
+    {
+      "BanHand": true,
+      "Transform": "Vehicle",
+      "Position": [
+        -1.625,
+        0.5,
+        -5.125
+      ],
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "Weapons": {
+    "Cannon": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/ap_shell.png",
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "Projectile": "superbwarfare:cannon_shell",
+      "IsArmorPiercingProjectile": true,
+      "DefaultZoom": 8,
+      "Magazine": 1,
+      "EmptyReloadTime": 120,
+      "Velocity": 58.3333,
+      "Gravity": 0.05,
+      "Damage": 500,
+      "ExplosionDamage": 80,
+      "ExplosionRadius": 4,
+      "RecoilTime": 42,
+      "RecoilForce": 1.0,
+      "ShootShake": [
+        8,
+        10,
+        60
+      ],
+      "Spread": 0.02,
+      "ShootAnimationTime": 40,
+      "Crosshair": "dragonrise_reforge:textures/overlay/vehicle/crosshair/cn_tank_cannon_cross.png",
+      "CrosshairColor": "0x00ff66",
+      "Name": "dragonrise_reforge:dtc10125",
+      "AmmoType": [
+        "superbwarfare:large_shell_ap",
+        {
+          "Ammo": "superbwarfare:large_shell_he",
+          "Override": {
+            "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/he_shell.png",
+            "IsArmorPiercingProjectile": false,
+            "IsHighExplosiveProjectile": true,
+            "Velocity": 30,
+            "Damage": 5,
+            "ExplosionDamage": 120,
+            "ExplosionRadius": 10,
+            "Gravity": 0.05,
+            "Name": "dragonrise_reforge:dtb10125"
+          }
+        },
+        {
+          "Ammo": "superbwarfare:medium_anti_ground_missile",
+          "Override": {
+            "Spread": 0.5,
+            "CrosshairColor": "0xFFC700",
+            "Name": "dragonrise_reforge:gp125",
+            "Projectile": "superbwarfare:wire_guide_missile",
+            "IsArmorPiercingProjectile": true,
+            "Damage": 650,
+            "ExplosionDamage": 30,
+            "ExplosionRadius": 5,
+            "Velocity": 10,
+            "Gravity": 0.05,
+            "RecoilTime": 18,
+            "RecoilForce": 0.05,
+            "Crosshair": "@VehicleCommonMissile",
+            "SoundInfo": {
+              "Fire1P": "dragonrise_reforge:cannon_125mm_fire_1p",
+              "Fire3P": "dragonrise_reforge:cannon_125mm_fire_3p",
+              "VehicleReload3p": "dragonrise_reforge:auto_loader",
+              "VehicleReloadSoundTime": 0,
+              "Change": "dragonrise_reforge:change_weapon"
+            },
+            "SoundRadius": 12,
+            "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/missile_gp_125.png"
+          }
+        }
+      ],
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:cannon_125mm_fire_1p",
+        "Fire3P": "dragonrise_reforge:cannon_125mm_fire_3p",
+        "Fire3PFar": "dragonrise_reforge:cannon_125mm_fire_3p_far",
+        "Fire3PVeryFar": "dragonrise_reforge:cannon_125mm_fire_3p_very_far",
+        "VehicleReload": "dragonrise_reforge:auto_loader",
+        "Change": "dragonrise_reforge:change_weapon",
+        "CancellableSounds": [
+          "dragonrise_reforge:auto_loader"
+        ]
+      },
+      "SoundRadius": 32,
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            0.106,
+            0.014698,
+            6.231
+          ]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      }
+    },
+    "MachineGun": {
+      "Icon": "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/gun_5_8mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Spread": 0.25,
+      "CrosshairColor": "0x00ff66",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 8,
+      "RPM": 800,
+      "Damage": 10,
+      "BypassesArmor": 0.2,
+      "Magazine": 500,
+      "EmptyReloadTime": 160,
+      "Velocity": 31,
+      "Gravity": 0.05,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 2.5,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "AmmoType": "@RifleAmmo",
+      "ShootPos": {
+        "Transform": "Barrel",
+        "Positions": [
+          [
+            -0.208,
+            -0.121,
+            0.778
+          ]
+        ],
+        "Directions": [
+          "Barrel"
+        ]
+      },
+      "Crosshair": "@VehicleCommonGun",
+      "Name": "dragonrise_reforge:QJT",
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:s_coax_fire",
+        "Fire3P": "superbwarfare:qbz_95_fire_3p",
+        "Fire3PFar": "superbwarfare:qbz_95_far",
+        "Fire3PVeryFar": "superbwarfare:qbz_95_veryfar",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 16
+    },
+    "PassengerMachineGun": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Spread": 0.25,
+      "CrosshairColor": "0x00ff66",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 8,
+      "RPM": 600,
+      "Damage": 40,
+      "BypassesArmor": 0.2,
+      "Magazine": 600,
+      "EmptyReloadTime": 100,
+      "Velocity": 28.3333,
+      "Gravity": 0.05,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 3.75,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "AmmoType": "@HeavyAmmo",
+      "ShootPos": {
+        "Transform": "WeaponStationBarrel",
+        "Positions": [
+          [
+            0.033019,
+            0.139472,
+            1.721231
+          ]
+        ],
+        "Directions": [
+          "WeaponStationBarrel"
+        ]
+      },
+      "Crosshair": "@VehicleCommonGun",
+      "Name": "dragonrise_reforge:88C",
+      "SoundInfo": {
+        "Fire1P": "dragonrise_reforge:qjz89_fire_1p",
+        "Fire3P": "dragonrise_reforge:qjz89_fire_3p",
+        "Fire3PFar": "dragonrise_reforge:qjz89_fire_3p_far",
+        "Fire3PVeryFar": "dragonrise_reforge:qjz89_fire_3p_very_far",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 16
+    }
+  },
+  "HUDColor": "0x00ff66",
+  "EngineType": "Track",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 128,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.75,
+    "TrackRotSpeed": 1.9,
+    "TrackDifferential": 0.6,
+    "MaxForwardSpeedRate": 0.85,
+    "MaxBackwardSpeedRate": 0.5,
+    "Increment": 0.02,
+    "Decrement": 0.01,
+    "SteeringSpeed": 0.1,
+    "EngineSoundVolume": 0.6,
+    "InertiaRotateRate": 0.8
+  },
+  "TurretPos": [
+    0.0,
+    1.865,
+    0.207
+  ],
+  "BarrelPos": [
+    -0.105,
+    0.277,
+    0.852
+  ],
+  "TurretTurnSpeed": [
+    2.625,
+    3.575
+  ],
+  "TurretCustomPitch": 2.5,
+  "TurretPitchRange": [
+    -7,
+    15
+  ],
+  "PassengerWeaponStationPos": [
+    -0.631,
+    1.444,
+    -0.215
+  ],
+  "PassengerWeaponStationBarrelPos": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "PassengerWeaponStationTurnSpeed": [
+    15.75,
+    8.47
+  ],
+  "PassengerWeaponStationPitchRange": [
+    -6,
+    85
+  ],
+  "HasDecoy": true,
+  "UpStep": 2.25,
+  "RotateOffsetHeight": 0.5,
+  "Mass": 55,
+  "DamageModifiers": [
+    "minecraft:arrow 0",
+    "minecraft:trident 0",
+    "minecraft:mob_attack 0",
+    "minecraft:mob_attack_no_aggro 0",
+    "minecraft:mob_projectile 0",
+    "minecraft:player_attack 0",
+    "#superbwarfare:projectile 0",
+    "@superbwarfare:small_cannon_shell + 20",
+    "@superbwarfare:cannon_shell + 20",
+    "All - 20",
+    "minecraft:lava + 20",
+    "minecraft:lava * 10",
+    "@minecraft:tnt * 4",
+    "@minecraft:tnt_minecart * 4",
+    "@#superbwarfare:aerial_bomb * 12",
+    "All * 0.2",
+    "@superbwarfare:small_cannon_shell * 5",
+    "@superbwarfare:cannon_shell * 5",
+    "superbwarfare:vehicle_strike * 2.5",
+    "minecraft:explosion * 2",
+    "superbwarfare:custom_explosion * 0.0433333333",
+    "superbwarfare:projectile_explosion * 0.65",
+    "superbwarfare:mine * 0.5",
+    "superbwarfare:lunge_mine * 0.5",
+    "superbwarfare:projectile_hit * 1.3",
+    "@superbwarfare:small_cannon_shell * 0.0769230769",
+    "@superbwarfare:cannon_shell * 0.2307692308",
+    "superbwarfare:grapeshot_hit * 0.1",
+    "#superbwarfare:projectile_absolute * 0.15",
+    "@#superbwarfare:aa_missile * 0.3",
+    "@superbwarfare:c4 * 4",
+    "@#superbwarfare:at_rocket * 1.1",
+    "@superbwarfare:gun_grenade * 1.25",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:tm_62 * 2.5",
+    "$entity.getSourceAngle(source, -0.3164163132) * damage",
+    "$entity.getSourceAngle(source, 0.4122722554) * damage",
+    "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Giant",
+    "ExplosionDamage": 200,
+    "ExplosionRadius": 16
+  },
+  "ThirdPersonCameraPos": [
+    -0.8669625,
+    1.5,
+    4
+  ],
+  "VehicleIcon": "dragonrise_reforge:textures/vehicle_icon/ztz99a_icon.png",
+  "ContainerIcon": "dragonrise_reforge:textures/gui/vehicle/type/cn_land.png",
+  "Type": "Tank",
+  "CollisionLevel": {
+    "Level": 4,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.1,
+        0.05,
+        false
+      ],
+      [
+        1,
+        0.3,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "dragonrise_reforge:ztz99a_engine",
+  "HudType": "@Land",
+  "InertiaRotateRate": 1.2,
+  "TerrainCompat": [
+    [
+      1.656,
+      0.038,
+      2.609
+    ],
+    [
+      -1.669,
+      0.038,
+      -2.547
+    ],
+    [
+      -1.669,
+      0.038,
+      2.547
+    ],
+    [
+      1.656,
+      0.038,
+      -2.547
+    ]
+  ],
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ztz99a.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ztz99a.png"
+    }
+  ],
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ztz99a.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ztz99a.png"
+  }
+}

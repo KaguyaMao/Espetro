@@ -1,0 +1,14 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "6 #superbwarfare:storage_blocks/steel",
+    "superbwarfare:heavy_armament_module",
+    "superbwarfare:large_battery_pack",
+    "6 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "fcp:ural_grad"
+  }
+}

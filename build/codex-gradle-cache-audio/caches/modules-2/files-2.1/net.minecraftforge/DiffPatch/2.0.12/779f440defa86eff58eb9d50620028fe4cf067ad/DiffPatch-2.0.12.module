@@ -1,0 +1,174 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "DiffPatch",
+    "version": "2.0.12",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.3.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "DiffPatch-2.0.12.jar",
+          "url": "DiffPatch-2.0.12.jar",
+          "size": 113466,
+          "sha512": "578d3095c1e8e5d9ea148009b920e2fdf9ec433ac14111194c9f173f29a4fada84b607a3d11078b8624a3c88efe9d60394737e39d16f8e4033193ec13e52f6ee",
+          "sha256": "82e557d3f92c4fdfb77e70a4edebf1198c03a9bdaf85f6487d05f4b56f5460a9",
+          "sha1": "b9d11cd7dcf5ce3806b0ec38baac8723c65db55b",
+          "md5": "a315c9c29466b61f4615780749bccf8f"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "it.unimi.dsi",
+          "module": "fastutil",
+          "version": {
+            "requires": "8.3.1"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-lang3",
+          "version": {
+            "requires": "3.9"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-compress",
+          "version": {
+            "requires": "1.18"
+          }
+        },
+        {
+          "group": "org.tukaani",
+          "module": "xz",
+          "version": {
+            "requires": "1.8"
+          }
+        },
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "DiffPatch-2.0.12.jar",
+          "url": "DiffPatch-2.0.12.jar",
+          "size": 113466,
+          "sha512": "578d3095c1e8e5d9ea148009b920e2fdf9ec433ac14111194c9f173f29a4fada84b607a3d11078b8624a3c88efe9d60394737e39d16f8e4033193ec13e52f6ee",
+          "sha256": "82e557d3f92c4fdfb77e70a4edebf1198c03a9bdaf85f6487d05f4b56f5460a9",
+          "sha1": "b9d11cd7dcf5ce3806b0ec38baac8723c65db55b",
+          "md5": "a315c9c29466b61f4615780749bccf8f"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "it.unimi.dsi",
+          "module": "fastutil",
+          "version": {
+            "requires": "8.3.1"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-lang3",
+          "version": {
+            "requires": "3.9"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-compress",
+          "version": {
+            "requires": "1.18"
+          }
+        },
+        {
+          "group": "org.tukaani",
+          "module": "xz",
+          "version": {
+            "requires": "1.8"
+          }
+        },
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "DiffPatch-2.0.12-all.jar",
+          "url": "DiffPatch-2.0.12-all.jar",
+          "size": 1362400,
+          "sha512": "079d5fffae44fc1ab64a17b6e292c838a5a280933888af37b26ff65ca127e0c59733bab928a178bcda9a810436488407949697ee01b6a382b480ad18bcae4402",
+          "sha256": "3749059d529d69534b068679d9c1bd4b40ef4f974a189ff1bb8931215d7ce10a",
+          "sha1": "7182b5f298c31f28aa50e97016f154b0ad746ad6",
+          "md5": "c5f3a5fcccbdce2e1514d1220b9602e6"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "DiffPatch-2.0.12-sources.jar",
+          "url": "DiffPatch-2.0.12-sources.jar",
+          "size": 44191,
+          "sha512": "8a40992296f26e8cb6857fcc7811bda97afd106e3bc0faaba47d9ab7c88167598b57b95eb935661c510301a3e85a9fceafedc7588b2bb84f173e3e278e351cfe",
+          "sha256": "c03d36bfad3fdfb3f05761600d4323f3a72ff66fd02438c291b6c6206ff45844",
+          "sha1": "13c040691c9d319747df35ce7ff7e24f1bd0d063",
+          "md5": "e82474e7e6f84ffd6cfaf47d78356a4f"
+        }
+      ]
+    }
+  ]
+}

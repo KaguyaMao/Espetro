@@ -1,0 +1,35 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.main.idle": {
+			"loop": true,
+			"bones": {
+				"mortar": {
+					"position": [0, 0, 0]
+				},
+				"shell": {
+					"scale": 0
+				}
+			}
+		},
+		"animation.main.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1.5,
+			"bones": {
+				"shell": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.375": [0, 0, 0],
+						"0.875": [0, -20, 0]
+					},
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.1667": [1, 1, 1],
+						"0.2917": [0.8, 0.8, 0.8],
+						"0.375": [1, 1, 1]
+					}
+				}
+			}
+		}
+	}
+}

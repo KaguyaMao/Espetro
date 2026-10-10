@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_small_battery_pack": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:small_battery_pack"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "superbwarfare:medium_battery_pack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_small_battery_pack",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "superbwarfare:medium_battery_pack"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -159,6 +159,22 @@ public final class PartyManager {
         return null;
     }
 
+    /** 设置 / 修改 / 清除队伍密码（仅队长）。空字符串 = 清除密码。 */
+    public String setPassword(UUID partyId, UUID ownerId, String password) {
+        PartyData party = partiesByOwner.get(partyId);
+        if (party == null) return "队伍不存在。";
+        if (!party.ownerId.equals(ownerId)) return "只有队长才能设置密码。";
+        if (password == null || password.isEmpty()) {
+            party.password = null;
+            party.locked = false;
+        } else {
+            party.password = password;
+            party.locked = false; // 设了密码就不再是"禁止加入"
+        }
+        broadcastPartyList();
+        return null;
+    }
+
     // -------------------- 广播 --------------------
 
     public void broadcastPartyList() {
@@ -200,6 +216,12 @@ public final class PartyManager {
         Map<UUID, String> result = new LinkedHashMap<>();
         List<UUID> unassigned = new ArrayList<>();
 
+        // 只统计本局实际参与的玩家，避免离线/观战成员混进队内计数。
+        Set<UUID> participating = new HashSet<>();
+        for (ServerPlayer p : allPlayers) {
+            participating.add(p.getUUID());
+        }
+
         // 按队伍分组
         Map<UUID, List<UUID>> partyGroups = new LinkedHashMap<>();
         Set<UUID> handled = new HashSet<>();
@@ -208,9 +230,18 @@ public final class PartyManager {
             if (handled.contains(uid)) continue;
             PartyData party = getPartyByMember(uid);
             if (party != null) {
+                List<UUID> members = new ArrayList<>();
+                for (UUID m : party.members) {
+                    if (participating.contains(m)) members.add(m);
+                }
+                if (members.isEmpty()) {
+                    unassigned.add(uid);
+                    handled.add(uid);
+                    continue;
+                }
                 partyGroups.computeIfAbsent(party.partyId, k -> new ArrayList<>())
-                    .addAll(party.members);
-                handled.addAll(party.members);
+                    .addAll(members);
+                handled.addAll(members);
             } else {
                 unassigned.add(uid);
                 handled.add(uid);
@@ -218,7 +249,7 @@ public final class PartyManager {
         }
 
         int attack = 0, defend = 0;
-        // 按队伍大小降序排列
+        // 按队伍大小降序排列；整队一起入队，保证同队玩家在同一阵营。
         List<List<UUID>> sortedGroups = new ArrayList<>(partyGroups.values());
         sortedGroups.sort((a, b) -> Integer.compare(b.size(), a.size()));
 
@@ -232,9 +263,22 @@ public final class PartyManager {
             }
         }
 
-        // 检查平衡：如果差异太大，解散最大的队伍
+        // 先补齐"无组队玩家"，拿到真实的双方人数，之后再判断是否需要拆队。
+        // （原先在补齐之前就判平衡，且计数器在 result.remove 之后读取导致永不递减，
+        //   于是只要初始人数差 >2 就会把全部组队逐个拆散——同队玩家因此被分到两边。）
+        for (UUID uid : unassigned) {
+            if (attack <= defend) {
+                result.put(uid, "ATTACK");
+                attack++;
+            } else {
+                result.put(uid, "DEFEND");
+                defend++;
+            }
+        }
+        unassigned.clear();
+
+        // 平衡检查：真实差距 >2 时，才拆散"人多一方里最大的那支队伍"，其余整队保留。
         while (Math.abs(attack - defend) > 2 && !partyGroups.isEmpty()) {
-            // 找到人数更多的一方中最大的队伍
             String overTeam = attack > defend ? "ATTACK" : "DEFEND";
             PartyData largestParty = null;
             for (UUID pid : partyGroups.keySet()) {
@@ -251,23 +295,18 @@ public final class PartyManager {
             }
             if (largestParty == null) break;
 
-            // 解散该队伍
+            // 拆散该队伍：必须先取回原阵营再删除，否则计数不会递减（原 bug）。
             for (UUID m : largestParty.members) {
-                result.remove(m);
+                String prev = result.remove(m);
+                if (prev == null) continue;
                 unassigned.add(m);
-                if ("ATTACK".equals(result.getOrDefault(m, null))) attack--;
-                else if ("DEFEND".equals(result.getOrDefault(m, null))) defend--;
+                if ("ATTACK".equals(prev)) attack--;
+                else defend--;
             }
             partyGroups.remove(largestParty.partyId);
         }
 
-        // 重算当前计数
-        attack = 0; defend = 0;
-        for (String t : result.values()) {
-            if ("ATTACK".equals(t)) attack++; else defend++;
-        }
-
-        // 分配无组队玩家
+        // 被拆散的成员按人数平衡逐个补齐
         for (UUID uid : unassigned) {
             if (attack <= defend) {
                 result.put(uid, "ATTACK");
@@ -299,7 +338,9 @@ public final class PartyManager {
             this.ownerName = ownerName;
             this.members = new LinkedHashSet<>();
             this.password = (password == null || password.isEmpty()) ? null : password;
-            this.locked = password != null && !password.isEmpty();
+            // 密码 ≠ 锁定：有密码的队伍仍可凭密码加入，锁定由队长单独切换（原实现把两者绑定，
+            // 导致设了密码的队伍在 joinParty 的 locked 判定处被直接拒绝）。
+            this.locked = false;
         }
 
         public int size() {

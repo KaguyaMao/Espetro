@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.espetro.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "espetro.refmap.json",
+  "plugin": "org.espetro.mixin.EspetroMixinPlugin",
+  "mixins": [
+    "ServerGamePacketListenerWaitingLockMixin",
+    "hcrpoints.CapturePointAudioMixin",
+    "hcrpoints.CapturePointNeutralizedAudioMixin",
+    "tacz.CommonAssetsManagerMixin",
+    "sbw.ChangeVehicleSeatMessageMixin",
+    "sbw.PlayerStopRidingMixin",
+    "sbw.VehicleEntityMainBaseProtectionMixin",
+    "sbw.VehicleEntitySeatAccessMixin",
+    "sbw.VehicleEntityWreckMixin",
+    "sbw.TurretWreckEntityMixin"
+  ],
+  "client": [
+    "sbw.ClickDismountMixin",
+    "sbw.MinecraftSeatMixin",
+    "sbw.VehicleChangeSeatDelayMixin",
+    "client.ClientLevelEntityRetryMixin",
+    "client.ClientLevelEntityRetryAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

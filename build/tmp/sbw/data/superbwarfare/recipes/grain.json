@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:plates/copper"
+    },
+    "b": {
+      "item": "minecraft:gunpowder"
+    },
+    "c": {
+      "item": "superbwarfare:primer"
+    }
+  },
+  "pattern": [
+    "aba",
+    "aba",
+    " c "
+  ],
+  "result": {
+    "count": 8,
+    "item": "superbwarfare:grain"
+  },
+  "show_notification": true
+}

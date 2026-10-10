@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:oplot",
+  "Model": {
+    "Model": "vvp:geo/oplot.geo.json",
+    "Texture": "vvp:textures/entity/oplot.png"
+  }
+}

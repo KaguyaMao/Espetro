@@ -1,0 +1,298 @@
+{
+  "ID": "vvp:pautina",
+  "MaxHealth": 380,
+  "MaxEnergy": 5800000,
+  "OBB": [],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Position": [
+        0.92576875,
+        1.3,
+        2.4125
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -90,
+      "MaxYaw": 90
+    },
+    {
+      "IsEnclosed": true,
+      "CanRotateBody": true,
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "UseFixedCameraPos": true,
+        "Position": [
+          0,
+          3,
+          -1.5
+        ],
+        "ZoomPosition": [
+          0,
+          0,
+          0.75
+        ],
+        "Direction": "Vehicle"
+      },
+      "Transform": "Vehicle",
+      "Position": [
+        -0.92576875,
+        1.3,
+        2.4125
+      ],
+      "MinPitch": -10,
+      "MaxPitch": 60,
+      "Weapons": [
+        "SwarmDrone"
+      ]
+    }
+  ],
+  "Weapons": {
+    "SwarmDrone": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/swarm_drone.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": [
+        "Auto"
+      ],
+      "Spread": 0.3,
+      "Magazine": 14,
+      "EmptyReloadTime": 140,
+      "DefaultZoom": 2,
+      "CrosshairColor": "0x00ff66",
+      "Projectile": "superbwarfare:swarm_drone",
+      "RPM": 600,
+      "ExplosionDamage": 150,
+      "ExplosionRadius": 2.8,
+      "Velocity": 2,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ],
+          [
+            -0.03125,
+            3.775,
+            -2.184375
+          ]
+        ],
+        "BoundUpWithAmmoAmount": true,
+        "Directions": [
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "ShootPositionForHud": [
+          1.078,
+          2.088,
+          -0.712
+        ],
+        "ViewDirection": "Passenger"
+      },
+      "SeekWeaponInfo": {
+        "SeekDirection": "Passenger",
+        "SeekRange": 384,
+        "SeekAngle": 20,
+        "SeekTime": 10,
+        "OnlyLockEntity": true
+      },
+      "AmmoType": [
+        {
+          "Ammo": "superbwarfare:swarm_drone",
+          "ShouldUnload": false
+        },
+        {
+          "Ammo": "superbwarfare:swarm_drone",
+          "ShouldUnload": false,
+          "Override": {
+            "SeekWeaponInfo": {
+              "SeekDirection": "Passenger",
+              "SeekRange": 384,
+              "SeekAngle": 20,
+              "SeekTime": 10,
+              "OnlyLockBlock": true
+            }
+          }
+        }
+      ],
+      "Crosshair": "@VehicleCommonMissile",
+      "CrosshairZooming": "@VehicleCommonSeekMissile",
+      "Name": "weapon.superbwarfare.swarm_drone",
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:yx_100_swarm_drone_release",
+        "Fire3P": "superbwarfare:yx_100_swarm_drone_release",
+        "VehicleReload3p": "superbwarfare:missile_reload",
+        "VehicleReloadSoundTime": 7
+      },
+      "SoundRadius": 4
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 80,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.3,
+    "MaxForwardSpeedRate": 1,
+    "MaxBackwardSpeedRate": 0.5,
+    "Increment": 0.03,
+    "Decrement": 0.02,
+    "SteeringSpeed": 0.07
+  },
+  "ThirdPersonCameraPos": [
+    0,
+    1,
+    3
+  ],
+  "UpStep": 1.5,
+  "RotateOffsetHeight": 2.2,
+  "Mass": 30,
+  "DamageModifiers": [
+    "minecraft:lava - -11",
+    "minecraft:lava * 10",
+    "All * 0.2",
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 2",
+    "superbwarfare:mine * 0.75",
+    "superbwarfare:projectile_hit * 1.25",
+    "superbwarfare:grapeshot_hit * 0.3",
+    "superbwarfare:laser * 1.25",
+    "@#superbwarfare:aerial_bomb * 3",
+    "#superbwarfare:projectile * 0.25",
+    "#superbwarfare:projectile_absolute * 0.85",
+    "superbwarfare:vehicle_strike * 4",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:gun_grenade * 1.5",
+    "@superbwarfare:javelin_missile * 0.8",
+    "@superbwarfare:igla_9k38_missile * 0.75",
+    "@superbwarfare:wire_guide_missile * 1",
+    "All - 11"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 150,
+    "ExplosionRadius": 4.4,
+    "ExplodeBlocks": false
+  },
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/bmp2_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/land_ru.png",
+  "Type": "APC",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0,
+        0,
+        true
+      ],
+      [
+        0.15,
+        0.09,
+        false
+      ]
+    ]
+  },
+  "EngineSound": "superbwarfare:truck_engine",
+  "HudType": "@Land",
+  "TerrainCompat": [
+    [
+      1.2,
+      0,
+      1.5
+    ],
+    [
+      -1.2,
+      0,
+      1.5
+    ],
+    [
+      1.2,
+      0,
+      -1.5
+    ],
+    [
+      -1.2,
+      0,
+      -1.5
+    ]
+  ],
+  "InertiaRotateRate": 1
+}

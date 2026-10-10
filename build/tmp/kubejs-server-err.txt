@@ -1,0 +1,37 @@
+[06:08:16] [INIT] KubeJS 2001.6.5-build.26; MC 2001 forge
+[06:08:16] [INIT] Loaded plugins:
+[06:08:16] [INIT] - dev.latvian.mods.kubejs.forge.BuiltinKubeJSForgePlugin
+[06:08:16] [INIT] - com.sighs.apricityui.script.KubeJS
+[06:08:16] [INIT] - cc.sighs.auratip.compat.kubejs.KJSAuraTipPlugin
+[06:08:16] [INIT] - com.tacz.guns.compat.kubejs.TimelessKubeJSPlugin
+[06:08:16] [INIT] - dev.aika.taczjs.forge.TaCZJSPlugin
+[06:08:16] [INIT] - com.atsuishio.superbwarfare.compat.kubejs.SbwKubeJSPlugin
+[06:08:16] [INIT] - org.espetro.kubejs.EspetroKubeJSPlugin
+[06:08:16] [INFO] Loaded script server_scripts:00_espetro_vehicle_supply_station.js in 0.002 s
+[06:08:16] [INFO] Loaded script server_scripts:00_espetro_drone_detection.js in 0.0 s
+[06:08:16] [ERROR] ! esvehhp_ammo.js#9: ReferenceError: "EsVehEvents" is not defined.
+[06:08:16] [ERROR] ! esvehhp_tacz_caliber.js#12: ReferenceError: "EsVehEvents" is not defined.
+[06:08:16] [INFO] Loaded script server_scripts:00_esveh_track_steer.js in 0.001 s
+[06:08:16] [INFO] example.js#5: Hello, World! (Loaded server scripts)
+[06:08:16] [INFO] Loaded script server_scripts:example.js in 0.0 s
+[06:08:16] [INFO] Loaded script server_scripts:granade.js in 0.003 s
+[06:08:16] [INFO] 00_espetro_artillery_155.js#11: Loaded Java class 'java.util.concurrent.ThreadLocalRandom'
+[06:08:16] [INFO] 00_espetro_artillery_155.js#17: [Espetro] artillery_155 script loaded: scheduled-waves-20260727
+[06:08:16] [INFO] Loaded script server_scripts:00_espetro_artillery_155.js in 0.002 s
+[06:08:16] [INFO] Loaded script server_scripts:zz_chunk_test.js in 0.003 s
+[06:08:16] [INFO] Loaded script server_scripts:m320.js in 0.002 s
+[06:08:16] [INFO] Loaded script server_scripts:qlz87.js in 0.0 s
+[06:08:16] [INFO] Loaded 9/11 KubeJS server scripts in 0.032 s with 2 errors and 0 warnings
+[06:08:16] [INFO] Scripts loaded
+[06:08:18] [INFO] Server resource reload complete!
+[06:08:18] [INFO] zz_chunk_test.js#9: Loaded Java class 'net.minecraft.world.phys.AABB'
+[06:08:18] [INFO] zz_chunk_test.js#19: Loaded Java class 'net.minecraftforge.common.capabilities.ForgeCapabilities'
+[06:08:18] [INFO] zz_chunk_test.js#22: [zzchunk] 载具=dragonrise_reforge:zbd04a 载具堆叠上限=64 格数=54
+[06:08:18] [INFO] zz_chunk_test.js#24: Loaded Java class 'net.minecraft.commands.arguments.item.ItemParser'
+[06:08:18] [INFO] zz_chunk_test.js#25: Loaded Java class 'com.mojang.brigadier.StringReader'
+[06:08:18] [INFO] zz_chunk_test.js#26: Loaded Java class 'net.minecraft.core.registries.Registries'
+[06:08:18] [INFO] zz_chunk_test.js#27: Loaded Java class 'net.minecraft.world.item.ItemStack'
+[06:08:18] [INFO] zz_chunk_test.js#31: [zzchunk] 物品堆叠上限=64
+[06:08:18] [INFO] zz_chunk_test.js#37: [zzchunk] A 整摞500 -> 被退回 500（500=全被拒 / 0=全进）
+[06:08:18] [INFO] zz_chunk_test.js#61: [zzchunk] B 分块64 -> 进车 500 发，剩余未进 0，占用槽位=64/64/64/64/64/64/64/52
+[06:08:18] [INFO] zz_chunk_test.js#65: [zzchunk] 测试结束，已清空

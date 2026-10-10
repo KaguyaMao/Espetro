@@ -85,11 +85,14 @@ public class Espetro {
     public static Object KEY_CLASS;  // J - 职业选择
     public static Object KEY_SKILL;  // Y - 指挥官技能
     public static Object KEY_RADIAL; // 长按战术交互轮盘
+    public static Object KEY_FORT_ROTATE; // R - 工事预览顺时针旋转 90°
 
     public Espetro() {
         ensureKubeJSDefaultScriptsIfLoaded();
+        // SERVER 类型（而非 COMMON）：载具交互/白名单在客户端也有一半判定，
+        // 必须由服务端统一下发，避免两边 toml 不一致导致"客户端读条、服务端已放行"。
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(
-            net.minecraftforge.fml.config.ModConfig.Type.COMMON,
+            net.minecraftforge.fml.config.ModConfig.Type.SERVER,
             org.espetro.vehicle.VehicleInteractionConfig.SPEC);
 
         // 客户端初始化：双重 lambda 确保服务端不加载客户端类

@@ -1,0 +1,63 @@
+Compiled from "MortarShellItem.kt"
+public final class com.atsuishio.superbwarfare.item.projectile.MortarShellItem$getLaunchBehavior$1 extends net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior {
+  com.atsuishio.superbwarfare.item.projectile.MortarShellItem$getLaunchBehavior$1();
+    Code:
+       0: aload_0
+       1: invokespecial #40                 // Method net/minecraft/core/dispenser/AbstractProjectileDispenseBehavior."<init>":()V
+       4: return
+
+  protected float m_7104_();
+    Code:
+       0: ldc           #45                 // float 0.5f
+       2: freturn
+
+  protected net.minecraft.world.entity.projectile.Projectile m_6895_(net.minecraft.world.level.Level, net.minecraft.core.Position, net.minecraft.world.item.ItemStack);
+    Code:
+       0: aload_1
+       1: ldc           #48                 // String pLevel
+       3: invokestatic  #54                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_2
+       7: ldc           #55                 // String pPosition
+       9: invokestatic  #54                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      12: aload_3
+      13: ldc           #56                 // String pStack
+      15: invokestatic  #54                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      18: new           #58                 // class com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity
+      21: dup
+      22: getstatic     #64                 // Field com/atsuishio/superbwarfare/init/ModEntities.MORTAR_SHELL:Lnet/minecraftforge/registries/RegistryObject;
+      25: invokevirtual #70                 // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+      28: dup
+      29: ldc           #72                 // String get(...)
+      31: invokestatic  #75                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      34: checkcast     #77                 // class net/minecraft/world/entity/EntityType
+      37: aload_2
+      38: invokeinterface #83,  1           // InterfaceMethod net/minecraft/core/Position.m_7096_:()D
+      43: aload_2
+      44: invokeinterface #86,  1           // InterfaceMethod net/minecraft/core/Position.m_7098_:()D
+      49: aload_2
+      50: invokeinterface #89,  1           // InterfaceMethod net/minecraft/core/Position.m_7094_:()D
+      55: aload_1
+      56: ldc           #90                 // float 0.13f
+      58: invokespecial #93                 // Method com/atsuishio/superbwarfare/entity/projectile/MortarShellEntity."<init>":(Lnet/minecraft/world/entity/EntityType;DDDLnet/minecraft/world/level/Level;F)V
+      61: checkcast     #95                 // class net/minecraft/world/entity/projectile/Projectile
+      64: areturn
+
+  protected void m_6823_(net.minecraft.core.BlockSource);
+    Code:
+       0: aload_1
+       1: ldc           #98                 // String pSource
+       3: invokestatic  #54                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: aload_1
+       7: invokeinterface #104,  1          // InterfaceMethod net/minecraft/core/BlockSource.m_7727_:()Lnet/minecraft/server/level/ServerLevel;
+      12: aconst_null
+      13: aload_1
+      14: invokeinterface #108,  1          // InterfaceMethod net/minecraft/core/BlockSource.m_7961_:()Lnet/minecraft/core/BlockPos;
+      19: getstatic     #113                // Field com/atsuishio/superbwarfare/init/ModSounds.MORTAR_FIRE:Lnet/minecraftforge/registries/RegistryObject;
+      22: invokevirtual #70                 // Method net/minecraftforge/registries/RegistryObject.get:()Ljava/lang/Object;
+      25: checkcast     #115                // class net/minecraft/sounds/SoundEvent
+      28: getstatic     #121                // Field net/minecraft/sounds/SoundSource.BLOCKS:Lnet/minecraft/sounds/SoundSource;
+      31: fconst_1
+      32: fconst_1
+      33: invokevirtual #127                // Method net/minecraft/server/level/ServerLevel.m_5594_:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+      36: return
+}

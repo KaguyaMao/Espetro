@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: fcp
+Specification-Vendor: Mado
+Specification-Version: 1
+Implementation-Title: fcp
+Implementation-Version: 1.1.1
+Implementation-Vendor: Mado
+Implementation-Timestamp: 2026-07-27T18:31:36+0800
+MixinConfigs: fcp.mixins.json
+

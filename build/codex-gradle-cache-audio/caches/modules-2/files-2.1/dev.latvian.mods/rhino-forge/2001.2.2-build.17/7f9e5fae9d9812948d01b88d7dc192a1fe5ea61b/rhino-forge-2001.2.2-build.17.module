@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "dev.latvian.mods",
+    "module": "rhino-forge",
+    "version": "2001.2.2-build.17",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "rhino-forge-2001.2.2-build.17.jar",
+          "url": "rhino-forge-2001.2.2-build.17.jar",
+          "size": 1782275,
+          "sha512": "1ad9eaf5221c12044956b866d564d32282c3e8d64ee9c4ce6e01d95a8138e8a4011d59ccd2356adaa03a51933159c29a9d2f737f76dd930070cf1086593ef0c4",
+          "sha256": "b9302053f7ac8b25738423f12cae937663d681b7d2f46d109b6e0b5812e52cbf",
+          "sha1": "50d1e0b7f3fef9616769622b2ec0a3f5d34bc906",
+          "md5": "d6b24171c46c0afc205d978eba54cb00"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "rhino-forge-2001.2.2-build.17.jar",
+          "url": "rhino-forge-2001.2.2-build.17.jar",
+          "size": 1782275,
+          "sha512": "1ad9eaf5221c12044956b866d564d32282c3e8d64ee9c4ce6e01d95a8138e8a4011d59ccd2356adaa03a51933159c29a9d2f737f76dd930070cf1086593ef0c4",
+          "sha256": "b9302053f7ac8b25738423f12cae937663d681b7d2f46d109b6e0b5812e52cbf",
+          "sha1": "50d1e0b7f3fef9616769622b2ec0a3f5d34bc906",
+          "md5": "d6b24171c46c0afc205d978eba54cb00"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "rhino-forge-2001.2.2-build.17-sources.jar",
+          "url": "rhino-forge-2001.2.2-build.17-sources.jar",
+          "size": 786537,
+          "sha512": "e2be40c21efb135f7cc230d84336cca9f6c78505821653e30448dca78f2a34e8f658a0103dfeb9776609f2415a2766504af7a51ac5b419a9da778292976705ab",
+          "sha256": "caaf0c4783ca67e0917c9c4bad6b0d0fb7cef86f7baeadc616571fbd20dc0b30",
+          "sha1": "6a3b01e96643acf5d3d28b15ae9414e1cfe80de3",
+          "md5": "0f490a71b421ef844266a6fec6982fe3"
+        }
+      ]
+    }
+  ]
+}

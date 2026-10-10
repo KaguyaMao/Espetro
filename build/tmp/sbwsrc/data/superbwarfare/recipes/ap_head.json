@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:gunpowder"
+    },
+    "b": {
+      "tag": "forge:plates/steel"
+    },
+    "d": {
+      "item": "superbwarfare:tungsten_rod"
+    },
+    "e": {
+      "item": "superbwarfare:fusee"
+    }
+  },
+  "pattern": [
+    " e ",
+    "bdb",
+    " a "
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:ap_head"
+  },
+  "show_notification": true
+}

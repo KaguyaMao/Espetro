@@ -253,8 +253,11 @@ public class ClassCountManager {
             return SelectionResult.REQUIRES_SQUAD;
         }
 
+        // 装备完全解锁模式：跳过下面全部"人数类"限制（位置/入队/冷却/队长限定仍保留）。
+        boolean freeUnlock = FreeUnlockManager.isEnabled();
+
         // teammates_need：小队至少 N 人（含自己）才可选该职
-        if (kit.teammatesNeed > 0) {
+        if (!freeUnlock && kit.teammatesNeed > 0) {
             int squadSize = SquadManager.getInstance().getSquadMemberUuids(team, squadId).size();
             if (squadSize < kit.teammatesNeed) {
                 pendingTeammatesNeedMessage.put(uuid, kit.teammatesNeed);
@@ -262,7 +265,7 @@ public class ClassCountManager {
             }
         }
 
-        // leader_only：仅小队长可选
+        // leader_only：仅小队长可选（权限类限制，解锁模式下依然保留）
         if (kit.leaderOnly && !SquadManager.getInstance().isSquadLeader(uuid)) {
             return SelectionResult.LEADER_ONLY;
         }
@@ -270,12 +273,12 @@ public class ClassCountManager {
         int squadSize = SquadManager.getInstance().getSquadMemberUuids(team, squadId).size();
 
         // unlock_min_squad：小队达到此人数后解锁（优先级高于 unlock_per_n）
-        if (kit.unlockMinSquad > 0 && squadSize < kit.unlockMinSquad) {
+        if (!freeUnlock && kit.unlockMinSquad > 0 && squadSize < kit.unlockMinSquad) {
             return SelectionResult.UNLOCK_MIN_SQUAD;
         }
 
         // unlock_per_n：每 N 个小队员解锁 1 个名额
-        if (kit.unlockPerN > 0) {
+        if (!freeUnlock && kit.unlockPerN > 0) {
             int available = squadSize / kit.unlockPerN;
             if (available <= 0) {
                 return SelectionResult.UNLOCK_PER_N;
@@ -292,30 +295,31 @@ public class ClassCountManager {
 
         if (kit.teamCount) {
             // maxPlayers = 每小队父职业上限；任意变体选择都计入该上限。
-            if (changingClass && countClassInSquad(team, squadId, classId) >= kit.maxPlayers) {
+            if (!freeUnlock && changingClass
+                && countClassInSquad(team, squadId, classId) >= kit.maxPlayers) {
                 Espetro.LOGGER.info("{} 方小队 {} 职业 {} 已满，玩家 {} 无法选择",
                     team, squadId, classId, player.getName().getString());
                 return SelectionResult.SQUAD_CLASS_FULL;
             }
             // strict_count：变体有独立上限，但仍叠加在父职业小队计数之上。
-            if (kit.strictCount && !variantId.equals(oldVariantId)
+            if (!freeUnlock && kit.strictCount && !variantId.equals(oldVariantId)
                 && countVariantInSquad(team, squadId, classId, variantId) >= variant.maxPlayers) {
                 return SelectionResult.VARIANT_FULL;
             }
         } else {
             // 编制/队伍总限：父职业人数（含所有变体）。
-            if (changingClass && isFull(team, classId)) {
+            if (!freeUnlock && changingClass && isFull(team, classId)) {
                 Espetro.LOGGER.info("{} 方职业 {} 已满，玩家 {} 无法选择",
                     team, classId, player.getName().getString());
                 return SelectionResult.CLASS_FULL;
             }
-            if (kit.maxPerSquad > 0
+            if (!freeUnlock && kit.maxPerSquad > 0
                 && changingClass
                 && countClassInSquad(team, squadId, classId) >= kit.maxPerSquad) {
                 return SelectionResult.SQUAD_CLASS_FULL;
             }
             // strict_count 变体独立上限；非 strict 时变体不单独限员，只占父职业名额。
-            if (kit.strictCount && !variantId.equals(oldVariantId)
+            if (!freeUnlock && kit.strictCount && !variantId.equals(oldVariantId)
                 && getVariantCount(team, classId, variantId) >= variant.maxPlayers) {
                 return SelectionResult.VARIANT_FULL;
             }

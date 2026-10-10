@@ -1,0 +1,1148 @@
+{
+  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/tjgc.animation.json",
+  "ID":  "dragonrise_reforge:tjgc",
+  "MaxHealth":  2300,
+  "MaxEnergy":  100000000,
+  "OBB":  [
+    {
+      "Size":  [
+        0.75,
+        0.65625,
+        2.65625
+      ],
+      "Position":  [
+        0.0,
+        2.46875,
+        3.40625
+      ]
+    },
+    {
+      "Size":  [
+        0.75,
+        0.4375,
+        1.71875
+      ],
+      "Position":  [
+        0.0,
+        2.25,
+        -0.96875
+      ]
+    },
+    {
+      "Size":  [
+        2.375,
+        0.21875,
+        4.0625
+      ],
+      "Position":  [
+        0.0,
+        1.96875,
+        -3.3125
+      ]
+    },
+    {
+      "Size":  [
+        5.125,
+        0.125,
+        1.4375
+      ],
+      "Position":  [
+        0.0,
+        1.5625,
+        -3.6875
+      ]
+    },
+    {
+      "Size":  [
+        3.59375,
+        0.125,
+        0.625
+      ],
+      "Position":  [
+        0.0,
+        1.5625,
+        -5.75
+      ]
+    },
+    {
+      "Size":  [
+        0.75,
+        0.125,
+        1.3125
+      ],
+      "Position":  [
+        -2.84375,
+        1.5625,
+        -7.6875
+      ]
+    },
+    {
+      "Size":  [
+        0.75,
+        0.125,
+        1.3125
+      ],
+      "Position":  [
+        2.84375,
+        1.5625,
+        -7.6875
+      ]
+    },
+    {
+      "Size":  [
+        0.5625,
+        0.28125,
+        1.25
+      ],
+      "Position":  [
+        0.0,
+        2.09375,
+        7.3125
+      ]
+    },
+    {
+      "Part":  "MainEngine",
+      "Size":  [
+        0.46875,
+        0.5625,
+        2.96875
+      ],
+      "Position":  [
+        0.90625,
+        1.8125,
+        -5.65625
+      ]
+    },
+    {
+      "Part":  "MainEngine",
+      "Size":  [
+        0.46875,
+        0.5625,
+        2.96875
+      ],
+      "Position":  [
+        -0.90625,
+        1.8125,
+        -5.65625
+      ]
+    }
+  ],
+  "Seats":  {
+    "IsEnclosed":  true,
+    "Transform":  "Vehicle",
+    "Position":  [
+      0.0,
+      1.625,
+      3.925
+    ],
+    "CanRotateHead":  false,
+    "Sensitivity":  [
+      0,
+      0,
+      0
+    ],
+    "CameraPos":  {
+      "Transform":  "Vehicle",
+      "Position":  [
+        0.0,
+        3.3125,
+        3.75
+      ],
+      "UseFixedCameraPos":  true,
+      "UseAircraftCamera":  true,
+      "AircraftCameraPos":  [
+        0,
+        2.75,
+        -14
+      ]
+    },
+    "DismountInfo":  {
+      "Transform":  "Vehicle",
+      "Position":  [
+        0.0,
+        2.14125625,
+        3.83578125
+      ],
+      "CanEject":  true,
+      "EjectPosition":  [
+        0,
+        4.2,
+        3.7
+      ],
+      "EjectDirection":  "Up",
+      "EjectForce":  4
+    },
+    "Weapons":  [
+      "Laser",
+      "Rocket",
+      "BigRocket",
+      "AAMissile",
+      "ATMissile",
+      "BigATMissile",
+      "Bomb"
+    ]
+  },
+  "HudType":  "@Aircraft",
+  "Weapons":  {
+    "Laser":  {
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/laser.png",
+      "DefaultFireMode":  "Semi",
+      "AvailableFireModes":  "Semi",
+      "Projectile":  "ray",
+      "Range":  512,
+      "DefaultZoom":  3,
+      "RPM":  120,
+      "Velocity":  4000000000,
+      "Damage":  1200,
+      "ExplosionDamage":  72,
+      "ExplosionRadius":  12,
+      "Spread":  0,
+      "HeatPerShoot":  50,
+      "NaturalCooldown":  5.7,
+      "ShootAnimationTime":  3,
+      "AmmoCostPerShoot":  10000,
+      "AmmoType":  [
+        "FE",
+        {
+          "Ammo":  "FE",
+          "Override":  {
+            "Name":  "weapon.superbwarfare.laser_auto",
+            "DefaultFireMode":  "Auto",
+            "RPM":  1200,
+            "Velocity":  4000000000,
+            "Damage":  600,
+            "HeatPerShoot":  0.7,
+            "ShootAnimationTime":  1,
+            "AmmoCostPerShoot":  5000,
+            "ExplosionDamage":  0,
+            "ExplosionRadius":  0,
+            "SoundInfo":  {
+              "Fire1P":  "superbwarfare:prism_tank_fire_low_1p",
+              "Fire3P":  "superbwarfare:prism_tank_fire_low_3p",
+              "Change":  "dragonrise_reforge:change_weapon"
+            }
+          }
+        }
+      ],
+      "Crosshair":  "@VehicleCommonMissile",
+      "CrosshairColor":  "0x00FFF6",
+      "Name":  "weapon.superbwarfare.laser_semi",
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:prism_tank_fire_high_1p",
+        "Fire3P":  "superbwarfare:prism_tank_fire_high_3p",
+        "Change":  "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius":  12,
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "Positions":  [
+          [
+            0.0,
+            1.69675,
+            7.43605
+          ]
+        ],
+        "Directions":  [
+          "Vehicle"
+        ]
+      }
+    },
+    "Rocket":  {
+      "AmmoType":  "superbwarfare:small_rocket",
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/rocket.png",
+      "DefaultZoom":  2,
+      "DefaultFireMode":  "Auto",
+      "AvailableFireModes":  "Semi",
+      "Magazine":  50,
+      "EmptyReloadTime":  120,
+      "Projectile":  "superbwarfare:small_rocket",
+      "Spread":  0.4,
+      "Name":  "dragonrise_reforge:tjrocket",
+      "RPM":  450,
+      "Damage":  960,
+      "ExplosionDamage":  240,
+      "ExplosionRadius":  30,
+      "Gravity":  0.05,
+      "Velocity":  13.3333,
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ShootPositionForHud":  [
+          0,
+          1.579,
+          0.128
+        ],
+        "ShootDirectionForHud":  [
+          0,
+          -0.03,
+          1
+        ],
+        "Positions":  [
+          [
+            3.65559375,
+            1.36296875,
+            -1.703275
+          ],
+          [
+            -3.65559375,
+            1.36296875,
+            -1.703275
+          ],
+          [
+            3.5457625,
+            1.38731875,
+            -1.703275
+          ],
+          [
+            -3.5457625,
+            1.38731875,
+            -1.703275
+          ],
+          [
+            3.435925,
+            1.41166875,
+            -1.703275
+          ],
+          [
+            -3.435925,
+            1.41166875,
+            -1.703275
+          ],
+          [
+            3.32609375,
+            1.43601875,
+            -1.7032625
+          ],
+          [
+            -3.32609375,
+            1.43601875,
+            -1.703275
+          ],
+          [
+            3.63124375,
+            1.2531375,
+            -2.640775
+          ],
+          [
+            -3.63124375,
+            1.2531375,
+            -1.703275
+          ],
+          [
+            3.5214125,
+            1.2774875,
+            -2.640775
+          ],
+          [
+            -3.5214125,
+            1.2774875,
+            -1.703275
+          ],
+          [
+            3.412225,
+            1.301375,
+            -2.640775
+          ],
+          [
+            -3.412225,
+            1.301375,
+            -1.703275
+          ],
+          [
+            3.30174375,
+            1.3261875,
+            -2.640775
+          ],
+          [
+            -3.30174375,
+            1.3261875,
+            -1.703275
+          ],
+          [
+            3.60559375,
+            1.14109375,
+            -2.640775
+          ],
+          [
+            -3.60559375,
+            1.14109375,
+            -1.703275
+          ],
+          [
+            3.4970625,
+            1.16765,
+            -2.640775
+          ],
+          [
+            -3.4970625,
+            1.16765,
+            -1.703275
+          ],
+          [
+            3.38723125,
+            1.192,
+            -2.640775
+          ],
+          [
+            -3.38723125,
+            1.192,
+            -1.703275
+          ],
+          [
+            3.27739375,
+            1.21635,
+            -2.640775
+          ],
+          [
+            -3.27739375,
+            1.21635,
+            -2.640775
+          ],
+          [
+            1.972275,
+            1.672875,
+            -1.640775
+          ],
+          [
+            -1.972275,
+            1.672875,
+            -1.640775
+          ],
+          [
+            1.872275,
+            1.6963125,
+            -0.703275
+          ],
+          [
+            -1.872275,
+            1.6963125,
+            -0.703275
+          ],
+          [
+            1.7624375,
+            1.7206625,
+            -0.703275
+          ],
+          [
+            -1.7624375,
+            1.7206625,
+            -0.703275
+          ],
+          [
+            1.65260625,
+            1.7450125,
+            -0.703275
+          ],
+          [
+            -1.65260625,
+            1.7450125,
+            -0.703275
+          ],
+          [
+            1.542775,
+            1.7693625,
+            -0.703275
+          ],
+          [
+            -1.542775,
+            1.7693625,
+            -0.703275
+          ],
+          [
+            1.847925,
+            1.58648125,
+            -0.703275
+          ],
+          [
+            -1.847925,
+            1.58648125,
+            -0.703275
+          ],
+          [
+            1.7380875,
+            1.61083125,
+            -0.703275
+          ],
+          [
+            -1.7380875,
+            1.61083125,
+            -0.703275
+          ],
+          [
+            1.62890625,
+            1.63471875,
+            -0.703275
+          ],
+          [
+            -1.62890625,
+            1.63471875,
+            -0.703275
+          ],
+          [
+            1.518425,
+            1.65953125,
+            -0.703275
+          ],
+          [
+            -1.518425,
+            1.65953125,
+            -0.703275
+          ],
+          [
+            1.822275,
+            1.4744375,
+            -1.640775
+          ],
+          [
+            -1.822275,
+            1.4744375,
+            -1.640775
+          ],
+          [
+            1.71374375,
+            1.50099375,
+            -1.640775
+          ],
+          [
+            -1.71374375,
+            1.50099375,
+            -1.640775
+          ],
+          [
+            1.60390625,
+            1.52534375,
+            -1.1714625
+          ],
+          [
+            -1.60390625,
+            1.52534375,
+            -1.1714625
+          ],
+          [
+            1.494075,
+            1.54969375,
+            -0.703275
+          ],
+          [
+            -1.494075,
+            1.54969375,
+            -0.703275
+          ]
+        ],
+        "Directions":  [
+          [
+            0.02,
+            0,
+            8.21
+          ],
+          [
+            -0.02,
+            0,
+            8.21
+          ]
+        ]
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:small_rocket_fire_1p",
+        "Fire3P":  "superbwarfare:small_rocket_fire_3p",
+        "VehicleReload3p":  "superbwarfare:missile_reload",
+        "VehicleReloadSoundTime":  7,
+        "Change":  "dragonrise_reforge:change_weapon"
+      },
+      "Crosshair":  "@AirCraftCommon",
+      "CrosshairColor":  "0x66FF00",
+      "SoundRadius":  12
+    },
+    "BigRocket":  {
+      "AmmoType":  "superbwarfare:small_rocket",
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/rocket.png",
+      "DefaultZoom":  2,
+      "DefaultFireMode":  "Auto",
+      "AvailableFireModes":  "Semi",
+      "Magazine":  10,
+      "EmptyReloadTime":  120,
+      "Projectile":  "superbwarfare:small_rocket",
+      "Spread":  0.4,
+      "Name":  "dragonrise_reforge:tjbigrocket",
+      "RPM":  100,
+      "Damage":  160,
+      "ExplosionDamage":  480,
+      "ExplosionRadius":  60,
+      "Gravity":  0.05,
+      "Velocity":  13.3333,
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ShootPositionForHud":  [
+          0,
+          1.579,
+          0.128
+        ],
+        "ShootDirectionForHud":  [
+          0,
+          -0.03,
+          1
+        ],
+        "Positions":  [
+          [
+            0.96273125,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            -0.96273125,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            1.12960625,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            -1.12960625,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            1.29648125,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            -1.29648125,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            1.46335625,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            -1.46335625,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            1.63023125,
+            1.3583875,
+            -1.77765
+          ],
+          [
+            -1.63023125,
+            1.3583875,
+            -1.77765
+          ]
+        ],
+        "Directions":  [
+          [
+            0.02,
+            0,
+            8.21
+          ],
+          [
+            -0.02,
+            0,
+            8.21
+          ]
+        ]
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:small_rocket_fire_1p",
+        "Fire3P":  "superbwarfare:small_rocket_fire_3p",
+        "VehicleReload3p":  "superbwarfare:missile_reload",
+        "VehicleReloadSoundTime":  7,
+        "Change":  "dragonrise_reforge:change_weapon"
+      },
+      "Crosshair":  "@AirCraftCommon",
+      "CrosshairColor":  "0x66FF00",
+      "SoundRadius":  12
+    },
+    "Bomb":  {
+      "AmmoType":  "superbwarfare:medium_aerial_bomb",
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/nuke.png",
+      "DefaultZoom":  2,
+      "DefaultFireMode":  "Auto",
+      "AvailableFireModes":  "Semi",
+      "Magazine":  1,
+      "EmptyReloadTime":  150,
+      "Projectile":  "superbwarfare:mk_82",
+      "Gravity":  0.05,
+      "Spread":  0.5,
+      "Name":  "dragonrise_reforge:neo",
+      "ExplosionDamage":  114514,
+      "ExplosionRadius":  210,
+      "AddShooterDeltaMovement":  true,
+      "Velocity":  0.6333,
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ShootPositionForHud":  [
+          0,
+          1.171875,
+          0.0625
+        ],
+        "ShootDirectionForHud":  "Bomb",
+        "Positions":  [
+          [
+            0.0,
+            1.6112625,
+            1.34975625
+          ]
+        ],
+        "BoundUpWithAmmoAmount":  true,
+        "Directions":  [
+          "DeltaMovement"
+        ],
+        "ViewPosition":  [
+          -0.94704375,
+          0.3360875,
+          0.9743625
+        ],
+        "ViewDirection":  "Bomb"
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:bomb_release",
+        "Fire3P":  "superbwarfare:bomb_release",
+        "VehicleReload3p":  "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime":  11,
+        "Change":  "dragonrise_reforge:change_weapon"
+      },
+      "Crosshair":  "@AirBomb",
+      "CrosshairColor":  "0x66FF00",
+      "SoundRadius":  8
+    },
+    "AAMissile":  {
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/aam.png",
+      "DefaultZoom":  2,
+      "Magazine":  10,
+      "EmptyReloadTime":  120,
+      "Projectile":  "superbwarfare:agm_65",
+      "Name":  "dragonrise_reforge:tjaa",
+      "Damage":  3100,
+      "ExplosionDamage":  540,
+      "ExplosionRadius":  24,
+      "AddShooterDeltaMovement":  true,
+      "Velocity":  6.6667,
+      "RPM":  400,
+      "SeekWeaponInfo":  {
+        "SeekDirection":  "Default",
+        "SeekRange":  512,
+        "SeekAngle":  20,
+        "SeekTime":  5,
+        "MinTargetHeight":  15,
+        "MinTargetSize":  0.9,
+        "OnlyLockEntity":  true
+      },
+      "AmmoType":  [
+        {
+          "Ammo":  "superbwarfare:large_anti_ground_missile",
+          "ShouldUnload":  false
+        }
+      ],
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ViewDirection":  "Default",
+        "ShootPositionForHud":  [
+          0,
+          1.53,
+          0
+        ],
+        "Positions":  [
+          [
+            0.65429375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            -0.65429375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            0.89579375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            -0.89579375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            1.13729375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            -1.13729375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            1.37879375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            -1.37879375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            1.62029375,
+            1.73141875,
+            -4.22778125
+          ],
+          [
+            -1.62029375,
+            1.73141875,
+            -4.22778125
+          ]
+        ],
+        "BoundUpWithAmmoAmount":  true
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:bomb_release",
+        "Fire3P":  "superbwarfare:bomb_release",
+        "VehicleReload3p":  "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime":  11,
+        "Change":  "dragonrise_reforge:change_weapon",
+        "Locking":  "superbwarfare:missile_locking",
+        "Locked":  "superbwarfare:missile_locked"
+      },
+      "Crosshair":  "@VehicleCommonSeekMissile",
+      "CrosshairColor":  "0x66FF00",
+      "SoundRadius":  8
+    },
+    "ATMissile":  {
+      "AmmoType":  [
+        {
+          "Ammo":  "superbwarfare:large_anti_ground_missile",
+          "ShouldUnload":  false
+        },
+        {
+          "Ammo":  "superbwarfare:large_anti_ground_missile",
+          "ShouldUnload":  false,
+          "Override":  {
+            "Name":  "dragonrise_reforge:aasmg",
+            "SeekWeaponInfo":  {
+              "SeekDirection":  "Barrel",
+              "SeekRange":  384,
+              "SeekAngle":  20,
+              "SeekTime":  5,
+              "MaxTargetHeight":  32,
+              "MinTargetSize":  0.9,
+              "OnlyLockBlock":  true
+            }
+          }
+        }
+      ],
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/atgm.png",
+      "DefaultZoom":  3,
+      "DefaultFireMode":  "Semi",
+      "Magazine":  10,
+      "EmptyReloadTime":  200,
+      "Projectile":  "superbwarfare:kh_39",
+      "Name":  "dragonrise_reforge:tjat",
+      "Damage":  6100,
+      "ExplosionDamage":  280,
+      "ExplosionRadius":  30,
+      "Velocity":  10,
+      "Gravity":  0.05,
+      "SeekWeaponInfo":  {
+        "SeekDirection":  "Vehicle",
+        "SeekRange":  384,
+        "SeekAngle":  20,
+        "SeekTime":  5,
+        "MaxTargetHeight":  32,
+        "MinTargetSize":  0.9,
+        "OnlyLockEntity":  true
+      },
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ShootPositionForHud":  [
+          0,
+          1.0625,
+          5.625
+        ],
+        "Positions":  [
+          [
+            -0.33755625,
+            2.05879375,
+            -2.00148125
+          ],
+          [
+            -0.16880625,
+            1.9339125,
+            -1.99603125
+          ],
+          [
+            -5.625E-05,
+            2.05879375,
+            -2.00148125
+          ],
+          [
+            0.16869375,
+            1.9339125,
+            -1.99603125
+          ],
+          [
+            0.33744375,
+            2.05879375,
+            -2.00148125
+          ],
+          [
+            -0.33755625,
+            2.12694375,
+            -0.44046875
+          ],
+          [
+            -0.16880625,
+            2.0020625,
+            -0.43501875
+          ],
+          [
+            -5.625E-05,
+            2.12694375,
+            -0.44046875
+          ],
+          [
+            0.16869375,
+            2.0020625,
+            -0.43501875
+          ],
+          [
+            0.33744375,
+            2.12694375,
+            -0.44046875
+          ]
+        ],
+        "ViewDirection":  "Vehicle",
+        "ViewPosition":  [
+          -0.94704375,
+          0.3360875,
+          0.9743625
+        ],
+        "BoundUpWithAmmoAmount":  true
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:bomb_release",
+        "Fire3P":  "superbwarfare:bomb_release",
+        "VehicleReload3p":  "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime":  11,
+        "Change":  "dragonrise_reforge:change_weapon",
+        "Locking":  "superbwarfare:javelin_locking",
+        "Locked":  "superbwarfare:javelin_locked"
+      },
+      "CrosshairColor":  "0xFFC700",
+      "Crosshair":  "@VehicleCommonSeekMissile",
+      "SoundRadius":  8,
+      "AvailableFireModes":  [
+        "Semi"
+      ]
+    },
+    "BigATMissile":  {
+      "AmmoType":  [
+        {
+          "Ammo":  "superbwarfare:large_anti_ground_missile",
+          "ShouldUnload":  false
+        },
+        {
+          "Ammo":  "superbwarfare:large_anti_ground_missile",
+          "ShouldUnload":  false,
+          "Override":  {
+            "Name":  "dragonrise_reforge:aasmg",
+            "SeekWeaponInfo":  {
+              "SeekDirection":  "Barrel",
+              "SeekRange":  384,
+              "SeekAngle":  20,
+              "SeekTime":  5,
+              "MaxTargetHeight":  32,
+              "MinTargetSize":  0.9,
+              "OnlyLockBlock":  true
+            }
+          }
+        }
+      ],
+      "Icon":  "dragonrise_reforge:textures/overlay/vehicle/weapon/icons/tjgc/atgm2.png",
+      "DefaultZoom":  3,
+      "DefaultFireMode":  "Semi",
+      "Magazine":  5,
+      "EmptyReloadTime":  200,
+      "Projectile":  "superbwarfare:kh_39",
+      "Name":  "dragonrise_reforge:tjbigat",
+      "Damage":  9100,
+      "ExplosionDamage":  840,
+      "ExplosionRadius":  46,
+      "Velocity":  10,
+      "Gravity":  0.05,
+      "SeekWeaponInfo":  {
+        "SeekDirection":  "Vehicle",
+        "SeekRange":  384,
+        "SeekAngle":  20,
+        "SeekTime":  5,
+        "MaxTargetHeight":  32,
+        "MinTargetSize":  0.9,
+        "OnlyLockEntity":  true
+      },
+      "ShootPos":  {
+        "Transform":  "Vehicle",
+        "ShootPositionForHud":  [
+          0,
+          1.0625,
+          5.625
+        ],
+        "Positions":  [
+          [
+            1.489575,
+            0.8622,
+            -4.88460625
+          ],
+          [
+            0.989575,
+            0.98715625,
+            -4.88133125
+          ],
+          [
+            0.0,
+            1.47006875,
+            -3.9849625
+          ],
+          [
+            -0.989575,
+            0.98715625,
+            -4.88133125
+          ],
+          [
+            -1.489575,
+            0.8622,
+            -4.88460625
+          ]
+        ],
+        "ViewDirection":  "Vehicle",
+        "ViewPosition":  [
+          -0.94704375,
+          0.3360875,
+          0.9743625
+        ],
+        "BoundUpWithAmmoAmount":  true
+      },
+      "SoundInfo":  {
+        "Fire1P":  "superbwarfare:bomb_release",
+        "Fire3P":  "superbwarfare:bomb_release",
+        "VehicleReload3p":  "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime":  11,
+        "Change":  "dragonrise_reforge:change_weapon",
+        "Locking":  "superbwarfare:javelin_locking",
+        "Locked":  "superbwarfare:javelin_locked"
+      },
+      "CrosshairColor":  "0xFFC700",
+      "Crosshair":  "@VehicleCommonSeekMissile",
+      "SoundRadius":  8,
+      "AvailableFireModes":  [
+        "Semi"
+      ]
+    }
+  },
+  "TurretPos":  [
+    -0.94,
+    0.336,
+    0.9743
+  ],
+  "BarrelPos":  [
+    0,
+    0,
+    0
+  ],
+  "TurretTurnSpeed":  [
+    5,
+    5
+  ],
+  "TurretPitchRange":  [
+    -90,
+    10
+  ],
+  "UpStep":  1.1,
+  "Mass":  20,
+  "AllowFreeCam":  true,
+  "HasDecoy":  true,
+  "SmokeDecoy": false,
+  "SendHitParticles":  false,
+  "DamageModifiers":  [
+    "minecraft:arrow * 1.5",
+    "minecraft:trident * 1.5",
+    "minecraft:mob_attack * 2.5",
+    "minecraft:mob_attack_no_aggro * 2",
+    "minecraft:mob_projectile * 1.5",
+    "minecraft:lava - -7",
+    "minecraft:lava * 2.66",
+    "@minecraft:tnt * 5",
+    "@minecraft:tnt_minecart * 5",
+    "minecraft:explosion * 6",
+    "minecraft:player_explosion * 6",
+    "superbwarfare:custom_explosion * 3.4",
+    "superbwarfare:projectile_explosion * 3",
+    "superbwarfare:mine * 0.75",
+    "superbwarfare:projectile_hit * 1.5",
+    "superbwarfare:grapeshot_hit * 0.75",
+    "superbwarfare:laser * 0.75",
+    "#superbwarfare:projectile * 0.25",
+    "#superbwarfare:projectile_absolute * 0.85",
+    "superbwarfare:vehicle_strike * 6",
+    "@superbwarfare:rgo_grenade * 5",
+    "@superbwarfare:hand_grenade * 5",
+    "@superbwarfare:mortar_shell * 5",
+    "@superbwarfare:igla_9k38_missile * 1.3",
+    "@superbwarfare:gun_grenade * 1.5",
+    "@#superbwarfare:at_rocket * 3",
+    "$entity.getSourceAngle(source, 0.25) * damage * (entity.getHealth() > 0.1 ? 0.4 : 0.05)"
+  ],
+  "RotateOffsetHeight":  2.375,
+  "DestroyInfo":  {
+    "ParticleType":  "Giant",
+    "ExplosionDamage":  114514,
+    "ExplosionRadius":  30,
+    "CrashPassengers":  true
+  },
+  "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/tjgc_icon.png",
+  "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/aircraft.png",
+  "Type":  "Airplane",
+  "EngineType":  "Aircraft",
+  "EngineInfo":  {
+    "HasGear":  true,
+    "EnergyCostRate":  512,
+    "Increment":  0.5,
+    "Decrement":  0.5,
+    "PitchSpeed":  2,
+    "YawSpeed":  2,
+    "RollSpeed":  2,
+    "LiftSpeed":  2,
+    "SpeedRate":  3,
+    "GearRotateAngle":  85,
+    "EngineStartSound":  "dragonrise_reforge:jet_engine_start",
+    "EngineSoundVolume":  0.8
+  },
+  "TerrainCompat":  [
+    [
+      -0.243,
+      0,
+      4.63
+    ],
+    [
+      -2.58,
+      0,
+      -0.74
+    ],
+    [
+      2.58,
+      0,
+      -0.74
+    ]
+  ],
+  "EngineSound":  "dragonrise_reforge:jet_engine",
+  "Models":  [
+    {
+      "Model":  "dragonrise_reforge:models/bedrock/vehicle/tjgc.geo.json",
+      "Texture":  "dragonrise_reforge:textures/entity/tjgc.png"
+    }
+  ]
+}

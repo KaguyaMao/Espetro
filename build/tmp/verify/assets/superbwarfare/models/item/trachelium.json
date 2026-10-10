@@ -1,0 +1,15 @@
+{
+  "base": {
+    "parent": "superbwarfare:item/trachelium_base"
+  },
+  "gui_light": "front",
+  "loader": "forge:separate_transforms",
+  "perspectives": {
+    "gui": {
+      "parent": "superbwarfare:item/trachelium_icon"
+    }
+  },
+  "textures": {
+    "particle": "superbwarfare:item/trachelium_icon"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.marhali",
+    "module": "json5-java",
+    "version": "3.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "json5-java-3.0.0.jar",
+          "url": "json5-java-3.0.0.jar",
+          "size": 56460,
+          "sha512": "24cf9325438e986c2e691be22b12b95f74233d7dd2c0e49a15245b46f04c8043f7e1f1ad00001b7fe73f4c02957919160c5a7330758a65301d9c1e515b69b5d1",
+          "sha256": "2e0f73784e6bc4c755e52d485f628d110d397f079d58b118658b903be9aa0533",
+          "sha1": "572e4e0b40e8cf1270b11d5416c0d39075174a8b",
+          "md5": "684541d676ed194f635c37cdf7bf4fdf"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "json5-java-3.0.0.jar",
+          "url": "json5-java-3.0.0.jar",
+          "size": 56460,
+          "sha512": "24cf9325438e986c2e691be22b12b95f74233d7dd2c0e49a15245b46f04c8043f7e1f1ad00001b7fe73f4c02957919160c5a7330758a65301d9c1e515b69b5d1",
+          "sha256": "2e0f73784e6bc4c755e52d485f628d110d397f079d58b118658b903be9aa0533",
+          "sha1": "572e4e0b40e8cf1270b11d5416c0d39075174a8b",
+          "md5": "684541d676ed194f635c37cdf7bf4fdf"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "json5-java-3.0.0-sources.jar",
+          "url": "json5-java-3.0.0-sources.jar",
+          "size": 48047,
+          "sha512": "5a5d908124e19120f30879dbb7d5c822b1028ad3e24df37512288f3be13c98a0474a44a78f652a554fc4b9f04be443ee87022823fb5a5822ee0ecbed2748d75e",
+          "sha256": "461bb172d7128fe9842fd68debe59885cbb534ea220d2b9dcec6e25e461ce845",
+          "sha1": "b92c64ae77cd6cc1d856cf711f29bad50351a9a2",
+          "md5": "62f9459c1df23d9980f6a4a2b652c604"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "16 superbwarfare:steel_block",
+    "2 superbwarfare:heavy_armament_module",
+    "superbwarfare:large_battery_pack",
+    "2 superbwarfare:track",
+    "superbwarfare:large_motor",
+    "3 superbwarfare:cemented_carbide_block"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:silverhand_mk_iv"
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "variants": {
+    "facing=east,launch_power=0,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=0,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=1,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=1,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=10,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=10,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=11,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=11,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=12,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=12,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=13,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=13,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=14,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=14,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=15,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=15,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=2,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=2,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=3,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=3,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=4,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=4,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=5,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=5,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=6,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=6,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=7,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=7,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=8,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=8,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=9,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=east,launch_power=9,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 90
+    },
+    "facing=north,launch_power=0,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=0,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=1,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=1,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=10,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=10,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=11,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=11,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=12,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=12,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=13,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=13,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=14,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=14,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=15,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=15,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=2,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=2,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=3,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=3,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=4,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=4,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=5,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=5,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=6,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=6,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=7,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=7,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=8,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=8,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=9,powered=false": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=north,launch_power=9,powered=true": {
+      "model": "superbwarfare:block/catapult_controller"
+    },
+    "facing=south,launch_power=0,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=0,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=1,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=1,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=10,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=10,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=11,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=11,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=12,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=12,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=13,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=13,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=14,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=14,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=15,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=15,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=2,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=2,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=3,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=3,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=4,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=4,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=5,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=5,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=6,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=6,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=7,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=7,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=8,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=8,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=9,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=south,launch_power=9,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 180
+    },
+    "facing=west,launch_power=0,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=0,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=1,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=1,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=10,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=10,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=11,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=11,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=12,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=12,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=13,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=13,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=14,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=14,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=15,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=15,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=2,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=2,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=3,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=3,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=4,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=4,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=5,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=5,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=6,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=6,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=7,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=7,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=8,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=8,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=9,powered=false": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    },
+    "facing=west,launch_power=9,powered=true": {
+      "model": "superbwarfare:block/catapult_controller",
+      "y": 270
+    }
+  }
+}

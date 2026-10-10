@@ -164,18 +164,15 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
             int x = startX + col * (cardW + gap);
             int y = startY + row * (cardH + gap);
 
-            String prefix = isSelected ? "\u00a7a\u2713 " : isSelf ? "\u00a78" : "\u00a7f";
+            String prefix = isSelected ? "\u00a7a\u2713 " : "\u00a7f";
             // 名字旁边显示实时投票数：票数>0黄色，=0灰色
-            String label = prefix + playerName + " \u00a7e[" + votes + "]";
+            String label = prefix + playerName + (isSelf ? " \u00a78(自己)" : "") + " \u00a7e[" + votes + "]";
 
             var button = EspetroAuiWidgets.button(x, y, cardW, cardH, label, () -> voteFor(playerName))
-                .setEnabled(votingOpen && !isSelf)
+                .setEnabled(votingOpen)
                 .setSelected(isSelected)
                 .setColors(0x00000000, 0x202D3444, 0x30243A27)
                 .setBorderColor(0x00000000);
-            if (isSelf) {
-                button.setTextColor(EspetroAuiWidgets.DIM);
-            }
             root.addChild(button);
             voteButtons.put(playerName, button);
         }
@@ -217,9 +214,9 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
             boolean selected = playerName.equals(currentVote);
             entry.getValue()
                 .setLabel(buildPlayerLabel(playerName, isSelf, selected))
-                .setEnabled(votingOpen && !isSelf)
+                .setEnabled(votingOpen)
                 .setSelected(selected)
-                .setTextColor(isSelf ? EspetroAuiWidgets.DIM : EspetroAuiWidgets.TEXT);
+                .setTextColor(EspetroAuiWidgets.TEXT);
         }
         if (voteStatusText != null) {
             String next = buildVoteStatusText();
@@ -256,8 +253,9 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
     }
 
     private String buildPlayerLabel(String playerName, boolean isSelf, boolean selected) {
-        String prefix = selected ? "\u00a7a\u2713 " : isSelf ? "\u00a78" : "\u00a7f";
-        return prefix + playerName + " \u00a7e[" + voteCounts.getOrDefault(playerName, 0) + "]";
+        String prefix = selected ? "\u00a7a\u2713 " : "\u00a7f";
+        return prefix + playerName + (isSelf ? " \u00a78(自己)" : "")
+            + " \u00a7e[" + voteCounts.getOrDefault(playerName, 0) + "]";
     }
 
     private String buildVoteStatusText() {
@@ -278,10 +276,10 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         }
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && playerName.equals(mc.player.getName().getString())) {
+        if (mc.player == null) {
             return;
         }
-
+        // 允许给自己投票（指挥官候选人自投）。
         if (!playerName.equals(currentVote)) {
             currentVote = playerName;
             NetworkManager.sendCastVote(playerName);

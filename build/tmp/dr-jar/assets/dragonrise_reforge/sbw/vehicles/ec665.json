@@ -1,0 +1,17 @@
+{
+    "ID":  "dragonrise_reforge:ec665",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/ec665.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/ec665.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/ec665.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/ec665.png"
+                   }
+               ]
+}

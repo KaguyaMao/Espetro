@@ -1,0 +1,1924 @@
+{
+  "variants": {
+    "controlled=false,facing=east,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=east,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=false,facing=north,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=north,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=false,facing=south,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=south,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=false,facing=west,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=false,facing=west,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=east,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=east,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 90
+    },
+    "controlled=true,facing=north,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=north,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult"
+    },
+    "controlled=true,facing=south,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=south,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 180
+    },
+    "controlled=true,facing=west,launch_power=0,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=0,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=0,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=0,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=1,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=1,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=1,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=1,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=10,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=10,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=10,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=10,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=11,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=11,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=11,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=11,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=12,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=12,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=12,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=12,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=13,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=13,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=13,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=13,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=14,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=14,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=14,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=14,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=15,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=15,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=15,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=15,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=2,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=2,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=2,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=2,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=3,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=3,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=3,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=3,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=4,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=4,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=4,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=4,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=5,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=5,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=5,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=5,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=6,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=6,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=6,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=6,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=7,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=7,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=7,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=7,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=8,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=8,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=8,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=8,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=9,reversed=false,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=9,reversed=false,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=9,reversed=true,updating=false": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    },
+    "controlled=true,facing=west,launch_power=9,reversed=true,updating=true": {
+      "model": "superbwarfare:block/aircraft_catapult",
+      "y": 270
+    }
+  }
+}

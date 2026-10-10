@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/steel"
+    },
+    "b": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "  a",
+    " b ",
+    "b  "
+  ],
+  "result": {
+    "item": "superbwarfare:crowbar"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,15 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "superbwarfare:medium_battery_pack",
+    "superbwarfare:medium_armament_module",
+    "superbwarfare:cemented_carbide_ingot",
+    "6 #forge:storage_blocks/steel",
+    "8 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "vvp:stryker_m1296"
+  }
+}

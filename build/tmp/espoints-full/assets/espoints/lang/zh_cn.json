@@ -1,0 +1,11 @@
+{
+  "key.categories.espoints": "HCR据点系统",
+  "key.espoints.open_gui": "打开据点信息",
+  "key.espoints.tactical_map": "切换战术地图",
+  "key.espoints.map_display_mode": "切换地图显示模式",
+  "key.espoints.map_config": "打开地图配置界面",
+  "key.espoints.open_md_reader": "打开MD文件阅读器",
+  "key.espoints.tactical_mark": "战术标点轮盘（长按）",
+  "gui.espoints.md_reader.title": "MD文件阅读器",
+  "gui.espoints.md_reader.file_list": "文件列表"
+}

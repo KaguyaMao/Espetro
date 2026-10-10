@@ -1,0 +1,57 @@
+{
+    "format_version":  "1.8.0",
+    "animations":  {
+                       "animation.cannon.idle":  {
+                                                     "loop":  true,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.cannon.fire":  {
+                                                     "loop":  "hold_on_last_frame",
+                                                     "animation_length":  0.15,
+                                                     "bones":  {
+                                                                   
+                                                               }
+                                                 },
+                       "animation.machine_gun.idle":  {
+                                                          "loop":  true,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.machine_gun.fire":  {
+                                                          "loop":  "hold_on_last_frame",
+                                                          "animation_length":  0.15,
+                                                          "bones":  {
+                                                                        
+                                                                    }
+                                                      },
+                       "animation.subcannon.idle":  {
+                                                        "loop":  true,
+                                                        "bones":  {
+                                                                      
+                                                                  }
+                                                    },
+                       "animation.subcannon.fire":  {
+                                                        "loop":  "hold_on_last_frame",
+                                                        "animation_length":  0.15,
+                                                        "bones":  {
+                                                                      
+                                                                  }
+                                                    },
+                       "animation.passenger_machine_gun.idle":  {
+                                                                    "loop":  true,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                },
+                       "animation.passenger_machine_gun.fire":  {
+                                                                    "loop":  "hold_on_last_frame",
+                                                                    "animation_length":  0.15,
+                                                                    "bones":  {
+                                                                                  
+                                                                              }
+                                                                }
+                   }
+}

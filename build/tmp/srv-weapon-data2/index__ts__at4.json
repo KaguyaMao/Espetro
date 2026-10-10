@@ -1,0 +1,8 @@
+{
+  "name": "ts.gun.at4.name",
+  "display": "ts:at4_display",
+  "data": "ts:at4_data",
+  "tooltip": "ts.gun.at4.desc",
+  "type": "rpg",
+  "sort": 1002
+}

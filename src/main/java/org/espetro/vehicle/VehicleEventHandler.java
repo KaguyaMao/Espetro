@@ -1,6 +1,10 @@
 package org.espetro.vehicle;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -15,9 +19,13 @@ import net.minecraftforge.fml.common.Mod;
 import org.espetro.Espetro;
 import org.espetro.team.SquadManager;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 载具事件处理器
@@ -25,11 +33,129 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod.EventBusSubscriber(modid = Espetro.MOD_ID)
 public class VehicleEventHandler {
 
-    /** 小队员载具认领申请：key = 小队 ID，同一时间每小队最多一条待处理申请。 */
-    static final Map<Integer, PendingClaim> PENDING_CLAIMS = new ConcurrentHashMap<>();
+    /**
+     * 队员的载具认领申请：**按载具排队**（key = 载具 UUID，value = 该载具的申请队列，先申请先处理）。
+     * 同一名队员重复申请同一台车只刷新时限，不会重复入队。
+     */
+    static final Map<UUID, ArrayDeque<PendingClaim>> PENDING_CLAIMS = new ConcurrentHashMap<>();
     private static final long CLAIM_TIMEOUT_MS = 60_000L;
+    /** 单台载具最多排队的申请数（防止刷屏/内存膨胀）。 */
+    private static final int MAX_CLAIMS_PER_VEHICLE = 8;
+    /** 申请序号，用于"先申请先处理"的 FIFO 排序。 */
+    private static final AtomicLong CLAIM_SEQ = new AtomicLong();
+    private static final Map<UUID, Long> LAST_DENIAL_MESSAGE = new ConcurrentHashMap<>();
+    private static final long DENIAL_MESSAGE_INTERVAL_MS = 1_000L;
 
-    record PendingClaim(UUID memberUuid, UUID vehicleUuid, long expiryMs) {}
+    record PendingClaim(UUID memberUuid, UUID vehicleUuid, int squadId, String team,
+                        long seq, long expiryMs) {}
+
+    /**
+     * 提交（或刷新）一条认领申请，并给该小队队长发带可点击按钮的提示。
+     */
+    private static void submitClaim(ServerPlayer member, Entity vehicle, int squadId,
+                                    String team, SquadManager sm) {
+        UUID vehicleId = vehicle.getUUID();
+        ArrayDeque<PendingClaim> queue = PENDING_CLAIMS.computeIfAbsent(vehicleId, k -> new ArrayDeque<>());
+        long expiry = System.currentTimeMillis() + CLAIM_TIMEOUT_MS;
+        PendingClaim claim = new PendingClaim(member.getUUID(), vehicleId, squadId, team,
+            CLAIM_SEQ.incrementAndGet(), expiry);
+        synchronized (queue) {
+            queue.removeIf(c -> c.memberUuid().equals(member.getUUID()));   // 同一人重复申请 → 只刷新
+            queue.addLast(claim);
+            while (queue.size() > MAX_CLAIMS_PER_VEHICLE) queue.pollFirst();
+        }
+
+        member.sendSystemMessage(Component.literal("§a已向队长申请认领该载具"));
+        notifyLeaderClaim(sm, member, vehicle, vehicleId, team, squadId);
+    }
+
+    /** 给队长发：§a队员申请使用&lt;载具名&gt;，[通过][否决]（按钮点击直接执行命令）。 */
+    private static void notifyLeaderClaim(SquadManager sm, ServerPlayer member, Entity vehicle,
+                                          UUID vehicleId, String team, int squadId) {
+        UUID leaderUuid = sm.getSquadLeaderUuid(team, squadId);
+        if (leaderUuid == null) return;
+        ServerPlayer leader = member.serverLevel().getServer().getPlayerList().getPlayer(leaderUuid);
+        if (leader == null) return;
+
+        String vehicleName = getVehicleDisplayName(vehicle);
+        Component passButton = Component.literal("[通过]").withStyle(Style.EMPTY
+            .withColor(ChatFormatting.GREEN)
+            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/veh pass " + vehicleId))
+            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                Component.literal("点击通过：" + vehicleName))));
+        Component denyButton = Component.literal("[否决]").withStyle(Style.EMPTY
+            .withColor(ChatFormatting.RED)
+            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/veh passno " + vehicleId))
+            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                Component.literal("点击否决：" + vehicleName))));
+
+        leader.sendSystemMessage(Component.literal("§a队员申请使用" + vehicleName + "，")
+            .append(passButton)
+            .append(Component.literal(" "))
+            .append(denyButton));
+    }
+
+    /**
+     * 取出队首（最早申请、未过期、属于该小队）的认领申请并移除。
+     *
+     * @param vehicleId 指定载具；传 null 表示该小队名下最早的一条申请（任意载具）
+     */
+    static PendingClaim pollClaim(@javax.annotation.Nullable UUID vehicleId, int squadId) {
+        long now = System.currentTimeMillis();
+        List<UUID> candidates = vehicleId != null
+            ? List.of(vehicleId) : new ArrayList<>(PENDING_CLAIMS.keySet());
+
+        PendingClaim best = null;
+        UUID bestVehicle = null;
+        for (UUID vid : candidates) {
+            ArrayDeque<PendingClaim> queue = PENDING_CLAIMS.get(vid);
+            if (queue == null) continue;
+            synchronized (queue) {
+                queue.removeIf(c -> c.expiryMs() < now);   // 顺手清理过期申请
+                for (PendingClaim c : queue) {
+                    if (c.squadId() != squadId) continue;
+                    if (best == null || c.seq() < best.seq()) {
+                        best = c;
+                        bestVehicle = vid;
+                    }
+                    break;   // 该载具只需要最早的一条
+                }
+                if (queue.isEmpty()) PENDING_CLAIMS.remove(vid);
+            }
+            if (vehicleId != null) break;
+        }
+        if (best == null || bestVehicle == null) return null;
+
+        ArrayDeque<PendingClaim> queue = PENDING_CLAIMS.get(bestVehicle);
+        if (queue != null) {
+            synchronized (queue) {
+                queue.remove(best);
+                if (queue.isEmpty()) PENDING_CLAIMS.remove(bestVehicle);
+            }
+        }
+        return best;
+    }
+
+    /**
+     * 清除某名玩家的全部待处理认领申请（跳边 / 观战 / 离队 / 对局重置时调用）。
+     * 否则队长换队后仍会收到该队员在旧队伍的认领按钮，点"通过"会把载具
+     * 归属给一个已经不存在的编制。
+     */
+    public static void clearClaimsFor(UUID memberUuid) {
+        if (memberUuid == null) return;
+        for (Map.Entry<UUID, ArrayDeque<PendingClaim>> entry : PENDING_CLAIMS.entrySet()) {
+            ArrayDeque<PendingClaim> queue = entry.getValue();
+            synchronized (queue) {
+                queue.removeIf(c -> c.memberUuid().equals(memberUuid));
+                if (queue.isEmpty()) PENDING_CLAIMS.remove(entry.getKey(), queue);
+            }
+        }
+    }
+
+    /** 清空全部认领申请（对局重置 / 地图切换）。 */
+    public static void clearAllClaims() {
+        PENDING_CLAIMS.clear();
+    }
 
     /**
      * 载具死亡时从追踪中移除
@@ -148,6 +274,10 @@ public class VehicleEventHandler {
         Entity target = event.getTarget();
         if (!isSbwVehicle(target)) return;
 
+        // 白名单载具：不拦截、不取消，让 SBW 原生 VehicleEntity.interact 全功能回归
+        // （上车/开集装箱/撬棍回收/命名牌/C4）。
+        if (VehicleNativeWhitelist.isNative(target)) return;
+
         if (!isMountAllowed(player, target)) {
             event.setCanceled(true);
         }
@@ -162,6 +292,8 @@ public class VehicleEventHandler {
      * @return true = 允许上车；false = 拒绝（已向队长发起认领申请）
      */
     public static boolean isMountAllowed(ServerPlayer player, Entity vehicle) {
+        // 白名单载具：完全豁免本模组的上车准入（敌对阵营/小队归属/组员座位等）。
+        if (VehicleNativeWhitelist.isNative(vehicle)) return true;
         if (player == null || !isSbwVehicle(vehicle)) return true;
         // 主城阶段放行：使用原版 SBW 上车，不限制。
         if (org.espetro.team.GameStateManager.getInstance().getCurrentPhase().isLobbyLike()) {
@@ -172,6 +304,13 @@ public class VehicleEventHandler {
         if (team == null) return true; // 不在阵营中的玩家不受限制
 
         team = team.toUpperCase();
+
+        // 0) 敌对阵营：无论如何都不能登（车上有人也不行、不能抢占、不能改成自己小队）
+        if (isEnemyVehicle(player, vehicle)) {
+            notifyEnemyVehicle(player);
+            return false;
+        }
+
         SquadManager sm = SquadManager.getInstance();
         int playerSquad = sm.getPlayerSquadId(player.getUUID());
         boolean isLeader = sm.isSquadLeader(player.getUUID());
@@ -180,7 +319,7 @@ public class VehicleEventHandler {
         boolean vehicleOwned = vehicleSquad != -1;
         boolean vehicleHasPassengers = !vehicle.getPassengers().isEmpty();
 
-        // 1) 载具上有人 → 任何人可登
+        // 1) 载具上有人 → 同阵营任何人可登（敌方已在上面拦掉）
         if (vehicleHasPassengers) {
             return true;
         }
@@ -215,26 +354,40 @@ public class VehicleEventHandler {
         return false;
     }
 
-    private static void submitClaim(ServerPlayer member, Entity vehicle, int squadId,
-                                      String team, SquadManager sm) {
-        // 新申请作废旧申请
-        PENDING_CLAIMS.remove(squadId);
-        PENDING_CLAIMS.put(squadId, new PendingClaim(
-            member.getUUID(), vehicle.getUUID(),
-            System.currentTimeMillis() + CLAIM_TIMEOUT_MS));
+    /**
+     * 载具是否与玩家敌对（用于锁车：敌人无论如何都不能登上/操作己方载具）。
+     * 载具阵营无法判定时视为中立，返回 false。
+     */
+    public static boolean isEnemyVehicle(ServerPlayer player, Entity vehicle) {
+        if (player == null || vehicle == null) return false;
+        String playerTeam = Espetro.getPlayerTeam(player);
+        if (playerTeam == null) return false;
+        String vehicleTeam = resolveVehicleTeam(vehicle);
+        return vehicleTeam != null && !vehicleTeam.equalsIgnoreCase(playerTeam.trim());
+    }
 
-        String vehicleName = getVehicleDisplayName(vehicle);
-        member.sendSystemMessage(Component.literal("§a已向队长申请认领该载具"));
-
-        UUID leaderUuid = sm.getSquadLeaderUuid(team, squadId);
-        if (leaderUuid != null) {
-            ServerPlayer leader = member.serverLevel().getServer().getPlayerList()
-                .getPlayer(leaderUuid);
-            if (leader != null) {
-                leader.sendSystemMessage(Component.literal(
-                    "§a队员申请使用" + vehicleName + "，输入/veh pass以通过，输入/veh passno以否决"));
-            }
+    /**
+     * 解析载具所属阵营（用于敌我锁车）：优先小队归属阵营，其次生成时写入的持久标签，
+     * 最后回退到运行期追踪表。无法判定时返回 null（按"中立"处理）。
+     */
+    private static String resolveVehicleTeam(Entity vehicle) {
+        String owned = VehicleSquadOwnership.getSquadTeam(vehicle);
+        if (owned != null && !owned.isBlank()) return owned.toUpperCase();
+        var data = vehicle.getPersistentData();
+        if (data.contains(VehicleManager.VEHICLE_TEAM_KEY, net.minecraft.nbt.Tag.TAG_STRING)) {
+            String tagged = data.getString(VehicleManager.VEHICLE_TEAM_KEY);
+            if (!tagged.isBlank()) return tagged.toUpperCase();
         }
+        String tracked = VehicleManager.getInstance().getVehicleTeam(vehicle.getUUID());
+        return tracked != null ? tracked.toUpperCase() : null;
+    }
+
+    /** 敌方载具提示（1 秒限流，避免连点刷屏）。 */
+    public static void notifyEnemyVehicle(ServerPlayer player) {
+        long now = System.currentTimeMillis();
+        Long previous = LAST_DENIAL_MESSAGE.put(player.getUUID(), now);
+        if (previous != null && now - previous < DENIAL_MESSAGE_INTERVAL_MS) return;
+        player.displayClientMessage(Component.literal("§c这是敌方载具，无法登上。"), true);
     }
 
     /**

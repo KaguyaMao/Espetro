@@ -1,0 +1,32 @@
+{
+  "targets": [
+    "swap",
+    "previous"
+  ],
+  "passes": [
+    {
+      "name": "thermal-vision-wp",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "PrevSampler",
+          "id": "previous"
+        }
+      ],
+      "uniforms": [
+
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "previous"
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

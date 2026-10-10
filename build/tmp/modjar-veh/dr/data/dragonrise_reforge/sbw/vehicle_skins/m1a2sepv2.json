@@ -1,0 +1,18 @@
+{
+  "Skins": [
+    {
+      "Id": "vanilla",
+      "Name": "原版涂装",
+      "Description": "使用喷漆罐喷涂的原版涂装",
+      "Texture": "dragonrise_reforge:textures/entity/m1a2sepv2.png",
+      "Priority": 0
+    },
+    {
+      "Id": "green",
+      "Name": "绿色涂装",
+      "Description": "使用喷漆罐喷涂的绿色涂装",
+      "Texture": "dragonrise_reforge:textures/entity/m1a2sepv2green.png",
+      "Priority": 0
+    }
+  ]
+}

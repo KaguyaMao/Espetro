@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:cnfast",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/cnfast.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/cnfast.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/cnfast.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/cnfast.png"
+                   }
+               ]
+}

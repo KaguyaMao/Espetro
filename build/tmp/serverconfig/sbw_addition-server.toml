@@ -1,0 +1,128 @@
+
+#载具损伤行为改造（由 coremod 注入卓越前线实现）
+[vehicle_combat]
+	#关闭整车与部件的被动回血（整车不再呼吸回血；5 个部件不再每 tick 自愈）。
+	#低血量自损仍然保留。
+	#关闭 = 与原生一致
+	disable_passive_regen = true
+	#总开关：关闭后炮塔报废的转速惩罚完全回到原生（0.2），下面的系数不再起作用
+	enable_turret_damaged_penalty = true
+	#炮塔报废后的转速系数（原生 0.2；调成 0.2 即等于原生）
+	#Range: 0.0 ~ 1.0
+	turret_damaged_speed_factor = 0.05
+	#总开关：关闭后维修工具完全回到原生（按原公式小修整车、不修部件）
+	enable_repair_tool_rules = true
+	#维修工具一次把 5 个部件修满（原生完全不修部件）
+	repair_tool_full_part_repair = true
+	#维修工具对整车血量的恢复上限比例（0.15 = 最多修到 15%；1.0 = 解除该上限，接近原生）
+	#Range: 0.0 ~ 1.0
+	repair_tool_body_cap = 0.15
+	#单侧履带报废时冻结该侧履带与负重轮（setLeftTrack(0)/setLeftWheelRot(0) 等）
+	freeze_dead_track_side = true
+	#单侧履带报废时，前进/后退自动叠加朝报废侧的转向输入（只能画圈走）
+	dead_track_steer_to_dead_side = true
+	#单侧履带报废时的功率上限（双向限幅）
+	#Range: 0.0 ~ 1.0
+	dead_track_power_cap = 0.25
+	#主发动机报废后完全不能移动（清空行驶输入 + 功率归零 + 锁死水平位移；保留竖直分量）
+	lock_on_engine_destroyed = true
+	#上面这条是否作用于履带车（含双侧断带）
+	lock_track_vehicle = true
+	#是否作用于轮式车
+	lock_wheel_vehicle = true
+	#是否作用于船
+	lock_ship = true
+	#是否作用于直升机
+	lock_helicopter = true
+
+	[vehicle_combat.gun_lay]
+		#测距读条时长（毫秒）：按锁定键后读条这么久才装表
+		#Range: 0 ~ 5000
+		read_time_ms = 500
+		#双击判定窗口（毫秒）：两次按下间隔小于它就判定为「标尺归零」
+		#Range: 100 ~ 2000
+		double_click_ms = 350
+		#超过这个距离不装表（米；0 = 不限制）。
+		#注意：目标点取自 SBW 炮手 HUD 同源的那条射线，长度只有 512 格 ——
+		#所以实际最大装表距离由它决定，这里填大于 512 没有额外意义。
+		#Range: 0.0 ~ 100000.0
+		max_range = 512.0
+		#无稳定器的载具不实现本功能（本模组规定；关闭则任何座位都能装表）
+		require_stabilizer = true
+		#是否在 SBW 炮手 UI 里画标尺（读条时该行显示进度条）
+		hud_show = true
+		#标尺行相对 SBW 距离读数的下移像素（默认 10 = 正好下一行；
+		#不同 HUD 变体的读数基准线不同，这里是统一的微调量）
+		#Range: 0 ~ 100
+		hud_gap_y = 10
+		#是否修正**瞄具与炮口位置差**带来的横向视差（默认开）。
+		#炮手从瞄具看（武器 ShootPos.ViewPosition / 座位相机位 / 玩家眼睛+1.61），
+		#炮弹却从炮口出，横向差 (S − M) 会让弹着相对准星平移这么一段。
+		#开启后：装表时把炮管的**偏航**也收敛到'从炮口指向目标点'的方向，
+		#同时镜头做等量反向补偿 —— 视角一点都不动，弹着落在准星所指处。
+		#（不做成'移动准星'：视差是位移不是角度，换算成 lat/距离 后近距离会到好几度，
+		#准星扫过远近地形时会大幅摆动，实测观感不对。）
+		#简易炮镜（相机在炮口）时视差≈0，自动不修正。
+		parallax_yaw_correct = true
+		#横向视差修正的手动微调（度，默认 0；正 = 炮管再向右一点）。
+		#用来抹掉残余横向偏差；万一符号判断反了，填 2 倍反号值即可。
+		#Range: -3.0 ~ 3.0
+		parallax_yaw_trim_deg = 0.0
+
+#载具撞击破坏（撞碎方块 + 树木级联 + 不归零减速；由 coremod 注入卓越前线实现）
+[impact]
+	#功能开关（与 gamerule sbw_addition:vehicleImpactBreak 是「与」关系）
+	enabled = true
+	#触发破坏所需的最低速度（方块/tick，约 3 m/s）。
+	#低于它只当作普通碰撞 —— 停着靠在树上不会把树啃光。
+	#Range: 0.0 ~ 10.0
+	min_speed = 0.15
+	#撞碎方块时保留的位移比例：1.0 = 完全不减速，0 = 等同原版停车。
+	#0.85 = 撞过去只掉约 15% 的速度。
+	#Range: 0.0 ~ 1.0
+	speed_keep = 0.85
+	#撞击后轻微减速持续的 tick 数（8 tick ≈ 0.4 秒，让掉速能被感觉到）
+	#Range: 0 ~ 200
+	slow_ticks = 8
+	#单个载具单 tick 最多破坏多少方块（含树木级联，防卡顿）
+	#Range: 1 ~ 4096
+	max_blocks_per_tick = 128
+	#同一载具两次破坏判定之间的最小间隔（tick）
+	#Range: 0 ~ 100
+	impact_cooldown = 2
+	#必须有人驾驶才生效（空车 / AI 载具不会推平森林）
+	require_driver = true
+	#排除 EngineType.FIXED 的载具（飞机；与卓越前线 collideBlocks 的口径一致）
+	exclude_fixed_engine = true
+	#破坏规则：LIST_ONLY = 只破坏标签与 extra_breakable 里的方块；
+	#ALL_EXCEPT_PROTECTED = 除 impact_protected 外全破坏（仍然要求该方块可被破坏）
+	mode = "LIST_ONLY"
+	#额外可破坏方块 id（逗号分隔，例如 minecraft:glass,minecraft:oak_planks）
+	#默认空 —— 列表本体在数据包标签 #sbw_addition:impact_breakable 里，
+	#kubejs 用 {"replace": false, "values": [...]} 追加即可。
+	extra_breakable = ""
+	#跳过带方块实体的方块（箱子/熔炉等，防丢东西与报错）
+	skip_block_entities = true
+	#非树木方块被撞碎时是否掉落物品
+	drop_items = true
+	#树木特殊处理：撞到 #sbw_addition:impact_tree 里的方块时，连带破坏整棵树的木头与叶子
+	tree_cascade = true
+	#级联范围上限（切比雪夫半径，格；超出范围的部分保留）
+	#Range: 1 ~ 128
+	tree_max_radius = 16
+	#一棵树最多破坏多少方块（深色橡木/巨型云杉约 150~350）
+	#Range: 1 ~ 8192
+	tree_max_blocks = 350
+	#分帧：每 tick 最多排掉队列里多少方块（剩下的随后几 tick 继续）
+	#Range: 1 ~ 2048
+	tree_blocks_per_tick = 96
+	#级联搜索的访问上限（防病态结构把服务器拖住）
+	#Range: 1 ~ 65536
+	tree_max_scan = 700
+	#树木级联时原木是否掉落物品
+	tree_drop_logs = true
+	#树木级联时叶子是否掉落物品（默认不掉，防物品洪水）
+	tree_drop_leaves = false
+	#前 60 次撞击判定打一行 INFO 追踪（需同时打开调试日志总开关才看得到）
+	debug_trace = false
+

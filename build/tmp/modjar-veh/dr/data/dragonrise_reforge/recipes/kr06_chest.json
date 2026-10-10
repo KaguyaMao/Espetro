@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    },
+    "N": {
+      "tag": "forge:dyes/black"
+    }
+  },
+  "pattern": [
+    "KNK",
+    "K K",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:kr06_chest"
+  },
+  "show_notification": true
+}

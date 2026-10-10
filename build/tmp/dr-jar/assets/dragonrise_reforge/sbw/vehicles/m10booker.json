@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/m10booker.animation.json",
+    "ID":  "dragonrise_reforge:m10booker",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/m10booker.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/m10booker.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/m10booker.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/m10booker.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/m10booker.png"
+                   }
+               ]
+}

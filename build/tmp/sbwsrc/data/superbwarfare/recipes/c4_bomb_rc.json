@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "b": {
+      "item": "minecraft:comparator"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "result": {
+    "count": 2,
+    "item": "superbwarfare:c4_bomb",
+    "nbt": {
+      "Control": 1
+    }
+  },
+  "show_notification": true
+}

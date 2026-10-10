@@ -1,0 +1,141 @@
+{
+  "ID": "fcp:uaz",
+  "MaxHealth": 150,
+  "MaxEnergy": 5000000,
+  "PassengerRenderScale": 0.85,
+  "OBB": [
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [0.74375, 0.4335, 1.4025], "Part": "WheelLeft"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [-0.74375, 0.4335, 1.4025], "Part": "WheelRight"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [0.74375, 0.4335, -1.16875], "Part": "WheelLeft"},
+    {"Size": [0.1785, 0.39525, 0.39525], "Position": [-0.74375, 0.4335, -1.16875], "Part": "WheelRight"},
+    {"Size": [0.85, 0.425, 2.04], "Position": [0.0, 0.935, 0.2125], "Part": "Body"},
+    {"Size": [0.85, 0.425, 1.36], "Position": [0.0, 1.785, -0.4675], "Part": "Body"}
+  ],
+  "Seats": [
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "Weapons": [],
+      "BanHand": true,
+      "Position": [0.40375, 0.255, 0.1275],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [-0.40375, 0.255, 0.1275],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [0.40375, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [0.0, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    },
+    {
+      "IsEnclosed": true,
+      "Transform": "Vehicle",
+      "BanHand": true,
+      "Position": [-0.40375, 0.255, -0.765],
+      "MinPitch": -60,
+      "MaxPitch": 60,
+      "MinYaw": -95,
+      "MaxYaw": 95
+    }
+  ],
+  "Weapons": {
+    "Nothing": {
+      "Name": "",
+      "Crosshair": "@Empty",
+      "RPM": 0,
+      "Magazine": 0,
+      "Damage": 0
+    }
+  },
+  "EngineType": "Wheel",
+  "EngineInfo": {
+    "Buoyancy": 0,
+    "EnergyCostRate": 96,
+    "WheelRotSpeed": 1.25,
+    "WheelDifferential": 0.5,
+    "MaxForwardSpeedRate": 1.62,
+    "MaxBackwardSpeedRate": 0.33,
+    "Increment": 0.025,
+    "Decrement": 0.020,
+    "SteeringSpeed": 0.1,
+    "EngineSoundVolume": 0.6
+  },
+  "UpStep": 2.2,
+  "Mass": 10,
+  "RotateOffsetHeight": 2.2,
+  "DamageModifiers": [
+    "All * 0.55",
+    "minecraft:lava - -4",
+    "minecraft:lava * 4",
+    "minecraft:arrow * 0.2",
+    "minecraft:trident * 0.4",
+    "minecraft:mob_attack * 0.4",
+    "minecraft:mob_attack_no_aggro * 0.4",
+    "minecraft:mob_projectile * 0.4",
+    "minecraft:explosion * 1",
+    "minecraft:player_explosion * 1",
+    "superbwarfare:custom_explosion * 2.0",
+    "superbwarfare:projectile_explosion * 0.5",
+    "superbwarfare:mine * 1.0",
+    "superbwarfare:projectile_hit * 0.8",
+    "superbwarfare:grapeshot_hit * 0.2",
+    "superbwarfare:laser * 1.0",
+    "@#superbwarfare:aerial_bomb * 1.4",
+    "#superbwarfare:projectile * 0.16",
+    "#superbwarfare:projectile_absolute * 1.0",
+    "superbwarfare:vehicle_strike * 0.7",
+    "@superbwarfare:mortar_shell * 2.0",
+    "@superbwarfare:gun_grenade * 0.5",
+    "@superbwarfare:javelin_missile * 1.0",
+    "@superbwarfare:igla_9k38_missile * 1.0",
+    "@superbwarfare:wire_guide_missile * 1.0",
+    "All - 4"
+  ],
+  "VehicleContainerType": "Medium",
+  "DestroyInfo": {
+    "ParticleType": "Medium",
+    "ExplosionDamage": 120,
+    "ExplosionRadius": 7
+  },
+  "ThirdPersonCameraPos": [0, 1, 5],
+  "ContainerIcon": "fcp:textures/gui/vehicle/type/civ_rus.png",
+  "Type": "Car",
+  "CollisionLevel": {
+    "Level": 3,
+    "PowerLimits": [
+      [0, 0, true],
+      [0, 0, true],
+      [0.15, 0.09, false]
+    ]
+  },
+  "EngineSound": "superbwarfare:truck_engine",
+  "HudType": "@Empty",
+  "TerrainCompat": [[0.9826, 0, 1.3549], [-0.9826, 0, 1.3549], [0.9826, 0, -1.3549], [-0.9826, 0, -1.3549]],
+  "InertiaRotateRate": 1.8
+}

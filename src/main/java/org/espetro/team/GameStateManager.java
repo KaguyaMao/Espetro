@@ -19,6 +19,7 @@ import org.espetro.config.GameConfig;
 import org.espetro.network.NetworkManager;
    import org.espetro.network.TeamSelectStatePacket;
 import org.espetro.vehicle.VehicleManager;
+import org.espetro.vehicle.VehicleEventHandler;
 import org.espetro.stats.PlayerMatchStatsManager;
 import org.espetro.mapconfig.ExternalConfigBootstrap;
 import org.espetro.mapconfig.BattlefieldContext;
@@ -91,6 +92,13 @@ public class GameStateManager {
     private final Set<UUID> deployClassSelected = new HashSet<>();
     /** 管理员设为观察者的玩家（局内观战）：本局结束（beginCleanup/forceStop/reset）时自动清除恢复。 */
     private final Set<UUID> observers = new HashSet<>();
+    /**
+     * 主城等待期间被设为观察者的玩家：<b>跨局保持</b>，下一局继续观战，
+     * 直到管理员用跳边指令把他编入队伍。与 {@link #observers} 的区别只有生命周期。
+     */
+    private final Set<UUID> persistentObservers = new HashSet<>();
+    /** 投票阶段给观战者刷新"请等待"提示的节流计数。 */
+    private int votingNoticeTicker = 0;
     private int teamSelectTickCounter = 0;
     private int roundEndTickCounter = 0;
     private String pendingRoundWinner = null;
@@ -287,8 +295,41 @@ public class GameStateManager {
         enforceSpectatorBlindness(player, true);
     }
 
+    /** 该观战者是否处于“已进入战局”的阶段（对战 / 回合结算）。 */
+    public static boolean isObserverInMatch(ServerPlayer player) {
+        if (player == null) {
+            return false;
+        }
+        GameStateManager manager = getInstance();
+        if (manager == null || !manager.isObserver(player.getUUID())) {
+            return false;
+        }
+        GamePhase phase = manager.currentPhase;
+        return phase == GamePhase.BATTLE || phase == GamePhase.ROUND_END;
+    }
+
+    /**
+     * 观战者进入战局：解除失明与位置锁，保持旁观模式自由观战。
+     */
+    public void releaseObserverHold(ServerPlayer player) {
+        if (player == null) {
+            return;
+        }
+        player.setGameMode(GameType.SPECTATOR);
+        player.removeEffect(MobEffects.BLINDNESS);
+        BastionManager.getInstance().unlockPlayerPosition(player.getUUID());
+        BastionManager.getInstance().clearWaiting(player.getUUID());
+    }
+
     public static void enforceSpectatorBlindness(ServerPlayer player, boolean forceClientResync) {
         if (player == null) {
+            return;
+        }
+        // 观战者进入战局（对战/结算）后不再失明，也不再被锁位，可自由飞行观战；
+        // 投票与准备阶段仍然保持隐藏（只显示"当前正在投票，请等待"）。
+        if (isObserverInMatch(player)) {
+            player.setGameMode(GameType.SPECTATOR);
+            player.removeEffect(MobEffects.BLINDNESS);
             return;
         }
         if (!player.isSpectator()) {
@@ -349,6 +390,10 @@ public class GameStateManager {
         assignedTeams.putAll(assignments);
 
         for (ServerPlayer player : allPlayers) {
+            // 观战者（含主城设置的跨局观战）不参与自动分配，继续保持旁观。
+            if (isObserver(player.getUUID())) {
+                continue;
+            }
             String team = assignments.get(player.getUUID());
             if (team == null) team = "ATTACK";
             applyTeamAssignmentToPlayer(player, team);
@@ -1099,7 +1144,10 @@ public class GameStateManager {
         // 只有部署命令成功后才会由 BastionManager.clearWaiting() 解除。
         BastionManager bastionManager = BastionManager.getInstance();
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (isRecordedUnassigned(player)) {
+            if (isObserver(player.getUUID())) {
+                // 观战者：进入战局即解除失明与锁位（不再走"未分配"的隐藏态）。
+                releaseObserverHold(player);
+            } else if (isRecordedUnassigned(player)) {
                 // 开战事件不得像普通已部署玩家一样摘除失明。
                 applyMatchHoldState(player, HoldAnchor.CURRENT_LOCK);
             } else if (bastionManager.isWaitingForBastion(player.getUUID())) {
@@ -1153,9 +1201,32 @@ public class GameStateManager {
         }
     }
 
+    /**
+     * 投票/揭示阶段：观战者不参与投票，只显示"当前正在投票，请等待"（动作栏，1.5 秒刷新一次）。
+     */
+    private void notifySpectatorsDuringVoting() {
+        if (currentPhase == null) return;
+        boolean voting = switch (currentPhase) {
+            case MAP_VOTE, MAP_REVEAL, MAP_LOADING, TEAM_SELECT, TEAM_ASSIGN_SHOW,
+                 COMMANDER_VOTE, DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE,
+                 DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT, FACTION_REVEAL -> true;
+            default -> false;
+        };
+        if (!voting) return;
+        if (++votingNoticeTicker % 30 != 0) return;
+        MinecraftServer server = Espetro.getServer();
+        if (server == null) return;
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (isObserver(player.getUUID())) {
+                NetworkManager.sendWaitingStatus(player, "§e当前正在投票，请等待", true);
+            }
+        }
+    }
+
     // ========== 服务器Tick ==========
 
     public void onServerTick() {
+        notifySpectatorsDuringVoting();
         switch (currentPhase) {
             case LOBBY, WAITING_FOR_PLAYERS:
                 // 人数变化时立即推；否则最多 5 秒一次，降低主城挂机广播负载
@@ -1364,6 +1435,8 @@ public class GameStateManager {
     public void resetGame() {
         MinecraftServer server = Espetro.getServer();
         forceStopInProgress = false;
+        // 仅本局有效：重置对局时关闭装备完全解锁模式
+        FreeUnlockManager.onRoundEnded();
         clearRoundRuntime(false);
         pendingRoundWinner = null;
         pendingMap = null;
@@ -1424,6 +1497,8 @@ public class GameStateManager {
             applyHubState(player);
         }
 
+        // 仅本局有效：强制结束时关闭装备完全解锁模式
+        FreeUnlockManager.onRoundEnded();
         clearRoundRuntime(true);
         pendingMap = null;
         pendingRoundWinner = null;
@@ -1507,7 +1582,7 @@ public class GameStateManager {
         NetworkManager.sendCommanderSkillSync(player);
 
         // 观察者重连：本局内保持旁观，不重新编队、不强制回城/等待点。
-        if (observers.contains(player.getUUID())) {
+        if (isObserver(player.getUUID())) {
             player.removeAllEffects();
             player.setGameMode(net.minecraft.world.level.GameType.SPECTATOR);
             player.setHealth(player.getMaxHealth());
@@ -2191,6 +2266,8 @@ public class GameStateManager {
         }
 
         ActiveMapConfig completedMap = pendingMap != null ? pendingMap : BattlefieldContext.getOrNull();
+        // 仅本局有效：本局结束（回城流程）关闭装备完全解锁模式
+        FreeUnlockManager.onRoundEnded();
         clearRoundRuntime(false); // per-round scoreboard survives until next prestart
         BattlefieldWorldManager.getInstance().cleanupBattlefield(server, completedMap, cleanupResult -> {
             pendingMap = null;
@@ -2212,6 +2289,15 @@ public class GameStateManager {
 
     private void clearPlayerRoundAssignment(ServerPlayer player) {
         if (player == null) return;
+        // 跳边 / 观战 / 重连 / 对局重置：先强制下车。
+        // 玩家若正坐在敌方载具里（换队瞬间载具归属未变），仅靠座位校验拦不住，
+        // 必须先脱离载具，之后每次上车都会重新走阵营校验。
+        if (player.getVehicle() != null) {
+            player.stopRiding();
+        }
+        // 该玩家在旧队伍的待处理认领申请一并作废，避免队长收到已失效的
+        // [通过]/[否决] 按钮并把载具归属给旧编制。
+        VehicleEventHandler.clearClaimsFor(player.getUUID());
         String squadTeam = SquadManager.getInstance().removePlayer(player.getUUID());
         ClassCountManager.getInstance().removePlayer(player);
         ClassEquipment.clearEquipment(player);
@@ -2227,7 +2313,8 @@ public class GameStateManager {
     // ========== 管理员：跳边 / 观战 ==========
 
     public boolean isObserver(UUID playerId) {
-        return playerId != null && observers.contains(playerId);
+        return playerId != null
+            && (observers.contains(playerId) || persistentObservers.contains(playerId));
     }
 
     /**
@@ -2251,9 +2338,26 @@ public class GameStateManager {
      * 本局结束（beginCleanup/forceStop/resetGame）后自动恢复为正常玩家。
      */
     public boolean adminSetObserver(ServerPlayer player) {
+        return setObserver(player, false);
+    }
+
+    /** 玩家自己通过面板按钮进入观战（局内有效，本局结束自动恢复）。 */
+    public boolean selfSetObserver(ServerPlayer player) {
+        return setObserver(player, true);
+    }
+
+    private boolean setObserver(ServerPlayer player, boolean selfRequest) {
         if (player == null) return false;
         UUID id = player.getUUID();
-        observers.add(id);
+        // 主城等待期间设置 → 跨局保持（下一局继续观战）；局内设置 → 本局结束自动恢复。
+        boolean lobbyLike = currentPhase == null || currentPhase.isLobbyLike();
+        if (lobbyLike) {
+            persistentObservers.add(id);
+            observers.remove(id);
+        } else {
+            observers.add(id);
+            persistentObservers.remove(id);
+        }
         clearPlayerRoundAssignment(player);
         // 服务端已清空队伍/小队/职业记录：让客户端立即优雅关闭残留的部署/投票/
         // 选职等对局界面，避免残留到后续阶段（J 屏等不会自行感知被移出对局）。
@@ -2263,8 +2367,15 @@ public class GameStateManager {
         player.removeAllEffects();
         player.setGameMode(net.minecraft.world.level.GameType.SPECTATOR);
         player.setHealth(player.getMaxHealth());
-        player.sendSystemMessage(Component.literal(
-            "§e你已被管理员设为观察者，本局结束后将自动恢复为正常玩家。"));
+        if (selfRequest) {
+            player.sendSystemMessage(Component.literal("§e你已进入观战模式。"));
+        } else if (lobbyLike) {
+            player.sendSystemMessage(Component.literal(
+                "§e你已被设为观察者：本局与下一局都将保持观战，直到被跳边编入队伍。"));
+        } else {
+            player.sendSystemMessage(Component.literal(
+                "§e你已被管理员设为观察者，本局结束后将自动恢复为正常玩家。"));
+        }
         return true;
     }
 
@@ -2280,7 +2391,7 @@ public class GameStateManager {
     public String adminChangeTeam(ServerPlayer player) {
         if (player == null) return null;
         UUID id = player.getUUID();
-        if (observers.remove(id)) {
+        if (observers.remove(id) | persistentObservers.remove(id)) {
             String team = java.util.concurrent.ThreadLocalRandom.current().nextBoolean()
                 ? "ATTACK" : "DEFEND";
             clearPlayerRoundAssignment(player);
@@ -2325,6 +2436,7 @@ public class GameStateManager {
 
     /** 本局结束：观察者恢复为正常玩家（保留 spectators 本身由回城流程处理）。 */
     public void clearAllObservers() {
+        // 只清"局内观战"；主城设置的跨局观战者保持旁观，下一局继续观战。
         observers.clear();
     }
 

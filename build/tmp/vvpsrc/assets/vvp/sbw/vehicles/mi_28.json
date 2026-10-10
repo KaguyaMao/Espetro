@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:mi_28",
+  "Model": {
+    "Model": "vvp:geo/mi28_3.geo.json",
+    "Texture": "vvp:textures/entity/mi28_camo.png"
+  }
+}

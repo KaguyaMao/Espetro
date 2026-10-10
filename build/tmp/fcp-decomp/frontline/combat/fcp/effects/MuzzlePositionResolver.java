@@ -1,0 +1,46 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.atsuishio.superbwarfare.data.gun.ShootParameters
+ *  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.phys.Vec3
+ */
+package frontline.combat.fcp.effects;
+
+import com.atsuishio.superbwarfare.data.gun.ShootParameters;
+import com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+
+public final class MuzzlePositionResolver {
+    private MuzzlePositionResolver() {
+    }
+
+    public static MuzzlePose resolve(ShootParameters parameters) {
+        Vec3 position = parameters.shootPosition;
+        Vec3 direction = parameters.shootDirection;
+        Entity supplier = parameters.ammoSupplier;
+        Entity shooter = parameters.shooter;
+        if (supplier instanceof VehicleEntity) {
+            VehicleEntity vehicle = (VehicleEntity)supplier;
+            if (shooter != null) {
+                position = vehicle.getShootPos(shooter, 1.0f);
+                direction = vehicle.getShootVec(shooter, 1.0f);
+            } else {
+                position = vehicle.getShootPos(0, 1.0f);
+                Vec3 seatDir = vehicle.getShootVec(0, 1.0f);
+                if (seatDir != null) {
+                    direction = seatDir;
+                }
+            }
+        }
+        direction = direction == null || direction.m_82556_() < 1.0E-8 ? new Vec3(0.0, 0.0, 1.0) : direction.m_82541_();
+        return new MuzzlePose(position, direction);
+    }
+
+    public record MuzzlePose(Vec3 position, Vec3 direction) {
+    }
+}
+

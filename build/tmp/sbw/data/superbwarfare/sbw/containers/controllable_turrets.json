@@ -1,0 +1,29 @@
+{
+  "List": [
+    {
+      "Type": "superbwarfare:type_63",
+      "Weight": 3
+    },
+    {
+      "Type": "superbwarfare:mk_42",
+      "Weight": 4
+    },
+    {
+      "Type": "superbwarfare:mle_1934",
+      "Weight": 3
+    },
+    {
+      "Type": "superbwarfare:bl_132",
+      "Weight": 2
+    },
+    {
+      "Type": "superbwarfare:hpj_11",
+      "Weight": 2
+    },
+    {
+      "Type": "superbwarfare:tow",
+      "Weight": 3
+    },
+    "superbwarfare:annihilator"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "superbwarfare:main/vehicle_assembling",
+  "criteria": {
+    "0": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:container"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "superbwarfare.advancement.main.super_container.des"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "superbwarfare:container"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "superbwarfare.advancement.main.super_container"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

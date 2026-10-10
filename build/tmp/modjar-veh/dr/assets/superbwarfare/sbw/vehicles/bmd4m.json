@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/bmd4m.animation.json",
+    "ID":  "dragonrise_reforge:bmd4m",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/bmd4m.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/bmd4m.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/bmd4m.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/bmd4m.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/bmd4m.png"
+                   }
+               ]
+}

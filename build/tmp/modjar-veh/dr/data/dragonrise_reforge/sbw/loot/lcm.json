@@ -1,0 +1,44 @@
+{
+  "ID": "dragonrise_reforge:lcm",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Chance": 1.0,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:wheel"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.2,
+          "Count": 1,
+          "Name": "superbwarfare:small_battery_pack"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 3,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "@Default",
+      "Type": "complete"
+    }
+  ]
+}

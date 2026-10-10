@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:pants21",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/pants21.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/pants21.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/pants21.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/pants21.png"
+                   }
+               ]
+}

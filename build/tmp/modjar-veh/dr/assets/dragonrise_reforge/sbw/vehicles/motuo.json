@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:motuo",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/motuo.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/motuo.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/motuo.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/motuo.png"
+                   }
+               ]
+}

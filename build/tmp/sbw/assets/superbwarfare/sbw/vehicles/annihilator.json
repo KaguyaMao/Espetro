@@ -1,0 +1,9 @@
+{
+  "Animation": "superbwarfare:animations/bedrock/vehicle/annihilator.animation.json",
+  "Models": [
+    {
+      "Model": "superbwarfare:models/bedrock/vehicle/annihilator.geo.json",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/annihilator.png"
+    }
+  ]
+}

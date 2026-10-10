@@ -1,0 +1,35 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+MixinGradle did not locate the diffplug APT plugin, skipping eclipse task configuration
+
+> Task :downloadMcpConfig
+> Task :extractSrg UP-TO-DATE
+> Task :createMcpToSrg UP-TO-DATE
+
+> Task :compileJava
+.\gradlew.bat : ע: SpongePowered MIXIN Annotation Processor Version=0.8.5 (MixinGradle Version=0.7)
+所在位置 行:1 字符: 129
++ ... ew($false); .\gradlew.bat compileJava --console=plain "-PauratipJar=C ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ע: SpongePowere...le Version=0.7):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ע: Supported obfuscation types: ObfuscationServiceMCP supports [notch] ObfuscationServiceFG3 supports [searge]
+ע: Loading searge mappings from D:\minecraft\modp\Espetro\build\createMcpToSrg\output.tsrg
+ע: Writing refmap to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-refmap.json
+ע: Writing refmap to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-refmap.json
+ע: Writing searge composite mappings to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-mappings.tsrg
+ע: Writing refmap to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-refmap.json
+ע: Writing refmap to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-refmap.json
+ע: Writing searge composite mappings to D:\minecraft\modp\Espetro\build\tmp\compileJava\compileJava-mappings.tsrg
+ע: ĳЩ�����ļ�ʹ�û򸲸����ѹ�ʱ�� API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+ע: ĳЩ�����ļ�ʹ�û򸲸��˱��Ϊ��ɾ�����ѹ�ʱ API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:removal ���±��롣
+ע: D:\minecraft\modp\Espetro\src\main\java\org\espetro\client\gui\EspetroTipNotifier.javaʹ����δ�����򲻰�ȫ�Ĳ�����
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+
+BUILD SUCCESSFUL in 41s
+4 actionable tasks: 2 executed, 2 up-to-date

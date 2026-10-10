@@ -1,0 +1,17 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "3 #forge:storage_blocks/steel",
+    "superbwarfare:medium_battery_pack",
+    "4 superbwarfare:wheel",
+    "superbwarfare:large_motor",
+    "minecraft:dispenser",
+    "superbwarfare:mortar_barrel",
+    "superbwarfare:artillery_indicator",
+    "superbwarfare:mortar_bipod"
+  ],
+  "result": {
+    "entity": "superbwarfare:sodayo_pick_up_tow"
+  }
+}

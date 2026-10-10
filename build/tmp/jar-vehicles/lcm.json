@@ -1,0 +1,289 @@
+{
+  "ID": "dragonrise_reforge:lcm",
+  "MaxHealth": 250,
+  "MaxEnergy": 20000000,
+  "OBB": [
+    {
+      "Size": [2.144,1.575,7.919],
+      "Position": [-0.016,1.57,-1.855],
+      "Part": "Collision"
+    },
+    {
+      "Size": [0.3,1.543,7.013],
+      "Position": [-1.859,1.601,-0.948]
+    },
+    {
+      "Size": [0.3,1.543,7.013],
+      "Position": [1.859,1.601,-0.948]
+    },
+    {
+      "Size": [2.144,0.543,7.513],
+      "Position": [-0.016,0.601,-2.261]
+    },
+    {
+      "Size": [1.831,0.293,1.95],
+      "Position": [0.023,2.726,-6.011]
+    },
+    {
+      "Size": [0.8,1.075,0.856],
+      "Position": [-0.008,4.008,-6.667]
+    },
+    {
+      "Size": [1.581,1.825,0.231],
+      "Position": [-0.016,2.3,6.123],
+      "CustomRotate": [17.5,0.0,0.0]
+    },
+    {
+      "Size": [2.147,1.167,2.77],
+      "Position": [0.0,1.315,-7.029],
+      "Part": "MainEngine"
+    }
+  ],
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.0,2.886,-6.665],
+      "MinPitch": -40,
+      "MaxPitch": 40,
+      "MinYaw": -90,
+      "MaxYaw": 90,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [-1.062,0.261,-3.415],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [-1.062,0.261,-1.228],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [-1.062,0.261,0.397],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [-1.062,0.261,2.022],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.875,0.261,2.022],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.875,0.261,-3.415],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.875,0.261,-1.228],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    },
+    {
+      "Transform": "Vehicle",
+      "RotateWithVehicle": true,
+      "Position": [0.875,0.261,0.397],
+      "MinPitch": -40,
+      "MaxPitch": 60,
+      "MinYaw": -120,
+      "MaxYaw": 120,
+      "Sensitivity": [0.57,0.75,0.9],
+      "HasThermalImaging": true
+    }
+  ],
+  "Weapons": {
+    "MachineGun": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 3,
+      "RPM": 450,
+      "Damage": 40,
+      "BypassesArmor": 0.6,
+      "Velocity": 25.0,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "AmmoType": "@HeavyAmmo",
+      "Crosshair": "@VehicleCommonGun",
+      "CrosshairColor": "0x66FF00",
+      "Name": "weapon.superbwarfare.50_cal_gun",
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:m_2_hb_fire_1p",
+        "Fire3P": "superbwarfare:m_2_hb_fire_3p",
+        "Fire3PFar": "superbwarfare:m_2_hb_far",
+        "Fire3PVeryFar": "superbwarfare:m_2_hb_veryfar",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 16,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [
+          [1.313,3.144,-4.713]
+        ],
+        "Directions": [
+          "Passenger"
+        ]
+      }
+    },
+    "MachineGun2": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:projectile",
+      "DefaultZoom": 3,
+      "RPM": 450,
+      "Damage": 40,
+      "BypassesArmor": 0.6,
+      "Velocity": 25.0,
+      "RecoilTime": 16,
+      "RecoilForce": 0.05,
+      "HeatPerShoot": 5,
+      "NaturalCooldown": 1,
+      "ShootAnimationTime": 1,
+      "AmmoType": "@HeavyAmmo",
+      "Crosshair": "@VehicleCommonGun",
+      "CrosshairColor": "0x66FF00",
+      "Name": "weapon.superbwarfare.50_cal_gun",
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:m_2_hb_fire_1p",
+        "Fire3P": "superbwarfare:m_2_hb_fire_3p",
+        "Fire3PFar": "superbwarfare:m_2_hb_far",
+        "Fire3PVeryFar": "superbwarfare:m_2_hb_veryfar",
+        "Change": "dragonrise_reforge:change_weapon"
+      },
+      "SoundRadius": 16,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [
+          [-1.313,3.144,-4.713]
+        ],
+        "Directions": [
+          "Passenger"
+        ]
+      }
+    }
+  },
+  "EngineType": "Ship",
+  "EngineInfo": {
+    "Buoyancy": 0.09,
+    "EnergyCostRate": 48,
+    "MaxForwardSpeedRate": 1.2,
+    "MaxBackwardSpeedRate": 0.7,
+    "Increment": 0.035,
+    "Decrement": 0.022,
+    "SteeringSpeed": 0.15,
+    "BodyRollRate": 0.8,
+    "EngineSoundVolume": 1.0
+  },
+  "HasDecoy": false,
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1.2,
+  "Mass": 30,
+  "DamageModifiers": [
+    "minecraft:arrow 0",
+    "minecraft:trident 0",
+    "minecraft:mob_attack 0",
+    "minecraft:mob_attack_no_aggro 0",
+    "minecraft:mob_projectile 0",
+    "minecraft:player_attack 0",
+    "#superbwarfare:projectile 0",
+    "All - 20",
+    "minecraft:lava + 20",
+    "minecraft:lava * 10",
+    "@minecraft:tnt * 4",
+    "@minecraft:tnt_minecart * 4",
+    "@#superbwarfare:aerial_bomb * 12",
+    "All * 0.2",
+    "minecraft:explosion * 2",
+    "superbwarfare:custom_explosion * 0.65",
+    "superbwarfare:projectile_explosion * 0.65",
+    "superbwarfare:mine * 0.5",
+    "superbwarfare:lunge_mine * 0.5",
+    "superbwarfare:projectile_hit * 1.3",
+    "superbwarfare:grapeshot_hit * 0.1",
+    "#superbwarfare:projectile_absolute * 0.15",
+    "@#superbwarfare:aa_missile * 0.3",
+    "@superbwarfare:small_cannon_shell * 0.5",
+    "@superbwarfare:c4 * 4",
+    "@#superbwarfare:at_rocket * 1.1",
+    "@superbwarfare:gun_grenade * 1.25",
+    "@superbwarfare:mortar_shell * 1.25",
+    "@superbwarfare:tm_62 * 2.5",
+    "$entity.getSourceAngle(source, 0.3) * damage"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Huge",
+    "ExplosionDamage": 80,
+    "ExplosionRadius": 6
+  },
+  "ThirdPersonCameraPos": [0,3.0,8.0],
+  "VehicleIcon": "dragonrise_reforge:textures/vehicle_icon/lcm_icon.png",
+  "ContainerIcon": "dragonrise_reforge:textures/gui/vehicle/type/us_water.png",
+  "VehicleContainerType": "Medium",
+  "Type": "Boat",
+  "EngineSound": "superbwarfare:lav_150_engine",
+  "InertiaRotateRate": 2.0,
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/lcm.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/lcm.png"
+    }
+  ],
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/lcm.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/lcm.png"
+  }
+}

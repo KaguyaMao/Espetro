@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:centauro",
+  "Model": {
+    "Model": "vvp:geo/centauro.geo.json",
+    "Texture": "vvp:textures/entity/centauro_green.png"
+  }
+}

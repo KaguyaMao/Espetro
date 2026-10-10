@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "superbwarfare:propeller"
+    },
+    "b": {
+      "item": "superbwarfare:motor"
+    },
+    "c": {
+      "tag": "forge:plates/plastic"
+    },
+    "e": {
+      "item": "superbwarfare:cell"
+    }
+  },
+  "pattern": [
+    "a a",
+    "bcb",
+    " e "
+  ],
+  "result": {
+    "count": 4,
+    "item": "superbwarfare:drone"
+  },
+  "show_notification": true
+}

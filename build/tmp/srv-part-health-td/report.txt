@@ -1,0 +1,2 @@
+✔ kubejs/data/dragonrise_reforge/sbw/vehicles/m1128.json  →  PartHealth={"Turret":200,"LeftWheel":100,"RightWheel":100,"MainEngine":150,"SubEngine":150}
+✔ kubejs/data/dragonrise_reforge/sbw/vehicles/ztd05.json  →  PartHealth={"Turret":200,"LeftWheel":100,"RightWheel":100,"MainEngine":150,"SubEngine":150}

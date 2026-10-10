@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/strv103.animation.json",
+    "ID":  "dragonrise_reforge:strv103",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/strv103.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/strv103.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/strv103.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/strv103.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/strv103.png"
+                   }
+               ]
+}

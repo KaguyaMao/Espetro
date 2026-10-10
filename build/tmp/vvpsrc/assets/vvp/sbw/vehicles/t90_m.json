@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:t90_m",
+  "Model": {
+    "Model": "vvp:geo/t90ms.geo.json",
+    "Texture": "vvp:textures/entity/t90_green.png"
+  }
+}

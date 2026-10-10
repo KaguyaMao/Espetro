@@ -1,0 +1,137 @@
+{
+  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/dshk.animation.json",
+  "ID":  "dragonrise_reforge:dshk",
+  "MaxHealth":  40,
+  "MaxEnergy":  0,
+  "TurretPos":  [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "TurretTurnSpeed":  [
+    10,
+    10
+  ],
+  "TurretPitchRange":  [
+    -40,
+    60
+  ],
+  "BarrelPos":  [
+    0.0,
+    0.47551875,
+    -0.0575625
+  ],
+  "Seats":  {
+    "Transform":  "Turret",
+    "Position":  [
+      0,
+      -0.3689,
+      -1
+    ],
+    "MinPitch":  -9,
+    "MaxPitch":  60,
+    "CameraPos":  {
+      "UseFixedCameraPos":  true,
+      "Position":  [
+        0.21875,
+        0.4375,
+        -0.9375
+      ],
+      "Transform":  "Barrel",
+      "ZoomPosition":  [
+        0.0,
+        0.3647875,
+        -0.98718125
+      ],
+      "Direction":  "Barrel"
+    },
+    "Weapons":  [
+      "Cannon"
+    ],
+    "Sensitivity":  [
+      0.55,
+      0.75,
+      1
+    ],
+    "DismountInfo":  {
+      "Transform":  "Turret",
+      "Position":  [
+        0,
+        0.75,
+        0
+      ]
+    }
+  },
+  "UsePassengerCreativeAmmoBox":  true,
+  "Weapons":  {
+    "Cannon":  {
+      "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode":  "Auto",
+      "AvailableFireModes":  "Auto",
+      "Spread":  0.25,
+      "CrosshairColor":  "0x00ff66",
+      "Projectile":  "superbwarfare:projectile",
+      "DefaultZoom":  3,
+      "RPM":  600,
+      "Damage":  40,
+      "BypassesArmor":  0.2,
+      "Magazine":  50,
+      "EmptyReloadTime":  80,
+      "Velocity":  28,
+      "Gravity":  0.05,
+      "RecoilTime":  20,
+      "RecoilForce":  5,
+      "HeatPerShoot":  3.75,
+      "NaturalCooldown":  1,
+      "ShootAnimationTime":  1,
+      "AmmoType":  "@HeavyAmmo",
+      "ShootPos":  {
+        "Transform":  "Barrel",
+        "Positions":  [
+          [
+            0.00285,
+            0.20235625,
+            1.39030625
+          ]
+        ],
+        "Directions":  [
+          "Barrel"
+        ]
+      },
+      "Name":  "dragonrise_reforge:DShK",
+      "SoundInfo":  {
+        "Fire1P":  "dragonrise_reforge:dshk_fire_1p",
+        "Fire3P":  "dragonrise_reforge:dshk_fire_3p",
+        "Fire3PFar":  "dragonrise_reforge:dshk_fire_3p_far",
+        "Fire3PVeryFar":  "dragonrise_reforge:dshk_fire_3p_very_far",
+        "Change":  "dragonrise_reforge:change_weapon"
+    },
+      "SoundRadius":  16
+    }
+  },
+  "ThirdPersonCameraPos":  [
+    -0.3,
+    1,
+    -1
+  ],
+  "Mass":  0.05,
+  "DamageModifiers":  [
+    "minecraft:lava * 2.667",
+    "All * 1.75",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3"
+  ],
+  "VehicleContainerType":  "Mini",
+  "EngineType":  "Fixed",
+  "HasLowHealthWarning":  false,
+  "SelfHurtPercent":  0,
+  "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/dshk_icon.png",
+  "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+  "Type":  "Defense",
+  "Models":  [
+    {
+      "Model":  "dragonrise_reforge:models/bedrock/vehicle/dshk.geo.json",
+      "Texture":  "dragonrise_reforge:textures/entity/dshk.png"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "minecraft:logs"
+  },
+  "base": {
+    "item": "superbwarfare:epic_material_pack"
+  },
+  "result": {
+    "item": "superbwarfare:rpk"
+  },
+  "template": {
+    "item": "superbwarfare:rpk_blueprint"
+  }
+}

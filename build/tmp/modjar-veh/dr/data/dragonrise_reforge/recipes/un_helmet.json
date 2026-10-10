@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "K": {
+      "item": "dragonrise_reforge:kevlar"
+    },
+    "L": {
+      "tag": "forge:dyes/light_blue"
+    }
+  },
+  "pattern": [
+    "KLK",
+    "K K"
+  ],
+  "result": {
+    "item": "dragonrise_reforge:un_helmet"
+  },
+  "show_notification": true
+}

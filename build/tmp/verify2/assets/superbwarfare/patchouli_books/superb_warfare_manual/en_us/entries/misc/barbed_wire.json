@@ -1,0 +1,16 @@
+{
+  "name": "superbwarfare.entry.misc.barbed_wire",
+  "icon": "superbwarfare:barbed_wire",
+  "category": "superbwarfare:misc",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.misc.barbed_wire.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "superbwarfare:barbed_wire"
+    }
+  ],
+  "sortnum": 40004
+}

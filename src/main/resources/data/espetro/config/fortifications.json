@@ -13,6 +13,13 @@
     "transfer_amount": 100,
     "transfer_interval_ticks": 20
   },
+  "entity_policy": {
+    "mode": "filter",
+    "extra_entity_types": [],
+    "extra_block_entity_types": [],
+    "extra_entity_fields": {},
+    "allow_player_entities": false
+  },
   "fortifications": [
     {
       "id": "espetro:radio",

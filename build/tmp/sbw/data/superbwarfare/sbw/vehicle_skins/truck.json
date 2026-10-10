@@ -1,0 +1,17 @@
+{
+  "Skins": [
+    {
+      "Id": "vanilla",
+      "Name": "Vanilla",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/truck.png",
+      "Priority": 1
+    },
+    {
+      "Id": "green",
+      "Name": "Green",
+      "Description": "Component#skin.superbwarfare.truck.green",
+      "Texture": "superbwarfare:textures/bedrock/vehicle/truck_green.png",
+      "Priority": 2
+    }
+  ]
+}

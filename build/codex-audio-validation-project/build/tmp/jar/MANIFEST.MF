@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: espetro
+Specification-Vendor: 
+Specification-Version: 1
+Implementation-Title: espetro
+Implementation-Version: 1.1.2-n
+Implementation-Vendor: 
+Implementation-Timestamp: 2026-08-11T12:00:03+0800
+MixinConfigs: espetro.mixins.json
+

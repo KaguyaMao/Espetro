@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:type3",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/type3.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/type3.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/type3.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/type3.png"
+                   }
+               ]
+}

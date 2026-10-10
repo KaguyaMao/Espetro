@@ -1,0 +1,112 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.cannon.fire": {
+			"animation_length": 3,
+			"bones": {
+				"group": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.0833": [9.2, 10.3, 77],
+						"0.25": [11.03943, 12.99547, 92.84626],
+						"1.875": [11.03943, 12.99547, 92.84626],
+						"2.0833": [9.2, 10.3, 77],
+						"2.4167": [0, 0, 0]
+					}
+				},
+				"group2": {
+					"rotation": {
+						"0.9167": [-35, 0, 0],
+						"1.0": [-50, 0, 0],
+						"1.0417": [-70, 0, 0],
+						"1.0833": [-100, 0, 0],
+						"1.125": {
+							"pre": [-112.5, 0, 0],
+							"post": [-112.5, 0, 0],
+							"lerp_mode": "catmullrom"
+						},
+						"1.1667": {
+							"post": [-122.5, 0, 0],
+							"lerp_mode": "catmullrom"
+						},
+						"1.25": {
+							"post": [-157.5, 0, 0],
+							"lerp_mode": "catmullrom"
+						},
+						"1.3333": {
+							"post": [-187.5, 0, 0],
+							"lerp_mode": "catmullrom"
+						}
+					},
+					"position": {
+						"0.9167": [0, 0, -1],
+						"1.0": [0, 3.1, 1.4],
+						"1.0417": [0, 7.1, 5.4],
+						"1.0833": [0, 10.5, 10.1],
+						"1.125": {
+							"pre": [0, 12.3, 16.8],
+							"post": [0, 12.3, 16.8],
+							"lerp_mode": "catmullrom"
+						},
+						"1.1667": {
+							"post": [0, 10.1, 24],
+							"lerp_mode": "catmullrom"
+						},
+						"1.25": {
+							"post": [1, 5.7, 30.3],
+							"lerp_mode": "catmullrom"
+						},
+						"1.3333": {
+							"post": [0, -1.9, 37.3],
+							"lerp_mode": "catmullrom"
+						}
+					},
+					"scale": {
+						"0.0": [1, 1, 1],
+						"1.25": {
+							"pre": [1, 1, 1],
+							"post": [1, 1, 1],
+							"lerp_mode": "catmullrom"
+						},
+						"1.3333": {
+							"post": [0, 0, 0],
+							"lerp_mode": "catmullrom"
+						}
+					}
+				}
+			}
+		},
+		"animation.cannon.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.machine_gun.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.machine_gun.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.15,
+			"bones": {
+				
+			}
+		},
+		"animation.passenger_machine_gun.idle": {
+			"loop": true,
+			"bones": {
+				
+			}
+		},
+		"animation.passenger_machine_gun.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.15,
+			"bones": {
+				
+			}
+		}
+	}
+}

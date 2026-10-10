@@ -1,0 +1,92 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "fmlcore",
+    "version": "1.20.1-47.4.20",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "net.minecraftforge",
+          "module": "eventbus",
+          "version": {
+            "requires": "6.2.33"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fmlcore-1.20.1-47.4.20.jar",
+          "url": "fmlcore-1.20.1-47.4.20.jar",
+          "size": 118909,
+          "sha512": "d1f7ac8f3069a7f89c8a8fa50ab6c6b3a9bbce89216d5ae0b56daea7a6b355894dcac94636acccd22526989268c797590d59d1399b73ca832e27903a37a4c6a8",
+          "sha256": "d6e80ff86208e3d1a5d80425d1a45ee89c092322288bbf14c47cfb0b6d6c722c",
+          "sha1": "e8cc697c69f3911e76caa2f005d9486597cd7448",
+          "md5": "e8e34ef2ce04f87145a6cc2095c341c4"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.minecraftforge",
+          "module": "fmlloader",
+          "version": {
+            "requires": "1.20.1-47.4.20"
+          }
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.11.0"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "eventbus",
+          "version": {
+            "requires": "6.2.33"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fmlcore-1.20.1-47.4.20.jar",
+          "url": "fmlcore-1.20.1-47.4.20.jar",
+          "size": 118909,
+          "sha512": "d1f7ac8f3069a7f89c8a8fa50ab6c6b3a9bbce89216d5ae0b56daea7a6b355894dcac94636acccd22526989268c797590d59d1399b73ca832e27903a37a4c6a8",
+          "sha256": "d6e80ff86208e3d1a5d80425d1a45ee89c092322288bbf14c47cfb0b6d6c722c",
+          "sha1": "e8cc697c69f3911e76caa2f005d9486597cd7448",
+          "md5": "e8e34ef2ce04f87145a6cc2095c341c4"
+        }
+      ]
+    }
+  ]
+}

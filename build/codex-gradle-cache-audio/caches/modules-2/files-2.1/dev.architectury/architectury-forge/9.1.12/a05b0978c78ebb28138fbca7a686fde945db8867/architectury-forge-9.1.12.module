@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "dev.architectury",
+    "module": "architectury-forge",
+    "version": "9.1.12",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "architectury-forge-9.1.12.jar",
+          "url": "architectury-forge-9.1.12.jar",
+          "size": 585696,
+          "sha512": "13b594f59eff607a2a2ca1b1eefee642bb377321ff73163dd0daec7991ac84e8250d5bf5d59ec13820c77c5f6147a844f9481666e06e344f6ca8f3b2dcba339f",
+          "sha256": "61d6ec4d5e1362ec2581bca60cf637ef3d9565d61437a2356654645a8c5cce87",
+          "sha1": "f99d8f8dbc47eae7607a718768e3a117bd475938",
+          "md5": "ad989e6d2476307ba33e8dab2c79ea22"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "architectury-forge-9.1.12.jar",
+          "url": "architectury-forge-9.1.12.jar",
+          "size": 585696,
+          "sha512": "13b594f59eff607a2a2ca1b1eefee642bb377321ff73163dd0daec7991ac84e8250d5bf5d59ec13820c77c5f6147a844f9481666e06e344f6ca8f3b2dcba339f",
+          "sha256": "61d6ec4d5e1362ec2581bca60cf637ef3d9565d61437a2356654645a8c5cce87",
+          "sha1": "f99d8f8dbc47eae7607a718768e3a117bd475938",
+          "md5": "ad989e6d2476307ba33e8dab2c79ea22"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "architectury-forge-9.1.12-sources.jar",
+          "url": "architectury-forge-9.1.12-sources.jar",
+          "size": 428160,
+          "sha512": "fbb1b9320ae43da6af685e13e0f4dbd7826369b7ba60ac04908839561d7acf068b07dac2fbc681a4e32d2e06324d57d89a54f6411bb15605a7285f8f72c74a8a",
+          "sha256": "bb0739f5ae72e8cb49a09ae6a609ff70a9a533b31acfc0966d473467d57236f3",
+          "sha1": "f7e08c5a3fec4bd9e431750e655804d7811b53df",
+          "md5": "fdfea69e989474dd8b1c7d560986dbaa"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1006 @@
+Compiled from "DamageModify.kt"
+public final class com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify implements com.atsuishio.superbwarfare.data.DeserializeFromString {
+  public static final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$Companion Companion;
+
+  private transient com.atsuishio.superbwarfare.script.ScriptManager$CustomScript script;
+
+  private transient com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$CustomDamageModifier modifyFunction;
+
+  private float value;
+
+  private com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType type;
+
+  private java.lang.String source;
+
+  private transient java.lang.String entityId;
+
+  private transient com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$SourceType sourceType;
+
+  private transient net.minecraft.tags.TagKey<net.minecraft.world.damagesource.DamageType> sourceTagKey;
+
+  private transient net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType> sourceKey;
+
+  private transient net.minecraft.tags.TagKey<net.minecraft.world.entity.EntityType<?>> entityTag;
+
+  private transient java.util.function.Function<net.minecraft.world.damagesource.DamageSource, java.lang.Boolean> condition;
+
+  private static final kotlinx.serialization.KSerializer<java.lang.Object>[] $childSerializers;
+
+  private static final java.util.regex.Pattern MODIFY_PATTERN;
+
+  private static void getScript$annotations();
+    Code:
+       0: return
+
+  public final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$CustomDamageModifier getModifyFunction();
+    Code:
+       0: aload_0
+       1: getfield      #172                // Field modifyFunction:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier;
+       4: areturn
+
+  public final void setModifyFunction(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier$CustomDamageModifier);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #172                // Field modifyFunction:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier;
+       5: return
+
+  public static void getModifyFunction$annotations();
+    Code:
+       0: return
+
+  public void deserializeFromString(java.lang.String);
+    Code:
+       0: aload_1
+       1: ldc           #175                // String str
+       3: invokestatic  #181                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: getstatic     #183                // Field MODIFY_PATTERN:Ljava/util/regex/Pattern;
+       9: aload_1
+      10: checkcast     #185                // class java/lang/CharSequence
+      13: invokestatic  #191                // Method kotlin/text/StringsKt.trim:(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;
+      16: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+      19: checkcast     #185                // class java/lang/CharSequence
+      22: invokevirtual #200                // Method java/util/regex/Pattern.matcher:(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+      25: dup
+      26: ldc           #202                // String matcher(...)
+      28: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      31: astore_2
+      32: aload_2
+      33: invokevirtual #211                // Method java/util/regex/Matcher.matches:()Z
+      36: ifne          51
+      39: getstatic     #217                // Field com/atsuishio/superbwarfare/Mod.LOGGER:Lorg/apache/logging/log4j/Logger;
+      42: ldc           #219                // String invalid damage modify: {}
+      44: aload_1
+      45: invokeinterface #225,  3          // InterfaceMethod org/apache/logging/log4j/Logger.warn:(Ljava/lang/String;Ljava/lang/Object;)V
+      50: return
+      51: aload_2
+      52: ldc           #227                // String prefix
+      54: invokevirtual #231                // Method java/util/regex/Matcher.group:(Ljava/lang/String;)Ljava/lang/String;
+      57: dup
+      58: ldc           #233                // String group(...)
+      60: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      63: checkcast     #185                // class java/lang/CharSequence
+      66: invokestatic  #191                // Method kotlin/text/StringsKt.trim:(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;
+      69: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+      72: astore_3
+      73: aload_2
+      74: ldc           #235                // String id
+      76: invokevirtual #231                // Method java/util/regex/Matcher.group:(Ljava/lang/String;)Ljava/lang/String;
+      79: dup
+      80: ldc           #233                // String group(...)
+      82: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      85: checkcast     #185                // class java/lang/CharSequence
+      88: invokestatic  #191                // Method kotlin/text/StringsKt.trim:(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;
+      91: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+      94: astore        4
+      96: aload_2
+      97: ldc           #237                // String operator
+      99: invokevirtual #231                // Method java/util/regex/Matcher.group:(Ljava/lang/String;)Ljava/lang/String;
+     102: dup
+     103: ldc           #233                // String group(...)
+     105: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     108: checkcast     #185                // class java/lang/CharSequence
+     111: invokestatic  #191                // Method kotlin/text/StringsKt.trim:(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;
+     114: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+     117: astore        5
+     119: aload_2
+     120: ldc           #238                // String value
+     122: invokevirtual #231                // Method java/util/regex/Matcher.group:(Ljava/lang/String;)Ljava/lang/String;
+     125: dup
+     126: ldc           #233                // String group(...)
+     128: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     131: checkcast     #185                // class java/lang/CharSequence
+     134: invokestatic  #191                // Method kotlin/text/StringsKt.trim:(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;
+     137: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+     140: astore        6
+     142: aload_0
+     143: aload_3
+     144: aload         4
+     146: invokedynamic #250,  0            // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     151: putfield      #252                // Field source:Ljava/lang/String;
+     154: aload_0
+     155: invokespecial #254                // Method generateSourceType:()V
+     158: aload_0
+     159: aload         5
+     161: astore        7
+     163: aload         7
+     165: invokevirtual #260                // Method java/lang/String.hashCode:()I
+     168: tableswitch   { // 42 to 45
+
+                    42: 200
+
+                    43: 214
+
+                    44: 251
+
+                    45: 228
+               default: 251
+          }
+     200: aload         7
+     202: ldc_w         #262                // String *
+     205: invokevirtual #266                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     208: ifne          245
+     211: goto          251
+     214: aload         7
+     216: ldc_w         #268                // String +
+     219: invokevirtual #266                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     222: ifne          239
+     225: goto          251
+     228: aload         7
+     230: ldc_w         #270                // String -
+     233: invokevirtual #266                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+     236: ifeq          251
+     239: getstatic     #273                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.REDUCE:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     242: goto          271
+     245: getstatic     #276                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.MULTIPLY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     248: goto          271
+     251: aload         6
+     253: ldc_w         #278                // String 0
+     256: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     259: ifeq          268
+     262: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     265: goto          271
+     268: getstatic     #288                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.INVALID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     271: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     274: aload_0
+     275: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     278: getstatic     #288                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.INVALID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+     281: if_acmpne     296
+     284: getstatic     #217                // Field com/atsuishio/superbwarfare/Mod.LOGGER:Lorg/apache/logging/log4j/Logger;
+     287: ldc           #219                // String invalid damage modify: {}
+     289: aload_1
+     290: invokeinterface #225,  3          // InterfaceMethod org/apache/logging/log4j/Logger.warn:(Ljava/lang/String;Ljava/lang/Object;)V
+     295: return
+     296: aload_0
+     297: aload         6
+     299: checkcast     #185                // class java/lang/CharSequence
+     302: invokeinterface #293,  1          // InterfaceMethod java/lang/CharSequence.length:()I
+     307: ifne          314
+     310: iconst_1
+     311: goto          315
+     314: iconst_0
+     315: ifeq          322
+     318: fconst_0
+     319: goto          345
+     322: aload         6
+     324: invokestatic  #299                // Method java/lang/Float.parseFloat:(Ljava/lang/String;)F
+     327: aload         5
+     329: ldc_w         #268                // String +
+     332: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     335: ifeq          342
+     338: iconst_m1
+     339: goto          343
+     342: iconst_1
+     343: i2f
+     344: fmul
+     345: putfield      #301                // Field value:F
+     348: return
+
+  public final float getValue();
+    Code:
+       0: aload_0
+       1: getfield      #301                // Field value:F
+       4: freturn
+
+  public final void setValue(float);
+    Code:
+       0: aload_0
+       1: fload_1
+       2: putfield      #301                // Field value:F
+       5: return
+
+  public static void getValue$annotations();
+    Code:
+       0: return
+
+  public final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType getType();
+    Code:
+       0: aload_0
+       1: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       4: areturn
+
+  public final void setType(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       5: return
+
+  public static void getType$annotations();
+    Code:
+       0: return
+
+  public final java.lang.String getSource();
+    Code:
+       0: aload_0
+       1: getfield      #252                // Field source:Ljava/lang/String;
+       4: areturn
+
+  public final void setSource(java.lang.String);
+    Code:
+       0: aload_1
+       1: ldc_w         #304                // String <set-?>
+       4: invokestatic  #181                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: aload_1
+       9: putfield      #252                // Field source:Ljava/lang/String;
+      12: return
+
+  public static void getSource$annotations();
+    Code:
+       0: return
+
+  public final java.lang.String getEntityId();
+    Code:
+       0: aload_0
+       1: getfield      #306                // Field entityId:Ljava/lang/String;
+       4: areturn
+
+  public final void setEntityId(java.lang.String);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #306                // Field entityId:Ljava/lang/String;
+       5: return
+
+  public static void getEntityId$annotations();
+    Code:
+       0: return
+
+  public final com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$SourceType getSourceType();
+    Code:
+       0: aload_0
+       1: getfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+       4: areturn
+
+  public final void setSourceType(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$SourceType);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+       5: return
+
+  public static void getSourceType$annotations();
+    Code:
+       0: return
+
+  public final net.minecraft.tags.TagKey<net.minecraft.world.damagesource.DamageType> getSourceTagKey();
+    Code:
+       0: aload_0
+       1: getfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+       4: areturn
+
+  public final void setSourceTagKey(net.minecraft.tags.TagKey<net.minecraft.world.damagesource.DamageType>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+       5: return
+
+  public static void getSourceTagKey$annotations();
+    Code:
+       0: return
+
+  public final net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType> getSourceKey();
+    Code:
+       0: aload_0
+       1: getfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+       4: areturn
+
+  public final void setSourceKey(net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+       5: return
+
+  public static void getSourceKey$annotations();
+    Code:
+       0: return
+
+  public final net.minecraft.tags.TagKey<net.minecraft.world.entity.EntityType<?>> getEntityTag();
+    Code:
+       0: aload_0
+       1: getfield      #319                // Field entityTag:Lnet/minecraft/tags/TagKey;
+       4: areturn
+
+  public final void setEntityTag(net.minecraft.tags.TagKey<net.minecraft.world.entity.EntityType<?>>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #319                // Field entityTag:Lnet/minecraft/tags/TagKey;
+       5: return
+
+  public static void getEntityTag$annotations();
+    Code:
+       0: return
+
+  public final java.util.function.Function<net.minecraft.world.damagesource.DamageSource, java.lang.Boolean> getCondition();
+    Code:
+       0: aload_0
+       1: getfield      #323                // Field condition:Ljava/util/function/Function;
+       4: areturn
+
+  public final void setCondition(java.util.function.Function<net.minecraft.world.damagesource.DamageSource, java.lang.Boolean>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #323                // Field condition:Ljava/util/function/Function;
+       5: return
+
+  public static void getCondition$annotations();
+    Code:
+       0: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify();
+    Code:
+       0: aload_0
+       1: invokespecial #326                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       8: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      11: aload_0
+      12: ldc_w         #328                // String All
+      15: putfield      #252                // Field source:Ljava/lang/String;
+      18: aload_0
+      19: ldc_w         #329                // String
+      22: putfield      #306                // Field entityId:Ljava/lang/String;
+      25: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, float);
+    Code:
+       0: aload_0
+       1: invokespecial #326                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       8: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      11: aload_0
+      12: ldc_w         #328                // String All
+      15: putfield      #252                // Field source:Ljava/lang/String;
+      18: aload_0
+      19: ldc_w         #329                // String
+      22: putfield      #306                // Field entityId:Ljava/lang/String;
+      25: aload_0
+      26: aload_1
+      27: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      30: aload_0
+      31: fload_2
+      32: putfield      #301                // Field value:F
+      35: aload_0
+      36: getstatic     #332                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ALL:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      39: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      42: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, float, net.minecraft.tags.TagKey<net.minecraft.world.damagesource.DamageType>);
+    Code:
+       0: aload_0
+       1: invokespecial #326                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       8: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      11: aload_0
+      12: ldc_w         #328                // String All
+      15: putfield      #252                // Field source:Ljava/lang/String;
+      18: aload_0
+      19: ldc_w         #329                // String
+      22: putfield      #306                // Field entityId:Ljava/lang/String;
+      25: aload_0
+      26: aload_1
+      27: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      30: aload_0
+      31: fload_2
+      32: putfield      #301                // Field value:F
+      35: aload_0
+      36: aload_3
+      37: putfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+      40: aload_0
+      41: getstatic     #336                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.TAG_KEY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      44: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      47: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, float, net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType>);
+    Code:
+       0: aload_0
+       1: invokespecial #326                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       8: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      11: aload_0
+      12: ldc_w         #328                // String All
+      15: putfield      #252                // Field source:Ljava/lang/String;
+      18: aload_0
+      19: ldc_w         #329                // String
+      22: putfield      #306                // Field entityId:Ljava/lang/String;
+      25: aload_0
+      26: aload_1
+      27: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      30: aload_0
+      31: fload_2
+      32: putfield      #301                // Field value:F
+      35: aload_0
+      36: aload_3
+      37: putfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+      40: aload_0
+      41: getstatic     #340                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.RESOURCE_KEY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      44: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      47: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, float, java.util.function.Function<net.minecraft.world.damagesource.DamageSource, java.lang.Boolean>);
+    Code:
+       0: aload_0
+       1: invokespecial #326                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+       8: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      11: aload_0
+      12: ldc_w         #328                // String All
+      15: putfield      #252                // Field source:Ljava/lang/String;
+      18: aload_0
+      19: ldc_w         #329                // String
+      22: putfield      #306                // Field entityId:Ljava/lang/String;
+      25: aload_0
+      26: aload_1
+      27: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      30: aload_0
+      31: fload_2
+      32: putfield      #301                // Field value:F
+      35: aload_0
+      36: aload_3
+      37: putfield      #323                // Field condition:Ljava/util/function/Function;
+      40: aload_0
+      41: getstatic     #344                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.FUNCTION:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      44: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      47: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, float, java.lang.String);
+    Code:
+       0: aload_1
+       1: ldc_w         #345                // String type
+       4: invokestatic  #181                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_0
+       8: invokespecial #326                // Method java/lang/Object."<init>":()V
+      11: aload_0
+      12: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      15: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      18: aload_0
+      19: ldc_w         #328                // String All
+      22: putfield      #252                // Field source:Ljava/lang/String;
+      25: aload_0
+      26: ldc_w         #329                // String
+      29: putfield      #306                // Field entityId:Ljava/lang/String;
+      32: aload_0
+      33: aload_1
+      34: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      37: aload_0
+      38: fload_2
+      39: putfield      #301                // Field value:F
+      42: aload_0
+      43: aload_3
+      44: putfield      #306                // Field entityId:Ljava/lang/String;
+      47: aload_0
+      48: getstatic     #348                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ENTITY_ID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      51: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      54: return
+
+  private final void generateSourceType();
+    Code:
+       0: aload_0
+       1: getfield      #252                // Field source:Ljava/lang/String;
+       4: ldc_w         #350                // String #
+       7: iconst_0
+       8: iconst_2
+       9: aconst_null
+      10: invokestatic  #354                // Method kotlin/text/StringsKt.startsWith$default:(Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+      13: ifeq          54
+      16: aload_0
+      17: getstatic     #336                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.TAG_KEY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      20: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      23: aload_0
+      24: getstatic     #359                // Field net/minecraft/core/registries/Registries.f_268580_:Lnet/minecraft/resources/ResourceKey;
+      27: aload_0
+      28: getfield      #252                // Field source:Ljava/lang/String;
+      31: iconst_1
+      32: invokevirtual #363                // Method java/lang/String.substring:(I)Ljava/lang/String;
+      35: dup
+      36: ldc_w         #365                // String substring(...)
+      39: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      42: invokestatic  #371                // Method net/minecraft/resources/ResourceLocation.m_135820_:(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+      45: invokestatic  #377                // Method net/minecraft/tags/TagKey.m_203882_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagKey;
+      48: putfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+      51: goto          200
+      54: aload_0
+      55: getfield      #252                // Field source:Ljava/lang/String;
+      58: ldc_w         #379                // String @#
+      61: iconst_0
+      62: iconst_2
+      63: aconst_null
+      64: invokestatic  #354                // Method kotlin/text/StringsKt.startsWith$default:(Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+      67: ifeq          108
+      70: aload_0
+      71: getstatic     #382                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ENTITY_TAG:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      74: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      77: aload_0
+      78: getstatic     #385                // Field net/minecraft/core/registries/Registries.f_256939_:Lnet/minecraft/resources/ResourceKey;
+      81: aload_0
+      82: getfield      #252                // Field source:Ljava/lang/String;
+      85: iconst_2
+      86: invokevirtual #363                // Method java/lang/String.substring:(I)Ljava/lang/String;
+      89: dup
+      90: ldc_w         #365                // String substring(...)
+      93: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      96: invokestatic  #371                // Method net/minecraft/resources/ResourceLocation.m_135820_:(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+      99: invokestatic  #377                // Method net/minecraft/tags/TagKey.m_203882_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagKey;
+     102: putfield      #319                // Field entityTag:Lnet/minecraft/tags/TagKey;
+     105: goto          200
+     108: aload_0
+     109: getfield      #252                // Field source:Ljava/lang/String;
+     112: ldc_w         #387                // String @
+     115: iconst_0
+     116: iconst_2
+     117: aconst_null
+     118: invokestatic  #354                // Method kotlin/text/StringsKt.startsWith$default:(Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+     121: ifeq          153
+     124: aload_0
+     125: getstatic     #348                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ENTITY_ID:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     128: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     131: aload_0
+     132: aload_0
+     133: getfield      #252                // Field source:Ljava/lang/String;
+     136: iconst_1
+     137: invokevirtual #363                // Method java/lang/String.substring:(I)Ljava/lang/String;
+     140: dup
+     141: ldc_w         #365                // String substring(...)
+     144: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     147: putfield      #306                // Field entityId:Ljava/lang/String;
+     150: goto          200
+     153: aload_0
+     154: getfield      #252                // Field source:Ljava/lang/String;
+     157: ldc_w         #328                // String All
+     160: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     163: ifne          193
+     166: aload_0
+     167: getstatic     #340                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.RESOURCE_KEY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     170: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     173: aload_0
+     174: getstatic     #359                // Field net/minecraft/core/registries/Registries.f_268580_:Lnet/minecraft/resources/ResourceKey;
+     177: aload_0
+     178: getfield      #252                // Field source:Ljava/lang/String;
+     181: invokestatic  #371                // Method net/minecraft/resources/ResourceLocation.m_135820_:(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+     184: invokestatic  #393                // Method net/minecraft/resources/ResourceKey.m_135785_:(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceKey;
+     187: putfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+     190: goto          200
+     193: aload_0
+     194: getstatic     #332                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ALL:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     197: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     200: return
+
+  public final boolean match(net.minecraft.world.damagesource.DamageSource);
+    Code:
+       0: aload_1
+       1: ifnonnull     6
+       4: iconst_0
+       5: ireturn
+       6: aload_0
+       7: getfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      10: ifnonnull     17
+      13: aload_0
+      14: invokespecial #254                // Method generateSourceType:()V
+      17: aload_0
+      18: getfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+      21: dup
+      22: ifnonnull     28
+      25: pop
+      26: iconst_0
+      27: ireturn
+      28: astore_2
+      29: aload_2
+      30: getstatic     #398                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$WhenMappings.$EnumSwitchMapping$0:[I
+      33: swap
+      34: invokevirtual #401                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType.ordinal:()I
+      37: iaload
+      38: tableswitch   { // 1 to 6
+
+                     1: 76
+
+                     2: 94
+
+                     3: 112
+
+                     4: 142
+
+                     5: 207
+
+                     6: 244
+               default: 248
+          }
+      76: aload_1
+      77: aload_0
+      78: getfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+      81: dup
+      82: ifnonnull     88
+      85: pop
+      86: iconst_0
+      87: ireturn
+      88: invokevirtual #407                // Method net/minecraft/world/damagesource/DamageSource.m_269533_:(Lnet/minecraft/tags/TagKey;)Z
+      91: goto          256
+      94: aload_1
+      95: aload_0
+      96: getfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+      99: dup
+     100: ifnonnull     106
+     103: pop
+     104: iconst_0
+     105: ireturn
+     106: invokevirtual #411                // Method net/minecraft/world/damagesource/DamageSource.m_276093_:(Lnet/minecraft/resources/ResourceKey;)Z
+     109: goto          256
+     112: aload_0
+     113: getfield      #323                // Field condition:Ljava/util/function/Function;
+     116: dup
+     117: invokestatic  #415                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+     120: aload_1
+     121: invokeinterface #421,  2          // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+     126: dup
+     127: ldc_w         #423                // String apply(...)
+     130: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     133: checkcast     #425                // class java/lang/Boolean
+     136: invokevirtual #428                // Method java/lang/Boolean.booleanValue:()Z
+     139: goto          256
+     142: aload_1
+     143: invokevirtual #432                // Method net/minecraft/world/damagesource/DamageSource.m_7640_:()Lnet/minecraft/world/entity/Entity;
+     146: astore_3
+     147: aload_1
+     148: invokevirtual #435                // Method net/minecraft/world/damagesource/DamageSource.m_7639_:()Lnet/minecraft/world/entity/Entity;
+     151: astore        4
+     153: aload_3
+     154: ifnull        177
+     157: aload_3
+     158: invokevirtual #441                // Method net/minecraft/world/entity/Entity.m_6095_:()Lnet/minecraft/world/entity/EntityType;
+     161: invokestatic  #447                // Method net/minecraft/world/entity/EntityType.m_20613_:(Lnet/minecraft/world/entity/EntityType;)Lnet/minecraft/resources/ResourceLocation;
+     164: invokevirtual #448                // Method net/minecraft/resources/ResourceLocation.toString:()Ljava/lang/String;
+     167: aload_0
+     168: getfield      #306                // Field entityId:Ljava/lang/String;
+     171: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     174: goto          256
+     177: aload         4
+     179: ifnull        203
+     182: aload         4
+     184: invokevirtual #441                // Method net/minecraft/world/entity/Entity.m_6095_:()Lnet/minecraft/world/entity/EntityType;
+     187: invokestatic  #447                // Method net/minecraft/world/entity/EntityType.m_20613_:(Lnet/minecraft/world/entity/EntityType;)Lnet/minecraft/resources/ResourceLocation;
+     190: invokevirtual #448                // Method net/minecraft/resources/ResourceLocation.toString:()Ljava/lang/String;
+     193: aload_0
+     194: getfield      #306                // Field entityId:Ljava/lang/String;
+     197: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     200: goto          256
+     203: iconst_0
+     204: goto          256
+     207: aload_1
+     208: invokevirtual #432                // Method net/minecraft/world/damagesource/DamageSource.m_7640_:()Lnet/minecraft/world/entity/Entity;
+     211: dup
+     212: ifnull        239
+     215: invokevirtual #441                // Method net/minecraft/world/entity/Entity.m_6095_:()Lnet/minecraft/world/entity/EntityType;
+     218: dup
+     219: ifnull        239
+     222: aload_0
+     223: getfield      #319                // Field entityTag:Lnet/minecraft/tags/TagKey;
+     226: dup
+     227: ifnonnull     233
+     230: pop
+     231: iconst_0
+     232: ireturn
+     233: invokevirtual #451                // Method net/minecraft/world/entity/EntityType.m_204039_:(Lnet/minecraft/tags/TagKey;)Z
+     236: goto          256
+     239: pop
+     240: iconst_0
+     241: goto          256
+     244: iconst_1
+     245: goto          256
+     248: new           #453                // class kotlin/NoWhenBranchMatchedException
+     251: dup
+     252: invokespecial #454                // Method kotlin/NoWhenBranchMatchedException."<init>":()V
+     255: athrow
+     256: ireturn
+
+  public final float compute(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, float);
+    Code:
+       0: aload_1
+       1: ldc_w         #457                // String entity
+       4: invokestatic  #181                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: aload_2
+       8: ldc_w         #458                // String source
+      11: invokestatic  #181                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      14: aload_0
+      15: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      18: ifnonnull     23
+      21: fconst_0
+      22: freturn
+      23: aload_0
+      24: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      27: dup
+      28: ifnonnull     36
+      31: pop
+      32: iconst_m1
+      33: goto          44
+      36: getstatic     #461                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$WhenMappings.$EnumSwitchMapping$1:[I
+      39: swap
+      40: invokevirtual #462                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.ordinal:()I
+      43: iaload
+      44: tableswitch   { // 1 to 5
+
+                     1: 80
+
+                     2: 84
+
+                     3: 97
+
+                     4: 106
+
+                     5: 136
+               default: 140
+          }
+      80: fconst_0
+      81: goto          154
+      84: fload_3
+      85: aload_0
+      86: getfield      #301                // Field value:F
+      89: fsub
+      90: fconst_0
+      91: invokestatic  #468                // Method java/lang/Math.max:(FF)F
+      94: goto          154
+      97: fload_3
+      98: aload_0
+      99: getfield      #301                // Field value:F
+     102: fmul
+     103: goto          154
+     106: aload_0
+     107: getfield      #172                // Field modifyFunction:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier;
+     110: ifnonnull     117
+     113: fload_3
+     114: goto          154
+     117: aload_0
+     118: getfield      #172                // Field modifyFunction:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier;
+     121: dup
+     122: invokestatic  #415                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+     125: aload_1
+     126: aload_2
+     127: fload_3
+     128: invokeinterface #470,  4          // InterfaceMethod com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier.compute:(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;F)F
+     133: goto          154
+     136: fload_3
+     137: goto          154
+     140: new           #472                // class java/lang/IllegalStateException
+     143: dup
+     144: ldc_w         #474                // String invalid type!
+     147: invokevirtual #194                // Method java/lang/Object.toString:()Ljava/lang/String;
+     150: invokespecial #476                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+     153: athrow
+     154: freturn
+
+  public static final void write$Self$superbwarfare(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify, kotlinx.serialization.encoding.CompositeEncoder, kotlinx.serialization.descriptors.SerialDescriptor);
+    Code:
+       0: getstatic     #480                // Field $childSerializers:[Lkotlinx/serialization/KSerializer;
+       3: astore_3
+       4: aload_1
+       5: aload_2
+       6: iconst_0
+       7: invokeinterface #486,  3          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.shouldEncodeElementDefault:(Lkotlinx/serialization/descriptors/SerialDescriptor;I)Z
+      12: ifeq          19
+      15: iconst_1
+      16: goto          35
+      19: aload_0
+      20: getfield      #301                // Field value:F
+      23: fconst_0
+      24: invokestatic  #491                // Method java/lang/Float.compare:(FF)I
+      27: ifeq          34
+      30: iconst_1
+      31: goto          35
+      34: iconst_0
+      35: ifeq          50
+      38: aload_1
+      39: aload_2
+      40: iconst_0
+      41: aload_0
+      42: getfield      #301                // Field value:F
+      45: invokeinterface #495,  4          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.encodeFloatElement:(Lkotlinx/serialization/descriptors/SerialDescriptor;IF)V
+      50: aload_1
+      51: aload_2
+      52: iconst_1
+      53: invokeinterface #486,  3          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.shouldEncodeElementDefault:(Lkotlinx/serialization/descriptors/SerialDescriptor;I)Z
+      58: ifeq          65
+      61: iconst_1
+      62: goto          80
+      65: aload_0
+      66: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      69: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      72: if_acmpeq     79
+      75: iconst_1
+      76: goto          80
+      79: iconst_0
+      80: ifeq          101
+      83: aload_1
+      84: aload_2
+      85: iconst_1
+      86: aload_3
+      87: iconst_1
+      88: aaload
+      89: checkcast     #497                // class kotlinx/serialization/SerializationStrategy
+      92: aload_0
+      93: getfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      96: invokeinterface #501,  5          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.encodeNullableSerializableElement:(Lkotlinx/serialization/descriptors/SerialDescriptor;ILkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)V
+     101: aload_1
+     102: aload_2
+     103: iconst_2
+     104: invokeinterface #486,  3          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.shouldEncodeElementDefault:(Lkotlinx/serialization/descriptors/SerialDescriptor;I)Z
+     109: ifeq          116
+     112: iconst_1
+     113: goto          134
+     116: aload_0
+     117: getfield      #252                // Field source:Ljava/lang/String;
+     120: ldc_w         #328                // String All
+     123: invokestatic  #282                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     126: ifne          133
+     129: iconst_1
+     130: goto          134
+     133: iconst_0
+     134: ifeq          149
+     137: aload_1
+     138: aload_2
+     139: iconst_2
+     140: aload_0
+     141: getfield      #252                // Field source:Ljava/lang/String;
+     144: invokeinterface #505,  4          // InterfaceMethod kotlinx/serialization/encoding/CompositeEncoder.encodeStringElement:(Lkotlinx/serialization/descriptors/SerialDescriptor;ILjava/lang/String;)V
+     149: return
+
+  public com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify(int, float, com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify$ModifyType, java.lang.String, kotlinx.serialization.internal.SerializationConstructorMarker);
+    Code:
+       0: iconst_0
+       1: iload_1
+       2: iand
+       3: ifeq          17
+       6: iload_1
+       7: iconst_0
+       8: getstatic     #509                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$$serializer.INSTANCE:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$$serializer;
+      11: invokevirtual #513                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$$serializer.getDescriptor:()Lkotlinx/serialization/descriptors/SerialDescriptor;
+      14: invokestatic  #519                // Method kotlinx/serialization/internal/PluginExceptionsKt.throwMissingFieldException:(IILkotlinx/serialization/descriptors/SerialDescriptor;)V
+      17: aload_0
+      18: invokespecial #326                // Method java/lang/Object."<init>":()V
+      21: aload_0
+      22: aconst_null
+      23: putfield      #521                // Field script:Lcom/atsuishio/superbwarfare/script/ScriptManager$CustomScript;
+      26: aload_0
+      27: aconst_null
+      28: putfield      #172                // Field modifyFunction:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModifier$CustomDamageModifier;
+      31: iload_1
+      32: iconst_1
+      33: iand
+      34: ifne          45
+      37: aload_0
+      38: fconst_0
+      39: putfield      #301                // Field value:F
+      42: goto          50
+      45: aload_0
+      46: fload_2
+      47: putfield      #301                // Field value:F
+      50: iload_1
+      51: iconst_2
+      52: iand
+      53: ifne          66
+      56: aload_0
+      57: getstatic     #285                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.IMMUNITY:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      60: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      63: goto          71
+      66: aload_0
+      67: aload_3
+      68: putfield      #290                // Field type:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType;
+      71: iload_1
+      72: iconst_4
+      73: iand
+      74: ifne          87
+      77: aload_0
+      78: ldc_w         #328                // String All
+      81: putfield      #252                // Field source:Ljava/lang/String;
+      84: goto          93
+      87: aload_0
+      88: aload         4
+      90: putfield      #252                // Field source:Ljava/lang/String;
+      93: aload_0
+      94: ldc_w         #329                // String
+      97: putfield      #306                // Field entityId:Ljava/lang/String;
+     100: aload_0
+     101: aconst_null
+     102: putfield      #308                // Field sourceType:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$SourceType;
+     105: aload_0
+     106: aconst_null
+     107: putfield      #311                // Field sourceTagKey:Lnet/minecraft/tags/TagKey;
+     110: aload_0
+     111: aconst_null
+     112: putfield      #315                // Field sourceKey:Lnet/minecraft/resources/ResourceKey;
+     115: aload_0
+     116: aconst_null
+     117: putfield      #319                // Field entityTag:Lnet/minecraft/tags/TagKey;
+     120: aload_0
+     121: aconst_null
+     122: putfield      #323                // Field condition:Ljava/util/function/Function;
+     125: return
+
+  public static final com.atsuishio.superbwarfare.script.ScriptManager$CustomScript access$getScript$p(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify);
+    Code:
+       0: aload_0
+       1: getfield      #521                // Field script:Lcom/atsuishio/superbwarfare/script/ScriptManager$CustomScript;
+       4: areturn
+
+  public static final void access$setScript$p(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify, com.atsuishio.superbwarfare.script.ScriptManager$CustomScript);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #521                // Field script:Lcom/atsuishio/superbwarfare/script/ScriptManager$CustomScript;
+       5: return
+
+  public static final java.util.regex.Pattern access$getMODIFY_PATTERN$cp();
+    Code:
+       0: getstatic     #183                // Field MODIFY_PATTERN:Ljava/util/regex/Pattern;
+       3: areturn
+
+  public static final void access$generateSourceType(com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModify);
+    Code:
+       0: aload_0
+       1: invokespecial #254                // Method generateSourceType:()V
+       4: return
+
+  public static final kotlinx.serialization.KSerializer[] access$get$childSerializers$cp();
+    Code:
+       0: getstatic     #480                // Field $childSerializers:[Lkotlinx/serialization/KSerializer;
+       3: areturn
+
+  static {};
+    Code:
+       0: new           #134                // class com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$Companion
+       3: dup
+       4: aconst_null
+       5: invokespecial #539                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$Companion."<init>":(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+       8: putstatic     #541                // Field Companion:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$Companion;
+      11: iconst_3
+      12: anewarray     #543                // class kotlinx/serialization/KSerializer
+      15: astore_0
+      16: aload_0
+      17: iconst_0
+      18: aconst_null
+      19: aastore
+      20: aload_0
+      21: iconst_1
+      22: getstatic     #546                // Field com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType.Companion:Lcom/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType$Companion;
+      25: invokevirtual #550                // Method com/atsuishio/superbwarfare/entity/vehicle/damage/DamageModify$ModifyType$Companion.serializer:()Lkotlinx/serialization/KSerializer;
+      28: aastore
+      29: aload_0
+      30: iconst_2
+      31: aconst_null
+      32: aastore
+      33: aload_0
+      34: putstatic     #480                // Field $childSerializers:[Lkotlinx/serialization/KSerializer;
+      37: ldc_w         #552                // String ^(?<prefix>(@#|#|@)?)(?<id>\\w+(:\\w+)?)\\s*(?<operator>[-*+]?)\\s*(?<value>([+-]?\\d+(\\.\\d*)?)?)$
+      40: invokestatic  #556                // Method java/util/regex/Pattern.compile:(Ljava/lang/String;)Ljava/util/regex/Pattern;
+      43: dup
+      44: ldc_w         #558                // String compile(...)
+      47: invokestatic  #205                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      50: putstatic     #183                // Field MODIFY_PATTERN:Ljava/util/regex/Pattern;
+      53: return
+}

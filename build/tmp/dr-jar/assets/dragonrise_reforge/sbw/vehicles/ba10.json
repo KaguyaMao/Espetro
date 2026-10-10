@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:ba10",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ba10.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ba10.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ba10.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ba10.png"
+    }
+  ]
+}

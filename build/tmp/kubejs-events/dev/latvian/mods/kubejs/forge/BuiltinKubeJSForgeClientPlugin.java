@@ -1,0 +1,34 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.screens.Screen
+ *  net.minecraftforge.client.event.ScreenEvent$Opening
+ *  net.minecraftforge.common.MinecraftForge
+ *  net.minecraftforge.eventbus.api.EventPriority
+ */
+package dev.latvian.mods.kubejs.forge;
+
+import dev.latvian.mods.kubejs.client.BuiltinKubeJSClientPlugin;
+import dev.latvian.mods.kubejs.client.KubeJSClientEventHandler;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
+
+public class BuiltinKubeJSForgeClientPlugin
+extends BuiltinKubeJSClientPlugin {
+    @Override
+    public void clientInit() {
+        super.clientInit();
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, this::openScreenEvent);
+    }
+
+    private void openScreenEvent(ScreenEvent.Opening event) {
+        Screen s = KubeJSClientEventHandler.setScreen(event.getScreen());
+        if (s != null && event.getScreen() != s) {
+            event.setNewScreen(s);
+        }
+    }
+}
+

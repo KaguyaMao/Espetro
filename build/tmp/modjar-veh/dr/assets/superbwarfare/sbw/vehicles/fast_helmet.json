@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:fast_helmet",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/fast_helmet.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/fast_helmet.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/fast_helmet.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/fast_helmet.png"
+                   }
+               ]
+}

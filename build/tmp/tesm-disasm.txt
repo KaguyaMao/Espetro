@@ -1,0 +1,256 @@
+﻿Compiled from "TransientEntitySectionManager.java"
+public class net.minecraft.world.level.entity.TransientEntitySectionManager<T extends net.minecraft.world.level.entity.EntityAccess> {
+  static final org.slf4j.Logger f_157635_;
+
+  final net.minecraft.world.level.entity.LevelCallback<T> f_157636_;
+
+  final net.minecraft.world.level.entity.EntityLookup<T> f_157637_;
+
+  final net.minecraft.world.level.entity.EntitySectionStorage<T> f_157638_;
+
+  private final it.unimi.dsi.fastutil.longs.LongSet f_157639_;
+
+  private final net.minecraft.world.level.entity.LevelEntityGetter<T> f_157640_;
+
+  public net.minecraft.world.level.entity.TransientEntitySectionManager(java.lang.Class<T>, net.minecraft.world.level.entity.LevelCallback<T>);
+    Code:
+       0: aload_0
+       1: invokespecial #35                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: new           #37                 // class it/unimi/dsi/fastutil/longs/LongOpenHashSet
+       8: dup
+       9: invokespecial #38                 // Method it/unimi/dsi/fastutil/longs/LongOpenHashSet."<init>":()V
+      12: putfield      #299                // Field f_157639_:Lit/unimi/dsi/fastutil/longs/LongSet;
+      15: aload_0
+      16: new           #301                // class net/minecraft/world/level/entity/EntityLookup
+      19: dup
+      20: invokespecial #302                // Method net/minecraft/world/level/entity/EntityLookup."<init>":()V
+      23: putfield      #304                // Field f_157637_:Lnet/minecraft/world/level/entity/EntityLookup;
+      26: aload_0
+      27: new           #306                // class net/minecraft/world/level/entity/EntitySectionStorage
+      30: dup
+      31: aload_1
+      32: aload_0
+      33: invokedynamic #315,  0            // InvokeDynamic #8:get:(Lnet/minecraft/world/level/entity/TransientEntitySectionManager;)Lit/unimi/dsi/fastutil/longs/Long2ObjectFunction;
+      38: invokespecial #316                // Method net/minecraft/world/level/entity/EntitySectionStorage."<init>":(Ljava/lang/Class;Lit/unimi/dsi/fastutil/longs/Long2ObjectFunction;)V
+      41: putfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      44: aload_0
+      45: aload_2
+      46: putfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      49: aload_0
+      50: new           #322                // class net/minecraft/world/level/entity/LevelEntityGetterAdapter
+      53: dup
+      54: aload_0
+      55: getfield      #304                // Field f_157637_:Lnet/minecraft/world/level/entity/EntityLookup;
+      58: aload_0
+      59: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      62: invokespecial #325                // Method net/minecraft/world/level/entity/LevelEntityGetterAdapter."<init>":(Lnet/minecraft/world/level/entity/EntityLookup;Lnet/minecraft/world/level/entity/EntitySectionStorage;)V
+      65: putfield      #327                // Field f_157640_:Lnet/minecraft/world/level/entity/LevelEntityGetter;
+      68: return
+
+  public void m_157651_(net.minecraft.world.level.ChunkPos);
+    Code:
+       0: aload_1
+       1: invokevirtual #338                // Method net/minecraft/world/level/ChunkPos.m_45588_:()J
+       4: lstore_2
+       5: aload_0
+       6: getfield      #299                // Field f_157639_:Lit/unimi/dsi/fastutil/longs/LongSet;
+       9: lload_2
+      10: invokeinterface #98,  3           // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.add:(J)Z
+      15: pop
+      16: aload_0
+      17: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      20: lload_2
+      21: invokevirtual #341                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_156888_:(J)Ljava/util/stream/Stream;
+      24: aload_0
+      25: invokedynamic #350,  0            // InvokeDynamic #9:accept:(Lnet/minecraft/world/level/entity/TransientEntitySectionManager;)Ljava/util/function/Consumer;
+      30: invokeinterface #118,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+      35: return
+
+  public void m_157658_(net.minecraft.world.level.ChunkPos);
+    Code:
+       0: aload_1
+       1: invokevirtual #338                // Method net/minecraft/world/level/ChunkPos.m_45588_:()J
+       4: lstore_2
+       5: aload_0
+       6: getfield      #299                // Field f_157639_:Lit/unimi/dsi/fastutil/longs/LongSet;
+       9: lload_2
+      10: invokeinterface #123,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.remove:(J)Z
+      15: pop
+      16: aload_0
+      17: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      20: lload_2
+      21: invokevirtual #341                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_156888_:(J)Ljava/util/stream/Stream;
+      24: aload_0
+      25: invokedynamic #358,  0            // InvokeDynamic #10:accept:(Lnet/minecraft/world/level/entity/TransientEntitySectionManager;)Ljava/util/function/Consumer;
+      30: invokeinterface #118,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+      35: return
+
+  public net.minecraft.world.level.entity.LevelEntityGetter<T> m_157645_();
+    Code:
+       0: aload_0
+       1: getfield      #327                // Field f_157640_:Lnet/minecraft/world/level/entity/LevelEntityGetter;
+       4: areturn
+
+  public void m_157653_(T);
+    Code:
+       0: aload_0
+       1: getfield      #304                // Field f_157637_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: aload_1
+       5: invokevirtual #367                // Method net/minecraft/world/level/entity/EntityLookup.m_156814_:(Lnet/minecraft/world/level/entity/EntityAccess;)V
+       8: aload_1
+       9: invokeinterface #373,  1          // InterfaceMethod net/minecraft/world/level/entity/EntityAccess.m_20183_:()Lnet/minecraft/core/BlockPos;
+      14: invokestatic  #379                // Method net/minecraft/core/SectionPos.m_175568_:(Lnet/minecraft/core/BlockPos;)J
+      17: lstore_2
+      18: aload_0
+      19: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      22: lload_2
+      23: invokevirtual #383                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_156893_:(J)Lnet/minecraft/world/level/entity/EntitySection;
+      26: astore        4
+      28: aload         4
+      30: aload_1
+      31: invokevirtual #388                // Method net/minecraft/world/level/entity/EntitySection.m_188346_:(Lnet/minecraft/world/level/entity/EntityAccess;)V
+      34: aload_1
+      35: new           #280                // class net/minecraft/world/level/entity/TransientEntitySectionManager$Callback
+      38: dup
+      39: aload_0
+      40: aload_1
+      41: lload_2
+      42: aload         4
+      44: invokespecial #391                // Method net/minecraft/world/level/entity/TransientEntitySectionManager$Callback."<init>":(Lnet/minecraft/world/level/entity/TransientEntitySectionManager;Lnet/minecraft/world/level/entity/EntityAccess;JLnet/minecraft/world/level/entity/EntitySection;)V
+      47: invokeinterface #395,  2          // InterfaceMethod net/minecraft/world/level/entity/EntityAccess.m_141960_:(Lnet/minecraft/world/level/entity/EntityInLevelCallback;)V
+      52: aload_0
+      53: getfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      56: aload_1
+      57: invokeinterface #400,  2          // InterfaceMethod net/minecraft/world/level/entity/LevelCallback.m_141989_:(Ljava/lang/Object;)V
+      62: aload_0
+      63: getfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      66: aload_1
+      67: invokeinterface #403,  2          // InterfaceMethod net/minecraft/world/level/entity/LevelCallback.m_141985_:(Ljava/lang/Object;)V
+      72: aload_1
+      73: invokeinterface #406,  1          // InterfaceMethod net/minecraft/world/level/entity/EntityAccess.m_142389_:()Z
+      78: ifne          92
+      81: aload         4
+      83: invokevirtual #410                // Method net/minecraft/world/level/entity/EntitySection.m_156848_:()Lnet/minecraft/world/level/entity/Visibility;
+      86: invokevirtual #415                // Method net/minecraft/world/level/entity/Visibility.m_157691_:()Z
+      89: ifeq          102
+      92: aload_0
+      93: getfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      96: aload_1
+      97: invokeinterface #418,  2          // InterfaceMethod net/minecraft/world/level/entity/LevelCallback.m_141987_:(Ljava/lang/Object;)V
+     102: return
+
+  public int m_157657_();
+    Code:
+       0: aload_0
+       1: getfield      #304                // Field f_157637_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: invokevirtual #427                // Method net/minecraft/world/level/entity/EntityLookup.m_156821_:()I
+       7: ireturn
+
+  void m_157648_(long, net.minecraft.world.level.entity.EntitySection<T>);
+    Code:
+       0: aload_3
+       1: invokevirtual #433                // Method net/minecraft/world/level/entity/EntitySection.m_156833_:()Z
+       4: ifeq          15
+       7: aload_0
+       8: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      11: lload_1
+      12: invokevirtual #436                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_156897_:(J)V
+      15: return
+
+  public java.lang.String m_157664_();
+    Code:
+       0: aload_0
+       1: getfield      #304                // Field f_157637_:Lnet/minecraft/world/level/entity/EntityLookup;
+       4: invokevirtual #427                // Method net/minecraft/world/level/entity/EntityLookup.m_156821_:()I
+       7: aload_0
+       8: getfield      #318                // Field f_157638_:Lnet/minecraft/world/level/entity/EntitySectionStorage;
+      11: invokevirtual #442                // Method net/minecraft/world/level/entity/EntitySectionStorage.m_156887_:()I
+      14: aload_0
+      15: getfield      #299                // Field f_157639_:Lit/unimi/dsi/fastutil/longs/LongSet;
+      18: invokeinterface #196,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.size:()I
+      23: invokedynamic #208,  0            // InvokeDynamic #3:makeConcatWithConstants:(III)Ljava/lang/String;
+      28: areturn
+
+  private void m_157655_(net.minecraft.world.level.entity.EntitySection);
+    Code:
+       0: aload_1
+       1: getstatic     #446                // Field net/minecraft/world/level/entity/Visibility.TRACKED:Lnet/minecraft/world/level/entity/Visibility;
+       4: invokevirtual #450                // Method net/minecraft/world/level/entity/EntitySection.m_156838_:(Lnet/minecraft/world/level/entity/Visibility;)Lnet/minecraft/world/level/entity/Visibility;
+       7: astore_2
+       8: aload_2
+       9: invokevirtual #415                // Method net/minecraft/world/level/entity/Visibility.m_157691_:()Z
+      12: ifeq          48
+      15: aload_1
+      16: invokevirtual #453                // Method net/minecraft/world/level/entity/EntitySection.m_156845_:()Ljava/util/stream/Stream;
+      19: invokedynamic #460,  0            // InvokeDynamic #11:test:()Ljava/util/function/Predicate;
+      24: invokeinterface #232,  2          // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      29: aload_0
+      30: getfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      33: dup
+      34: invokestatic  #238                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      37: pop
+      38: invokedynamic #468,  0            // InvokeDynamic #12:accept:(Lnet/minecraft/world/level/entity/LevelCallback;)Ljava/util/function/Consumer;
+      43: invokeinterface #118,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+      48: return
+
+  private static boolean m_157660_(net.minecraft.world.level.entity.EntityAccess);
+    Code:
+       0: aload_0
+       1: invokeinterface #406,  1          // InterfaceMethod net/minecraft/world/level/entity/EntityAccess.m_142389_:()Z
+       6: ifne          13
+       9: iconst_1
+      10: goto          14
+      13: iconst_0
+      14: ireturn
+
+  private void m_157662_(net.minecraft.world.level.entity.EntitySection);
+    Code:
+       0: aload_1
+       1: getstatic     #473                // Field net/minecraft/world/level/entity/Visibility.TICKING:Lnet/minecraft/world/level/entity/Visibility;
+       4: invokevirtual #450                // Method net/minecraft/world/level/entity/EntitySection.m_156838_:(Lnet/minecraft/world/level/entity/Visibility;)Lnet/minecraft/world/level/entity/Visibility;
+       7: astore_2
+       8: aload_2
+       9: invokevirtual #415                // Method net/minecraft/world/level/entity/Visibility.m_157691_:()Z
+      12: ifne          48
+      15: aload_1
+      16: invokevirtual #453                // Method net/minecraft/world/level/entity/EntitySection.m_156845_:()Ljava/util/stream/Stream;
+      19: invokedynamic #478,  0            // InvokeDynamic #13:test:()Ljava/util/function/Predicate;
+      24: invokeinterface #232,  2          // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      29: aload_0
+      30: getfield      #320                // Field f_157636_:Lnet/minecraft/world/level/entity/LevelCallback;
+      33: dup
+      34: invokestatic  #238                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      37: pop
+      38: invokedynamic #480,  0            // InvokeDynamic #14:accept:(Lnet/minecraft/world/level/entity/LevelCallback;)Ljava/util/function/Consumer;
+      43: invokeinterface #118,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+      48: return
+
+  private static boolean m_157665_(net.minecraft.world.level.entity.EntityAccess);
+    Code:
+       0: aload_0
+       1: invokeinterface #406,  1          // InterfaceMethod net/minecraft/world/level/entity/EntityAccess.m_142389_:()Z
+       6: ifne          13
+       9: iconst_1
+      10: goto          14
+      13: iconst_0
+      14: ireturn
+
+  private net.minecraft.world.level.entity.Visibility m_157646_(long);
+    Code:
+       0: aload_0
+       1: getfield      #299                // Field f_157639_:Lit/unimi/dsi/fastutil/longs/LongSet;
+       4: lload_1
+       5: invokeinterface #256,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.contains:(J)Z
+      10: ifeq          19
+      13: getstatic     #473                // Field net/minecraft/world/level/entity/Visibility.TICKING:Lnet/minecraft/world/level/entity/Visibility;
+      16: goto          22
+      19: getstatic     #446                // Field net/minecraft/world/level/entity/Visibility.TRACKED:Lnet/minecraft/world/level/entity/Visibility;
+      22: areturn
+
+  static {};
+    Code:
+       0: invokestatic  #263                // Method com/mojang/logging/LogUtils.getLogger:()Lorg/slf4j/Logger;
+       3: putstatic     #485                // Field f_157635_:Lorg/slf4j/Logger;
+       6: return
+}

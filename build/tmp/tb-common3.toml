@@ -1,0 +1,775 @@
+
+[hp]
+	#Default HP for wooden doors.
+	#Range: 1.0 ~ 100000.0
+	wooden_door_hp = 24.0
+	#Default HP for wooden trapdoors.
+	#Range: 1.0 ~ 100000.0
+	wooden_trapdoor_hp = 16.0
+	#Default HP for iron doors.
+	#Range: 1.0 ~ 100000.0
+	iron_door_hp = 140.0
+	#Default HP for iron trapdoors.
+	#Range: 1.0 ~ 100000.0
+	iron_trapdoor_hp = 100.0
+	#Default HP for full glass blocks and stained glass blocks.
+	#Range: 1.0 ~ 100000.0
+	glass_block_hp = 16.0
+	#Default HP for glass panes and stained glass panes.
+	#Range: 1.0 ~ 100000.0
+	glass_pane_hp = 8.0
+	#Default HP for tinted glass.
+	#Range: 1.0 ~ 100000.0
+	tinted_glass_hp = 24.0
+	#Default HP for modded glass door-like blocks.
+	#Range: 1.0 ~ 100000.0
+	glass_door_hp = 18.0
+	#Default HP for supported blocks that are not wood, iron, or glass.
+	#Range: 1.0 ~ 100000.0
+	other_supported_block_hp = 40.0
+	#Per-block or per-tag HP overrides. Format: 'namespace:block=hp' or '#namespace:tag=hp'. Earlier entries win.
+	block_hp_overrides = ["#minecraft:wooden_doors=24", "#minecraft:wooden_trapdoors=16", "minecraft:iron_door=140", "minecraft:iron_trapdoor=100", "minecraft:glass=16", "minecraft:glass_pane=8", "minecraft:tinted_glass=24"]
+
+[damage]
+	#Global multiplier applied after TaCZ bullet damage is calculated.
+	#Range: 0.0 ~ 1000.0
+	damage_multiplier = 1.0
+	#Optional per-TaCZ-gun multipliers. Format: 'namespace:gun_id=multiplier'.
+	gun_damage_multipliers = ["tacz:m107=1.45", "tacz:m95=1.45", "tacz:rpg7=4.0"]
+	#Optional per-TaCZ-ammo/caliber multipliers. Format: 'namespace:ammo_id=multiplier'.
+	ammo_damage_multipliers = ["tacz:12g=1.15", "tacz:50bmg=1.5"]
+	#Distance in blocks where shotguns receive extra block damage.
+	#Range: 0.0 ~ 256.0
+	shotgun_close_range = 7.0
+	#Extra multiplier for shotgun hits inside shotgun_close_range.
+	#Range: 0.0 ~ 100.0
+	shotgun_close_range_multiplier = 1.35
+	#When true, bullets keep flying after hitting glass targets.
+	glass_passthrough_enabled = true
+	#Cumulative damage multiplier applied to a bullet each time it passes through glass.
+	#Range: 0.0 ~ 1.0
+	glass_passthrough_damage_multiplier = 0.65
+
+[rules]
+	#When true, only blocks in block_whitelist can be damaged.
+	use_whitelist = false
+	#Blocks/tags that may be damaged when use_whitelist is true. Format: 'namespace:block' or '#namespace:tag'.
+	block_whitelist = []
+	#Blocks/tags that can never be damaged. Format: 'namespace:block' or '#namespace:tag'.
+	block_blacklist = []
+	#Whether blocks broken by bullets drop their normal item drops.
+	drop_items = true
+	#Ticks after the last hit before stored damage is forgotten.
+	#Range: 20 ~ 72000
+	damage_timeout_ticks = 400
+	#Show vanilla crack progress while a block has stored damage.
+	show_crack_progress = true
+	#Spawn block particles when a supported block is hit.
+	show_impact_particles = true
+	#Legacy setting. Vanilla block hit sounds are no longer played by this mod.
+	play_impact_sound = true
+
+[shell_casings]
+	#Spawn visual shell casings when TaCZ guns fire.
+	enableShellCasings = true
+	#How long shell casings remain in ticks. 20 ticks = 1 second.
+	#Range: 20 ~ 2400
+	casingLifetime = 100
+	#Maximum casings allowed near a shooter before new casings are skipped.
+	#Range: 0 ~ 1000
+	maxNearbyCasings = 80
+	#Legacy setting. Vanilla casing impact sounds are no longer played by this mod.
+	enableCasingSounds = true
+	#If true, casings that have landed and stopped moving stay on the ground until removed with a command or by unloading rules.
+	persistentSettledCasings = false
+
+[impact_smoke]
+	#Spawn subtle client-side smoke puffs when TaCZ bullets hit blocks.
+	enableImpactSmoke = true
+	#Base smoke particles per impact.
+	#Range: 0 ~ 64
+	impactSmokeAmount = 3
+	#Visual scale for impact smoke particles.
+	#Range: 0.05 ~ 2.0
+	impactSmokeSize = 0.35
+	#Smoke lifetime in client ticks.
+	#Range: 1 ~ 80
+	impactSmokeLifetimeTicks = 12
+	#When true, smoke only appears on stone/concrete/metal and other hard blocks.
+	impactSmokeOnlyOnHardBlocks = true
+	#Client-side limiter for impact smoke/dust particles.
+	#Range: 0 ~ 2000
+	maxImpactParticlesPerSecond = 180
+
+[metal_impacts]
+	#Spawn bright directional sparks when TaCZ bullets hit metal blocks.
+	enableMetalSparks = true
+	#Spark particles per metal impact.
+	#Range: 0 ~ 64
+	metalSparkAmount = 8
+	#Lifetime for metal spark particles in client ticks.
+	#Range: 1 ~ 40
+	metalSparkLifetimeTicks = 6
+	#Play a small metallic ricochet/ping sound on metal impacts.
+	enableMetalRicochetSound = true
+
+[wood_impacts]
+	#Spawn directional wood splinters when TaCZ bullets hit wooden blocks.
+	enableWoodSplinters = true
+	#Wood splinter particles per wooden impact. Shotguns and high calibers scale this up.
+	#Range: 0 ~ 96
+	woodSplinterAmount = 10
+	#Lifetime for wood splinter particles in client ticks.
+	#Range: 1 ~ 80
+	woodSplinterLifetimeTicks = 14
+	#Play a sharp wooden crack/splinter sound on wood impacts.
+	enableWoodImpactSound = true
+
+[bullet_decals]
+	#Render persistent client-side bullet hole decals at TaCZ impact positions.
+	enableBulletDecals = true
+	#Maximum client-side bullet decals stored per chunk. Oldest decals are removed first.
+	#Range: 0 ~ 1000
+	maxDecalsPerChunk = 100
+	#How long bullet decals remain visible on clients, in seconds.
+	#Range: 1 ~ 3600
+	bulletDecalLifetimeSeconds = 100
+	#Base visual size for bullet decals, in blocks.
+	#Range: 0.03 ~ 2.0
+	bulletDecalSize = 0.22
+	#Use material-specific decal colors and crack/chip styles.
+	enableMaterialSpecificDecals = true
+	#Master toggle for client-side impact decal rendering. Existing enableBulletDecals must also be true.
+	impactDecalsEnabled = true
+	#Maximum client-side bullet impact decals stored per chunk. Oldest decals are removed first.
+	#Range: 0 ~ 1000
+	maxImpactDecalsPerChunk = 50
+	#Global client-side cap for active impact decals across all chunks. Oldest decals are removed first.
+	#Range: 0 ~ 5000
+	maxImpactDecals = 300
+	#How long bullet hole decals remain visible on clients, in ticks. 20 ticks = 1 second.
+	#Range: 20 ~ 72000
+	bulletHoleLifetimeTicks = 100
+	#Randomize bullet hole decal rotation so repeated impacts do not look identical.
+	bulletHoleRandomRotation = true
+	#Randomize bullet hole decal size slightly for less repetition.
+	bulletHoleRandomScale = true
+	#Use material-specific particles, sounds, and decal styles for bullet impacts.
+	materialSpecificImpacts = true
+
+[ricochet_sounds]
+	#Play client-side bullet ricochet/ping sounds on metal and hard block impacts.
+	enableRicochetSounds = true
+	#Chance that a metal impact plays a ricochet sound.
+	#Range: 0.0 ~ 1.0
+	ricochetSoundChanceMetal = 0.7
+	#Chance that a hard stone/concrete impact plays a dull ricochet/chip sound.
+	#Range: 0.0 ~ 1.0
+	ricochetSoundChanceHardBlock = 0.25
+	#Base ricochet sound volume.
+	#Range: 0.0 ~ 4.0
+	ricochetVolume = 0.8
+	#Client-side limiter for ricochet sounds to avoid automatic fire spam.
+	#Range: 0 ~ 128
+	ricochetMaxSoundsPerSecond = 12
+	#Maximum distance in blocks at which ricochet sounds can play.
+	#Range: 1.0 ~ 256.0
+	ricochetMaxDistance = 48.0
+
+[muzzle_smoke]
+	#Spawn client-side muzzle smoke when TaCZ guns fire.
+	enableMuzzleSmoke = true
+	#Base muzzle smoke particles per shot. Campfire smoke is dense, so defaults are intentionally low.
+	#Range: 0 ~ 64
+	muzzleSmokeAmount = 2
+	#Base muzzle smoke lifetime in client ticks.
+	#Range: 1 ~ 100
+	muzzleSmokeLifetimeTicks = 10
+	#Base visual scale for muzzle smoke particles.
+	#Range: 0.05 ~ 2.0
+	muzzleSmokeScale = 0.06
+	#Increase smoke density during sustained automatic fire.
+	dynamicSmokeBuildup = true
+	#Client-side limiter for muzzle smoke particles.
+	#Range: 0 ~ 2000
+	maxSmokeParticlesPerSecond = 45
+
+[indoor_smoke]
+	#Accumulate longer-lived client-side tactical smoke in enclosed indoor spaces during gunfights.
+	enableIndoorSmoke = false
+	#Multiplier for smoke density gained in enclosed indoor spaces.
+	#Range: 0.0 ~ 10.0
+	indoorSmokeMultiplier = 2.5
+	#Indoor smoke dissipation speed. Lower values linger longer.
+	#Range: 0.01 ~ 5.0
+	smokeDissipationSpeedIndoor = 0.25
+	#Outdoor smoke dissipation speed. Higher values clears smoke faster.
+	#Range: 0.01 ~ 5.0
+	smokeDissipationSpeedOutdoor = 1.0
+	#Maximum tracked indoor smoke density per local room cell.
+	#Range: 0.05 ~ 4.0
+	maxIndoorSmokeDensity = 1.0
+	#Allow tactical light flashes and flashlight-like beams to brighten nearby smoke haze.
+	enableFlashlightSmokeInteraction = true
+	#Allow laser/beam-like light hints to become more visible inside smoke haze.
+	enableLaserSmokeVisibility = true
+
+[glass_shards]
+	#Spawn temporary client-side glass shard debris when bullets hit or break glass.
+	enableGlassShards = true
+	#Base glass shard debris count for full glass blocks. Panes spawn fewer shards.
+	#Range: 0 ~ 128
+	glassShardAmount = 12
+	#How long glass shard debris remains visible on clients.
+	#Range: 1 ~ 300
+	glassShardLifetimeSeconds = 20
+	#Fade glass shard debris before removing it.
+	glassShardFadeOut = true
+	#Maximum client-side glass shard debris stored per chunk. Oldest shards are removed first.
+	#Range: 0 ~ 1000
+	maxGlassShardsPerChunk = 80
+
+[suppression]
+	#Deprecated and ignored. Projectile proximity sounds have been removed; distant gunshots are handled by the distant_gunshots section.
+	enableSuppressionSounds = false
+	#Deprecated and ignored.
+	#Range: 0.25 ~ 16.0
+	suppressionRadius = 3.0
+	#Deprecated and ignored.
+	#Range: 0.0 ~ 4.0
+	suppressionVolume = 1.0
+	#Deprecated and ignored.
+	#Range: 0 ~ 128
+	suppressionMaxSoundsPerSecond = 10
+	#Deprecated and ignored.
+	enableShooterSuppression = false
+
+[dynamic_lighting]
+	#Render short-lived client-side tactical light flashes from gunfire and breaching impacts.
+	enableDynamicGunLighting = false
+	#Render tiny short-lived light flashes from metal ricochet sparks.
+	enableSparkLighting = false
+	#Base visual intensity for muzzle flash lighting.
+	#Range: 0.0 ~ 8.0
+	muzzleFlashLightIntensity = 1.0
+	#Base visual intensity for spark light flashes.
+	#Range: 0.0 ~ 8.0
+	sparkLightIntensity = 0.4
+	#Maximum visual range in blocks for tactical dynamic light flashes.
+	#Range: 1 ~ 32
+	dynamicLightRange = 7
+	#Reduce muzzle flash lighting for suppressed weapons.
+	reducedLightingForSuppressors = false
+
+[screen_dust]
+	#Show subtle client-side screen edge dust/debris when bullets impact close to the player.
+	enableScreenDust = true
+	#Impact distance in blocks that can trigger screen dust.
+	#Range: 0.5 ~ 24.0
+	screenDustRadius = 5.0
+	#Base screen dust opacity/intensity.
+	#Range: 0.0 ~ 2.0
+	screenDustIntensity = 0.45
+	#Screen dust overlay duration in client ticks.
+	#Range: 1 ~ 100
+	screenDustDurationTicks = 18
+	#Client-side limiter for nearby screen dust triggers.
+	#Range: 0 ~ 64
+	screenDustMaxTriggersPerSecond = 4
+	#Multiplier for screen dust intensity indoors/enclosed spaces.
+	#Range: 0.0 ~ 6.0
+	screenDustIndoorMultiplier = 1.5
+
+[weapon_heat]
+	#Track client-side weapon heat from sustained TaCZ fire.
+	enableWeaponHeat = true
+	#Spawn smoke from hot barrels after sustained fire.
+	enableBarrelSmoke = true
+	#Spawn subtle heat shimmer/haze particles above hot barrels.
+	enableHeatDistortion = true
+	#Spawn subtle orange/red glow particles and light from extremely hot barrels/suppressors.
+	enableHotBarrelGlow = true
+	#Multiplier for weapon heat cooling speed. Higher values cool faster.
+	#Range: 0.05 ~ 10.0
+	weaponCoolingSpeed = 1.0
+	#Maximum tracked weapon heat level.
+	#Range: 10 ~ 1000
+	maxHeatLevel = 100
+	#Visual strength for heat shimmer particles.
+	#Range: 0.0 ~ 4.0
+	heatDistortionStrength = 0.35
+	#Visual intensity for hot barrel/suppressor glow.
+	#Range: 0.0 ~ 4.0
+	barrelGlowIntensity = 0.5
+
+[material_penetration]
+	#Allow TaCZ bullets to penetrate supported materials with damage and velocity loss.
+	enableMaterialPenetration = true
+	#Maximum block thickness in blocks that the penetration solver checks.
+	#Range: 0.1 ~ 16.0
+	maxPenetrationDepth = 3.0
+	#Penetration capability multiplier for wood-like blocks.
+	#Range: 0.0 ~ 10.0
+	woodPenetrationMultiplier = 1.0
+	#Penetration capability multiplier for stone/concrete/brick-like blocks.
+	#Range: 0.0 ~ 10.0
+	stonePenetrationMultiplier = 0.55
+	#Penetration capability multiplier for metal blocks.
+	#Range: 0.0 ~ 10.0
+	metalPenetrationMultiplier = 0.25
+	#Penetration capability multiplier for reinforced/blast-resistant blocks.
+	#Range: 0.0 ~ 10.0
+	reinforcedPenetrationMultiplier = 0.05
+	#Damage multiplier loss per block penetrated.
+	#Range: 0.0 ~ 1.0
+	damageLossPerBlock = 0.35
+	#Velocity multiplier loss per block penetrated.
+	#Range: 0.0 ~ 1.0
+	velocityLossPerBlock = 0.3
+	#Spawn client-side exit decals when bullets penetrate blocks.
+	enableExitDecals = true
+	#Spawn client-side entry/exit particles for bullet penetration.
+	enablePenetrationParticles = true
+
+[camera_shake]
+	#Enable subtle client-side cinematic camera shake. Accessibility: set false to disable all shake.
+	enableCameraShake = true
+	#Global camera shake intensity multiplier.
+	#Range: 0.0 ~ 4.0
+	cameraShakeIntensity = 1.0
+	#Maximum distance in blocks for camera shake events.
+	#Range: 1 ~ 96
+	cameraShakeMaxDistance = 18
+	#Base duration in ticks for camera shake events.
+	#Range: 1 ~ 80
+	cameraShakeDurationTicks = 8
+	#Enable stronger rumble shake from nearby explosions.
+	enableExplosionShake = true
+	#Enable short punchy shake from shotgun/heavy nearby fire.
+	enableShotgunShake = true
+	#Enable sharp jolt shake from configured pressure events.
+	enableSuppressionShake = true
+	#Enable short impact shake from door/block breaching and destruction.
+	enableBreachingShake = true
+
+[armor_hits]
+	#Enable client-side sparks, smoke, metal debris, and sounds when TaCZ bullets hit armor.
+	enableArmorHitEffects = true
+	#Allow weak bullet hits on armor to visually ricochet and reduce damage.
+	enableArmorRicochet = false
+	#Spawn bright metal sparks when TaCZ bullets hit armor.
+	enableArmorSparks = true
+	#Base chance for non-AP bullet hits on armor to ricochet or deflect. High caliber and AP rounds reduce this chance.
+	#Range: 0.0 ~ 1.0
+	armorRicochetChance = 0.45
+	#Spark particles per armored entity or vehicle hit.
+	#Range: 0 ~ 64
+	armorSparkAmount = 8
+	#Base volume for armor hit, thud, and ricochet sounds.
+	#Range: 0.0 ~ 4.0
+	armorHitVolume = 0.9
+
+[blood_effects]
+	#Spawn subtle client-side blood mist when TaCZ bullets hit living entities.
+	enableBloodMist = true
+	#Render small fading client-side blood splatter decals on nearby surfaces behind hit targets.
+	enableWallSplatter = true
+	#Global intensity multiplier for subtle blood mist. Keep low for restrained tactical visuals.
+	#Range: 0.0 ~ 2.0
+	bloodMistIntensity = 0.35
+	#Chance that a living entity bullet hit creates a small wall/floor splatter behind the target.
+	#Range: 0.0 ~ 1.0
+	bloodSplatterChance = 0.25
+	#How long blood splatter decals remain visible on clients, in seconds.
+	#Range: 1 ~ 1800
+	bloodDecalLifetimeSeconds = 180
+	#Maximum client-side blood splatter decals stored per chunk. Oldest decals are removed first.
+	#Range: 0 ~ 500
+	maxBloodDecalsPerChunk = 40
+	#Master toggle for all client-side blood mist, droplets, and splatter visuals.
+	bloodEffectsEnabled = true
+	#Enable lightweight client-side Blood Physics 2.0 droplets that fall, collide with blocks, and become decals.
+	bloodPhysicsEnabled = true
+	#Density multiplier for client-side blood mist and droplet particles.
+	#Range: 0.0 ~ 5.0
+	bloodDensity = 1.0
+	#Lifetime in client ticks for Blood Physics 2.0 droplets and blood decals. 20 ticks = 1 second.
+	#Range: 20 ~ 72000
+	bloodLifetimeTicks = 1200
+	#Maximum Blood Physics 2.0 droplets spawned for one hit before global rate limiting.
+	#Range: 0 ~ 128
+	maxBloodParticlesPerHit = 18
+	#Maximum blood mist/droplet particles spawned for one impact before global rate limiting.
+	#Range: 0 ~ 256
+	maxBloodParticlesPerImpact = 48
+	#Allow badly injured nearby living entities to occasionally drop tiny client-side blood droplets while moving. Rate-limited and off by default.
+	bloodTrailsEnabled = false
+	#Force conservative depth-tested rendering for custom impact visuals. Helps Sodium, Iris, Embeddium, and shader compatibility.
+	sodiumSafeRendering = true
+
+[dynamic_impact_sounds]
+	#Legacy setting. Vanilla material impact sound layers are no longer played by this mod.
+	enableDynamicImpactSounds = true
+	#Add short local echo/reverb layers for impacts in enclosed indoor spaces.
+	enableIndoorReverb = true
+	#Lower volume and pitch for distant impacts to simulate muffling.
+	enableDistanceMuffling = true
+	#Maximum distance in blocks for dynamic impact sounds.
+	#Range: 4 ~ 256
+	impactSoundMaxDistance = 256
+	#Global dynamic impact sound volume multiplier.
+	#Range: 0.0 ~ 4.0
+	impactSoundVolume = 1.0
+	#Randomize impact sound variants, pitch, volume, and rare cinematic ricochet cracks.
+	dynamicImpactVariation = true
+
+[gunshot_acoustics]
+	#Legacy setting. Vanilla gunshot crack and indoor echo layers are no longer played by this mod.
+	enableBulletCrackEcho = true
+	#Allow outdoor echo tails in open, urban, valley, and forest environments.
+	enableOutdoorEcho = true
+	#Echo intensity multiplier for dense urban/building areas.
+	#Range: 0.0 ~ 5.0
+	urbanEchoIntensity = 1.0
+	#Reverb intensity multiplier for indoor gunshots and sniper cracks.
+	#Range: 0.0 ~ 5.0
+	indoorReverbIntensity = 1.2
+	#Echo intensity multiplier for open valley/mountain-like terrain.
+	#Range: 0.0 ~ 5.0
+	valleyEchoIntensity = 1.4
+	#Multiplier applied to outdoor echoes in forests to dampen high-frequency crack tails.
+	#Range: 0.0 ~ 1.0
+	forestEchoReduction = 0.65
+	#Maximum distance in blocks for client-side environmental gunshot echoes.
+	#Range: 16 ~ 512
+	maxEchoDistance = 256
+
+[suppression_effects]
+	#Render a very subtle edge-only pressure vignette/blur hint for explosions and sustained nearby fire. Accessibility: set false to disable visual blur.
+	enableSuppressionBlur = true
+	#Play short fading tinnitus/ringing after heavy suppression, sniper cracks, or nearby explosions.
+	enableSuppressionRinging = true
+	#Enable subtle desaturation tint and pressure feel while under heavy fire.
+	enableStressEffects = true
+	#Maximum visual strength for subtle edge suppression blur. Center screen remains clear.
+	#Range: 0.0 ~ 1.0
+	suppressionBlurStrength = 0.18
+	#Radius in blocks for suppression visual/stress effects around the player.
+	#Range: 0.5 ~ 16.0
+	suppressionEffectRadius = 4.0
+	#Base duration in ticks for ear ringing after heavy suppression events.
+	#Range: 1 ~ 200
+	earRingingDurationTicks = 40
+	#Client-side limiter for suppression visual/ringing triggers.
+	#Range: 0 ~ 64
+	maxSuppressionEffectsPerSecond = 6
+
+[physical_debris]
+	#Spawn short-lived client-side physical debris when doors, glass, and destructible blocks are destroyed.
+	enablePhysicalDebris = true
+	#How long physical debris remains visible before fading/despawning.
+	#Range: 1 ~ 180
+	debrisLifetimeSeconds = 25
+	#Maximum physical debris pieces stored per chunk. Oldest debris is removed first.
+	#Range: 0 ~ 1000
+	maxDebrisPerChunk = 120
+	#Base plank/chunk debris amount for destroyed wooden blocks and doors.
+	#Range: 0 ~ 160
+	woodDebrisAmount = 14
+	#Base glass chunk debris amount for destroyed glass blocks and panes.
+	#Range: 0 ~ 160
+	glassDebrisAmount = 18
+	#Base bent metal fragment amount for destroyed metallic blocks.
+	#Range: 0 ~ 160
+	metalDebrisAmount = 10
+	#Base rubble fragment amount for destroyed stone/concrete blocks.
+	#Range: 0 ~ 160
+	concreteDebrisAmount = 16
+
+[shockwave_dust]
+	#Spawn client-side shockwave dust, haze, and drifting debris after indoor explosions and heavy breaching detonations.
+	enableShockwaveDust = false
+	#Apply brief client-side pressure feedback near indoor explosions.
+	enableIndoorPressureEffect = false
+	#Spawn short falling dust/debris from ceilings and nearby surfaces after explosions.
+	enableDebrisFalloff = true
+	#Global intensity multiplier for explosion shockwave dust.
+	#Range: 0.0 ~ 5.0
+	shockwaveDustIntensity = 1.0
+	#Strength multiplier for indoor pressure wave camera/audio visual feedback.
+	#Range: 0.0 ~ 2.0
+	pressureEffectStrength = 0.45
+	#Lifetime for shockwave dust and falling ceiling dust particles.
+	#Range: 4 ~ 300
+	dustLifetimeTicks = 80
+	#Client-side particle budget per second for shockwave dust and debris falloff.
+	#Range: 0 ~ 2000
+	maxShockwaveParticles = 180
+
+[burn_marks]
+	#Render client-side burn/scorch decals from explosions, breaching, and heavy heat residue.
+	enableBurnMarks = true
+	#Create large dark scorch marks after explosions.
+	enableExplosionScorch = true
+	#Create scorch residue around breached doors, frames, locks, and destroyed blocks.
+	enableBreachScorch = true
+	#Allow sustained heavy fire, hot barrels, and muzzle blasts to lightly darken nearby surfaces.
+	enableHeatResidue = true
+	#How long burn/scorch decals remain visible on clients, in seconds.
+	#Range: 5 ~ 7200
+	burnMarkLifetimeSeconds = 600
+	#Maximum client-side burn marks stored per chunk. Oldest scorch marks are removed first.
+	#Range: 0 ~ 500
+	maxBurnMarksPerChunk = 60
+	#Global opacity multiplier for scorch decals.
+	#Range: 0.0 ~ 1.0
+	burnMarkOpacity = 0.65
+
+[nightstick_flashlight]
+	#Upgrade the TaCZ Nightstick Compact Laser attachment into a client-side tactical flashlight and laser/light combo.
+	enableNightstickFlashlight = true
+	#Visual intensity multiplier for the Nightstick tactical flashlight beam.
+	#Range: 0.0 ~ 5.0
+	flashlightIntensity = 1.0
+	#Maximum range in blocks for the Nightstick tactical flashlight beam.
+	#Range: 2 ~ 64
+	flashlightRange = 18
+	#Allow the Nightstick flashlight to feed TaCZ Tactical Breaching's client-side dynamic lighting and smoke illumination.
+	enableDynamicLighting = true
+	#Render the visible yellow Nightstick flashlight cone/core/hotspot beam. Disable to keep only dynamic/world lighting.
+	renderVisibleFlashlightBeam = true
+
+[frag_grenade]
+	#Enable the TaCZ Tactical Breaching throwable frag grenade item and entity.
+	enableFragGrenade = true
+	#Cooldown after throwing a frag grenade, in ticks. 20 ticks = 1 second.
+	#Range: 0 ~ 1200
+	fragGrenadeCooldownTicks = 40
+	#Fuse time for thrown frag grenades in ticks. 20 ticks = 1 second.
+	#Range: 5 ~ 400
+	fragFuseTimeTicks = 60
+	#Visual and damage radius for frag grenade explosions, in blocks. Values above 6 are safety-capped for compatibility with explosion overhauls.
+	#Range: 1.0 ~ 24.0
+	fragExplosionRadius = 12.0
+	#Base fragmentation damage before distance falloff and armor mitigation. Values above 8 are safety-capped to prevent excessive modded explosion damage.
+	#Range: 0.0 ~ 200.0
+	fragDamage = 80.0
+	#Number of invisible fragment rays checked when the grenade detonates. Values above 64 are safety-capped for balanced damage and performance.
+	#Range: 0 ~ 512
+	fragCount = 256
+	#When true, blocks between fragments and targets block or reduce fragment hits.
+	enableFragmentLineOfSight = true
+	#Allow frag grenade explosions to damage/break vanilla blocks. Disabled by default; automatically skipped when Explosion Overhaul is installed to prevent amplified blast damage.
+	enableBlockDamage = false
+	#Spawn client-side smoke and lingering haze from frag detonations.
+	enableFragSmoke = true
+	#Spawn client-side debris, dust, sparks, and fragments from frag detonations.
+	enableFragDebris = true
+	#Enable stronger indoor pressure/shockwave feedback for frag detonations.
+	enableIndoorPressure = true
+	#Allow ceiling dust/falling debris after indoor frag detonations.
+	enableCeilingDust = true
+	#Enable ear ringing/tinnitus after close frag detonations.
+	enableEarRinging = true
+	#Maximum client distance in blocks for layered frag explosion audio.
+	#Range: 16 ~ 512
+	fragExplosionSoundDistance = 256
+	#Enable distant rolling boom tails for frag explosions.
+	enableExplosionEcho = true
+	#Enable close indoor reverb layers for frag explosions.
+	enableIndoorExplosionReverb = true
+	#Throw velocity for frag grenades. Higher values make grenades fly farther.
+	#Range: 0.2 ~ 3.0
+	fragThrowPower = 1.35
+
+[flashbang]
+	#Enable the TaCZ Tactical Breaching throwable tactical flashbang item and entity.
+	enableFlashbang = true
+	#Cooldown after throwing a flashbang grenade, in ticks. 20 ticks = 1 second.
+	#Range: 0 ~ 1200
+	flashbangCooldownTicks = 40
+	#Fuse time for thrown flashbang grenades in ticks. 20 ticks = 1 second.
+	#Range: 5 ~ 400
+	flashbangFuseTicks = 40
+	#Radius in blocks for flash, tinnitus, blur, and pressure effects.
+	#Range: 1.0 ~ 48.0
+	flashbangRadius = 12.0
+	#Duration of the white flash visual effect in ticks.
+	#Range: 1 ~ 240
+	flashDurationTicks = 100
+	#Duration of close flashbang tinnitus/ringing in ticks.
+	#Range: 1 ~ 400
+	tinnitusDurationTicks = 100
+	#Maximum subtle blur/vignette strength caused by flashbangs.
+	#Range: 0.0 ~ 1.0
+	blurStrength = 0.25
+	#When true, solid walls block flashbang blinding effects. Glass reduces the effect instead of fully blocking it.
+	enableLineOfSightCheck = true
+	#Enable stronger indoor flashbang detonation reverb and pressure feeling.
+	enableIndoorReverb = true
+	#Throw velocity for flashbang grenades. Higher values make flashbangs fly farther.
+	#Range: 0.2 ~ 3.0
+	flashbangThrowPower = 1.3
+
+[dropped_magazines]
+	#Drop a physical magazine entity when a TaCZ magazine-fed weapon reloads normally.
+	dropMagazines = true
+	#Allow players to pick dropped magazines back up.
+	allowPickup = false
+	#Preserve remaining rounds in dropped magazines and picked-up magazine items.
+	preserveAmmo = true
+	#When true, Shift + Reload stores the old magazine in inventory instead of dropping it.
+	enableTacticalReload = true
+	#How long dropped magazines remain in the world, in seconds.
+	#Range: 5 ~ 3600
+	despawnTimeSeconds = 20
+	#Makes weapons require loaded magazines instead of loose ammo when explicitly enabled. Disabled by default so normal TaCZ ammo boxes/loose ammo can reload weapons.
+	forceMagazineReloading = false
+	#Allows normal TaCZ ammo reloads without requiring the custom loaded magazine system.
+	allowLooseAmmoReloading = true
+	#Allows the custom loaded magazine system.
+	allowMagazineReloading = true
+
+[sprinting_weapons]
+	#Allow TaCZ firearms to fire while the shooter is sprinting. Ammo, fire-rate, reload, jam, and server validation still apply.
+	allowShootWhileSprinting = false
+	#Allow TaCZ firearms to start and continue reloading while the player keeps sprinting.
+	allowReloadWhileSprinting = false
+	#Allow a reload input immediately after a valid shot instead of waiting for TaCZ's short post-shot reload delay.
+	allowInstantReloadAfterShot = true
+	#Reserved balance toggle for applying extra spread while sprint-firing when a compatible TaCZ spread hook is available.
+	sprintingAccuracyPenalty = true
+	#Reserved sprint-firing spread multiplier. Values above 1 mean less accurate.
+	#Range: 1.0 ~ 10.0
+	sprintingAccuracyMultiplier = 1.35
+	#Reserved sprint-firing recoil multiplier. Values above 1 mean more recoil.
+	#Range: 1.0 ~ 10.0
+	sprintingRecoilMultiplier = 1.15
+	#Reserved reload-speed multiplier while sprinting. 1.0 keeps normal TaCZ reload timing.
+	#Range: 0.1 ~ 10.0
+	sprintingReloadSpeedMultiplier = 1.0
+
+[armor_plates]
+	#Enable the ballistic armor plate equipment and damage absorption system.
+	enableArmorPlates = false
+	#Armor plates lose durability when absorbing TaCZ bullet damage and break at zero.
+	enablePlateDurability = false
+	#Apply movement penalties for heavy and military grade armor plates.
+	enableMovementPenalty = false
+
+[gas_masks]
+	#Enable gas mask items, filter durability, HUD, and protection hooks.
+	enableGasMasks = true
+	#Drain installed gas mask filters over time while worn. Empty filters provide no protection.
+	enableFilterDurability = true
+	#Play subtle client-side breathing sounds while wearing a gas mask with a working filter.
+	enableBreathingSounds = true
+	#Reduce flashbang duration and intensity when wearing a gas mask with a working filter.
+	enableFlashbangProtection = true
+	#Reduce smoke visual impairment and smoke-related effects when wearing a gas mask with a working filter.
+	enableSmokeProtection = true
+	#Render the first-person gas mask lens/frame HUD overlay while wearing a gas mask.
+	gasMaskOverlayEnabled = true
+	#Opacity multiplier for the first-person gas mask overlay.
+	#Range: 0.0 ~ 1.0
+	gasMaskOverlayOpacity = 0.34
+	#Scale multiplier for the gas mask filter HUD text.
+	#Range: 0.35 ~ 1.5
+	gasMaskFilterTextScale = 0.6
+	#Show the gas mask filter percentage HUD text while wearing a gas mask.
+	gasMaskFilterTextEnabled = true
+
+[handcuffs]
+	#Enable the multiplayer-safe handcuffs restraint system.
+	handcuffsEnabled = true
+	#Allow players to restrain other players with handcuffs.
+	allowHandcuffPlayers = true
+	#Allow players to restrain villagers with handcuffs.
+	allowHandcuffVillagers = true
+	#Movement speed multiplier applied to restrained players.
+	#Range: 0.0 ~ 1.0
+	restrainedSpeedMultiplier = 0.2
+	#Block restrained players from using inventories and item interactions.
+	blockInventoryInteraction = true
+	#Block restrained players from opening chests and container blocks.
+	blockChestInteraction = true
+	#Block restrained players from using doors, buttons, levers, trapdoors, gates, and similar controls.
+	blockDoorInteraction = true
+	#Require a Handcuff Key item to release restrained players or villagers.
+	requireKeyToUnlock = true
+	#Allow operators to force unlock restrained entities without a key.
+	operatorsCanForceUnlock = true
+
+[distant_gunshots]
+	#Enable event-driven distant TaCZ gunshot audio beyond normal Minecraft sound range.
+	enableDistantGunshots = true
+	#Distance in blocks where normal TaCZ gun sounds are used and no extra distant sound packet is sent.
+	#Range: 0 ~ 10000
+	normalRange = 300
+	#Minimum shooter-to-listener distance in blocks before sending packet-based distant gunshot audio. Keep this equal to normalRange for normal gameplay.
+	#Range: 0 ~ 10000
+	minDistantGunshotDistance = 300
+	#Distance in blocks for quieter nearby distant gunshot pops.
+	#Range: 32 ~ 12000
+	distantRange = 1000
+	#Distance in blocks for dedicated far pop sounds with small randomized delay.
+	#Range: 64 ~ 16000
+	farRange = 3000
+	#Distance in blocks for very distant echo sounds with heavier delay and skip chance.
+	#Range: 128 ~ 32000
+	extremeRange = 7000
+	#Maximum shooter-to-listener distance in blocks for packet-based distant gunshot audio.
+	#Range: 128 ~ 32000
+	maxDistantGunshotDistance = 7000
+	#Global volume multiplier for all distant gunshot sounds.
+	#Range: 0.0 ~ 4.0
+	distantGunshotVolume = 1.0
+	#Delay distant gunshot playback by distance / 343.0 to simulate speed of sound.
+	enableSoundDelay = true
+	#Multiplier applied to maximum distant gunshot range and volume for suppressed weapons. 0 disables distant gunshot packets for suppressed weapons.
+	#Range: 0.0 ~ 1.0
+	suppressorDistanceMultiplier = 0.0
+	#Track shot bursts per chunk so far players can hear occasional active firefight bursts.
+	enableBattleDetection = true
+	#Shots in the battle window needed to mark a chunk as an active firefight.
+	#Range: 1 ~ 200
+	battleThresholdShots = 10
+	#Time window in seconds for active firefight detection.
+	#Range: 1 ~ 60
+	battleWindowSeconds = 5
+	#Volume multiplier for 300-1000 block distant gunshots.
+	#Range: 0.0 ~ 4.0
+	distantVolumeMultiplier = 0.5
+	#Volume multiplier for 1000-3000 block distant gunshots.
+	#Range: 0.0 ~ 4.0
+	farVolumeMultiplier = 0.25
+	#Volume multiplier for 3000-7000 block distant echoes.
+	#Range: 0.0 ~ 4.0
+	extremeVolumeMultiplier = 0.1
+	#Enable randomized delays, occasional skip chance, and battle burst variation.
+	enableRandomEchoes = true
+	#Maximum distant gunshot sounds sent/played per player per second. Higher values let automatic fire overlap more naturally at range.
+	#Range: 0 ~ 64
+	maxSoundsPerSecond = 18
+	#Compatibility flag only. Must remain false: distant gunshots never fall back to Minecraft vanilla sounds.
+	useVanillaSoundsFallback = false
+	#Log distant gunshot dispatch details for troubleshooting. Can also be toggled with /taczbreach distantgunshots debug.
+	debugDistantGunshots = false
+
+[weapon_jamming]
+	#Allow TaCZ firearms to malfunction and jam during combat.
+	enableWeaponJamming = false
+	#Track per-weapon condition from 0-100% on the gun item NBT.
+	enableWeaponCondition = false
+	#Increase jam chance and condition wear when firing in rain.
+	enableRainJams = false
+	#Increase jam chance and condition wear after heavy rapid fire.
+	enableRapidFireJams = false
+	#Seconds the clear malfunction key must be held to clear a jam.
+	#Range: 0.1 ~ 10.0
+	jamClearTimeSeconds = 2.0
+	#Show a small client-side jam/condition HUD hint.
+	showJamHUD = false
+	#Show the client-side 'Weapon Condition: x%' HUD text while holding worn weapons. Jam warnings still use showJamHUD.
+	showWeaponConditionHud = false
+

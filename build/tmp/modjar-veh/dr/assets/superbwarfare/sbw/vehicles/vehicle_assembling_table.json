@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:vehicle_assembling_table",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/vehicle_assembling_table.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/vehicle_assembling_table.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/vehicle_assembling_table.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/vehicle_assembling_table.png"
+                   }
+               ]
+}

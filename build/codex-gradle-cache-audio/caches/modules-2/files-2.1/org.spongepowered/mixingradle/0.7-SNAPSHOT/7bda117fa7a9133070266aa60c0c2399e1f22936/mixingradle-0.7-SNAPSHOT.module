@@ -1,0 +1,85 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.spongepowered",
+    "module": "mixingradle",
+    "version": "0.7-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.1.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "dev.gradleplugins",
+          "module": "gradle-api",
+          "version": {
+            "requires": "6.6"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "mixingradle-0.7-SNAPSHOT.jar",
+          "url": "mixingradle-0.7-SNAPSHOT.jar",
+          "size": 140713,
+          "sha512": "d967dba2d9f0a814d3afd9de35271fb852c74ebace0bc6f22a809fb4d9c3efdfe6b7abf08003a40ca354b4e3d0b9cbbe1ceb758b7213e50f49f09fd74b534556",
+          "sha256": "61d4dd3a40eeaf126ac9c5ffdea74c284dfcb34a38baa256f7c99d023a0a04a9",
+          "sha1": "0e08d649b5b3510db0e3a6033f182b5482c2a6d9",
+          "md5": "31d81f7ce292956d56570c873e861c91"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "21.0"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "mixingradle-0.7-SNAPSHOT.jar",
+          "url": "mixingradle-0.7-SNAPSHOT.jar",
+          "size": 140713,
+          "sha512": "d967dba2d9f0a814d3afd9de35271fb852c74ebace0bc6f22a809fb4d9c3efdfe6b7abf08003a40ca354b4e3d0b9cbbe1ceb758b7213e50f49f09fd74b534556",
+          "sha256": "61d4dd3a40eeaf126ac9c5ffdea74c284dfcb34a38baa256f7c99d023a0a04a9",
+          "sha1": "0e08d649b5b3510db0e3a6033f182b5482c2a6d9",
+          "md5": "31d81f7ce292956d56570c873e861c91"
+        }
+      ]
+    }
+  ]
+}

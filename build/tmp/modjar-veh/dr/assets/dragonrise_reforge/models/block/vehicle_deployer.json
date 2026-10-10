@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "dragonrise_reforge:block/vehicle_deployer_bottom",
+    "up": "dragonrise_reforge:block/vehicle_deployer_top",
+    "north": "dragonrise_reforge:block/vehicle_deployer_side",
+    "east": "dragonrise_reforge:block/vehicle_deployer_side",
+    "south": "dragonrise_reforge:block/vehicle_deployer_side",
+    "west": "dragonrise_reforge:block/vehicle_deployer_side"
+  }
+}

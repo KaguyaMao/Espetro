@@ -1,0 +1,66 @@
+
+═══ ah64.json  差异 0 处
+
+═══ bmp3.json  差异 0 处  (客户端有调参覆盖)
+
+═══ csk181.json  差异 0 处
+
+═══ m1126.json  差异 0 处  (客户端有调参覆盖)
+
+═══ m1128.json  差异 0 处  (客户端有调参覆盖)
+
+═══ m113.json  差异 0 处
+
+═══ m1296.json  差异 0 处  (客户端有调参覆盖)
+
+═══ m1a2sepv1.json  差异 0 处
+
+═══ m1a2sepv2.json  差异 0 处  (客户端有调参覆盖)
+
+═══ m3a3.json  差异 0 处  (客户端有调参覆盖)
+
+═══ mv3.json  差异 0 处
+
+═══ mv3_armed.json  差异 0 处
+
+═══ mv3_supply.json  差异 0 处
+
+═══ sx1.json  差异 0 处
+
+═══ sx1_a.json  差异 0 处
+
+═══ t72b3.json  差异 0 处  (客户端有调参覆盖)
+
+═══ t90mh.json  差异 0 处
+
+═══ ural4320.json  差异 0 处
+
+═══ ural4320_supply.json  差异 0 处
+
+═══ ural4320_zu23.json  差异 0 处
+
+═══ z20.json  差异 0 处
+
+═══ zbd04a.json  差异 0 处  (客户端有调参覆盖)
+
+═══ zbd05.json  差异 0 处
+
+═══ zbl08.json  差异 0 处  (客户端有调参覆盖)
+
+═══ zlt11.json  差异 0 处  (客户端有调参覆盖)
+
+═══ zsl10.json  差异 0 处
+
+═══ ztd05.json  差异 0 处
+
+═══ ztz96a.json  差异 0 处  (客户端有调参覆盖)
+
+═══ ztz99a.json  差异 0 处  (客户端有调参覆盖)
+
+═══ fcp/t72av.json：服务端缺失 ✘
+
+================ 汇总 ================
+服务端与客户端生效数据【完全一致】的载具 29 个: ah64.json, bmp3.json, csk181.json, m1126.json, m1128.json, m113.json, m1296.json, m1a2sepv1.json, m1a2sepv2.json, m3a3.json, mv3.json, mv3_armed.json, mv3_supply.json, sx1.json, sx1_a.json, t72b3.json, t90mh.json, ural4320.json, ural4320_supply.json, ural4320_zu23.json, z20.json, zbd04a.json, zbd05.json, zbl08.json, zlt11.json, zsl10.json, ztd05.json, ztz96a.json, ztz99a.json
+【有差异】的载具 0 个: （无）
+服务端【缺失】的文件: fcp/t72av.json
+服务端 AmmoType 被字符串化的武器: （无）

@@ -5,6 +5,7 @@
   "key.espetro.class": "职业选择",
   "key.espetro.skill": "指挥官技能",
   "key.espetro.radial": "战术交互轮盘（长按）",
+  "key.espetro.fort_rotate": "工事旋转（顺时针 90°）",
   "radial.espetro.deploy": "部署",
   "radial.espetro.logistics": "后勤",
   "radial.espetro.radio": "部署 Radio",
@@ -17,6 +18,7 @@
   "block.espetro.supply_source": "补给站",
   "item.espetro.supply_source": "补给站",
   "item.espetro.construction_material": "建材",
+  "item.espetro.fortification_wand": "工事选定棒",
 
   "tutorial.step.welcome.title": "欢迎来到 Espetro",
   "tutorial.step.welcome.body": "本模式用 AuraTip 提示讲解各阶段与界面。关闭当前提示会进入下一条；可用 /espetro tutorial skip 跳过本会话，之后可在主城或命令重开。",

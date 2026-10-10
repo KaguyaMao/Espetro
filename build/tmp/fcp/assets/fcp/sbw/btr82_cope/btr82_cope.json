@@ -1,0 +1,7 @@
+{
+  "ID": "fcp:btr82_cope",
+  "Model": {
+    "Model": "fcp:geo/btr82_cope.geo.json",
+    "Texture": "fcp:textures/entity/btr82a/btr_82.png"
+  }
+}

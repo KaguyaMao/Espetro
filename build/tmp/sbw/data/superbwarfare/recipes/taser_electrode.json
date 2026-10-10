@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "minecraft:lightning_rod"
+    },
+    "b": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "a a",
+    "b b",
+    "b b"
+  ],
+  "result": {
+    "count": 4,
+    "item": "superbwarfare:taser_electrode"
+  },
+  "show_notification": true
+}

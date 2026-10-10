@@ -1,0 +1,36 @@
+{
+    "ID":  "dragonrise_reforge:shield",
+    "MaxHealth":  40,
+    "MaxEnergy":  0,
+    "TurretPitchRange":  [
+                             20,
+                             89
+                         ],
+    "OBB":  [
+                {
+                    "Size":  [
+                                 0.55,
+                                 0.6,
+                                 0.1
+                             ],
+                    "Position":  [
+                                     0,
+                                     0.6,
+                                     0
+                                 ]
+                }
+            ],
+    "EngineType":  "Fixed",
+    "Mass":  0.05,
+    "HasLowHealthWarning":  false,
+    "SelfHurtPercent":  0,
+    "VehicleContainerType":  "One",
+    "SendHitParticles":  false,
+    "Type":  "Artillery",
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/shield.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/shield.png"
+                   }
+               ]
+}

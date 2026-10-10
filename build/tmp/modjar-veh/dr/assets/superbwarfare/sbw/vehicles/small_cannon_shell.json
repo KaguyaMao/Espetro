@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:small_cannon_shell",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/small_cannon_shell.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/small_cannon_shell.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/small_cannon_shell.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/small_cannon_shell.png"
+                   }
+               ]
+}

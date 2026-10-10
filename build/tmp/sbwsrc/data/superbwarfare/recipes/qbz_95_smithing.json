@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "forge:plates/plastic"
+  },
+  "base": {
+    "item": "superbwarfare:rare_material_pack"
+  },
+  "result": {
+    "item": "superbwarfare:qbz_95"
+  },
+  "template": {
+    "item": "superbwarfare:qbz_95_blueprint"
+  }
+}

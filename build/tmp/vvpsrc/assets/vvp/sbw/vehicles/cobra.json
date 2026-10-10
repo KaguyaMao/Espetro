@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:cobra",
+  "Model": {
+    "Model": "vvp:geo/ah1z.geo.json",
+    "Texture": "vvp:textures/entity/ah1z.png"
+  }
+}

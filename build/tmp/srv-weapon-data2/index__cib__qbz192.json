@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.qbz192.name",
+  "display": "cib:qbz192_display",
+  "data": "cib:qbz192_data",
+  "type": "rifle",
+  "item_type": "modern_kinetic",
+  "tooltip": "cib.gun.qbz192.desc",
+  "sort": 2461600
+}

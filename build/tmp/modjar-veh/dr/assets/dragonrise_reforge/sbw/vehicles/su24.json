@@ -1,0 +1,13 @@
+{
+    "ID":  "dragonrise_reforge:su24",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/su24.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/su24.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/su24.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/su24.png"
+                   }
+               ]
+}

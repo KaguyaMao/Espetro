@@ -1,0 +1,46 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.mortar.idle": {
+			"loop": true,
+			"bones": {
+				"mortar": {
+					"position": [0, 0, 0]
+				},
+				"shell": {
+					"scale": 0
+				},
+				"flare": {
+					"scale": "easeOutQuad"
+				}
+			}
+		},
+		"animation.mortar.fire": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1.5,
+			"bones": {
+				"shell": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.375": [0, 0, 0],
+						"0.875": [14, -20, 0],
+						"1.5": [14, -20, 0]
+					},
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.1667": [1, 1, 1],
+						"0.2917": [0.8, 0.8, 0.8],
+						"0.375": [1, 1, 1]
+					}
+				},
+				"flare": {
+					"scale": {
+						"1.0": [1200, 1200, 1200],
+						"1.0417": [1200, 1200, 1200],
+						"1.0833": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

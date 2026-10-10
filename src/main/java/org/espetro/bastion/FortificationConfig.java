@@ -57,6 +57,8 @@ public final class FortificationConfig {
     private static volatile ParsedRoot pending = defaults();
     private static volatile boolean frozen;
     private static volatile String failure;
+    /** 最近一次冻结时的策略性剔除警告（entity_policy / filter 模式），供管理员指令查看。 */
+    private static volatile List<String> compileWarnings = List.of();
 
     private FortificationConfig() {
     }
@@ -118,9 +120,11 @@ public final class FortificationConfig {
         if (!errors.isEmpty()) return fail(errors);
 
         try {
+            List<String> warnings = new ArrayList<>();
+            EntityPolicy policy = pending.entityPolicy == null ? new EntityPolicy() : pending.entityPolicy;
             Map<String, FortificationDef> globalDefs = copyDefinitions(pending.definitions);
             validateRequired(globalDefs, errors);
-            compileDefinitions(server, globalDefs, pending.limits, errors, "global");
+            compileDefinitions(server, globalDefs, pending.limits, policy, errors, "global", warnings);
 
             Map<ResourceLocation, Map<String, FortificationDef>> perMap = new LinkedHashMap<>();
             Map<ResourceLocation, Map<String, String>> perMapAliases = new LinkedHashMap<>();
@@ -130,8 +134,8 @@ public final class FortificationConfig {
                     Map<String, FortificationDef> overridden = applyOverrides(
                         globalDefs, map.logisticsJson, errors, map.mapFolder);
                     validateRequired(overridden, errors);
-                    compileDefinitions(server, overridden, pending.limits, errors,
-                        "map " + map.mapFolder);
+                    compileDefinitions(server, overridden, pending.limits, policy, errors,
+                        "map " + map.mapFolder, warnings);
                     perMap.put(map.dimensionId, Collections.unmodifiableMap(overridden));
                     perMapAliases.put(map.dimensionId,
                         Collections.unmodifiableMap(buildAliases(overridden, errors)));
@@ -144,11 +148,19 @@ public final class FortificationConfig {
                 Collections.unmodifiableMap(aliases),
                 Collections.unmodifiableMap(perMap),
                 Collections.unmodifiableMap(perMapAliases),
-                pending.vehicleService.copy(), pending.limits.copy());
+                pending.vehicleService.copy(), pending.limits.copy(), policy.copy());
             frozen = true;
             failure = null;
-            Espetro.LOGGER.info("工事 JSON v2 已事务冻结: global={} maps={} aliases={}",
-                globalDefs.size(), perMap.size(), aliases.size());
+            compileWarnings = List.copyOf(warnings);
+            if (!warnings.isEmpty()) {
+                Espetro.LOGGER.warn("工事模板实体策略剔除 {} 项：{}",
+                    warnings.size(), String.join(" | ", warnings));
+            }
+            Espetro.LOGGER.info("工事 JSON v2 已事务冻结: global={} maps={} aliases={} 策略剔除={} instant={}",
+                globalDefs.size(), perMap.size(), aliases.size(), warnings.size(),
+                globalDefs.values().stream()
+                    .filter(d -> d.construction != null && d.construction.instant)
+                    .map(d -> d.id).toList());
             return PreparationResult.ok(globalDefs.size(), perMap.size());
         } catch (Exception e) {
             errors.add(e.getMessage() == null ? e.toString() : e.getMessage());
@@ -161,6 +173,7 @@ public final class FortificationConfig {
         failure = null;
         pending = defaults();
         registrySet = RegistrySet.empty();
+        compileWarnings = List.of();
     }
 
     public static boolean isFrozenReady() {
@@ -170,6 +183,60 @@ public final class FortificationConfig {
     @Nullable
     public static String getFailure() {
         return failure;
+    }
+
+    /**
+     * 管理员免重启重载：解冻 → 重新读取 JSON → 重新编译冻结。
+     *
+     * <p>全程事务化：任何一步失败都回滚到重载前的 registry，避免
+     * {@code fail()} 清空 registry 导致战场 gate 关闭（那会直接让地图开不起来）。</p>
+     */
+    public static synchronized PreparationResult adminReload(MinecraftServer server,
+                                                             List<ActiveMapConfig> maps) {
+        boolean previousFrozen = frozen;
+        String previousFailure = failure;
+        ParsedRoot previousPending = pending;
+        RegistrySet previousRegistry = registrySet;
+        List<String> previousWarnings = compileWarnings;
+
+        frozen = false;
+        failure = null;
+        loadServerConfig();
+        PreparationResult result = compileAndFreeze(server, maps);
+        if (!result.success()) {
+            frozen = previousFrozen;
+            failure = previousFailure;
+            pending = previousPending;
+            registrySet = previousRegistry;
+            compileWarnings = previousWarnings;
+        }
+        return result;
+    }
+
+    /** 最近一次冻结时的策略性剔除警告（entity_policy=filter 时产生）。 */
+    public static List<String> recentWarnings() {
+        return compileWarnings;
+    }
+
+    /** 服务端工事配置文件路径（管理员编辑器写入定义时使用）。 */
+    public static java.nio.file.Path serverConfigPath() {
+        return FMLPaths.CONFIGDIR.get().resolve("espetro/fortifications.json");
+    }
+
+    /** 内置 v2 兜底配置文本；读取失败返回 null。 */
+    @Nullable
+    public static String bundledDefaultJsonSafe() {
+        try {
+            return bundledDefaultJson();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** 当前生效的实体/方块实体策略；registry 未就绪时返回默认（filter）策略。 */
+    public static EntityPolicy entityPolicy() {
+        EntityPolicy policy = registrySet.entityPolicy;
+        return policy == null ? new EntityPolicy() : policy;
     }
 
     public static Limits limits() {
@@ -269,6 +336,12 @@ public final class FortificationConfig {
             ? GSON.fromJson(root.get("vehicle_service"), VehicleServiceSettings.class)
             : new VehicleServiceSettings();
         service.normalize(errors, source + ".vehicle_service");
+        EntityPolicy entityPolicy = root.has("entity_policy")
+            && root.get("entity_policy").isJsonObject()
+            ? GSON.fromJson(root.get("entity_policy"), EntityPolicy.class)
+            : new EntityPolicy();
+        if (entityPolicy == null) entityPolicy = new EntityPolicy();
+        entityPolicy.normalize(errors, source + ".entity_policy");
         Map<String, FortificationDef> definitions = new LinkedHashMap<>();
         JsonArray entries = root.has("fortifications") && root.get("fortifications").isJsonArray()
             ? root.getAsJsonArray("fortifications") : null;
@@ -286,6 +359,9 @@ public final class FortificationConfig {
                 try {
                     FortificationDef def = GSON.fromJson(entries.get(i), FortificationDef.class);
                     normalize(def, limits, errors, path);
+                    if (def != null && def.fixedWeapon != null) {
+                        def.fixedWeapon.normalize(errors, path + ".fixed_weapon");
+                    }
                     if (def != null && def.id != null && definitions.putIfAbsent(def.id, def) != null) {
                         errors.add(path + ".id: 重复 " + def.id);
                     }
@@ -294,7 +370,7 @@ public final class FortificationConfig {
                 }
             }
         }
-        return new ParsedRoot(definitions, service, limits, List.copyOf(errors));
+        return new ParsedRoot(definitions, service, limits, entityPolicy, List.copyOf(errors));
     }
 
     private static JsonObject migrateV1(JsonObject legacy, List<String> errors, String source) {
@@ -444,6 +520,8 @@ public final class FortificationConfig {
         requirements.addProperty("require_radio_range", radioRange);
         requirements.add("usable_by", GSON.toJsonTree(List.of(
             "commander", "squad_leader", "fireteam_leader")));
+        // 可选：编制专属限定，留空数组 = 所有编制可用
+        requirements.add("factions", new JsonArray());
         result.add("requirements", requirements);
         return result;
     }
@@ -514,10 +592,13 @@ public final class FortificationConfig {
 
     private static void compileDefinitions(MinecraftServer server,
                                            Map<String, FortificationDef> definitions,
-                                           Limits limits, List<String> errors, String scope) {
+                                           Limits limits, EntityPolicy policy,
+                                           List<String> errors, String scope,
+                                           List<String> warnings) {
         for (FortificationDef def : definitions.values()) {
             try {
-                def.compiled = FortificationTemplateCompiler.compile(server, def, limits);
+                def.compiled = FortificationTemplateCompiler.compile(server, def, limits,
+                    policy, warnings);
             } catch (Exception e) {
                 errors.add(scope + "/" + def.id + "/" +
                     (def.placement == null ? "placement" : def.placement.describeTemplates())
@@ -718,7 +799,8 @@ public final class FortificationConfig {
         }
         registrySet = new RegistrySet(Collections.unmodifiableMap(root.definitions),
             Collections.unmodifiableMap(aliases), Map.of(), Map.of(),
-            root.vehicleService.copy(), root.limits.copy());
+            root.vehicleService.copy(), root.limits.copy(),
+            root.entityPolicy == null ? new EntityPolicy() : root.entityPolicy.copy());
         pending = root;
     }
 
@@ -755,10 +837,11 @@ public final class FortificationConfig {
 
     private record ParsedRoot(Map<String, FortificationDef> definitions,
                               VehicleServiceSettings vehicleService, Limits limits,
+                              EntityPolicy entityPolicy,
                               List<String> errors) {
         static ParsedRoot invalid(String error) {
             return new ParsedRoot(new LinkedHashMap<>(), new VehicleServiceSettings(),
-                new Limits(), List.of(error));
+                new Limits(), new EntityPolicy(), List.of(error));
         }
     }
 
@@ -766,10 +849,134 @@ public final class FortificationConfig {
                                Map<String, String> aliases,
                                Map<ResourceLocation, Map<String, FortificationDef>> byDimension,
                                Map<ResourceLocation, Map<String, String>> aliasesByDimension,
-                               VehicleServiceSettings vehicleService, Limits limits) {
+                               VehicleServiceSettings vehicleService, Limits limits,
+                               EntityPolicy entityPolicy) {
         static RegistrySet empty() {
             return new RegistrySet(Map.of(), Map.of(), Map.of(), Map.of(),
-                new VehicleServiceSettings(), new Limits());
+                new VehicleServiceSettings(), new Limits(), new EntityPolicy());
+        }
+    }
+
+    /**
+     * 模板实体/方块实体策略（A+B）。
+     *
+     * <p>模板文件始终**无损保存**实体完整 NBT；本策略只在编译（加载）阶段决定
+     * 哪些实体会被放进工事：</p>
+     * <ul>
+     *   <li>{@code mode = "filter"}（默认）：不允许的类型/字段**剔除并记警告**，
+     *       不会因为一颗老鼠屎让整份 registry 冻结失败。</li>
+     *   <li>{@code mode = "reject"}：恢复旧的一票否决行为（直接报错）。</li>
+     * </ul>
+     * <p>{@code extra_*} 用于在默认视觉白名单之外追加允许项，例如允许某模组实体、
+     * 允许箱子类方块实体。字段白名单键可用 {@code "*"} 表示对所有实体生效。</p>
+     */
+    public static final class EntityPolicy {
+        private static final int MAX_EXTRA_TYPES = 64;
+        private static final int MAX_EXTRA_FIELDS = 64;
+
+        public String mode = "filter";
+        @SerializedName("extra_entity_types")
+        public List<String> extraEntityTypes = new ArrayList<>();
+        @SerializedName("extra_block_entity_types")
+        public List<String> extraBlockEntityTypes = new ArrayList<>();
+        @SerializedName("extra_entity_fields")
+        public Map<String, List<String>> extraEntityFields = new LinkedHashMap<>();
+        @SerializedName("allow_player_entities")
+        public boolean allowPlayerEntities;
+
+        void normalize(List<String> errors, String path) {
+            mode = mode == null ? "filter" : mode.trim().toLowerCase(Locale.ROOT);
+            if (!Set.of("filter", "reject").contains(mode)) {
+                errors.add(path + ".mode: 必须是 filter 或 reject");
+                mode = "filter";
+            }
+            extraEntityTypes = cleanKeys(extraEntityTypes, path + ".extra_entity_types", errors);
+            extraBlockEntityTypes = cleanKeys(extraBlockEntityTypes,
+                path + ".extra_block_entity_types", errors);
+            Map<String, List<String>> fields = new LinkedHashMap<>();
+            if (extraEntityFields != null) {
+                for (Map.Entry<String, List<String>> entry : extraEntityFields.entrySet()) {
+                    String key = entry.getKey() == null ? "" : entry.getKey().trim();
+                    if (!"*".equals(key) && ResourceLocation.tryParse(key) == null) {
+                        errors.add(path + ".extra_entity_fields." + entry.getKey() + ": 非法类型 id");
+                        continue;
+                    }
+                    List<String> values = new ArrayList<>();
+                    if (entry.getValue() != null) {
+                        for (String field : entry.getValue()) {
+                            if (field == null || field.isBlank()) continue;
+                            if (values.size() >= MAX_EXTRA_FIELDS) {
+                                errors.add(path + ".extra_entity_fields." + key
+                                    + ": 超过 " + MAX_EXTRA_FIELDS + " 项");
+                                break;
+                            }
+                            if (!values.contains(field)) values.add(field);
+                        }
+                    }
+                    fields.put(key, List.copyOf(values));
+                }
+            }
+            extraEntityFields = fields;
+        }
+
+        private static List<String> cleanKeys(List<String> raw, String path, List<String> errors) {
+            List<String> result = new ArrayList<>();
+            if (raw == null) return result;
+            for (String value : raw) {
+                if (value == null || value.isBlank()) continue;
+                String id = value.trim().toLowerCase(Locale.ROOT);
+                if (ResourceLocation.tryParse(id) == null) {
+                    errors.add(path + ": 非法 id " + value);
+                    continue;
+                }
+                if (result.size() >= MAX_EXTRA_TYPES) {
+                    errors.add(path + ": 超过 " + MAX_EXTRA_TYPES + " 项");
+                    break;
+                }
+                if (!result.contains(id)) result.add(id);
+            }
+            return result;
+        }
+
+        /** true = 旧的一票否决行为。 */
+        public boolean strict() {
+            return "reject".equals(mode);
+        }
+
+        public boolean allowPlayerEntities() {
+            return allowPlayerEntities;
+        }
+
+        public List<String> extraEntityTypes() {
+            return extraEntityTypes == null ? List.of() : extraEntityTypes;
+        }
+
+        public List<String> extraBlockEntityTypes() {
+            return extraBlockEntityTypes == null ? List.of() : extraBlockEntityTypes;
+        }
+
+        /** 指定实体类型额外允许的 NBT 字段（含 {@code "*"} 通配）。 */
+        public List<String> extraFieldsFor(String entityId) {
+            if (extraEntityFields == null || extraEntityFields.isEmpty()) return List.of();
+            List<String> result = new ArrayList<>();
+            List<String> all = extraEntityFields.get("*");
+            if (all != null) result.addAll(all);
+            List<String> specific = extraEntityFields.get(entityId);
+            if (specific != null) result.addAll(specific);
+            return result;
+        }
+
+        EntityPolicy copy() {
+            EntityPolicy copy = new EntityPolicy();
+            copy.mode = mode;
+            copy.extraEntityTypes = new ArrayList<>(extraEntityTypes());
+            copy.extraBlockEntityTypes = new ArrayList<>(extraBlockEntityTypes());
+            copy.extraEntityFields = new LinkedHashMap<>();
+            if (extraEntityFields != null) {
+                extraEntityFields.forEach((k, v) -> copy.extraEntityFields.put(k, new ArrayList<>(v)));
+            }
+            copy.allowPlayerEntities = allowPlayerEntities;
+            return copy;
         }
     }
 
@@ -852,6 +1059,9 @@ public final class FortificationConfig {
         public Construction construction = new Construction();
         public Durability durability = new Durability();
         public Requirements requirements = new Requirements();
+        /** 固定武器配置（可选）：修建后可用 F 键轮盘把所在 FOB 的弹药兑换成该武器用的弹药。 */
+        @SerializedName(value = "fixed_weapon", alternate = {"fixedWeapon"})
+        public FixedWeapon fixedWeapon = new FixedWeapon();
 
         public transient Behavior behaviorType;
         public transient Map<String, FortificationTemplateCompiler.CompiledTemplate> compiled = Map.of();
@@ -983,6 +1193,11 @@ public final class FortificationConfig {
         public int buildPerHit = 5;
         @SerializedName("remove_per_hit")
         public int removePerHit = 5;
+        /**
+         * 放置即建成，跳过施工阶段（例如电台"放下来就能直接用"）。
+         * 仍然保留 required_progress 作为结构值/耐久上限与摧毁结算的依据。
+         */
+        public boolean instant;
 
         void normalize(List<String> errors, String path) {
             requiredProgress = boundedPositive(requiredProgress, 1_000_000,
@@ -1049,7 +1264,18 @@ public final class FortificationConfig {
         public List<String> usableBy = new ArrayList<>(List.of(
             "commander", "squad_leader", "fireteam_leader"));
 
+        /**
+         * 编制专属限定（可选字段）。
+         *
+         * <p>省略或留空 = <strong>所有编制</strong>都能部署该工事；一旦填写，只有列出的编制能部署。
+         * 取值为 {@code EsFactions} 里的编制 id（文件名，例如 {@code pla_112th_brigade}）。
+         * 与 {@code usable_by} 是"与"关系：既要角色满足，也要编制在列表里。</p>
+         */
+        @SerializedName(value = "factions", alternate = {"usable_factions", "faction_ids"})
+        public List<String> factions = new ArrayList<>();
+
         void normalize(List<String> errors, String path) {
+            normalizeFactions(path);
             if (usableBy == null || usableBy.isEmpty()) {
                 errors.add(path + ".usable_by: 不得为空");
                 return;
@@ -1061,6 +1287,96 @@ public final class FortificationConfig {
                 else if (!normalized.contains(role)) normalized.add(role);
             }
             usableBy = normalized;
+        }
+
+        /**
+         * 编制列表去空去重；如果编制表此时已加载，对找不到的 id 打一条告警
+         * （只告警不致命：配置里写错编制名时至少能在日志里看到）。
+         */
+        private void normalizeFactions(String path) {
+            List<String> cleaned = new ArrayList<>();
+            if (factions != null) {
+                for (String raw : factions) {
+                    String id = raw == null ? "" : raw.trim();
+                    if (id.isEmpty() || cleaned.contains(id)) {
+                        continue;
+                    }
+                    cleaned.add(id);
+                }
+            }
+            factions = cleaned;
+            if (cleaned.isEmpty()) {
+                return;
+            }
+            try {
+                String[] known = org.espetro.team.FactionDataProvider.getOrCreateLoader()
+                    .getAllFactionIds();
+                if (known == null || known.length == 0) {
+                    return; // 编制表尚未加载，无法校验
+                }
+                for (String id : cleaned) {
+                    boolean found = false;
+                    for (String candidate : known) {
+                        if (candidate != null && candidate.equalsIgnoreCase(id)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        org.espetro.Espetro.LOGGER.warn(
+                            "工事配置 {}.factions: 未找到编制 {}（该工事将无人能部署）", path, id);
+                    }
+                }
+            } catch (Throwable ignored) {
+                // 编制表不可用时跳过校验，不影响工事加载
+            }
+        }
+    }
+
+    /**
+     * 固定武器配置块（可选）。
+     *
+     * <pre>"fixed_weapon": {
+     *   "enabled": true,
+     *   "ammo_item": "",
+     *   "exchange_amount": 50,
+     *   "fob_ammo_cost": 25,
+     *   "output": "vehicle"
+     * }</pre>
+     *
+     * <ul>
+     *   <li>{@code ammo_item} 留空 = 自动读该武器实际消耗的弹药（SBW {@code AMMO_CONSUMER}）</li>
+     *   <li>{@code exchange_amount} = 每次兑换产出多少发；{@code fob_ammo_cost} = 每次消耗多少 FOB 弹药点</li>
+     *   <li>{@code output} = {@code player}（玩家背包）/ {@code vehicle}（武器的弹药池或弹夹，直接装填）
+     *       或 {@code container}（只放进武器物品箱，交给武器自身的手动装填逻辑消耗）</li>
+     * </ul>
+     */
+    public static final class FixedWeapon {
+        public boolean enabled;
+        @SerializedName("ammo_item")
+        public String ammoItem = "";
+        @SerializedName("exchange_amount")
+        public int exchangeAmount = 1;
+        @SerializedName("fob_ammo_cost")
+        public int fobAmmoCost = 0;
+        public String output = "vehicle";
+
+        void normalize(List<String> errors, String path) {
+            if (ammoItem == null) {
+                ammoItem = "";
+            }
+            ammoItem = ammoItem.trim();
+            exchangeAmount = Math.max(0, exchangeAmount);
+            fobAmmoCost = Math.max(0, fobAmmoCost);
+            String out = output == null ? "" : output.trim().toLowerCase(Locale.ROOT);
+            if (!"player".equals(out) && !"vehicle".equals(out) && !"container".equals(out)) {
+                errors.add(path + ".output: 只能是 player / vehicle / container");
+                out = "vehicle";
+            }
+            output = out;
+            if (enabled && exchangeAmount <= 0) {
+                errors.add(path + ".exchange_amount: 启用固定武器时必须大于 0");
+            }
         }
     }
 

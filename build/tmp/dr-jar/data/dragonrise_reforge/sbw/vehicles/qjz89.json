@@ -1,0 +1,142 @@
+{
+  "ID":  "dragonrise_reforge:qjz89",
+  "MaxHealth":  40,
+  "MaxEnergy":  0,
+  "TurretPos":  [
+    0.0,
+    0.325,
+    0.03125
+  ],
+  "TurretTurnSpeed":  [
+    10,
+    10
+  ],
+  "TurretPitchRange":  [
+    -40,
+    60
+  ],
+  "BarrelPos":  [
+    0.0,
+    0.17551875,
+    0.0388125
+  ],
+  "Seats":  {
+    "Transform":  "Turret",
+    "Position":  [
+      0,
+      -0.8689,
+      -1
+    ],
+    "MinPitch":  -9,
+    "MaxPitch":  60,
+    "CameraPos":  {
+      "UseFixedCameraPos":  true,
+      "Position":  [
+        0.21875,
+        0.4375,
+        -0.9375
+      ],
+      "Transform":  "Barrel",
+      "ZoomPosition":  [
+        0.0,
+        0.19603125,
+        -0.11530625
+      ],
+      "Direction":  "Barrel"
+    },
+    "Weapons":  [
+      "Cannon"
+    ],
+    "Sensitivity":  [
+      0.55,
+      0.75,
+      1
+    ],
+    "DismountInfo":  {
+      "Transform":  "Turret",
+      "Position":  [
+        0,
+        0.25,
+        0
+      ]
+    }
+  },
+  "UsePassengerCreativeAmmoBox":  true,
+  "Weapons":  {
+    "Cannon":  {
+      "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/gun_12_7mm.png",
+      "DefaultFireMode":  "Auto",
+      "AvailableFireModes":  "Auto",
+      "Spread":  0.25,
+      "CrosshairColor":  "0x00ff66",
+      "Projectile":  "superbwarfare:projectile",
+      "DefaultZoom":  3,
+      "RPM":  600,
+      "Damage":  40,
+      "BypassesArmor":  0.2,
+      "Magazine":  50,
+      "EmptyReloadTime":  80,
+      "Velocity":  16.6667,
+      "Gravity":  0.05,
+      "RecoilTime":  20,
+      "RecoilForce":  5,
+      "HeatPerShoot":  3.75,
+      "NaturalCooldown":  1,
+      "ShootAnimationTime":  1,
+      "AmmoType":  "@HeavyAmmo",
+      "ShootPos":  {
+        "UseFixedCameraPos":  true,
+        "Position":  [
+          0.21875,
+          0.4375,
+          -0.9375
+        ],
+        "Transform":  "Barrel",
+        "Positions":  [
+          [
+            -0.00064375,
+            0.0689,
+            1.25905625
+          ]
+        ],
+        "Directions":  [
+          "Barrel"
+        ]
+      },
+      "Name":  "dragonrise_reforge:QJZ89",
+      "SoundInfo":  {
+        "Fire1P":  "dragonrise_reforge:qjz89_fire_1p",
+        "Fire3P":  "dragonrise_reforge:qjz89_fire_3p",
+        "Fire3PFar":  "dragonrise_reforge:qjz89_fire_3p_far",
+        "Fire3PVeryFar":  "dragonrise_reforge:qjz89_fire_3p_very_far",
+        "Change":  "dragonrise_reforge:change_weapon"
+    },
+      "SoundRadius":  16
+    }
+  },
+  "ThirdPersonCameraPos":  [
+    -0.3,
+    1,
+    -1
+  ],
+  "Mass":  0.05,
+  "DamageModifiers":  [
+    "minecraft:lava * 2.667",
+    "All * 1.75",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3"
+  ],
+  "VehicleContainerType":  "Mini",
+  "EngineType":  "Fixed",
+  "HasLowHealthWarning":  false,
+  "SelfHurtPercent":  0,
+  "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/qjz89_icon.png",
+  "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+  "Type":  "Defense",
+  "Models":  [
+    {
+      "Model":  "dragonrise_reforge:models/bedrock/vehicle/qjz89.geo.json",
+      "Texture":  "dragonrise_reforge:textures/entity/qjz89.png"
+    }
+  ]
+}

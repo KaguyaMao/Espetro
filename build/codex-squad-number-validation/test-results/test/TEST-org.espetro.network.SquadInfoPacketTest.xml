@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.espetro.network.SquadInfoPacketTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-08-13T07:32:15" hostname="DESKTOP-1GK3H0A" time="0.534">
+  <properties/>
+  <testcase name="preservesInternalAndFactionDisplayIdsSeparately()" classname="org.espetro.network.SquadInfoPacketTest" time="0.534"/>
+  <system-out><![CDATA[2026-08-13 15:32:15,818 Test worker WARN Advanced terminal features are not available in this environment
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

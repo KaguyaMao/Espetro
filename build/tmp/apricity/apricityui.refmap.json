@@ -1,0 +1,26 @@
+{
+  "mappings": {
+    "com/sighs/apricityui/mixin/AbstractContainerScreenMixin": {
+      "recalculateQuickCraftRemaining": "m_97818_()V",
+      "renderFloatingItem(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_280211_(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+      "isHovering(Lnet/minecraft/world/inventory/Slot;DD)Z": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_97774_(Lnet/minecraft/world/inventory/Slot;DD)Z",
+      "renderSlot": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_280092_(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/inventory/Slot;)V"
+    },
+    "com/sighs/apricityui/mixin/CommonKeyboardHandlerMixin": {
+      "charTyped": "Lnet/minecraft/client/KeyboardHandler;m_90889_(JII)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/sighs/apricityui/mixin/AbstractContainerScreenMixin": {
+        "recalculateQuickCraftRemaining": "m_97818_()V",
+        "renderFloatingItem(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_280211_(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+        "isHovering(Lnet/minecraft/world/inventory/Slot;DD)Z": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_97774_(Lnet/minecraft/world/inventory/Slot;DD)Z",
+        "renderSlot": "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_280092_(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/inventory/Slot;)V"
+      },
+      "com/sighs/apricityui/mixin/CommonKeyboardHandlerMixin": {
+        "charTyped": "Lnet/minecraft/client/KeyboardHandler;m_90889_(JII)V"
+      }
+    }
+  }
+}

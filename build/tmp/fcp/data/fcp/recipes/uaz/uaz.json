@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "3 #superbwarfare:storage_blocks/steel",
+    "superbwarfare:medium_battery_pack",
+    "4 superbwarfare:wheel",
+    "superbwarfare:motor"
+  ],
+  "result": {
+    "entity": "fcp:uaz"
+  }
+}

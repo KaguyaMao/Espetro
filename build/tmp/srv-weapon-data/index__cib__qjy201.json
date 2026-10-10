@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.qjy201.name",
+  "display": "cib:qjy201_display",
+  "data": "cib:qjy201_data",
+  "type": "mg",
+  "item_type": "modern_kinetic",
+  "tooltip": "cib.gun.qjy201.desc",
+  "sort": 2461600
+}

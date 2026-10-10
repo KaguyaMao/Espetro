@@ -1,0 +1,7 @@
+{
+  "ID": "fcp:stryker_tow",
+  "Model": {
+    "Model": "fcp:geo/stryker_tow.geo.json",
+    "Texture": "fcp:textures/entity/stryker/stryker_1.png"
+  }
+}

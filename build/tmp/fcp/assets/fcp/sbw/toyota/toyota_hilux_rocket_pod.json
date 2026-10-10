@@ -1,0 +1,7 @@
+﻿{
+  "ID": "fcp:toyota_hilux_rocket_pod",
+  "Model": {
+    "Model": "fcp:geo/toyota_hilux_rocket_pod.geo.json",
+    "Texture": "fcp:textures/entity/toyota.png"
+  }
+}

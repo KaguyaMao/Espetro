@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_slime_covered_leather": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "superbwarfare:slime_covered_leather"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "superbwarfare:engineering_plastic"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_slime_covered_leather",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "superbwarfare:engineering_plastic"
+    ]
+  },
+  "sends_telemetry_event": false
+}

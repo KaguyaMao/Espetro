@@ -1,0 +1,443 @@
+{
+  "ID": "vvp:mi_24",
+  "MaxHealth": 325,
+  "MaxEnergy": 10000000,
+  "OBB": [
+    {
+      "Size": [
+        0.875,
+        1.125,
+        1.5625
+      ],
+      "Position": [
+        0,
+        2.4375,
+        1.125
+      ]
+    },
+    {
+      "Size": [
+        1,
+        1.125,
+        3.25
+      ],
+      "Position": [
+        0,
+        2.4375,
+        -3.625
+      ]
+    },
+    {
+      "Size": [
+        1,
+        0.375,
+        3.40625
+      ],
+      "Position": [
+        0,
+        3.9375,
+        -3.46875
+      ],
+      "Part": "MainEngine"
+    },
+    {
+      "Size": [
+        0.9375,
+        1.3125,
+        1.59375
+      ],
+      "Position": [
+        0,
+        2.75,
+        -8.46875
+      ]
+    },
+    {
+      "Size": [
+        0.6875,
+        0.65625,
+        3.3125
+      ],
+      "Position": [
+        0,
+        3.21875,
+        -13.375
+      ]
+    },
+    {
+      "Size": [
+        0.6875,
+        1.375,
+        0.625
+      ],
+      "Position": [
+        0,
+        3.9375,
+        -17.3125
+      ],
+      "Part": "SubEngine"
+    }
+  ],
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0,
+        1.5,
+        0.25
+      ],
+      "Sensitivity": [
+        0,
+        0,
+        0
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "Position": [
+          0,
+          3.4,
+          0
+        ],
+        "UseFixedCameraPos": true,
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [
+          -3.8,
+          3.5,
+          -16
+        ]
+      },
+      "CanRotateHead": false,
+      "MinPitch": -80,
+      "MaxPitch": 80,
+      "MinYaw": -80,
+      "MaxYaw": 80,
+      "Weapons": [
+        "Cannon"
+      ],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          2.5
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0,
+        1,
+        1.8
+      ],
+      "Sensitivity": [
+        0.59,
+        0.8,
+        0.9
+      ],
+      "MinPitch": -60,
+      "MaxPitch": 10,
+      "MinYaw": -110,
+      "MaxYaw": 110,
+      "Weapons": [
+        "Rocket"
+      ],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          3.5625
+        ]
+      }
+    }
+  ],
+  "Weapons": {
+    "Cannon": {
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Projectile": "superbwarfare:small_cannon_shell",
+      "Icon": "vvp:textures/screens/vehicle_weapon/12_7mm.png",
+      "DefaultZoom": 3,
+      "RPM": 800,
+      "Velocity": 30,
+      "Damage": 55,
+      "ExplosionDamage": 15,
+      "ExplosionRadius": 2.2,
+      "HeatPerShoot": 7,
+      "NaturalCooldown": 1,
+      "RecoilTime": 31,
+      "RecoilForce": 0.62,
+      "Spread": 0.25,
+      "Name": "weapon.vvp.2a42_30mm",
+      "SoundInfo": {
+        "Fire1P": "vvp:pkt_fire",
+        "Fire3P": "vvp:pkt_fire",
+        "Fire3PFar": "vvp:pkt_fire",
+        "Fire3PVeryFar": "vvp:pkt_fire",
+        "Change": "vvp:into_autocannon"
+      },
+      "Crosshair": "@VehicleCommonGunDynamic",
+      "CrosshairColor": "0xFFC700",
+      "SoundRadius": 24,
+      "AmmoType": "vvp:item_12_7mm",
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "Positions": [
+          [
+            -0.5625,
+            1.59375,
+            2.9375
+          ],
+          [
+            -0.5625,
+            1.484375,
+            2.9375
+          ]
+        ],
+        "Directions": [
+          "Vehicle"
+        ]
+      }
+    },
+    "Rocket": {
+      "AmmoType": "superbwarfare:small_rocket",
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/small_rocket.png",
+      "DefaultZoom": 2,
+      "DefaultFireMode": "Auto",
+      "AvailableFireModes": "Auto",
+      "Magazine": 60,
+      "EmptyReloadTime": 220,
+      "Projectile": "superbwarfare:small_rocket",
+      "Spread": 0.25,
+      "Name": "weapon.vvp.80mm_rocket",
+      "RPM": 450,
+      "Damage": 80,
+      "ExplosionDamage": 32,
+      "ExplosionRadius": 1.7,
+      "Gravity": 0.02,
+      "Velocity": 16,
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "ShootPositionForHud": [
+          0,
+          0.62,
+          0.8
+        ],
+        "ShootDirectionForHud": [
+          0,
+          0.018,
+          1
+        ],
+        "Positions": [
+          [
+            -1.875,
+            2.0625,
+            -3.5
+          ],
+          [
+            -2.859375,
+            1.875,
+            -3.5
+          ],
+          [
+            1.875,
+            2.0625,
+            -3.5
+          ],
+          [
+            2.859375,
+            1.875,
+            -3.5
+          ]
+        ],
+        "Directions": [
+          [
+            0.003,
+            0.025,
+            1
+          ],
+          [
+            -0.003,
+            0.025,
+            1
+          ]
+        ]
+      },
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:small_rocket_fire_1p",
+        "Fire3P": "superbwarfare:small_rocket_fire_3p",
+        "VehicleReload3p": "superbwarfare:missile_reload",
+        "VehicleReloadSoundTime": 7,
+        "Change": "vvp:into_atgm"
+      },
+      "Crosshair": "@Empty",
+      "SoundRadius": 12
+    },
+    "@Missile": {
+      "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/missile_9m120.png",
+      "DefaultFireMode": "Semi",
+      "AvailableFireModes": "Semi",
+      "RPM": 12,
+      "EmptyReloadTime": 240,
+      "AmmoType": "superbwarfare:medium_anti_ground_missile",
+      "Projectile": "superbwarfare:wire_guide_missile",
+      "Name": "weapon.vvp.9m120_missile",
+      "Damage": 650,
+      "ExplosionDamage": 80,
+      "ExplosionRadius": 3.9,
+      "Velocity": 3,
+      "CrosshairColor": "0xFFC700",
+      "SoundInfo": {
+        "Fire1P": "superbwarfare:bomb_release",
+        "Fire3P": "superbwarfare:bomb_release",
+        "VehicleReload3p": "superbwarfare:bomb_reload",
+        "VehicleReloadSoundTime": 11,
+        "Change": "vvp:into_atgm"
+      },
+      "SoundRadius": 8
+    },
+    "PassengerMissile": {
+      "DefaultZoom": 3,
+      "Magazine": 8,
+      "Template": "@Missile",
+      "Crosshair": "@VehicleCommonMissile",
+      "ShootPos": {
+        "Transform": "Vehicle",
+        "ShootPositionForHud": [
+          0,
+          1.0625,
+          5.625
+        ],
+        "Positions": [
+          [
+            2.258,
+            1.932,
+            0
+          ],
+          [
+            2.258,
+            1.67,
+            0
+          ],
+          [
+            2.446,
+            1.932,
+            0
+          ],
+          [
+            2.446,
+            1.67,
+            0
+          ],
+          [
+            2.806,
+            1.932,
+            0
+          ],
+          [
+            2.806,
+            1.67,
+            0
+          ],
+          [
+            2.993,
+            1.932,
+            0
+          ],
+          [
+            2.993,
+            1.67,
+            0
+          ]
+        ],
+        "BoundUpWithAmmoAmount": true,
+        "ViewDirection": "Barrel"
+      }
+    }
+  },
+  "EngineType": "Helicopter",
+  "EngineInfo": {
+    "EnergyCostRate": 320,
+    "Increment": 1.08,
+    "Decrement": 0.8,
+    "PitchSpeed": 1.01,
+    "YawSpeed": 0.85,
+    "RollSpeed": 0.6,
+    "LiftSpeed": 1.08,
+    "Speed": 1.35,
+    "EngineStartSound": "superbwarfare:mi_28_engine_start",
+    "EngineSoundVolume": 2
+  },
+  "EngineSound": "superbwarfare:mi_28_engine",
+  "ThirdPersonCameraPos": [
+    2.7,
+    4,
+    12
+  ],
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1.8,
+  "Mass": 1.2,
+  "AllowFreeCam": true,
+  "HasDecoy": true,
+  "DamageModifiers": [
+    "minecraft:arrow * 0.1",
+    "minecraft:trident * 0.2",
+    "minecraft:mob_attack * 0.3",
+    "minecraft:mob_attack_no_aggro * 0.3",
+    "minecraft:mob_projectile * 0.2",
+    "minecraft:player_attack * 0.2",
+    "minecraft:lava - -10",
+    "minecraft:lava * 2.6",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3",
+    "minecraft:explosion * 3.5",
+    "minecraft:player_explosion * 3.5",
+    "superbwarfare:projectile_hit * 0.6",
+    "superbwarfare:grapeshot_hit * 0.5",
+    "#superbwarfare:projectile * 0.03",
+    "#superbwarfare:projectile_absolute * 0.3",
+    "superbwarfare:vehicle_strike * 6",
+    "superbwarfare:laser * 0.35",
+    "@superbwarfare:cannon_shell * 1.5",
+    "@superbwarfare:small_cannon_shell * 0.95",
+    "@superbwarfare:gun_grenade * 2.2",
+    "@superbwarfare:rgo_grenade * 6",
+    "@superbwarfare:hand_grenade * 5",
+    "@superbwarfare:mortar_shell * 3",
+    "@#superbwarfare:at_rocket * 1.5",
+    "All * 0.77",
+    "All - 10",
+    "@#superbwarfare:aerial_bomb * 2"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Giant",
+    "ExplosionDamage": 400,
+    "ExplosionRadius": 7.6,
+    "CrashPassengers": true,
+    "ExplodeBlocks": false
+  },
+  "HUDColor": "0x66FF00",
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/mi_28_icon.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/aircraft_ru.png",
+  "Type": "Helicopter",
+  "HudType": "@Helicopter",
+  "TerrainCompat": [
+    [
+      -1.284,
+      0,
+      1.728
+    ],
+    [
+      1.284,
+      0,
+      1.728
+    ],
+    [
+      0,
+      0.58,
+      -11.1
+    ]
+  ],
+  "TerrainCompatRotateRate": 0.18
+}

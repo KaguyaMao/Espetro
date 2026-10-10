@@ -1,0 +1,18 @@
+{
+  "Skins": [
+    {
+      "Id": "blue",
+      "Name": "blue",
+      "Description": "使用喷漆罐喷涂的 blue涂装",
+      "Texture": "dragonrise_reforge:textures/entity/ural4320_zu23_blue.png",
+      "Priority": 0
+    },
+    {
+      "Id": "sand",
+      "Name": "沙漠涂装",
+      "Description": "使用喷漆罐喷涂的 沙漠涂装涂装",
+      "Texture": "dragonrise_reforge:textures/entity/ural4320_zu23_sand.png",
+      "Priority": 0
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:lightning_rod"
+    },
+    "b": {
+      "item": "minecraft:lever"
+    },
+    "c": {
+      "tag": "forge:plates/plastic"
+    },
+    "d": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "e": {
+      "tag": "forge:glass_panes"
+    }
+  },
+  "pattern": [
+    "a a",
+    "beb",
+    "dcd"
+  ],
+  "result": {
+    "item": "superbwarfare:monitor"
+  },
+  "show_notification": true
+}

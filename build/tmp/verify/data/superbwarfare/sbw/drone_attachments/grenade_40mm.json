@@ -1,0 +1,27 @@
+{
+  "Item": "superbwarfare:grenade_40mm",
+  "Entity": "superbwarfare:gun_grenade",
+  "IsKamikaze": false,
+  "Count": 4,
+  "DropData": {
+    "Damage": 20,
+    "ExplosionDamage": 50,
+    "Radius": 5
+  },
+  "Offset": [
+    0,
+    0.035,
+    -0.05
+  ],
+  "Rotation": [
+    90,
+    0,
+    0
+  ],
+  "Scale": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "TickCount": 2
+}

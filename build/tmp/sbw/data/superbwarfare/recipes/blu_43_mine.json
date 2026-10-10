@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "b": {
+      "item": "superbwarfare:high_energy_explosives"
+    },
+    "c": {
+      "tag": "forge:plates/plastic"
+    }
+  },
+  "pattern": [
+    "a",
+    "b",
+    "c"
+  ],
+  "result": {
+    "count": 8,
+    "item": "superbwarfare:blu_43_mine"
+  },
+  "show_notification": true
+}

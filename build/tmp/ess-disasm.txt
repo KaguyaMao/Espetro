@@ -1,0 +1,347 @@
+﻿Compiled from "EntitySectionStorage.java"
+public class net.minecraft.world.level.entity.EntitySectionStorage<T extends net.minecraft.world.level.entity.EntityAccess> {
+  private final java.lang.Class<T> f_156850_;
+
+  private final it.unimi.dsi.fastutil.longs.Long2ObjectFunction<net.minecraft.world.level.entity.Visibility> f_156851_;
+
+  private final it.unimi.dsi.fastutil.longs.Long2ObjectMap<net.minecraft.world.level.entity.EntitySection<T>> f_156852_;
+
+  private final it.unimi.dsi.fastutil.longs.LongSortedSet f_156853_;
+
+  public net.minecraft.world.level.entity.EntitySectionStorage(java.lang.Class<T>, it.unimi.dsi.fastutil.longs.Long2ObjectFunction<net.minecraft.world.level.entity.Visibility>);
+    Code:
+       0: aload_0
+       1: invokespecial #41                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: new           #43                 // class it/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap
+       8: dup
+       9: invokespecial #44                 // Method it/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap."<init>":()V
+      12: putfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+      15: aload_0
+      16: new           #48                 // class it/unimi/dsi/fastutil/longs/LongAVLTreeSet
+      19: dup
+      20: invokespecial #49                 // Method it/unimi/dsi/fastutil/longs/LongAVLTreeSet."<init>":()V
+      23: putfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      26: aload_0
+      27: aload_1
+      28: putfield      #370                // Field f_156850_:Ljava/lang/Class;
+      31: aload_0
+      32: aload_2
+      33: putfield      #372                // Field f_156851_:Lit/unimi/dsi/fastutil/longs/Long2ObjectFunction;
+      36: return
+
+  public void m_188362_(net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer<net.minecraft.world.level.entity.EntitySection<T>>);
+    Code:
+       0: iconst_2
+       1: istore_3
+       2: aload_1
+       3: getfield      #384                // Field net/minecraft/world/phys/AABB.f_82288_:D
+       6: ldc2_w        #68                 // double 2.0d
+       9: dsub
+      10: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      13: istore        4
+      15: aload_1
+      16: getfield      #392                // Field net/minecraft/world/phys/AABB.f_82289_:D
+      19: ldc2_w        #77                 // double 4.0d
+      22: dsub
+      23: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      26: istore        5
+      28: aload_1
+      29: getfield      #395                // Field net/minecraft/world/phys/AABB.f_82290_:D
+      32: ldc2_w        #68                 // double 2.0d
+      35: dsub
+      36: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      39: istore        6
+      41: aload_1
+      42: getfield      #398                // Field net/minecraft/world/phys/AABB.f_82291_:D
+      45: ldc2_w        #68                 // double 2.0d
+      48: dadd
+      49: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      52: istore        7
+      54: aload_1
+      55: getfield      #401                // Field net/minecraft/world/phys/AABB.f_82292_:D
+      58: dconst_0
+      59: dadd
+      60: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      63: istore        8
+      65: aload_1
+      66: getfield      #404                // Field net/minecraft/world/phys/AABB.f_82293_:D
+      69: ldc2_w        #68                 // double 2.0d
+      72: dadd
+      73: invokestatic  #389                // Method net/minecraft/core/SectionPos.m_175552_:(D)I
+      76: istore        9
+      78: iload         4
+      80: istore        10
+      82: iload         10
+      84: iload         7
+      86: if_icmpgt     254
+      89: iload         10
+      91: iconst_0
+      92: iconst_0
+      93: invokestatic  #407                // Method net/minecraft/core/SectionPos.m_123209_:(III)J
+      96: lstore        11
+      98: iload         10
+     100: iconst_m1
+     101: iconst_m1
+     102: invokestatic  #407                // Method net/minecraft/core/SectionPos.m_123209_:(III)J
+     105: lstore        13
+     107: aload_0
+     108: getfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+     111: lload         11
+     113: lload         13
+     115: lconst_1
+     116: ladd
+     117: invokeinterface #97,  5           // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.subSet:(JJ)Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+     122: invokeinterface #101,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.iterator:()Lit/unimi/dsi/fastutil/longs/LongBidirectionalIterator;
+     127: astore        15
+     129: aload         15
+     131: invokeinterface #109,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongIterator.hasNext:()Z
+     136: ifeq          248
+     139: aload         15
+     141: invokeinterface #113,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongIterator.nextLong:()J
+     146: lstore        16
+     148: lload         16
+     150: invokestatic  #410                // Method net/minecraft/core/SectionPos.m_123225_:(J)I
+     153: istore        18
+     155: lload         16
+     157: invokestatic  #413                // Method net/minecraft/core/SectionPos.m_123230_:(J)I
+     160: istore        19
+     162: iload         18
+     164: iload         5
+     166: if_icmplt     245
+     169: iload         18
+     171: iload         8
+     173: if_icmpgt     245
+     176: iload         19
+     178: iload         6
+     180: if_icmplt     245
+     183: iload         19
+     185: iload         9
+     187: if_icmpgt     245
+     190: aload_0
+     191: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+     194: lload         16
+     196: invokeinterface #124,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectMap.get:(J)Ljava/lang/Object;
+     201: checkcast     #415                // class net/minecraft/world/level/entity/EntitySection
+     204: astore        20
+     206: aload         20
+     208: ifnull        245
+     211: aload         20
+     213: invokevirtual #418                // Method net/minecraft/world/level/entity/EntitySection.m_156833_:()Z
+     216: ifne          245
+     219: aload         20
+     221: invokevirtual #422                // Method net/minecraft/world/level/entity/EntitySection.m_156848_:()Lnet/minecraft/world/level/entity/Visibility;
+     224: invokevirtual #427                // Method net/minecraft/world/level/entity/Visibility.m_157694_:()Z
+     227: ifeq          245
+     230: aload_2
+     231: aload         20
+     233: invokeinterface #431,  2          // InterfaceMethod net/minecraft/util/AbortableIterationConsumer.m_260972_:(Ljava/lang/Object;)Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+     238: invokevirtual #434                // Method net/minecraft/util/AbortableIterationConsumer$Continuation.m_261146_:()Z
+     241: ifeq          245
+     244: return
+     245: goto          129
+     248: iinc          10, 1
+     251: goto          82
+     254: return
+
+  public java.util.stream.LongStream m_156861_(long);
+    Code:
+       0: lload_1
+       1: invokestatic  #447                // Method net/minecraft/world/level/ChunkPos.m_45592_:(J)I
+       4: istore_3
+       5: lload_1
+       6: invokestatic  #450                // Method net/minecraft/world/level/ChunkPos.m_45602_:(J)I
+       9: istore        4
+      11: aload_0
+      12: iload_3
+      13: iload         4
+      15: invokevirtual #453                // Method m_156858_:(II)Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      18: astore        5
+      20: aload         5
+      22: invokeinterface #176,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.isEmpty:()Z
+      27: ifeq          34
+      30: invokestatic  #182                // InterfaceMethod java/util/stream/LongStream.empty:()Ljava/util/stream/LongStream;
+      33: areturn
+      34: aload         5
+      36: invokeinterface #101,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.iterator:()Lit/unimi/dsi/fastutil/longs/LongBidirectionalIterator;
+      41: astore        6
+      43: aload         6
+      45: sipush        1301
+      48: invokestatic  #188                // Method java/util/Spliterators.spliteratorUnknownSize:(Ljava/util/PrimitiveIterator$OfLong;I)Ljava/util/Spliterator$OfLong;
+      51: iconst_0
+      52: invokestatic  #194                // Method java/util/stream/StreamSupport.longStream:(Ljava/util/Spliterator$OfLong;Z)Ljava/util/stream/LongStream;
+      55: areturn
+
+  private it.unimi.dsi.fastutil.longs.LongSortedSet m_156858_(int, int);
+    Code:
+       0: iload_1
+       1: iconst_0
+       2: iload_2
+       3: invokestatic  #407                // Method net/minecraft/core/SectionPos.m_123209_:(III)J
+       6: lstore_3
+       7: iload_1
+       8: iconst_m1
+       9: iload_2
+      10: invokestatic  #407                // Method net/minecraft/core/SectionPos.m_123209_:(III)J
+      13: lstore        5
+      15: aload_0
+      16: getfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      19: lload_3
+      20: lload         5
+      22: lconst_1
+      23: ladd
+      24: invokeinterface #97,  5           // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.subSet:(JJ)Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      29: areturn
+
+  public java.util.stream.Stream<net.minecraft.world.level.entity.EntitySection<T>> m_156888_(long);
+    Code:
+       0: aload_0
+       1: lload_1
+       2: invokevirtual #460                // Method m_156861_:(J)Ljava/util/stream/LongStream;
+       5: aload_0
+       6: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+       9: dup
+      10: invokestatic  #205                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      13: pop
+      14: invokedynamic #463,  0            // InvokeDynamic #6:apply:(Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;)Ljava/util/function/LongFunction;
+      19: invokeinterface #227,  2          // InterfaceMethod java/util/stream/LongStream.mapToObj:(Ljava/util/function/LongFunction;)Ljava/util/stream/Stream;
+      24: invokedynamic #466,  0            // InvokeDynamic #7:test:()Ljava/util/function/Predicate;
+      29: invokeinterface #245,  2          // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      34: areturn
+
+  private static long m_156899_(long);
+    Code:
+       0: lload_0
+       1: invokestatic  #471                // Method net/minecraft/core/SectionPos.m_123213_:(J)I
+       4: lload_0
+       5: invokestatic  #413                // Method net/minecraft/core/SectionPos.m_123230_:(J)I
+       8: invokestatic  #474                // Method net/minecraft/world/level/ChunkPos.m_45589_:(II)J
+      11: lreturn
+
+  public net.minecraft.world.level.entity.EntitySection<T> m_156893_(long);
+    Code:
+       0: aload_0
+       1: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+       4: lload_1
+       5: aload_0
+       6: invokedynamic #484,  0            // InvokeDynamic #8:get:(Lnet/minecraft/world/level/entity/EntitySectionStorage;)Lit/unimi/dsi/fastutil/longs/Long2ObjectFunction;
+      11: invokeinterface #262,  4          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectMap.computeIfAbsent:(JLit/unimi/dsi/fastutil/longs/Long2ObjectFunction;)Ljava/lang/Object;
+      16: checkcast     #415                // class net/minecraft/world/level/entity/EntitySection
+      19: areturn
+
+  public net.minecraft.world.level.entity.EntitySection<T> m_156895_(long);
+    Code:
+       0: aload_0
+       1: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+       4: lload_1
+       5: invokeinterface #124,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectMap.get:(J)Ljava/lang/Object;
+      10: checkcast     #415                // class net/minecraft/world/level/entity/EntitySection
+      13: areturn
+
+  private net.minecraft.world.level.entity.EntitySection<T> m_156901_(long);
+    Code:
+       0: lload_1
+       1: invokestatic  #489                // Method m_156899_:(J)J
+       4: lstore_3
+       5: aload_0
+       6: getfield      #372                // Field f_156851_:Lit/unimi/dsi/fastutil/longs/Long2ObjectFunction;
+       9: lload_3
+      10: invokeinterface #209,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectFunction.get:(J)Ljava/lang/Object;
+      15: checkcast     #424                // class net/minecraft/world/level/entity/Visibility
+      18: astore        5
+      20: aload_0
+      21: getfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      24: lload_1
+      25: invokeinterface #269,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.add:(J)Z
+      30: pop
+      31: new           #415                // class net/minecraft/world/level/entity/EntitySection
+      34: dup
+      35: aload_0
+      36: getfield      #370                // Field f_156850_:Ljava/lang/Class;
+      39: aload         5
+      41: invokespecial #492                // Method net/minecraft/world/level/entity/EntitySection."<init>":(Ljava/lang/Class;Lnet/minecraft/world/level/entity/Visibility;)V
+      44: areturn
+
+  public it.unimi.dsi.fastutil.longs.LongSet m_156857_();
+    Code:
+       0: new           #276                // class it/unimi/dsi/fastutil/longs/LongOpenHashSet
+       3: dup
+       4: invokespecial #277                // Method it/unimi/dsi/fastutil/longs/LongOpenHashSet."<init>":()V
+       7: astore_1
+       8: aload_0
+       9: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+      12: invokeinterface #280,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectMap.keySet:()Lit/unimi/dsi/fastutil/longs/LongSet;
+      17: aload_1
+      18: invokedynamic #500,  0            // InvokeDynamic #9:accept:(Lit/unimi/dsi/fastutil/longs/LongSet;)Lit/unimi/dsi/fastutil/longs/LongConsumer;
+      23: invokeinterface #295,  2          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.forEach:(Lit/unimi/dsi/fastutil/longs/LongConsumer;)V
+      28: aload_1
+      29: areturn
+
+  public void m_261111_(net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer<T>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_1
+       3: aload_2
+       4: invokedynamic #513,  0            // InvokeDynamic #10:m_260972_:(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)Lnet/minecraft/util/AbortableIterationConsumer;
+       9: invokevirtual #515                // Method m_188362_:(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)V
+      12: return
+
+  public <U extends T> void m_261191_(net.minecraft.world.level.entity.EntityTypeTest<T, U>, net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer<U>);
+    Code:
+       0: aload_0
+       1: aload_2
+       2: aload_1
+       3: aload_2
+       4: aload_3
+       5: invokedynamic #529,  0            // InvokeDynamic #11:m_260972_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)Lnet/minecraft/util/AbortableIterationConsumer;
+      10: invokevirtual #515                // Method m_188362_:(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)V
+      13: return
+
+  public void m_156897_(long);
+    Code:
+       0: aload_0
+       1: getfield      #366                // Field f_156852_:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
+       4: lload_1
+       5: invokeinterface #325,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/Long2ObjectMap.remove:(J)Ljava/lang/Object;
+      10: pop
+      11: aload_0
+      12: getfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+      15: lload_1
+      16: invokeinterface #327,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.remove:(J)Z
+      21: pop
+      22: return
+
+  public int m_156887_();
+    Code:
+       0: aload_0
+       1: getfield      #368                // Field f_156853_:Lit/unimi/dsi/fastutil/longs/LongSortedSet;
+       4: invokeinterface #332,  1          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSortedSet.size:()I
+       9: ireturn
+
+  private static net.minecraft.util.AbortableIterationConsumer$Continuation m_260795_(net.minecraft.world.level.entity.EntityTypeTest, net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer, net.minecraft.world.level.entity.EntitySection);
+    Code:
+       0: aload_3
+       1: aload_0
+       2: aload_1
+       3: aload_2
+       4: invokevirtual #543                // Method net/minecraft/world/level/entity/EntitySection.m_188348_:(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+       7: areturn
+
+  private static net.minecraft.util.AbortableIterationConsumer$Continuation m_260794_(net.minecraft.world.phys.AABB, net.minecraft.util.AbortableIterationConsumer, net.minecraft.world.level.entity.EntitySection);
+    Code:
+       0: aload_2
+       1: aload_0
+       2: aload_1
+       3: invokevirtual #551                // Method net/minecraft/world/level/entity/EntitySection.m_260830_:(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/util/AbortableIterationConsumer;)Lnet/minecraft/util/AbortableIterationConsumer$Continuation;
+       6: areturn
+
+  private static void m_156884_(it.unimi.dsi.fastutil.longs.LongSet, long);
+    Code:
+       0: aload_0
+       1: lload_1
+       2: invokestatic  #489                // Method m_156899_:(J)J
+       5: invokeinterface #339,  3          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.add:(J)Z
+      10: pop
+      11: return
+}

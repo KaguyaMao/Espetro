@@ -68,31 +68,19 @@ public final class PartyScreen extends EspetroMenuScreen {
                 .setBorderColor(0x00000000));
         } else {
             int bw1 = EspetroAuiWidgets.textButtonWidth("§c退出队伍");
-            int bw2 = EspetroAuiWidgets.textButtonWidth(latest.isOwner ? "§e管理队伍" : "§7管理队伍");
-            int rowW = bw1 + bw2 + 8;
             root.addChild(EspetroAuiWidgets.button(
-                panelX + panelW / 2 - rowW / 2, y, bw1, 14,
+                panelX + panelW / 2 - bw1 / 2, y, bw1, 14,
                 "§c退出队伍", () -> {
                     if (!tutorialPreviewMode) NetworkManager.sendPartyLeave();
                 })
                 .setColors(0x00000000, 0x20402020, 0x30502020)
                 .setBorderColor(0x00000000));
-            if (latest.isOwner) {
-                root.addChild(EspetroAuiWidgets.button(
-                    panelX + panelW / 2 - rowW / 2 + bw1 + 8, y, bw2, 14,
-                    "§e管理队伍", () -> {
-                        if (!tutorialPreviewMode) {
-                            Minecraft.getInstance().setScreen(new ManagePartyScreen(this, latest.myPartyId));
-                        }
-                    })
-                    .setColors(0x00000000, 0x20303020, 0x30403020)
-                    .setBorderColor(0x00000000));
-            }
         }
 
         y += 20;
         // 分隔线
         root.addChild(EspetroAuiWidgets.rect(panelX + 8, y, panelW - 16, 1, 0x30FFFFFF));
+        y += 4;
         y += 8;
 
         // 队伍列表
@@ -101,25 +89,53 @@ public final class PartyScreen extends EspetroMenuScreen {
                 "§8暂无队伍，点击上方按钮创建", EspetroAuiWidgets.MUTED));
         } else {
             int listW = panelW - 24;
-            int entryH = 16;
             int listY = y;
             for (PartyListPacket.PartyInfo p : latest.parties) {
                 String lockIcon = p.locked ? "§c🔒 " : "";
                 String pwIcon = p.hasPassword ? " §7🔑" : "";
                 boolean isMyParty = p.myPartyId != null && p.myPartyId.equals(latest.myPartyId);
-                String ownerText = "§f" + p.ownerName + " 的队伍";
+                boolean canManage = isMyParty && latest.isOwner;
                 String infoText = "§7[" + p.memberCount + "/" + latest.maxPartySize + "]";
-                String fullText = lockIcon + ownerText + pwIcon + "  " + infoText;
-                if (isMyParty) fullText = "§a§l● " + fullText;
+                String nameText = (isMyParty ? "§a§l● §f" : "§f") + p.ownerName + " 的队伍";
 
-                String label = EspetroAuiWidgets.trimToWidth(fullText, listW - 50);
-                root.addChild(EspetroAuiWidgets.text(panelX + 16, listY + 2,
-                    label, isMyParty ? 0xFFFFFF : EspetroAuiWidgets.TEXT));
-                // 加入按钮
-                if (latest.myPartyId == null && !p.locked) {
+                // 队伍名称行
+                root.addChild(EspetroAuiWidgets.text(panelX + 16, listY,
+                    EspetroAuiWidgets.trimToWidth(lockIcon + nameText + pwIcon + "  " + infoText, listW - 120),
+                    isMyParty ? 0xFFFFFF : EspetroAuiWidgets.TEXT));
+
+                if (canManage) {
+                    // 锁定 / 密码 / 解散：紧跟在队伍名字后面（右对齐，先算宽度再裁队名）
+                    String lockLabel = p.locked ? "§a解锁" : "§c锁定";
+                    int lbw = EspetroAuiWidgets.textButtonWidth(lockLabel);
+                    int pwdbw = EspetroAuiWidgets.textButtonWidth("密码");
+                    int dbw = EspetroAuiWidgets.textButtonWidth("解散");
+                    int right = panelX + panelW - 16;
+                    int bx1 = right - dbw - lbw - pwdbw - 12;
+                    root.addChild(EspetroAuiWidgets.button(bx1, listY - 2, lbw, 14, lockLabel,
+                        () -> {
+                            if (!tutorialPreviewMode) NetworkManager.sendPartyToggleLock(p.partyId);
+                        })
+                        .setColors(0x00000000, 0x20303050, 0x30404060)
+                        .setBorderColor(0x00000000));
+                    root.addChild(EspetroAuiWidgets.button(bx1 + lbw + 6, listY - 2, pwdbw, 14, "§e密码",
+                        () -> {
+                            if (!tutorialPreviewMode) {
+                                Minecraft.getInstance().setScreen(
+                                    new SetPartyPasswordScreen(this, p.partyId));
+                            }
+                        })
+                        .setColors(0x00000000, 0x20303020, 0x30403020)
+                        .setBorderColor(0x00000000));
+                    root.addChild(EspetroAuiWidgets.button(bx1 + lbw + pwdbw + 12, listY - 2, dbw, 14, "§c解散",
+                        () -> {
+                            if (!tutorialPreviewMode) NetworkManager.sendPartyDisband(p.partyId);
+                        })
+                        .setColors(0x00000000, 0x20402020, 0x30502020)
+                        .setBorderColor(0x00000000));
+                } else if (latest.myPartyId == null && !p.locked) {
                     int jbw = EspetroAuiWidgets.textButtonWidth("加入");
                     root.addChild(EspetroAuiWidgets.button(
-                        panelX + panelW - 30 - jbw, listY, jbw, 14,
+                        panelX + panelW - 30 - jbw, listY - 2, jbw, 14,
                         "§a加入", () -> {
                             if (!tutorialPreviewMode) {
                                 if (p.hasPassword) {
@@ -133,7 +149,18 @@ public final class PartyScreen extends EspetroMenuScreen {
                         .setColors(0x00000000, 0x20254530, 0x30305530)
                         .setBorderColor(0x00000000));
                 }
-                listY += entryH;
+
+                if (isMyParty) {
+                    // 成员名单显示在队伍名称下面（队长与队员都能看到）
+                    String members = !p.memberNames.isEmpty()
+                        ? "§7成员： §f" + String.join("§7， §f", p.memberNames)
+                        : "§7成员： §8（同步中…）";
+                    root.addChild(EspetroAuiWidgets.text(panelX + 28, listY + 12,
+                        EspetroAuiWidgets.trimToWidth(members, listW - 16), EspetroAuiWidgets.TEXT));
+                    listY += 30;
+                } else {
+                    listY += 16;
+                }
             }
         }
     }
@@ -189,6 +216,7 @@ public final class PartyScreen extends EspetroMenuScreen {
             passwordField.setBordered(true);
             passwordField.setCanLoseFocus(true);
             addRenderableWidget(passwordField);
+            setFocused(passwordField);
         }
 
         @Override
@@ -244,16 +272,34 @@ public final class PartyScreen extends EspetroMenuScreen {
         public boolean isPauseScreen() { return false; }
     }
 
-    // ==================== 子界面：加入队伍 ====================
+    // ==================== 子界面：设置队伍密码 ====================
 
-    private static final class JoinPartyScreen extends EspetroMenuScreen {
+    private static final class SetPartyPasswordScreen extends EspetroMenuScreen {
         private final PartyScreen parent;
         private final UUID partyId;
+        private EditBox passwordField;
 
-        JoinPartyScreen(PartyScreen parent, UUID partyId) {
-            super(Component.literal("输入密码"));
+        SetPartyPasswordScreen(PartyScreen parent, UUID partyId) {
+            super(Component.literal("设置队伍密码"));
             this.parent = parent;
             this.partyId = partyId;
+        }
+
+        @Override
+        protected void init() {
+            super.init();
+            int pw = Math.min(260, width - 40);
+            int px = (width - pw) / 2;
+            int py = (height - 84) / 2;
+            int bw = pw - 60;
+            int bx = px + 30;
+            passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 28, bw, 14,
+                Component.literal("队伍密码"));
+            passwordField.setMaxLength(64);
+            passwordField.setBordered(true);
+            passwordField.setCanLoseFocus(true);
+            addRenderableWidget(passwordField);
+            setFocused(passwordField);
         }
 
         @Override
@@ -263,27 +309,30 @@ public final class PartyScreen extends EspetroMenuScreen {
 
         @Override
         protected void buildMenuRoot(GuiElement root) {
-            int pw = Math.min(240, width - 40);
-            int ph = 70;
+            int pw = Math.min(260, width - 40);
+            int ph = 84;
             int px = (width - pw) / 2;
             int py = (height - ph) / 2;
 
             root.addChild(EspetroAuiWidgets.panel(px, py, pw, ph, 0x00000000, 0x00000000));
             root.addChild(EspetroAuiWidgets.centeredText(px, py + 8, pw,
-                "§b输入队伍密码", EspetroAuiWidgets.TEXT));
+                "§b设置队伍密码", EspetroAuiWidgets.TEXT));
+            root.addChild(EspetroAuiWidgets.centeredText(px, py + 18, pw,
+                "§7留空保存 = 清除密码（有密码时需密码才能加入）", EspetroAuiWidgets.MUTED));
 
             int bw = pw - 60;
             int bx = px + 30;
-            root.addChild(EspetroAuiWidgets.button(bx, py + 30, bw / 2 - 4, 14,
-                "§a确认加入（1234）", () -> {
+            root.addChild(EspetroAuiWidgets.button(bx, py + 52, bw / 2 - 4, 14,
+                "§a保存密码", () -> {
                     if (!tutorialPreviewMode) {
-                        NetworkManager.sendPartyJoin(partyId, "1234");
+                        String pwd = passwordField != null ? passwordField.getValue().trim() : "";
+                        NetworkManager.sendPartySetPassword(partyId, pwd);
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })
                 .setColors(0x00000000, 0x20303050, 0x30404060)
                 .setBorderColor(0x00000000));
-            root.addChild(EspetroAuiWidgets.button(bx + bw / 2 + 4, py + 30, bw / 2 - 4, 14,
+            root.addChild(EspetroAuiWidgets.button(bx + bw / 2 + 4, py + 52, bw / 2 - 4, 14,
                 "§c返回", () -> Minecraft.getInstance().setScreen(parent))
                 .setColors(0x00000000, 0x20402020, 0x30502020)
                 .setBorderColor(0x00000000));
@@ -295,16 +344,34 @@ public final class PartyScreen extends EspetroMenuScreen {
         public boolean isPauseScreen() { return false; }
     }
 
-    // ==================== 子界面：管理队伍 ====================
+    // ==================== 子界面：加入队伍 ====================
 
-    private static final class ManagePartyScreen extends EspetroMenuScreen {
+    private static final class JoinPartyScreen extends EspetroMenuScreen {
         private final PartyScreen parent;
         private final UUID partyId;
+        private EditBox passwordField;
 
-        ManagePartyScreen(PartyScreen parent, UUID partyId) {
-            super(Component.literal("管理队伍"));
+        JoinPartyScreen(PartyScreen parent, UUID partyId) {
+            super(Component.literal("输入密码"));
             this.parent = parent;
             this.partyId = partyId;
+        }
+
+        @Override
+        protected void init() {
+            super.init();
+            int pw = Math.min(240, width - 40);
+            int px = (width - pw) / 2;
+            int py = (height - 70) / 2;
+            int bw = pw - 60;
+            int bx = px + 30;
+            passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 26, bw, 14,
+                Component.literal("队伍密码"));
+            passwordField.setMaxLength(64);
+            passwordField.setBordered(true);
+            passwordField.setCanLoseFocus(true);
+            addRenderableWidget(passwordField);
+            setFocused(passwordField);
         }
 
         @Override
@@ -314,56 +381,30 @@ public final class PartyScreen extends EspetroMenuScreen {
 
         @Override
         protected void buildMenuRoot(GuiElement root) {
-            int pw = Math.min(300, width - 40);
-            int py = (height - 110) / 2; // smaller panel without password button
+            int pw = Math.min(240, width - 40);
+            int ph = 78;
             int px = (width - pw) / 2;
-            int gap = 4;
+            int py = (height - ph) / 2;
 
-            root.addChild(EspetroAuiWidgets.panel(px, py, pw, 110, 0x00000000, 0x00000000));
-            root.addChild(EspetroAuiWidgets.centeredText(px, py + 6, pw,
-                "§b管理队伍", EspetroAuiWidgets.TEXT));
+            root.addChild(EspetroAuiWidgets.panel(px, py, pw, ph, 0x00000000, 0x00000000));
+            root.addChild(EspetroAuiWidgets.centeredText(px, py + 8, pw,
+                "§b输入队伍密码", EspetroAuiWidgets.TEXT));
 
-            PartyListPacket.PartyInfo myInfo = null;
-            if (latest != null) {
-                for (PartyListPacket.PartyInfo p : latest.parties) {
-                    if (p.partyId.equals(partyId)) { myInfo = p; break; }
-                }
-            }
-            boolean isLocked = myInfo != null && myInfo.locked;
-
-            int bw = pw - 40;
-            int bx = px + 20;
-            int by = py + 26;
-            int bh = 14;
-
-            root.addChild(EspetroAuiWidgets.button(bx, by, bw, bh,
-                isLocked ? "§a解锁队伍（允许加入）" : "§c锁定队伍（禁止加入）",
-                () -> {
+            int bw = pw - 60;
+            int bx = px + 30;
+            root.addChild(EspetroAuiWidgets.button(bx, py + 48, bw / 2 - 4, 14,
+                "§a确认加入", () -> {
                     if (!tutorialPreviewMode) {
-                        NetworkManager.sendPartyToggleLock(partyId);
+                        String pwd = passwordField != null ? passwordField.getValue().trim() : "";
+                        NetworkManager.sendPartyJoin(partyId, pwd);
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })
                 .setColors(0x00000000, 0x20303050, 0x30404060)
                 .setBorderColor(0x00000000));
-            by += bh + gap;
-
-            root.addChild(EspetroAuiWidgets.button(bx, by, bw, bh,
-                "§c解散队伍",
-                () -> {
-                    if (!tutorialPreviewMode) {
-                        NetworkManager.sendPartyDisband(partyId);
-                        Minecraft.getInstance().setScreen(parent);
-                    }
-                })
+            root.addChild(EspetroAuiWidgets.button(bx + bw / 2 + 4, py + 48, bw / 2 - 4, 14,
+                "§c返回", () -> Minecraft.getInstance().setScreen(parent))
                 .setColors(0x00000000, 0x20402020, 0x30502020)
-                .setBorderColor(0x00000000));
-            by += bh + gap;
-
-            int cbw = EspetroAuiWidgets.textButtonWidth("§7返回");
-            root.addChild(EspetroAuiWidgets.button(px + pw / 2 - cbw / 2, by + 8, cbw, 14,
-                "§7返回", () -> Minecraft.getInstance().setScreen(parent))
-                .setColors(0x00000000, 0x20404040, 0x30505050)
                 .setBorderColor(0x00000000));
         }
 
@@ -372,4 +413,6 @@ public final class PartyScreen extends EspetroMenuScreen {
         @Override
         public boolean isPauseScreen() { return false; }
     }
+
+
 }

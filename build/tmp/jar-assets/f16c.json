@@ -1,0 +1,19 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f16c.animation.json",
+    "ID":  "dragonrise_reforge:f16c",
+    "Model":  {
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/f16c.geo.json",
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f16c.animation.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/f16c.png"
+              },
+    "MouseSpeed":  [
+                       0.23,
+                       0.23
+                   ],
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/f16c.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/f16c.png"
+                   }
+               ]
+}

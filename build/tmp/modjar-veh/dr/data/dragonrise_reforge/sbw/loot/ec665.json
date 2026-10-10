@@ -1,0 +1,49 @@
+{
+  "ID": "dragonrise_reforge:ec665",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Chance": 1.0,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:medium_armament_module"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 1,
+          "Name": "superbwarfare:large_battery_pack"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        }
+      ],
+      "Rolls": 1,
+      "Source": "@Default",
+      "Type": "complete"
+    }
+  ]
+}

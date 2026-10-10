@@ -1,0 +1,12 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "aircraft",
+  "inputs": [
+    "16 #minecraft:wool",
+    "#minecraft:boats",
+    "8 minecraft:mutton"
+  ],
+  "result": {
+    "entity": "superbwarfare:air_sheep"
+  }
+}

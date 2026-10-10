@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/csk181.animation.json",
+    "ID":  "dragonrise_reforge:csk181",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/csk181.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/csk181.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/csk181.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/csk181.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/csk181.png"
+                   }
+               ]
+}

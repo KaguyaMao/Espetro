@@ -1,0 +1,668 @@
+[
+  {
+    "kind": "index",
+    "id": "cib:qbz192",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qbz192.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qbz192.json",
+    "chars": 214
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qbz192",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qbz192.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz192_data.json",
+    "chars": 2139
+  },
+  {
+    "kind": "index",
+    "id": "cib:qsz92",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qsz92.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qsz92.json",
+    "chars": 211
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qsz92",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qsz92.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qsz92_data.json",
+    "chars": 1646
+  },
+  {
+    "kind": "index",
+    "id": "cib:qbz191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qbz191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qbz191.json",
+    "chars": 214
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qbz191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qbz191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbz191_data.json",
+    "chars": 2142
+  },
+  {
+    "kind": "index",
+    "id": "cib:qcw05",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qcw05.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qcw05.json",
+    "chars": 208
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qcw05",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qcw05.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qcw05_data.json",
+    "chars": 2207
+  },
+  {
+    "kind": "index",
+    "id": "cib:qjb201",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qjb201.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qjb201.json",
+    "chars": 204
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qjb201",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qjb201.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjb201_data.json",
+    "chars": 2996
+  },
+  {
+    "kind": "index",
+    "id": "cib:dzj08",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__dzj08.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/dzj08.json",
+    "chars": 208
+  },
+  {
+    "kind": "gun",
+    "id": "cib:dzj08",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__dzj08.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/dzj08_data.json",
+    "chars": 1596
+  },
+  {
+    "kind": "index",
+    "id": "cib:qbu191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qbu191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qbu191.json",
+    "chars": 214
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qbu191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qbu191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qbu191_data.json",
+    "chars": 2524
+  },
+  {
+    "kind": "index",
+    "id": "suffuse:qlz87",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "index__suffuse__qlz87.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/index/guns/qlz87.json",
+    "chars": 220
+  },
+  {
+    "kind": "gun",
+    "id": "suffuse:qlz87",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "gun__suffuse__qlz87.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/qlz87_data.json",
+    "chars": 2674
+  },
+  {
+    "kind": "index",
+    "id": "cib:qjy201",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__qjy201.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/qjy201.json",
+    "chars": 211
+  },
+  {
+    "kind": "gun",
+    "id": "cib:qjy201",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__qjy201.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/qjy201_data.json",
+    "chars": 2303
+  },
+  {
+    "kind": "index",
+    "id": "suffuse:pf98a",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "index__suffuse__pf98a.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/index/guns/pf98a.json",
+    "chars": 184
+  },
+  {
+    "kind": "gun",
+    "id": "suffuse:pf98a",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "gun__suffuse__pf98a.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/pf98a_data.json",
+    "chars": 2082
+  },
+  {
+    "kind": "index",
+    "id": "ccrp:ak74m",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "index__ccrp__ak74m.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/index/guns/ak74m.json",
+    "chars": 203
+  },
+  {
+    "kind": "gun",
+    "id": "ccrp:ak74m",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "gun__ccrp__ak74m.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/ak74m_data.json",
+    "chars": 2973
+  },
+  {
+    "kind": "index",
+    "id": "suffuse:tt33",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "index__suffuse__tt33.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/index/guns/tt33.json",
+    "chars": 183
+  },
+  {
+    "kind": "gun",
+    "id": "suffuse:tt33",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "gun__suffuse__tt33.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/tt33_data.json",
+    "chars": 1511
+  },
+  {
+    "kind": "index",
+    "id": "suffuse:aks74u",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "index__suffuse__aks74u.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/index/guns/aks74u.json",
+    "chars": 278
+  },
+  {
+    "kind": "gun",
+    "id": "suffuse:aks74u",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "gun__suffuse__aks74u.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/guns/aks74u_data.json",
+    "chars": 4061
+  },
+  {
+    "kind": "index",
+    "id": "ccrp:rpk74m",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "index__ccrp__rpk74m.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/index/guns/rpk74m.json",
+    "chars": 204
+  },
+  {
+    "kind": "gun",
+    "id": "ccrp:rpk74m",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "gun__ccrp__rpk74m.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/rpk74m_data.json",
+    "chars": 2975
+  },
+  {
+    "kind": "index",
+    "id": "murasamet:rpg7_pg7heat",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "index__murasamet__rpg7_pg7heat.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/index/guns/rpg7_pg7heat.json",
+    "chars": 206
+  },
+  {
+    "kind": "gun",
+    "id": "murasamet:rpg7_pg7heat",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "gun__murasamet__rpg7_pg7heat.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7heat_data.json",
+    "chars": 1788
+  },
+  {
+    "kind": "index",
+    "id": "murasamet:rpg7_og7he",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "index__murasamet__rpg7_og7he.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/index/guns/rpg7_og7he.json",
+    "chars": 198
+  },
+  {
+    "kind": "gun",
+    "id": "murasamet:rpg7_og7he",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "gun__murasamet__rpg7_og7he.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_og7he_data.json",
+    "chars": 1788
+  },
+  {
+    "kind": "index",
+    "id": "ts:at4",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "index__ts__at4.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/index/guns/at4.json",
+    "chars": 159
+  },
+  {
+    "kind": "gun",
+    "id": "ts:at4",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "gun__ts__at4.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/guns/at4_data.json",
+    "chars": 2156
+  },
+  {
+    "kind": "index",
+    "id": "murasamet:rpg7_pg7vr_tandem_heat",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "index__murasamet__rpg7_pg7vr_tandem_heat.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/index/guns/rpg7_pg7vr_tandem_heat.json",
+    "chars": 246
+  },
+  {
+    "kind": "gun",
+    "id": "murasamet:rpg7_pg7vr_tandem_heat",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "gun__murasamet__rpg7_pg7vr_tandem_heat.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/guns/rpg7_pg7vr_tandem_heat_data.json",
+    "chars": 1799
+  },
+  {
+    "kind": "index",
+    "id": "cib:svd",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__svd.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/svd.json",
+    "chars": 169
+  },
+  {
+    "kind": "gun",
+    "id": "cib:svd",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__svd.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/svd_data.json",
+    "chars": 2145
+  },
+  {
+    "kind": "index",
+    "id": "cib:pkp",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "index__cib__pkp.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/index/guns/pkp.json",
+    "chars": 199
+  },
+  {
+    "kind": "gun",
+    "id": "cib:pkp",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "gun__cib__pkp.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/guns/pkp_data.json",
+    "chars": 2439
+  },
+  {
+    "kind": "index",
+    "id": "tacz:m4a1",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "index__tacz__m4a1.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/index/guns/m4a1.json",
+    "chars": 170
+  },
+  {
+    "kind": "gun",
+    "id": "tacz:m4a1",
+    "pack": "VanguardArmament",
+    "ns": "tacz",
+    "file": "gun__tacz__m4a1.json",
+    "serverRel": "tacz/VanguardArmament/data/tacz/data/guns/m4a1_data.json",
+    "chars": 3917
+  },
+  {
+    "kind": "index",
+    "id": "tacz:p320",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "index__tacz__p320.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/index/guns/p320.json",
+    "chars": 171
+  },
+  {
+    "kind": "gun",
+    "id": "tacz:p320",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "gun__tacz__p320.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/guns/p320_data.json",
+    "chars": 1674
+  },
+  {
+    "kind": "index",
+    "id": "tacz:m249",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "index__tacz__m249.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/index/guns/m249.json",
+    "chars": 167
+  },
+  {
+    "kind": "gun",
+    "id": "tacz:m249",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "gun__tacz__m249.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/guns/m249_data.json",
+    "chars": 2124
+  },
+  {
+    "kind": "index",
+    "id": "tacz:m320",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "index__tacz__m320.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/index/guns/m320.json",
+    "chars": 154
+  },
+  {
+    "kind": "gun",
+    "id": "tacz:m320",
+    "pack": "VanguardArmament",
+    "ns": "tacz",
+    "file": "gun__tacz__m320.json",
+    "serverRel": "tacz/VanguardArmament/data/tacz/data/guns/m320_data.json",
+    "chars": 5040
+  },
+  {
+    "kind": "index",
+    "id": "ccrp:m110",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "index__ccrp__m110.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/index/guns/m110.json",
+    "chars": 200
+  },
+  {
+    "kind": "gun",
+    "id": "ccrp:sr25",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "gun__ccrp__sr25.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/guns/sr25_data.json",
+    "chars": 2825
+  },
+  {
+    "kind": "index",
+    "id": "ts:gustavm4",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "index__ts__gustavm4.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/index/guns/gustavm4.json",
+    "chars": 162
+  },
+  {
+    "kind": "gun",
+    "id": "ts:gustavm4",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "gun__ts__gustavm4.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/guns/gustavm4_data.json",
+    "chars": 5487
+  },
+  {
+    "kind": "attach",
+    "id": "cib:grip_191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__grip_191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/grip_191_data.json",
+    "chars": 264
+  },
+  {
+    "kind": "attach",
+    "id": "cib:csol2",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__csol2.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/csol2_data.json",
+    "chars": 61
+  },
+  {
+    "kind": "attach",
+    "id": "cib:qmk171",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__qmk171.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/qmk171_data.json",
+    "chars": 45
+  },
+  {
+    "kind": "attach",
+    "id": "cib:qcw05_js9_muffler",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__qcw05_js9_muffler.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/qcw05_js9_muffler_data.json",
+    "chars": 507
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:sight_t2",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__sight_t2.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/sight_t2_data.json",
+    "chars": 62
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:extended_mag_3",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__extended_mag_3.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/extended_mag_3_data.json",
+    "chars": 134
+  },
+  {
+    "kind": "attach",
+    "id": "cib:qmk204",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__qmk204.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/qmk204_data.json",
+    "chars": 114
+  },
+  {
+    "kind": "attach",
+    "id": "cib:muzzle_191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__muzzle_191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/muzzle_191_data.json",
+    "chars": 507
+  },
+  {
+    "kind": "attach",
+    "id": "cib:qmk191",
+    "pack": "[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7",
+    "ns": "cib",
+    "file": "attach__cib__qmk191.json",
+    "serverRel": "tacz/[Tacz1.1.7+]CIBR_GunsPack_v0.3_1.1.7/data/cib/data/attachments/qmk191_data.json",
+    "chars": 44
+  },
+  {
+    "kind": "attach",
+    "id": "huinuo:1p68",
+    "pack": "Huinuo_s_scope_v0.0.8_hotfix",
+    "ns": "huinuo",
+    "file": "attach__huinuo__1p68.json",
+    "serverRel": "tacz/Huinuo_s_scope_v0.0.8_hotfix/data/huinuo/data/attachments/1p68_data.json",
+    "chars": 40
+  },
+  {
+    "kind": "attach",
+    "id": "huinuo:1p78",
+    "pack": "Huinuo_s_scope_v0.0.8_hotfix",
+    "ns": "huinuo",
+    "file": "attach__huinuo__1p78.json",
+    "serverRel": "tacz/Huinuo_s_scope_v0.0.8_hotfix/data/huinuo/data/attachments/1p78_data.json",
+    "chars": 40
+  },
+  {
+    "kind": "attach",
+    "id": "ts:weapon_gp25",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "attach__ts__weapon_gp25.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/attachments/weapon_gp25_data.json",
+    "chars": 374
+  },
+  {
+    "kind": "attach",
+    "id": "murasamet:scope_pgo_7",
+    "pack": "KhanPowder_v0.8.99_hotfix",
+    "ns": "murasamet",
+    "file": "attach__murasamet__scope_pgo_7.json",
+    "serverRel": "tacz/KhanPowder_v0.8.99_hotfix/data/murasamet/data/attachments/scope_pgo_7_data.json",
+    "chars": 44
+  },
+  {
+    "kind": "attach",
+    "id": "huinuo:pso1e",
+    "pack": "Huinuo_s_scope_v0.0.8_hotfix",
+    "ns": "huinuo",
+    "file": "attach__huinuo__pso1e.json",
+    "serverRel": "tacz/Huinuo_s_scope_v0.0.8_hotfix/data/huinuo/data/attachments/pso1e_data.json",
+    "chars": 40
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:extended_mag_1",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__extended_mag_1.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/extended_mag_1_data.json",
+    "chars": 133
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:grip_vertical_military",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__grip_vertical_military.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/grip_vertical_military_data.json",
+    "chars": 263
+  },
+  {
+    "kind": "attach",
+    "id": "ccrp:laser_peq15",
+    "pack": "[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2",
+    "ns": "ccrp",
+    "file": "attach__ccrp__laser_peq15.json",
+    "serverRel": "tacz/[TACZ1.1.8+Arcana]ClassicRCCRP 1.1.6_release_hotfix2/data/ccrp/data/attachments/laser_peq15_data.json",
+    "chars": 281
+  },
+  {
+    "kind": "attach",
+    "id": "suffuse:scope_compm4",
+    "pack": "Suffuse-GunSmoke-Pack1.0.8-hotfix",
+    "ns": "suffuse",
+    "file": "attach__suffuse__scope_compm4.json",
+    "serverRel": "tacz/Suffuse-GunSmoke-Pack1.0.8-hotfix/data/suffuse/data/attachments/scope_compm4_data.json",
+    "chars": 60
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:stock_m4ss",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__stock_m4ss.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/stock_m4ss_data.json",
+    "chars": 179
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:scope_acog_ta31",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__scope_acog_ta31.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/scope_acog_ta31_data.json",
+    "chars": 45
+  },
+  {
+    "kind": "attach",
+    "id": "tacz:scope_standard_8x",
+    "pack": "tacz_default_gun",
+    "ns": "tacz",
+    "file": "attach__tacz__scope_standard_8x.json",
+    "serverRel": "tacz/tacz_default_gun/data/tacz/data/attachments/scope_standard_8x_data.json",
+    "chars": 44
+  },
+  {
+    "kind": "attach",
+    "id": "ts:fcs13re",
+    "pack": "VanguardArmament",
+    "ns": "ts",
+    "file": "attach__ts__fcs13re.json",
+    "serverRel": "tacz/VanguardArmament/data/ts/data/attachments/fcs13re_data.json",
+    "chars": 1670
+  }
+]

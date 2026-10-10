@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:challenger_ds",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/challenger_ds.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/challenger_ds.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/challenger_ds.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/challenger_ds.png"
+    }
+  ]
+}

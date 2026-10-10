@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:tripwire_hook"
+    },
+    "b": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    "a",
+    "b",
+    "a"
+  ],
+  "result": {
+    "item": "superbwarfare:tow_bar"
+  },
+  "show_notification": true
+}

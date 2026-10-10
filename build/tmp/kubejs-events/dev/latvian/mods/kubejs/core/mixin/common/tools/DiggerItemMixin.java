@@ -1,0 +1,36 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Multimap
+ *  net.minecraft.world.entity.ai.attributes.Attribute
+ *  net.minecraft.world.entity.ai.attributes.AttributeModifier
+ *  net.minecraft.world.item.DiggerItem
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Mutable
+ *  org.spongepowered.asm.mixin.gen.Accessor
+ */
+package dev.latvian.mods.kubejs.core.mixin.common.tools;
+
+import com.google.common.collect.Multimap;
+import dev.latvian.mods.kubejs.core.ModifiableItemKJS;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.DiggerItem;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+@Mixin(value={DiggerItem.class})
+public abstract class DiggerItemMixin
+implements ModifiableItemKJS {
+    @Override
+    @Accessor(value="defaultModifiers")
+    public abstract Multimap<Attribute, AttributeModifier> kjs$getAttributeMap();
+
+    @Override
+    @Accessor(value="defaultModifiers")
+    @Mutable
+    public abstract void kjs$setAttributeMap(Multimap<Attribute, AttributeModifier> var1);
+}
+

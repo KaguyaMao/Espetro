@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "5 superbwarfare:steel_block",
+    "superbwarfare:light_armament_module",
+    "4 superbwarfare:wheel",
+    "superbwarfare:motor"
+  ],
+  "result": {
+    "entity": "dragonrise_reforge:sx1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "civilian",
+  "inputs": [
+    "3 #superbwarfare:storage_blocks/steel",
+    "superbwarfare:armor_plate",
+    "4 superbwarfare:wheel",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "fcp:gaz_tigr"
+  }
+}

@@ -868,6 +868,20 @@ public class FactionDataLoader {
          */
         @SerializedName(value = "nbt", alternate = {"entity_nbt", "entityNbt"})
         public String nbt;
+        /**
+         * 载具集装箱（物品栏）预置物品，语法与职业技能 commands 一致：
+         * {@code "<itemId>[<snbt>] <count>"}，例：
+         * {@code "items": ["superbwarfare:large_shell_ap 12", "superbwarfare:repair_tool{Energy:100000}"]}
+         * 由 VehicleManager 部署时通过 Forge ITEM_HANDLER 能力写入，载具没有集装箱则忽略。
+         */
+        @SerializedName(value = "items", alternate = {"cargo", "vehicle_items", "vehicleItems"})
+        public String[] items;
+        /**
+         * 未显式配置 {@link #items} 时，是否套用服务端 {@code data/<ns>/supply_station/} 的
+         * 补给站弹药配置（让载具一出生就带满弹药）。默认 true；填 false 则该车型不带弹药出生。
+         */
+        @SerializedName(value = "supply_loadout", alternate = {"supplyLoadout", "auto_ammo", "autoAmmo"})
+        public Boolean supplyLoadout;
         /** 单类载具的固定部署坐标配置。 */
         public VehicleDeploymentData deployment;
         /** 补给载具：可装载弹药和建材，默认容量 3000 */

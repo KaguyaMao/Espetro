@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "tag": "superbwarfare:ingots/cemented_carbide"
+    },
+    "b": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "a",
+    "b",
+    "b"
+  ],
+  "result": {
+    "item": "superbwarfare:cemented_carbide_shovel"
+  },
+  "show_notification": true
+}

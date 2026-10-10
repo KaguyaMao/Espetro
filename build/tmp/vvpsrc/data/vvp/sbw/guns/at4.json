@@ -1,0 +1,40 @@
+{
+  "ID": "vvp:at4",
+  "Spread": 3,
+  "RecoilX": 0.006,
+  "RecoilY": 0.015,
+  "Damage": 300,
+  "Projectile": "superbwarfare:rpg_rocket_standard",
+  "ExplosionDamage": 100,
+  "ExplosionRadius": 1.8,
+  "ZoomReload": false,
+  "Headshot": 0,
+  "Velocity": 5,
+  "Magazine": 1,
+  "Weight": 6,
+  "EmptyReloadTime": 114,
+  "RPM": 60,
+  "Gravity": 0.012,
+  "GunType": "DirectLauncher",
+  "AmmoType": [
+    "superbwarfare:rpg_rocket_standard"
+  ],
+  "Icon": "vvp:textures/gun_icon/at4_icon.png",
+  "AnimationInfo": {
+    "Idle": "animation.at4.idle",
+    "ReloadEmpty": "animation.at4.reload",
+    "Fire": "animation.at4.fire",
+    "Run": "animation.at4.run",
+    "RunFast": "animation.at4.run_fast"
+  },
+  "SoundInfo": {
+    "Fire1P": "superbwarfare:rpg_fire_1p",
+    "Fire3P": "superbwarfare:rpg_fire_3p",
+    "Fire3PFar": "superbwarfare:rpg_far",
+    "Fire3PVeryFar": "superbwarfare:rpg_veryfar",
+    "ReloadEmpty": "superbwarfare:rpg_reload_empty",
+    "CancellableSounds": [
+      "superbwarfare:rpg_reload_empty"
+    ]
+  }
+}

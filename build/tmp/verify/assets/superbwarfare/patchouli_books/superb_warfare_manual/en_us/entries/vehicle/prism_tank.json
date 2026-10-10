@@ -1,0 +1,20 @@
+{
+  "name": "superbwarfare.entry.vehicle.prism_tank",
+  "icon": "superbwarfare:container",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.prism_tank.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.prism_tank.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.prism_tank.3"
+    }
+  ],
+  "sortnum": 20104
+}

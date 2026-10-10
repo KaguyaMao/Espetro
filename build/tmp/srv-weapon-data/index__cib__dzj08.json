@@ -1,0 +1,9 @@
+{
+  "name": "cib.gun.dzj08.name",
+  "display": "cib:dzj08_display",
+  "data": "cib:dzj08_data",
+  "tooltip": "cib.gun.dzj08.desc",
+  "type": "rpg",
+  "item_type": "modern_kinetic",
+  "sort": 2461600
+}

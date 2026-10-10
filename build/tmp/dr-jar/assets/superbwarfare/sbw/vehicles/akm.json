@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/akm.animation.json",
+  "ID": "dragonrise_reforge:akm",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/akm.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/akm.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/akm.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/akm.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/akm.png"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "ID": "dragonrise_reforge:ik_fightcat",
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/ik_fightcat.animation.json",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/ik_fightcat.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/ik_fightcat.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/ik_fightcat.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/ik_fightcat.png"
+    }
+  ]
+}

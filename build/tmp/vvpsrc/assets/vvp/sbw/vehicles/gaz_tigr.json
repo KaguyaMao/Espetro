@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:gaz_tigr",
+  "Model": {
+    "Model": "vvp:geo/tigr.geo.json",
+    "Texture": "vvp:textures/entity/gaz_tigr.png"
+  }
+}

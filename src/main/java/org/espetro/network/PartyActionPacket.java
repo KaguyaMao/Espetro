@@ -18,6 +18,8 @@ public class PartyActionPacket {
         LEAVE,
         KICK,
         TOGGLE_LOCK,
+        /** 队长设置 / 修改 / 清除密码。 */
+        SET_PASSWORD,
         DISBAND,
         /** 客户端请求刷新队伍列表（不修改任何状态）。 */
         REQUEST_LIST
@@ -54,6 +56,10 @@ public class PartyActionPacket {
 
     public static PartyActionPacket toggleLock(UUID partyId) {
         return new PartyActionPacket(Action.TOGGLE_LOCK, partyId, null, null);
+    }
+
+    public static PartyActionPacket setPassword(UUID partyId, String password) {
+        return new PartyActionPacket(Action.SET_PASSWORD, partyId, password, null);
     }
 
     public static PartyActionPacket disband(UUID partyId) {
@@ -119,6 +125,17 @@ public class PartyActionPacket {
                     if (partyId == null) break;
                     String lockErr = pm.toggleLock(partyId, player.getUUID());
                     if (lockErr != null) player.sendSystemMessage(Component.literal("§c" + lockErr));
+                    break;
+
+                case SET_PASSWORD:
+                    if (partyId == null) break;
+                    String pwErr = pm.setPassword(partyId, player.getUUID(), password);
+                    if (pwErr != null) {
+                        player.sendSystemMessage(Component.literal("§c" + pwErr));
+                    } else {
+                        player.sendSystemMessage(Component.literal(password == null || password.isEmpty()
+                            ? "§a已清除队伍密码。" : "§a已更新队伍密码。"));
+                    }
                     break;
 
                 case DISBAND:

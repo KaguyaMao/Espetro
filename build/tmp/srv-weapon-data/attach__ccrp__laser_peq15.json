@@ -1,0 +1,17 @@
+{
+  "weight": 0.133,
+  "ads": {
+    "multiplier": 0.66
+  },
+  "inaccuracy": {
+    "multiplier": 1.2
+  },
+    "extras": {        //由 Arcana 提供的特殊属性
+    "flashlight": {
+      "enable": true,
+      "luminance": 1.5,
+      "angle": 35.0,
+      "range": 48.0
+    }
+  }
+}

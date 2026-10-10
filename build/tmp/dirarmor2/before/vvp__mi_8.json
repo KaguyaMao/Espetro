@@ -1,0 +1,336 @@
+{
+  "ID": "vvp:mi_8",
+  "MaxHealth": 250,
+  "MaxEnergy": 10000000,
+  "OBB": [
+    {
+      "Size": [
+        1.5625,
+        1.4375,
+        5.43755
+      ],
+      "Position": [
+        0,
+        2.1875,
+        0
+      ]
+    },
+    {
+      "Size": [
+        0.5625,
+        0.78125,
+        5.4375
+      ],
+      "Position": [
+        0,
+        3.15625,
+        -10.875
+      ]
+    },
+    {
+      "Size": [
+        1.125,
+        0.40625,
+        4.1875
+      ],
+      "Position": [
+        0,
+        4.03125,
+        -1.25
+      ],
+      "Part": "MainEngine"
+    }
+  ],
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0.65,
+        1.1,
+        3.7
+      ],
+      "Sensitivity": [
+        0,
+        0,
+        0
+      ],
+      "CameraPos": {
+        "Transform": "Vehicle",
+        "Position": [
+          0.65,
+          2.85,
+          3.7
+        ],
+        "UseFixedCameraPos": true,
+        "UseAircraftCamera": true,
+        "AircraftCameraPos": [
+          -3.8,
+          3.5,
+          -15
+        ]
+      },
+      "CanRotateHead": false,
+      "MinPitch": -80,
+      "MaxPitch": 80,
+      "MinYaw": -80,
+      "MaxYaw": 80,
+      "Crosshair": "@Empty",
+      "Weapons": [
+        "Nothing"
+      ],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          2.5,
+          0.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        -0.65,
+        1.1,
+        3.7
+      ],
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        -0.95,
+        0.95,
+        1.2
+      ],
+      "Orientation": -90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          1.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0.95,
+        0.95,
+        1.2
+      ],
+      "Orientation": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          2.5,
+          0.5,
+          1.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        -0.95,
+        0.95,
+        -0.3
+      ],
+      "Orientation": -90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          -0.5
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0.95,
+        0.95,
+        -0.3
+      ],
+      "Orientation": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          2.5,
+          0.5,
+          -0.5
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        -0.95,
+        0.95,
+        -1.8
+      ],
+      "Orientation": -90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          -2.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0.95,
+        0.95,
+        -1.8
+      ],
+      "Orientation": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          2.5,
+          0.5,
+          -2.0
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        -0.95,
+        0.95,
+        -3.3
+      ],
+      "Orientation": -90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          -2.5,
+          0.5,
+          -3.5
+        ]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [
+        0.95,
+        0.95,
+        -3.3
+      ],
+      "Orientation": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [
+          2.5,
+          0.5,
+          -3.5
+        ]
+      }
+    }
+  ],
+  "EngineType": "Helicopter",
+  "EngineInfo": {
+    "EnergyCostRate": 320,
+    "Increment": 1.15,
+    "Decrement": 0.8,
+    "PitchSpeed": 1.01,
+    "YawSpeed": 0.85,
+    "RollSpeed": 0.6,
+    "LiftSpeed": 1.15,
+    "Speed": 1.35,
+    "EngineStartSound": "superbwarfare:mi_28_engine_start",
+    "EngineSoundVolume": 2
+  },
+  "EngineSound": "superbwarfare:mi_28_engine",
+  "ThirdPersonCameraPos": [
+    3.0,
+    5,
+    15
+  ],
+  "UpStep": 1.2,
+  "RotateOffsetHeight": 2.0,
+  "Mass": 1.2,
+  "AllowFreeCam": true,
+  "HasDecoy": true,
+  "DamageModifiers": [
+    "minecraft:arrow * 0.1",
+    "minecraft:trident * 0.2",
+    "minecraft:mob_attack * 0.3",
+    "minecraft:mob_attack_no_aggro * 0.3",
+    "minecraft:mob_projectile * 0.2",
+    "minecraft:player_attack * 0.2",
+    "minecraft:lava - -10",
+    "minecraft:lava * 2.6",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3",
+    "minecraft:explosion * 3.5",
+    "minecraft:player_explosion * 3.5",
+    "superbwarfare:projectile_hit * 0.6",
+    "superbwarfare:grapeshot_hit * 0.5",
+    "#superbwarfare:projectile * 0.03",
+    "#superbwarfare:projectile_absolute * 0.3",
+    "superbwarfare:vehicle_strike * 6",
+    "superbwarfare:laser * 0.35",
+    "@superbwarfare:cannon_shell * 1.5",
+    "@superbwarfare:small_cannon_shell * 0.95",
+    "@superbwarfare:gun_grenade * 2.2",
+    "@superbwarfare:rgo_grenade * 6",
+    "@superbwarfare:hand_grenade * 5",
+    "@superbwarfare:mortar_shell * 3",
+    "@#superbwarfare:at_rocket * 1.5",
+    "All * 0.8",
+    "All - 8",
+    "@#superbwarfare:aerial_bomb * 2"
+  ],
+  "DestroyInfo": {
+    "ParticleType": "Giant",
+    "ExplosionDamage": 350,
+    "ExplosionRadius": 7.6,
+    "CrashPassengers": true,
+    "ExplodeBlocks": false
+  },
+  "HUDColor": "0x66FF00",
+  "VehicleIcon": "vvp:textures/vehicle_icon/mi8.png",
+  "ContainerIcon": "vvp:textures/gui/vehicle/type/aircraft_ru.png",
+  "Weapons": {
+    "Nothing": {
+      "Name": "",
+      "Crosshair": "@Empty",
+      "RPM": 0,
+      "Magazine": 0,
+      "Damage": 0
+    }
+  },
+  "Type": "Helicopter",
+  "HudType": "@Helicopter",
+  "TerrainCompat": [
+    [
+      -1.5,
+      0,
+      2.0
+    ],
+    [
+      1.5,
+      0,
+      2.0
+    ],
+    [
+      0,
+      0.5,
+      -10.0
+    ]
+  ],
+  "TerrainCompatRotateRate": 0.18
+}

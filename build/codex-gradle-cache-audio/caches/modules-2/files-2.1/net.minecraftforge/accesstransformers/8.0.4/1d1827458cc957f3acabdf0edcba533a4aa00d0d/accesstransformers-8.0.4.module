@@ -1,0 +1,154 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "accesstransformers",
+    "version": "8.0.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.antlr",
+          "module": "antlr4",
+          "version": {
+            "requires": "4.9.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "accesstransformers-8.0.4.jar",
+          "url": "accesstransformers-8.0.4.jar",
+          "size": 77756,
+          "sha512": "80a885a6c766251dafc44421a293cd1ec281bcc887be805dc3f79d80d388f36147a214a118871e9a73f575f4979d7ce82c310f2b9687c4a2d288fe91f7a5d991",
+          "sha256": "3225e2a513f658df686fe8b2ae5b4808525851a2c238ce65e38847cc4ffc6441",
+          "sha1": "272d240aa73f42195b2a68e2ebd8b701ecf41f63",
+          "md5": "f0d3533f9437ba4428eaee9f28f7ecd9"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 16,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.antlr",
+          "module": "antlr4-runtime",
+          "version": {
+            "requires": "4.9.1"
+          }
+        },
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.1"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-api",
+          "version": {
+            "requires": "2.11.+"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-core",
+          "version": {
+            "requires": "2.11.+"
+          }
+        },
+        {
+          "group": "cpw.mods",
+          "module": "modlauncher",
+          "version": {
+            "requires": "9.0.4"
+          }
+        },
+        {
+          "group": "org.antlr",
+          "module": "antlr4",
+          "version": {
+            "requires": "4.9.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "accesstransformers-8.0.4.jar",
+          "url": "accesstransformers-8.0.4.jar",
+          "size": 77756,
+          "sha512": "80a885a6c766251dafc44421a293cd1ec281bcc887be805dc3f79d80d388f36147a214a118871e9a73f575f4979d7ce82c310f2b9687c4a2d288fe91f7a5d991",
+          "sha256": "3225e2a513f658df686fe8b2ae5b4808525851a2c238ce65e38847cc4ffc6441",
+          "sha1": "272d240aa73f42195b2a68e2ebd8b701ecf41f63",
+          "md5": "f0d3533f9437ba4428eaee9f28f7ecd9"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "accesstransformers-8.0.4-fatjar.jar",
+          "url": "accesstransformers-8.0.4-fatjar.jar",
+          "size": 15816819,
+          "sha512": "a72b1d73584027b6acbf5138e9c5564188abd5fc1e6c3f7fd3afa5349faac68f053fbaa7113d7c577da7fb630bc2daf6913c6401e6671004cfa51a11f622dc55",
+          "sha256": "3706ebeec3a460dcc178a30e2646c38ad0965b52b61c4d5feda3dfe4d77c9b43",
+          "sha1": "3f88587ac353982a54dce8a21a8e6fd4061ce495",
+          "md5": "2b8bb6b315bdc1b1cf1f1a0b439a2470"
+        }
+      ]
+    }
+  ]
+}

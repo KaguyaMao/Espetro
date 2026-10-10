@@ -1,0 +1,12 @@
+
+[gameplay]
+	#Set true if you want to reload all your guns when respawn
+	#是否开启重生时自动装填弹药
+	respawn_reload = true
+	#Set false if you want to show kill indication ONLY while killing an entity with a gun
+	#是否仅在使用枪械击杀生物时触发击杀提示特效
+	global_indication = true
+	#Set true if you want to refill your armor plate when respawn
+	#是否开启重生时自动使用防弹插板
+	respawn_auto_armor = true
+

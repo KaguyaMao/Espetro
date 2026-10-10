@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:gunpowder"
+    },
+    "b": {
+      "item": "minecraft:sugar"
+    },
+    "c": {
+      "tag": "forge:sand"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cac",
+    "aba"
+  ],
+  "result": {
+    "count": 4,
+    "item": "superbwarfare:high_energy_explosives"
+  },
+  "show_notification": true
+}

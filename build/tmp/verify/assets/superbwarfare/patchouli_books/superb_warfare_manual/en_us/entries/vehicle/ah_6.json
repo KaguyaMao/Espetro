@@ -1,0 +1,20 @@
+{
+  "name": "superbwarfare.entry.vehicle.ah_6",
+  "icon": "superbwarfare:container",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.ah_6.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.ah_6.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.ah_6.3"
+    }
+  ],
+  "sortnum": 20301
+}

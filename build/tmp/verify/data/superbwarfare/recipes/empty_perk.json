@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:paper"
+    },
+    "b": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "c": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "cbc",
+    "bab",
+    "cbc"
+  ],
+  "result": {
+    "item": "superbwarfare:empty_perk"
+  },
+  "show_notification": true
+}

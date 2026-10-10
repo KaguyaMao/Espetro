@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:redstone_torch"
+    },
+    "b": {
+      "item": "minecraft:stone_button"
+    },
+    "c": {
+      "tag": "forge:plates/plastic"
+    }
+  },
+  "pattern": [
+    " a",
+    "bc"
+  ],
+  "result": {
+    "item": "superbwarfare:detonator"
+  },
+  "show_notification": true
+}

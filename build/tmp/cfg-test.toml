@@ -1,0 +1,27 @@
+
+[vehicle]
+	#Ticks holding INTERACT on wheel center to mount (0 = instant)
+	#Range: 0 ~ 1200
+	mountDelayTicks = 60
+	#Ticks holding INTERACT to dismount (0 = native SBW)
+	#Range: 0 ~ 1200
+	dismountDelayTicks = 60
+	#Ticks holding Shift before a seat change is allowed
+	#Range: 0 ~ 1200
+	seatSwitchDelayTicks = 100
+	#Max distance from vehicle while mounting
+	#Range: 1.0 ~ 16.0
+	mountMaxDistance = 5.0
+	#载具原版操作白名单总开关。
+	#开启后，nativeVehicles 中列出的载具不受本模组任何交互类修改：
+	#读条上车/下车/换座、座位权限与载具组员座位、敌对阵营禁乘、小队归属准入、
+	#残骸加速消失、载具内标点座位规则、换职业/退队踢下座位全部豁免，
+	#完全使用 Superb Warfare（SBW）及其载具包的原生交互方式。
+	#仍然保留：主基地无敌保护、阵营归属与部署记账（兵损/自动刷新/回合清理/veh 认领）。
+	nativeWhitelistEnabled = true
+	#载具原版操作白名单：元素是实体类型注册名（entity type registry name），
+	#如 fcp:bmp2、superbwarfare:ztz_99a；不带实例/UUID 概念。
+	#支持整命名空间通配："fcp:*" 表示 fcp 命名空间下的全部实体类型。
+	#示例: ["fcp:bmp2", "superbwarfare:ztz_99a"]
+nativeVehicles = ["fcp:bmp2"]
+

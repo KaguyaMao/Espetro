@@ -1,0 +1,99 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.nbt.CompoundTag
+ *  net.minecraft.network.syncher.EntityDataAccessor
+ *  net.minecraft.network.syncher.EntityDataSerializer
+ *  net.minecraft.network.syncher.EntityDataSerializers
+ *  net.minecraft.network.syncher.SynchedEntityData
+ *  net.minecraft.world.entity.EntityType
+ *  net.minecraft.world.level.Level
+ */
+package tech.vvp.vvp.entity.vehicle;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import tech.vvp.vvp.entity.vehicle.VvpVehicleBase;
+
+public class UralEntity
+extends VvpVehicleBase {
+    private static final EntityDataAccessor<Float> STEERING_ANGLE = SynchedEntityData.m_135353_(UralEntity.class, (EntityDataSerializer)EntityDataSerializers.f_135029_);
+    private float prevSteeringAngle = 0.0f;
+    private float wheelRotation = 0.0f;
+    private float prevWheelRotation = 0.0f;
+
+    public UralEntity(EntityType<UralEntity> type, Level world) {
+        super(type, world);
+    }
+
+    protected void m_8097_() {
+        super.m_8097_();
+        this.f_19804_.m_135372_(STEERING_ANGLE, (Object)Float.valueOf(0.0f));
+    }
+
+    public float getSteeringAngle() {
+        return ((Float)this.f_19804_.m_135370_(STEERING_ANGLE)).floatValue();
+    }
+
+    public void setSteeringAngle(float angle) {
+        this.f_19804_.m_135381_(STEERING_ANGLE, (Object)Float.valueOf(angle));
+    }
+
+    public float getPrevSteeringAngle() {
+        return this.prevSteeringAngle;
+    }
+
+    public float getWheelRotation() {
+        return this.wheelRotation;
+    }
+
+    public float getPrevWheelRotation() {
+        return this.prevWheelRotation;
+    }
+
+    public void m_7380_(CompoundTag compound) {
+        super.m_7380_(compound);
+        compound.m_128350_("SteeringAngle", this.getSteeringAngle());
+    }
+
+    public void m_7378_(CompoundTag compound) {
+        super.m_7378_(compound);
+        if (compound.m_128441_("SteeringAngle")) {
+            this.setSteeringAngle(compound.m_128457_("SteeringAngle"));
+        }
+    }
+
+    public void m_6075_() {
+        super.m_6075_();
+        this.prevSteeringAngle = this.getSteeringAngle();
+        float currentAngle = this.getSteeringAngle();
+        double speed = Math.sqrt(this.m_20184_().f_82479_ * this.m_20184_().f_82479_ + this.m_20184_().f_82481_ * this.m_20184_().f_82481_);
+        boolean isMoving = speed > 0.05;
+        boolean turningLeft = this.leftInputDown();
+        boolean turningRight = this.rightInputDown();
+        if (turningLeft && !turningRight) {
+            currentAngle += 2.0f;
+            currentAngle = Math.min(45.0f, currentAngle);
+            this.setSteeringAngle(currentAngle);
+        } else if (turningRight && !turningLeft) {
+            currentAngle -= 2.0f;
+            currentAngle = Math.max(-45.0f, currentAngle);
+            this.setSteeringAngle(currentAngle);
+        } else if (isMoving && Math.abs(currentAngle) > 0.5f) {
+            this.setSteeringAngle(currentAngle *= 0.9f);
+        }
+        if (isMoving && Math.abs(currentAngle) > 1.0f) {
+            float turnAmount = currentAngle * 0.008f * (float)speed;
+            this.m_146922_(this.m_146908_() + turnAmount);
+        }
+        this.prevWheelRotation = this.wheelRotation;
+        this.wheelRotation += (float)(speed * 20.0);
+    }
+}
+

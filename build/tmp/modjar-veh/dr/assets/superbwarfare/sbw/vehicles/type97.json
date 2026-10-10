@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/type97.animation.json",
+    "ID":  "dragonrise_reforge:type97",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/type97.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/type97.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/type97.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/type97.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/type97.png"
+                   }
+               ]
+}

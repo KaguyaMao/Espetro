@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "superbwarfare:he_head"
+    },
+    "b": {
+      "item": "superbwarfare:grain"
+    }
+  },
+  "pattern": [
+    "a",
+    "b"
+  ],
+  "result": {
+    "item": "superbwarfare:large_shell_he"
+  },
+  "show_notification": true
+}

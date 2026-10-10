@@ -1,0 +1,76 @@
+{
+  "MaxHealth": 50,
+  "MaxEnergy": 500000,
+  "Gravity": 0,
+  "OBB": [
+    {
+      "Size": [0.6875, 0.25, 0.6875],
+      "Position": [0, 0.25, 0]
+    },
+    {
+      "Size": [1.6875, 1.5625, 1.90625],
+      "Position": [0, 3.6875, 0.03125]
+    }
+  ],
+  "Seats": [
+    {
+      "Transform": "Vehicle",
+      "Position": [0, -0.45, -0.3],
+      "RotateWithVehicle": true,
+      "MinPitch": -80,
+      "MaxPitch": 80,
+      "MinYaw": -90,
+      "MaxYaw": 90,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [2, 0.5, 0]
+      }
+    },
+    {
+      "Transform": "Vehicle",
+      "Position": [0, 4.7, -0.3],
+      "RotateWithVehicle": true,
+      "CanRotateBody": true,
+      "DismountInfo": {
+        "Transform": "Vehicle",
+        "Position": [0, 5.5, 0]
+      }
+    }
+  ],
+  "EngineType": "AirShip",
+  "EngineInfo": {
+    "Buoyancy": 0.1,
+    "EnergyCostRate": 2,
+    "MaxForwardSpeedRate": 0.5,
+    "MaxBackwardSpeedRate": 0.5,
+    "MaxUpSpeedRate": 0.2,
+    "MaxDownSpeedRate": 0.2,
+    "Increment": 0.7,
+    "Decrement": 0.6,
+    "SteeringSpeed": 2,
+    "EngineSoundVolume" : 0.2,
+    "FloatHeight": 0.5
+  },
+  "ThirdPersonCameraPos": [0, 1, 4],
+  "UpStep": 1.1,
+  "RotateOffsetHeight": 1,
+  "Mass": 0.05,
+  "TowForceFactor": 10.0,
+  "DamageModifiers": [
+    "minecraft:lava * 2.667",
+    "All * 0.75",
+    "@minecraft:tnt * 3",
+    "@minecraft:tnt_minecart * 3"
+  ],
+  "DestroyInfo": {
+    "ExplosionDamage": 2,
+    "ExplosionRadius": 2,
+    "ExplodePassengers": false,
+    "ExplodeBlocks": false,
+    "NoWreck": true
+  },
+  "VehicleIcon": "superbwarfare:textures/vehicle_icon/air_sheep_icon.png",
+  "ContainerIcon": "superbwarfare:textures/gui/vehicle/type/airship.png",
+  "VehicleContainerType": "Huge",
+  "Type": "AirShip"
+}

@@ -1,0 +1,367 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.minecraftforge",
+    "module": "fmlloader",
+    "version": "1.20.1-47.4.20",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "forgespi",
+          "version": {
+            "requires": "7.0.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "mergetool",
+          "version": {
+            "requires": "1.1.5"
+          },
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "mergetool",
+              "type": "jar",
+              "extension": "jar",
+              "classifier": "api"
+            }
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-api",
+          "version": {
+            "requires": "2.19.0"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.8.0-beta4"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "31.1-jre"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10"
+          }
+        },
+        {
+          "group": "org.apache.maven",
+          "module": "maven-artifact",
+          "version": {
+            "requires": "3.8.5"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-lang3",
+          "version": {
+            "requires": "3.12.0"
+          }
+        },
+        {
+          "group": "com.electronwill.night-config",
+          "module": "core",
+          "version": {
+            "requires": "3.6.4"
+          }
+        },
+        {
+          "group": "com.electronwill.night-config",
+          "module": "toml",
+          "version": {
+            "requires": "3.6.4"
+          }
+        },
+        {
+          "group": "cpw.mods",
+          "module": "modlauncher",
+          "version": {
+            "requires": "10.0.9"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "coremods",
+          "version": {
+            "requires": "5.2.4"
+          }
+        },
+        {
+          "group": "com.mojang",
+          "module": "logging",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "JarJarSelector",
+          "version": {
+            "requires": "0.3.19"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "JarJarMetadata",
+          "version": {
+            "requires": "0.3.19"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fmlloader-1.20.1-47.4.20.jar",
+          "url": "fmlloader-1.20.1-47.4.20.jar",
+          "size": 270672,
+          "sha512": "f58c35b52c4535c7488499982641287f053dd66ba1e7c30c027367f70d7d0e5c16cdca459f0b099f9f21653f98dd1719918d368133a7bc02ef8da18c92515464",
+          "sha256": "957191be01acc0ebdfb9bd7c69d2e33ce73677028425adbc6057040eab4866c6",
+          "sha1": "8798bdd148d476c7ec54d8156f88de5e243c2dfb",
+          "md5": "29197f7093c8b9d058bdd22bc871c5cc"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.sf.jopt-simple",
+          "module": "jopt-simple",
+          "version": {
+            "requires": "5.0.4"
+          }
+        },
+        {
+          "group": "cpw.mods",
+          "module": "securejarhandler",
+          "version": {
+            "requires": "2.1.10"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "accesstransformers",
+          "version": {
+            "requires": "8.0.4"
+          }
+        },
+        {
+          "group": "net.minecrell",
+          "module": "terminalconsoleappender",
+          "version": {
+            "requires": "1.2.0"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-core",
+          "version": {
+            "requires": "2.19.0"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-tree",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-commons",
+          "version": {
+            "requires": "9.9.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "forgespi",
+          "version": {
+            "requires": "7.0.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "mergetool",
+          "version": {
+            "requires": "1.1.5"
+          },
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "mergetool",
+              "type": "jar",
+              "extension": "jar",
+              "classifier": "api"
+            }
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-api",
+          "version": {
+            "requires": "2.19.0"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.8.0-beta4"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "31.1-jre"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10"
+          }
+        },
+        {
+          "group": "org.apache.maven",
+          "module": "maven-artifact",
+          "version": {
+            "requires": "3.8.5"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-lang3",
+          "version": {
+            "requires": "3.12.0"
+          }
+        },
+        {
+          "group": "com.electronwill.night-config",
+          "module": "core",
+          "version": {
+            "requires": "3.6.4"
+          }
+        },
+        {
+          "group": "com.electronwill.night-config",
+          "module": "toml",
+          "version": {
+            "requires": "3.6.4"
+          }
+        },
+        {
+          "group": "cpw.mods",
+          "module": "modlauncher",
+          "version": {
+            "requires": "10.0.9"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "coremods",
+          "version": {
+            "requires": "5.2.4"
+          }
+        },
+        {
+          "group": "com.mojang",
+          "module": "logging",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "JarJarSelector",
+          "version": {
+            "requires": "0.3.19"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "JarJarMetadata",
+          "version": {
+            "requires": "0.3.19"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fmlloader-1.20.1-47.4.20.jar",
+          "url": "fmlloader-1.20.1-47.4.20.jar",
+          "size": 270672,
+          "sha512": "f58c35b52c4535c7488499982641287f053dd66ba1e7c30c027367f70d7d0e5c16cdca459f0b099f9f21653f98dd1719918d368133a7bc02ef8da18c92515464",
+          "sha256": "957191be01acc0ebdfb9bd7c69d2e33ce73677028425adbc6057040eab4866c6",
+          "sha1": "8798bdd148d476c7ec54d8156f88de5e243c2dfb",
+          "md5": "29197f7093c8b9d058bdd22bc871c5cc"
+        }
+      ]
+    }
+  ]
+}

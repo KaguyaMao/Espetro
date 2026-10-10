@@ -1,0 +1,115 @@
+{
+  "ID": "superbwarfare:kirov",
+  "Pools": [
+    {
+      "Entries": [
+        {
+          "Count": 20,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Name": "minecraft:flower_pot"
+        },
+        {
+          "Count": 64,
+          "Name": "minecraft:black_wool"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:heavy_armament_module"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:heavy_armament_module"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:heavy_armament_module"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_battery_pack"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_battery_pack"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_propeller"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        },
+        {
+          "Chance": 0.5,
+          "Name": "superbwarfare:large_motor"
+        }
+      ],
+      "Source": "superbwarfare:repair_tool",
+      "Type": "complete"
+    },
+    {
+      "Entries": [
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Chance": 0.5,
+          "Count": 4,
+          "Name": "superbwarfare:steel_block"
+        },
+        {
+          "Name": "minecraft:flower_pot"
+        }
+      ],
+      "Type": "complete"
+    }
+  ]
+}

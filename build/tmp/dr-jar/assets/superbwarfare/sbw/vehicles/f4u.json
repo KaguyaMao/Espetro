@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f4u.animation.json",
+    "ID":  "dragonrise_reforge:f4u",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/f4u.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/f4u.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/f4u.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/f4u.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/f4u.png"
+                   }
+               ]
+}

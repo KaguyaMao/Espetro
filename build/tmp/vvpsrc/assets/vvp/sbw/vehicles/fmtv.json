@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:fmtv",
+  "Model": {
+    "Model": "vvp:geo/fmtv.geo.json",
+    "Texture": "vvp:textures/entity/fmtv_green.png"
+  }
+}

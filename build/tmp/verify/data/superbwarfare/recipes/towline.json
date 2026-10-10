@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:chain"
+    },
+    "b": {
+      "item": "minecraft:lead"
+    },
+    "c": {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "pattern": [
+    " a ",
+    "cbc",
+    " a "
+  ],
+  "result": {
+    "item": "superbwarfare:towline"
+  },
+  "show_notification": true
+}

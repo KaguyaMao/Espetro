@@ -1,0 +1,15 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/pzbjy.animation.json",
+    "ID":  "dragonrise_reforge:pzbjy",
+    "Model":  {
+                  "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/pzbjy.animation.json",
+                  "Model":  "dragonrise_reforge:models/bedrock/vehicle/pzbjy.geo.json",
+                  "Texture":  "dragonrise_reforge:textures/entity/pzbjy.png"
+              },
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/pzbjy.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/pzbjy.png"
+                   }
+               ]
+}

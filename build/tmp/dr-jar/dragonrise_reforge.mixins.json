@@ -1,0 +1,38 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.redabysslucia.dragonrise_reforge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "dragonrise_reforge.refmap.json",
+  "plugin": "com.redabysslucia.dragonrise_reforge.mixin.DragonriseMixinPlugin",
+  "mixins": [
+    "FireControlTurretAimMixin",
+    "MonitorItemServerMixin",
+    "VehicleRegenMixin",
+    "VehiclePartRegenMixin",
+    "VehicleEngineDamageMixin",
+    "VehicleTurretSpeedMixin",
+    "RepairToolVehicleMixin"
+  ],
+  "client": [
+    "AircraftHudMixin",
+    "GameRendererMixin",
+    "LandVehicleHudMixin",
+    "VehicleAssemblingScreenMixin",
+    "MonitorItemMixin",
+    "ClientMouseHandlerMixin",
+    "R6DroneCameraMixin",
+    "ClientEventHandlerDualSeekMixin",
+    "ClientEventHandlerRadarLowAltLockMixin",
+    "VehicleMainWeaponHudOverlayDualSeekMixin",
+    "DynamicLightsHandlerMixin",
+    "DynamicLightsLevelMixin",
+    "DynamicLightsUpdateMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "superbwarfare.entry.vehicle.a_10a",
+  "icon": "superbwarfare:container",
+  "category": "superbwarfare:vehicle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.a_10a.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.a_10a.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.a_10a.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "superbwarfare.page.vehicle.a_10a.4"
+    }
+  ],
+  "sortnum": 20302
+}

@@ -1,0 +1,473 @@
+{
+  "mode": "exact05_11_15",
+  "rules": [
+    "$entity.getSourceAngle(source, -0.3164163132) * damage",
+    "$entity.getSourceAngle(source, 0.4122722554) * damage",
+    "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+  ],
+  "targets": [
+    "dragonrise_reforge:bmp3",
+    "dragonrise_reforge:m1126",
+    "dragonrise_reforge:m1128",
+    "dragonrise_reforge:m113",
+    "dragonrise_reforge:m1296",
+    "dragonrise_reforge:m1a2sepv1",
+    "dragonrise_reforge:m1a2sepv2",
+    "dragonrise_reforge:m3a3",
+    "dragonrise_reforge:t72b3",
+    "dragonrise_reforge:t90mh",
+    "dragonrise_reforge:uh60",
+    "dragonrise_reforge:z20",
+    "dragonrise_reforge:zbd04a",
+    "dragonrise_reforge:zbd05",
+    "dragonrise_reforge:zbl08",
+    "dragonrise_reforge:zlt11",
+    "dragonrise_reforge:zsd05",
+    "dragonrise_reforge:zsl10",
+    "dragonrise_reforge:ztd05",
+    "dragonrise_reforge:ztz96a",
+    "dragonrise_reforge:ztz99a",
+    "fcp:bmp1am",
+    "fcp:btr80",
+    "fcp:btr82",
+    "vvp:mi_8",
+    "superbwarfare:drone",
+    "dragonrise_reforge:sx1",
+    "superbwarfare:annihilator"
+  ],
+  "truckJeepUntouched": [
+    "dragonrise_reforge:mv3_armed",
+    "dragonrise_reforge:mv3_supply",
+    "dragonrise_reforge:ural4320_supply",
+    "fcp:gaz_tigr_rws",
+    "fcp:kamaz",
+    "fcp:matv_crow"
+  ],
+  "restore": [
+    "dragonrise_reforge:csk181"
+  ],
+  "files": [
+    {
+      "id": "dragonrise_reforge:bmp3",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__bmp3.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m1126",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m1126.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m1128",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m1128.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m113",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m113.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m1296",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m1296.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m1a2sepv1",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m1a2sepv1.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m1a2sepv2",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m1a2sepv2.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:m3a3",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__m3a3.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:t72b3",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__t72b3.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:t90mh",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__t90mh.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:uh60",
+      "status": "ok",
+      "source": "jar:dragonrise_reforge-1.5.0-beta-20260927.jar",
+      "newOverride": true,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__uh60.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:z20",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__z20.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:zbd04a",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__zbd04a.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:zbd05",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__zbd05.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:zbl08",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__zbl08.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:zlt11",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__zlt11.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:zsd05",
+      "status": "no-source"
+    },
+    {
+      "id": "dragonrise_reforge:zsl10",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__zsl10.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:ztd05",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__ztd05.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:ztz96a",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__ztz96a.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:ztz99a",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": true,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__ztz99a.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "fcp:bmp1am",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "fcp__bmp1am.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "fcp:btr80",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "fcp__btr80.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "fcp:btr82",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "fcp__btr82.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "vvp:mi_8",
+      "status": "ok",
+      "source": "jar:vvp-alpha-beta-1.20.1-0.2.1-更改特化版.jar",
+      "newOverride": true,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "vvp__mi_8.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "superbwarfare:drone",
+      "status": "ok",
+      "source": "jar:[卓越前线] superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar",
+      "newOverride": true,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "superbwarfare__drone.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:sx1",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "dragonrise_reforge__sx1.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "superbwarfare:annihilator",
+      "status": "ok",
+      "source": "jar:[卓越前线] superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar",
+      "newOverride": true,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "",
+      "outName": "superbwarfare__annihilator.json",
+      "rules": [
+        "$entity.getSourceAngle(source, -0.3164163132) * damage",
+        "$entity.getSourceAngle(source, 0.4122722554) * damage",
+        "$entity.getSourceAngle(source, 0.4125) * damage * (entity.getHealth() > -1 ? 1.1 : 1.1)"
+      ]
+    },
+    {
+      "id": "dragonrise_reforge:csk181",
+      "status": "ok",
+      "source": "kubejs",
+      "newOverride": false,
+      "fixedTrailingComma": false,
+      "err": null,
+      "note": "恢复 jar 原值",
+      "outName": "dragonrise_reforge__csk181.json",
+      "rules": [
+        "$entity.getSourceAngle(source, 0.05) * damage"
+      ]
+    }
+  ]
+}

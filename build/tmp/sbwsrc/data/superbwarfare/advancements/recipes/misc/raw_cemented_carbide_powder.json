@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "superbwarfare:raw_cemented_carbide_powder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_powder": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/tungsten"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_tungsten_powder",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "superbwarfare:raw_cemented_carbide_powder"
+    ]
+  },
+  "sends_telemetry_event": false
+}

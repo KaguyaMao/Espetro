@@ -1,0 +1,13 @@
+{
+  "ID": "dragonrise_reforge:lcm",
+  "Model": {
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/lcm.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/lcm.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/lcm.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/lcm.png"
+    }
+  ]
+}

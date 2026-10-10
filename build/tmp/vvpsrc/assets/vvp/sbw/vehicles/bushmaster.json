@@ -1,0 +1,7 @@
+{
+  "ID": "vvp:bushmaster",
+  "Model": {
+    "Model": "vvp:geo/bushmaster.geo.json",
+    "Texture": "vvp:textures/entity/bushmaster_green.png"
+  }
+}

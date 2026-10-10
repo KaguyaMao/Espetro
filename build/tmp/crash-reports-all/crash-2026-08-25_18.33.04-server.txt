@@ -1,0 +1,139 @@
+---- Minecraft Crash Report ----
+// Ooh. Shiny.
+
+Time: 2026-08-25 18:33:04
+Description: Exception in server tick loop
+
+java.lang.NoSuchMethodError: 'com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier com.atsuishio.superbwarfare.entity.vehicle.damage.DamageModifier.custom(kotlin.jvm.functions.Function2)'
+	at frontline.combat.fcp.entity.vehicle.Lav.Lav25Entity.getDamageModifier(Lav25Entity.java:83) ~[fcp-1.1.1-�9yH.jar%23160!/:1.1.1] {re:classloading}
+	at com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.m_6469_(VehicleEntity.kt:2060) ~[%5BS�M�%5D%20superbwarfare-0.8.9.1-hotfix-mc1.20.1-993063bed-all.jar%23143!/:0.8.9.1-mc1.20.1-993063bed] {re:mixin,pl:runtimedistcleaner:A,re:classloading,pl:mixin:A,pl:runtimedistcleaner:A}
+	at net.minecraft.world.entity.player.Player.m_5706_(Player.java:1142) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:create.mixins.json:PlayerMixin,pl:mixin:APP:kubejs-common.mixins.json:PlayerMixin,pl:mixin:APP:mixins.superbwarfare.json:PlayerMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerPlayer.m_5706_(ServerPlayer.java:1400) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:xaerolib.mixins.json:MixinServerPlayer,pl:mixin:APP:tacz.mixins.json:common.ServerPlayerMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerPlayer,pl:mixin:APP:kubejs-common.mixins.json:ServerPlayerMixin,pl:mixin:A}
+	at net.minecraft.server.network.ServerGamePacketListenerImpl$1.m_141994_(ServerGamePacketListenerImpl.java:1493) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.network.protocol.game.ServerboundInteractPacket$1.m_142457_(ServerboundInteractPacket.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.network.protocol.game.ServerboundInteractPacket.m_179617_(ServerboundInteractPacket.java:66) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.m_6946_(ServerGamePacketListenerImpl.java:1461) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:tacz.mixins.json:common.ServerGamePacketListenerImplMixin,pl:mixin:APP:tacz.mixins.json:common.ServerPlayNetHandlerMixin,pl:mixin:APP:simplebedrockmodel.mixins.json:ServerPlayNetHandlerMixin,pl:mixin:APP:espetro.mixins.json:ServerGamePacketListenerWaitingLockMixin,pl:mixin:A}
+	at net.minecraft.network.protocol.game.ServerboundInteractPacket.m_5797_(ServerboundInteractPacket.java:53) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.network.protocol.game.ServerboundInteractPacket.m_5797_(ServerboundInteractPacket.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.network.protocol.PacketUtils.m_263899_(PacketUtils.java:22) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.server.TickTask.run(TickTask.java:18) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:classloading}
+	at net.minecraft.util.thread.BlockableEventLoop.m_6367_(BlockableEventLoop.java:156) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at net.minecraft.util.thread.ReentrantBlockableEventLoop.m_6367_(ReentrantBlockableEventLoop.java:23) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,re:computing_frames,re:classloading}
+	at net.minecraft.server.MinecraftServer.m_6367_(MinecraftServer.java:770) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_6367_(MinecraftServer.java:161) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.util.thread.BlockableEventLoop.m_7245_(BlockableEventLoop.java:130) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.m_129961_(MinecraftServer.java:753) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_7245_(MinecraftServer.java:747) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.util.thread.BlockableEventLoop.m_18699_(BlockableEventLoop.java:115) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.m_130012_(MinecraftServer.java:732) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:665) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23179!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at java.lang.Thread.run(Thread.java:840) ~[?:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Linux (amd64) version 7.0.0-28-generic
+	Java Version: 17.0.16, Azul Systems, Inc.
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Azul Systems, Inc.
+	Memory: 3487307280 bytes (3325 MiB) / 6257901568 bytes (5968 MiB) up to 17179869184 bytes (16384 MiB)
+	CPUs: 48
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen Threadripper PRO 5995WX 64-Cores
+	Identifier: AuthenticAMD Family 25 Model 8 Stepping 2
+	Microarchitecture: Zen 3
+	Frequency (GHz): -0.00
+	Number of physical packages: 1
+	Number of physical CPUs: 48
+	Number of logical CPUs: 48
+	Graphics card #0 name: unknown
+	Graphics card #0 vendor: unknown
+	Graphics card #0 VRAM (MB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MB): 193373.48
+	Virtual memory used (MB): 61032.55
+	Swap memory total (MB): 0.00
+	Swap memory used (MB): 0.00
+	JVM Flags: 20 total; -Xmx16G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99
+	Server Running: true
+	Player Count: 1 / 60; [ServerPlayer['ly01_lin'/13, l='ServerLevel[world]', x=-368.87, y=-43.00, z=-330.01]]
+	Data Packs: vanilla, mod:geckolib, mod:playeranimator (incompatible), mod:superbwarfare, mod:curios (incompatible), mod:simplebedrockmodel, mod:architectury (incompatible), mod:doomsday_decoration, mod:rhino (incompatible), mod:kubejs (incompatible), mod:tacz, mod:forge, mod:kotlinforforge (incompatible), mod:flywheel, mod:ponder (incompatible), mod:create, mod:ferritecore (incompatible), mod:dragonrise_reforge, create:dynamic_data, superbwarfare:resourcepacks/sbw_legacy, tacz_resources, mod:customskinloader (incompatible), mod:auratip, mod:tacz_tactical_breaching, mod:taczmagazines, mod:oelib, mod:memoryleakfix (incompatible), mod:cloth_config (incompatible), mod:voicechat (incompatible), mod:fcp, mod:disablef5, mod:mutil, mod:taczexpands, mod:taczadditions, mod:taczjs, mod:espetro, mod:mm_armor, espetro_dimensions_runtime, mod:esvoice, mod:mixinextras (incompatible), mod:pingwheel (incompatible), mod:espoints, mod:spark (incompatible), mod:snassets_particles, mod:xaerolib (incompatible), mod:xaeroworldmap (incompatible), mod:vvp, mod:tetrachordlib (incompatible), mod:apricityui
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Experimental
+	Is Modded: Definitely; Server brand changed to 'forge'
+	Type: Dedicated Server (map_server.txt)
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeserver
+	ModLauncher naming: srg
+	ModLauncher services: 
+		mixin-0.8.5.jar mixin PLUGINSERVICE 
+		eventbus-6.2.33.jar eventbus PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar slf4jfixer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar object_holder_definalize PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtime_enum_extender PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar capability_token_subclass PLUGINSERVICE 
+		accesstransformers-8.0.4.jar accesstransformer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar taczexpands_coremod TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		minecraft@1.0
+		kotlinforforge@4.12.0
+		javafml@null
+		lowcodefml@null
+	Mod List: 
+		rhino-forge-2001.2.3-build.10.jar                 |Rhino                         |rhino                         |2001.2.3-build.10   |DONE      |Manifest: NOSIGNATURE
+		[t�UI] ApricityUI-forge-1.20.1-1.2.3.jar          |ApricityUI                    |apricityui                    |1.2.3               |DONE      |Manifest: NOSIGNATURE
+		geckolib-forge-1.20.1-4.8.3.jar                   |GeckoLib 4                    |geckolib                      |4.8.3               |DONE      |Manifest: NOSIGNATURE
+		player-animation-lib-forge-1.0.2-rc1+1.20.jar     |Player Animator               |playeranimator                |1.0.2-rc1+1.20      |DONE      |Manifest: NOSIGNATURE
+		CustomSkinLoader_ForgeV2-14.28.jar                |CustomSkinLoader              |customskinloader              |14.28               |DONE      |Manifest: 4a:31:8b:cf:34:eb:d0:13:f3:19:39:d5:d2:b9:12:78:b5:f2:8d:91:3e:6f:8f:ed:97:48:00:69:e1:30:3a:54
+		tetrachordlib-1.20+1.0.3.jar                      |Tetrachord Lib                |tetrachordlib                 |1.20+1.0.3          |DONE      |Manifest: NOSIGNATURE
+		[n�UI] auratip-forge-1.20.1-1.1.1-beta.jar        |AuraTip                       |auratip                       |1.1.1-beta          |DONE      |Manifest: NOSIGNATURE
+		snassets_particles-1.0.1.jar                      |SnAssets Particles            |snassets_particles            |1.0.1               |DONE      |Manifest: NOSIGNATURE
+		xaerolib-forge-1.20.1-1.7.1.jar                   |XaeroLib                      |xaerolib                      |1.7.1               |DONE      |Manifest: NOSIGNATURE
+		[8R���J�] tacz-1.20.1-1.1.8-release.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8               |DONE      |Manifest: NOSIGNATURE
+		tacz_tactical_breaching-forge-1.20.1-1.0.1.jar    |TaCZ Tactical Breaching       |tacz_tactical_breaching       |1.0.1               |DONE      |Manifest: NOSIGNATURE
+		Ping-Wheel-1.12.1-forge-1.20.1.jar                |Ping Wheel                    |pingwheel                     |1.12.1              |DONE      |Manifest: NOSIGNATURE
+		[Xaero�L0�] xaeroworldmap-forge-1.20.1-1.44.2.jar|Xaero's World Map             |xaeroworldmap                 |1.44.2              |DONE      |Manifest: NOSIGNATURE
+		taczmagazines-1.20.1-0.1.6-Beta.jar               |TaCZ: Magazines               |taczmagazines                 |0.1.6               |DONE      |Manifest: NOSIGNATURE
+		mixinextras-forge-0.4.1.jar                       |MixinExtras                   |mixinextras                   |0.4.1               |DONE      |Manifest: NOSIGNATURE
+		OELib-forge-1.20.1-0.2.4.1.jar                    |OELib                         |oelib                         |0.2.4.1             |DONE      |Manifest: NOSIGNATURE
+		[S�M�] superbwarfare-0.8.9.1-hotfix-mc1.20.1-99306|Superb Warfare                |superbwarfare                 |0.8.9.1             |DONE      |Manifest: NOSIGNATURE
+		vvp-alpha-beta-1.20.1-0.2.1-�9yH.jar             |Vintage Vehicle Pack          |vvp                           |0.2.0               |DONE      |Manifest: NOSIGNATURE
+		[�X��] memoryleakfix-forge-1.17+-1.1.5.jar      |Memory Leak Fix               |memoryleakfix                 |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		cloth-config-11.1.136-forge.jar                   |Cloth Config v10 API          |cloth_config                  |11.1.136            |DONE      |Manifest: NOSIGNATURE
+		forge-1.20.1-47.4.22-universal.jar                |Forge                         |forge                         |47.4.22             |DONE      |Manifest: NOSIGNATURE
+		server-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |DONE      |Manifest: NOSIGNATURE
+		voicechat-forge-1.20.1-2.6.20.jar                 |Simple Voice Chat             |voicechat                     |1.20.1-2.6.20       |DONE      |Manifest: NOSIGNATURE
+		fcp-1.1.1-�9yH.jar                               |Frontline Combat Pack         |fcp                           |1.1.1               |DONE      |Manifest: NOSIGNATURE
+		[k�] spark-1.10.53-forge.jar                      |spark                         |spark                         |1.10.53             |DONE      |Manifest: NOSIGNATURE
+		kffmod-4.12.0.jar                                 |Kotlin For Forge              |kotlinforforge                |4.12.0              |DONE      |Manifest: NOSIGNATURE
+		disablef5-1.2(1).jar                              |Disable F5                    |disablef5                     |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		curios-forge-5.14.1+1.20.1.jar                    |Curios API                    |curios                        |5.14.1+1.20.1       |DONE      |Manifest: NOSIGNATURE
+		flywheel-forge-1.20.1-1.0.5.jar                   |Flywheel                      |flywheel                      |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		Ponder-Forge-1.20.1-1.0.91.jar                    |Ponder                        |ponder                        |1.0.91              |DONE      |Manifest: NOSIGNATURE
+		[:���] create-1.20.1-6.0.8.jar                    |Create                        |create                        |6.0.8               |DONE      |Manifest: NOSIGNATURE
+		mutil-1.20.1-6.3.0.jar                            |mutil                         |mutil                         |6.3.0               |DONE      |Manifest: NOSIGNATURE
+		simplebedrockmodel-2.5.1-forge-mc1.20.1.jar       |SimpleBedrockModel            |simplebedrockmodel            |2.5.1-forge-mc1.20.1|DONE      |Manifest: NOSIGNATURE
+		tmp_16263135364106971143.tmp                      |TACZExpands                   |taczexpands                   |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		taczadditions-1.20.1-1.0.0-hotfix.jar             |TaCZ: Additions               |taczadditions                 |1.0.0-hotfix        |DONE      |Manifest: NOSIGNATURE
+		architectury-9.2.14-forge.jar                     |Architectury                  |architectury                  |9.2.14              |DONE      |Manifest: NOSIGNATURE
+		kubejs-forge-2001.6.5-build.26.jar                |KubeJS                        |kubejs                        |2001.6.5-build.26   |DONE      |Manifest: NOSIGNATURE
+		taczjs-forge-1.4.2+mc1.20.1.jar                   |TaCZ JS                       |taczjs                        |1.4.2+mc1.20.1      |DONE      |Manifest: NOSIGNATURE
+		[�'S��] ferritecore-6.0.1-forge.jar               |Ferrite Core                  |ferritecore                   |6.0.1               |DONE      |Manifest: 41:ce:50:66:d1:a0:05:ce:a1:0e:02:85:9b:46:64:e0:bf:2e:cf:60:30:9a:fe:0c:27:e0:63:66:9a:84:ce:8a
+		mm_armor-1.1.0-forge-1.20.1.jar                   |miklos_military_armor_r       |mm_armor                      |1.1.0               |DONE      |Manifest: NOSIGNATURE
+		[+��p] doomsday_decoration-1.1.3-forge-1.20.1.jar |Doomsday Decoration           |doomsday_decoration           |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		dragonrise_reforge-1.5.0-beta.jar                 |DragonRise:Reforge            |dragonrise_reforge            |1.5.0-beta          |DONE      |Manifest: NOSIGNATURE
+		espetro-1.2.0.jar                                 |Espetro                       |espetro                       |1.2.0               |DONE      |Manifest: NOSIGNATURE
+		esvoice-1.0.0-final.jar                           |Esvoice                       |esvoice                       |1.0.0-final         |DONE      |Manifest: NOSIGNATURE
+		espoints-1.2.0.jar                                |EsPoints                      |espoints                      |1.2.0               |DONE      |Manifest: NOSIGNATURE
+	Crash Report UUID: 77117252-5d21-41e7-ba37-586f67305627
+	FML: 47.4
+	Forge: net.minecraftforge:47.4.22

@@ -1,0 +1,27 @@
+
+k2026-08-13 13:47:11,109 Test worker WARN Advanced terminal features are not available in this environment
+
+�[13:47:11] [Test worker/INFO] [or.es.Espetro/]: 已冻结工事配置: 1 条，主基地补给半径=40.0，补给站半径=20.0
+y[13:47:11] [Test worker/WARN] [or.es.Espetro/]: 忽略无效工事配置: duplicate_wall 包含重复结构偏移 0,0,0
+h[13:47:11] [Test worker/WARN] [or.es.Espetro/]: 工事配置没有有效条目，恢复内置默认值
+�[13:47:11] [Test worker/INFO] [or.es.Espetro/]: 已冻结工事配置: 3 条，主基地补给半径=40.0，补给站半径=20.0
+j[13:47:11] [Test worker/WARN] [or.es.Espetro/]: 忽略无效工事配置: ../invalid 的 id 格式无效
+�[13:47:11] [Test worker/INFO] [or.es.Espetro/]: 已冻结工事配置: 1 条，主基地补给半径=256.0，补给站半径=1.0
+TSk[13:47:12] [Test worker/INFO] [or.es.Espetro/]: 已安全导出 Espetro 示例内容: 新增 25, 跳过 1
+TUl[13:47:12] [Test worker/INFO] [or.es.Espetro/]: 已安全导出 Espetro 示例内容: 新增 16, 跳过 10
+XZ�[13:47:16] [Test worker/INFO] [or.es.Espetro/]: 加载外部编制: C:\Users\Administrator\AppData\Local\Temp\junit12398957175335912093\compatible.json (Test)
+XZ�[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classKits 中各类 factionId 的职业数: {compatible=1}
+XZ�[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classesByFaction 的 factionId 集合: [compatible], factions.keySet: [compatible]
+XZ`[13:47:16] [Test worker/INFO] [or.es.Espetro/]: EsFactions 已冻结: 1 个编制, 1 个职业
+XZ�[13:47:16] [Test worker/INFO] [or.es.Espetro/]: 加载外部编制: C:\Users\Administrator\AppData\Local\Temp\junit12398957175335912093\overflow.json (Test)
+XZ[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classKits 中各类 factionId 的职业数: {overflow=1}
+XZ�[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classesByFaction 的 factionId 集合: [overflow], factions.keySet: [overflow]
+XZ`[13:47:16] [Test worker/INFO] [or.es.Espetro/]: EsFactions 已冻结: 1 个编制, 1 个职业
+XZ�[13:47:16] [Test worker/WARN] [or.es.Espetro/]: [编制兼容] overflow → 失败: 载具类型 'tank' entities(2) > spawn点数(1)
+���[13:47:16] [Test worker/WARN] [or.es.Espetro/]: [预览解析] 职业 invalid_slot 变体 default 的 equipment 槽位无效: not_a_slot
+���[13:47:16] [Test worker/WARN] [or.es.Espetro/]: [预览解析] 职业 invalid_item 变体 default 物品参数解析失败: minecraft:does_not_exist 1 (Unknown item 'minecraft:does_not_exist' at position 0: <--[HERE])
+���[13:47:16] [Test worker/WARN] [or.es.Espetro/]: [预览解析] 职业 illegal_count 变体 default 物品参数解析失败: minecraft:iron_sword abc (Expected integer at position 21: ...ron_sword <--[HERE])
+���[13:47:16] [Test worker/INFO] [or.es.Espetro/]: 加载外部编制: C:\Users\Administrator\AppData\Local\Temp\junit5529731543186681460\ordered.json (Order Test)
+��~[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classKits 中各类 factionId 的职业数: {ordered=6}
+���[13:47:16] [Test worker/INFO] [or.es.Espetro/]: [重建缓存诊断] classesByFaction 的 factionId 集合: [ordered], factions.keySet: [ordered]
+��`[13:47:16] [Test worker/INFO] [or.es.Espetro/]: EsFactions 已冻结: 1 个编制, 6 个职业

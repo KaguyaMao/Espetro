@@ -1,0 +1,15 @@
+{
+  "Animation": "dragonrise_reforge:animations/bedrock/vehicle/l1a2.animation.json",
+  "ID": "dragonrise_reforge:l1a2",
+  "Model": {
+    "Animation": "dragonrise_reforge:animations/bedrock/vehicle/l1a2.animation.json",
+    "Model": "dragonrise_reforge:models/bedrock/vehicle/l1a2.geo.json",
+    "Texture": "dragonrise_reforge:textures/entity/l1a2.png"
+  },
+  "Models": [
+    {
+      "Model": "dragonrise_reforge:models/bedrock/vehicle/l1a2.geo.json",
+      "Texture": "dragonrise_reforge:textures/entity/l1a2.png"
+    }
+  ]
+}

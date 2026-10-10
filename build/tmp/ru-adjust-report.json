@@ -1,0 +1,36 @@
+{
+ "scoutMoved": [
+  "ru_205th: RU_205th_SCOUT -> row=4",
+  "ru_3th: RU_3th_SCOUT -> row=4",
+  "ru_49th: RU_R1_SCOUT -> row=4",
+  "ru_6th_tank: RU_6th_tank_SCOUT -> row=4"
+ ],
+ "scopeSwapped": 4,
+ "otherPso1e": [],
+ "row4After": {
+  "ru_205th": [
+   "重型反坦克兵(RU_205th_HEAVYANTITANK)",
+   "侦察兵(RU_205th_SCOUT)",
+   "通用机枪手(RU_205th_MMG)",
+   "战斗工兵(RU_205th_ENGINEER)"
+  ],
+  "ru_3th": [
+   "重型反坦克兵(RU_3th_HEAVYANTITANK)",
+   "侦察兵(RU_3th_SCOUT)",
+   "通用机枪手(RU_3th_MMG)",
+   "战斗工兵(RU_3th_ENGINEER)"
+  ],
+  "ru_49th": [
+   "重型反坦克兵(RU_R1_HEAVYANTITANK)",
+   "侦察兵(RU_R1_SCOUT)",
+   "通用机枪手(RU_R1_MMG)",
+   "战斗工兵(RU_R1_ENGINEER)"
+  ],
+  "ru_6th_tank": [
+   "重型反坦克兵(RU_6th_tank_HEAVYANTITANK)",
+   "侦察兵(RU_6th_tank_SCOUT)",
+   "通用机枪手(RU_6th_tank_MMG)",
+   "战斗工兵(RU_6th_tank_ENGINEER)"
+  ]
+ }
+}

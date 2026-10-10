@@ -1,0 +1,16 @@
+
+{
+  "type": "superbwarfare:vehicle_assembling",
+  "category": "land",
+  "inputs": [
+    "superbwarfare:medium_battery_pack",
+    "superbwarfare:light_armament_module",
+    "superbwarfare:heavy_armament_module",
+    "4 #forge:storage_blocks/steel",
+    "2 superbwarfare:track",
+    "superbwarfare:large_motor"
+  ],
+  "result": {
+    "entity": "vvp:bmp_2m"
+  }
+}

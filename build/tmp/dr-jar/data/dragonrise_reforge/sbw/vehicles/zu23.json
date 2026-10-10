@@ -1,0 +1,141 @@
+{
+    "Animation":  "dragonrise_reforge:animations/bedrock/vehicle/zu23.animation.json",
+    "ID":  "dragonrise_reforge:zu23",
+    "MaxHealth":  120,
+    "MaxEnergy":  0,
+    "TurretPos":  [
+                      0.0,
+                      0.54543125,
+                      -0.123075
+                  ],
+    "TurretTurnSpeed":  [
+                            10,
+                            10
+                        ],
+    "TurretPitchRange":  [
+                             -5,
+                             70
+                         ],
+    "BarrelPos":  [
+                      0,
+                      0.6,
+                      0.25
+                  ],
+    "Seats":  {
+                  "Transform":  "Turret",
+                  "Position":  [
+                                   0.8125,
+                                   -0.2,
+                                   -1.0625
+                               ],
+                  "MinPitch":  -5,
+                  "MaxPitch":  60,
+                  "CameraPos":  {
+                                    "Transform":  "Barrel",
+                                    "UseFixedCameraPos":  true,
+                                    "Position":  [
+                                                     0,
+                                                     1.4,
+                                                     0.6
+                                                 ],
+                                    "Direction":  "Barrel"
+                                },
+                  "Weapons":  [
+                                  "Cannon"
+                              ],
+                  "Sensitivity":  [
+                                      0.55,
+                                      0.75,
+                                      1
+                                  ],
+                  "DismountInfo":  {
+                                       "Transform":  "Turret",
+                                       "Position":  [
+                                                        0,
+                                                        0.25,
+                                                        0
+                                                    ]
+                                   }
+              },
+    "UsePassengerCreativeAmmoBox":  true,
+    "Weapons":  {
+                    "Cannon":  {
+                                   "Icon":  "superbwarfare:textures/overlay/vehicle/weapon/icons/cannon_25mm_aa.png",
+                                   "DefaultFireMode":  "Auto",
+                                   "AvailableFireModes":  "Auto",
+                                   "Projectile":  "superbwarfare:small_cannon_shell",
+                                   "ShellType":  "AA",
+                                   "DefaultZoom":  3,
+                                   "RPM":  800,
+                                   "Velocity":  32.3333,
+                                   "Gravity":  0.05,
+                                   "Damage":  23,
+                                   "ExplosionDamage":  2,
+                                   "ExplosionRadius":  1,
+                                   "ProjectileLife":  20,
+                                   "Spread":  0.75,
+                                   "RecoilTime":  31,
+                                   "RecoilForce":  0.2,
+                                   "HeatPerShoot":  1.8,
+                                   "NaturalCooldown":  0.75,
+                                   "ShootAnimationTime":  3,
+                                   "Crosshair":  "@VehicleCommonGunDynamic",
+                                   "CrosshairColor":  "0x66FF00",
+                                   "Name":  "weapon.superbwarfare.25mm_cannon_aa",
+                                   "SoundInfo":  {
+                                                     "Fire1P":  "dragonrise_reforge:zbd04a_30mm_fire_1p",
+                                                     "Fire3P":  "dragonrise_reforge:zbd04a_30mm_fire_3p",
+                                                     "Fire3PFar":  "dragonrise_reforge:zbd04a_30mm_fire_3p_far",
+                                                     "Fire3PVeryFar":  "superbwarfare:mi_28_cannon_veryfar",
+                                                     "Change":  "dragonrise_reforge:change_weapon"
+                                                 },
+                                   "SoundRadius":  24,
+                                   "AmmoType":  "superbwarfare:small_shell_aa",
+                                   "Magazine":  120,
+                                   "EmptyReloadTime":  100,
+                                   "ShootPos":  {
+                                                    "Transform":  "Barrel",
+                                                    "Positions":  [
+                                                                      [
+                                                                          0.1609375,
+                                                                          0.2890625,
+                                                                          0.5
+                                                                      ],
+                                                                      [
+                                                                          -0.1609375,
+                                                                          0.2890625,
+                                                                          0.5
+                                                                      ]
+                                                                  ],
+                                                    "Directions":  [
+                                                                       "Barrel"
+                                                                   ]
+                                                }
+                               }
+                },
+    "ThirdPersonCameraPos":  [
+                                 -0.3,
+                                 1,
+                                 -1
+                             ],
+    "Mass":  0.05,
+    "DamageModifiers":  [
+                            "minecraft:lava * 2.667",
+                            "All * 1.75",
+                            "@minecraft:tnt * 3",
+                            "@minecraft:tnt_minecart * 3"
+                        ],
+    "VehicleContainerType":  "Mini",
+    "EngineType":  "Fixed",
+    "HasLowHealthWarning":  false,
+    "SelfHurtPercent":  0,
+    "VehicleIcon":  "dragonrise_reforge:textures/vehicle_icon/zu23_icon.png",
+    "ContainerIcon":  "superbwarfare:textures/gui/vehicle/type/defense.png",
+    "Type":  "Defense",
+    "Models":  [
+                   {
+                       "Model":  "dragonrise_reforge:models/bedrock/vehicle/zu23.geo.json",
+                       "Texture":  "dragonrise_reforge:textures/entity/zu23.png"
+                   }
+               ]
+}
