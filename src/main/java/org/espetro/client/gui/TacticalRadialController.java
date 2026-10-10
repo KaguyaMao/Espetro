@@ -29,7 +29,7 @@ import java.util.Map;
  *   <li>Overlay 活跃期间绝不调用 {@code RadialMenuRegistry.setMenus}、close/open Overlay。</li>
  *   <li>菜单重建延迟到 Alt 已松开且 Overlay 已关闭后执行；每次关闭最多重建一次。</li>
  *   <li>技能同步由服务端在入服/指挥官变更/技能激活时主动推送，不依赖首次 Alt 长按。</li>
- *   <li>根菜单：指挥官直接显示「载具部署」；有可用技能时显示「技能」槽。</li>
+ *   <li>根菜单：队包、电台、工事与 EsPoints 战术标点按时钟位置安排。</li>
  *   <li>冷却值更新仅影响下次打开时的菜单内容，不触发 Overlay 内重建。</li>
  *   <li>每次开始按住 Alt 会请求一次技能同步，避免「后成为队长」仍无入口。</li>
  * </ul>
@@ -498,7 +498,7 @@ public final class TacticalRadialController {
         return loc != null ? loc : COMMAND_ICON;
     }
 
-    /** Rally plus one slot per catalog fort; radio/HAB must not be hard-coded again. */
+    /** Stable actions across the home page and construction catalogue; no duplicate radio/HAB. */
     static List<String> buildMenuSlotIds(List<FortificationCatalogPacket.Entry> forts) {
         List<String> ids = new ArrayList<>();
         boolean fireteamOnly = isFireteamLeaderOnly();
