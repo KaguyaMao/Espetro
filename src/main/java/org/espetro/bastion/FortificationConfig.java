@@ -359,6 +359,9 @@ public final class FortificationConfig {
                 try {
                     FortificationDef def = GSON.fromJson(entries.get(i), FortificationDef.class);
                     normalize(def, limits, errors, path);
+                    if (def != null && def.fixedWeapon != null) {
+                        def.fixedWeapon.normalize(errors, path + ".fixed_weapon");
+                    }
                     if (def != null && def.id != null && definitions.putIfAbsent(def.id, def) != null) {
                         errors.add(path + ".id: 重复 " + def.id);
                     }
@@ -1056,6 +1059,9 @@ public final class FortificationConfig {
         public Construction construction = new Construction();
         public Durability durability = new Durability();
         public Requirements requirements = new Requirements();
+        /** 固定武器配置（可选）：修建后可用 F 键轮盘把所在 FOB 的弹药兑换成该武器用的弹药。 */
+        @SerializedName(value = "fixed_weapon", alternate = {"fixedWeapon"})
+        public FixedWeapon fixedWeapon = new FixedWeapon();
 
         public transient Behavior behaviorType;
         public transient Map<String, FortificationTemplateCompiler.CompiledTemplate> compiled = Map.of();
@@ -1323,6 +1329,53 @@ public final class FortificationConfig {
                 }
             } catch (Throwable ignored) {
                 // 编制表不可用时跳过校验，不影响工事加载
+            }
+        }
+    }
+
+    /**
+     * 固定武器配置块（可选）。
+     *
+     * <pre>"fixed_weapon": {
+     *   "enabled": true,
+     *   "ammo_item": "",
+     *   "exchange_amount": 50,
+     *   "fob_ammo_cost": 25,
+     *   "output": "vehicle"
+     * }</pre>
+     *
+     * <ul>
+     *   <li>{@code ammo_item} 留空 = 自动读该武器实际消耗的弹药（SBW {@code AMMO_CONSUMER}）</li>
+     *   <li>{@code exchange_amount} = 每次兑换产出多少发；{@code fob_ammo_cost} = 每次消耗多少 FOB 弹药点</li>
+     *   <li>{@code output} = {@code player}（玩家背包）/ {@code vehicle}（武器的弹药池或弹夹，直接装填）
+     *       或 {@code container}（只放进武器物品箱，交给武器自身的手动装填逻辑消耗）</li>
+     * </ul>
+     */
+    public static final class FixedWeapon {
+        public boolean enabled;
+        @SerializedName("ammo_item")
+        public String ammoItem = "";
+        @SerializedName("exchange_amount")
+        public int exchangeAmount = 1;
+        @SerializedName("fob_ammo_cost")
+        public int fobAmmoCost = 0;
+        public String output = "vehicle";
+
+        void normalize(List<String> errors, String path) {
+            if (ammoItem == null) {
+                ammoItem = "";
+            }
+            ammoItem = ammoItem.trim();
+            exchangeAmount = Math.max(0, exchangeAmount);
+            fobAmmoCost = Math.max(0, fobAmmoCost);
+            String out = output == null ? "" : output.trim().toLowerCase(Locale.ROOT);
+            if (!"player".equals(out) && !"vehicle".equals(out) && !"container".equals(out)) {
+                errors.add(path + ".output: 只能是 player / vehicle / container");
+                out = "vehicle";
+            }
+            output = out;
+            if (enabled && exchangeAmount <= 0) {
+                errors.add(path + ".exchange_amount: 启用固定武器时必须大于 0");
             }
         }
     }

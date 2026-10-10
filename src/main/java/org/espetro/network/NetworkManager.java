@@ -488,6 +488,17 @@ public class NetworkManager {
             .decoder(CloseModScreensPacket::read)
             .consumerMainThread(CloseModScreensPacket::handle)
             .add();
+        // 固定武器：F 键用 FOB 弹药兑换（协议 1.12）
+        NET.registerMessage(nextId(), FixedWeaponExchangePacket.class,
+            FixedWeaponExchangePacket::write, FixedWeaponExchangePacket::read,
+            FixedWeaponExchangePacket::handle);
+        // 固定武器：F 打开兑换轮盘（协议 1.13）
+        NET.registerMessage(nextId(), FixedWeaponOpenPacket.class,
+            FixedWeaponOpenPacket::write, FixedWeaponOpenPacket::read,
+            FixedWeaponOpenPacket::handle);
+        NET.registerMessage(nextId(), FixedWeaponWheelPacket.class,
+            FixedWeaponWheelPacket::write, FixedWeaponWheelPacket::read,
+            FixedWeaponWheelPacket::handle);
     }
 
     public static void sendBuildFortification(String fortId) {
@@ -507,6 +518,22 @@ public class NetworkManager {
 
     public static void sendFortificationEntityWork(UUID target, boolean build) {
         NET.sendToServer(FortificationWorkPacket.entity(target, build));
+    }
+
+    /** 固定武器：请求打开兑换轮盘（对普通载具会静默无响应）。 */
+    public static void sendFixedWeaponOpen(UUID weaponEntityId) {
+        if (weaponEntityId == null) {
+            return;
+        }
+        NET.sendToServer(new FixedWeaponOpenPacket(weaponEntityId));
+    }
+
+    /** 固定武器：请求用所在 FOB 的弹药兑换一次。 */
+    public static void sendFixedWeaponExchange(UUID weaponEntityId) {
+        if (weaponEntityId == null) {
+            return;
+        }
+        NET.sendToServer(new FixedWeaponExchangePacket(weaponEntityId));
     }
 
     public static void requestFortificationCatalog() {

@@ -21,6 +21,10 @@ import org.joml.Matrix4f;
  *
  * <p>按需求：所有标识**全距离可见**（含本队），仅车内规则不同——车内只保留
  * 指挥官/小队长/火力组长，不画普通成员标识。普通成员标识为队长标识的 1/2。</p>
+ *
+ * <p>可见性规则：火力组长的彩色标识与组员的彩色标识**只对本小队可见**；
+ * 其它小队一律显示同一张"小蓝色标"（squad_leader.png，小号、不画数字）。
+ * 小队长标内的队伍编号为黑色，保证在绿色/蓝色圆标上都看得清。</p>
  */
 public final class LeaderOverheadRenderer {
 
@@ -34,7 +38,7 @@ public final class LeaderOverheadRenderer {
      * 图标中心 = 顶边 + 抬高量 + 图标半高 ⇒ 图标底边 = 顶边 + 抬高量。
      */
     private static final double MEMBER_LIFT = 0.05;
-    private static final float NUMBER_MAX_SCALE = 0.018f;
+    private static final float NUMBER_MAX_SCALE = 0.022f;
     private static final float NUMBER_MAX_WIDTH = HALF * 1.45f;
     private static final float NUMBER_FORWARD_OFFSET = 0.02f;
 
@@ -107,8 +111,11 @@ public final class LeaderOverheadRenderer {
                                Entity entity, float pt, OverheadInfo info, Camera camera) {
         double x = entity.xo + (entity.getX() - entity.xo) * pt;
         double baseY = entity.yo + (entity.getY() - entity.yo) * pt;
-        // 队长类：实体高度 + 1.0（保持原样）；普通成员：位于 nametag 顶边上方
-        double y = baseY + (info.type == T.MEMBER
+        // 其它小队的火力组长/组员统一显示"小蓝色标"：小一号，并放到普通成员高度
+        boolean smallAllyMarker = info.squadId != ClientTacticalState.getMySquadId()
+            && (info.type == T.FIRETEAM_LEADER || info.type == T.MEMBER);
+        // 队长类：实体高度 + 1.0（保持原样）；普通成员/小蓝标：位于 nametag 顶边上方
+        double y = baseY + (info.type == T.MEMBER || smallAllyMarker
             ? entity.getNameTagOffsetY() + MEMBER_LIFT + HALF_MEMBER
             : entity.getBbHeight() + 1.0);
         double z = entity.zo + (entity.getZ() - entity.zo) * pt;
@@ -122,8 +129,8 @@ public final class LeaderOverheadRenderer {
         ps.pushPose();
         // 保持正向缩放以维持顶点绕序；通过 UV 水平翻转修正镜像，避免被背面剔除。
         RenderType iconLayer = RenderType.textSeeThrough(icon);
-        // 普通成员标识为队长标识的 1/5
-        float half = info.type == T.MEMBER ? HALF_MEMBER : HALF;
+        // 普通成员标识与其它小队的小蓝标都是小号（队长标识的一半）
+        float half = (info.type == T.MEMBER || smallAllyMarker) ? HALF_MEMBER : HALF;
         ps.scale(half, half, 1f);
         quadFlippedX(buf.getBuffer(iconLayer), ps.last().pose(), 0xFFFFFFFF);
         ps.popPose();
@@ -133,19 +140,25 @@ public final class LeaderOverheadRenderer {
         // == 小队编号：居中叠在队长画框前方，按位数缩放且始终略小于画框 ==
         if (info.type == T.SQUAD_LEADER) {
             renderSquadNumber(ps, buf, info.displayId);
+            // 关键：字体与图标是不同 RenderType，而 BufferSource.endBatch()（无参）只 flush
+            // lastState；这里必须立刻 flush 一次（此刻 lastState 正是字体层），否则后续任何
+            // 标识 getBuffer(图标层) 都会把 lastState 顶掉，字体层永远不落盘 → 数字不可见。
+            buf.endBatch();
         }
         ps.popPose();
     }
 
     private static ResourceLocation textureFor(OverheadInfo info) {
+        boolean mySquad = info.squadId == ClientTacticalState.getMySquadId();
         return switch (info.type) {
             case COMMANDER -> COMMANDER_TEX;
-            case SQUAD_LEADER -> info.squadId == ClientTacticalState.getMySquadId()
-                ? SELF_SQUAD_LEADER_TEX : SQUAD_LEADER_TEX;
-            case FIRETEAM_LEADER -> info.fireteam == 1 ? FIRETEAM_B_TEX : FIRETEAM_C_TEX;
-            // 普通成员：其它小队用 squad_leader.png（不画数字）；本队 A/B/C 组各用一张（不画数字）
+            case SQUAD_LEADER -> mySquad ? SELF_SQUAD_LEADER_TEX : SQUAD_LEADER_TEX;
+            // 火力组长标识只对本小队可见；其它小队一律小蓝色标（尺寸见 render 的 smallAllyMarker）
+            case FIRETEAM_LEADER -> !mySquad ? SQUAD_LEADER_TEX
+                : info.fireteam == 1 ? FIRETEAM_B_TEX : FIRETEAM_C_TEX;
+            // 普通成员：本队 A/B/C 组各用一张彩色标（不画数字）；其它小队用小蓝色标（不画数字）
             case MEMBER -> {
-                if (info.squadId != ClientTacticalState.getMySquadId()) yield SQUAD_LEADER_TEX;
+                if (!mySquad) yield SQUAD_LEADER_TEX;
                 yield switch (info.fireteam) {
                     case 1 -> FIRETEAMMATE_B_TEX;   // B 组
                     case 2 -> FIRETEAMMATE_C_TEX;   // C 组
@@ -168,7 +181,7 @@ public final class LeaderOverheadRenderer {
         font.drawInBatch(label,
             -textWidth / 2f,
             -font.lineHeight / 2f,
-            0xFFFFFFFF, false, ps.last().pose(), buf,
+            0xFF000000, false, ps.last().pose(), buf,
             net.minecraft.client.gui.Font.DisplayMode.SEE_THROUGH, 0, 0xF000F0);
         ps.popPose();
     }

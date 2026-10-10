@@ -1,2 +1,2 @@
-status=200 size=16603191
-SAVED D:/minecraft/modp/Espetro/build/tmp/verify-redeploy2.jar
+status=200 size=1568446
+SAVED D:/minecraft/modp/Espetro/build/tmp/heavy-ok.log

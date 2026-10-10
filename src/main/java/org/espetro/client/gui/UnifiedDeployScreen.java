@@ -181,9 +181,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private PlainText phaseTitleText;
     private PlainText governanceTimerText;
     /** 指挥官空缺治理小窗是否已关闭（最小化为「载具信息」右侧的按钮）。 */
-    private boolean vacancyWindowMinimized;
+    private boolean governanceWindowMinimized;
     /** 指挥官空缺治理小窗宽度/标题区高度。 */
     private static final int VACANCY_WINDOW_W = 186;
+    /** 弹劾投票小窗（"原指挥官 / 挑战者"两行按钮，略宽）。 */
+    private static final int IMPEACH_WINDOW_W = 210;
     private static final int VACANCY_WINDOW_HEADER_H = 26;
     private String pendingDeployPosition;
     private String pendingDeployCommand;
@@ -2216,39 +2218,34 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return;
         }
 
-        // 指挥官空缺（志愿/公投）：不再整块盖住地图，改为屏幕右侧可关闭的小窗；
-        // 关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
-        boolean vacancy = "VACANCY_VOLUNTEER".equals(state.state)
-            || "VACANCY_VOTE".equals(state.state);
-        if (battle && vacancy) {
-            if (vacancyWindowMinimized) {
-                EspButton restore = new EspButton(nextX, by, 60, BTN_H, "\u00a7a指挥官补位",
-                    () -> {
-                        vacancyWindowMinimized = false;
-                        invalidateSections(Section.MAP_CONTROLS);
-                    });
-                restore.setTextScale(UI_TEXT_SCALE);
-                sectionRoot.addChild(restore);
-            } else {
-                buildVacancyWindow(sectionRoot, state);
-            }
-            return;
+        // 所有指挥官治理投票（弹劾 / 空缺志愿 / 空缺公投）一律使用地图右侧可关闭的小窗，
+        // 不再整块盖住战术地图；关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
+        boolean impeachment = "IMPEACHMENT_VOTE".equals(state.state);
+        if (governanceWindowMinimized) {
+            EspButton restore = new EspButton(nextX, by, 60, BTN_H,
+                impeachment ? "\u00a7c弹劾投票" : "\u00a7a指挥官补位",
+                () -> {
+                    governanceWindowMinimized = false;
+                    invalidateSections(Section.MAP_CONTROLS);
+                });
+            restore.setTextScale(UI_TEXT_SCALE);
+            sectionRoot.addChild(restore);
+        } else {
+            buildGovernanceWindow(sectionRoot, state);
         }
-
-        // 其余治理（弹劾投票等）保留旧式覆盖层。
-        buildLegacyGovernanceOverlay(sectionRoot, state);
     }
 
-    /** 指挥官空缺治理：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
-    private void buildVacancyWindow(GuiElement sectionRoot, GovernanceStatePacket.TeamState state) {
+    /** 指挥官治理（弹劾 / 空缺志愿 / 空缺公投）：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
+    private void buildGovernanceWindow(GuiElement sectionRoot, GovernanceStatePacket.TeamState state) {
         boolean volunteerPhase = "VACANCY_VOLUNTEER".equals(state.state);
-        int w = Math.min(VACANCY_WINDOW_W, Math.max(120, mapW - 16));
+        boolean impeachment = "IMPEACHMENT_VOTE".equals(state.state);
+        int w = Math.min(impeachment ? IMPEACH_WINDOW_W : VACANCY_WINDOW_W, Math.max(120, mapW - 16));
         int x = mapX + mapW - w - 6;
         int y = mapY + 6;
 
-        // 高度按内容行数估算：标题区 + 志愿/候选人行 + 已志愿文本
+        // 高度按内容行数估算：标题区 + 投票/志愿行 + 已志愿文本
         int bodyH = 10 + BTN_H + 2
-            + (volunteerPhase ? 10 : Math.max(1, state.volunteers.size()) * 18);
+            + (impeachment ? 36 : volunteerPhase ? 10 : Math.max(1, state.volunteers.size()) * 18);
         int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
             Math.max(64, mapH - MAP_FOOTER_H - 16));
 
@@ -2256,7 +2253,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(new GuiRect(x, y, w, h, 0xFF141719));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
-            "\u00a76\u00a7l" + (volunteerPhase ? "指挥官空缺" : "空缺公投"), 0xFFFFC766));
+            "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
+            0xFFFFC766));
         governanceTimerText = new PlainText(x + 6, y + 17,
             "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
         sectionRoot.addChild(governanceTimerText);
@@ -2264,7 +2262,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 关闭：最小化为「载具信息」右侧按钮
         EspButton close = new EspButton(x + w - 36, y + 3, 32, BTN_H, "\u00a7c关闭",
             () -> {
-                vacancyWindowMinimized = true;
+                governanceWindowMinimized = true;
                 invalidateSections(Section.MAP_CONTROLS);
             });
         close.setTextScale(UI_TEXT_SCALE);
@@ -2273,7 +2271,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int contentX = x + 6;
         int contentW = w - 12;
         int cy = y + VACANCY_WINDOW_HEADER_H;
-        if (volunteerPhase) {
+        if (impeachment) {
+            int y2 = cy;
+            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官",
+                contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+            y2 += 18;
+            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
+                contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
+        } else if (volunteerPhase) {
             EspButton volunteer = new EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
                 () -> NetworkManager.sendGovernanceAction(
                     GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
@@ -2296,55 +2301,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_VACANCY);
                 y2 += 18;
                 if (y2 + 16 > y + h - 4) break;
-            }
-        }
-    }
-
-    /** 弹劾投票等旧式治理覆盖层：整块覆盖战术地图上部。 */
-    private void buildLegacyGovernanceOverlay(GuiElement sectionRoot,
-                                              GovernanceStatePacket.TeamState state) {
-        if (state == null || "IDLE".equals(state.state)) {
-            return;
-        }
-        int governanceH = Math.max(20, mapH - MAP_FOOTER_H - 6);
-        sectionRoot.addChild(new GuiRect(mapX + 3, mapY + 3, mapW - 6, governanceH, 0xE0181818));
-        String stateTitle = switch (state.state) {
-            case "IMPEACHMENT_VOTE" -> "弹劾投票";
-            case "VACANCY_VOLUNTEER" -> "指挥官空缺";
-            case "VACANCY_VOTE" -> "空缺公投";
-            default -> state.state;
-        };
-        sectionRoot.addChild(new PlainText(mapX + 10, mapY + 30,
-            "\u00a76\u00a7l指挥官治理：" + stateTitle, 0xFFFFC766));
-        governanceTimerText = new PlainText(mapX + 10, mapY + 43,
-            "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
-        sectionRoot.addChild(governanceTimerText);
-        int rowY = mapY + 60;
-        if ("IMPEACHMENT_VOTE".equals(state.state)) {
-            addGovernanceVoteButton(sectionRoot, state, state.commander, "原指挥官",
-                mapX + 10, rowY, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
-            addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
-                mapX + 10, rowY + 18, mapW - 20, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
-        } else if ("VACANCY_VOLUNTEER".equals(state.state)) {
-            EspButton volunteer = new EspButton(mapX + 10, rowY, Math.max(80, mapW - 20), BTN_H,
-                "\u00a7a志愿补位", () -> NetworkManager.sendGovernanceAction(
-                    GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
-            volunteer.setTextScale(UI_TEXT_SCALE);
-            sectionRoot.addChild(volunteer);
-            if (!state.volunteers.isEmpty()) {
-                String names = state.volunteers.stream()
-                    .map(MatchScoreboardScreen::nameFor)
-                    .reduce((a, b) -> a + ", " + b).orElse("");
-                sectionRoot.addChild(new PlainText(mapX + 10, rowY + 18,
-                    "\u00a77已志愿: " + names, 0xFFB0B0B0));
-            }
-        } else if ("VACANCY_VOTE".equals(state.state)) {
-            int y = rowY;
-            for (UUID volunteer : state.volunteers) {
-                addGovernanceVoteButton(sectionRoot, state, volunteer, "志愿者",
-                    mapX + 10, y, mapW - 20, GovernanceActionPacket.Action.VOTE_VACANCY);
-                y += 18;
-                if (y > mapY + mapH - MAP_FOOTER_H - 18) break;
             }
         }
     }

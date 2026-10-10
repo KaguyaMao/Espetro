@@ -190,12 +190,12 @@ public final class RadioRadialController {
         var builder = new RadialMenuBuilder(CLASS_MENU)
             .title(Component.literal("更换职业"))
             .radii(44, 100)
-            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"))
             .persistentSlot("espetro.radio.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "root")),
                 Component.literal("↩"), "#FF888888");
+        java.util.Set<String> usedClassSlots = new java.util.HashSet<>();
         if (cachedClasses.isEmpty()) {
             builder = builder.slot("espetro.radio.no_class", ICON_UNAVAILABLE,
                 Actions.script(NAVIGATE, Map.of("target", "root")),
@@ -203,7 +203,8 @@ public final class RadioRadialController {
         } else {
             for (RadioRadialPacket.ClassEntry e : cachedClasses) {
                 ResourceLocation icon = resolveClassIcon(e);
-                String slotName = "espetro.radio.class." + sanitizeSlotId(e.classId);
+                String slotName = uniqueSlotId(usedClassSlots,
+                    "espetro.radio.class." + sanitizeSlotId(e.classId));
                 String displayName = e.name != null && !e.name.isBlank() ? e.name : e.classId;
                 String count = e.showCount
                     ? " " + (e.enabled ? "§a" : e.cooldownBlocked ? "§7" : "§c")
@@ -233,13 +234,13 @@ public final class RadioRadialController {
         var builder = new RadialMenuBuilder(variantMenuId(entry.classId))
             .title(Component.literal("选择职业装备"))
             .radii(44, 100)
-            .squadLayout()
             .animationSpeed(1.25f)
             .ringColors(List.of("#B824292B", "#C832383A"))
             .persistentSlot("espetro.radio.variant.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "back")),
                 Component.literal("返回"), "#FF888888");
         ResourceLocation icon = resolveClassIcon(entry);
+        java.util.Set<String> usedVariantSlots = new java.util.HashSet<>();
         for (RadioRadialPacket.VariantEntry variant : entry.variants) {
             String label = variant.name != null && !variant.name.isBlank()
                 ? variant.name : variant.variantId;
@@ -249,8 +250,8 @@ public final class RadioRadialController {
                 : " §a" + variant.currentCount + "人";
             String nameColor = variant.enabled ? "§f" : "§c";
             builder = builder.slot(
-                "espetro.radio.variant." + sanitizeSlotId(entry.classId)
-                    + "." + sanitizeSlotId(variant.variantId),
+                uniqueSlotId(usedVariantSlots, "espetro.radio.variant."
+                    + sanitizeSlotId(entry.classId) + "." + sanitizeSlotId(variant.variantId)),
                 icon,
                 pickAction(entry.classId, variant.variantId,
                     variant.enabled, variant.denialMessage),
@@ -311,6 +312,19 @@ public final class RadioRadialController {
             ids.add("espetro.radio.class." + sanitizeSlotId(entry.classId));
         }
         return ids;
+    }
+
+    /**
+     * 槽位 id 必须唯一：中文等非 ASCII 变体 id 经 {@link #sanitizeSlotId} 后可能撞车
+     * （例如「标准」「指挥」都会变成 {@code __}），撞车时按出现顺序补 {@code _2}/{@code _3} 后缀。
+     */
+    private static String uniqueSlotId(java.util.Set<String> used, String base) {
+        String id = base;
+        int n = 2;
+        while (!used.add(id)) {
+            id = base + "_" + n++;
+        }
+        return id;
     }
 
     static String sanitizeSlotId(String classId) {

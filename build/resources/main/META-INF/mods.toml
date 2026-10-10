@@ -79,7 +79,7 @@ side = "BOTH"
 [[dependencies."espetro"]]
 modId = "apricityui"
 mandatory = true
-versionRange = "[1.2.2-hotfix1]"
+versionRange = "[1.2.6]"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -150,3 +150,11 @@ mandatory = false
 versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
+
+
+[[dependencies."espetro"]]
+modId = "esradial"
+mandatory = true
+versionRange = "[0.2.0]"
+ordering = "AFTER"
+side = "CLIENT"

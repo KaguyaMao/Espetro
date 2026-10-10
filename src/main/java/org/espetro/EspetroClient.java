@@ -40,6 +40,7 @@ public class EspetroClient {
         org.espetro.client.gui.RadioRadialController.initialize();
         org.espetro.client.gui.VehicleWheelController.initialize();
         org.espetro.client.gui.ResupplyRadialController.initialize();
+        org.espetro.client.gui.FixedWeaponWheelController.initialize();
         org.espetro.client.gui.VehicleSupplyHud.register();
         org.espetro.client.vehicle.VehicleMountClientGate.register();
         org.espetro.client.vehicle.DismountGate.register();
@@ -110,6 +111,8 @@ public class EspetroClient {
         org.espetro.client.gui.VehicleWheelController.tick(mc);
         org.espetro.client.gui.ResupplyRadialController.tick();
         org.espetro.client.FortificationPlacementController.tick(mc);
+        org.espetro.client.FixedWeaponInteractController.tick(mc);
+        org.espetro.client.gui.FixedWeaponWheelController.tick();
         org.espetro.client.gui.TutorialOverlay.tick();
         org.espetro.client.audio.ClientFormationAudioManager.tick(mc);
         // 载具/补给站实体补加：区块未 FULL 时被暂存的实体在此重试补加（方案 A）

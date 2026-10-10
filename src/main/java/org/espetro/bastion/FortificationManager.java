@@ -572,6 +572,15 @@ public final class FortificationManager {
         if (c != null) {
             return c.team;
         }
+        // 兜底：completeEntity 会给工事实体打 espetro_team_<TEAM> 标签
+        for (String tag : entity.getTags()) {
+            if (tag != null && tag.startsWith("espetro_team_")) {
+                String team = tag.substring("espetro_team_".length()).trim();
+                if (!team.isEmpty()) {
+                    return team;
+                }
+            }
+        }
         CompoundTag data = entity.getPersistentData();
         if (data.contains(VehicleManager.SUPPLY_STATION_TEAM_KEY)) {
             String team = data.getString(VehicleManager.SUPPLY_STATION_TEAM_KEY);
@@ -591,6 +600,51 @@ public final class FortificationManager {
         }
         String myTeam = normalizeTeam(Espetro.getPlayerTeam(player));
         return myTeam != null && !myTeam.equals(ownerTeam);
+    }
+
+    /** 该实体是否是"已启用固定武器"的工事实体。 */
+    public boolean isFixedWeaponEntity(@Nullable Entity entity) {
+        FortificationConfig.FortificationDef def = definitionOfEntity(entity);
+        return def != null && def.fixedWeapon != null && def.fixedWeapon.enabled;
+    }
+
+    /** 该实体所属工事的定义；不属于任何工事时返回 null。 */
+    @Nullable
+    public FortificationConfig.FortificationDef definitionOfEntity(@Nullable Entity entity) {
+        if (entity == null) {
+            return null;
+        }
+        UUID id = entityIndex.get(entity.getUUID());
+        Construction c = id == null ? null : constructions.get(id);
+        if (c != null) {
+            return c.blueprint.definition;
+        }
+        // 兜底：SBW 载具可能是多部件实体，玩家准星命中的子部件 UUID 不在索引里。
+        // 固定武器每件武器对应唯一实体类型，因此可以按实体类型回查定义。
+        return fixedWeaponDefinitionForType(entity.getType());
+    }
+
+    /** 按实体类型找"已启用的固定武器"定义（固定武器一件武器一种实体，类型即唯一键）。 */
+    @Nullable
+    public FortificationConfig.FortificationDef fixedWeaponDefinitionForType(@Nullable EntityType<?> type) {
+        if (type == null) {
+            return null;
+        }
+        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        if (key == null) {
+            return null;
+        }
+        String id = key.toString();
+        for (FortificationConfig.FortificationDef def : FortificationConfig.list()) {
+            if (def == null || def.fixedWeapon == null || !def.fixedWeapon.enabled
+                || def.placement == null || def.placement.entityId == null) {
+                continue;
+            }
+            if (id.equalsIgnoreCase(def.placement.entityId.trim())) {
+                return def;
+            }
+        }
+        return null;
     }
 
     public boolean isFoundation(ServerLevel level, BlockPos pos) {

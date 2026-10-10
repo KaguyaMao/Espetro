@@ -41,6 +41,23 @@ public final class VehicleNativeWhitelist {
     /** 命名空间通配（全小写），如 {@code fcp}（来自配置 {@code "fcp:*"}）。 */
     private static volatile Set<String> namespaces = Set.of();
 
+    /**
+     * 固定武器实体类型：由工事系统修建的固定武器（反坦克导弹/重机枪/防空炮等）
+     * <b>一律</b>按原版载具交互处理，不受本模组的交互类修改影响。
+     *
+     * <p>放在代码里而不是只靠配置，是为了避免"新增固定武器忘了加白名单"——
+     * 配置里的 {@code nativeVehicles} 仍然有效，这里是并集。</p>
+     */
+    private static final Set<String> FIXED_WEAPON_IDS = Set.of(
+        "superbwarfare:tow",
+        "dragonrise_reforge:hj8",
+        "dragonrise_reforge:9m133",
+        "dragonrise_reforge:m2",
+        "dragonrise_reforge:qjz89",
+        "dragonrise_reforge:dshk",
+        "dragonrise_reforge:zu23",
+        "superbwarfare:mortar");
+
     /** 总开关快照。 */
     private static volatile boolean enabled = false;
 
@@ -89,13 +106,46 @@ public final class VehicleNativeWhitelist {
         }
         Set<String> ns = namespaces;
         if (ns.isEmpty()) {
-            return false;
+            return isFixedWeapon(id);
         }
         String namespace = key.getNamespace();
         if (ns.contains(namespace)) {
             return true;
         }
-        return hasUpperCase(namespace) && ns.contains(namespace.toLowerCase(Locale.ROOT));
+        if (hasUpperCase(namespace) && ns.contains(namespace.toLowerCase(Locale.ROOT))) {
+            return true;
+        }
+        if (isFixedWeapon(id)) {
+            return true;
+        }
+        // 工事系统里定义的固定武器也一律豁免 —— 以后新增固定武器只要加工事配置，不必改代码。
+        try {
+            for (org.espetro.bastion.FortificationConfig.FortificationDef def
+                : org.espetro.bastion.FortificationConfig.list()) {
+                if (def == null || def.fixedWeapon == null || !def.fixedWeapon.enabled
+                    || def.placement == null || def.placement.entityId == null) {
+                    continue;
+                }
+                if (def.placement.entityId.trim().equalsIgnoreCase(id)) {
+                    return true;
+                }
+            }
+        } catch (Throwable ignored) {
+            // 工事定义不可用（例如客户端未加载）时忽略
+        }
+        return false;
+    }
+
+    /** 是否是可豁免的固定武器实体类型（大小写不敏感）。 */
+    private static boolean isFixedWeapon(String id) {
+        if (id == null || id.isEmpty()) {
+            return false;
+        }
+        if (FIXED_WEAPON_IDS.contains(id)) {
+            return true;
+        }
+        String lower = id.toLowerCase(Locale.ROOT);
+        return FIXED_WEAPON_IDS.contains(lower);
     }
 
     /** 缺少 String#chars 短路时的低成本检查，避免热路径无谓的 toLowerCase 分配。 */
@@ -157,6 +207,7 @@ public final class VehicleNativeWhitelist {
         built = true;
         Espetro.LOGGER.info("[载具白名单] enabled={}, 精确 {} 项, 命名空间 {} 个: {} / {}",
             newEnabled, exact.size(), wildcards.size(), exact, wildcardDisplay);
+        Espetro.LOGGER.info("[载具白名单] 固定武器自动豁免 {} 项: {}", FIXED_WEAPON_IDS.size(), FIXED_WEAPON_IDS);
     }
 
     private static void ensureBuilt() {

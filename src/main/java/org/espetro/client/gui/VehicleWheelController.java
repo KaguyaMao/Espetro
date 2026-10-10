@@ -48,6 +48,8 @@ public final class VehicleWheelController {
     private static final ResourceLocation ICON_RESUPPLY =
         id("textures/gui/squad/ammo_crate.png");
     private static final String COLOR_LOAD = "#FFFFFFFF";
+    /** 建材操作的进度环颜色（与载具 HUD 的建材填充同色）。 */
+    private static final String COLOR_CONSTRUCTION_PROGRESS = "#FFCCAA00";
     private static final String COLOR_UNLOAD = "#FFFF4A4A";
 
     private static boolean initialized;
@@ -195,10 +197,12 @@ public final class VehicleWheelController {
             builder = builder
                 .persistentSlot("espetro.veh.load_construction", ICON_CONSTRUCTION_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_CONSTRUCTION")),
-                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650").sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
+                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650")
+                .progressColorLast(COLOR_CONSTRUCTION_PROGRESS).sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_construction", ICON_CONSTRUCTION_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_CONSTRUCTION")),
-                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525").sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525")
+                .progressColorLast(COLOR_CONSTRUCTION_PROGRESS).sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canResupplyInfantry()) {
             builder = builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,

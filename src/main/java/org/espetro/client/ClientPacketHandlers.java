@@ -597,6 +597,11 @@ public class ClientPacketHandlers {
         org.espetro.client.gui.OutpostSupplyHud.update(packet);
     }
 
+    /** 固定武器兑换轮盘：服务端下发数据后打开轮盘。 */
+    public static void handleFixedWeaponWheel(FixedWeaponWheelPacket packet) {
+        org.espetro.client.gui.FixedWeaponWheelController.update(packet);
+    }
+
     public static void handleFortificationCatalog(FortificationCatalogPacket packet) {
         org.espetro.client.gui.TacticalRadialController
             .updateFortifications(packet.entries());

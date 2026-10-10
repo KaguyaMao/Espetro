@@ -18,6 +18,12 @@ public final class VehicleInteractionConfig {
     /** 载具原版操作白名单：实体类型注册名列表，支持整命名空间通配。 */
     public static final ForgeConfigSpec.ConfigValue<String> NATIVE_VEHICLES;
 
+    /** 是否禁止玩家打开载具/武器的物品栏 GUI。 */
+    public static final ForgeConfigSpec.BooleanValue DISABLE_INVENTORY_GUI;
+
+    /** 权限等级 ≥ 此值的玩家豁免上述禁用（原版 OP = 2；0 = 所有人豁免）。 */
+    public static final ForgeConfigSpec.IntValue INVENTORY_GUI_BYPASS_PERMISSION_LEVEL;
+
     static {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
         b.push("vehicle");
@@ -44,7 +50,16 @@ public final class VehicleInteractionConfig {
                 "示例: [\"fcp:bmp2\", \"superbwarfare:ztz_99a\"]")
             // 注意：默认值必须是可变列表（new ArrayList<>()）。若用不可变的 List.of()，
             // Forge 在读取配置文件时会静默把该项重置为默认，白名单将永远读成空列表（实测）。
-            .define("nativeVehicles", "superbwarfare:drone,superbwarfare:tow,superbwarfare:container,dragonrise_reforge:hj8,dragonrise_reforge:9m133,dragonrise_reforge:m2,dragonrise_reforge:qjz89,dragonrise_reforge:dshk");
+            .define("nativeVehicles", "superbwarfare:drone,superbwarfare:tow,superbwarfare:container,dragonrise_reforge:hj8,dragonrise_reforge:9m133,dragonrise_reforge:m2,dragonrise_reforge:qjz89,dragonrise_reforge:dshk,dragonrise_reforge:zu23");
+        DISABLE_INVENTORY_GUI = b.comment(
+                "禁止玩家打开载具/武器的物品栏 GUI（SBW 的 container 系方块与载具自带物品箱）。",
+                "只拦物品栏界面本身：上车/下车/换座、撬棍回收、命名牌、C4、F 键轮盘都不受影响。",
+                "设为 false 可完全放开。")
+            .define("disableVehicleInventoryGui", true);
+        INVENTORY_GUI_BYPASS_PERMISSION_LEVEL = b.comment(
+                "权限等级 ≥ 此值的玩家不受上述禁用限制（原版 OP 为 2 → 管理员可开）。",
+                "0 = 所有人豁免（等同关闭）。")
+            .defineInRange("inventoryGuiBypassPermissionLevel", 2, 0, 4);
         b.pop();
         SPEC = b.build();
     }
