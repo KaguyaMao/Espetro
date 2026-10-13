@@ -207,8 +207,10 @@ public class CommanderSkillManager {
         }
 
         GamePhase phase = GameStateManager.getInstance().getCurrentPhase();
-        if (phase != GamePhase.BATTLE && phase != GamePhase.DEPLOYING) {
-            Espetro.sendToPlayer(commander, "\u00a7c当前阶段无法使用技能！");
+        if (phase != GamePhase.BATTLE) {
+            Espetro.sendToPlayer(commander, phase == GamePhase.DEPLOYING
+                ? "\u00a7c部署阶段不可使用指挥官技能，进入对战阶段后才开放。"
+                : "\u00a7c当前阶段无法使用技能！");
             return false;
         }
 
@@ -502,6 +504,38 @@ public class CommanderSkillManager {
             Espetro.broadcastToTeam(team, "\u00a76\u26a1 " + roleLabel + " "
                 + commander.getName().getString() + " 发动了 " + displayName + "！");
         }
+    }
+
+    /**
+     * 进入对战阶段时，为所有可使用者把技能冷却起算。
+     *
+     * <p>部署阶段禁止使用技能，因此冷却不从开局就算；统一在部署阶段结束那一刻起算。</p>
+     */
+    public void armSkillCooldownsOnBattleStart() {
+        net.minecraft.server.MinecraftServer server = Espetro.getServer();
+        if (server == null) {
+            return;
+        }
+        long now = getServerTick();
+        for (net.minecraft.server.level.ServerPlayer player : server.getPlayerList().getPlayers()) {
+            Map<String, Long> perSkill = cooldownEndTicks.computeIfAbsent(
+                player.getUUID(), k -> new HashMap<>());
+            boolean changed = false;
+            for (KubeCommanderSkillDefinition definition : EspetroCommanderSkills.getDefinitions()) {
+                if (definition == null || !definition.enabled()) {
+                    continue;
+                }
+                if (!canPlayerUseSkill(player, definition)) {
+                    continue;
+                }
+                perSkill.put(definition.id(), now + definition.cooldownSeconds() * 20L);
+                changed = true;
+            }
+            if (changed) {
+                NetworkManager.sendCommanderSkillSync(player);
+            }
+        }
+        Espetro.LOGGER.info("对战阶段开始：已为在线玩家起算指挥官技能冷却");
     }
 
     public boolean isOnCooldown(UUID uuid, CommanderSkillType type) {

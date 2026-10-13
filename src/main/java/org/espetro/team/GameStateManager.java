@@ -144,6 +144,10 @@ public class GameStateManager {
         this.currentPhase = phase;
         Espetro.LOGGER.info("游戏阶段切换: {}", phase.getDisplayName());
         NetworkManager.broadcastGamePhase(phase);
+        if (phase == GamePhase.BATTLE && previous != GamePhase.BATTLE) {
+            // 部署阶段不可用技能：冷却从对战阶段开始才起算
+            CommanderSkillManager.getInstance().armSkillCooldownsOnBattleStart();
+        }
         MinecraftForge.EVENT_BUS.post(new GamePhaseChangedEvent(previous, phase));
     }
 

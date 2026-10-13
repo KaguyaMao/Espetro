@@ -19,11 +19,20 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class ArtilleryBarrageExecutor {
 
     private static final String SHELL_ENTITY = "superbwarfare:cannon_shell";
-    private static final double COVERAGE_RADIUS = 90.0D;
-    private static final int COVER_WAVES = 6;
-    private static final int SHELLS_PER_WAVE = 4;
+    /** 与 KubeJS 脚本保持一致：散布半径 45 格。 */
+    private static final double COVERAGE_RADIUS = 45.0D;
+    /** 释放后到第一发的延迟：30 秒。 */
+    private static final int START_DELAY_TICKS = 30 * 20;
+    private static final int SIGHT_SECOND_OFFSET_TICKS = 50;
+    /** 覆盖射击起点（相对延迟）：400 tick = 20 秒。 */
+    private static final int COVER_START_OFFSET_TICKS = 400;
+    private static final int COVER_WAVES = 8;
+    private static final int SHELLS_PER_WAVE = 6;
+    private static final int WAVE_INTERVAL_TICKS = 50;
     private static final int SPAWN_HEIGHT = 180;
     private static final double DOWNWARD_VELOCITY = 1.5D;
+    /** 炮弹战斗部强化（与脚本同一套 NBT）。 */
+    private static final String SHELL_NBT = ",Damage:300.0f,ExplosionDamage:600.0f,Radius:12.0f";
 
     private ArtilleryBarrageExecutor() {
     }
@@ -37,13 +46,13 @@ public final class ArtilleryBarrageExecutor {
         if (server == null) {
             return;
         }
-        int base = server.getTickCount();
+        int base = server.getTickCount() + START_DELAY_TICKS;   // 释放后等 30 秒才开始落弹
         // 两发校射打在直线起点
         schedule(server, level, base, x1, z1, x2, z2, sessionId, 0, 1, 0);
-        schedule(server, level, base + 20 * 20, x1, z1, x2, z2, sessionId, 0, 1, 0);
-        // 六轮覆盖沿直线推进
+        schedule(server, level, base + SIGHT_SECOND_OFFSET_TICKS, x1, z1, x2, z2, sessionId, 0, 1, 0);
+        // 八轮覆盖沿直线推进
         for (int wave = 0; wave < COVER_WAVES; wave++) {
-            schedule(server, level, base + 2 * 20 * 20 + wave * 4 * 20,
+            schedule(server, level, base + COVER_START_OFFSET_TICKS + wave * WAVE_INTERVAL_TICKS,
                 x1, z1, x2, z2, sessionId, wave, SHELLS_PER_WAVE, wave);
         }
         Espetro.LOGGER.info("徐进弹幕已排程: ({}, {}) → ({}, {}) session={}",
@@ -84,7 +93,7 @@ public final class ArtilleryBarrageExecutor {
         }
         String command = "summon " + SHELL_ENTITY + " "
             + fmt(x) + " " + fmt(y) + " " + fmt(z)
-            + " {Motion:[0.0d," + fmt(-DOWNWARD_VELOCITY) + "d,0.0d]}";
+            + " {Motion:[0.0d," + fmt(-DOWNWARD_VELOCITY) + "d,0.0d]" + SHELL_NBT + "}";
         CommandSourceStack source = server.createCommandSourceStack()
             .withSuppressedOutput()
             .withLevel(level);

@@ -17,7 +17,7 @@ public final class ArtilleryZoneBridge {
     public static final long ZONE_DURATION_MS = 70_000L;
 
     /** 155 火炮的覆盖半径（格）：与 KubeJS 脚本里的 impactRadius 保持一致。 */
-    public static final double COVERAGE_RADIUS = 90.0D;
+    public static final double COVERAGE_RADIUS = 45.0D;
 
     private static volatile boolean unavailable;
 

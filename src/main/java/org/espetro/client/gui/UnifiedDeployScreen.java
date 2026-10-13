@@ -2251,8 +2251,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             cooldownSeconds = TacticalRadialController.skillCooldownSeconds(skillId);
         }
 
+        /** 部署阶段所有技能不可用（服务端同样会拒绝）。 */
+        private static boolean isDeployPhase() {
+            return ClientGameState.getCurrentPhase() == GamePhase.DEPLOYING;
+        }
+
         private boolean isUsable() {
-            return cooldownSeconds <= 0 && !CommanderSkillTargetRequest.isPending(skillId);
+            return cooldownSeconds <= 0
+                && !CommanderSkillTargetRequest.isPending(skillId)
+                && !isDeployPhase();
         }
 
         @Override
@@ -2288,6 +2295,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int py = y + getY();
             int w = getWidth();
             int h = getHeight();
+            boolean deployLocked = isDeployPhase();
             boolean usable = isUsable();
             boolean pending = CommanderSkillTargetRequest.isPending(skillId);
             boolean hover = usable && mouseX >= px && mouseX < px + w
@@ -2335,8 +2343,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             graphics.pose().popPose();
 
             // ③ 冷却 / 可用（居中，字体更小）
-            String cooldownText = usable ? "可用" : formatCooldown(cooldownSeconds);
-            int cooldownColor = usable ? 0xFF7FD98F : 0xFFB9BEC6;
+            String cooldownText = deployLocked ? "不可用"
+                : pending ? "选点中"
+                : usable ? "可用" : formatCooldown(cooldownSeconds);
+            int cooldownColor = deployLocked ? 0xFF8B9099
+                : usable ? 0xFF7FD98F : 0xFFB9BEC6;
             graphics.pose().pushPose();
             graphics.pose().translate(centerX, py + 37, 0.0D);
             graphics.pose().scale(0.75f, 0.75f, 1.0f);
