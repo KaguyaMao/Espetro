@@ -12,6 +12,7 @@ import org.espetro.network.NetworkManager;
 import org.espetro.network.UnifiedDeployScreenPacket;
 import org.espetro.network.GovernanceStatePacket;
 import org.espetro.network.GovernanceActionPacket;
+import org.espetro.team.CommanderSkillManager;
 import org.espetro.team.Fireteam;
 import org.espetro.team.GamePhase;
 import org.lwjgl.glfw.GLFW;
@@ -28,6 +29,12 @@ import java.util.regex.Pattern;
 public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private static final int BTN_H = 12;
+    /** J 菜单内指挥官技能列（替代旧轮盘入口）。 */
+    private static final int SKILL_COL_W = 104;
+    private static final int SKILL_BTN_H = 42;
+    private static final int SKILL_BTN_GAP = 4;
+    private final List<SkillButton> skillButtons = new ArrayList<>();
+    private int lastSkillSignature = Integer.MIN_VALUE;
     private static final int CLASS_BTN_H = 22;
     private static final int CLASS_ICON_SIZE = 17;
     private static final int TITLE_H = 35;
@@ -2132,6 +2139,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             outpostRedeployButton.setEnabled(
                 !waitingForDeploySelection && getRedeployCooldownRemaining() == 0);
         }
+        // 指挥官技能：冷却倒数每秒刷新；技能列表变化时按需重建整段。
+        int skillSignature = TacticalRadialController.skillSnapshotSignature();
+        if (skillSignature != lastSkillSignature) {
+            invalidateSections(Section.MAP_CONTROLS);
+        } else {
+            for (SkillButton button : skillButtons) {
+                button.refresh();
+            }
+        }
         // 仅更新 Rally 个人冷却文案，不重建部署区域。
         refreshRallyWaveLabels();
         // 更新 HAB 激活倒计时文案，激活完成后自动启用按钮。
@@ -2173,7 +2189,144 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     // ---------- 战术地图（右半屏，由 HCR AAD / ESPoints 绘制）----------
+    /**
+     * 指挥官技能列：J 菜单地图面板左侧空白处竖排。
+     * 每个按钮三段居中：图标 / 名称 / 冷却（可用时显示「可用」）。
+     */
+    private void buildSkillColumn(GuiElement sectionRoot) {
+        skillButtons.clear();
+        if (!TacticalRadialController.hasSkillSnapshot()
+            || !TacticalRadialController.isCommanderSnapshot()) {
+            lastSkillSignature = Integer.MIN_VALUE;
+            return;
+        }
+        List<CommanderSkillManager.SkillView> skills = TacticalRadialController.skillSnapshot();
+        if (skills.isEmpty()) {
+            lastSkillSignature = Integer.MIN_VALUE;
+            return;
+        }
+        int x = mapX + 6;
+        int y = mapY + 28;
+        int maxY = mapY + mapH - MAP_FOOTER_H - 6;
+        for (CommanderSkillManager.SkillView skill : skills) {
+            if (y + SKILL_BTN_H > maxY) {
+                break;   // 放不下就不再往下堆（技能数量通常 3~5 个）
+            }
+            SkillButton button = new SkillButton(x, y, SKILL_COL_W, SKILL_BTN_H, skill);
+            skillButtons.add(button);
+            sectionRoot.addChild(button);
+            y += SKILL_BTN_H + SKILL_BTN_GAP;
+        }
+        lastSkillSignature = TacticalRadialController.skillSnapshotSignature();
+    }
+
+    /** 技能按钮：自绘（半透明灰底 + 白边 + 居中图标/名称/冷却）。 */
+    private static final class SkillButton extends GuiElement {
+        private static final int ICON_SIZE = 14;
+        private final String skillId;
+        private final String skillName;
+        private final ResourceLocation skillIcon;
+        private int rawCooldownSeconds;
+        private long cooldownEndsAtMs;
+        private int cooldownSeconds;
+
+        SkillButton(int x, int y, int width, int height, CommanderSkillManager.SkillView skill) {
+            super(x, y, width, height);
+            this.skillId = skill.id();
+            this.skillName = skill.displayName();
+            this.skillIcon = TacticalRadialController.skillIcon(skill);
+            refresh();
+        }
+
+        /** 每秒调用：重新锚定服务端冷却值并本地倒数。 */
+        void refresh() {
+            int raw = TacticalRadialController.skillCooldownSeconds(skillId);
+            if (raw != rawCooldownSeconds) {
+                rawCooldownSeconds = raw;
+                cooldownEndsAtMs = raw > 0 ? System.currentTimeMillis() + raw * 1000L : 0L;
+            }
+            if (cooldownEndsAtMs <= 0L) {
+                cooldownSeconds = 0;
+            } else {
+                long remaining = cooldownEndsAtMs - System.currentTimeMillis();
+                cooldownSeconds = remaining <= 0L ? 0 : (int) Math.ceil(remaining / 1000.0);
+            }
+        }
+
+        private boolean isUsable() {
+            return cooldownSeconds <= 0;
+        }
+
+        @Override
+        public boolean onMouseClick(int mouseX, int mouseY, int button) {
+            if (button != 0 || !isUsable()) {
+                return false;
+            }
+            NetworkManager.sendCommanderSkillActivate(skillId);
+            Minecraft.getInstance().setScreen(null);
+            return true;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
+                         int mouseX, int mouseY, float partialTick) {
+            if (!isVisible()) {
+                return;
+            }
+            int px = x + getX();
+            int py = y + getY();
+            int w = getWidth();
+            int h = getHeight();
+            boolean usable = isUsable();
+            boolean hover = usable && mouseX >= px && mouseX < px + w
+                && mouseY >= py && mouseY < py + h;
+
+            // 半透明灰底 + 白色边框（不可用时整体压暗）
+            int fill = usable ? (hover ? 0xAA3C4247 : 0x99202427) : 0x881A1D1F;
+            int border = usable ? (hover ? 0xFFFFFFFF : 0xCCFFFFFF) : 0x55FFFFFF;
+            graphics.fill(px, py, px + w, py + h, fill);
+            graphics.fill(px, py, px + w, py + 1, border);
+            graphics.fill(px, py + h - 1, px + w, py + h, border);
+            graphics.fill(px, py, px + 1, py + h, border);
+            graphics.fill(px + w - 1, py, px + w, py + h, border);
+
+            var font = Minecraft.getInstance().font;
+            int centerX = px + w / 2;
+
+            // ① 技能图标（居中）
+            if (skillIcon != null) {
+                float iconAlpha = usable ? 1f : 0.45f;
+                graphics.setColor(1f, 1f, 1f, iconAlpha);
+                graphics.blit(skillIcon, centerX - ICON_SIZE / 2, py + 4, 0, 0,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                graphics.setColor(1f, 1f, 1f, 1f);
+            }
+
+            // ② 技能名称（居中）
+            int nameColor = usable ? 0xFFFFFFFF : 0xFF8B9099;
+            graphics.drawCenteredString(font, skillName, centerX, py + 21, nameColor);
+
+            // ③ 冷却 / 可用（居中，字体更小）
+            String cooldownText = usable ? "可用" : formatCooldown(cooldownSeconds);
+            int cooldownColor = usable ? 0xFF7FD98F : 0xFFB9BEC6;
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, py + 32, 0.0D);
+            graphics.pose().scale(0.75f, 0.75f, 1.0f);
+            graphics.drawCenteredString(font, cooldownText, 0, 0, cooldownColor);
+            graphics.pose().popPose();
+
+            super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
+        }
+
+        private static String formatCooldown(int seconds) {
+            int minutes = seconds / 60;
+            int rest = seconds % 60;
+            return minutes + ":" + (rest < 10 ? "0" : "") + rest;
+        }
+    }
+
     private void buildMapPanel(GuiElement sectionRoot) {
+        buildSkillColumn(sectionRoot);
         governanceVoteButtons.clear();
         int bx = mapX + 5;
         int by = mapY + mapH - BTN_H - 4;

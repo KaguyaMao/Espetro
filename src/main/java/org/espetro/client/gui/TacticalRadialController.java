@@ -489,6 +489,40 @@ public final class TacticalRadialController {
     /**
      * 解析技能图标资源位置。无效或缺失时回退 command.png。
      */
+    // ==== J 菜单技能列读取口（只在客户端线程调用）====
+
+    public static boolean hasSkillSnapshot() {
+        return hasSkillSnapshot;
+    }
+
+    public static boolean isCommanderSnapshot() {
+        return cachedIsCommander;
+    }
+
+    public static List<CommanderSkillManager.SkillView> skillSnapshot() {
+        return List.copyOf(cachedSkills);
+    }
+
+    /** 服务端下发的剩余冷却秒数（原始值，客户端需自行锚定倒计时）。 */
+    public static int skillCooldownSeconds(String skillId) {
+        Integer seconds = cachedCooldowns.get(skillId);
+        return seconds == null ? 0 : Math.max(0, seconds);
+    }
+
+    /** 技能快照签名：列表内容或冷却变化时改变。 */
+    public static int skillSnapshotSignature() {
+        int signature = cachedSkills.size() * 31 + (cachedIsCommander ? 7 : 0);
+        for (CommanderSkillManager.SkillView skill : cachedSkills) {
+            signature = signature * 31 + skill.id().hashCode();
+            signature = signature * 31 + skillCooldownSeconds(skill.id());
+        }
+        return signature;
+    }
+
+    public static ResourceLocation skillIcon(CommanderSkillManager.SkillView skill) {
+        return resolveSkillIcon(skill);
+    }
+
     private static ResourceLocation resolveSkillIcon(CommanderSkillManager.SkillView skill) {
         String raw = skill.icon();
         if (raw == null || raw.isBlank()) {
