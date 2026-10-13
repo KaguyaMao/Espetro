@@ -350,14 +350,10 @@ public class CommanderSkillManager {
             level.getGameTime(),
             System.currentTimeMillis());
 
-        KubeCommanderSkillEvent event = EspetroCommanderSkills.barrageEvent(
-            definition, request, commander, level, startBlock, endX, endZ);
-        if (!EspetroCommanderSkills.execute(definition, event)) {
-            Espetro.sendToPlayer(commander, "\u00a7c" + skillName + "KubeJS 回调执行失败，请检查服务端日志。");
-            pendingTargetSkillIds.remove(commanderId);
-            return false;
-        }
         pendingTargetSkillIds.remove(commanderId);
+        // 与定点炮击是同一个技能、同一个冷却：这里直接在 Java 端排程徐进弹幕，
+        // 不经过 KubeJS，避免依赖服务端脚本版本。
+        ArtilleryBarrageExecutor.start(level, startX, startZ, endX, endZ, -1);
         finishCommanderSkill(commander, skillId, definition.displayName(),
             definition.cooldownSeconds() * 20L);
 
