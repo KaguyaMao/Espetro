@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public final class ArtilleryBarrageExecutor {
 
-    private static final String SHELL_ENTITY = "superbwarfare:mortar_shell";
+    private static final String SHELL_ENTITY = "superbwarfare:cannon_shell";
     private static final double COVERAGE_RADIUS = 90.0D;
     private static final int COVER_WAVES = 6;
     private static final int SHELLS_PER_WAVE = 4;

@@ -2,7 +2,7 @@
 // 不使用 server.scheduleInTicks：部分 KubeJS/Forge 组合会丢失较长延迟的回调。
 // 队列仅在有火炮任务时执行，且每次执行前会核验当前战局，避免跨局落弹。
 
-var EspetroArtilleryEntityId = 'superbwarfare:mortar_shell'
+var EspetroArtilleryEntityId = 'superbwarfare:cannon_shell'
 var EspetroArtilleryTasks = []
 var EspetroArtilleryTick = 0
 var EspetroArtilleryJavaRandom = null
