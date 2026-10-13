@@ -886,6 +886,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     // ==================== 界面构建 ====================
 
     @Override
+        protected void init() {
+        // 部署面板一出现就关掉战术轮盘：否则轮盘会盖在面板上，
+        // 把面板上的点击当成轮盘确认（部署阶段"只能放炮"的根因之一）。
+        TacticalRadialController.closeWheelIfOpen();
+        super.init();
+    }
+
+    @Override
     protected void buildMenuRoot(GuiElement root) {
         this.root = root;
         dirtySections.clear();

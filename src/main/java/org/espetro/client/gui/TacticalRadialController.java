@@ -61,6 +61,26 @@ public final class TacticalRadialController {
     private static boolean keyWasDown;
     private static boolean ownsOverlay;
     private static boolean consumedUntilRelease;
+
+    /** 忽略来自轮盘的技能激活时的日志（带调用栈，便于定位自动触发来源）。 */
+    static void logIgnoredSkill(String skillId) {
+        org.espetro.Espetro.LOGGER.info(
+            "忽略轮盘技能激活（J 菜单已打开）: {}（调用栈见下）", skillId,
+            new Throwable("radial-skill-ignored"));
+    }
+
+    /** 关闭战术轮盘（J 菜单打开时调用，避免轮盘悬在面板上抢点击）。 */
+    public static void closeWheelIfOpen() {
+        try {
+            if (RadialMenuClientApi.isOwnedBy(OWNER) || ownsOverlay) {
+                RadialMenuClientApi.close(OWNER);
+            }
+        } catch (RuntimeException ignored) {
+            // 轮盘未打开或 EsRadial 版本差异时忽略
+        }
+        ownsOverlay = false;
+        consumedUntilRelease = true;
+    }
     private static int heldTicks;
 
     // === 已确认的技能缓存（仅在客户端线程中读写） ===
@@ -129,6 +149,15 @@ public final class TacticalRadialController {
                 return;
             }
             if (skillId.isEmpty()) {
+                return;
+            }
+            // J 菜单（统一部署面板）打开时，轮盘的"确认"不算数：
+            // EsRadial 0.3.2 的时钟式轮盘会在悬停/点击时立刻确认，
+            // 部署阶段点地图会被它当成选中技能，表现就是"只能放炮、别的点不动"。
+            if (Minecraft.getInstance().screen instanceof UnifiedDeployScreen) {
+                consumedUntilRelease = true;
+                ownsOverlay = false;
+                logIgnoredSkill(skillId);
                 return;
             }
             org.espetro.client.gui.CommanderSkillTargetRequest.arm();
