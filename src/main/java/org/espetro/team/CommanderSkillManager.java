@@ -375,6 +375,19 @@ public class CommanderSkillManager {
         }
 
         finishCommanderSkill(commander, skillId, definition.displayName(), definition.cooldownSeconds() * 20L);
+
+        // 本方地图上显示炮击覆盖区（红边 + 红色半透明底，圆中心画火炮图标），结束后自动消失
+        ArtilleryZoneBridge.showZone(
+            commanderTeam,
+            "circle",
+            x,
+            z,
+            0.0D,
+            0.0D,
+            ArtilleryZoneBridge.COVERAGE_RADIUS,
+            definition.icon(),
+            level.dimension().location().toString(),
+            ArtilleryZoneBridge.ZONE_DURATION_MS);
         Espetro.sendToPlayer(commander, "\u00a7a" + skillName + "坐标已提交: "
             + targetBlock.getX() + ", " + targetBlock.getY() + ", " + targetBlock.getZ());
         Espetro.LOGGER.info("指挥官 {} 提交 {} 坐标: {} {} {} ({})",
