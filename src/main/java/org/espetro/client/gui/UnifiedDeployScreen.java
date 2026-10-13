@@ -258,7 +258,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.team = data.getTeam();
         this.selectedClassId = normalizeSelectedClassId(data.getSelectedClassId());
         this.waitingForDeploySelection = data.isWaitingForDeploySelection();
-        org.espetro.Espetro.LOGGER.info("等待部署点状态更新: {} → {}", waitingForDeploySelection, data.isWaitingForDeploySelection());
         this.outpostRedeployCooldownEndsAt = System.currentTimeMillis()
             + data.getOutpostRedeployCooldownRemaining() * 1000L;
         this.classSwitchCooldownEndsAt = System.currentTimeMillis()
@@ -888,9 +887,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
         protected void init() {
-        org.espetro.Espetro.LOGGER.info(
-                "部署面板打开: waitingForDeploySelection={}（true=其它功能被锁）",
-                waitingForDeploySelection);
         // 部署面板一出现就关掉战术轮盘：否则轮盘会盖在面板上，
         // 把面板上的点击当成轮盘确认（部署阶段"只能放炮"的根因之一）。
         TacticalRadialController.closeWheelIfOpen();
@@ -2005,7 +2001,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void confirmDeploymentPoint() {
-        org.espetro.Espetro.LOGGER.info("确认部署点被调用");
         if (!waitingForDeploySelection || pendingDeployCommand == null) {
             return;
         }
@@ -2257,7 +2252,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
 
         private boolean isUsable() {
-            return cooldownSeconds <= 0;
+            return cooldownSeconds <= 0 && !CommanderSkillTargetRequest.isPending(skillId);
         }
 
         @Override
@@ -2278,7 +2273,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             lastActivateMs = now;
             // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
             // 指挥官直接在这张地图上操作即可。
-            CommanderSkillTargetRequest.arm();
+            CommanderSkillTargetRequest.arm(skillId);
             NetworkManager.sendCommanderSkillActivate(skillId);
             return true;
         }
@@ -2294,12 +2289,23 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int w = getWidth();
             int h = getHeight();
             boolean usable = isUsable();
+            boolean pending = CommanderSkillTargetRequest.isPending(skillId);
             boolean hover = usable && mouseX >= px && mouseX < px + w
                 && mouseY >= py && mouseY < py + h;
 
-            // 半透明灰底 + 白色边框（不可用时整体压暗）
-            int fill = usable ? (hover ? 0xAA3C4247 : 0x99202427) : 0x881A1D1F;
-            int border = usable ? (hover ? 0xFFFFFFFF : 0xCCFFFFFF) : 0x55FFFFFF;
+            // 待用（已点击、尚未使用）整体变黄；冷却中压暗；可用为半透明灰底 + 白边
+            int fill;
+            int border;
+            if (pending) {
+                fill = hover ? 0xCC6E5A12 : 0xBB5C4A0E;
+                border = 0xFFFFE066;
+            } else if (usable) {
+                fill = hover ? 0xAA3C4247 : 0x99202427;
+                border = hover ? 0xFFFFFFFF : 0xCCFFFFFF;
+            } else {
+                fill = 0x881A1D1F;
+                border = 0x55FFFFFF;
+            }
             graphics.fill(px, py, px + w, py + h, fill);
             graphics.fill(px, py, px + w, py + 1, border);
             graphics.fill(px, py + h - 1, px + w, py + h, border);
@@ -2319,7 +2325,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
 
             // ② 技能名称（居中；列窄时自动缩小以完整显示）
-            int nameColor = usable ? 0xFFFFFFFF : 0xFF8B9099;
+            int nameColor = pending ? 0xFFFFE066 : usable ? 0xFFFFFFFF : 0xFF8B9099;
             int nameWidth = font.width(skillName);
             float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.5f, (w - 6f) / nameWidth);
             graphics.pose().pushPose();

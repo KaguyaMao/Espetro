@@ -270,8 +270,6 @@ public class CommanderSkillManager {
         try {
             Class<?> packetClass = Class.forName(ESPOINTS_ARTILLERY_PACKET_CLASS_NAME);
             String targetMode = artilleryTargetMode(skillId);
-            Espetro.LOGGER.info("指挥官 {} 进入技能选点: skill={} mode={}（调用栈见下）",
-                commander.getName().getString(), skillId, targetMode, new Throwable("artillery-target-trigger"));
             try {
                 packetClass.getMethod("sendTo", ServerPlayer.class, String.class)
                     .invoke(null, commander, targetMode);

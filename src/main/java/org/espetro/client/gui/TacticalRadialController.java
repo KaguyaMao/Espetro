@@ -62,12 +62,6 @@ public final class TacticalRadialController {
     private static boolean ownsOverlay;
     private static boolean consumedUntilRelease;
 
-    /** 忽略来自轮盘的技能激活时的日志（带调用栈，便于定位自动触发来源）。 */
-    static void logIgnoredSkill(String skillId) {
-        org.espetro.Espetro.LOGGER.info(
-            "忽略轮盘技能激活（J 菜单已打开）: {}（调用栈见下）", skillId,
-            new Throwable("radial-skill-ignored"));
-    }
 
     /** 关闭战术轮盘（J 菜单打开时调用，避免轮盘悬在面板上抢点击）。 */
     public static void closeWheelIfOpen() {
@@ -157,10 +151,9 @@ public final class TacticalRadialController {
             if (Minecraft.getInstance().screen instanceof UnifiedDeployScreen) {
                 consumedUntilRelease = true;
                 ownsOverlay = false;
-                logIgnoredSkill(skillId);
                 return;
             }
-            org.espetro.client.gui.CommanderSkillTargetRequest.arm();
+            org.espetro.client.gui.CommanderSkillTargetRequest.arm(skillId);
             NetworkManager.sendCommanderSkillActivate(skillId);
             consumedUntilRelease = true;
             ownsOverlay = false;
@@ -550,6 +543,8 @@ public final class TacticalRadialController {
                 skillCooldownEndsAt.remove(id);
                 continue;
             }
+            // 服务端开始给这个技能上冷却 = 技能已真正使用 → 结束"待用(黄色)"，倒计时从此刻开始
+            CommanderSkillTargetRequest.clearPending(id);
             Long endsAt = skillCooldownEndsAt.get(id);
             long localRemaining = endsAt == null ? 0L
                 : Math.max(0L, (endsAt - now + 999L) / 1000L);
