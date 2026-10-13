@@ -2252,6 +2252,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
             // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
             // 指挥官直接在这张地图上操作即可。
+            CommanderSkillTargetRequest.arm();
             NetworkManager.sendCommanderSkillActivate(skillId);
             return true;
         }

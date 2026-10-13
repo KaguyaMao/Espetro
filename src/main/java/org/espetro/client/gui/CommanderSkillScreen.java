@@ -201,6 +201,7 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
     }
 
     private void activateSkill(String skillId) {
+        CommanderSkillTargetRequest.arm();
         NetworkManager.sendCommanderSkillActivate(skillId);
         Minecraft.getInstance().setScreen(null);
     }

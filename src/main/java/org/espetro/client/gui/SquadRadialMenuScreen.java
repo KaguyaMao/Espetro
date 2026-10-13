@@ -56,7 +56,10 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                     ? skill.displayName() + " §7(" + cooldown + "s)"
                     : skill.displayName();
                 options.add(new Option(label, icon, 128, cooldown <= 0,
-                    () -> NetworkManager.sendCommanderSkillActivate(skill.id())));
+                    () -> {
+                    org.espetro.client.gui.CommanderSkillTargetRequest.arm();
+                    NetworkManager.sendCommanderSkillActivate(skill.id());
+                }));
             }
         }
     }

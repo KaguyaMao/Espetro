@@ -131,6 +131,7 @@ public final class TacticalRadialController {
             if (skillId.isEmpty()) {
                 return;
             }
+            org.espetro.client.gui.CommanderSkillTargetRequest.arm();
             NetworkManager.sendCommanderSkillActivate(skillId);
             consumedUntilRelease = true;
             ownsOverlay = false;
