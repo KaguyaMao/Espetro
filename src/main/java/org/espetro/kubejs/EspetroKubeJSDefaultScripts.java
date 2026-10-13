@@ -28,6 +28,8 @@ public final class EspetroKubeJSDefaultScripts {
         install("startup_scripts/00_espetro_artillery_155.js");
         install("server_scripts/00_espetro_drone_detection.js");
         install("server_scripts/00_espetro_artillery_155.js");
+        install("startup_scripts/00_espetro_artillery_barrage.js");
+        install("server_scripts/00_espetro_artillery_barrage.js");
     }
 
     private static void install(String relativePath) {
