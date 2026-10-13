@@ -258,6 +258,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.team = data.getTeam();
         this.selectedClassId = normalizeSelectedClassId(data.getSelectedClassId());
         this.waitingForDeploySelection = data.isWaitingForDeploySelection();
+        org.espetro.Espetro.LOGGER.info("等待部署点状态更新: {} → {}", waitingForDeploySelection, data.isWaitingForDeploySelection());
         this.outpostRedeployCooldownEndsAt = System.currentTimeMillis()
             + data.getOutpostRedeployCooldownRemaining() * 1000L;
         this.classSwitchCooldownEndsAt = System.currentTimeMillis()
@@ -887,6 +888,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
         protected void init() {
+        org.espetro.Espetro.LOGGER.info(
+                "部署面板打开: waitingForDeploySelection={}（true=其它功能被锁）",
+                waitingForDeploySelection);
         // 部署面板一出现就关掉战术轮盘：否则轮盘会盖在面板上，
         // 把面板上的点击当成轮盘确认（部署阶段"只能放炮"的根因之一）。
         TacticalRadialController.closeWheelIfOpen();
@@ -2001,6 +2005,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void confirmDeploymentPoint() {
+        org.espetro.Espetro.LOGGER.info("确认部署点被调用");
         if (!waitingForDeploySelection || pendingDeployCommand == null) {
             return;
         }
@@ -2235,6 +2240,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private final String skillName;
         private final ResourceLocation skillIcon;
         private int cooldownSeconds;
+        /** 防抖：同一次按住/拖动/连点只算一次，避免误触连发火炮。 */
+        private long lastActivateMs;
 
         SkillButton(int x, int y, int width, int height, CommanderSkillManager.SkillView skill) {
             super(x, y, width, height);
@@ -2258,6 +2265,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (button != 0 || !isUsable()) {
                 return false;
             }
+            long now = System.currentTimeMillis();
+            if (now - lastActivateMs < 600L) {
+                return true;   // 600ms 内的重复触发直接吞掉
+            }
+            lastActivateMs = now;
             // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
             // 指挥官直接在这张地图上操作即可。
             CommanderSkillTargetRequest.arm();
@@ -3729,9 +3741,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     public void onClose() {
-        if (!isDeploymentSelectionRequired()) {
-            super.onClose();
-        }
+        // 不再硬锁：未选完部署点时也允许 Esc 关闭面板，
+        // 避免"除了放炮什么也干不了、还退不出去"的死锁体验。
+        super.onClose();
     }
 
     private boolean isDeploymentSelectionRequired() {

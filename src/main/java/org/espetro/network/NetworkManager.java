@@ -1777,6 +1777,20 @@ public class NetworkManager {
     }
 
     public static void sendCommanderSkillActivate(String skillId) {
+        // 诊断：客户端到底是谁在激活技能（尤其是"没点却开炮"的情况）
+        try {
+            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+            StringBuilder trace = new StringBuilder();
+            for (StackTraceElement e : new Throwable().getStackTrace()) {
+                if (e.getClassName().startsWith("java.")) continue;
+                trace.append("\n    at ").append(e);
+                if (trace.length() > 900) break;
+            }
+            org.espetro.Espetro.LOGGER.info("客户端请求激活技能: {} 当前界面={}{}",
+                skillId, mc.screen == null ? "null" : mc.screen.getClass().getSimpleName(),
+                trace.toString());
+        } catch (Throwable ignored) {
+        }
         NET.sendToServer(new CommanderSkillPacket(skillId));
     }
 
