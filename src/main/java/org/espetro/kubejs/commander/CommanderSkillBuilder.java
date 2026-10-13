@@ -66,6 +66,11 @@ public final class CommanderSkillBuilder {
         return trigger("artillery_target");
     }
 
+    /** 徐进弹幕：按住右键在地图上拖出直线，弹幕沿该线逐轮推进。 */
+    public CommanderSkillBuilder barrageTarget() {
+        return trigger("artillery_line");
+    }
+
     public CommanderSkillBuilder cooldownSeconds(int value) {
         this.cooldownSeconds = Math.max(0, value);
         return this;

@@ -173,6 +173,17 @@ public final class EspetroCommanderSkills {
         return new KubeCommanderSkillEvent(definition, commander, team);
     }
 
+    /** 徐进弹幕事件：把直线终点一并交给 KubeJS。 */
+    public static KubeCommanderSkillEvent barrageEvent(KubeCommanderSkillDefinition definition,
+            CommanderSkillManager.ArtillerySupportRequest request,
+            ServerPlayer commander,
+            ServerLevel level,
+            BlockPos blockPos,
+            double endX,
+            double endZ) {
+        return new KubeCommanderSkillEvent(definition, request, commander, level, blockPos, endX, endZ);
+    }
+
     public static KubeCommanderSkillEvent targetEvent(KubeCommanderSkillDefinition definition,
                                                       CommanderSkillManager.ArtillerySupportRequest request,
                                                       ServerPlayer commander,

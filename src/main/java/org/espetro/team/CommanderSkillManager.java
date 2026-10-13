@@ -294,6 +294,94 @@ public class CommanderSkillManager {
         return trigger.contains("line") || trigger.contains("barrage") ? "line" : "point";
     }
 
+    /**
+     * 提交徐进弹幕的直线（起点 + 终点）。
+     * 校验与定点炮击一致，随后把两点交给 KubeJS 沿直线布置各轮弹幕，并广播长方形覆盖区。
+     */
+    public boolean submitBarrageTarget(ServerPlayer commander, double startX, double startZ,
+                                       double endX, double endZ) {
+        if (commander == null || !Double.isFinite(startX) || !Double.isFinite(startZ)
+            || !Double.isFinite(endX) || !Double.isFinite(endZ)) {
+            return false;
+        }
+        UUID commanderId = commander.getUUID();
+        String skillId = pendingTargetSkillIds.getOrDefault(
+            commanderId, EspetroCommanderSkills.DEFAULT_ARTILLERY_SKILL_ID);
+        KubeCommanderSkillDefinition definition = EspetroCommanderSkills.getDefinition(skillId);
+        String skillName = definition != null ? definition.displayName() : "选点技能";
+        if (definition == null || !canPlayerUseSkill(commander, definition)) {
+            Espetro.sendToPlayer(commander, "\u00a7c你没有权限提交" + skillName + "坐标！");
+            pendingTargetSkillIds.remove(commanderId);
+            return false;
+        }
+        GamePhase phase = GameStateManager.getInstance().getCurrentPhase();
+        if (phase != GamePhase.BATTLE && phase != GamePhase.DEPLOYING) {
+            Espetro.sendToPlayer(commander, "\u00a7c当前阶段无法提交" + skillName + "坐标！");
+            pendingTargetSkillIds.remove(commanderId);
+            return false;
+        }
+        if (isOnCooldown(commander.getUUID(), skillId)) {
+            int remaining = getRemainingCooldownSeconds(commander.getUUID(), skillId);
+            Espetro.sendToPlayer(commander, "\u00a7c" + skillName + "冷却中，剩余 " + remaining + " 秒");
+            pendingTargetSkillIds.remove(commanderId);
+            return false;
+        }
+        String commanderTeam = normalizeTeam(Espetro.getPlayerTeam(commander));
+        if (commanderTeam == null) {
+            Espetro.sendToPlayer(commander, "\u00a7c你不属于任何阵营，无法提交" + skillName + "坐标！");
+            pendingTargetSkillIds.remove(commanderId);
+            return false;
+        }
+
+        ServerLevel level = commander.serverLevel();
+        BlockPos startBlock = resolveArtilleryTargetBlock(level, startX, startZ);
+        BlockPos endBlock = resolveArtilleryTargetBlock(level, endX, endZ);
+        ArtillerySupportRequest request = new ArtillerySupportRequest(
+            commander.getUUID(),
+            commander.getName().getString(),
+            definition.id(),
+            skillName,
+            commanderTeam,
+            level.dimension(),
+            startX,
+            startBlock.getY(),
+            startZ,
+            startBlock,
+            level.getGameTime(),
+            System.currentTimeMillis());
+
+        KubeCommanderSkillEvent event = EspetroCommanderSkills.barrageEvent(
+            definition, request, commander, level, startBlock, endX, endZ);
+        if (!EspetroCommanderSkills.execute(definition, event)) {
+            Espetro.sendToPlayer(commander, "\u00a7c" + skillName + "KubeJS 回调执行失败，请检查服务端日志。");
+            pendingTargetSkillIds.remove(commanderId);
+            return false;
+        }
+        pendingTargetSkillIds.remove(commanderId);
+        finishCommanderSkill(commander, skillId, definition.displayName(),
+            definition.cooldownSeconds() * 20L);
+
+        // 本方地图上显示长方形覆盖区（线两侧各覆盖半径，弹着点都落在其中）
+        ArtilleryZoneBridge.showZone(
+            commanderTeam,
+            "line",
+            startX,
+            startZ,
+            endX,
+            endZ,
+            ArtilleryZoneBridge.COVERAGE_RADIUS,
+            definition.icon(),
+            level.dimension().location().toString(),
+            ArtilleryZoneBridge.ZONE_DURATION_MS);
+        Espetro.sendToPlayer(commander, "\u00a7a" + skillName + "弹幕已确认: "
+            + startBlock.getX() + ", " + startBlock.getZ() + " → "
+            + endBlock.getX() + ", " + endBlock.getZ());
+        Espetro.LOGGER.info("指挥官 {} 提交 {} 弹幕: ({}, {}) → ({}, {})",
+            commander.getName().getString(), skillName,
+            startBlock.getX(), startBlock.getZ(), endBlock.getX(), endBlock.getZ());
+        return true;
+    }
+
     public boolean submitArtillerySupportTarget(ServerPlayer commander, double x, double z) {
         if (commander == null || !Double.isFinite(x) || !Double.isFinite(z)) {
             return false;

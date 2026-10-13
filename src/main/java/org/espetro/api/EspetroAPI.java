@@ -257,6 +257,14 @@ public class EspetroAPI {
      * ESPoints 在服务端将战术地图选点转换为世界坐标后调用。
      * 这是通用指挥官技能选点入口；旧的 submitArtillerySupportTarget 保留为兼容别名。
      */
+    /** 徐进弹幕：提交直线起点与终点。 */
+    public static boolean submitCommanderBarrageTarget(ServerPlayer commander,
+                                                       double startX, double startZ,
+                                                       double endX, double endZ) {
+        return CommanderSkillManager.getInstance()
+            .submitBarrageTarget(commander, startX, startZ, endX, endZ);
+    }
+
     public static boolean submitCommanderSkillTarget(ServerPlayer commander, double x, double z) {
         return CommanderSkillManager.getInstance().submitArtillerySupportTarget(commander, x, z);
     }

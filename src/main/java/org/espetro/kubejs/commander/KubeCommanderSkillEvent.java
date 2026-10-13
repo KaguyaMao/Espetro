@@ -23,6 +23,10 @@ public class KubeCommanderSkillEvent {
     private final double z;
     private final BlockPos blockPos;
     private final boolean hasTarget;
+    /** 徐进弹幕的直线终点（无直线时为 0）。 */
+    private final double x2;
+    private final double z2;
+    private final boolean hasLine;
 
     public KubeCommanderSkillEvent(KubeCommanderSkillDefinition definition,
                                    ServerPlayer commander,
@@ -37,6 +41,9 @@ public class KubeCommanderSkillEvent {
         this.z = commander.getZ();
         this.blockPos = commander.blockPosition();
         this.hasTarget = false;
+        this.x2 = 0.0D;
+        this.z2 = 0.0D;
+        this.hasLine = false;
     }
 
     public KubeCommanderSkillEvent(KubeCommanderSkillDefinition definition,
@@ -54,6 +61,47 @@ public class KubeCommanderSkillEvent {
         this.z = request.z();
         this.blockPos = blockPos;
         this.hasTarget = true;
+        this.x2 = 0.0D;
+        this.z2 = 0.0D;
+        this.hasLine = false;
+    }
+
+    /** 徐进弹幕：带直线终点的目标事件。 */
+    public KubeCommanderSkillEvent(KubeCommanderSkillDefinition definition,
+                                   CommanderSkillManager.ArtillerySupportRequest request,
+                                   ServerPlayer commander,
+                                   ServerLevel level,
+                                   BlockPos blockPos,
+                                   double endX,
+                                   double endZ) {
+        this.definition = definition;
+        this.request = request;
+        this.commander = commander;
+        this.team = request.team();
+        this.level = level;
+        this.x = request.x();
+        this.y = request.y();
+        this.z = request.z();
+        this.blockPos = blockPos;
+        this.hasTarget = true;
+        this.x2 = endX;
+        this.z2 = endZ;
+        this.hasLine = true;
+    }
+
+    /** 直线终点 X（徐进弹幕）。 */
+    public double x2() {
+        return x2;
+    }
+
+    /** 直线终点 Z（徐进弹幕）。 */
+    public double z2() {
+        return z2;
+    }
+
+    /** 本次技能是否携带直线（徐进弹幕）。 */
+    public boolean hasLine() {
+        return hasLine;
     }
 
     public KubeCommanderSkillDefinition getDefinition() {

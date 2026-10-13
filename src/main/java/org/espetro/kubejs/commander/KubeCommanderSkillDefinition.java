@@ -144,7 +144,8 @@ public final class KubeCommanderSkillDefinition {
     }
 
     public boolean isTargetMapTrigger() {
-        return "artillery_target".equals(trigger) || "target_map".equals(trigger);
+        return "artillery_target".equals(trigger) || "target_map".equals(trigger)
+            || "artillery_line".equals(trigger);
     }
 
     public boolean isActivateTrigger() {
