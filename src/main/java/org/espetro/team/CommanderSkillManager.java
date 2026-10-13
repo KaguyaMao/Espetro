@@ -269,7 +269,14 @@ public class CommanderSkillManager {
 
         try {
             Class<?> packetClass = Class.forName(ESPOINTS_ARTILLERY_PACKET_CLASS_NAME);
-            packetClass.getMethod("sendTo", ServerPlayer.class).invoke(null, commander);
+            String targetMode = artilleryTargetMode(skillId);
+            try {
+                packetClass.getMethod("sendTo", ServerPlayer.class, String.class)
+                    .invoke(null, commander, targetMode);
+            } catch (NoSuchMethodException legacy) {
+                // 旧版 EsPoints 只支持单参数：仍可用（一律按点选处理）
+                packetClass.getMethod("sendTo", ServerPlayer.class).invoke(null, commander);
+            }
             pendingTargetSkillIds.put(commander.getUUID(),
                 skillId == null || skillId.isBlank() ? EspetroCommanderSkills.DEFAULT_ARTILLERY_SKILL_ID : skillId);
             return true;
@@ -278,6 +285,13 @@ public class CommanderSkillManager {
             Espetro.sendToPlayer(commander, "\u00a7cESPoints 不支持指挥官技能选点接口，请确认双方模组版本一致。");
             return false;
         }
+    }
+
+    /** 技能的选点形态：徐进弹幕为 line（按住右键画线），其余为 point。 */
+    public static String artilleryTargetMode(String skillId) {
+        KubeCommanderSkillDefinition definition = EspetroCommanderSkills.getDefinition(skillId);
+        String trigger = definition == null ? "" : String.valueOf(definition.trigger());
+        return trigger.contains("line") || trigger.contains("barrage") ? "line" : "point";
     }
 
     public boolean submitArtillerySupportTarget(ServerPlayer commander, double x, double z) {

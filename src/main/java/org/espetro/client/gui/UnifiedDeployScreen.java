@@ -30,8 +30,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private static final int BTN_H = 12;
     /** J 菜单内指挥官技能列（替代旧轮盘入口）。 */
-    private static final int SKILL_COL_W = 104;
-    private static final int SKILL_BTN_H = 42;
+    private static final int SKILL_COL_W = 42;
+    private static final int SKILL_BTN_H = 50;
     private static final int SKILL_BTN_GAP = 4;
     private final List<SkillButton> skillButtons = new ArrayList<>();
     private int lastSkillSignature = Integer.MIN_VALUE;
@@ -2205,7 +2205,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             lastSkillSignature = Integer.MIN_VALUE;
             return;
         }
-        int x = mapX + 6;
+        int x = mapX + 4;
         int y = mapY + 28;
         int maxY = mapY + mapH - MAP_FOOTER_H - 6;
         for (CommanderSkillManager.SkillView skill : skills) {
@@ -2222,7 +2222,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     /** 技能按钮：自绘（半透明灰底 + 白边 + 居中图标/名称/冷却）。 */
     private static final class SkillButton extends GuiElement {
-        private static final int ICON_SIZE = 14;
+        private static final int ICON_SIZE = 16;
         private final String skillId;
         private final String skillName;
         private final ResourceLocation skillIcon;
@@ -2262,8 +2262,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (button != 0 || !isUsable()) {
                 return false;
             }
+            // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
+            // 指挥官直接在这张地图上操作即可。
             NetworkManager.sendCommanderSkillActivate(skillId);
-            Minecraft.getInstance().setScreen(null);
             return true;
         }
 
@@ -2302,15 +2303,21 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 graphics.setColor(1f, 1f, 1f, 1f);
             }
 
-            // ② 技能名称（居中）
+            // ② 技能名称（居中；列窄时自动缩小以完整显示）
             int nameColor = usable ? 0xFFFFFFFF : 0xFF8B9099;
-            graphics.drawCenteredString(font, skillName, centerX, py + 21, nameColor);
+            int nameWidth = font.width(skillName);
+            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.5f, (w - 6f) / nameWidth);
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, py + 22, 0.0D);
+            graphics.pose().scale(nameScale, nameScale, 1.0f);
+            graphics.drawCenteredString(font, skillName, 0, 0, nameColor);
+            graphics.pose().popPose();
 
             // ③ 冷却 / 可用（居中，字体更小）
             String cooldownText = usable ? "可用" : formatCooldown(cooldownSeconds);
             int cooldownColor = usable ? 0xFF7FD98F : 0xFFB9BEC6;
             graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 32, 0.0D);
+            graphics.pose().translate(centerX, py + 37, 0.0D);
             graphics.pose().scale(0.75f, 0.75f, 1.0f);
             graphics.drawCenteredString(font, cooldownText, 0, 0, cooldownColor);
             graphics.pose().popPose();
