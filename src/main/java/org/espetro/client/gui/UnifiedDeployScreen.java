@@ -2262,6 +2262,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         @Override
         public boolean onMouseClick(int mouseX, int mouseY, int button) {
+            // 关键：GuiElement 不会替叶子元素做范围判定（它只转发给子元素），
+            // 所以必须自己判断命中，否则这个按钮会吞掉整个界面的左键点击。
+            if (mouseX < getX() || mouseX >= getX() + getWidth()
+                || mouseY < getY() || mouseY >= getY() + getHeight()) {
+                return false;
+            }
             if (button != 0 || !isUsable()) {
                 return false;
             }
