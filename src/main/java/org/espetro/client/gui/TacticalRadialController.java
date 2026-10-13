@@ -198,6 +198,7 @@ public final class TacticalRadialController {
             cachedCooldowns.clear();
             cachedCooldowns.putAll(pendingCooldowns);
         }
+        anchorSkillCooldowns();
         synchronized (pendingSkills) {
             cachedSkills.clear();
             cachedSkills.addAll(pendingSkills);
@@ -503,10 +504,41 @@ public final class TacticalRadialController {
         return List.copyOf(cachedSkills);
     }
 
-    /** 服务端下发的剩余冷却秒数（原始值，客户端需自行锚定倒计时）。 */
+    /** 技能冷却结束时刻（全局唯一锚点：重开界面/重建菜单都不会让它重新计时）。 */
+    private static final java.util.Map<String, Long> skillCooldownEndsAt = new java.util.HashMap<>();
+
+    /**
+     * 用服务端下发的"剩余秒数"更新锚点：只有当服务端给的剩余时间明显大于
+     * 本地推算出的剩余时间（说明是新一轮冷却）才重新锚定，否则保持原锚点让倒计时自己走。
+     */
+    private static void anchorSkillCooldowns() {
+        long now = System.currentTimeMillis();
+        for (java.util.Map.Entry<String, Integer> entry : cachedCooldowns.entrySet()) {
+            String id = entry.getKey();
+            int raw = entry.getValue() == null ? 0 : entry.getValue();
+            if (raw <= 0) {
+                skillCooldownEndsAt.remove(id);
+                continue;
+            }
+            Long endsAt = skillCooldownEndsAt.get(id);
+            long localRemaining = endsAt == null ? 0L
+                : Math.max(0L, (endsAt - now + 999L) / 1000L);
+            if (endsAt == null || raw > localRemaining + 2L) {
+                skillCooldownEndsAt.put(id, now + raw * 1000L);
+            }
+        }
+        skillCooldownEndsAt.keySet().removeIf((id) -> !cachedCooldowns.containsKey(id));
+    }
+
+    /** 该技能当前剩余冷却秒数（由全局锚点实时推算）。 */
     public static int skillCooldownSeconds(String skillId) {
-        Integer seconds = cachedCooldowns.get(skillId);
-        return seconds == null ? 0 : Math.max(0, seconds);
+        Long endsAt = skillCooldownEndsAt.get(skillId);
+        if (endsAt == null) {
+            Integer raw = cachedCooldowns.get(skillId);
+            return raw == null ? 0 : Math.max(0, raw);
+        }
+        long remaining = endsAt - System.currentTimeMillis();
+        return remaining <= 0L ? 0 : (int) Math.ceil(remaining / 1000.0);
     }
 
     /** 技能快照签名：列表内容或冷却变化时改变。 */

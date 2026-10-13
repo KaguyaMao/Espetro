@@ -2205,7 +2205,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             lastSkillSignature = Integer.MIN_VALUE;
             return;
         }
-        int x = mapX + 4;
+        int x = mapX + 9;   // 相对地图面板左下内边右移 5 像素
         int y = mapY + 28;
         int maxY = mapY + mapH - MAP_FOOTER_H - 6;
         for (CommanderSkillManager.SkillView skill : skills) {
@@ -2226,8 +2226,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private final String skillId;
         private final String skillName;
         private final ResourceLocation skillIcon;
-        private int rawCooldownSeconds;
-        private long cooldownEndsAtMs;
         private int cooldownSeconds;
 
         SkillButton(int x, int y, int width, int height, CommanderSkillManager.SkillView skill) {
@@ -2238,19 +2236,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             refresh();
         }
 
-        /** 每秒调用：重新锚定服务端冷却值并本地倒数。 */
+        /** 每秒调用：取全局锚点推算出的剩余秒数（重建菜单也不会重新计时）。 */
         void refresh() {
-            int raw = TacticalRadialController.skillCooldownSeconds(skillId);
-            if (raw != rawCooldownSeconds) {
-                rawCooldownSeconds = raw;
-                cooldownEndsAtMs = raw > 0 ? System.currentTimeMillis() + raw * 1000L : 0L;
-            }
-            if (cooldownEndsAtMs <= 0L) {
-                cooldownSeconds = 0;
-            } else {
-                long remaining = cooldownEndsAtMs - System.currentTimeMillis();
-                cooldownSeconds = remaining <= 0L ? 0 : (int) Math.ceil(remaining / 1000.0);
-            }
+            cooldownSeconds = TacticalRadialController.skillCooldownSeconds(skillId);
         }
 
         private boolean isUsable() {
