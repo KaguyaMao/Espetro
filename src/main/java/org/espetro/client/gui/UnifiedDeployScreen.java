@@ -237,7 +237,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private int mapX, mapY, mapW, mapH;
 
     public UnifiedDeployScreen(UnifiedDeployScreenPacket data) {
-        super(Component.literal("部署面板"));
+        super(Component.literal("战术面板"));
         this.factionId = data.getFactionId();
         this.factionName = data.getFactionName();
         this.factionDescription = data.getFactionDescription();

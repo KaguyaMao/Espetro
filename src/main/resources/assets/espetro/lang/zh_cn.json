@@ -1,7 +1,7 @@
 {
   "block.espetro.onbuilding": "施工中的工事",
   "key.categories.espetro": "Espetro 战术小队",
-  "key.espetro.team": "队伍选择",
+  "key.espetro.team": "战术面板（主城：组队）",
   "key.espetro.class": "职业选择",
   "key.espetro.skill": "指挥官技能",
   "key.espetro.radial": "战术交互轮盘（长按）",
@@ -36,7 +36,7 @@
   "tutorial.step.faction_select.body": "指挥官从卡片池选择编制（TO&E），决定职业与载具，不是个人职业。三列卡片可滚轮浏览；双方完成后进入揭示。",
   "tutorial.step.faction_reveal.title": "编制揭示",
   "tutorial.step.faction_reveal.body": "短暂展示双方最终编制，随后进入部署阶段并打开统一部署面板。",
-  "tutorial.step.deploy_panel.title": "统一部署面板 (J)",
+  "tutorial.step.deploy_panel.title": "战术面板 (J)",
   "tutorial.step.deploy_panel.body": "三栏：左班组、中职业与部署点、右战术地图。部署阶段与战斗中按 J 打开。先处理班组与部署点，再确认职业更稳妥。",
   "tutorial.step.squad.title": "班组小队",
   "tutorial.step.squad.body": "左侧可加入已有班组或创建并选择类别。队长可管理成员，并在 Alt 轮盘部署 Rally。小队与队伍隔离。",

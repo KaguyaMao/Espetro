@@ -2120,7 +2120,7 @@ public class GameStateManager {
                 player.sendSystemMessage(Component.literal("§e编制: §f" + factionId));
                 player.sendSystemMessage(Component.literal("§e指挥官: §f" + commanderName));
                 player.sendSystemMessage(Component.literal("§a════════════════════════════════"));
-                player.sendSystemMessage(Component.literal("§e⚠ 请先在部署面板选择部署点，再选择职业！"));
+                player.sendSystemMessage(Component.literal("§e⚠ 请先在战术面板选择部署点，再选择职业！"));
 
                 NetworkManager.sendUnifiedDeployScreen(player, -1);
                 NetworkManager.sendDeployPointSync(player);
