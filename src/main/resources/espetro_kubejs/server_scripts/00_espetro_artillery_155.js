@@ -1,13 +1,28 @@
-// Espetro 默认指挥官技能实现脚本：155 火炮支援。
-// 不使用 server.scheduleInTicks：部分 KubeJS/Forge 组合会丢失较长延迟的回调。
-// 队列仅在有火炮任务时执行，且每次执行前会核验当前战局，避免跨局落弹。
+// Espetro 指挥官技能实现脚本：155 火炮支援（密集覆盖 + 强化战斗部）。
+// 排定方式：KubeJS 的 server.scheduleInTicks（本服务器实测 20/200/600/1400 tick 长延迟回调均可靠）。
+// 释放后先等 EspetroArtilleryStartDelayTicks（默认 30 秒）再开始射击。
+// 调参入口全部集中在下面的常量里，改完 /reload 即生效（无需重启）。
 
 var EspetroArtilleryEntityId = 'superbwarfare:cannon_shell'
-var EspetroArtilleryTasks = []
-var EspetroArtilleryTick = 0
 var EspetroArtilleryJavaRandom = null
 var EspetroArtilleryFallbackSeed = 135791357
-var EspetroArtilleryScriptVersion = 'wave-queue-20260729'
+var EspetroArtilleryScriptVersion = 'dense-20260925'
+
+// 释放后到第一发的延迟（tick）：30 秒 = 600
+var EspetroArtilleryStartDelayTicks = 30 * 20
+
+// 战斗部 NBT：superbwarfare 炮弹父类会读取 Damage / ExplosionDamage / Radius
+// 实体默认值为 60 / 100 / 8，这里大幅强化（数值越高对步兵越致命；对载具还受其抗性表限制）
+var EspetroArtilleryShellNbt = ',Damage:300.0f,ExplosionDamage:600.0f,Radius:12.0f'
+
+// 覆盖密度
+var EspetroArtilleryImpactRadius = 45        // 散布半径（格）——越小越密
+var EspetroArtilleryCoverWaves = 8           // 覆盖轮数
+var EspetroArtilleryShellsPerWave = 6        // 每轮发数
+var EspetroArtilleryWaveIntervalTicks = 140  // 轮间隔（tick，140 = 7 秒）
+var EspetroArtillerySightFirstOffsetTicks = 0    // 第一发校射（相对延迟）
+var EspetroArtillerySightSecondOffsetTicks = 50  // 第二发校射
+var EspetroArtilleryCoverStartOffsetTicks = 400  // 覆盖射击起点（相对延迟，400 = 20 秒）
 
 try {
   if (typeof Java !== 'undefined') {
@@ -18,23 +33,6 @@ try {
 }
 
 console.info('[Espetro] artillery_155 script loaded: ' + EspetroArtilleryScriptVersion)
-
-// 空队列时仅做一次整数递增和一次长度判断；不扫描玩家、实体或区块。
-ServerEvents.tick(event => {
-  EspetroArtilleryTick++
-  if (EspetroArtilleryTasks.length === 0) return
-
-  for (var index = EspetroArtilleryTasks.length - 1; index >= 0; index--) {
-    const task = EspetroArtilleryTasks[index]
-    if (task.executeAt > EspetroArtilleryTick) continue
-    EspetroArtilleryTasks.splice(index, 1)
-    try {
-      espetroExecuteArtilleryWave(task)
-    } catch (error) {
-      console.error('[Espetro] artillery_155 wave ' + task.label + ' failed: ' + error)
-    }
-  }
-})
 
 EspetroCommanderSkills.on('artillery_155', event => {
   if (!event.hasTarget()) {
@@ -49,67 +47,80 @@ EspetroCommanderSkills.on('artillery_155', event => {
     centerX: espetroArtilleryNumber(event.x(), 0),
     targetY: espetroArtilleryNumber(event.y(), 0),
     centerZ: espetroArtilleryNumber(event.z(), 0),
-    // 与旧版 155 脚本一致：炮弹从目标上空约 180 格处落下。
-    spawnHeight: 180,
+    spawnHeight: 20,
     downwardVelocity: 1.5,
-    impactRadius: 90,
+    impactRadius: EspetroArtilleryImpactRadius,
+    nbt: EspetroArtilleryShellNbt,
     cancelled: false
   }
+  const server = event.server()
 
-  if (!/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(cfg.entity)
-      || cfg.sessionId <= 0 || cfg.dimensionId === 'null') {
-    event.tell('§c当前战局不可使用火炮支援。')
+  if (!/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(cfg.entity)) {
+    event.tell('§c炮击实体配置无效。')
     return false
   }
 
-  // 两发校射：间隔 20 秒；随后等待 20 秒，再进行六轮、每轮四发的覆盖射击。
-  espetroQueueArtilleryWave(cfg, 0, 1, '校射 1/2')
-  espetroQueueArtilleryWave(cfg, 20 * 20, 1, '校射 2/2')
-  for (var wave = 0; wave < 6; wave++) {
-    espetroQueueArtilleryWave(cfg, 2 * 20 * 20 + wave * 4 * 20, 4, '覆盖 ' + (wave + 1) + '/6')
+  var totalShells = 0
+  try {
+    // 释放后先等 EspetroArtilleryStartDelayTicks（默认 30 秒）再开始射击。
+    // 第一轮：两发校射。
+    espetroScheduleArtilleryWave(server, cfg, EspetroArtilleryStartDelayTicks + EspetroArtillerySightFirstOffsetTicks, 1)
+    espetroScheduleArtilleryWave(server, cfg, EspetroArtilleryStartDelayTicks + EspetroArtillerySightSecondOffsetTicks, 1)
+    totalShells += 2
+
+    // 第二轮：密集覆盖。
+    for (var wave = 0; wave < EspetroArtilleryCoverWaves; wave++) {
+      espetroScheduleArtilleryWave(
+        server, cfg,
+        EspetroArtilleryStartDelayTicks + EspetroArtilleryCoverStartOffsetTicks + wave * EspetroArtilleryWaveIntervalTicks,
+        EspetroArtilleryShellsPerWave)
+      totalShells += EspetroArtilleryShellsPerWave
+    }
+  } catch (error) {
+    console.error('[Espetro] artillery_155 scheduling failed: ' + error)
+    event.tell('§c炮击任务排定失败。')
+    return false
   }
 
-  event.tell('§a火炮支援已确认：两发校射后将实施六轮覆盖，共 26 发。')
-  console.info('[Espetro] artillery_155 queued 8 waves / 26 shells in session ' + cfg.sessionId)
+  event.tell('§a火炮支援已确认：30 秒后开始射击，' + EspetroArtilleryCoverWaves + ' 轮覆盖，共 ' + totalShells + ' 发。')
+  console.info('[Espetro] artillery_155 scheduled ' + (EspetroArtilleryCoverWaves + 2)
+    + ' waves / ' + totalShells + ' shells, first wave in ' + (EspetroArtilleryStartDelayTicks / 20)
+    + 's, radius ' + cfg.impactRadius + ', session ' + cfg.sessionId)
   return true
 })
 
-function espetroQueueArtilleryWave(cfg, delayTicks, count, label) {
-  EspetroArtilleryTasks.push({
-    executeAt: EspetroArtilleryTick + Math.max(0, Math.floor(delayTicks)),
-    cfg: cfg,
-    count: count,
-    label: label
-  })
-}
+function espetroScheduleArtilleryWave(server, cfg, delayTicks, count) {
+  server.scheduleInTicks(Math.max(0, Math.floor(delayTicks)), scheduled => {
+    const level = espetroResolveArtilleryLevel(cfg)
+    if (level == null) return
 
-function espetroExecuteArtilleryWave(task) {
-  const level = espetroResolveArtilleryLevel(task.cfg)
-  if (level == null) return
-
-  var failures = 0
-  for (var i = 0; i < task.count; i++) {
-    const point = espetroRandomArtilleryPoint(
-      task.cfg.centerX,
-      task.cfg.centerZ,
-      task.cfg.impactRadius
-    )
-    if (!espetroSpawnArtilleryShell(
-      level,
-      task.cfg,
-      point[0],
-      task.cfg.targetY + task.cfg.spawnHeight,
-      point[1]
-    )) {
-      failures++
+    var failures = 0
+    // 把本轮炮弹按角度均匀铺开（随机起始角 + 半径 0.55~1.0 随机），
+    // 避免"均匀随机撒点"造成几发挤在中心同一处、看起来像叠在一起落下。
+    const spreadStep = Math.PI * 2 / Math.max(1, count)
+    const spreadStart = espetroArtilleryRandom() * Math.PI * 2
+    for (var i = 0; i < count; i++) {
+      const spreadAngle = spreadStart + spreadStep * i
+      const spreadDist = cfg.impactRadius * (0.55 + 0.45 * espetroArtilleryRandom())
+      const point = [
+        cfg.centerX + Math.cos(spreadAngle) * spreadDist,
+        cfg.centerZ + Math.sin(spreadAngle) * spreadDist
+      ]
+      if (!espetroSpawnArtilleryShell(
+        level,
+        cfg,
+        point[0],
+        cfg.targetY + cfg.spawnHeight,
+        point[1]
+      )) {
+        failures++
+      }
     }
-  }
 
-  const spawned = task.count - failures
-  console.info('[Espetro] artillery_155 ' + task.label + ': ' + spawned + '/' + task.count + ' shells spawned')
-  if (failures > 0) {
-    console.warn('[Espetro] artillery_155 ' + task.label + ' failed to spawn ' + failures + '/' + task.count + ' shells')
-  }
+    if (failures > 0) {
+      console.warn('[Espetro] artillery_155 wave failed to spawn ' + failures + '/' + count + ' shells')
+    }
+  })
 }
 
 function espetroResolveArtilleryLevel(cfg) {
@@ -128,16 +139,17 @@ function espetroResolveArtilleryLevel(cfg) {
   }
 
   const server = Espetro.server()
-  return server == null ? null : server.getLevel(espetroArtilleryResourceId(cfg.dimensionId))
+  if (server == null) return null
+  return server.getLevel(espetroArtilleryResourceId(cfg.dimensionId))
 }
 
 function espetroSpawnArtilleryShell(level, cfg, x, y, z) {
-  // 保留经过实测可用的命令生成方式，避免不同 Superb Warfare 版本的实体包装 API 差异。
   const command = 'summon ' + cfg.entity + ' '
     + espetroArtilleryCommandNumber(x) + ' '
     + espetroArtilleryCommandNumber(y) + ' '
     + espetroArtilleryCommandNumber(z)
-    + ' {Motion:[0.0d,' + espetroArtilleryCommandNumber(-cfg.downwardVelocity) + 'd,0.0d]}'
+    + ' {Motion:[0.0d,' + espetroArtilleryCommandNumber(-cfg.downwardVelocity) + 'd,0.0d]'
+    + (cfg.nbt || '') + '}'
   return level.runCommandSilent(command) > 0
 }
 
@@ -148,7 +160,9 @@ function espetroRandomArtilleryPoint(centerX, centerZ, radius) {
   for (var attempt = 0; attempt < 16; attempt++) {
     offsetX = (espetroArtilleryRandom() * 2 - 1) * radius
     offsetZ = (espetroArtilleryRandom() * 2 - 1) * radius
-    if (offsetX * offsetX + offsetZ * offsetZ <= radiusSquared) return [centerX + offsetX, centerZ + offsetZ]
+    if (offsetX * offsetX + offsetZ * offsetZ <= radiusSquared) {
+      return [centerX + offsetX, centerZ + offsetZ]
+    }
   }
   return [centerX + offsetX * 0.5, centerZ + offsetZ * 0.5]
 }
@@ -161,6 +175,7 @@ function espetroArtilleryRandom() {
       EspetroArtilleryJavaRandom = null
     }
   }
+
   EspetroArtilleryFallbackSeed = (EspetroArtilleryFallbackSeed * 48271) % 2147483647
   if (EspetroArtilleryFallbackSeed <= 0) EspetroArtilleryFallbackSeed += 2147483646
   return EspetroArtilleryFallbackSeed / 2147483647

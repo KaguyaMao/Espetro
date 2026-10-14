@@ -14,7 +14,7 @@ public final class ArtilleryZoneBridge {
     private static final String TARGET_CLASS = "com.example.espoints.network.SyncArtilleryZonesMessage";
 
     /** 一次覆盖的持续时长（毫秒）：与火炮脚本 2 发校射 + 6 轮覆盖大致对齐。 */
-    public static final long ZONE_DURATION_MS = 70_000L;
+    public static final long ZONE_DURATION_MS = 150_000L;   // 覆盖 30 秒延迟 + 20 秒起算 + 8 轮 × 7 秒
 
     /** 155 火炮的覆盖半径（格）：与 KubeJS 脚本里的 impactRadius 保持一致。 */
     public static final double COVERAGE_RADIUS = 45.0D;

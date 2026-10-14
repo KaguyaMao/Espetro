@@ -39,7 +39,7 @@ public final class ArtilleryBarrageExecutor {
     private static final int COVER_START_OFFSET_TICKS = 400;
     private static final int COVER_WAVES = 8;
     private static final int SHELLS_PER_WAVE = 6;
-    private static final int WAVE_INTERVAL_TICKS = 50;
+    private static final int WAVE_INTERVAL_TICKS = 140;   // 每轮间隔 7 秒
     private static final int SPAWN_HEIGHT = 180;
     private static final double DOWNWARD_VELOCITY = 1.5D;
     /** 炮弹战斗部强化（与脚本同一套 NBT）。 */
@@ -128,12 +128,19 @@ public final class ArtilleryBarrageExecutor {
         }
         double centerX = wave.x1() + (wave.x2() - wave.x1()) * wave.centerT();
         double centerZ = wave.z1() + (wave.z2() - wave.z1()) * wave.centerT();
+        // 本轮炮弹按角度均匀铺开（随机起始角 + 半径 0.55~1.0 随机），与定点炮击一致
+        double spreadStep = Math.PI * 2.0D / Math.max(1, wave.count());
+        double spreadStart = ThreadLocalRandom.current().nextDouble() * Math.PI * 2.0D;
         for (int i = 0; i < wave.count(); i++) {
-            Vec3 point = randomPoint(centerX, centerZ, COVERAGE_RADIUS);
+            double angle = spreadStart + spreadStep * i;
+            double distance = COVERAGE_RADIUS
+                * (0.55D + 0.45D * ThreadLocalRandom.current().nextDouble());
+            double px = centerX + Math.cos(angle) * distance;
+            double pz = centerZ + Math.sin(angle) * distance;
             int y = level.getHeight(
                 net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (int) Math.floor(point.x), (int) Math.floor(point.z)) + SPAWN_HEIGHT;
-            summonShell(level, point.x, y, point.z);
+                (int) Math.floor(px), (int) Math.floor(pz)) + SPAWN_HEIGHT;
+            summonShell(level, px, y, pz);
         }
     }
 
