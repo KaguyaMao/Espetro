@@ -18,7 +18,8 @@
     "sbw.VehicleEntityMainBaseProtectionMixin",
     "sbw.VehicleEntitySeatAccessMixin",
     "sbw.VehicleEntityWreckMixin",
-    "sbw.TurretWreckEntityMixin"
+    "sbw.TurretWreckEntityMixin",
+    "sbw.CustomExplosionBlockGateMixin"
   ],
   "client": [
     "sbw.ClickDismountMixin",

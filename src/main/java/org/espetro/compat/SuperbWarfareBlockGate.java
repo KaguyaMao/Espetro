@@ -36,6 +36,33 @@ public final class SuperbWarfareBlockGate {
         event.getAffectedBlocks().removeIf((pos) -> !isAllowed(level.getBlockState(pos)));
     }
 
+    /**
+     * 过滤一批即将被卓越前线爆炸破坏的方块，只保留允许的（玻璃类/活板门类/门类）。
+     *
+     * <p>SBW 的 {@code CustomExplosion} 自己销毁方块、且不把方块列表交给
+     * {@code ExplosionEvent.Detonate}，所以真正的拦截点在
+     * {@code CustomExplosionBlockGateMixin} 里，本方法供其调用。</p>
+     */
+    public static java.util.Collection<net.minecraft.core.BlockPos> filterBlocks(
+            net.minecraft.world.level.Level level, java.util.Collection<net.minecraft.core.BlockPos> blocks) {
+        if (level == null || blocks == null || blocks.isEmpty()) {
+            return blocks;
+        }
+        java.util.List<net.minecraft.core.BlockPos> kept = new java.util.ArrayList<>(blocks.size());
+        for (net.minecraft.core.BlockPos pos : blocks) {
+            if (pos != null && isAllowed(level.getBlockState(pos))) {
+                kept.add(pos);
+            }
+        }
+        return kept;
+    }
+
+    /** 该坐标的方块是否允许被卓越前线的爆炸破坏（供 Mixin 调用）。 */
+    public static boolean isExplosionBreakable(net.minecraft.world.level.Level level,
+                                               net.minecraft.core.BlockPos pos) {
+        return level != null && pos != null && isAllowed(level.getBlockState(pos));
+    }
+
     /** 该方块是否允许被卓越前线的爆炸破坏。 */
     private static boolean isAllowed(BlockState state) {
         if (state.isAir()) {
