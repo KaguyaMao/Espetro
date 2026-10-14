@@ -302,6 +302,7 @@ public abstract class AuiScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
         graphics.flush();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -331,6 +332,10 @@ public abstract class AuiScreen extends Screen {
                 if (argb != 0) {
                     graphics.fill(0, 0, this.width, this.height, argb);
                 }
+            }
+            // 聊天栏渲染在本模组界面之上：界面是全屏不透明的，否则聊天消息会被完全遮住。
+            if (minecraft != null && minecraft.gui != null) {
+                minecraft.gui.getChat().render(graphics, minecraft.gui.getGuiTicks(), mouseX, mouseY);
             }
             graphics.flush();
         } finally {
@@ -372,6 +377,22 @@ public abstract class AuiScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (root != null && root.onKeyPress(keyCode, scanCode, modifiers)) {
             return true;
+        }
+        // 原版聊天栏（T）与命令输入（/）在本模组的任何界面里都应能正常打开，
+        // 这里显式转发，避免全屏界面把按键吞掉。
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        if (minecraft.options != null && minecraft.player != null
+            && (modifiers & (org.lwjgl.glfw.GLFW.GLFW_MOD_CONTROL
+                | org.lwjgl.glfw.GLFW.GLFW_MOD_ALT
+                | org.lwjgl.glfw.GLFW.GLFW_MOD_SHIFT)) == 0) {
+            if (keyCode == minecraft.options.keyChat.getKey().getValue()) {
+                minecraft.setScreen(new net.minecraft.client.gui.screens.ChatScreen(""));
+                return true;
+            }
+            if (keyCode == minecraft.options.keyCommand.getKey().getValue()) {
+                minecraft.setScreen(new net.minecraft.client.gui.screens.ChatScreen("/"));
+                return true;
+            }
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
