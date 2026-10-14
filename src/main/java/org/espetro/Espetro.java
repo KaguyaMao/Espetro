@@ -89,6 +89,7 @@ public class Espetro {
 
     public Espetro() {
         ensureKubeJSDefaultScriptsIfLoaded();
+        org.espetro.debug.EspetroDebugRules.register();
         // SERVER 类型（而非 COMMON）：载具交互/白名单在客户端也有一半判定，
         // 必须由服务端统一下发，避免两边 toml 不一致导致"客户端读条、服务端已放行"。
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(
@@ -221,6 +222,7 @@ public class Espetro {
         public static void commonSetup(FMLCommonSetupEvent event) {
             event.enqueueWork(() -> {
                 ensureKubeJSDefaultScriptsIfLoaded();
+                org.espetro.debug.EspetroDebugRules.register();
                 NetworkManager.registerNetwork();
                 // 初始化职业人数管理器
                 new ClassCountManager();

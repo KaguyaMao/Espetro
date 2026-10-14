@@ -23,6 +23,7 @@ public final class HcrTacticalMapBridge {
     private static Method decreaseRenderRangeMethod;
     private static Method setSelectedDeploymentPointMethod;
     private static Method clearSelectedDeploymentPointMethod;
+    private static Method hideMinimapMethod;
     private static Object hudInstance;
     private static Boolean espointsLoaded;
     private static boolean unavailableLogged;
@@ -70,6 +71,18 @@ public final class HcrTacticalMapBridge {
             setSelectedDeploymentPointMethod().invoke(getHudInstance(), x, z);
         } catch (Throwable e) {
             logUnavailable(e);
+        }
+    }
+
+    /** 关闭 V 键小地图（J 菜单打开时调用）。 */
+    public static void hideMinimap() {
+        if (!isAvailable()) {
+            return;
+        }
+        try {
+            hideMinimapMethod().invoke(getHudInstance());
+        } catch (ReflectiveOperationException error) {
+            logUnavailable(error);
         }
     }
 
@@ -156,6 +169,13 @@ public final class HcrTacticalMapBridge {
                 "setSelectedDeploymentPoint", double.class, double.class);
         }
         return setSelectedDeploymentPointMethod;
+    }
+
+    private static Method hideMinimapMethod() throws ReflectiveOperationException {
+        if (hideMinimapMethod == null) {
+            hideMinimapMethod = hudClass().getMethod("hideMinimap");
+        }
+        return hideMinimapMethod;
     }
 
     private static Method clearSelectedDeploymentPointMethod() throws ReflectiveOperationException {

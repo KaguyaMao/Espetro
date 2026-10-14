@@ -890,6 +890,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 部署面板一出现就关掉战术轮盘：否则轮盘会盖在面板上，
         // 把面板上的点击当成轮盘确认（部署阶段"只能放炮"的根因之一）。
         TacticalRadialController.closeWheelIfOpen();
+        // J 菜单打开时立刻关掉 V 键小地图，避免两块地图同时占屏
+        org.espetro.client.HcrTacticalMapBridge.hideMinimap();
         super.init();
     }
 

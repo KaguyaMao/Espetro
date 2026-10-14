@@ -490,6 +490,9 @@ public class CommanderSkillManager {
     }
 
     private void finishCommanderSkill(ServerPlayer commander, String skillId, String displayName, long cooldownTicks) {
+        if (org.espetro.debug.EspetroDebugRules.skillNoCooldown()) {
+            cooldownTicks = 0L;   // 调试模式：不写冷却
+        }
         cooldownEndTicks
             .computeIfAbsent(commander.getUUID(), k -> new HashMap<>())
             .put(skillId, getServerTick() + cooldownTicks);
@@ -515,6 +518,9 @@ public class CommanderSkillManager {
         net.minecraft.server.MinecraftServer server = Espetro.getServer();
         if (server == null) {
             return;
+        }
+        if (org.espetro.debug.EspetroDebugRules.skillNoCooldown(server)) {
+            return;   // 调试模式：不预先起算冷却
         }
         long now = getServerTick();
         for (net.minecraft.server.level.ServerPlayer player : server.getPlayerList().getPlayers()) {
@@ -543,6 +549,9 @@ public class CommanderSkillManager {
     }
 
     public boolean isOnCooldown(UUID uuid, String skillId) {
+        if (org.espetro.debug.EspetroDebugRules.skillNoCooldown()) {
+            return false;   // 调试模式：技能无冷却
+        }
         Map<String, Long> map = cooldownEndTicks.get(uuid);
         if (map == null) return false;
         Long endTick = map.get(skillId);
