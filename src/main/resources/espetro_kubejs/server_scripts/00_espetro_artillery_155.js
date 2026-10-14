@@ -101,7 +101,8 @@ function espetroScheduleArtilleryWave(server, cfg, delayTicks, count) {
     const spreadStart = espetroArtilleryRandom() * Math.PI * 2
     for (var i = 0; i < count; i++) {
       const spreadAngle = spreadStart + spreadStep * i
-      const spreadDist = cfg.impactRadius * (0.55 + 0.45 * espetroArtilleryRandom())
+      // 目标附近密、外圈稀：0.15~0.50 倍散布半径，目标点必定有弹着
+      const spreadDist = cfg.impactRadius * (0.15 + 0.35 * espetroArtilleryRandom())
       const point = [
         cfg.centerX + Math.cos(spreadAngle) * spreadDist,
         cfg.centerZ + Math.sin(spreadAngle) * spreadDist
@@ -148,7 +149,7 @@ function espetroSpawnArtilleryShell(level, cfg, x, y, z) {
     + espetroArtilleryCommandNumber(x) + ' '
     + espetroArtilleryCommandNumber(y) + ' '
     + espetroArtilleryCommandNumber(z)
-    + ' {Motion:[0.0d,' + espetroArtilleryCommandNumber(-cfg.downwardVelocity) + 'd,0.0d]'
+    + ' {Rotation:[0.0f,90.0f],Motion:[0.0d,' + espetroArtilleryCommandNumber(-cfg.downwardVelocity) + 'd,0.0d]'
     + (cfg.nbt || '') + '}'
   return level.runCommandSilent(command) > 0
 }

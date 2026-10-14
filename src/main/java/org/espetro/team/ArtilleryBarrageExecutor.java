@@ -134,7 +134,7 @@ public final class ArtilleryBarrageExecutor {
         for (int i = 0; i < wave.count(); i++) {
             double angle = spreadStart + spreadStep * i;
             double distance = COVERAGE_RADIUS
-                * (0.55D + 0.45D * ThreadLocalRandom.current().nextDouble());
+                * (0.15D + 0.35D * ThreadLocalRandom.current().nextDouble());
             double px = centerX + Math.cos(angle) * distance;
             double pz = centerZ + Math.sin(angle) * distance;
             int y = level.getHeight(
@@ -151,7 +151,7 @@ public final class ArtilleryBarrageExecutor {
         }
         String command = "summon " + SHELL_ENTITY + " "
             + fmt(x) + " " + fmt(y) + " " + fmt(z)
-            + " {Motion:[0.0d," + fmt(-DOWNWARD_VELOCITY) + "d,0.0d]" + SHELL_NBT + "}";
+            + " {Rotation:[0.0f,90.0f],Motion:[0.0d," + fmt(-DOWNWARD_VELOCITY) + "d,0.0d]" + SHELL_NBT + "}";
         CommandSourceStack source = server.createCommandSourceStack()
             .withSuppressedOutput()
             .withLevel(level);
