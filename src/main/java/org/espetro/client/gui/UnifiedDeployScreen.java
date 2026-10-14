@@ -2250,7 +2250,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         /** 每秒调用：取全局锚点推算出的剩余秒数（重建菜单也不会重新计时）。 */
         void refresh() {
-            cooldownSeconds = TacticalRadialController.skillCooldownSeconds(skillId);
+            cooldownSeconds = isDebugNoCooldown()
+                ? 0 : TacticalRadialController.skillCooldownSeconds(skillId);
         }
 
         /** 部署阶段所有技能不可用（服务端同样会拒绝）。 */
@@ -2258,8 +2259,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return ClientGameState.getCurrentPhase() == GamePhase.DEPLOYING;
         }
 
+        /** 调试模式（/gamerule espetroSkillNoCooldown true）：忽略冷却。 */
+        private static boolean isDebugNoCooldown() {
+            net.minecraft.client.multiplayer.ClientLevel level = Minecraft.getInstance().level;
+            return level != null && org.espetro.debug.EspetroDebugRules
+                .skillNoCooldown(level.getGameRules());
+        }
+
         private boolean isUsable() {
-            return cooldownSeconds <= 0
+            return (cooldownSeconds <= 0 || isDebugNoCooldown())
                 && !CommanderSkillTargetRequest.isPending(skillId)
                 && !isDeployPhase();
         }

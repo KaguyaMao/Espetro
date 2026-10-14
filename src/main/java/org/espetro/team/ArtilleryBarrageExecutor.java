@@ -2,24 +2,35 @@ package org.espetro.team;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.espetro.Espetro;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 徐进弹幕执行器（纯 Java，不依赖服务端 KubeJS 脚本版本）。
+ * 徐进弹幕执行器（纯 Java）。
  *
- * <p>与 155 定点炮击同一个技能、同一个冷却：指挥官在地图上按住右键拖出直线时，
- * 本执行器把 2 发校射 + 6 轮覆盖共 26 发按轮次均匀铺满整条直线，
- * 每发在覆盖半径内随机落点，形成从起点向终点推进的徐进弹幕。</p>
+ * <p>与 155 定点炮击同一个技能、同一个冷却。时序与 KubeJS 脚本一致：
+ * 释放后等 30 秒 → 起点附近两发校射 → 之后每一轮的中心点均匀分配在整条路径上，
+ * 一路炸过去。每轮炮弹在该中心点周围的覆盖半径内随机落点。</p>
+ *
+ * <p>注意：不使用 {@code server.tell(new TickTask(...))} 做长延迟调度 ——
+ * 部分 Forge/KubeJS 组合会丢失较长延迟的回调，表现为"刚画完路径整条线上先炸一遍"。
+ * 这里改为自维护波次列表 + 每 tick 判定绝对 tick 数。</p>
  */
+@Mod.EventBusSubscriber(modid = Espetro.MOD_ID)
 public final class ArtilleryBarrageExecutor {
 
     private static final String SHELL_ENTITY = "superbwarfare:cannon_shell";
-    /** 与 KubeJS 脚本保持一致：散布半径 45 格。 */
+    /** 与 KubeJS 脚本一致：散布半径 45 格。 */
     private static final double COVERAGE_RADIUS = 45.0D;
     /** 释放后到第一发的延迟：30 秒。 */
     private static final int START_DELAY_TICKS = 30 * 20;
@@ -34,53 +45,93 @@ public final class ArtilleryBarrageExecutor {
     /** 炮弹战斗部强化（与脚本同一套 NBT）。 */
     private static final String SHELL_NBT = ",Damage:300.0f,ExplosionDamage:600.0f,Radius:12.0f";
 
+    /** 一波待发射的弹幕。centerT ∈ [0,1] 为该轮中心在路径上的位置。 */
+    private record PendingWave(int atTick, ServerLevel level,
+                               double x1, double z1, double x2, double z2,
+                               int count, double centerT) {
+    }
+
+    private static final List<PendingWave> PENDING = new ArrayList<>();
+
     private ArtilleryBarrageExecutor() {
     }
 
-    /** 开始一次徐进弹幕（立即返回，炮弹按时间表陆续落下）。 */
-    public static void start(ServerLevel level, double x1, double z1, double x2, double z2, int sessionId) {
-        if (level == null) {
+    /** 开始一次徐进弹幕（立即返回，波次由服务端 tick 驱动）。 */
+    public static void start(ServerLevel level, double x1, double z1, double x2, double z2, int ignoredSession) {
+        if (level == null || level.getServer() == null) {
             return;
         }
         MinecraftServer server = level.getServer();
+        int base = server.getTickCount() + START_DELAY_TICKS;   // 30 秒后才开始落弹
+        synchronized (PENDING) {
+            PENDING.clear();   // 同一时间只保留一次进行中的弹幕，避免叠加
+            // 两发校射：落在起点附近
+            PENDING.add(new PendingWave(base, level, x1, z1, x2, z2, 1, 0.0D));
+            PENDING.add(new PendingWave(base + SIGHT_SECOND_OFFSET_TICKS,
+                level, x1, z1, x2, z2, 1, 0.0D));
+            // 八轮覆盖：每轮中心点均匀分配在整条路径上
+            for (int wave = 0; wave < COVER_WAVES; wave++) {
+                double centerT = (wave + 0.5D) / COVER_WAVES;
+                PENDING.add(new PendingWave(
+                    base + COVER_START_OFFSET_TICKS + wave * WAVE_INTERVAL_TICKS,
+                    level, x1, z1, x2, z2, SHELLS_PER_WAVE, centerT));
+            }
+        }
+        Espetro.LOGGER.info("徐进弹幕已排程: ({}, {}) → ({}, {}), 首发 {} 秒后, {} 轮覆盖",
+            Math.round(x1), Math.round(z1), Math.round(x2), Math.round(z2),
+            START_DELAY_TICKS / 20, COVER_WAVES);
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || PENDING.isEmpty()) {
+            return;
+        }
+        MinecraftServer server = Espetro.getServer();
         if (server == null) {
             return;
         }
-        int base = server.getTickCount() + START_DELAY_TICKS;   // 释放后等 30 秒才开始落弹
-        // 两发校射打在直线起点
-        schedule(server, level, base, x1, z1, x2, z2, sessionId, 0, 1, 0);
-        schedule(server, level, base + SIGHT_SECOND_OFFSET_TICKS, x1, z1, x2, z2, sessionId, 0, 1, 0);
-        // 八轮覆盖沿直线推进
-        for (int wave = 0; wave < COVER_WAVES; wave++) {
-            schedule(server, level, base + COVER_START_OFFSET_TICKS + wave * WAVE_INTERVAL_TICKS,
-                x1, z1, x2, z2, sessionId, wave, SHELLS_PER_WAVE, wave);
+        int now = server.getTickCount();
+        List<PendingWave> due = null;
+        synchronized (PENDING) {
+            Iterator<PendingWave> iterator = PENDING.iterator();
+            while (iterator.hasNext()) {
+                PendingWave wave = iterator.next();
+                if (now >= wave.atTick()) {
+                    if (due == null) {
+                        due = new ArrayList<>();
+                    }
+                    due.add(wave);
+                    iterator.remove();
+                }
+            }
         }
-        Espetro.LOGGER.info("徐进弹幕已排程: ({}, {}) → ({}, {}) session={}",
-            Math.round(x1), Math.round(z1), Math.round(x2), Math.round(z2), sessionId);
-    }
-
-    private static void schedule(MinecraftServer server, ServerLevel level, int atTick,
-                                 double x1, double z1, double x2, double z2,
-                                 int sessionId, int ignoredWave, int count, int waveIndex) {
-        server.tell(new TickTask(atTick, () -> fireWave(level, x1, z1, x2, z2, sessionId,
-            count, waveIndex)));
-    }
-
-    private static void fireWave(ServerLevel level, double x1, double z1, double x2, double z2,
-                                 int sessionId, int count, int waveIndex) {
-        if (level.getServer() == null) {
+        if (due == null) {
             return;
         }
-        // 战场变化则中止（与脚本同样的保护）
+        for (PendingWave wave : due) {
+            try {
+                fireWave(wave);
+            } catch (RuntimeException error) {
+                Espetro.LOGGER.warn("徐进弹幕落弹失败", error);
+            }
+        }
+    }
+
+    private static void fireWave(PendingWave wave) {
+        ServerLevel level = wave.level();
+        if (level == null || level.getServer() == null) {
+            return;
+        }
         if (!org.espetro.mapconfig.BattlefieldContext.isActiveBattlefield(level)) {
-            return;
+            return;   // 战场已切换：停止剩余波次
         }
-        for (int i = 0; i < count; i++) {
-            double t = (waveIndex + (i + 0.5D) / Math.max(1, count)) / (double) COVER_WAVES;
-            double baseX = x1 + (x2 - x1) * t;
-            double baseZ = z1 + (z2 - z1) * t;
-            Vec3 point = randomPoint(baseX, baseZ, COVERAGE_RADIUS);
-            int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        double centerX = wave.x1() + (wave.x2() - wave.x1()) * wave.centerT();
+        double centerZ = wave.z1() + (wave.z2() - wave.z1()) * wave.centerT();
+        for (int i = 0; i < wave.count(); i++) {
+            Vec3 point = randomPoint(centerX, centerZ, COVERAGE_RADIUS);
+            int y = level.getHeight(
+                net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (int) Math.floor(point.x), (int) Math.floor(point.z)) + SPAWN_HEIGHT;
             summonShell(level, point.x, y, point.z);
         }
@@ -101,7 +152,7 @@ public final class ArtilleryBarrageExecutor {
     }
 
     private static String fmt(double value) {
-        return String.format(java.util.Locale.ROOT, "%.3f", value);
+        return String.format(Locale.ROOT, "%.3f", value);
     }
 
     private static Vec3 randomPoint(double centerX, double centerZ, double radius) {

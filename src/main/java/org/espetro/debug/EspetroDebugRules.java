@@ -76,6 +76,18 @@ public final class EspetroDebugRules {
         return skillNoCooldown(Espetro.getServer());
     }
 
+    /** 客户端也能用：直接查当前世界的游戏规则（无需服务端实例）。 */
+    public static boolean skillNoCooldown(GameRules rules) {
+        if (rules == null || skillNoCooldownKey == null) {
+            return false;
+        }
+        try {
+            return rules.getBoolean(skillNoCooldownKey);
+        } catch (RuntimeException error) {
+            return false;
+        }
+    }
+
     public static boolean skillNoCooldown(MinecraftServer server) {
         if (server == null || skillNoCooldownKey == null) {
             return false;
