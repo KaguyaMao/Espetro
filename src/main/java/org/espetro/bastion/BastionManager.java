@@ -746,6 +746,10 @@ public class BastionManager {
         }
 
         setBastionActive(bastion, false);
+        if (!silent) {
+            // 立即把新部署点列表推给该阵营（可能有玩家正开着部署界面在看这个兵站）
+            org.espetro.network.NetworkManager.refreshDeployPointsForTeam(bastionTeam);
+        }
         // Radio 增减会影响 HAB 覆盖；silent 战局清理由 reset 整体清空，无需重算。
         if (radio && !silent) {
             recomputeHabCoverage();

@@ -1591,16 +1591,19 @@ public class NetworkManager {
         }
     }
 
-    /** HAB/Radio 生命周期变化后立即刷新该阵营正在等待部署的成员。 */
+    /**
+     * HAB/Radio 生命周期变化后立即刷新该阵营的部署点列表。
+     *
+     * <p>不再只刷新"等待复活"的玩家：玩家可能正开着部署界面（J 菜单）看兵站列表，
+     * 兵站被摧毁后必须立刻把新列表推给他，否则按钮会残留、点击必然失败。</p>
+     */
     public static void refreshDeployPointsForTeam(String team) {
         MinecraftServer server = Espetro.getServer();
         if (server == null || team == null) return;
         GamePhase phase = GameStateManager.getInstance().getCurrentPhase();
         if (phase != GamePhase.DEPLOYING && phase != GamePhase.BATTLE) return;
-        org.espetro.bastion.BastionManager bm = org.espetro.bastion.BastionManager.getInstance();
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (team.equals(Espetro.getPlayerTeam(player))
-                && bm.isWaitingForBastion(player.getUUID())) {
+            if (team.equals(Espetro.getPlayerTeam(player))) {
                 sendDeployPointSync(player);
             }
         }
@@ -1611,6 +1614,8 @@ public class NetworkManager {
         org.espetro.bastion.BastionManager bm = org.espetro.bastion.BastionManager.getInstance();
         java.util.List<UnifiedDeployScreenPacket.BastionItem> items = new java.util.ArrayList<>();
         for (org.espetro.bastion.BastionData bd : bm.getTeamBastions(team)) {
+            // 已被摧毁的兵站不再出现在部署列表里（否则旧按钮会残留、点了必然失败）
+            if (!bd.isActive()) continue;
             net.minecraft.core.BlockPos armorStandPos = bm.getRecordedArmorStandPosition(bd);
             if (armorStandPos == null) continue;
             items.add(new UnifiedDeployScreenPacket.BastionItem(

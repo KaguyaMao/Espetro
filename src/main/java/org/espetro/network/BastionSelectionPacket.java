@@ -92,7 +92,15 @@ public class BastionSelectionPacket {
 
         BastionData bastion = BastionManager.getInstance().getBastion(bastionId);
         if (bastion == null || !bastion.isActive() || !team.equals(bastion.getTeam())) {
-            return TeamPackManager.getInstance().respawnAtTeamPack(player, bastionId);
+            // 该 ID 可能是队伍集结点：只有队包系统认得它时才走队包复活
+            if (TeamPackManager.getInstance().getTeamPack(bastionId) != null) {
+                return TeamPackManager.getInstance().respawnAtTeamPack(player, bastionId);
+            }
+            // 兵站已被摧毁/不属于本队：明确提示并立刻刷新部署点列表（保留等待状态，可重选）
+            player.sendSystemMessage(Component.literal(
+                "§c该部署点已被摧毁或已失效，请重新选择部署点。"));
+            NetworkManager.sendDeployPointSync(player);
+            return false;
         }
 
         // 准备阶段也允许部署（加局加入）
@@ -115,6 +123,7 @@ public class BastionSelectionPacket {
             player.sendSystemMessage(Component.literal(
                 "§c无法在该兵站部署：§e" + status
                     + "§c（需己方 Radio 覆盖且未被敌方压制）"));
+            NetworkManager.sendDeployPointSync(player);
             return false;
         }
 
