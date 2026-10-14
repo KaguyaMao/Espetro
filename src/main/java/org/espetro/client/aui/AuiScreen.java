@@ -386,10 +386,12 @@ public abstract class AuiScreen extends Screen {
                 | org.lwjgl.glfw.GLFW.GLFW_MOD_ALT
                 | org.lwjgl.glfw.GLFW.GLFW_MOD_SHIFT)) == 0) {
             if (keyCode == minecraft.options.keyChat.getKey().getValue()) {
+                org.espetro.client.gui.ChatReturnController.rememberMenu(this);
                 minecraft.setScreen(new net.minecraft.client.gui.screens.ChatScreen(""));
                 return true;
             }
             if (keyCode == minecraft.options.keyCommand.getKey().getValue()) {
+                org.espetro.client.gui.ChatReturnController.rememberMenu(this);
                 minecraft.setScreen(new net.minecraft.client.gui.screens.ChatScreen("/"));
                 return true;
             }
