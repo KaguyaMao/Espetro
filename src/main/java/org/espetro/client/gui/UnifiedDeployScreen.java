@@ -30,8 +30,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private static final int BTN_H = 12;
     /** J 菜单内指挥官技能列（替代旧轮盘入口）。 */
-    private static final int SKILL_COL_W = 42;
-    private static final int SKILL_BTN_H = 50;
+    private static final int SKILL_COL_W = 17;   // 原 42 的 2/5
+    private static final int SKILL_BTN_H = 20;   // 原 50 的 2/5
     private static final int SKILL_BTN_GAP = 4;
     private final List<SkillButton> skillButtons = new ArrayList<>();
     private int lastSkillSignature = Integer.MIN_VALUE;
@@ -663,6 +663,45 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     // ==================== 自定义按钮 ====================
 
+    /** 职业分类图标：黄色渲染（用于每排左侧）。 */
+    private static class CategoryIcon extends GuiElement {
+        private final ResourceLocation texture;
+
+        CategoryIcon(ResourceLocation texture, int x, int y, int size) {
+            super(x, y, size, size);
+            this.texture = texture;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
+            if (!isVisible() || texture == null) {
+                return;
+            }
+            int size = getWidth();
+            graphics.setColor(1.0f, 0.85f, 0.25f, 1.0f);      // 黄色
+            graphics.blit(texture, x + getX(), y + getY(), size, size, 0.0f, 0.0f, 128, 128, 128, 128);
+            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+    }
+
+    /** 一条细横线（用于职业排之间）。 */
+    private static class Divider extends GuiElement {
+        private final int color;
+
+        Divider(int x, int y, int width, int color) {
+            super(x, y, Math.max(1, width), 1);
+            this.color = color;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
+            if (!isVisible()) {
+                return;
+            }
+            graphics.fill(x + getX(), y + getY(), x + getX() + getWidth(), y + getY() + 1, color);
+        }
+    }
+
     private static class EspButton extends GuiElement {
         private final Runnable action;
         private String label;
@@ -681,6 +720,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private String rightLabel = "";
         private float textScale = UI_TEXT_SCALE;
         private boolean centeredText = true;
+        /** 无底色/无边框：仅悬停或选中时才有视觉反馈（职业/部署点/小队按钮用）。 */
+        private boolean plainWhenIdle = false;
+        /** 非 0 表示已选中，画成该底色。 */
+        private int selectedColor = 0;
         /** 禁用态仍可点击以弹出原因说明（如选职拒绝）。 */
         private Runnable disabledAction;
 
@@ -709,6 +752,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         void setRightLabel(String value) { rightLabel = value == null ? "" : value; }
         void setTextScale(float scale) { textScale = Math.max(0.5f, Math.min(1.0f, scale)); }
         void setCenteredText(boolean centered) { centeredText = centered; }
+
+        void setPlainWhenIdle(boolean plain) { plainWhenIdle = plain; }
+
+        void setSelected(boolean selected, int color) { selectedColor = selected ? color : 0; }
         void setDisabledStyle(int background, int border, int text) {
             disabledColor = background;
             disabledBorderColor = border;
@@ -736,15 +783,29 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             int bx = x + getX(), by = y + getY(), bw = getWidth(), bh = getHeight();
 
-            int bgCol;
-            if (!enabled) bgCol = disabledColor;
-            else if (hovered) bgCol = hoverColor;
-            else bgCol = normalColor;
-            graphics.fill(bx, by, bx + bw, by + bh, bgCol);
+            // 选中 > 禁用 > 悬停 > 常态：plainWhenIdle 时常态不画底色与边框
+            boolean selected = selectedColor != 0;
+            if (selected) {
+                graphics.fill(bx, by, bx + bw, by + bh, selectedColor);
+            } else if (!enabled) {
+                if ((disabledColor >>> 24) != 0) {
+                    graphics.fill(bx, by, bx + bw, by + bh, disabledColor);
+                }
+            } else if (hovered) {
+                graphics.fill(bx, by, bx + bw, by + bh, hoverColor);
+            } else if (!plainWhenIdle) {
+                graphics.fill(bx, by, bx + bw, by + bh, normalColor);
+            }
 
-            int borderCol = !enabled
-                ? disabledBorderColor : (hovered ? 0xFF9999BB : BTN_BORDER);
-            graphics.renderOutline(bx, by, bw, bh, borderCol);
+            if (selected) {
+                graphics.renderOutline(bx, by, bw, bh, 0xFFFFD54A);
+            } else if (hovered) {
+                graphics.renderOutline(bx, by, bw, bh, 0xFFBFC6D6);
+            } else if (!plainWhenIdle && !enabled) {
+                graphics.renderOutline(bx, by, bw, bh, disabledBorderColor);
+            } else if (!plainWhenIdle) {
+                graphics.renderOutline(bx, by, bw, bh, BTN_BORDER);
+            }
 
             int textCol = enabled ? textColor : disabledTextColor;
             int contentLeft = bx + 3;
@@ -1654,7 +1715,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     // ---------- 职业选择（中上，5行网格）----------
     private static final int ICON_BTN = 15;          // 按钮边长 = 2/3 * CLASS_BTN_H
     private static final int ICON_GRID_GAP = 2;      // 图标间距
-    private static final int ROW_LABEL_W = 10;       // 行标宽度
+    private static final int ROW_LABEL_W = 18;       // 行标宽度（放宽以容纳职业分类图标）
+    /** 职业分类图标：命令支援 / 直接战斗 / 火力支援 / 专业兵（黄色渲染）。 */
+    private static final ResourceLocation[] ROW_CATEGORY_ICONS = {
+        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_commandsupport.png"),
+        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_directcombat.png"),
+        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_firesupport.png"),
+        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_specialist.png"),
+    };
 
     private void buildClassSection(GuiElement sectionRoot) {
         int sx = classAreaX, sy = classAreaY;
@@ -1690,6 +1758,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         for (int r = 1; r <= 5; r++) {
             var rowList = rows.get(r);
             if (rowList.isEmpty()) continue;
+            // 排与排之间一条细白线（第一排之前不画）
+            if (gy > 0) {
+                classScrollList.addChild(new Divider(0, gy - 1, contentW, 0x55FFFFFF));
+            }
+            // 该排左侧的分类图标（黄色渲染），图标之后就是这一排的职业按钮
+            if (r >= 1 && r <= ROW_CATEGORY_ICONS.length) {
+                classScrollList.addChild(new CategoryIcon(ROW_CATEGORY_ICONS[r - 1], 1, gy, ICON_BTN));
+            }
             for (int i = 0; i < rowList.size(); i++) {
                 int col = i % cols;
                 int bx = ROW_LABEL_W + col * (ICON_BTN + ICON_GRID_GAP);
@@ -1709,6 +1785,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             EspButton btn = new EspButton(0, gy, contentW, ICON_BTN + 2, label,
                 () -> selectClass(classes.indexOf(cls)));
+            btn.setPlainWhenIdle(true);   // 去掉底色与边框
             btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
                 RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
             btn.setIconSize(ICON_BTN);
@@ -1738,6 +1815,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean emphasizeRed = isClassEmphasizeRed(cls, disabled);
 
         EspButton btn = new EspButton(bx, by, size, size, "", () -> selectClass(clsIdx));
+        btn.setPlainWhenIdle(true);   // 去掉底色与边框，仅悬停高亮 / 选中黄底
         btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
             RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
         btn.setIconSize(size - 2);
@@ -1899,6 +1977,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else {
             deployButtonWaveSeconds.remove(button);
         }
+        button.setPlainWhenIdle(true);   // 去掉底色与边框，仅悬停高亮 / 选中黄底
         button.setLabel(buildDeployButtonLabel(
             buildLiveDeployBaseLabel(button, baseLabel), positionText, command));
     }
@@ -2337,17 +2416,18 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (skillIcon != null) {
                 float iconAlpha = usable ? 1f : 0.45f;
                 graphics.setColor(1f, 1f, 1f, iconAlpha);
-                graphics.blit(skillIcon, centerX - ICON_SIZE / 2, py + 4, 0, 0,
-                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                int drawnIcon = Math.max(4, Math.round(ICON_SIZE * 0.4f));   // 图标绘制尺寸缩到 2/5
+                graphics.blit(skillIcon, centerX - drawnIcon / 2, py + 2, 0, 0,
+                    drawnIcon, drawnIcon, ICON_SIZE, ICON_SIZE);
                 graphics.setColor(1f, 1f, 1f, 1f);
             }
 
             // ② 技能名称（居中；列窄时自动缩小以完整显示）
             int nameColor = pending ? 0xFFFFE066 : usable ? 0xFFFFFFFF : 0xFF8B9099;
             int nameWidth = font.width(skillName);
-            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.5f, (w - 6f) / nameWidth);
+            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.22f, (w - 6f) / nameWidth);
             graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 22, 0.0D);
+            graphics.pose().translate(centerX, py + 9, 0.0D);   // 原 22，按 2/5 缩放
             graphics.pose().scale(nameScale, nameScale, 1.0f);
             graphics.drawCenteredString(font, skillName, 0, 0, nameColor);
             graphics.pose().popPose();
@@ -2359,8 +2439,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int cooldownColor = deployLocked ? 0xFF8B9099
                 : usable ? 0xFF7FD98F : 0xFFB9BEC6;
             graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 37, 0.0D);
-            graphics.pose().scale(0.75f, 0.75f, 1.0f);
+            graphics.pose().translate(centerX, py + 13, 0.0D);   // 原 37，按 2/5 缩放
+            graphics.pose().scale(0.3f, 0.3f, 1.0f);
             graphics.drawCenteredString(font, cooldownText, 0, 0, cooldownColor);
             graphics.pose().popPose();
 
@@ -2646,6 +2726,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             String command = deployButtonCommands.get(button);
             boolean ready = isDeployButtonSelectable(command);
             button.setEnabled(waitingForDeploySelection && ready && hasClass);
+            String position = deployButtonPositions.get(button);
+            button.setSelected(pendingDeployPosition != null
+                && pendingDeployPosition.equals(position), CLASS_BG_SELECTED);
             if (waitingForDeploySelection && ready && !hasClass) {
                 button.setDisabledAction(() ->
                     EspetroTipNotifier.showDenial("未选择职业", "请先选择职业，再选择部署点。"));
@@ -3494,8 +3577,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 }
             } else {
                 btn.setDisabledAction(null);
-                btn.normalColor = isSelected ? CLASS_BG_SELECTED : BTN_BG_NORMAL;
+                btn.normalColor = BTN_BG_NORMAL;
                 btn.hoverColor = BTN_BG_HOVER;
+                btn.setSelected(isSelected, CLASS_BG_SELECTED);   // 选中显示黄底
             }
         }
     }
