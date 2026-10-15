@@ -30,8 +30,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private static final int BTN_H = 12;
     /** J 菜单内指挥官技能列（替代旧轮盘入口）。 */
-    private static final int SKILL_COL_W = 17;   // 原 42 的 2/5
-    private static final int SKILL_BTN_H = 20;   // 原 50 的 2/5
+    private static final int SKILL_COL_W = 42;   // 2.5 倍后回到 42
+    private static final int SKILL_BTN_H = 50;   // 2.5 倍后回到 50
     private static final int SKILL_BTN_GAP = 4;
     private final List<SkillButton> skillButtons = new ArrayList<>();
     private int lastSkillSignature = Integer.MIN_VALUE;
@@ -63,11 +63,31 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final float TOOLTIP_TEXT_SCALE = 0.68f;
     private static final float SQUAD_TEXT_SCALE = 0.68f;
     private static final float SQUAD_MEMBER_TEXT_SCALE = 0.64f;
+    /** 需求 7/9：「创建/退出」按钮宽度 = 动作区宽度的 1/5。 */
+    private static final int SQUAD_CREATE_BTN_W_DIV = 5;
+    /** 需求 7/9：「创建/退出」按钮高度 = 原行高 SQUAD_ROW_H 的 2 倍。 */
+    private static final int SQUAD_CREATE_BTN_H_MUL = 2;
+    /** 创建小队按钮：绿色不透明底（无边框，需求 7）。 */
+    private static final int SQUAD_CREATE_BG = 0xFF2E7D32;
+    private static final int SQUAD_CREATE_BG_HOVER = 0xFF3E9E42;
+    /** 退出小队按钮：与创建小队同位置同尺寸，红色不透明底（需求 9）。 */
+    private static final int SQUAD_LEAVE_BG = 0xFF7A1B1B;
+    private static final int SQUAD_LEAVE_BG_HOVER = 0xFFA32626;
+    /** 队伍类型上拉按钮：黄色不透明底（需求 7）。 */
+    private static final int SQUAD_CATEGORY_BG = 0xFFE6C319;
+    private static final int SQUAD_CATEGORY_BG_HOVER = 0xFFF5D53A;
+    /** 内联「小队名称」输入框：无边框 + 淡灰底色（需求 7）。 */
+    private static final int SQUAD_INLINE_FIELD_BG = 0xFFBDBDBD;
+    private static final int SQUAD_INLINE_FIELD_BG_ACTIVE = 0xFFD6D6D6;
+    private static final int SQUAD_INLINE_FIELD_TEXT = 0xFF1A1A1A;
+    private static final int SQUAD_INLINE_FIELD_DIM = 0xFF5A5A5A;
+    /** 动作行内元素间距。 */
+    private static final int SQUAD_INLINE_GAP = 2;
 
     // EspButton 颜色：全不透明，避免 isPauseScreen=false 时世界从按钮透出（Embeddium 叠影）。
-    private static final int BTN_BG_NORMAL   = 0x99B8BDC2;
-    private static final int BTN_BG_HOVER    = 0x99CFD4D8;
-    private static final int BTN_BG_DISABLED = 0x99AAB0B4;
+    private static final int BTN_BG_NORMAL   = 0x00000000;
+    private static final int BTN_BG_HOVER    = 0x66FFFFFF;   // 悬停时才有一点高亮
+    private static final int BTN_BG_DISABLED = 0x00000000;
     private static final int CLASS_BG_UNAVAILABLE = 0xFF4A2024;
     private static final int CLASS_BG_SELECTED   = 0xFF6A6A20;
     private static final int CLASS_BORDER_UNAVAILABLE = 0xFF8A3A42;
@@ -77,11 +97,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int REDEPLOY_BG_NORMAL = 0xFF7A1B1B;
     private static final int REDEPLOY_BG_HOVER  = 0xFFA32626;
     /** J 键主 GUI 的所有非地图背景统一使用不透明纯黑，避免世界画面穿透或色块交替闪烁。 */
-    // 淡灰半透明（原为纯黑不透明）
-    private static final int CHROME_BG       = 0x99A6ABB0;
-    private static final int PANEL_LEFT_BG   = 0x99A6ABB0;
-    private static final int PANEL_CENTER_BG = 0x99A6ABB0;
-    private static final int PANEL_MAP_FOOTER_BG = 0x99A6ABB0;
+    // 完全透明：面板不铺任何底色，直接透出后面的世界/地图
+    private static final int CHROME_BG       = 0x00000000;
+    private static final int PANEL_LEFT_BG   = 0x00000000;
+    private static final int PANEL_CENTER_BG = 0x00000000;
+    private static final int PANEL_MAP_FOOTER_BG = 0x00000000;
     private static final int SCREEN_SHADE    = 0xFF000000;
     private static final int STATIC_DIVIDER = 0xFF3A3F3D;
     private static final Pattern COORDINATE_PATTERN =
@@ -140,7 +160,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /** MUtil 弹出层；必须始终作为根节点最后一个子元素以拦截下层点击。 */
     private GuiElement fireteamContextRoot;
 
-    // ===== 班组栏底部动作按钮（三行：解散 / 锁定·解锁 / 创建·退出）=====
+    // ===== 班组栏底部动作行（改版后单行：创建/退出 + 解散 / 锁定）=====
     /** 动作按钮专用容器：数据原地刷新时只重建这一小块。 */
     private GuiElement squadActionRoot;
     private int squadActionX;
@@ -150,12 +170,27 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private EspButton squadLockButton;
     private EspButton squadCreateLeaveButton;
 
-    // ===== 班组弹层：创建小窗 / 通用确认框 =====
-    /** 创建小队小窗（屏幕正中）：名称输入 + 队伍类型。 */
-    private GuiElement squadCreateRoot;
-    private SquadNameField squadCreateNameField;
+    // ===== 班组栏内联创建（未入队）：名称输入框 + 队伍类型上拉菜单（替代旧创建小窗）=====
+    /** 内联「小队名称」输入框。 */
+    private SquadInlineNameField squadInlineNameField;
+    /** 输入框草稿：班组栏因数据刷新整块重建时保留已输入名称。 */
+    private String squadInlineName = "";
+    /** 输入框是否处于输入焦点（跨整块重建保留）。 */
+    private boolean squadInlineNameTyping;
+    /** 上次创建发包时间：防连点重复创建。 */
+    private long squadCreateSentAtMs;
+    /** 黄色「队伍类型」上拉按钮（未入队时显示在输入框右侧）。 */
+    private EspButton squadCategoryDropButton;
+    private int squadCategoryButtonX;
+    private int squadCategoryButtonY;
+    private int squadCategoryButtonW;
+    private int squadCategoryButtonH;
+
+    // ===== 班组弹层：队伍类型上拉菜单 / 通用确认框 =====
+    /** 当前选中的队伍类型 id（上拉菜单选中项）。 */
     private String squadCreateCategoryId = "none";
-    private final Map<String, EspButton> squadCreateCategoryButtons = new HashMap<>();
+    /** 队伍类型上拉菜单层（替代旧的创建小窗，最后添加以拦截下层点击）。 */
+    private GuiElement squadCategoryRoot;
     /** 通用确认框（退出/解散/踢人复用）；默认高亮"取消"以防误触。 */
     private GuiElement squadConfirmRoot;
     private String squadConfirmTitle = "";
@@ -723,6 +758,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private boolean centeredText = true;
         /** 无底色/无边框：仅悬停或选中时才有视觉反馈（职业/部署点/小队按钮用）。 */
         private boolean plainWhenIdle = false;
+        /** 只关闭边框（保留底色）：小队按钮去边框但保留底色时用（需求 8）。 */
+        private boolean borderless = false;
         /** 非 0 表示已选中，画成该底色。 */
         private int selectedColor = 0;
         /** 禁用态仍可点击以弹出原因说明（如选职拒绝）。 */
@@ -755,6 +792,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         void setCenteredText(boolean centered) { centeredText = centered; }
 
         void setPlainWhenIdle(boolean plain) { plainWhenIdle = plain; }
+
+        /** 只关掉边框绘制：底色/悬停/选中填充保持不变（需求 8）。 */
+        void setBorderless(boolean noBorder) { borderless = noBorder; }
 
         void setSelected(boolean selected, int color) { selectedColor = selected ? color : 0; }
         void setDisabledStyle(int background, int border, int text) {
@@ -798,14 +838,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 graphics.fill(bx, by, bx + bw, by + bh, normalColor);
             }
 
-            if (selected) {
-                graphics.renderOutline(bx, by, bw, bh, 0xFFFFD54A);
-            } else if (hovered) {
-                graphics.renderOutline(bx, by, bw, bh, 0xFFBFC6D6);
-            } else if (!plainWhenIdle && !enabled) {
-                graphics.renderOutline(bx, by, bw, bh, disabledBorderColor);
-            } else if (!plainWhenIdle) {
-                graphics.renderOutline(bx, by, bw, bh, BTN_BORDER);
+            // borderless：完全不画边框（需求 7/8），底色与悬停填充不受影响
+            if (!borderless) {
+                if (selected) {
+                    graphics.renderOutline(bx, by, bw, bh, 0xFFFFD54A);
+                } else if (hovered) {
+                    graphics.renderOutline(bx, by, bw, bh, 0xFFBFC6D6);
+                } else if (!plainWhenIdle && !enabled) {
+                    graphics.renderOutline(bx, by, bw, bh, disabledBorderColor);
+                } else if (!plainWhenIdle) {
+                    graphics.renderOutline(bx, by, bw, bh, BTN_BORDER);
+                }
             }
 
             int textCol = enabled ? textColor : disabledTextColor;
@@ -911,6 +954,117 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         graphics.drawString(Minecraft.getInstance().font, Component.literal(text),
             Math.round(x / scale), Math.round(y / scale), color, false);
         graphics.pose().popPose();
+    }
+
+    /**
+     * 班组栏内联「小队名称」输入框（需求 7）：无边框 + 淡灰底色，点击聚焦后可输入。
+     * 机制与该界面原有的名称输入框一致（AUI 树内自绘）：聚焦时 UnifiedDeployScreen.keyPressed
+     * 优先把按键喂给它并吞掉其它快捷键；字符输入仍由 charTyped 完成。
+     */
+    private class SquadInlineNameField extends GuiElement {
+        private static final int MAX_LENGTH = 18;
+        private static final float FIELD_TEXT_SCALE = 0.72f;
+
+        private final String hint;
+        private String value = "";
+        private boolean typing = false;
+
+        SquadInlineNameField(int x, int y, int width, int height, String hint) {
+            super(x, y, width, height);
+            this.hint = hint == null ? "" : hint;
+        }
+
+        String getValue() {
+            return value.trim();
+        }
+
+        /** 原始输入内容（不 trim），用于整块重建时无损恢复草稿。 */
+        String getRawValue() {
+            return value;
+        }
+
+        void setValue(String text) {
+            value = text == null ? "" : text;
+        }
+
+        boolean isTyping() {
+            return typing;
+        }
+
+        void setTyping(boolean active) {
+            typing = active;
+        }
+
+        @Override
+        public boolean onMouseClick(int mouseX, int mouseY, int button) {
+            if (button != 0 || !isVisible()) {
+                return false;
+            }
+            typing = hasFocus();
+            return typing;
+        }
+
+        @Override
+        public boolean onKeyPress(int keyCode, int scanCode, int modifiers) {
+            if (!typing) {
+                return false;
+            }
+            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+                createSquadInline();
+                return true;
+            }
+            if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !value.isEmpty()) {
+                int cut = value.offsetByCodePoints(value.length(), -1);
+                value = value.substring(0, cut);
+                return true;
+            }
+            if (keyCode == GLFW.GLFW_KEY_DELETE) {
+                value = "";
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onCharType(char codePoint, int modifiers) {
+            // 167 = '§'，与 SharedConstants.isAllowedChatCharacter 同规则
+            if (!typing || value.length() >= MAX_LENGTH
+                || codePoint < ' ' || codePoint == 127 || codePoint == 167) {
+                return false;
+            }
+            value += codePoint;
+            return true;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
+                         int mouseX, int mouseY, float partialTick) {
+            if (!isVisible()) {
+                return;
+            }
+            int bx = x + getX();
+            int by = y + getY();
+            // 无边框；淡灰底（不透明，避免半透明界面叠影）
+            graphics.fill(bx, by, bx + getWidth(), by + getHeight(),
+                typing ? SQUAD_INLINE_FIELD_BG_ACTIVE : SQUAD_INLINE_FIELD_BG);
+
+            String drawn = value.isEmpty() ? hint : value;
+            int color = value.isEmpty() ? SQUAD_INLINE_FIELD_DIM : SQUAD_INLINE_FIELD_TEXT;
+            int logicalWidth = Math.max(8, (int) ((getWidth() - 8) / FIELD_TEXT_SCALE));
+            String trimmed = Minecraft.getInstance().font.plainSubstrByWidth(drawn, logicalWidth);
+            int textHeight = Math.max(1,
+                Math.round(Minecraft.getInstance().font.lineHeight * FIELD_TEXT_SCALE));
+            drawScaledString(graphics, trimmed, bx + 4,
+                by + Math.max(1, (getHeight() - textHeight) / 2), color, FIELD_TEXT_SCALE);
+
+            if (typing && (System.currentTimeMillis() / 500) % 2 == 0) {
+                int textWidth = Math.round(
+                    Minecraft.getInstance().font.width(trimmed) * FIELD_TEXT_SCALE);
+                int cursorX = Math.min(bx + getWidth() - 3, bx + 4 + textWidth + 1);
+                graphics.fill(cursorX, by + 3, cursorX + 1,
+                    by + Math.max(4, getHeight() - 3), SQUAD_INLINE_FIELD_TEXT);
+            }
+        }
     }
 
     // ==================== 自定义文本元素（绕过 GuiText，直接用 drawString) ====================
@@ -1019,12 +1173,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         fireteamContextRoot = new GuiElement(0, 0, this.width, this.height);
         fireteamContextRoot.setVisible(false);
         root.addChild(fireteamContextRoot);
-        // 班组弹层：创建小窗 / 确认框（始终最后添加，保证在最上层拦截点击）
-        squadCreateRoot = new GuiElement(0, 0, this.width, this.height);
+        // 班组弹层：队伍类型上拉菜单 / 确认框（始终最后添加，保证在最上层拦截点击）
+        squadCategoryRoot = new GuiElement(0, 0, this.width, this.height);
+        squadCategoryRoot.setVisible(false);
         squadConfirmRoot = new GuiElement(0, 0, this.width, this.height);
-        root.addChild(squadCreateRoot);
+        root.addChild(squadCategoryRoot);
         root.addChild(squadConfirmRoot);
-        closeSquadCreateDialog();
+        closeSquadCategoryPopup();
         closeSquadConfirm();
     }
 
@@ -1223,9 +1378,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaH = squadAreaH;
 
         sectionRoot.addChild(new PlainText(sx, sy, "\u00a76\u00a7l班组", 0xFFFFC766));
-        // 底部动作按钮：行数随身份变化（队长 3 行 / 其他 1 行）
-        int actionRows = squadActionRowCount();
-        int actionsH = actionRows * SQUAD_ROW_H + Math.max(0, actionRows - 1) * SQUAD_ROW_GAP;
+        // 底部动作行：改版后固定 1 行（需求 7/9）
+        // 未入队：[创建小队(1/5 宽·2 倍高·绿底无边框)] [名称输入框] [黄色队伍类型上拉]
+        // 已入队：[退出小队(同位置同尺寸)]，队长时右侧追加 [解散] [锁定/解锁]
+        int actionsH = squadActionHeight();
         int listY = sy + SECTION_TITLE_H + 1;
         int listH = areaH - SECTION_TITLE_H - actionsH - 5;
 
@@ -1258,6 +1414,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 label, () -> toggleSquadExpanded(squad.id));
             button.setTextScale(SQUAD_TEXT_SCALE);
             button.setCenteredText(false);
+            button.setBorderless(true);   // 需求 8：小队按钮去边框（底色保持不变）
             // \u884c\u6700\u53f3\u4fa7\u663e\u793a\u5fd7\u613f/\u73ed\u7ec4\u7c7b\u522b\uff08\u521b\u5efa\u65f6\u9009\u62e9\u7684 category\uff09\u3002
             String category = squad.categoryDisplayName;
             if (category != null && !category.isBlank()
@@ -1276,6 +1433,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     SQUAD_JOIN_BTN_W, SQUAD_TITLE_ROW_H, "\u00a7a加入",
                     () -> NetworkManager.joinSquad(squad.id));
                 join.setTextScale(SQUAD_TEXT_SCALE);
+                join.setBorderless(true);   // 需求 8：内部小按钮去边框，底色保持不变
                 join.setEnabled(!unavailable);
                 if (unavailable) {
                     String reason = squad.isLocked
@@ -1338,41 +1496,107 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    /** 底部动作按钮可见行数：队长 3 行（解散/锁定/创建·退出），其他 1 行（创建·退出）。 */
-    private int squadActionRowCount() {
-        return inSquad() && isLocalPlayerLeader() ? 3 : 1;
+    /** 底部动作行高度：等于「创建/退出」按钮高度 = 原行高的 2 倍（需求 7/9）。 */
+    private int squadActionHeight() {
+        return SQUAD_ROW_H * SQUAD_CREATE_BTN_H_MUL;
+    }
+
+    /** 「创建/退出」按钮宽度：动作区宽度的 1/5（需求 7/9）。 */
+    private int squadCreateButtonWidth() {
+        return Math.max(24, squadActionW / SQUAD_CREATE_BTN_W_DIV);
     }
 
     /**
-     * 重建底部动作按钮。
-     * 队长（且已入队）显示 3 行：解散 / 锁定·解锁 / 创建·退出；
-     * 其余情况只显示最后一行（创建小队或退出小队）——解散与锁定对非队长/未入队完全隐藏。
+     * 重建底部动作行（单行，需求 7/9）。
+     * 未入队：[创建小队(1/5 宽·2 倍高·绿底无边框)] [名称输入框] [黄色队伍类型上拉按钮]；
+     * 已入队：[退出小队(与创建小队同位置同尺寸·红底无边框)]；队长时右侧再排 [解散] [锁定]。
+     * 解散与锁定只对队长可见，对非队长/未入队完全隐藏。
      */
     private void rebuildSquadActions() {
         if (squadActionRoot == null) {
             return;
         }
+        // 整块重建前保留输入框草稿与焦点，避免数据刷新丢掉玩家已输入的名称
+        if (squadInlineNameField != null) {
+            squadInlineName = squadInlineNameField.getRawValue();
+            squadInlineNameTyping = squadInlineNameField.isTyping();
+        }
+        closeSquadCategoryPopup();
         squadActionRoot.clearChildren();
+        squadInlineNameField = null;
+        squadCategoryDropButton = null;
+        squadDisbandButton = null;
+        squadLockButton = null;
+        squadCreateLeaveButton = null;
+
         boolean inSquadNow = inSquad();
         boolean leader = inSquadNow && isLocalPlayerLeader();
         boolean locked = isMySquadLocked();
-        int rowH = SQUAD_ROW_H;
-        int gap = SQUAD_ROW_GAP;
-        int rows = squadActionRowCount();
-        // 创建/退出永远在最底一行
-        int bottomY = squadActionY + Math.max(0, rows - 1) * (rowH + gap);
+        if (inSquadNow) {
+            // 已入队：内联创建控件不显示，顺手清掉输入草稿与焦点
+            squadInlineName = "";
+            squadInlineNameTyping = false;
+        }
+        int rowH = squadActionHeight();
+        int createW = squadCreateButtonWidth();
+        // 宽度只有原来的 1/5：按按钮宽度自适应字号（按 4 个汉字估算），
+        // 保证「创建小队 / 退出小队」在窄按钮里也能完整显示
+        float createScale = Math.min(SQUAD_TEXT_SCALE,
+            Math.max(0.5f, (createW - 6) / 36.0f));
+        int gap = SQUAD_INLINE_GAP;
+        int y = squadActionY;
 
-        if (leader) {
-            // 第 1 行：解散小队（仅队长可见）
-            squadDisbandButton = new EspButton(squadActionX, squadActionY, squadActionW, rowH,
-                "\u00a7c解散小队", this::openDisbandSquadConfirm);
+        // 「创建小队」/「退出小队」：永远在最左，共用同一位置与尺寸（1/5 宽 · 2 倍高 · 无边框）
+        squadCreateLeaveButton = new EspButton(squadActionX, y, createW, rowH,
+            inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
+            inSquadNow ? this::openLeaveSquadConfirm : this::createSquadInline);
+        squadCreateLeaveButton.setTextScale(createScale);
+        squadCreateLeaveButton.setBorderless(true);
+        squadCreateLeaveButton.normalColor = inSquadNow ? SQUAD_LEAVE_BG : SQUAD_CREATE_BG;
+        squadCreateLeaveButton.hoverColor = inSquadNow ? SQUAD_LEAVE_BG_HOVER : SQUAD_CREATE_BG_HOVER;
+        squadActionRoot.addChild(squadCreateLeaveButton);
+
+        int rightX = squadActionX + createW + gap;
+        int rightW = Math.max(0, squadActionW - createW - gap);
+
+        if (!inSquadNow) {
+            if (!squadCategoryIdValid()) {
+                squadCreateCategoryId = defaultSquadCategoryId();
+            }
+            // 名称输入框（无边框、淡灰底）+ 右侧黄色「队伍类型」上拉按钮
+            int ddW = Math.max(18, Math.min(34, rightW / 2));
+            int inputW = Math.max(20, rightW - ddW - gap);
+            int inputH = Math.max(SQUAD_ROW_H, rowH - 6);
+            squadInlineNameField = new SquadInlineNameField(
+                rightX, y + Math.max(0, (rowH - inputH) / 2), inputW, inputH, "小队名称");
+            squadInlineNameField.setValue(squadInlineName);
+            squadInlineNameField.setTyping(squadInlineNameTyping);
+            squadActionRoot.addChild(squadInlineNameField);
+
+            int ddX = squadActionX + squadActionW - ddW;
+            squadCategoryButtonX = ddX;
+            squadCategoryButtonY = y;
+            squadCategoryButtonW = ddW;
+            squadCategoryButtonH = rowH;
+            squadCategoryDropButton = new EspButton(ddX, y, ddW, rowH,
+                squadCategoryDropLabel(), this::toggleSquadCategoryPopup);
+            squadCategoryDropButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadCategoryDropButton.setBorderless(true);
+            squadCategoryDropButton.normalColor = SQUAD_CATEGORY_BG;          // 黄色
+            squadCategoryDropButton.hoverColor = SQUAD_CATEGORY_BG_HOVER;
+            squadActionRoot.addChild(squadCategoryDropButton);
+        } else if (leader) {
+            // 解散 / 锁定（缩小 + 只显示「解散」「锁定」两词，需求 9）：排在「退出」右侧
+            int disbandW = Math.max(28, (rightW - gap) / 2);
+            squadDisbandButton = new EspButton(rightX, y, disbandW, rowH,
+                "\u00a7c解散", this::openDisbandSquadConfirm);
             squadDisbandButton.setTextScale(SQUAD_TEXT_SCALE);
             squadActionRoot.addChild(squadDisbandButton);
 
-            // 第 2 行：锁定/解锁（仅队长可见）
-            squadLockButton = new EspButton(squadActionX, squadActionY + rowH + gap,
-                squadActionW, rowH,
-                locked ? "\u00a7e解锁小队" : "\u00a7e锁定小队",
+            int lockX = rightX + disbandW + gap;
+            int lockW = Math.max(24, squadActionX + squadActionW - lockX);
+            squadLockButton = new EspButton(lockX, y, lockW, rowH,
+                locked ? "\u00a7e解锁" : "\u00a7e锁定",
                 () -> {
                     if (isMySquadLocked()) {
                         NetworkManager.unlockSquad();
@@ -1383,13 +1607,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             squadLockButton.setTextScale(SQUAD_TEXT_SCALE);
             squadActionRoot.addChild(squadLockButton);
         }
-
-        // 最后一行：创建小队 / 退出小队（两态；退出需二次确认）
-        squadCreateLeaveButton = new EspButton(squadActionX, bottomY, squadActionW, rowH,
-            inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
-            inSquadNow ? this::openLeaveSquadConfirm : this::openSquadCreateDialog);
-        squadCreateLeaveButton.setTextScale(SQUAD_TEXT_SCALE);
-        squadActionRoot.addChild(squadCreateLeaveButton);
     }
 
     /** 本地玩家是否是自己小队的队长（成员列表 leader 标记 + 本地 UUID）。 */
@@ -1435,130 +1652,129 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         invalidateSections(Section.SQUAD);
     }
 
-    /** 打开创建小队小窗（屏幕正中，命名 + 队伍类型）。 */
-    private void openSquadCreateDialog() {
-        if (squadCreateRoot == null || inSquad()) {
+    /**
+     * 内联创建小队（需求 7）：用输入框里的名称 + 上拉菜单选中的队伍类型发包，
+     * 不再打开屏幕正中的「创建小队」小窗。发包逻辑与原来的创建小窗完全一致。
+     */
+    private void createSquadInline() {
+        if (inSquad()) {
             return;
         }
-        closeVariantPopup();
-        closeFireteamContextMenu();
-        closeSquadConfirm();
-        squadCreateCategoryId = defaultSquadCategoryId();
-        rebuildSquadCreateDialog("");
+        long now = System.currentTimeMillis();
+        if (now - squadCreateSentAtMs < 1200L) {
+            return;   // 防连点重复创建
+        }
+        String name = squadInlineNameField == null
+            ? squadInlineName
+            : squadInlineNameField.getValue();
+        squadInlineName = name == null ? "" : name;
+        String categoryId = squadCreateCategoryId == null ? "none" : squadCreateCategoryId;
+        squadCreateSentAtMs = now;
+        squadInlineNameTyping = false;   // 发完包收起输入焦点（与旧小窗确定后关闭一致）
+        if (squadInlineNameField != null) {
+            squadInlineNameField.setTyping(false);
+        }
+        NetworkManager.sendSquadCreateWithCategory(squadInlineName, categoryId);
     }
 
-    /**
-     * 重建创建小窗内容。{@code keepName} 用于类别切换时保留已输入的名称。
-     */
-    private void rebuildSquadCreateDialog(String keepName) {
-        if (squadCreateRoot == null) {
+    /** 队伍类型上拉菜单是否打开。 */
+    private boolean hasSquadCategoryPopup() {
+        return squadCategoryRoot != null && squadCategoryRoot.isVisible();
+    }
+
+    private void closeSquadCategoryPopup() {
+        if (squadCategoryRoot != null) {
+            squadCategoryRoot.clearChildren();
+            squadCategoryRoot.setVisible(false);
+        }
+    }
+
+    /** 黄色按钮：开/关队伍类型上拉菜单。 */
+    private void toggleSquadCategoryPopup() {
+        if (hasSquadCategoryPopup()) {
+            closeSquadCategoryPopup();
             return;
         }
-        String name = keepName == null ? "" : keepName;
-        boolean nameActive = false;
-        if (squadCreateNameField != null) {
-            if (keepName == null) {
-                name = squadCreateNameField.getRawValue();
-            }
-            nameActive = squadCreateNameField.isActive();
+        openSquadCategoryPopup();
+    }
+
+    /** 打开队伍类型上拉菜单：贴在黄色按钮上方，选项取 squadCategoryOptions()。 */
+    private void openSquadCategoryPopup() {
+        if (squadCategoryRoot == null) {
+            return;
         }
-        squadCreateRoot.clearChildren();
-        squadCreateCategoryButtons.clear();
-
-        int w = Math.min(260, Math.max(180, this.width - 40));
-        int rows = Math.max(1, Math.min(6, squadCategoryOptions().size()));
-        int h = 20 + BTN_H + 6 + rows * (BTN_H + 2) + 4 + BTN_H + 10;
-        int x = (this.width - w) / 2;
-        int y = (this.height - h) / 2;
-
-        // 全屏遮罩：点击窗外 = 取消
-        squadCreateRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
+        closeSquadCategoryPopup();
+        List<UnifiedDeployScreenPacket.SquadCategoryInfo> options = squadCategoryOptions();
+        int rowH2 = BTN_H + 2;
+        int w = Math.max(64, Math.min(150, squadActionW));
+        int h = 4 + options.size() * rowH2;
+        int px = Math.max(2, Math.min(this.width - w - 2,
+            squadCategoryButtonX + squadCategoryButtonW - w));
+        int py = Math.max(2, squadCategoryButtonY - h - 2);   // 上拉：贴在按钮上方
+        squadCategoryRoot.clearChildren();
+        squadCategoryRoot.setVisible(true);
+        // 全屏遮罩：点菜单外 = 关闭（反序遍历，后添加的选项按钮优先响应）
+        squadCategoryRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
             @Override
             public boolean onMouseClick(int mx, int my, int button) {
-                closeSquadCreateDialog();
+                closeSquadCategoryPopup();
                 return true;
             }
         });
-        squadCreateRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
-        squadCreateRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
-        squadCreateRoot.addChild(new PlainText(x + 8, y + 5, "\u00a76\u00a7l创建小队", 0xFFFFC766));
-
-        squadCreateNameField = new SquadNameField(x + 8, y + 20, w - 16, BTN_H,
-            "小队名称", this::confirmSquadCreate);
-        squadCreateNameField.setValue(name);
-        squadCreateNameField.setActive(nameActive);
-        squadCreateRoot.addChild(squadCreateNameField);
-
-        int listY = y + 20 + BTN_H + 6;
-        int listH = rows * (BTN_H + 2);
-        ScrollableList list = new ScrollableList(x + 8, listY, w - 16, listH)
-            .setScrollStep(BTN_H + 2)
-            .setAlwaysShowScrollbar(squadCategoryOptions().size() > rows);
-        squadCreateRoot.addChild(list);
-        int cy = 0;
-        for (var option : squadCategoryOptions()) {
+        squadCategoryRoot.addChild(new GuiRect(px, py, w, h, 0xF0111418));
+        int y = py + 2;
+        for (var option : options) {
             final String categoryId = option.id;
-            EspButton btn = new EspButton(0, cy, list.getWidth() - 10, BTN_H,
+            EspButton btn = new EspButton(px + 2, y, w - 4, rowH2 - 1,
                 categoryLabel(option), () -> selectSquadCreateCategory(categoryId));
             btn.setTextScale(UI_TEXT_SCALE);
             btn.setCenteredText(false);
-            boolean selected = categoryId.equals(squadCreateCategoryId);
-            if (selected) {
-                btn.normalColor = 0xFF3A4A38;
-            }
-            list.addChild(btn);
-            squadCreateCategoryButtons.put(categoryId, btn);
-            cy += BTN_H + 2;
-        }
-
-        int by = y + h - BTN_H - 5;
-        EspButton ok = new EspButton(x + w - 8 - 64, by, 64, BTN_H, "\u00a7a确定",
-            this::confirmSquadCreate);
-        ok.setTextScale(UI_TEXT_SCALE);
-        squadCreateRoot.addChild(ok);
-        EspButton cancel = new EspButton(x + w - 8 - 64 - 68, by, 60, BTN_H, "\u00a7c取消",
-            this::closeSquadCreateDialog);
-        cancel.setTextScale(UI_TEXT_SCALE);
-        squadCreateRoot.addChild(cancel);
-
-        squadCreateRoot.setVisible(true);
-    }
-
-    private void closeSquadCreateDialog() {
-        squadCreateNameField = null;
-        squadCreateCategoryButtons.clear();
-        if (squadCreateRoot != null) {
-            squadCreateRoot.clearChildren();
-            squadCreateRoot.setVisible(false);
+            squadCategoryRoot.addChild(btn);
+            y += rowH2;
         }
     }
 
-    private boolean hasSquadCreateDialog() {
-        return squadCreateRoot != null && squadCreateRoot.isVisible();
-    }
-
-    /** 切换类型：就地更新选中态，保留已输入名称。 */
+    /** 切换队伍类型：更新 squadCreateCategoryId、刷新黄色按钮文案，保留输入框名称。 */
     private void selectSquadCreateCategory(String categoryId) {
         if (categoryId == null) {
             return;
         }
         squadCreateCategoryId = categoryId;
-        String keepName = squadCreateNameField == null ? "" : squadCreateNameField.getRawValue();
-        rebuildSquadCreateDialog(keepName);
+        refreshSquadCategoryDropButton();
+        closeSquadCategoryPopup();
     }
 
-    private void confirmSquadCreate() {
-        if (!hasSquadCreateDialog()) {
-            return;
+    /** 黄色上拉按钮文案：当前选中的队伍类型（黑字 + 上三角）。 */
+    private String squadCategoryDropLabel() {
+        return "\u00a70\u25b2 " + currentSquadCategoryName();
+    }
+
+    private String currentSquadCategoryName() {
+        for (UnifiedDeployScreenPacket.SquadCategoryInfo option : squadCategoryOptions()) {
+            if (option.id != null && option.id.equals(squadCreateCategoryId)) {
+                return option.displayName == null ? "" : option.displayName;
+            }
         }
-        String name = squadCreateNameField == null ? "" : squadCreateNameField.getValue();
-        String categoryId = squadCreateCategoryId == null ? "none" : squadCreateCategoryId;
-        // 先关窗，避免连点重复创建
-        closeSquadCreateDialog();
-        NetworkManager.sendSquadCreateWithCategory(name, categoryId);
+        return "";
     }
 
-    /** 创建小窗的类型选项：地图 squadCategories（含"无"兜底）。 */
+    /** 当前选中的队伍类型是否仍在可选列表里。 */
+    private boolean squadCategoryIdValid() {
+        for (UnifiedDeployScreenPacket.SquadCategoryInfo option : squadCategoryOptions()) {
+            if (option.id != null && option.id.equals(squadCreateCategoryId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void refreshSquadCategoryDropButton() {
+        if (squadCategoryDropButton != null) {
+            squadCategoryDropButton.setLabel(squadCategoryDropLabel());
+        }
+    }
+
+    /** 队伍类型选项：地图 squadCategories（含"无"兜底）。 */
     private List<UnifiedDeployScreenPacket.SquadCategoryInfo> squadCategoryOptions() {
         if (squadCategories == null || squadCategories.isEmpty()) {
             return List.of(new UnifiedDeployScreenPacket.SquadCategoryInfo("none", "无"));
@@ -1615,7 +1831,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         closeVariantPopup();
         closeFireteamContextMenu();
-        closeSquadCreateDialog();
+        closeSquadCategoryPopup();
         squadConfirmTitle = title == null ? "" : title;
         squadConfirmBody = body == null ? "" : body;
         squadConfirmAction = onConfirm;
@@ -1632,8 +1848,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
-        squadConfirmRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
+        squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0x00000000));
+        squadConfirmRoot.addChild(new GuiRect(x, y, w, h, 0x00000000));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
             "\u00a7c\u00a7l" + squadConfirmTitle, 0xFFFFC766));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
@@ -1677,7 +1893,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return squadConfirmRoot != null && squadConfirmRoot.isVisible();
     }
 
-    /** 供外部（数据包）刷新队伍类型列表；小窗打开时保留已输入名称。 */
+    /** 供外部（数据包）刷新队伍类型列表；保留内联输入框名称与当前选中项。 */
     public void updateSquadCategories(List<UnifiedDeployScreenPacket.SquadCategoryInfo> updated) {
         if (updated == null) {
             return;
@@ -1685,13 +1901,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean changed = !sameSquadCategories(squadCategories, updated);
         squadCategories.clear();
         squadCategories.addAll(updated);
-        if (changed && hasSquadCreateDialog()) {
-            String keepName = squadCreateNameField == null ? "" : squadCreateNameField.getRawValue();
-            boolean active = squadCreateNameField != null && squadCreateNameField.isActive();
-            rebuildSquadCreateDialog(keepName);
-            if (squadCreateNameField != null) {
-                squadCreateNameField.setActive(active);
-            }
+        if (!changed) {
+            return;
+        }
+        if (!squadCategoryIdValid()) {
+            squadCreateCategoryId = defaultSquadCategoryId();
+        }
+        refreshSquadCategoryDropButton();
+        if (hasSquadCategoryPopup()) {
+            openSquadCategoryPopup();   // 上拉菜单开着：按新列表重建
         }
     }
 
@@ -2273,7 +2491,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     public void removed() {
         clearPendingDeploySelection();
         previewRenderer.clear();
-        closeSquadCreateDialog();
+        closeSquadCategoryPopup();
         closeSquadConfirm();
         super.removed();
     }
@@ -2417,18 +2635,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (skillIcon != null) {
                 float iconAlpha = usable ? 1f : 0.45f;
                 graphics.setColor(1f, 1f, 1f, iconAlpha);
-                int drawnIcon = Math.max(4, Math.round(ICON_SIZE * 0.4f));   // 图标绘制尺寸缩到 2/5
-                graphics.blit(skillIcon, centerX - drawnIcon / 2, py + 2, 0, 0,
-                    drawnIcon, drawnIcon, ICON_SIZE, ICON_SIZE);
+                graphics.blit(skillIcon, centerX - ICON_SIZE / 2, py + 4, 0, 0,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
                 graphics.setColor(1f, 1f, 1f, 1f);
             }
 
             // ② 技能名称（居中；列窄时自动缩小以完整显示）
             int nameColor = pending ? 0xFFFFE066 : usable ? 0xFFFFFFFF : 0xFF8B9099;
             int nameWidth = font.width(skillName);
-            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.22f, (w - 6f) / nameWidth);
+            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.5f, (w - 6f) / nameWidth);
             graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 9, 0.0D);   // 原 22，按 2/5 缩放
+            graphics.pose().translate(centerX, py + 22, 0.0D);
             graphics.pose().scale(nameScale, nameScale, 1.0f);
             graphics.drawCenteredString(font, skillName, 0, 0, nameColor);
             graphics.pose().popPose();
@@ -2440,8 +2657,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int cooldownColor = deployLocked ? 0xFF8B9099
                 : usable ? 0xFF7FD98F : 0xFFB9BEC6;
             graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 13, 0.0D);   // 原 37，按 2/5 缩放
-            graphics.pose().scale(0.3f, 0.3f, 1.0f);
+            graphics.pose().translate(centerX, py + 37, 0.0D);
+            graphics.pose().scale(0.75f, 0.75f, 1.0f);
             graphics.drawCenteredString(font, cooldownText, 0, 0, cooldownColor);
             graphics.pose().popPose();
 
@@ -2532,8 +2749,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
             Math.max(64, mapH - MAP_FOOTER_H - 16));
 
-        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
-        sectionRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
+        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0x00000000));
+        sectionRoot.addChild(new GuiRect(x, y, w, h, 0x00000000));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
             "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
@@ -3261,8 +3478,16 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         lastMouseX = (int) mx;
         lastMouseY = (int) my;
-        // 班组弹层打开时：交由弹层容器（含全屏遮罩）处理，避免穿透到下层按钮。
-        if (hasSquadCreateDialog() || hasSquadConfirm()) {
+        // 点击内联名称输入框以外的地方：取消它的输入焦点
+        if (squadInlineNameField != null && squadInlineNameField.isTyping()
+            && !inside((int) mx, (int) my,
+                squadInlineNameField.getX(), squadInlineNameField.getY(),
+                squadInlineNameField.getWidth(), squadInlineNameField.getHeight())) {
+            squadInlineNameField.setTyping(false);
+            squadInlineNameTyping = false;
+        }
+        // 班组确认框打开时：交由弹层容器（含全屏遮罩）处理，避免穿透到下层按钮。
+        if (hasSquadConfirm()) {
             return super.mouseClicked(mx, my, button);
         }
         if (hasVariantPopup()) {
@@ -3279,7 +3504,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     @Override
     public boolean mouseScrolled(double mx, double my, double delta) {
         // 弹层打开时吞掉滚轮，避免滚动下层列表
-        if (hasSquadCreateDialog() || hasSquadConfirm()) {
+        if (hasSquadConfirm()) {
             return true;
         }
         if (hasVariantPopup() && inside((int) mx, (int) my,
@@ -3295,9 +3520,21 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        // 弹层优先级：创建小窗 → 确认框 → 成员右键菜单 → 职业变体弹窗
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasSquadCreateDialog()) {
-            closeSquadCreateDialog();
+        // 内联「小队名称」输入框聚焦时：键盘只喂给输入框，避免触发其它快捷键
+        // （字符输入走 charTyped，与 keyPressed 的返回值无关）。
+        SquadInlineNameField inline = squadInlineNameField;
+        if (inline != null && inline.isTyping()) {
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                inline.setTyping(false);
+                squadInlineNameTyping = false;
+                return true;   // 先取消输入焦点，不关闭界面
+            }
+            inline.onKeyPress(keyCode, scanCode, modifiers);
+            return true;   // 吞掉其余按键（含 C / B / T 等快捷键）
+        }
+        // 弹层优先级：队伍类型上拉菜单 → 确认框 → 成员右键菜单 → 职业变体弹窗
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasSquadCategoryPopup()) {
+            closeSquadCategoryPopup();
             return true;
         }
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && hasSquadConfirm()) {
