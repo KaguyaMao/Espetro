@@ -59,9 +59,18 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int VARIANT_ROW_H = 28;
     private static final int VARIANT_MAX_VISIBLE = 6;
     private static final int SQUAD_ROW_GAP = 1;
+    /** 需求 3-3：载具信息上拉菜单 —— 宽度、行高、超过多少行启用滚动列表。 */
+    private static final int VEHICLE_POPUP_W = 168;
+    private static final int VEHICLE_POPUP_ROW_H = BTN_H + 2;
+    private static final int VEHICLE_POPUP_MAX_ROWS = 6;
+    /** 需求 3-3：就绪载具行的淡金高亮底（对应上拉菜单的"选中项高亮"观感）。 */
+    private static final int VEHICLE_ROW_READY_TINT = 0x30FFD27A;
     private static final float UI_TEXT_SCALE = 0.72f;
     private static final float TOOLTIP_TEXT_SCALE = 0.68f;
     private static final float SQUAD_TEXT_SCALE = 0.68f;
+    /** 需求 3-2：「创建/退出小队」与「队伍类型」上拉按钮共用同一字号（取两者都放得下的值后夹在此区间）。 */
+    private static final float SQUAD_ACTION_TEXT_SCALE_MIN = 0.6f;
+    private static final float SQUAD_ACTION_TEXT_SCALE_MAX = 0.8f;
     private static final float SQUAD_MEMBER_TEXT_SCALE = 0.64f;
     /** 需求 7/9：「创建/退出」按钮宽度 = 动作区宽度的 1/5。 */
     private static final int SQUAD_CREATE_BTN_W_DIV = 5;
@@ -191,6 +200,25 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private int squadCategoryButtonW;
     private int squadCategoryButtonH;
 
+    // ===== 载具信息上拉菜单（需求 3-3：取代原独立/常驻的载具信息窗口）=====
+    /** 「载具信息」上拉按钮（对战阶段位于地图页脚）。 */
+    private EspButton vehicleInfoDropButton;
+    private int vehicleInfoButtonX;
+    private int vehicleInfoButtonY;
+    private int vehicleInfoButtonW;
+    private int vehicleInfoButtonH;
+    /** 载具信息上拉菜单层（全屏半透明遮罩 + 按钮上方的选项列表）。 */
+    private GuiElement vehicleInfoRoot;
+    /** 载具较多时启用的滚动列表（保留滚动位置）。 */
+    private ScrollableList vehicleInfoScrollList;
+    /** 面板包携带的载具快照（为空时菜单显示空态）。 */
+    private List<UnifiedDeployScreenPacket.VehicleInfo> vehicleInfos = new ArrayList<>();
+    /** 载具快照收到的时刻：包内冷却为秒，本地据此继续倒数。 */
+    private long vehicleInfoReceivedAtMs;
+    /** 菜单行按钮 ↔ 载具：每秒只刷文案，不重建结构、不丢滚动位置。 */
+    private final List<EspButton> vehicleInfoRowButtons = new ArrayList<>();
+    private final List<UnifiedDeployScreenPacket.VehicleInfo> vehicleInfoRowVehicles = new ArrayList<>();
+
     // ===== 班组弹层：队伍类型上拉菜单 / 通用确认框 =====
     /** 当前选中的队伍类型 id（上拉菜单选中项）。 */
     private String squadCreateCategoryId = "none";
@@ -295,6 +323,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.isCommander = data.isCommander();
         this.squads = new ArrayList<>(data.getSquads());
         this.squadCategories = new ArrayList<>(data.getSquadCategories());
+        // 需求 3-3：载具信息改由面板内上拉菜单展示，数据取统一面板包里的载具快照。
+        this.vehicleInfos = new ArrayList<>(
+            data.getVehicles() == null ? List.of() : data.getVehicles());
+        this.vehicleInfoReceivedAtMs = System.currentTimeMillis();
         this.mySquadId = data.getMySquadId();
         this.team = data.getTeam();
         this.selectedClassId = normalizeSelectedClassId(data.getSelectedClassId());
@@ -310,6 +342,43 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.deployTimeRemaining = seconds;
         this.deployTimerAnchorSeconds = seconds;
         this.deployTimerAnchorMs = System.currentTimeMillis();
+    }
+
+    /**
+     * 需求 3-3：载具快照更新（面板已打开时由服务端推送）。列表变化时刷新按钮文案；
+     * 菜单开着则就地重建选项列表。
+     */
+    public void updateVehicles(List<UnifiedDeployScreenPacket.VehicleInfo> nextVehicles) {
+        List<UnifiedDeployScreenPacket.VehicleInfo> next = nextVehicles == null
+            ? List.of() : new ArrayList<>(nextVehicles);
+        if (vehicleInfosEqual(vehicleInfos, next)) {
+            return;
+        }
+        vehicleInfos = new ArrayList<>(next);
+        vehicleInfoReceivedAtMs = System.currentTimeMillis();
+        refreshVehicleInfoPopup();
+        if (hasVehicleInfoPopup()) {
+            openVehicleInfoPopup();
+        }
+    }
+
+    private static boolean vehicleInfosEqual(List<UnifiedDeployScreenPacket.VehicleInfo> a,
+                                             List<UnifiedDeployScreenPacket.VehicleInfo> b) {
+        if (a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            UnifiedDeployScreenPacket.VehicleInfo x = a.get(i);
+            UnifiedDeployScreenPacket.VehicleInfo y = b.get(i);
+            if (!Objects.equals(x.type, y.type)
+                || !Objects.equals(x.displayName, y.displayName)
+                || x.max != y.max
+                || x.current != y.current
+                || x.respawnMinutes != y.respawnMinutes) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -862,9 +931,16 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int contentLeft = bx + 3;
             if (icon != null) {
                 int drawnIconSize = Math.min(iconSize, bh - 3);
+                // 需求 3-4：禁用态不再铺底色，改为把图标压暗，仍能区分可用 / 不可用
+                if (!enabled) {
+                    graphics.setColor(0.45f, 0.45f, 0.45f, 1.0f);
+                }
                 graphics.blit(icon, bx + 2, by + (bh - drawnIconSize) / 2,
                     drawnIconSize, drawnIconSize, 0.0f, 0.0f,
                     iconTextureWidth, iconTextureHeight, iconTextureWidth, iconTextureHeight);
+                if (!enabled) {
+                    graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+                }
                 contentLeft = bx + drawnIconSize + 4;
             }
             int rightLabelWidth = rightLabel.isEmpty() ? 0 : Math.round(
@@ -1137,6 +1213,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.phaseTitleText = null;
         this.governanceTimerText = null;
         this.governanceVoteButtons.clear();
+        this.vehicleInfoDropButton = null;
+        this.vehicleInfoScrollList = null;
         // Seed from global cache so mid-impeachment open still shows vote UI.
         this.governanceState = ClientGovernanceState.get();
         this.governanceReceivedAtMs = ClientGovernanceState.getReceivedAtMs();
@@ -1180,6 +1258,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         fireteamContextRoot = new GuiElement(0, 0, this.width, this.height);
         fireteamContextRoot.setVisible(false);
         root.addChild(fireteamContextRoot);
+        // 需求 3-3：载具信息上拉菜单层（与队伍类型上拉菜单同为最上层弹层）
+        vehicleInfoRoot = new GuiElement(0, 0, this.width, this.height);
+        vehicleInfoRoot.setVisible(false);
+        root.addChild(vehicleInfoRoot);
         // 班组弹层：队伍类型上拉菜单 / 确认框（始终最后添加，保证在最上层拦截点击）
         squadCategoryRoot = new GuiElement(0, 0, this.width, this.height);
         squadCategoryRoot.setVisible(false);
@@ -1187,6 +1269,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         root.addChild(squadCategoryRoot);
         root.addChild(squadConfirmRoot);
         closeSquadCategoryPopup();
+        closeVehicleInfoPopup();
         closeSquadConfirm();
     }
 
@@ -1514,6 +1597,24 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     /**
+     * 需求 3-2：「创建/退出小队」与「队伍类型」上拉按钮共用同一字号。
+     *
+     * <p>「创建小队」按 4 个汉字估宽（1.0 倍约 36px）；「▲ + 当前类型名」按
+     * 箭头 9px + 空格 4px + 每字 9px 估宽。取两者都放得下的较小值，
+     * 再夹到 {@link #SQUAD_ACTION_TEXT_SCALE_MIN}~{@link #SQUAD_ACTION_TEXT_SCALE_MAX}
+     * 区间内，保证两个按钮字号一致且文案完整。</p>
+     */
+    private float squadActionTextScale(int createW, int dropdownW) {
+        float createFit = Math.max(0.01f, (createW - 6) / 36.0f);
+        String name = EspetroAuiWidgets.stripFormatting(currentSquadCategoryName());
+        float labelSpan = 13.0f + Math.max(0, name.length()) * 9.0f;
+        float dropFit = Math.max(0.01f, (dropdownW - 6) / labelSpan);
+        float fit = Math.min(createFit, dropFit);
+        float lower = Math.min(SQUAD_ACTION_TEXT_SCALE_MIN, fit);
+        return Math.max(lower, Math.min(SQUAD_ACTION_TEXT_SCALE_MAX, fit));
+    }
+
+    /**
      * 重建底部动作行（单行，需求 7/9 + 本轮需求 1~4）。
      * 未入队：[创建小队(1/5 宽·1 倍行高·绿底)] [黄色队伍类型上拉按钮] [名称输入框(等高)]；
      * 已入队：[退出小队(与创建小队同位置同尺寸·红底)]；队长时右侧再排 [解散] [锁定]（黑半透底）。
@@ -1546,18 +1647,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         int rowH = squadActionHeight();
         int createW = squadCreateButtonWidth();
-        // 宽度只有原来的 1/5：按按钮宽度自适应字号（按 4 个汉字估算），
-        // 保证「创建小队 / 退出小队」在窄按钮里也能完整显示
-        float createScale = Math.min(SQUAD_TEXT_SCALE,
-            Math.max(0.5f, (createW - 6) / 36.0f));
         int gap = SQUAD_INLINE_GAP;
         int y = squadActionY;
+        // 需求 3-2：「创建/退出小队」与「队伍类型」上拉按钮统一字号：
+        // 先按同一套宽度算出两个按钮都放得下的共享字号，再分别 setTextScale(同一个值)。
+        int actionRightW = Math.max(0, squadActionW - createW - gap);
+        int actionDropW = Math.max(18, Math.min(34, actionRightW / 2));
+        float actionTextScale = squadActionTextScale(createW, actionDropW);
 
         // 「创建小队」/「退出小队」：永远在最左，共用同一位置与尺寸（1/5 宽 · 1 倍行高 · 无边框）
         squadCreateLeaveButton = new EspButton(squadActionX, y, createW, rowH,
             inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
             inSquadNow ? this::openLeaveSquadConfirm : this::createSquadInline);
-        squadCreateLeaveButton.setTextScale(createScale);
+        squadCreateLeaveButton.setTextScale(actionTextScale);   // 需求 3-2：与队伍类型按钮同一个字号
         // 需求 6：原本就有底色（绿/红）→ 只去掉边框，底色保留
         squadCreateLeaveButton.normalColor = inSquadNow ? SQUAD_LEAVE_BG : SQUAD_CREATE_BG;
         squadCreateLeaveButton.hoverColor = inSquadNow ? SQUAD_LEAVE_BG_HOVER : SQUAD_CREATE_BG_HOVER;
@@ -1572,7 +1674,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
             // 需求 1：动作行顺序改为 [创建小队] → [队伍类型下拉] → [队名输入框]
             // 需求 2/3：三者等高（rowH，本轮已降为原先的一半）
-            int ddW = Math.max(18, Math.min(34, rightW / 2));
+            int ddW = actionDropW;   // 需求 3-2：与上面统一字号使用同一个宽度
             int inputX = rightX + ddW + gap;
             int inputW = Math.max(20, rightW - ddW - gap);
 
@@ -1583,7 +1685,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             squadCategoryButtonH = rowH;
             squadCategoryDropButton = new EspButton(rightX, y, ddW, rowH,
                 squadCategoryDropLabel(), this::toggleSquadCategoryPopup);
-            squadCategoryDropButton.setTextScale(SQUAD_TEXT_SCALE);
+            squadCategoryDropButton.setTextScale(actionTextScale);   // 需求 3-2：与创建小队同一个字号
             squadCategoryDropButton.normalColor = SQUAD_CATEGORY_BG;          // 黄色
             squadCategoryDropButton.hoverColor = SQUAD_CATEGORY_BG_HOVER;
             squadActionRoot.addChild(squadCategoryDropButton);
@@ -1804,6 +1906,172 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return (selected ? "\u00a7a\u25b6 " : "\u00a7f   ") + option.displayName;
     }
 
+    // ===== 载具信息上拉菜单（需求 3-3：取代原独立载具信息窗口）=====
+
+    /** 载具信息上拉菜单是否打开。 */
+    private boolean hasVehicleInfoPopup() {
+        return vehicleInfoRoot != null && vehicleInfoRoot.isVisible();
+    }
+
+    private void closeVehicleInfoPopup() {
+        if (vehicleInfoRoot != null) {
+            vehicleInfoRoot.clearChildren();
+            vehicleInfoRoot.setVisible(false);
+        }
+        vehicleInfoScrollList = null;
+        vehicleInfoRowButtons.clear();
+        vehicleInfoRowVehicles.clear();
+    }
+
+    /** 页脚「载具」按钮：开/关载具信息上拉菜单。 */
+    private void toggleVehicleInfoPopup() {
+        if (hasVehicleInfoPopup()) {
+            closeVehicleInfoPopup();
+            return;
+        }
+        openVehicleInfoPopup();
+    }
+
+    /**
+     * 打开载具信息上拉菜单：排版与「队伍类型」上拉菜单一致 ——
+     * 一个按钮 + 按钮上方弹出选项列表 + 全屏半透明遮罩（点菜单外关闭）；
+     * 选项超过 {@link #VEHICLE_POPUP_MAX_ROWS} 行时列表可滚动（带滚动条）。
+     */
+    private void openVehicleInfoPopup() {
+        if (vehicleInfoRoot == null) {
+            return;
+        }
+        closeVehicleInfoPopup();
+        closeSquadCategoryPopup();   // 两个上拉菜单互斥
+        int rowH = VEHICLE_POPUP_ROW_H;
+        int count = vehicleInfos.size();
+        int visibleRows = Math.min(Math.max(1, count), VEHICLE_POPUP_MAX_ROWS);
+        boolean scrollable = count > VEHICLE_POPUP_MAX_ROWS;
+        int w = Math.max(96, Math.min(VEHICLE_POPUP_W, this.width - 8));
+        int listH = visibleRows * rowH;
+        int h = listH + 4;
+        int px = Math.max(2, Math.min(this.width - w - 2,
+            vehicleInfoButtonX + vehicleInfoButtonW - w));
+        int py = vehicleInfoButtonY - h - 2;   // 上拉：贴在按钮上方
+        if (py < 2) {
+            // 上方放不下（按钮太靠上）时退化为下拉，保证菜单完整可见
+            py = Math.min(this.height - h - 2, vehicleInfoButtonY + vehicleInfoButtonH + 2);
+        }
+        py = Math.max(2, py);
+
+        vehicleInfoRoot.clearChildren();
+        vehicleInfoRoot.setVisible(true);
+        // 全屏遮罩：点菜单外 = 关闭（后添加的列表优先响应点击）
+        vehicleInfoRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
+            @Override
+            public boolean onMouseClick(int mx, int my, int button) {
+                closeVehicleInfoPopup();
+                return true;
+            }
+        });
+        vehicleInfoRoot.addChild(new GuiRect(px, py, w, h, 0xF0111418));
+
+        vehicleInfoScrollList = new ScrollableList(px + 2, py + 2, w - 4, listH)
+            .setScrollStep(rowH)
+            .setAlwaysShowScrollbar(scrollable);
+        vehicleInfoRoot.addChild(vehicleInfoScrollList);
+
+        if (vehicleInfos.isEmpty()) {
+            EspButton empty = new EspButton(2, 0, w - 6, rowH - 1,
+                "\u00a77当前编制暂无载具信息", null);
+            empty.setTextScale(UI_TEXT_SCALE);
+            empty.setCenteredText(false);
+            empty.setPlainBlack();
+            empty.setEnabled(false);
+            vehicleInfoScrollList.addChild(empty);
+            return;
+        }
+        int rowW = w - 6 - (scrollable ? 6 : 0);   // 滚动时给滚动条留位
+        int y = 0;
+        for (UnifiedDeployScreenPacket.VehicleInfo vehicle : vehicleInfos) {
+            EspButton row = new EspButton(2, y, rowW, rowH - 1,
+                vehicleInfoRowLabel(vehicle), null);
+            row.setTextScale(UI_TEXT_SCALE);
+            row.setCenteredText(false);
+            row.setPlainBlack();
+            // 就绪（未满、无冷却）的行加一层淡金高亮，对应菜单的"选中/可用项高亮"
+            row.setSelected(vehicleReady(vehicle), VEHICLE_ROW_READY_TINT);
+            vehicleInfoScrollList.addChild(row);
+            vehicleInfoRowButtons.add(row);
+            vehicleInfoRowVehicles.add(vehicle);
+            y += rowH;
+        }
+    }
+
+    /** 每秒刷新：按钮文案 + 菜单内冷却倒计时（只改 label，结构/滚动位置不动）。 */
+    private void refreshVehicleInfoPopup() {
+        if (vehicleInfoDropButton != null) {
+            vehicleInfoDropButton.setLabel(vehicleInfoDropLabel());
+        }
+        if (!hasVehicleInfoPopup()) {
+            return;
+        }
+        for (int i = 0; i < vehicleInfoRowButtons.size(); i++) {
+            vehicleInfoRowButtons.get(i).setLabel(vehicleInfoRowLabel(vehicleInfoRowVehicles.get(i)));
+        }
+    }
+
+    /** 按钮文案：无数据时「载具信息 ▲」，有数据时「载具 就绪数/总数 ▲」。 */
+    private String vehicleInfoDropLabel() {
+        if (vehicleInfos.isEmpty()) {
+            return "\u00a7b载具信息 \u00a77\u25b2";
+        }
+        int ready = 0;
+        for (UnifiedDeployScreenPacket.VehicleInfo vehicle : vehicleInfos) {
+            if (vehicleReady(vehicle)) {
+                ready++;
+            }
+        }
+        return "\u00a7b载具 \u00a7f" + ready + "\u00a77/\u00a7f" + vehicleInfos.size()
+            + " \u00a77\u25b2";
+    }
+
+    /** 载具是否可用：不在冷却中且未达编制上限。 */
+    private boolean vehicleReady(UnifiedDeployScreenPacket.VehicleInfo vehicle) {
+        return vehicleCooldownSeconds(vehicle) <= 0 && vehicle.current < vehicle.max;
+    }
+
+    /** 冷却剩余秒数（包内 cooldownRemaining 为秒；用快照时刻在本地继续倒数）。 */
+    private int vehicleCooldownSeconds(UnifiedDeployScreenPacket.VehicleInfo vehicle) {
+        int base = Math.max(0, vehicle.cooldownRemaining);
+        if (base <= 0 || vehicleInfoReceivedAtMs <= 0L) {
+            return 0;
+        }
+        long elapsed = Math.max(0L,
+            System.currentTimeMillis() - vehicleInfoReceivedAtMs) / 1000L;
+        return (int) Math.max(0L, base - elapsed);
+    }
+
+    /** 单行文案：沿用原载具窗口的关键信息（名称 + 就绪/冷却/已满 + 刷新周期）。 */
+    private String vehicleInfoRowLabel(UnifiedDeployScreenPacket.VehicleInfo vehicle) {
+        int remaining = vehicleCooldownSeconds(vehicle);
+        String name = vehicle.displayName == null ? vehicle.type : vehicle.displayName;
+        String marker;
+        String nameColor;
+        String status;
+        if (remaining > 0) {
+            marker = "\u00a77  ";
+            nameColor = "\u00a78";
+            status = "\u00a7c冷却 " + remaining + "s";
+        } else if (vehicle.current >= vehicle.max) {
+            marker = "\u00a77  ";
+            nameColor = "\u00a78";
+            status = "\u00a76已满 " + vehicle.current + "/" + vehicle.max;
+        } else {
+            marker = "\u00a7a\u25b6 ";
+            nameColor = "\u00a7f";
+            status = "\u00a7a就绪 " + vehicle.current + "/" + vehicle.max;
+        }
+        String respawn = vehicle.respawnMinutes > 0
+            ? " \u00a77(" + vehicle.respawnMinutes + "分刷新)" : "";
+        return marker + nameColor + name + "  " + status + respawn;
+    }
+
     // ===== 通用确认框（退出 / 解散 / 踢人）=====
 
     private void openLeaveSquadConfirm() {
@@ -1948,8 +2216,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     // ---------- 职业选择（中上，5行网格）----------
     private static final int ICON_BTN = 15;          // 按钮边长 = 2/3 * CLASS_BTN_H
-    private static final int ICON_GRID_GAP = 2;      // 图标间距
-    private static final int ROW_LABEL_W = 18;       // 行标宽度（放宽以容纳职业分类图标）
+    /** 需求 3-4：图标间距由 2px 收紧到 1px，职业按钮排列更紧密。 */
+    private static final int ICON_GRID_GAP = 1;      // 图标间距
+    /** 需求 3-4：行标宽度同步收紧（15px 分类图标 + 1px 间隙）。 */
+    private static final int ROW_LABEL_W = 17;       // 行标宽度（放宽以容纳职业分类图标）
+    /** 需求 3-4：图标行之间的额外垂直间隙（实际排间距 = ICON_GRID_GAP + 此值 = 3px）。 */
+    private static final int CLASS_ROW_EXTRA_GAP = 2;
+    /** 需求 3-1：排间分隔线相对下一排顶部的上移量：1px 细线落在上一排图标下沿。 */
+    private static final int CLASS_ROW_DIVIDER_LIFT = 3;
     /** 职业分类图标：命令支援 / 直接战斗 / 火力支援 / 专业兵（黄色渲染）。 */
     private static final ResourceLocation[] ROW_CATEGORY_ICONS = {
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_commandsupport.png"),
@@ -1993,9 +2267,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             var rowList = rows.get(r);
             if (rowList.isEmpty()) continue;
             // 排与排之间一条细白线（第一排之前不画）
-            // 需求 7：加粗到 2px 并上移 1px，等于把线提高"自身粗细的一个单位"
+            // 需求 3-1：上一轮曾加粗到 2px，本轮按要求"只移动、不加粗"
             if (gy > 0) {
-                classScrollList.addChild(new Divider(0, gy - 2, contentW, 0x55FFFFFF, 2));
+                // 需求 3-1：恢复 1px 细线，并整体上移到上一排图标下沿
+                // （不再压在排间空隙里；颜色与横跨宽度保持不变）。
+                classScrollList.addChild(new Divider(0, gy - CLASS_ROW_DIVIDER_LIFT,
+                    contentW, 0x55FFFFFF, 1));
             }
             // 该排左侧的分类图标（黄色渲染），图标之后就是这一排的职业按钮
             if (r >= 1 && r <= ROW_CATEGORY_ICONS.length) {
@@ -2007,7 +2284,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 int by = gy + (i / cols) * (ICON_BTN + ICON_GRID_GAP);
                 addClassIconButton(rowList.get(i), rowList, bx, by, ICON_BTN);
             }
-            gy += ((rowList.size() + cols - 1) / cols) * (ICON_BTN + ICON_GRID_GAP) + 2;
+            gy += ((rowList.size() + cols - 1) / cols) * (ICON_BTN + ICON_GRID_GAP)
+                + CLASS_ROW_EXTRA_GAP;
         }
 
         // row=0 职业（载具兵等）紧凑列表
@@ -2030,15 +2308,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             btn.setDisabledAction(() -> selectClass(classes.indexOf(cls)));
             if (disabled) {
                 boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
+                // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
                 btn.setDisabledStyle(
-                    coolingDown ? BTN_BG_DISABLED : CLASS_BG_UNAVAILABLE,
+                    0x00000000,
                     coolingDown ? 0x60383848 : CLASS_BORDER_UNAVAILABLE,
                     coolingDown ? 0xFF777777 : 0xFFFF9A9A);
             }
             classScrollList.addChild(btn);
             classButtons.add(btn);
             classButtonToClassIndex.put(btn, classes.indexOf(cls));
-            gy += ICON_BTN + ICON_GRID_GAP + 2;
+            // 需求 3-4：紧凑职业行之间的空隙由 4px 收到 1px（按钮高 = ICON_BTN + 2）
+            gy += ICON_BTN + 2 + ICON_GRID_GAP;
         }
     }
 
@@ -2059,8 +2339,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         btn.setDisabledAction(() -> selectClass(clsIdx));
         if (disabled) {
             boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
+            // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
             btn.setDisabledStyle(
-                coolingDown ? BTN_BG_DISABLED : CLASS_BG_UNAVAILABLE,
+                0x00000000,
                 coolingDown ? 0x60383848 : CLASS_BORDER_UNAVAILABLE,
                 coolingDown ? 0xFF777777 : 0xFFFF9A9A);
         }
@@ -2480,6 +2761,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         refreshConfirmDeployButton();
         refreshClassSwitchCooldown();
         refreshClassSelectionLocation();
+        // 需求 3-3：载具上拉按钮文案与菜单内冷却倒计时每秒刷新
+        refreshVehicleInfoPopup();
         GovernanceStatePacket.TeamState governance = activeGovernance();
         if (governanceTimerText != null && governance != null) {
             governanceTimerText.setText("\u00a7e剩余 "
@@ -2509,6 +2792,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         clearPendingDeploySelection();
         previewRenderer.clear();
         closeSquadCategoryPopup();
+        closeVehicleInfoPopup();
         closeSquadConfirm();
         super.removed();
     }
@@ -2683,6 +2967,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void buildMapPanel(GuiElement sectionRoot) {
+        // 需求 3-3：地图控制区重建时关闭并释放载具上拉菜单（按钮坐标会变）
+        closeVehicleInfoPopup();
+        vehicleInfoDropButton = null;
         buildSkillColumn(sectionRoot);
         governanceVoteButtons.clear();
         int bx = mapX + 5;
@@ -2708,11 +2995,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             nextX += 60;
         }
         if (battle) {
-            EspButton vehicleInfo = new EspButton(nextX, by, 64, BTN_H, "\u00a7b载具信息",
-                () -> NetworkManager.requestVehicleInfo());
-            vehicleInfo.setTextScale(UI_TEXT_SCALE);
-            vehicleInfo.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
-            sectionRoot.addChild(vehicleInfo);
+            // 需求 3-3：原「载具信息」按钮（点击打开独立载具窗口）改为面板内上拉菜单入口
+            buildVehicleInfoButton(sectionRoot, nextX, by);
             nextX += 68;
         }
 
@@ -2748,6 +3032,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else {
             buildGovernanceWindow(sectionRoot, state);
         }
+    }
+
+    /** 需求 3-3：载具信息上拉菜单的入口按钮（位置与尺寸沿用原「载具信息」按钮）。 */
+    private void buildVehicleInfoButton(GuiElement sectionRoot, int x, int y) {
+        vehicleInfoButtonX = x;
+        vehicleInfoButtonY = y;
+        vehicleInfoButtonW = 64;
+        vehicleInfoButtonH = BTN_H;
+        vehicleInfoDropButton = new EspButton(x, y, vehicleInfoButtonW, vehicleInfoButtonH,
+            vehicleInfoDropLabel(), this::toggleVehicleInfoPopup);
+        vehicleInfoDropButton.setTextScale(UI_TEXT_SCALE);
+        vehicleInfoDropButton.setPlainBlack();   // 需求 6：无边框 + 黑半透底
+        sectionRoot.addChild(vehicleInfoDropButton);
     }
 
     /** 指挥官治理（弹劾 / 空缺志愿 / 空缺公投）：贴在地图右侧的小窗，可关闭（最小化）为页脚按钮。 */
