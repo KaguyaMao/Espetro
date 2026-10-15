@@ -354,12 +354,36 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (vehicleInfosEqual(vehicleInfos, next)) {
             return;
         }
+        boolean rowsChanged = !vehicleRowSignatureEqual(vehicleInfos, next);
         vehicleInfos = new ArrayList<>(next);
         vehicleInfoReceivedAtMs = System.currentTimeMillis();
+        // bug 修复：数据变化也只就地刷新 —— 绝不 close→reopen（那会丢打开状态与滚动位置）。
         refreshVehicleInfoPopup();
-        if (hasVehicleInfoPopup()) {
-            openVehicleInfoPopup();
+        if (rowsChanged && hasVehicleInfoPopup()) {
+            refreshVehicleInfoPopupLayout(true);
         }
+    }
+
+    /**
+     * 行集合是否变化（类型/名称/上限/刷新周期）：
+     * 只有它变了才需要重建行按钮；仅有 current 变化时原地改文案即可。
+     */
+    private static boolean vehicleRowSignatureEqual(List<UnifiedDeployScreenPacket.VehicleInfo> a,
+                                                    List<UnifiedDeployScreenPacket.VehicleInfo> b) {
+        if (a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            UnifiedDeployScreenPacket.VehicleInfo x = a.get(i);
+            UnifiedDeployScreenPacket.VehicleInfo y = b.get(i);
+            if (!Objects.equals(x.type, y.type)
+                || !Objects.equals(x.displayName, y.displayName)
+                || x.max != y.max
+                || x.respawnMinutes != y.respawnMinutes) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static boolean vehicleInfosEqual(List<UnifiedDeployScreenPacket.VehicleInfo> a,
@@ -1941,8 +1965,33 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (vehicleInfoRoot == null) {
             return;
         }
-        closeVehicleInfoPopup();
         closeSquadCategoryPopup();   // 两个上拉菜单互斥
+        renderVehicleInfoPopup(false);
+    }
+
+    /**
+     * bug 修复：弹层已打开时就地重建内容 —— 不改变“是否打开”的状态，
+     * 滚动偏移按需保留，hover 由每帧 focus 计算自动恢复。
+     * 用于地图控制区重建（技能冷却每秒触发）与载具行集合变化。
+     */
+    private void refreshVehicleInfoPopupLayout(boolean preserveScroll) {
+        if (vehicleInfoRoot == null || !hasVehicleInfoPopup()) {
+            return;
+        }
+        renderVehicleInfoPopup(preserveScroll);
+    }
+
+    /** 只重建弹层子节点与行按钮，不负责打开/关闭（可见性由调用方语义决定）。 */
+    private void renderVehicleInfoPopup(boolean preserveScroll) {
+        if (vehicleInfoRoot == null) {
+            return;
+        }
+        double keepOffset = preserveScroll && vehicleInfoScrollList != null
+            ? vehicleInfoScrollList.getOffset() : 0.0D;
+        vehicleInfoRoot.clearChildren();
+        vehicleInfoScrollList = null;
+        vehicleInfoRowButtons.clear();
+        vehicleInfoRowVehicles.clear();
         int rowH = VEHICLE_POPUP_ROW_H;
         int count = vehicleInfos.size();
         int visibleRows = Math.min(Math.max(1, count), VEHICLE_POPUP_MAX_ROWS);
@@ -1959,7 +2008,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         py = Math.max(2, py);
 
-        vehicleInfoRoot.clearChildren();
         vehicleInfoRoot.setVisible(true);
         // 全屏遮罩：点菜单外 = 关闭（后添加的列表优先响应点击）
         vehicleInfoRoot.addChild(new GuiElement(0, 0, this.width, this.height) {
@@ -2001,9 +2049,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             vehicleInfoRowVehicles.add(vehicle);
             y += rowH;
         }
+        vehicleInfoRoot.setVisible(true);
+        if (preserveScroll && vehicleInfoScrollList != null) {
+            vehicleInfoScrollList.setOffset(keepOffset);   // bug 修复：重建后恢复滚动位置
+        }
     }
 
-    /** 每秒刷新：按钮文案 + 菜单内冷却倒计时（只改 label，结构/滚动位置不动）。 */
+    /**
+     * 每秒刷新：按钮文案 + 菜单内冷却倒计时/就绪数/可用高亮。
+     * bug 修复：这里只原地改 label 与 selected，绝不重建节点、绝不 close→reopen，
+     * 因此弹层会一直保持打开，滚动位置与 hover 都不受影响。
+     */
     private void refreshVehicleInfoPopup() {
         if (vehicleInfoDropButton != null) {
             vehicleInfoDropButton.setLabel(vehicleInfoDropLabel());
@@ -2012,7 +2068,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return;
         }
         for (int i = 0; i < vehicleInfoRowButtons.size(); i++) {
-            vehicleInfoRowButtons.get(i).setLabel(vehicleInfoRowLabel(vehicleInfoRowVehicles.get(i)));
+            UnifiedDeployScreenPacket.VehicleInfo vehicle = vehicleInfoRowVehicles.get(i);
+            vehicleInfoRowButtons.get(i).setLabel(vehicleInfoRowLabel(vehicle));
+            vehicleInfoRowButtons.get(i).setSelected(
+                vehicleReady(vehicle), VEHICLE_ROW_READY_TINT);
         }
     }
 
@@ -2967,8 +3026,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void buildMapPanel(GuiElement sectionRoot) {
-        // 需求 3-3：地图控制区重建时关闭并释放载具上拉菜单（按钮坐标会变）
-        closeVehicleInfoPopup();
+        // bug 修复：地图控制区重建（rebuildMapControls 会被“技能冷却每秒变化”等
+        // tick 事件触发）时**不得**关闭载具上拉菜单，否则玩家打开后一两秒就会看到
+        // 弹层自己关掉。这里只释放按钮引用，弹层保持打开，重建后重新贴靠（见下方）。
         vehicleInfoDropButton = null;
         buildSkillColumn(sectionRoot);
         governanceVoteButtons.clear();
@@ -2998,6 +3058,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             // 需求 3-3：原「载具信息」按钮（点击打开独立载具窗口）改为面板内上拉菜单入口
             buildVehicleInfoButton(sectionRoot, nextX, by);
             nextX += 68;
+            // bug 修复：弹层若开着 → 就地重建并重新贴靠到新按钮位置（保持打开与滚动位置）
+            refreshVehicleInfoPopupLayout(true);
+        } else {
+            // 已不在对战阶段、按钮消失：关闭弹层，避免留下无主浮层
+            closeVehicleInfoPopup();
         }
 
         // 重新部署（红色，载具信息右侧）：立刻阵亡并重选部署点；
