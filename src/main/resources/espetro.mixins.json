@@ -18,6 +18,7 @@
     "sbw.VehicleEntityMainBaseProtectionMixin",
     "sbw.VehicleEntitySeatAccessMixin",
     "sbw.VehicleEntityWreckMixin",
+    "sbw.VehicleDriverLogoutKeepMixin",
     "sbw.TurretWreckEntityMixin",
     "sbw.CustomExplosionBlockGateMixin"
   ],
