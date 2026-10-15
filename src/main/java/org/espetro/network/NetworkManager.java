@@ -1520,9 +1520,32 @@ public class NetworkManager {
             }
         }
 
-        // 载具部署已分离到独立界面，J 键主面板不再枚举载具运行时状态。
+        // 载具运行时状态：面板内「载具」上拉菜单的数据源。
+        // 与 sendVehicleDeployScreen 使用同一套 API；cooldownRemaining 沿用该字段的
+        // 历史单位（秒），不改协议字段的顺序与含义。
+        java.util.List<UnifiedDeployScreenPacket.VehicleInfo> vehicleList = new java.util.ArrayList<>();
+        org.espetro.vehicle.VehicleManager vehicleManager =
+            org.espetro.vehicle.VehicleManager.getInstance();
+        java.util.Map<String, org.espetro.vehicle.VehicleConfig.VehicleTypeConfig> vehicleConfigs =
+            org.espetro.vehicle.VehicleConfig.getFactionVehicles(factionId);
+        for (java.util.Map.Entry<String, org.espetro.vehicle.VehicleConfig.VehicleTypeConfig> vehicleEntry
+                : vehicleConfigs.entrySet()) {
+            String vehicleType = vehicleEntry.getKey();
+            org.espetro.vehicle.VehicleConfig.VehicleTypeConfig vehicleCfg = vehicleEntry.getValue();
+            int vehicleCurrent = team == null
+                ? vehicleManager.getActiveCount(factionId, vehicleType)
+                : vehicleManager.getActiveCount(team, factionId, vehicleType);
+            long vehicleCooldownMs = vehicleManager.getCooldownRemaining(team, factionId, vehicleType);
+            vehicleList.add(new UnifiedDeployScreenPacket.VehicleInfo(
+                vehicleType,
+                org.espetro.vehicle.VehicleManager.getDisplayName(factionId, vehicleType),
+                vehicleCfg.max,
+                vehicleCurrent,
+                (int) (vehicleCooldownMs / 1000L),
+                vehicleCfg.respawnMinutes));
+        }
+
         boolean isCmd = voteManager.isCommanderOf(player.getUUID(), team);
-        java.util.List<UnifiedDeployScreenPacket.VehicleInfo> vehicleList = java.util.Collections.emptyList();
 
         // === 小队数据 ===
         java.util.List<UnifiedDeployScreenPacket.SquadInfo> squadList = buildSquadInfoList(team);

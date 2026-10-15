@@ -318,6 +318,9 @@ public class ClientPacketHandlers {
             screen.updateSquads(packet.getSquads(), packet.getMySquadId());
             screen.updateSquadCategories(packet.getSquadCategories());
             screen.updateClasses(packet.getClasses(), packet.getClassCounts(), packet.getVariantCounts());
+            // 需求 3-3：载具快照 —— 面板内「载具」上拉菜单的数据源
+            // （空列表时面板显示空态；updateVehicles 内部已做 null 判空，不会 NPE）
+            screen.updateVehicles(packet.getVehicles());
             screen.updateSelectedClass(packet.getSelectedClassId());
             if (freeUnlockChanged) {
                 screen.refreshForFreeUnlock();

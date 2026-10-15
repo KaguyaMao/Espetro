@@ -4135,15 +4135,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                         0xFFE8B85C,
                         0xFFFFFFFF);
                 } else {
+                    // 需求 3-4：禁用态同样不铺底色（只靠图标压暗 + 文字变色）
                     btn.setDisabledStyle(
-                        coolingDown ? BTN_BG_DISABLED : CLASS_BG_UNAVAILABLE,
+                        0x00000000,
                         coolingDown ? 0x60383848 : CLASS_BORDER_UNAVAILABLE,
                         coolingDown ? 0xFF777777 : 0xFFFF9A9A);
                 }
             } else {
                 btn.setDisabledAction(null);
-                btn.normalColor = BTN_BG_PLAIN_BLACK;   // 需求 6：无边框 + 黑半透底
-                btn.hoverColor = BTN_BG_HOVER;
+                // 需求 3-4：职业按钮常态一律无底色、无边框（仅悬停高亮 / 选中黄底）。
+                // 这里必须跟随刷新，否则会覆盖构建时的透明态、重新铺上黑底。
+                btn.setTransparentIdle();
                 btn.setSelected(isSelected, CLASS_BG_SELECTED);   // 选中显示黄底
             }
         }
