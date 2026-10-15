@@ -65,9 +65,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final float SQUAD_MEMBER_TEXT_SCALE = 0.64f;
 
     // EspButton 颜色：全不透明，避免 isPauseScreen=false 时世界从按钮透出（Embeddium 叠影）。
-    private static final int BTN_BG_NORMAL   = 0xFF1B1E20;
-    private static final int BTN_BG_HOVER    = 0xFF435145;
-    private static final int BTN_BG_DISABLED = 0xFF181B1D;
+    private static final int BTN_BG_NORMAL   = 0x99B8BDC2;
+    private static final int BTN_BG_HOVER    = 0x99CFD4D8;
+    private static final int BTN_BG_DISABLED = 0x99AAB0B4;
     private static final int CLASS_BG_UNAVAILABLE = 0xFF4A2024;
     private static final int CLASS_BG_SELECTED   = 0xFF6A6A20;
     private static final int CLASS_BORDER_UNAVAILABLE = 0xFF8A3A42;
@@ -77,10 +77,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int REDEPLOY_BG_NORMAL = 0xFF7A1B1B;
     private static final int REDEPLOY_BG_HOVER  = 0xFFA32626;
     /** J 键主 GUI 的所有非地图背景统一使用不透明纯黑，避免世界画面穿透或色块交替闪烁。 */
-    private static final int CHROME_BG       = 0xFF000000;
-    private static final int PANEL_LEFT_BG   = 0xFF000000;
-    private static final int PANEL_CENTER_BG = 0xFF000000;
-    private static final int PANEL_MAP_FOOTER_BG = 0xFF000000;
+    // 淡灰半透明（原为纯黑不透明）
+    private static final int CHROME_BG       = 0x99A6ABB0;
+    private static final int PANEL_LEFT_BG   = 0x99A6ABB0;
+    private static final int PANEL_CENTER_BG = 0x99A6ABB0;
+    private static final int PANEL_MAP_FOOTER_BG = 0x99A6ABB0;
     private static final int SCREEN_SHADE    = 0xFF000000;
     private static final int STATIC_DIVIDER = 0xFF3A3F3D;
     private static final Pattern COORDINATE_PATTERN =
@@ -983,10 +984,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         buildTitleBar();
 
         // 所有非地图区域使用同一层不透明纯黑底；地图视口由桥接渲染器逐帧绘制。
-        root.addChild(new GuiRect(leftX, leftY, leftW, leftH, PANEL_LEFT_BG));
+        // 面板底色改由 renderBeforeMenu 动态绘制（部署后透明），这里不再放固定底色的 GuiRect
         boolean combatColumnVisible = waitingForDeploySelection;
         if (combatColumnVisible) {
-            root.addChild(new GuiRect(centerX, centerY, centerW, centerH, PANEL_CENTER_BG));
+            // 同上：中列底色由 renderBeforeMenu 动态绘制
         }
         root.addChild(new GuiRect(mapX, mapY + Math.max(0, mapH - MAP_FOOTER_H),
             mapW, MAP_FOOTER_H, PANEL_MAP_FOOTER_BG));
@@ -1478,8 +1479,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        squadCreateRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xF0121518));
-        squadCreateRoot.addChild(new GuiRect(x, y, w, h, 0xFF1A1E22));
+        squadCreateRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
+        squadCreateRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
         squadCreateRoot.addChild(new PlainText(x + 8, y + 5, "\u00a76\u00a7l创建小队", 0xFFFFC766));
 
         squadCreateNameField = new SquadNameField(x + 8, y + 20, w - 16, BTN_H,
@@ -1631,8 +1632,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xF0121518));
-        squadConfirmRoot.addChild(new GuiRect(x, y, w, h, 0xFF1A1E22));
+        squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
+        squadConfirmRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
             "\u00a7c\u00a7l" + squadConfirmTitle, 0xFFFFC766));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
@@ -2531,8 +2532,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
             Math.max(64, mapH - MAP_FOOTER_H - 16));
 
-        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xE0181818));
-        sectionRoot.addChild(new GuiRect(x, y, w, h, 0xFF141719));
+        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0xCC8A9096));
+        sectionRoot.addChild(new GuiRect(x, y, w, h, 0xCCB0B5BA));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
             "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
@@ -2811,9 +2812,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         CurrentMapBackgroundRenderer.render(
             graphics, this.width, this.height, ClientGameState.getCurrentMapFolder());
         computeRegions();
-        // 左/中列先铺实心，即使地图污染 GL 也不会露出世界。
-        graphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, PANEL_LEFT_BG);
-        graphics.fill(centerX, centerY, centerX + centerW, centerY + centerH, PANEL_CENTER_BG);
+        // 已部署下来（不再等待部署选择）时面板背景完全透明；部署前保持淡灰半透明。
+        boolean spawned = !waitingForDeploySelection;
+        int leftBg = spawned ? 0x00000000 : PANEL_LEFT_BG;
+        int centerBg = spawned ? 0x00000000 : PANEL_CENTER_BG;
+        int chromeBg = spawned ? 0x00000000 : CHROME_BG;
+        int footerBg = spawned ? 0x00000000 : PANEL_MAP_FOOTER_BG;
+        graphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, leftBg);
+        graphics.fill(centerX, centerY, centerX + centerW, centerY + centerH, centerBg);
         UnifiedDeployScreenPacket.LoadoutPreview activePreview = getActivePreview();
         if (activePreview != null) {
             renderClassPreview(graphics, activePreview, mouseX, mouseY);
@@ -2822,14 +2828,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else {
             // 旧式治理覆盖层（弹劾投票等）整块盖住地图时不再绘制地图。
             int viewportH = Math.max(1, mapH - MAP_FOOTER_H);
-            graphics.fill(mapX, mapY, mapX + mapW, mapY + viewportH, PANEL_MAP_FOOTER_BG);
+            graphics.fill(mapX, mapY, mapX + mapW, mapY + viewportH, footerBg);
         }
         // 地图/预览可能改动全局 RenderSystem；复位后再画 MUtil 树，避免左栏整页闪。
         resetGuiRenderState(graphics);
         // 再盖一次左/中列，挡住地图 scissor 外溢。
-        graphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, PANEL_LEFT_BG);
-        graphics.fill(centerX, centerY, centerX + centerW, centerY + centerH, PANEL_CENTER_BG);
-        graphics.fill(0, 0, this.width, TITLE_H, CHROME_BG);
+        graphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, leftBg);
+        graphics.fill(centerX, centerY, centerX + centerW, centerY + centerH, centerBg);
+        graphics.fill(0, 0, this.width, TITLE_H, chromeBg);
         // 阵营强调条属于稳定背景层，不加入会被局部更新影响的 MUtil 元素树。
         graphics.fill(0, 0, 3, TITLE_H, teamAccentColor());
         int barY = this.height - STATUS_BAR_H;
