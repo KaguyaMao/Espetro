@@ -93,14 +93,46 @@ class VehicleSupplyStateTest {
     }
 
     @Test
-    void onlySupplyVehiclesActAsMobileClassChangeSources() {
+    void supplyAndCombatVehiclesActAsMobileClassChangeSources() {
         var supplyVehicle = new VehicleConfig.VehicleTypeConfig(1, 10);
         supplyVehicle.supplyVeh = true;
         assertTrue(supplyVehicle.canChangeClass());
 
         var combatVehicle = new VehicleConfig.VehicleTypeConfig(1, 10);
         combatVehicle.fightVeh = true;
-        assertFalse(combatVehicle.canChangeClass());
+        assertTrue(combatVehicle.canChangeClass());
+
+        var disabledVehicle = new VehicleConfig.VehicleTypeConfig(1, 10);
+        assertFalse(disabledVehicle.canChangeClass());
+    }
+
+    @Test
+    void onlyExplicitFightVehiclesAllowFullClassChange() {
+        var combat = new VehicleConfig.VehicleTypeConfig(1, 10);
+        VehicleConfig.applySupplyProfile(combat, false, true, null);
+        assertTrue(VehicleClassChangePolicy.allowsFullClassChange(combat));
+
+        var supply = new VehicleConfig.VehicleTypeConfig(1, 10);
+        VehicleConfig.applySupplyProfile(supply, true, null, null);
+        assertFalse(VehicleClassChangePolicy.allowsFullClassChange(supply));
+
+        var legacy = new VehicleConfig.VehicleTypeConfig(1, 10);
+        VehicleConfig.applySupplyProfile(legacy, null, null, null);
+        assertFalse(VehicleClassChangePolicy.allowsFullClassChange(legacy));
+
+        var disabled = new VehicleConfig.VehicleTypeConfig(1, 10);
+        VehicleConfig.applySupplyProfile(disabled, false, false, null);
+        assertFalse(VehicleClassChangePolicy.allowsFullClassChange(disabled));
+    }
+
+    @Test
+    void vehicleCrewWhitelistFollowsClassTagsAndLegacyIcons() {
+        assertTrue(VehicleClassChangePolicy.resolvesVehicleCrew(true, "rifleman"));
+        assertTrue(VehicleClassChangePolicy.resolvesVehicleCrew(null, "crewman"));
+        assertTrue(VehicleClassChangePolicy.resolvesVehicleCrew(null, " lead_crewman "));
+        assertFalse(VehicleClassChangePolicy.resolvesVehicleCrew(false, "crewman"));
+        assertFalse(VehicleClassChangePolicy.resolvesVehicleCrew(null, "rifleman"));
+        assertFalse(VehicleClassChangePolicy.resolvesVehicleCrew(null, null));
     }
 
     @Test
@@ -113,6 +145,7 @@ class VehicleSupplyStateTest {
         assertFalse(legacyVehicle.supplyVeh);
         assertEquals(500, legacyVehicle.supplyCapacity);
         assertTrue(legacyVehicle.legacyDefaultedToFightVehicle);
+        assertFalse(legacyVehicle.explicitFightVehicle);
     }
 
     @Test
@@ -125,6 +158,7 @@ class VehicleSupplyStateTest {
         assertFalse(disabledVehicle.supplyVeh);
         assertEquals(300, disabledVehicle.supplyCapacity);
         assertFalse(disabledVehicle.legacyDefaultedToFightVehicle);
+        assertFalse(disabledVehicle.explicitFightVehicle);
     }
 
     @Test

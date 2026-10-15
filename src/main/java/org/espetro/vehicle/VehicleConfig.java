@@ -57,14 +57,24 @@ public class VehicleConfig {
         public int supplyCapacity;
         /** 旧编制未声明载具补给类型时，是否按战斗载具兼容。 */
         boolean legacyDefaultedToFightVehicle;
+        /**
+         * 编制 JSON 是否显式声明 {@code fightveh: true}（步兵战斗载具）。
+         * 只有这类载具允许在载具内更换完整职业列表；补给载具、显式双 false 的载具
+         * 以及未声明标签的旧载具都只能换成驾驶员/载具队长，
+         * 见 {@link VehicleClassChangePolicy#allowsFullClassChange}。
+         */
+        public boolean explicitFightVehicle;
         /** 作为攻方时首次可部署前等待秒数（开战起算） */
         public int initialDeployDelayAttackSeconds;
         /** 作为守方时首次可部署前等待秒数（开战起算） */
         public int initialDeployDelayDefendSeconds;
         /** 是否可装载建材 */
         public boolean canCarryConstruction() { return supplyVeh; }
-        /** 只有补给载具可作为移动换装点，换装消耗其携带的弹药。 */
-        public boolean canChangeClass() { return supplyVeh; }
+        /**
+         * 战斗载具与补给载具都可作为移动换装点，换装消耗其携带的弹药。
+         * 可用职业列表另由 {@link VehicleClassChangePolicy} 按载具类别收敛。
+         */
+        public boolean canChangeClass() { return supplyVeh || fightVeh; }
 
         public int initialDeployDelaySeconds(String team) {
             if ("DEFEND".equalsIgnoreCase(team)) {
@@ -287,8 +297,11 @@ public class VehicleConfig {
     }
 
     /**
-     * 兼容新增 fightveh/supplyveh 字段之前的编制：两项都缺失时按战斗载具处理。
+     * 兼容新增 fightveh/supplyveh 字段之前的编制：两项都缺失时按战斗载具处理（装卸与容量语义）。
      * 任一字段被显式声明后不再启用兼容回退，因此两个 false 仍可明确关闭载具轮盘。
+     *
+     * <p>注意：载具内换职白名单只认显式 {@code fightveh: true}；兼容回退来的“无标签载具”
+     * 与补给载具一样只能换成驾驶员/载具队长，见 {@link VehicleClassChangePolicy}。</p>
      */
     static void applySupplyProfile(VehicleTypeConfig cfg, @Nullable Boolean supplyVeh,
                                    @Nullable Boolean fightVeh, @Nullable Integer capacity) {
@@ -296,6 +309,7 @@ public class VehicleConfig {
         cfg.supplyVeh = Boolean.TRUE.equals(supplyVeh);
         cfg.fightVeh = Boolean.TRUE.equals(fightVeh) || legacy;
         cfg.legacyDefaultedToFightVehicle = legacy;
+        cfg.explicitFightVehicle = Boolean.TRUE.equals(fightVeh);
 
         if (capacity != null && capacity > 0) {
             cfg.supplyCapacity = capacity;
@@ -311,8 +325,9 @@ public class VehicleConfig {
     private static void warnLegacyVehicleTypes(int count) {
         if (count <= 0) return;
         Espetro.LOGGER.warn(
-            "检测到 {} 个未声明 fightveh/supplyveh 的旧载具类型，已按 fightveh=true 兼容；"
-                + "补给载具请显式配置 supplyveh=true", count);
+            "检测到 {} 个未声明 fightveh/supplyveh 的旧载具类型，已按 fightveh=true 兼容装卸；"
+                + "其载具内换职按“无标签载具”处理（仅驾驶员/载具队长），"
+                + "需要完整职业列表请显式配置 fightveh=true，补给载具请显式配置 supplyveh=true", count);
     }
 
     private static DeploymentConfig buildDeploymentConfig(String vehicleType, FactionDataLoader.VehicleData vd) {

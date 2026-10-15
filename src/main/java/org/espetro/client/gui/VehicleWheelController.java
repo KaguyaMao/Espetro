@@ -141,7 +141,8 @@ public final class VehicleWheelController {
                     return;
                 }
                 if (action == VehicleSupplyActionPacket.Action.CHANGE_CLASS) {
-                    RadioRadialController.markNextClassListAsVehicle(currentVehicleId);
+                    RadioRadialController.markNextClassListAsVehicle(
+                        currentVehicleId, isClassChangeCrewOnly());
                 }
                 NetworkManager.NET.sendToServer(
                     new VehicleSupplyActionPacket(currentVehicleId, action));
@@ -296,6 +297,20 @@ public final class VehicleWheelController {
             ownsOverlay = data != null && RadialMenuClientApi.open(data,
                 new RadialMenuClientApi.OpenOptions(OWNER, () -> isInteractKeyDown(window), false, reason -> { ownsOverlay = false; consumedUntilRelease = true; }));
         }
+    }
+
+    /**
+     * 该载具的换职轮盘是否只允许驾驶员/载具队长。
+     *
+     * <p>客户端快照只有 {@code supplyVehicle}/{@code fightVehicle} 两个布尔（协议不新增字段），
+     * 因此这里按“补给载具或非战斗载具”保守收敛；服务端始终会做权威校验并只下发允许的职业，
+     * 未声明标签的旧载具以服务端下发结果为准。</p>
+     */
+    static boolean isClassChangeCrewOnly() {
+        if (cachedSupply == null) {
+            return true;
+        }
+        return cachedSupply.isSupplyVehicle() || !cachedSupply.isFightVehicle();
     }
 
     static List<String> visibleActions(@Nullable VehicleSupplySyncPacket supply) {

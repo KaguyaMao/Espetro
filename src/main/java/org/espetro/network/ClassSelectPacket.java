@@ -141,10 +141,18 @@ public class ClassSelectPacket {
                 allowed = mainBaseAmmo
                     || RadioRadialPacket.isFriendlyRadioNearby(player, sourcePos);
             } else if (source == Source.VEHICLE) {
-                // 同队 + 五格视线 + 补给载具类型（最终提交时再次权威校验）
+                // 同队 + 五格视线 + 载具类型（最终提交时再次权威校验）
                 allowed = vehicleId != null
                     && org.espetro.vehicle.VehicleManager.getInstance()
                         .canPlayerChangeClassAtVehicle(player, vehicleId);
+                // 换职白名单：补给载具与无标签载具只允许驾驶员（载具组员）与载具队长。
+                if (allowed && !isClassAllowedForVehicle(vehicleId, classId)) {
+                    player.displayClientMessage(Component.literal(
+                        org.espetro.vehicle.VehicleClassChangePolicy.DENIED_MESSAGE), true);
+                    player.sendSystemMessage(Component.literal(
+                        org.espetro.vehicle.VehicleClassChangePolicy.DENIED_MESSAGE));
+                    return;
+                }
             } else {
                 allowed = BastionManager.getInstance().isWaitingForBastion(player.getUUID())
                     || ClassEquipmentZones.isPlayerNearOriginalSpawn(player);
@@ -233,6 +241,22 @@ public class ClassSelectPacket {
             NetworkManager.syncSquadsToTeam(team);
         });
         ctx.get().setPacketHandled(true);
+    }
+
+    /**
+     * 载具内换职白名单：显式 {@code fightveh: true} 的步兵战斗载具允许完整职业列表；
+     * 补给载具、显式双 false 与未声明标签的载具只允许该编制中的驾驶员（载具组员）与载具队长。
+     * 载具已不在追踪表里时返回 true，交由 {@code canPlayerChangeClassAtVehicle} 的既有判定处理。
+     */
+    private static boolean isClassAllowedForVehicle(java.util.UUID vehicleId, String classId) {
+        var vehicles = org.espetro.vehicle.VehicleManager.getInstance();
+        String factionId = vehicles.getVehicleFactionId(vehicleId);
+        String vehicleType = vehicles.getVehicleType(vehicleId);
+        if (factionId == null || vehicleType == null) {
+            return true;
+        }
+        return org.espetro.vehicle.VehicleClassChangePolicy.isClassAllowed(
+            org.espetro.vehicle.VehicleConfig.getVehicleConfig(factionId, vehicleType), classId);
     }
 
     private static void denyOutOfRange(ServerPlayer player) {

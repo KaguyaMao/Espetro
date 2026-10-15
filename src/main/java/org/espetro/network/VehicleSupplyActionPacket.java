@@ -17,6 +17,7 @@ import org.espetro.bastion.FortificationConfig;
 import org.espetro.bastion.FortificationManager;
 import org.espetro.logistics.LogisticsConfig;
 import org.espetro.team.SpawnPointConfig;
+import org.espetro.vehicle.VehicleClassChangePolicy;
 import org.espetro.vehicle.VehicleConfig;
 import org.espetro.vehicle.VehicleManager;
 import org.espetro.vehicle.VehicleNativeWhitelist;
@@ -89,7 +90,10 @@ public final class VehicleSupplyActionPacket {
         }
         if (action == Action.CHANGE_CLASS) {
             if (interaction.config().canChangeClass()) {
-                NetworkManager.sendVehicleClassSelect(player, interaction.factionId());
+                // 补给载具与无标签载具只下发驾驶员/载具队长，客户端轮盘因此不会列出其它职业。
+                boolean crewOnly = !VehicleClassChangePolicy
+                    .allowsFullClassChange(interaction.config());
+                NetworkManager.sendVehicleClassSelect(player, interaction.factionId(), crewOnly);
             }
             sendSync(player, interaction);
             return;

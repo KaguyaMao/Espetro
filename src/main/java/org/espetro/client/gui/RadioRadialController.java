@@ -43,11 +43,24 @@ public final class RadioRadialController {
     private static boolean initialized;
     private static BlockPos lastRadioPos = BlockPos.ZERO;
     private static java.util.UUID pendingVehicleId; // 车辆换职业时非 null
+    /** 车辆换职业时是否只允许驾驶员/载具队长（补给载具与无标签载具）。 */
+    private static boolean pendingVehicleCrewOnly;
     private static List<RadioRadialPacket.ClassEntry> cachedClasses = List.of();
 
     /** 由车辆轮盘调用，在下一次职业列表到达时标记为车辆换职 */
     public static void markNextClassListAsVehicle(java.util.UUID vehicleId) {
+        markNextClassListAsVehicle(vehicleId, false);
+    }
+
+    /**
+     * 由车辆轮盘调用，在下一次职业列表到达时标记为车辆换职。
+     *
+     * @param crewOnly true 表示该载具只允许换成载具组员（驾驶员）与载具队长，
+     *                 职业轮盘会同步过滤，避免玩家选了才被服务端拒绝
+     */
+    public static void markNextClassListAsVehicle(java.util.UUID vehicleId, boolean crewOnly) {
         pendingVehicleId = vehicleId;
+        pendingVehicleCrewOnly = crewOnly;
     }
 
     private RadioRadialController() {
@@ -92,6 +105,7 @@ public final class RadioRadialController {
                             faction != null ? faction : "", classId, variantId,
                             pendingVehicleId));
                     pendingVehicleId = null;
+                    pendingVehicleCrewOnly = false;
                 } else {
                     // Radio 换职业
                     NetworkManager.sendRadioClassSelect(
@@ -116,6 +130,7 @@ public final class RadioRadialController {
         }
         lastRadioPos = radioPos != null ? radioPos.immutable() : BlockPos.ZERO;
         pendingVehicleId = null; // 清除车辆上下文
+        pendingVehicleCrewOnly = false;
         NetworkManager.sendRadioOpen(lastRadioPos);
     }
 
@@ -201,7 +216,7 @@ public final class RadioRadialController {
                 Actions.script(NAVIGATE, Map.of("target", "root")),
                 Component.literal("无可用职业"), "#FF4A3030").disabledLast(Component.literal("没有职业列表"));
         } else {
-            for (RadioRadialPacket.ClassEntry e : cachedClasses) {
+            for (RadioRadialPacket.ClassEntry e : visibleClassEntries()) {
                 ResourceLocation icon = resolveClassIcon(e);
                 String slotName = uniqueSlotId(usedClassSlots,
                     "espetro.radio.class." + sanitizeSlotId(e.classId));
@@ -227,6 +242,25 @@ public final class RadioRadialController {
             }
         }
         return builder.build();
+    }
+
+    /**
+     * 补给载具/无标签载具里打开职业轮盘时只列出驾驶员（载具组员）与载具队长；
+     * 步兵战斗载具保持完整列表。判定只看职业自身的 {@code vehicle_crew} 标签/图标，
+     * 因此与阵营前缀无关，新增或改名职业后自动跟随。
+     */
+    private static List<RadioRadialPacket.ClassEntry> visibleClassEntries() {
+        if (pendingVehicleId == null || !pendingVehicleCrewOnly) {
+            return cachedClasses;
+        }
+        List<RadioRadialPacket.ClassEntry> filtered = new ArrayList<>();
+        for (RadioRadialPacket.ClassEntry entry : cachedClasses) {
+            if (entry != null
+                && org.espetro.vehicle.VehicleClassChangePolicy.isVehicleCrewIcon(entry.icon)) {
+                filtered.add(entry);
+            }
+        }
+        return filtered;
     }
 
     private static org.esradial.client.RadialMenuData buildVariantMenuData(

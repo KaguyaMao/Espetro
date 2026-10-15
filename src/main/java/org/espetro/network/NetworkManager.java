@@ -570,6 +570,17 @@ public class NetworkManager {
 
     /** 向玩家发送载具职业选择（不依赖 Radio，战斗载具专用） */
     public static void sendVehicleClassSelect(ServerPlayer player, String factionId) {
+        sendVehicleClassSelect(player, factionId, false);
+    }
+
+    /**
+     * 向玩家发送载具职业选择。
+     *
+     * @param crewOnly true 时只下发载具组员（驾驶员）与载具队长，用于补给载具与无标签载具；
+     *                 显式 {@code fightveh: true} 的步兵战斗载具传 false，保持完整职业列表。
+     *                 只是过滤同一个 {@link RadioRadialPacket#classList} 的元素，协议字段不变。
+     */
+    public static void sendVehicleClassSelect(ServerPlayer player, String factionId, boolean crewOnly) {
         if (factionId == null) return;
         var loader = org.espetro.team.FactionDataProvider.getOrCreateLoader();
         var server = player.getServer();
@@ -588,6 +599,10 @@ public class NetworkManager {
         if (kits != null) {
             for (var kit : kits) {
                 if (kit == null) continue;
+                if (crewOnly
+                    && !org.espetro.vehicle.VehicleClassChangePolicy.isVehicleCrewClass(kit)) {
+                    continue;
+                }
                 int squadCount = counts.getSquadClassCountForViewer(
                     player.getUUID(), team, kit.id);
                 int maxCount = kit.teamCount
