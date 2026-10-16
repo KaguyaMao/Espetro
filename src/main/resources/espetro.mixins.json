@@ -20,7 +20,9 @@
     "sbw.VehicleEntityWreckMixin",
     "sbw.VehicleDriverLogoutKeepMixin",
     "sbw.TurretWreckEntityMixin",
-    "sbw.CustomExplosionBlockGateMixin"
+    "sbw.CustomExplosionBlockGateMixin",
+    "dragonrise.DragonVehicleLoginCleanupMixin",
+    "dragonrise.DragonVehicleDeployerIdleClearMixin"
   ],
   "client": [
     "sbw.ClickDismountMixin",
