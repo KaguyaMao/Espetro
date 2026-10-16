@@ -552,6 +552,11 @@ public final class FortificationConfig {
         def.icon = def.iconData.texture != null && !def.iconData.texture.isBlank()
             ? def.iconData.texture : def.iconData.item;
         if (def.icon == null || def.icon.isBlank()) def.icon = "minecraft:barrier";
+        // map_icon 与建造菜单图标无关：建造图标仍走 iconData/icon，这里只归一化地图图标。
+        if (def.mapIcon != null) {
+            String icon = def.mapIcon.trim();
+            def.mapIcon = icon.isEmpty() ? null : icon;
+        }
         try {
             def.behaviorType = Behavior.valueOf(def.behavior == null ? ""
                 : def.behavior.trim().toUpperCase(Locale.ROOT));
@@ -1054,6 +1059,14 @@ public final class FortificationConfig {
         @SerializedName("icon")
         public Icon iconData = new Icon();
         public String behavior;
+        /**
+         * 战术地图图标文件名（如 {@code "deployable_hmg.png"}），与载具编制
+         * {@code map_icon} 同语义、同白名单（{@code ^[a-z0-9_]+\.png$}，客户端只解析
+         * {@code textures/gui/mark/friendly/}）。null/空 = 由客户端按武器类型给默认图标。
+         * 只同步给客户端做展示，不参与服务端逻辑。
+         */
+        @SerializedName(value = "map_icon", alternate = {"mapIcon", "icon", "mapicon"})
+        public String mapIcon;
         public Placement placement;
         public Cost cost = new Cost();
         public Construction construction = new Construction();

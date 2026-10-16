@@ -90,6 +90,50 @@ public final class FortificationManager {
                              UUID mapId) {
     }
 
+    /**
+     * 已建成工事的只读快照（副本）。战术地图等外部集成从这里取固定武器位置，
+     * 不会看到内部 Map，也不会在遍历时因服务端线程增删而抛并发异常。
+     */
+    public List<PlacedFort> placedForts() {
+        return new ArrayList<>(placed.values());
+    }
+
+    /**
+     * 战术地图用的固定武器快照：只含 {@code fixed_weapon.enabled} 的工事。
+     * 判定复用与 {@link #isFixedWeaponEntity(Entity)} / F 轮盘完全相同的
+     * {@code def.fixedWeapon.enabled} 语义，不引入第二套规则。
+     * 定义已被热重载移除的残留工事会被跳过。
+     */
+    public List<PlacedFixedWeapon> placedFixedWeapons() {
+        List<PlacedFixedWeapon> result = new ArrayList<>();
+        for (PlacedFort fort : placedForts()) {
+            FortificationConfig.FortificationDef def = FortificationConfig.get(fort.fortId());
+            if (!isFixedWeaponDefinition(def)) continue;
+            result.add(new PlacedFixedWeapon(fort.fortId(), fort.team(), fort.dimension(),
+                fort.pos(), mapIconOf(def)));
+        }
+        return result;
+    }
+
+    /** 与 {@link #isFixedWeaponEntity(Entity)} 同一判定：{@code fixed_weapon.enabled}。 */
+    public static boolean isFixedWeaponDefinition(
+            @Nullable FortificationConfig.FortificationDef def) {
+        return def != null && def.fixedWeapon != null && def.fixedWeapon.enabled;
+    }
+
+    /** 编制里给该工事配置的战术地图图标文件名；缺省/空 = null，交给客户端默认映射。 */
+    @Nullable
+    private static String mapIconOf(FortificationConfig.FortificationDef def) {
+        if (def.mapIcon == null) return null;
+        String icon = def.mapIcon.trim();
+        return icon.isEmpty() ? null : icon;
+    }
+
+    /** 固定武器在地图上需要的最小信息（不含世界/区块引用）。 */
+    public record PlacedFixedWeapon(String fortId, String team, String dimension,
+                                    BlockPos pos, @Nullable String mapIcon) {
+    }
+
     public record RadioConstructionProgress(int progress, int required) {
     }
 
@@ -965,6 +1009,8 @@ public final class FortificationManager {
         PlacedFort fort = new PlacedFort(def.id, c.team, c.radioId, c.dimension, c.anchor,
             c.entityId, c.entityId == null ? c.mapId : c.entityId);
         placed.put(posKey(c.dimension, c.anchor), fort);
+        // 新工事可能带固定武器，战术地图快照需要重建。
+        org.espetro.api.EspetroAPI.markTacticalMapStateDirty();
         if (c.entityId != null) entityIndex.put(c.entityId, c.id);
         BastionData radio = c.radioId == null ? null : BastionManager.getInstance().getBastion(c.radioId);
         if (def.behaviorType == FortificationConfig.Behavior.AMMO_CRATE && radio != null) {
@@ -1031,6 +1077,8 @@ public final class FortificationManager {
         }
         PlacedFort fort = placed.remove(posKey(c.dimension, c.anchor));
         if (fort != null) {
+            // 工事消失后战术地图上的固定武器图标必须同步消失。
+            org.espetro.api.EspetroAPI.markTacticalMapStateDirty();
             VehicleManager.getInstance().unregisterMappedSupplyStation(fort.mapId());
             FortificationConfig.FortificationDef def = FortificationConfig.get(fort.fortId());
             if (def != null && def.behaviorType == FortificationConfig.Behavior.AMMO_CRATE
