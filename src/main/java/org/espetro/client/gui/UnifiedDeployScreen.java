@@ -2106,6 +2106,17 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return (int) Math.max(0L, base - elapsed);
     }
 
+    /**
+     * 冷却文案统一格式：分钟:秒（{@code m:ss}），秒数不足两位补零
+     * （例如 {@code 0:05}、{@code 12:05}）。技能按钮与载具行共用这一份实现。
+     */
+    static String formatCooldown(int seconds) {
+        int safe = Math.max(0, seconds);
+        int minutes = safe / 60;
+        int rest = safe % 60;
+        return minutes + ":" + (rest < 10 ? "0" : "") + rest;
+    }
+
     /** 单行文案：沿用原载具窗口的关键信息（名称 + 就绪/冷却/已满 + 刷新周期）。 */
     private String vehicleInfoRowLabel(UnifiedDeployScreenPacket.VehicleInfo vehicle) {
         int remaining = vehicleCooldownSeconds(vehicle);
@@ -2116,7 +2127,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (remaining > 0) {
             marker = "\u00a77  ";
             nameColor = "\u00a78";
-            status = "\u00a7c冷却 " + remaining + "s";
+            status = "\u00a7c冷却 " + formatCooldown(remaining);
         } else if (vehicle.current >= vehicle.max) {
             marker = "\u00a77  ";
             nameColor = "\u00a78";
@@ -3018,10 +3029,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
 
+        /** 冷却文案统一走外层 UnifiedDeployScreen#formatCooldown（m:ss）。 */
         private static String formatCooldown(int seconds) {
-            int minutes = seconds / 60;
-            int rest = seconds % 60;
-            return minutes + ":" + (rest < 10 ? "0" : "") + rest;
+            return UnifiedDeployScreen.formatCooldown(seconds);
         }
     }
 

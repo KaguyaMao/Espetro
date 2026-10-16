@@ -148,7 +148,7 @@ public class VehicleDeployScreen extends EspetroMenuScreen {
                                             int remaining, boolean enabled) {
         String status;
         if (remaining > 0) {
-            status = "\u00a7c冷却 " + remaining + "秒";
+            status = "\u00a7c冷却 " + UnifiedDeployScreen.formatCooldown(remaining);
         } else if (vehicle.current >= vehicle.max) {
             status = "\u00a76已满 " + vehicle.current + "/" + vehicle.max;
         } else {

@@ -49,6 +49,16 @@ public final class TroopCountOverlay {
         notifyDeployScreen();
     }
 
+    /** 客户端缓存的攻方票数（由既有的 TroopCountSyncPacket 同步，未新增协议字段）。 */
+    public static int getAttackTroops() {
+        return attackTroops;
+    }
+
+    /** 客户端缓存的守方票数。 */
+    public static int getDefendTroops() {
+        return defendTroops;
+    }
+
     /** 供 UnifiedDeployScreen 右上角展示；null 表示不显示。 */
     public static String getDisplayLine() {
         return displayLine;
