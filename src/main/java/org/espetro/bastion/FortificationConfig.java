@@ -1065,7 +1065,7 @@ public final class FortificationConfig {
          * {@code textures/gui/mark/friendly/}）。null/空 = 由客户端按武器类型给默认图标。
          * 只同步给客户端做展示，不参与服务端逻辑。
          */
-        @SerializedName(value = "map_icon", alternate = {"mapIcon", "icon", "mapicon"})
+        @SerializedName(value = "map_icon", alternate = {"mapIcon", "mapicon"})
         public String mapIcon;
         public Placement placement;
         public Cost cost = new Cost();

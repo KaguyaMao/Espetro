@@ -904,7 +904,7 @@ public class FactionDataLoader {
          * 只写文件名（相对 {@code espoints:textures/gui/mark/friendly/}），不要写路径。
          * 缺失/为空 = 沿用 EsPoints 的车型关键字兜底图标。
          */
-        @SerializedName(value = "map_icon", alternate = {"mapIcon", "icon", "mapicon"})
+        @SerializedName(value = "map_icon", alternate = {"mapIcon", "mapicon"})
         public String mapIcon;
     }
 
