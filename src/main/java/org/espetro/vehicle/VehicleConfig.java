@@ -45,6 +45,13 @@ public class VehicleConfig {
         /** Type-level SNBT applied to every slot unless a slot overrides it. */
         @Nullable
         public String nbt;
+        /**
+         * 战术地图图标文件名（如 {@code "map_trackedheavyifv.png"}），来自编制 JSON 的
+         * {@code vehicles.<type>.map_icon}；null/空 = 沿用 EsPoints 的车型关键字兜底图标。
+         * 只是同步给客户端的展示数据，不参与服务端逻辑。
+         */
+        @Nullable
+        public String mapIcon;
         /** 部署时写入载具集装箱的物品（"<itemId>[<snbt>] <count>"），slot 未单独指定时使用。 */
         public List<String> items = new ArrayList<>();
         /** 未显式配置 items 时，是否套用 data/<ns>/supply_station/ 的补给站弹药配置（默认开）。 */
@@ -210,6 +217,7 @@ public class VehicleConfig {
                 cfg.perMaxCount = perMax;
                 cfg.displayName = firstNonBlank(data.displayName, type);
                 cfg.troopValue = Math.max(0, data.troopValue);
+                cfg.mapIcon = firstNonBlank(data.mapIcon, null);
                 cfg.nbt = firstNonBlank(data.nbt, null);
                 addVehicleItems(cfg.items, data.items);
                 if (data.supplyLoadout != null) cfg.supplyLoadout = data.supplyLoadout;
@@ -269,6 +277,7 @@ public class VehicleConfig {
         cfg.entityTypeStr = vd.entityTypeStr;
         cfg.displayName = firstNonBlank(vd.displayName, vehicleType);
         cfg.troopValue = Math.max(0, vd.troopValue);
+        cfg.mapIcon = firstNonBlank(vd.mapIcon, null);
         cfg.vehicleCrewSeats = vd.vehicleCrewSeats;
         cfg.nbt = firstNonBlank(vd.nbt, null);
         addVehicleItems(cfg.items, vd.items);

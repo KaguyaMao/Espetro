@@ -899,6 +899,13 @@ public class FactionDataLoader {
         @SerializedName(value = "initial_deploy_delay_seconds",
             alternate = {"initialDeployDelaySeconds"})
         public InitialDeployDelayData initialDeployDelay;
+        /**
+         * 可选：该车型在战术地图上使用的图标文件名，例如 {@code "map_trackedheavyifv.png"}。
+         * 只写文件名（相对 {@code espoints:textures/gui/mark/friendly/}），不要写路径。
+         * 缺失/为空 = 沿用 EsPoints 的车型关键字兜底图标。
+         */
+        @SerializedName(value = "map_icon", alternate = {"mapIcon", "icon", "mapicon"})
+        public String mapIcon;
     }
 
     public static class InitialDeployDelayData {
