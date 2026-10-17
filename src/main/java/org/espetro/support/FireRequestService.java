@@ -102,13 +102,13 @@ public final class FireRequestService {
                 require(action.session() == b.session(), "战局已改变，请重新打开火力面板");
                 require(battle(), "只能在战斗阶段处理火力申请");
                 switch (action.type()) {
-                    case CREATE_POINT, CREATE_LINE -> {
+                    case CREATE -> {
                         var r =
                                 b.create(
                                         actor,
                                         dimension(),
                                         bounds(),
-                                        action.type() == Type.CREATE_LINE,
+                                        true,
                                         action.x(),
                                         action.z(),
                                         action.endX(),
@@ -117,11 +117,7 @@ public final class FireRequestService {
                                         clock);
                         Espetro.broadcastToTeam(
                                 actor.team(),
-                                "§e[火力申请] "
-                                        + actor.name()
-                                        + " 申请了"
-                                        + r.title()
-                                        + "，指挥官可按火力支援键查看（默认 U）。");
+                                "§e[火力申请] " + actor.name() + " 请求支援火力" + "，指挥官可按请求支援火力键查看（默认 U）。");
                     }
                     case REJECT -> b.reject(action.id(), actor, clock);
                     case CANCEL -> b.cancel(action.id(), actor, clock);
@@ -136,9 +132,8 @@ public final class FireRequestService {
                         preflight(player, r);
                         require(
                                 b.approve(action.id(), actor, clock, rq -> execute(player, rq)),
-                                "火力未执行，请检查原有技能冷却或配置");
-                        Espetro.broadcastToTeam(
-                                actor.team(), "§e[火力支援] 指挥官已下达" + r.title() + "。请避开目标区域。");
+                                "火力未执行，请检查支援冷却或配置");
+                        Espetro.broadcastToTeam(actor.team(), "§e[支援火力] 指挥官已批准申请。请避开目标区域。");
                     }
                     default -> {}
                 }
@@ -165,7 +160,7 @@ public final class FireRequestService {
         require(
                 !CommanderSkillManager.getInstance()
                         .hasConflictingPendingTarget(p.getUUID(), SKILL),
-                "请先完成或取消其他指挥官技能选点");
+                "请先完成或取消当前进行中的选点");
     }
 
     private static boolean execute(ServerPlayer p, Request r) {

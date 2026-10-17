@@ -9,6 +9,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.*;
 import net.minecraftforge.fml.common.Mod;
 
+import org.espetro.client.gui.FireSupportScreen;
 import org.espetro.support.FireRequestNetwork;
 import org.espetro.support.FireRequestNetwork.*;
 import org.lwjgl.glfw.GLFW;
@@ -83,9 +84,8 @@ public final class FireSupportClient {
         public static void render(ScreenEvent.Render.Post e) {
             if (deploy(e.getScreen()) && connected()) {
                 int x = e.getScreen().width - 179;
-                e.getGuiGraphics().fill(x, 6, x + 83, 25, 0xee263a30);
-                FireSupportScreen.text(
-                        e.getGuiGraphics(), "火力申请 [U]", x + 7, 10, 0xffe2c777, 9, 70);
+                FireSupportScreen.drawEntry(
+                        e.getGuiGraphics(), x, e.getMouseX(), e.getMouseY(), e.getPartialTick());
             }
         }
 

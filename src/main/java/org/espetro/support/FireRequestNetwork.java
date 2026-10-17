@@ -19,14 +19,13 @@ public final class FireRequestNetwork {
     public static final SimpleChannel CHANNEL =
             NetworkRegistry.newSimpleChannel(
                     new ResourceLocation("espetro", "fire_requests"),
-                    () -> "1",
-                    "1"::equals,
-                    "1"::equals);
+                    () -> "2",
+                    "2"::equals,
+                    "2"::equals);
 
     public enum Type {
         VIEW,
-        CREATE_POINT,
-        CREATE_LINE,
+        CREATE,
         APPROVE,
         REJECT,
         CANCEL

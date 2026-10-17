@@ -138,7 +138,7 @@ public final class FireRequestBoard {
         }
 
         public String title() {
-            return line ? "徐进弹幕" : "定点炮击";
+            return "请求支援火力";
         }
     }
 
@@ -210,7 +210,7 @@ public final class FireRequestBoard {
                     bounds.contains(endX, endZ)
                             && Math.hypot(endX - x, endZ - z) >= 1
                             && Math.hypot(endX - x, endZ - z) <= rules.maximumLineLength(),
-                    "弹幕终点或长度超出允许范围");
+                    "支援范围终点或长度超出允许范围");
         require(
                 tick - lastCreated.getOrDefault(actor.id(), Long.MIN_VALUE / 2)
                         >= rules.createInterval(),
@@ -299,7 +299,7 @@ public final class FireRequestBoard {
             put(
                     r.state(
                             success ? State.APPROVED : State.PENDING,
-                            success ? "火力指令已下达" : "未执行，请检查技能冷却或目标",
+                            success ? "火力指令已下达" : "未执行，请检查支援冷却或目标",
                             tick));
             return success;
         } catch (Exception e) {

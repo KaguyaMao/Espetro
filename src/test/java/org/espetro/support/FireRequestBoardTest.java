@@ -28,7 +28,7 @@ class FireRequestBoardTest {
     }
 
     Request create() {
-        return board.create(leader, "minecraft:overworld", bounds, false, 10, 20, 0, 0, "压制", 0);
+        return board.create(leader, "minecraft:overworld", bounds, true, 10, 20, 30, 40, "压制", 0);
     }
 
     void denied(Runnable action) {

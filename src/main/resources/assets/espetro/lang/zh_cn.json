@@ -67,5 +67,5 @@
   "tutorial.msg.skipped": "§e已跳过本会话教程。",
   "tutorial.msg.skip_disabled": "§c当前不允许跳过教程。",
   "tutorial.msg.disabled": "§c教程功能已关闭。",
-  "key.espetro.fire_requests": "打开火力申请与审批"
+  "key.espetro.fire_requests": "请求支援火力"
 }
