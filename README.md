@@ -132,3 +132,7 @@ cd /home/shu/Java/Projects/Espetro
 ## 与 HCR AAD 源码的边界
 
 当前仓库还保留了一份 `src/main/java/com/example/hcrpoints` 旧源码副本，但构建已排除它。当前 ESPoints 源码位于 `/home/shu/IdeaProjects/espetro-HCR`，模组 ID 为 `espoints`，包名为 `com.example.espoints`；Espetro 仅通过可选依赖和反射桥接调用战术地图。新的战术地图功能应在 ESPoints 开发，Espetro 业务代码应放在 `org.espetro`。
+
+## 火力申请与审批
+
+默认按 U 打开火力申请面板，队长提交目标，由本方指挥官批准后调用原有火力。详见 [使用与服务端配置](docs/fire-support-requests.md)。
