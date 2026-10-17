@@ -66,5 +66,6 @@
   "tutorial.msg.complete": "§a教程已全部阅读完毕。",
   "tutorial.msg.skipped": "§e已跳过本会话教程。",
   "tutorial.msg.skip_disabled": "§c当前不允许跳过教程。",
-  "tutorial.msg.disabled": "§c教程功能已关闭。"
+  "tutorial.msg.disabled": "§c教程功能已关闭。",
+  "key.espetro.fire_requests": "请求支援火力"
 }
