@@ -892,8 +892,12 @@ public final class FortificationManager {
             BastionManager manager = BastionManager.getInstance();
             String cooldown = manager.canBuildBastion(player.getUUID(), manager.getEffectiveRadioCooldownSeconds());
             if (cooldown != null) return new PlacementBacking(null, null, cooldown);
+            // 只统计“在建”的 Radio：已建成（c.complete）的 Radio 会保留在 constructions 里用于
+            // 追踪方块/血量，并且已经计入 getActiveBastionCount(team)；若这里再算一次就会把每个
+            // Radio 数两遍，导致上限 4 时实际只能放 2 个。
             long pending = constructions.values().stream().filter(c ->
-                c.blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO
+                !c.complete
+                    && c.blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO
                     && c.team.equals(preview.team)).count();
             if (manager.getActiveBastionCount(preview.team) + pending >= manager.getBastionLimitPerTeam()) {
                 return new PlacementBacking(null, null, "§c本方 Radio 数量已达到上限。" );
@@ -1452,7 +1456,10 @@ public final class FortificationManager {
                 && b.getPosition().distSqr(radio.getPosition()) <= radiusSq) count++;
         }
         for (Construction c : constructions.values()) {
-            if (c.blueprint.definition.behaviorType == FortificationConfig.Behavior.HAB
+            // 已建成（c.complete）的 HAB 已经是 BastionData，上面那段已经数过；这里只数在建的，
+            // 否则每个 HAB 会被数两次，导致 max_habs_per_radio 实际上只有一半生效。
+            if (!c.complete
+                && c.blueprint.definition.behaviorType == FortificationConfig.Behavior.HAB
                 && radio.getBastionId().equals(c.radioId)) count++;
         }
         return count;
