@@ -97,11 +97,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static int squadConfirmInnerBgColor() { return UiTheme.GLASS_PANEL; }
 
     // EspButton 颜色：统一圆角玻璃按钮；无自带底色的按钮使用半透明内凹底。
-    /** 无自带底色的按钮的统一底色（半透明深玻璃，透出后面的世界/地图）。 */
-    private static int btnBgPlainBlackColor() { return UiTheme.GLASS_PANEL; }
+    /** 无自带底色的按钮的统一底色（近实心黑，透出一点点后面的世界）。 */
+    private static int btnBgPlainBlackColor() { return UiTheme.BUTTON_BLACK; }
     private static int btnBgHoverColor() { return UiTheme.HAIRLINE_STRONG; }   // 悬停高亮：叠在常态底色之上
     /** 禁用态：比常态更淡的玻璃底，禁用按钮依然可见。 */
-    private static int btnBgDisabledColor() { return UiTheme.alpha(UiTheme.SUNKEN, 0.55f); }
+    private static int btnBgDisabledColor() { return UiTheme.alpha(UiTheme.BUTTON_BLACK, 0.72f); }
     private static int classBgUnavailableColor() { return UiTheme.ATTACK_SOFT; }
     private static int classBgSelectedColor() { return UiTheme.GOLD_SOFT; }
     private static int classBorderUnavailableColor() { return UiTheme.withAlpha(UiTheme.ATTACK, 0x8C); }
@@ -2610,7 +2610,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else {
             deployButtonWaveSeconds.remove(button);
         }
-        button.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
+        button.setPlainBlack();   // 部署点按钮统一黑底（原来是完全透明的，压在毛玻璃上看不出是按钮）
         button.setLabel(buildDeployButtonLabel(
             buildLiveDeployBaseLabel(button, baseLabel), positionText, command));
     }

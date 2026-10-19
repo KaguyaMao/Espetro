@@ -71,6 +71,8 @@ public final class UiTheme {
     public static int COLUMN_SCRIM = 0xF0191D17;
     public static int GLASS_PANEL = 0xB41B2019;
     public static int GLASS_PANEL_SOFT = 0x9E252B21;
+    /** 按钮常态黑底：比栏目玻璃更实，保证"按钮是实体控件"可读。 */
+    public static int BUTTON_BLACK = 0xE612100E;
     public static int FROST_SCRIM = 0x7A0D110C;
     public static int SHADOW_1 = 0x66000000;
     public static int SHADOW_2 = 0x47000000;
@@ -126,6 +128,7 @@ public final class UiTheme {
         COLUMN_SCRIM = light ? 0xF0F2F2EA : 0xF0191D17;
         GLASS_PANEL = light ? 0xC6F4F4ED : 0xB41B2019;
         GLASS_PANEL_SOFT = light ? 0xB2E7E8DE : 0x9E252B21;
+        BUTTON_BLACK = light ? 0xF5F1F1EA : 0xE612100E;
         FROST_SCRIM = light ? 0x96EEEFE6 : 0x7A0D110C;
         SHADOW_1 = light ? 0x23131517 : 0x66000000;
         SHADOW_2 = light ? 0x18131517 : 0x47000000;
