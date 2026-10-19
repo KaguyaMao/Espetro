@@ -1,6 +1,7 @@
 package org.espetro.client.vehicle;
 
 import net.minecraft.resources.ResourceLocation;
+import org.espetro.client.gui.UiTheme;
 
 /** Client-side vehicle interaction progress for the AuraTip wheel center. */
 public final class VehicleInteractionState {
@@ -63,15 +64,15 @@ public final class VehicleInteractionState {
 
     public static int color() {
         if (progress < 0f) {
-            return 0xFF888888;
+            return UiTheme.TEXT_SECOND;
         }
         if (progress > 0.75f) {
-            return 0xFF44CC44;
+            return UiTheme.POSITIVE;
         }
         if (progress > 0.5f) {
-            return 0xFFCCAA00;
+            return UiTheme.WARNING;
         }
-        return 0xFFCC4444;
+        return UiTheme.NEGATIVE;
     }
 
     private static float clamp(float p) {

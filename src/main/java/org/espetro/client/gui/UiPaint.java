@@ -6,23 +6,26 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Immediate-mode paint primitives for the Espetro UI.
+ * Immediate-mode paint primitives for the Espetro UI — "END-01 · 纸墨工业".
  *
- * <p>原版 {@link GuiGraphics} 只有直角 {@code fill}，现代玻璃质感必须自己画：
- * 圆角填充、渐变填充、1px 圆角描边、外阴影、胶囊、圆环、进度条、屏幕暗角与颗粒。
- * 全部按"逐行扫描"实现（半径 ≤ 8 时每帧开销可忽略），并带半径内缩缓存。
+ * <p>上一版（圆角玻璃）已归档：git tag {@code ui/tactical-glass-v1}，
+ * 源码快照 {@code docs/archive/tactical-glass/}。
+ *
+ * <p>这一版把 {@link GuiGraphics#fill} 组织成"印刷工业"的元件：直角/切角面板、发丝线框、
+ * 角标（L 形短线）、刻度尺、图纸网格、实心强调条、硬投影，以及带字距的微标签。
+ * 方法名与签名尽量与旧版保持一致，逐屏迁移时调用方不需要改。
  */
 public final class UiPaint {
 
     private UiPaint() {
     }
 
-    /** 颗粒纹理（256×256 RGBA，透明度很低）。 */
+    /** 颗粒纹理（256×256 RGBA，透明度很低；纸的纤维感）。 */
     public static final ResourceLocation NOISE =
         new ResourceLocation("espetro", "textures/gui/ui/noise.png");
 
     private static final int MAX_RADIUS = 24;
-    /** 缓存每个半径的逐行内缩量，避免每帧开方。 */
+    /** 缓存每个切角尺寸的逐行内缩量（45° 直线切角，不是圆弧）。 */
     private static final int[][] INSETS = new int[MAX_RADIUS + 1][];
 
     private static int[] insets(int radius) {
@@ -31,29 +34,27 @@ public final class UiPaint {
         if (cached != null) {
             return cached;
         }
+        // 45° 切角：第 row 行内缩 r - (row + 1)，形成一条斜边。
         int[] table = new int[r + 1];
         for (int row = 0; row <= r; row++) {
-            // 使用像素中心计算圆弧内缩，得到视觉上更平滑的角。
-            double dy = r - (row + 0.5D);
-            double inner = Math.sqrt(Math.max(0.0D, (double) r * r - dy * dy));
-            table[row] = (int) Math.round(r - inner);
+            table[row] = r - row;
         }
         INSETS[r] = table;
         return table;
     }
 
-    /** 某一行在圆角形状内的水平内缩量。 */
+    /** 某一行在切角形状内的水平内缩量。 */
     private static int insetAt(int row, int height, int radius, int[] table) {
         int r = Math.max(0, Math.min(MAX_RADIUS, radius));
         if (r == 0) {
             return 0;
         }
         if (row < r) {
-            return table[row];
+            return Math.max(0, table[row] - 1);
         }
         if (row >= height - r) {
             int mirrored = height - 1 - row;
-            return mirrored >= 0 ? table[Math.min(mirrored, r)] : 0;
+            return mirrored >= 0 && mirrored < table.length ? Math.max(0, table[mirrored] - 1) : 0;
         }
         return 0;
     }
@@ -62,13 +63,17 @@ public final class UiPaint {
     // 基础形状
     // ------------------------------------------------------------------
 
-    /** 圆角实心填充。 */
+    /** 直角（或 45° 切角，radius > 0）实心填充。 */
     public static void roundRect(GuiGraphics graphics, int x, int y, int width, int height,
                                  int radius, int color) {
         if (!UiTheme.visible(color) || width <= 0 || height <= 0) {
             return;
         }
         int r = clampRadius(radius, width, height);
+        if (r == 0) {
+            graphics.fill(x, y, x + width, y + height, color);
+            return;
+        }
         int[] table = insets(r);
         for (int row = 0; row < height; row++) {
             int inset = insetAt(row, height, r, table);
@@ -80,7 +85,7 @@ public final class UiPaint {
         }
     }
 
-    /** 圆角竖向渐变填充（顶部 → 底部）。 */
+    /** 竖向渐变实心填充（纸面微差，或墨块的从深到更深）。 */
     public static void roundRectGradient(GuiGraphics graphics, int x, int y, int width, int height,
                                          int radius, int topColor, int bottomColor) {
         if (width <= 0 || height <= 0) {
@@ -90,6 +95,10 @@ public final class UiPaint {
             return;
         }
         int r = clampRadius(radius, width, height);
+        if (r == 0) {
+            graphics.fillGradient(x, y, x + width, y + height, topColor, bottomColor);
+            return;
+        }
         int[] table = insets(r);
         for (int row = 0; row < height; row++) {
             float t = height <= 1 ? 0f : row / (float) (height - 1);
@@ -106,13 +115,20 @@ public final class UiPaint {
         }
     }
 
-    /** 1px 圆角描边。 */
+    /** 1px 描边（直角或切角）。 */
     public static void strokeRoundRect(GuiGraphics graphics, int x, int y, int width, int height,
                                        int radius, int color) {
         if (!UiTheme.visible(color) || width <= 0 || height <= 0) {
             return;
         }
         int r = clampRadius(radius, width, height);
+        if (r == 0) {
+            graphics.fill(x, y, x + width, y + 1, color);
+            graphics.fill(x, y + height - 1, x + width, y + height, color);
+            graphics.fill(x, y + 1, x + 1, y + height - 1, color);
+            graphics.fill(x + width - 1, y + 1, x + width, y + height - 1, color);
+            return;
+        }
         int[] table = insets(r);
         for (int row = 0; row < height; row++) {
             int inset = insetAt(row, height, r, table);
@@ -122,7 +138,6 @@ public final class UiPaint {
                 continue;
             }
             if (row < r || row >= height - r) {
-                // 圆弧区：整行宽度就是这一行上的轮廓。
                 graphics.fill(left, y + row, right, y + row + 1, color);
             } else {
                 graphics.fill(left, y + row, left + 1, y + row + 1, color);
@@ -131,7 +146,7 @@ public final class UiPaint {
         }
     }
 
-    /** 圆形实心（轮盘中心、图标底）。 */
+    /** 圆形实心（轮盘中心、状态点、图标底）。 */
     public static void circle(GuiGraphics graphics, int centerX, int centerY, int radius, int color) {
         if (!UiTheme.visible(color) || radius <= 0) {
             return;
@@ -169,26 +184,119 @@ public final class UiPaint {
         }
     }
 
+    /** 1px 矩形框（最常用的"技术图纸"框）。 */
+    public static void frame(GuiGraphics graphics, int x, int y, int width, int height, int color) {
+        if (!UiTheme.visible(color) || width <= 0 || height <= 0) {
+            return;
+        }
+        graphics.fill(x, y, x + width, y + 1, color);
+        graphics.fill(x, y + height - 1, x + width, y + height, color);
+        if (height > 2) {
+            graphics.fill(x, y + 1, x + 1, y + height - 1, color);
+            graphics.fill(x + width - 1, y + 1, x + width, y + height - 1, color);
+        }
+    }
+
+    /** 四角 L 形角标：画在矩形外侧，强调"这是一个被框定的区域"。 */
+    public static void brackets(GuiGraphics graphics, int x, int y, int width, int height, int color) {
+        brackets(graphics, x, y, width, height, UiTheme.TICK_LENGTH, color);
+    }
+
+    public static void brackets(GuiGraphics graphics, int x, int y, int width, int height,
+                                int length, int color) {
+        if (!UiTheme.visible(color) || width <= 2 || height <= 2) {
+            return;
+        }
+        int len = Math.max(2, Math.min(Math.min(length, width / 2), height / 2));
+        // 左上
+        graphics.fill(x, y, x + len, y + 1, color);
+        graphics.fill(x, y, x + 1, y + len, color);
+        // 右上
+        graphics.fill(x + width - len, y, x + width, y + 1, color);
+        graphics.fill(x + width - 1, y, x + width, y + len, color);
+        // 左下
+        graphics.fill(x, y + height - 1, x + len, y + height, color);
+        graphics.fill(x, y + height - len, x + 1, y + height, color);
+        // 右下
+        graphics.fill(x + width - len, y + height - 1, x + width, y + height, color);
+        graphics.fill(x + width - 1, y + height - len, x + width, y + height, color);
+    }
+
+    /** 水平刻度尺（每 step 一格，可指定短线长度）。 */
+    public static void ticksH(GuiGraphics graphics, int x, int y, int width, int step, int length,
+                              int color) {
+        if (!UiTheme.visible(color) || width <= 0 || step <= 0) {
+            return;
+        }
+        for (int i = 0; i <= width; i += step) {
+            graphics.fill(x + i, y, x + Math.min(i + 1, width), y + Math.max(1, length), color);
+        }
+    }
+
+    /** 竖直刻度尺。 */
+    public static void ticksV(GuiGraphics graphics, int x, int y, int height, int step, int length,
+                              int color) {
+        if (!UiTheme.visible(color) || height <= 0 || step <= 0) {
+            return;
+        }
+        for (int i = 0; i <= height; i += step) {
+            graphics.fill(x, y + i, x + Math.max(1, length), y + Math.min(i + 1, height), color);
+        }
+    }
+
+    /** 图纸网格：minor 每格、major 每 5 格一条更实的线。 */
+    public static void grid(GuiGraphics graphics, int x, int y, int width, int height, int step) {
+        if (width <= 0 || height <= 0 || step <= 0) {
+            return;
+        }
+        int i = 0;
+        for (int gx = x; gx < x + width; gx += step, i++) {
+            int color = (i % 5 == 0) ? UiTheme.GRID_MAJOR : UiTheme.GRID;
+            graphics.fill(gx, y, Math.min(gx + 1, x + width), y + height, color);
+        }
+        i = 0;
+        for (int gy = y; gy < y + height; gy += step, i++) {
+            int color = (i % 5 == 0) ? UiTheme.GRID_MAJOR : UiTheme.GRID;
+            graphics.fill(x, gy, x + width, Math.min(gy + 1, y + height), color);
+        }
+    }
+
+    /** 45° 斜线填充（"禁用 / 不可用"区域的工业语汇）。 */
+    public static void hatch(GuiGraphics graphics, int x, int y, int width, int height,
+                             int step, int color) {
+        if (!UiTheme.visible(color) || width <= 0 || height <= 0 || step <= 0) {
+            return;
+        }
+        int span = width + height;
+        for (int i = -height; i < span; i += step) {
+            for (int row = 0; row < height; row++) {
+                int px = i + row;
+                if (px >= 0 && px < width) {
+                    graphics.fill(x + px, y + row, x + px + 1, y + row + 1, color);
+                }
+            }
+        }
+    }
+
     // ------------------------------------------------------------------
     // 组合部件
     // ------------------------------------------------------------------
 
-    /** 柔和外阴影：三层圆角叠加，向下偏移。 */
+    /** 硬投影：向下 2px 的两层直角块，不做模糊。 */
     public static void shadow(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
-        int r = Math.max(0, radius);
-        roundRect(graphics, x - 2, y + 1, width + 4, height + 3, r + 2, UiTheme.SHADOW_3);
-        roundRect(graphics, x - 1, y + 1, width + 2, height + 2, r + 1, UiTheme.SHADOW_2);
-        roundRect(graphics, x, y + 1, width, height + 1, r, UiTheme.SHADOW_1);
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+        roundRect(graphics, x + 1, y + 2, width, height, radius, UiTheme.SHADOW_1);
+        roundRect(graphics, x, y + 1, width, height, radius, UiTheme.SHADOW_3);
     }
 
-    /**
-     * 标准玻璃卡片：外阴影 + 渐变底 + 发丝描边 + 顶部内高光 + 底部压暗。
-     */
+    /** 标准纸卡片：硬投影 + 纸面 + 1px 发丝框 + 顶部高光。 */
     public static void card(GuiGraphics graphics, int x, int y, int width, int height) {
         card(graphics, x, y, width, height, UiTheme.RADIUS_CARD, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
     }
 
-    /** 自定义底色/圆角的卡片。 */
+    /** 自定义底色/切角的卡片。 */
     public static void card(GuiGraphics graphics, int x, int y, int width, int height,
                             int radius, int topColor, int bottomColor) {
         if (width <= 0 || height <= 0) {
@@ -197,21 +305,27 @@ public final class UiPaint {
         shadow(graphics, x, y, width, height, radius);
         roundRectGradient(graphics, x, y, width, height, radius, topColor, bottomColor);
         strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
-        // 顶部内高光：贴着上边缘的一条 1px 亮线（左右各收掉圆角）。
         hairline(graphics, x + radius, y, Math.max(0, width - radius * 2), UiTheme.SHEEN);
-        // 底部压暗：让卡片从背景中"沉"下去。
         hairline(graphics, x + radius, y + height - 1, Math.max(0, width - radius * 2),
             UiTheme.HAIRLINE_DARK);
     }
 
-    /** 内凹容器（列表底、进度槽、输入框）。 */
-    public static void sunken(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
-        roundRect(graphics, x, y, width, height, radius, UiTheme.SUNKEN);
-        strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.withAlpha(0xFF000000, 0x50));
-        hairline(graphics, x + radius, y + 1, Math.max(0, width - radius * 2), 0x0A000000);
+    /** 带强调条的卡片：左侧实心信号黄竖条 + 右上角标。 */
+    public static void accentCard(GuiGraphics graphics, int x, int y, int width, int height,
+                                  int accent) {
+        card(graphics, x, y, width, height);
+        graphics.fill(x, y + 1, x + UiTheme.ACCENT_BAR, y + height - 1, accent);
+        brackets(graphics, x + width - 9, y - 5, 8, 8, 4, UiTheme.alpha(accent, 0.85f));
     }
 
-    /** 1px 水平细线（两端可渐隐）。 */
+    /** 内凹容器（列表底、输入框、进度槽、表格体）。 */
+    public static void sunken(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
+        roundRect(graphics, x, y, width, height, radius, UiTheme.SUNKEN);
+        strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
+        hairline(graphics, x, y, width, 0x14000000);
+    }
+
+    /** 1px 水平细线。 */
     public static void hairline(GuiGraphics graphics, int x, int y, int width, int color) {
         if (!UiTheme.visible(color) || width <= 0) {
             return;
@@ -219,16 +333,21 @@ public final class UiPaint {
         graphics.fill(x, y, x + width, y + 1, color);
     }
 
-    /** 水平分割线：中间实、两端渐隐。 */
+    /** 1px 竖直细线。 */
+    public static void hairlineV(GuiGraphics graphics, int x, int y, int height, int color) {
+        if (!UiTheme.visible(color) || height <= 0) {
+            return;
+        }
+        graphics.fill(x, y, x + 1, y + height, color);
+    }
+
+    /** 水平分割线：一条实线 + 一段末端刻度，编辑风的"分栏"。 */
     public static void divider(GuiGraphics graphics, int x, int y, int width) {
         if (width <= 0) {
             return;
         }
-        int inset = Math.min(12, width / 4);
-        graphics.fill(x + inset, y, x + width - inset, y + 1, UiTheme.HAIRLINE);
-        graphics.fill(x + inset, y, x + inset * 2, y + 1, UiTheme.withAlpha(UiTheme.HAIRLINE, 0x08));
-        graphics.fill(x + width - inset * 2, y, x + width - inset, y + 1,
-            UiTheme.withAlpha(UiTheme.HAIRLINE, 0x08));
+        graphics.fill(x, y, x + width, y + 1, UiTheme.HAIRLINE);
+        graphics.fill(x, y, x + 1, y + 5, UiTheme.TICK);
     }
 
     /** 竖直分割线。 */
@@ -236,44 +355,37 @@ public final class UiPaint {
         if (height <= 0) {
             return;
         }
-        int inset = Math.min(10, height / 4);
-        graphics.fill(x, y + inset, x + 1, y + height - inset, UiTheme.HAIRLINE);
+        graphics.fill(x, y, x + 1, y + height, UiTheme.HAIRLINE);
     }
 
-    /** 强调色条：卡片左侧 2px 竖条，上下渐隐。 */
+    /** 强调条：卡片左侧竖条。 */
     public static void accentBarLeft(GuiGraphics graphics, int x, int y, int height, int accent) {
         if (height <= 0) {
             return;
         }
-        int inset = Math.min(4, height / 3);
-        graphics.fill(x, y + inset, x + 2, y + height - inset, accent);
-        graphics.fill(x, y, x + 2, y + inset, UiTheme.alpha(accent, 0.35f));
-        graphics.fill(x, y + height - inset, x + 2, y + height, UiTheme.alpha(accent, 0.35f));
+        graphics.fill(x, y, x + UiTheme.ACCENT_BAR, y + height, accent);
     }
 
-    /** 强调色条：卡片底部 1px 横线，左右渐隐。 */
+    /** 强调条：卡片底部横线。 */
     public static void accentBarBottom(GuiGraphics graphics, int x, int y, int width, int accent) {
         if (width <= 0) {
             return;
         }
-        int inset = Math.min(16, width / 4);
-        graphics.fill(x + inset, y, x + width - inset, y + 1, accent);
-        graphics.fill(x + inset / 2, y, x + inset, y + 1, UiTheme.alpha(accent, 0.4f));
-        graphics.fill(x + width - inset, y, x + width - inset / 2, y + 1, UiTheme.alpha(accent, 0.4f));
+        graphics.fill(x, y, x + width, y + 2, accent);
     }
 
-    /** 胶囊底（圆角 = 高度一半）。 */
+    /** 标签底（直角实心块，或描边框）。 */
     public static void pill(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-        roundRect(graphics, x, y, width, height, Math.max(1, height / 2), color);
+        roundRect(graphics, x, y, width, height, UiTheme.RADIUS_CONTROL, color);
     }
 
-    /** 胶囊描边。 */
+    /** 标签描边。 */
     public static void pillOutline(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-        strokeRoundRect(graphics, x, y, width, height, Math.max(1, height / 2), color);
+        strokeRoundRect(graphics, x, y, width, height, UiTheme.RADIUS_CONTROL, color);
     }
 
     /**
-     * 进度条：内凹槽 + 渐变填充 + 顶部高光。
+     * 进度条：内凹槽 + 实心信号色 + 每 10% 一格刻度 + 右端 2px 端头。
      *
      * @param progress 0..1
      */
@@ -282,78 +394,71 @@ public final class UiPaint {
         if (width <= 0 || height <= 0) {
             return;
         }
-        int radius = Math.max(1, height / 2);
-        sunken(graphics, x, y, width, height, radius);
+        sunken(graphics, x, y, width, height, UiTheme.RADIUS_INNER);
         float clamped = Math.max(0f, Math.min(1f, progress));
         int filled = Math.round(width * clamped);
         if (filled <= 0) {
             return;
         }
-        int top = UiTheme.lerp(fillColor, 0xFFFFFFFF, 0.18f);
-        int bottom = UiTheme.lerp(fillColor, 0xFF000000, 0.22f);
-        roundRectGradient(graphics, x, y, filled, height, radius, top, bottom);
-        if (filled > radius * 2 + 2 && height >= 4) {
-            hairline(graphics, x + radius, y + 1, filled - radius * 2, 0x22FFFFFF);
+        int innerY = y + 2;
+        int innerH = Math.max(1, height - 4);
+        graphics.fill(x + 2, innerY, x + Math.max(2, filled - 1), innerY + innerH, fillColor);
+        if (filled > 4) {
+            graphics.fill(x + Math.max(2, filled - 1), innerY, x + filled, innerY + innerH,
+                UiTheme.lerp(fillColor, UiTheme.INK_FILL, 0.45f));
+        }
+        // 刻度：每 10% 一条 1px 的纸色隔断，让进度"可读数"。
+        int step = Math.max(6, width / 10);
+        for (int i = step; i < width - 2; i += step) {
+            graphics.fill(x + i, innerY, x + i + 1, innerY + innerH, UiTheme.withAlpha(0xFF000000, 0x22));
         }
     }
 
-    /** 发光外圈：选中态使用，两层低 alpha 圆角叠加。 */
+    /** 选中框：1px 信号黄实线 + 外一圈更淡的黄，替代旧版的"发光"。 */
     public static void glow(GuiGraphics graphics, int x, int y, int width, int height,
                             int radius, int accent) {
-        strokeRoundRect(graphics, x - 1, y - 1, width + 2, height + 2, radius + 1,
-            UiTheme.alpha(accent, 0.30f));
-        strokeRoundRect(graphics, x - 2, y - 2, width + 4, height + 4, radius + 2,
-            UiTheme.alpha(accent, 0.12f));
+        strokeRoundRect(graphics, x, y, width, height, radius, accent);
+        strokeRoundRect(graphics, x - 2, y - 2, width + 4, height + 4, radius,
+            UiTheme.alpha(accent, 0.22f));
     }
 
     // ------------------------------------------------------------------
     // 屏幕级背景
     // ------------------------------------------------------------------
 
-    /** 全屏渐变底（深色玻璃）。 */
+    /** 全屏纸底：纸色渐变 + 极淡网格。 */
     public static void backdrop(GuiGraphics graphics, int width, int height) {
         if (width <= 0 || height <= 0) {
             return;
         }
         graphics.fillGradient(0, 0, width, height, UiTheme.BACKDROP_TOP, UiTheme.BACKDROP_BOTTOM);
+        grid(graphics, 0, 0, width, height, 24);
     }
 
-    /** 屏幕暗角：四边向内的黑色渐变，让中央内容更聚焦。 */
+    /** 屏幕暗角：四边向内轻微压暗（编辑风的"纸张边缘阴影"，很轻）。 */
     public static void vignette(GuiGraphics graphics, int width, int height) {
         if (width <= 0 || height <= 0) {
             return;
         }
-        int bandX = Math.max(24, width / 5);
-        int bandY = Math.max(20, height / 6);
-        // 左
+        int bandX = Math.max(20, width / 7);
+        int bandY = Math.max(16, height / 8);
         for (int i = 0; i < bandX; i += 2) {
             float t = 1f - i / (float) bandX;
-            graphics.fill(i, 0, Math.min(i + 2, width), height, UiTheme.withAlpha(0xFF000000,
-                Math.round(26 * t)));
-        }
-        // 右
-        for (int i = 0; i < bandX; i += 2) {
-            float t = 1f - i / (float) bandX;
+            int a = Math.round(14 * t);
+            graphics.fill(i, 0, Math.min(i + 2, width), height, UiTheme.withAlpha(0xFF101110, a));
             int x = width - i - 2;
-            if (x < 0) {
-                break;
+            if (x >= 0) {
+                graphics.fill(x, 0, x + 2, height, UiTheme.withAlpha(0xFF101110, a));
             }
-            graphics.fill(x, 0, x + 2, height, UiTheme.withAlpha(0xFF000000, Math.round(26 * t)));
         }
-        // 上
         for (int i = 0; i < bandY; i += 2) {
             float t = 1f - i / (float) bandY;
-            graphics.fill(0, i, width, Math.min(i + 2, height),
-                UiTheme.withAlpha(0xFF000000, Math.round(30 * t)));
-        }
-        // 下
-        for (int i = 0; i < bandY; i += 2) {
-            float t = 1f - i / (float) bandY;
+            int a = Math.round(16 * t);
+            graphics.fill(0, i, width, Math.min(i + 2, height), UiTheme.withAlpha(0xFF101110, a));
             int y = height - i - 2;
-            if (y < 0) {
-                break;
+            if (y >= 0) {
+                graphics.fill(0, y, width, y + 2, UiTheme.withAlpha(0xFF101110, a));
             }
-            graphics.fill(0, y, width, y + 2, UiTheme.withAlpha(0xFF000000, Math.round(30 * t)));
         }
     }
 
@@ -368,37 +473,73 @@ public final class UiPaint {
         graphics.setColor(1f, 1f, 1f, 1f);
     }
 
-    /** 阶段界面统一底：渐变 + 暗角 + 颗粒。 */
+    /** 阶段界面统一底：纸底 + 网格 + 边缘压暗 + 纸纤维。 */
     public static void screenBackdrop(GuiGraphics graphics, int width, int height) {
         backdrop(graphics, width, height);
         vignette(graphics, width, height);
-        grain(graphics, width, height, 0.05f);
+        grain(graphics, width, height, 0.035f);
     }
 
     // ------------------------------------------------------------------
     // 文本
     // ------------------------------------------------------------------
 
-    /** 带阴影的文本（现代 UI 的"重量感"来自阴影而非粗体）。 */
-    public static void text(GuiGraphics graphics, String value, int x, int y, int color) {
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(value), x, y, color, false);
+    /**
+     * 旧版文案里的 {@code §} 颜色码是按"深色玻璃"配的：白字 {@code §f}、黄字 {@code §e}
+     * 压在纸底上会直接消失。这里统一重映射到纸墨可读的等价码（幂等，重复调用安全）：
+     * <ul>
+     *   <li>{@code §f} 白 → {@code §0} 墨（正文强调）</li>
+     *   <li>{@code §e} 黄 → {@code §8} 深灰（次级强调；黄色在纸上不可读，只作底色）</li>
+     *   <li>{@code §b} 青 → {@code §9} 蓝</li>
+     *   <li>{@code §d} 粉 → {@code §5} 紫</li>
+     * </ul>
+     */
+    public static String retone(String value) {
+        if (value == null || value.isEmpty() || value.indexOf('\u00a7') < 0) {
+            return value;
+        }
+        StringBuilder out = new StringBuilder(value.length());
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (c == '\u00a7' && i + 1 < value.length()) {
+                char code = Character.toLowerCase(value.charAt(i + 1));
+                char mapped = switch (code) {
+                    case 'f' -> '0';
+                    case 'e' -> '8';
+                    case 'b' -> '9';
+                    case 'd' -> '5';
+                    default -> code;
+                };
+                out.append('\u00a7').append(mapped);
+                i++;
+            } else {
+                out.append(c);
+            }
+        }
+        return out.toString();
     }
 
-    /** 带投影的文本。 */
+    /** 普通文本（纸上不用阴影，保持印刷的干净边缘）。 */
+    public static void text(GuiGraphics graphics, String value, int x, int y, int color) {
+        graphics.drawString(Minecraft.getInstance().font, Component.literal(retone(value)), x, y, color, false);
+    }
+
+    /** 带投影的文本（仅用于压在墨块/图片上的文字）。 */
     public static void textShadowed(GuiGraphics graphics, String value, int x, int y, int color) {
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(value), x, y, color, true);
+        graphics.drawString(Minecraft.getInstance().font, Component.literal(retone(value)), x, y, color, true);
     }
 
     /** 缩放文本（左上角锚点）。 */
     public static void textScaled(GuiGraphics graphics, String value, int x, int y, int color,
                                   float scale, boolean shadow) {
+        String text = retone(value);
         if (scale == 1f) {
-            graphics.drawString(Minecraft.getInstance().font, Component.literal(value), x, y, color, shadow);
+            graphics.drawString(Minecraft.getInstance().font, Component.literal(text), x, y, color, shadow);
             return;
         }
         graphics.pose().pushPose();
         graphics.pose().scale(scale, scale, 1f);
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(value),
+        graphics.drawString(Minecraft.getInstance().font, Component.literal(text),
             Math.round(x / scale), Math.round(y / scale), color, shadow);
         graphics.pose().popPose();
     }
@@ -410,7 +551,14 @@ public final class UiPaint {
         textScaled(graphics, value, x + (width - textWidth) / 2, y, color, scale, shadow);
     }
 
-    /** 带字距的文本（仅用于全大写拉丁微标签；中日韩字符请用普通文本）。 */
+    /** 右对齐文本。 */
+    public static void textRight(GuiGraphics graphics, String value, int rightX, int y, int color,
+                                 float scale) {
+        int textWidth = Math.round(Minecraft.getInstance().font.width(value) * scale);
+        textScaled(graphics, value, rightX - textWidth, y, color, scale, false);
+    }
+
+    /** 带字距的文本（全大写拉丁微标签；中日韩字符请用普通文本）。 */
     public static void textSpaced(GuiGraphics graphics, String value, int x, int y, int color,
                                   float scale, int spacing, boolean shadow) {
         var font = Minecraft.getInstance().font;
@@ -429,6 +577,11 @@ public final class UiPaint {
             }
             cursor += advance * scale;
         }
+    }
+
+    /** 微标签：小号 + 字距 + 可选的左侧 2px 信号色方块。 */
+    public static void label(GuiGraphics graphics, String value, int x, int y, int color) {
+        textSpaced(graphics, value, x, y, color, UiTheme.TYPE_MICRO, UiTheme.LETTERSPACING_MICRO, false);
     }
 
     /** 微标签宽度（带字距）。 */

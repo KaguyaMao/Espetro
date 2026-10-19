@@ -17,6 +17,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
+import org.espetro.client.gui.UiTheme;
 
 public final class VanillaHudLayout {
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/widgets.png");
@@ -411,8 +412,8 @@ public final class VanillaHudLayout {
         }
 
         if (healthFilled > 0) {
-            graphics.fill(x, healthY, x + healthFilled, healthY + HEALTH_HEIGHT, 0xFFE33434);
-            graphics.fill(x, healthY, x + healthFilled, healthY + 2, 0xFFFF6B6B);
+            graphics.fill(x, healthY, x + healthFilled, healthY + HEALTH_HEIGHT, UiTheme.NEGATIVE);
+            graphics.fill(x, healthY, x + healthFilled, healthY + 2, UiTheme.withAlpha(UiTheme.TEXT, 0x1A));
         }
         HudRenderState.restore(graphics);
     }

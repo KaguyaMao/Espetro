@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.espetro.client.gui.UiTheme;
 
 /** Hold SBW INTERACT EsRadial wheel for the vehicle under the crosshair. */
 public final class VehicleWheelController {
@@ -107,7 +108,7 @@ public final class VehicleWheelController {
 
     public static int getHoldColor() {
         return holdAction != null && holdAction.contains("CONSTRUCTION")
-            ? 0xFFCCAA00 : 0xFFCC4444;
+            ? UiTheme.WARNING : UiTheme.NEGATIVE;
     }
 
     @Nullable

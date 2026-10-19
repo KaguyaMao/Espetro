@@ -1,22 +1,26 @@
 package org.espetro.client.gui;
 
 /**
- * Espetro UI design tokens — "Tactical Glass".
+ * Espetro UI design tokens — "END-01 · 纸墨工业"（参照《明日方舟：终末地》的工业编辑风）。
  *
- * <p>单一样式来源：所有界面的颜色、圆角、间距、字号、动效时长都必须从这里取，
- * 组件与页面上不再出现裸写的 ARGB 常量（语义色如阵营红/蓝也在此集中定义）。
+ * <p>上一版 "Tactical Glass"（冷调深色玻璃 / 圆角 / 青强调色）已归档：
+ * git tag {@code ui/tactical-glass-v1}，源码快照见 {@code docs/archive/tactical-glass/}。
  *
- * <p>设计语言要点：
+ * <p>本版三条硬规则：
  * <ul>
- *   <li><b>冷调深色玻璃</b>：表面是半透明的蓝黑色叠层，靠"内高光 + 细描边"分层，
- *       而不是靠更亮的底色；卡片有柔和外阴影，边缘 1px 发丝线。</li>
- *   <li><b>克制的强调色</b>：默认离子青（{@link #ACCENT}）只用于交互/选中，
- *       金色 {@link #GOLD} 保留为品牌色与比分数值，语义色仅表达状态。</li>
- *   <li><b>现代排版层次</b>：极小号全大写微标签（{@link #TYPE_MICRO}）→ 正文
- *       （{@link #TYPE_BODY}）→ 标题（{@link #TYPE_TITLE}）→ 大数值（{@link #TYPE_NUMERAL}），
- *       微标签带字距，数值带阴影。</li>
- *   <li><b>几何</b>：4px 网格，卡片圆角 6、按钮/标签圆角 4、内嵌元素圆角 2。</li>
+ *   <li><b>纸与墨是主体，强调色是信号。</b>表面是带暖灰的"纸"（{@link #PAPER}），
+ *       文字是"墨"（{@link #INK}）；信号黄 {@link #ACCENT} 只出现在需要被看见的那一处——
+ *       选中、悬停、焦点、关键数值、强调条。</li>
+ *   <li><b>全直角。</b>圆角会把界面推向"柔和产品"，直角把它推向"工程图纸"。
+ *       只有本身是圆的东西（状态点、头像、环形进度）保留圆形；
+ *       卡片允许切角（{@link #CHAMFER_CARD}），不使用圆弧。</li>
+ *   <li><b>靠线与字距分层，不靠阴影。</b>1px 发丝线、角标、刻度、字距微标签构成层次；
+ *       阴影只保留 1~2px 的硬投影，用来把卡片"钉"在纸上。</li>
  * </ul>
+ *
+ * <p>对比度：墨 {@code #101110} 压在纸 {@code #F2F2EC} 上约 17:1；
+ * 信号黄作为文字在纸上不可读，故纸上文字用深金 {@link #GOLD}（{@code #6B5D00}，约 5.4:1），
+ * 黄色只作底色/描边/图形（黄底压墨字约 16.5:1）。
  */
 public final class UiTheme {
 
@@ -24,100 +28,135 @@ public final class UiTheme {
     }
 
     // ------------------------------------------------------------------
-    // 表面（Surfaces）：从最底的全屏底到最上层的浮起元素
+    // 表面（Surfaces）：纸阶，从全屏底到浮层
     // ------------------------------------------------------------------
 
-    /** 全屏渐变底：顶部略深、底部略亮，模拟环境光。 */
-    public static final int BACKDROP_TOP = 0xF5070A0E;
-    public static final int BACKDROP_BOTTOM = 0xF80C1118;
+    /** 全屏底（铺满屏幕的"纸"）：暖灰纸色，顶部略亮、底部略沉。 */
+    public static final int BACKDROP_TOP = 0xF4E9E9E3;
+    public static final int BACKDROP_BOTTOM = 0xF6E3E4DD;
 
-    /** 页面主容器（大卡片）。 */
-    public static final int SURFACE_0 = 0xE60D1219;
+    /** 页面主容器。 */
+    public static final int SURFACE_0 = 0xF8F0F0EA;
 
-    /** 标准卡片：顶部略亮 → 底部略暗的玻璃渐变。 */
-    public static final int CARD_TOP = 0xE2131A24;
-    public static final int CARD_BOTTOM = 0xE80C1118;
+    /** 标准卡片：纸面极浅的竖向渐变（不是玻璃渐变，只是印刷纸的微差）。 */
+    public static final int CARD_TOP = 0xFFF5F5EF;
+    public static final int CARD_BOTTOM = 0xFFEDEDE7;
 
-    /** 浮起/悬停态卡片。 */
-    public static final int SURFACE_2 = 0xF01A2431;
+    /** 浮起 / 悬停态。 */
+    public static final int SURFACE_2 = 0xFFFAFAF4;
 
-    /** 按下态。 */
-    public static final int SURFACE_3 = 0xF5222E3E;
+    /** 按下 / 选中态（比纸更沉一档）。 */
+    public static final int SURFACE_3 = 0xFFDCDDD6;
 
-    /** 内凹区域（列表底、输入框、进度槽）。 */
-    public static final int SUNKEN = 0xB3080B10;
+    /** 内凹区域（列表底、输入框、进度槽、表格行）。 */
+    public static final int SUNKEN = 0xFFE2E3DC;
 
-    /** 卡片柔和外阴影（多层叠加，由近到远）。 */
-    public static final int SHADOW_1 = 0x30000000;
-    public static final int SHADOW_2 = 0x1C000000;
-    public static final int SHADOW_3 = 0x0E000000;
+    /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在纸上。 */
+    public static final int SHADOW_1 = 0x1C101110;
+    public static final int SHADOW_2 = 0x12101110;
+    public static final int SHADOW_3 = 0x0A101110;
 
     // ------------------------------------------------------------------
     // 描边（Strokes）
     // ------------------------------------------------------------------
 
-    /** 发丝线：卡片/分隔线的主描边。 */
-    public static final int HAIRLINE = 0x16FFFFFF;
+    /** 发丝线：卡片、表格、分隔线的主描边。 */
+    public static final int HAIRLINE = 0xFFD5D6D0;
 
-    /** 更强的描边（悬停、聚焦）。 */
-    public static final int HAIRLINE_STRONG = 0x2EFFFFFF;
+    /** 更强的描边（悬停、聚焦、分组框）。 */
+    public static final int HAIRLINE_STRONG = 0xFF9A9C96;
 
-    /** 卡片顶部内高光。 */
-    public static final int SHEEN = 0x14FFFFFF;
+    /** 纸面顶部内高光（很轻，只是让卡片"有厚度"）。 */
+    public static final int SHEEN = 0x1AFFFFFF;
 
-    /** 底部压暗线，让卡片"坐"在背景上。 */
-    public static final int HAIRLINE_DARK = 0x66000000;
+    /** 底部压暗线。 */
+    public static final int HAIRLINE_DARK = 0x26101110;
+
+    /** 网格线：技术图纸的底纹。 */
+    public static final int GRID = 0x14101110;
+    /** 网格主线（每 5 格一条）。 */
+    public static final int GRID_MAJOR = 0x22101110;
+    /** 角标 / 刻度的颜色。 */
+    public static final int TICK = 0xFF6E7069;
 
     // ------------------------------------------------------------------
-    // 文字（Text）
+    // 文字（Ink）
     // ------------------------------------------------------------------
 
-    public static final int TEXT = 0xFFF3F6FA;
-    public static final int TEXT_SECOND = 0xFFA9B4C4;
-    public static final int TEXT_THIRD = 0xFF6E7A8A;
-    public static final int TEXT_DISABLED = 0xFF4C5666;
-    public static final int TEXT_ON_ACCENT = 0xFF04121A;
+    /** 正文墨色。 */
+    public static final int TEXT = 0xFF101110;
+    /** 次要文字。 */
+    public static final int TEXT_SECOND = 0xFF4A4C48;
+    /** 三级文字（字段名、单位、注释）。 */
+    public static final int TEXT_THIRD = 0xFF7C7E78;
+    /** 禁用。 */
+    public static final int TEXT_DISABLED = 0xFFA5A7A1;
+    /** 压在信号黄上的字（墨）。 */
+    public static final int TEXT_ON_ACCENT = 0xFF101110;
+
+    /** 墨色实心块（主按钮、状态带）。 */
+    public static final int INK_FILL = 0xFF141513;
+    /** 压在墨色块上的字。 */
+    public static final int ON_INK = 0xFFF5F5F0;
+    /** 压在墨色块上的次级字。 */
+    public static final int ON_INK_SECOND = 0xFFA9ABA5;
 
     // ------------------------------------------------------------------
     // 强调色与语义色
     // ------------------------------------------------------------------
 
-    /** 默认强调色：离子青。交互、选中、聚焦。 */
-    public static final int ACCENT = 0xFF5AD7FF;
-    public static final int ACCENT_DIM = 0xFF2E8AA6;
-    public static final int ACCENT_SOFT = 0x2E5AD7FF;
-    public static final int ACCENT_LINE = 0x8C5AD7FF;
-    public static final int ACCENT_GLOW = 0x225AD7FF;
+    /** 信号黄：交互、选中、焦点、强调条。大面积铺色只用于"当前项"。 */
+    public static final int ACCENT = 0xFFFFF500;
+    /** 加深一档（悬停、按下、描边）。 */
+    public static final int ACCENT_DIM = 0xFFE8E000;
+    /** 纸上文字用的深金（信号黄在纸上不可读）。 */
+    public static final int ACCENT_ON_PAPER = 0xFF6B5D00;
+    /** 半透明信号底色块。 */
+    public static final int ACCENT_SOFT = 0x33FFF500;
+    /** 强调描边（1px）。 */
+    public static final int ACCENT_LINE = 0xFFFFF500;
+    /** 强调"光环"：用于选中外框的第二圈，很轻。 */
+    public static final int ACCENT_GLOW = 0x24FFF500;
 
-    /** 品牌金：标题、比分数值、奖励。 */
-    public static final int GOLD = 0xFFF2C15E;
-    public static final int GOLD_SOFT = 0x2EF2C15E;
-    public static final int GOLD_LINE = 0x8CF2C15E;
+    /** 品牌 / 数值金：纸上的金（深金）。 */
+    public static final int GOLD = 0xFF6B5D00;
+    public static final int GOLD_SOFT = 0x2E6B5D00;
+    public static final int GOLD_LINE = 0x8C6B5D00;
 
-    public static final int ATTACK = 0xFFFF6B5E;
-    public static final int DEFEND = 0xFF5C8CFF;
-    public static final int POSITIVE = 0xFF57D38C;
-    public static final int WARNING = 0xFFFFC24B;
-    public static final int NEGATIVE = 0xFFFF5C5C;
-    public static final int PURPLE = 0xFFC08CFF;
-    public static final int SQUAD = 0xFF67A7FF;
+    /** 语义色（纸上可读的深档）。 */
+    public static final int ATTACK = 0xFFB3352A;
+    public static final int DEFEND = 0xFF1F5FA8;
+    public static final int POSITIVE = 0xFF2F7A3E;
+    public static final int WARNING = 0xFFA8611A;
+    public static final int NEGATIVE = 0xFFB32626;
+    public static final int PURPLE = 0xFF6B4FA8;
+    public static final int SQUAD = 0xFF2B6CB0;
 
-    public static final int ATTACK_SOFT = 0x2EFF6B5E;
-    public static final int DEFEND_SOFT = 0x2E5C8CFF;
-    public static final int POSITIVE_SOFT = 0x2E57D38C;
-    public static final int WARNING_SOFT = 0x2EFFC24B;
-    public static final int NEGATIVE_SOFT = 0x2EFF5C5C;
+    public static final int ATTACK_SOFT = 0x1FB3352A;
+    public static final int DEFEND_SOFT = 0x1F1F5FA8;
+    public static final int POSITIVE_SOFT = 0x1F2F7A3E;
+    public static final int WARNING_SOFT = 0x1FA8611A;
+    public static final int NEGATIVE_SOFT = 0x1FB32626;
 
     // ------------------------------------------------------------------
-    // 几何（Geometry）：4px 网格
+    // 几何（Geometry）：4px 网格，全直角
     // ------------------------------------------------------------------
 
-    /** 卡片圆角。 */
-    public static final int RADIUS_CARD = 6;
-    /** 按钮、标签圆角。 */
-    public static final int RADIUS_CONTROL = 4;
-    /** 内嵌小块圆角。 */
-    public static final int RADIUS_INNER = 2;
+    /** 卡片圆角：0（直角）。保留常量是为了调用方语义清晰。 */
+    public static final int RADIUS_CARD = 0;
+    /** 按钮、标签圆角：0。 */
+    public static final int RADIUS_CONTROL = 0;
+    /** 内嵌小块圆角：0。 */
+    public static final int RADIUS_INNER = 0;
+
+    /** 卡片切角尺寸（45° 切一刀，0 表示不切）。 */
+    public static final int CHAMFER_CARD = 0;
+    /** 控件切角尺寸。 */
+    public static final int CHAMFER_CONTROL = 0;
+    /** 强调条厚度。 */
+    public static final int ACCENT_BAR = 3;
+    /** 角标长度（卡四角的 L 形短线）。 */
+    public static final int TICK_LENGTH = 6;
 
     /** 卡片内边距。 */
     public static final int PAD_CARD = 12;
@@ -136,10 +175,10 @@ public final class UiTheme {
     public static final int HAIRLINE_WIDTH = 1;
 
     // ------------------------------------------------------------------
-    // 排版（Typography）：与原版字体 9px 行高配套的缩放档位
+    // 排版（Typography）
     // ------------------------------------------------------------------
 
-    /** 微标签：全大写 + 字距，用于分组标题、字段名。 */
+    /** 微标签：小号 + 字距，用于分组标题、字段名、编号。 */
     public static final float TYPE_MICRO = 0.8f;
     /** 正文。 */
     public static final float TYPE_BODY = 1.0f;
@@ -150,21 +189,21 @@ public final class UiTheme {
     /** 大数值（比分、人口、弹药）。 */
     public static final float TYPE_NUMERAL = 1.5f;
 
-    /** 微标签字距（像素，仅在 1x 缩放下叠加）。 */
+    /** 微标签字距（像素，仅在缩放下叠加）。 */
     public static final int LETTERSPACING_MICRO = 1;
     /** 正文轻微字距。 */
     public static final int LETTERSPACING_BODY = 0;
 
     // ------------------------------------------------------------------
-    // 动效（Motion）
+    // 动效（Motion）：编辑风要"快"，过渡短促
     // ------------------------------------------------------------------
 
     /** 悬停过渡时长。 */
-    public static final long MOTION_HOVER_MS = 140L;
+    public static final long MOTION_HOVER_MS = 90L;
     /** 选中/切换过渡时长。 */
-    public static final long MOTION_SELECT_MS = 180L;
+    public static final long MOTION_SELECT_MS = 120L;
     /** 面板入场时长。 */
-    public static final long MOTION_ENTER_MS = 220L;
+    public static final long MOTION_ENTER_MS = 160L;
 
     // ------------------------------------------------------------------
     // 工具方法
@@ -201,7 +240,7 @@ public final class UiTheme {
         int g = (background >>> 8) & 0xFF;
         int b = background & 0xFF;
         double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255.0;
-        return luminance > 0.6 ? 0xFF081018 : TEXT;
+        return luminance > 0.55 ? TEXT : ON_INK;
     }
 
     /** 是否具备可见 alpha（0 表示完全不画）。 */
@@ -209,8 +248,13 @@ public final class UiTheme {
         return (argb & 0xFF000000) != 0;
     }
 
-    /** 强调色"环境光"洗色：给全屏底叠一层极淡的青色光，让底不再死黑。 */
+    /** 纸上叠一层极淡的信号黄（用于"当前阶段"这类需要被注意的区域）。 */
     public static int accentWash(float strength) {
         return withAlpha(ACCENT, Math.round(255f * Math.max(0f, Math.min(1f, strength))));
+    }
+
+    /** 墨色块上的强调文字：纸底用深金，墨底用信号黄。 */
+    public static int accentOn(boolean darkSurface) {
+        return darkSurface ? ACCENT : ACCENT_ON_PAPER;
     }
 }

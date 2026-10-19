@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.espetro.client.gui.UiTheme;
 
 /**
  * Hold-key state machine for Espetro's EsRadial tactical radial.
@@ -393,7 +394,7 @@ public final class TacticalRadialController {
     private static org.esradial.client.RadialMenuData rootMenu() {
         var builder = base(ROOT_MENU);
         if (!isFireteamLeaderOnly()) builder.slot("espetro.rally", RALLY,
-            action(RadialActionPacket.Action.DEPLOY_RALLY), Component.literal("队包获取"), "#FFD5B25C")
+            action(RadialActionPacket.Action.DEPLOY_RALLY), Component.literal("队包获取"), "#FF6B5D00")
             .sectorLast(0,60);
         cachedFortifications.stream().filter(f -> f != null && FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
             .filter(f -> !isFireteamLeaderOnly()).findFirst().ifPresent(f -> {
@@ -401,7 +402,7 @@ public final class TacticalRadialController {
             });
         if (!cachedFortifications.isEmpty()) builder.slot("espetro.build", BUILD_ICON,
             Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "build")),
-            Component.literal("工事建造"), "#FFD5B25C", false).submenuLast().tintLast(0xFFD5B25C).sectorLast(270,30);
+            Component.literal("工事建造"), "#FF6B5D00", false).submenuLast().tintLast(UiTheme.GOLD).sectorLast(270,30);
         return builder.build();
     }
 
@@ -417,7 +418,7 @@ public final class TacticalRadialController {
             String path = "tactical_build_" + category.name().toLowerCase(java.util.Locale.ROOT);
             root.slot("espetro.build.directory." + category.name(), ui(category.icon),
                 Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", path)),
-                Component.literal(category.title), "#FFD5B25C", false).submenuLast().sectorLast(quarter++*90,90);
+                Component.literal(category.title), "#FF6B5D00", false).submenuLast().sectorLast(quarter++*90,90);
             var group = base(id(path)).title(Component.literal(category.title));
             if (category == FortificationMenuCategory.FOUNDATION) {
                 String[][] functional = {{"espetro:hab", "兵站", "radialhab"},
@@ -427,7 +428,7 @@ public final class TacticalRadialController {
                     var item = functional[i];
                     var fort = entries.stream().filter(f -> item[0].equals(f.id())).findFirst().orElse(null);
                     if (fort != null) addFort(group, fort, item[1]);
-                    else group.slot("espetro.unavailable."+item[0],ui(item[2]),()->{},Component.literal(item[1]),"#FFD5B25C")
+                    else group.slot("espetro.unavailable."+item[0],ui(item[2]),()->{},Component.literal(item[1]),"#FF6B5D00")
                         .disabledLast(Component.literal("当前建造目录未开放"));
                     group.sectorLast(i*90,90);
                 }
@@ -439,7 +440,7 @@ public final class TacticalRadialController {
                         String childPath=path+"_"+first/11;
                         String title=category.title+" · "+(first/11+1);
                         group.slot("espetro.build.group."+childPath,ui(category.icon),
-                            Actions.script(OPEN_SUBMENU_ACTION,Map.of("menu",childPath)),Component.literal(title),"#FFD5B25C",false).submenuLast();
+                            Actions.script(OPEN_SUBMENU_ACTION,Map.of("menu",childPath)),Component.literal(title),"#FF6B5D00",false).submenuLast();
                         var child=base(id(childPath)).title(Component.literal(title));
                         for (var fort:entries.subList(first,Math.min(first+11,entries.size()))) addFort(child,fort);
                         child.backSlot(() -> RadialMenuClientApi.back()); pages.add(child.build());
@@ -470,7 +471,7 @@ public final class TacticalRadialController {
         }
         builder.slot("espetro.fort." + fort.id(), icon,
             Actions.script(BUILD_FORT_ACTION, Map.of("fortId", fort.id())),
-            Component.literal(label.toString()), "#FFD5B25C");
+            Component.literal(label.toString()), "#FF6B5D00");
     }
 
     private static org.esradial.client.RadialMenuData skillsMenu() {
@@ -497,7 +498,7 @@ public final class TacticalRadialController {
             }
             int cooldown = cachedCooldowns.getOrDefault(skill.id(), 0);
             boolean onCooldown = cooldown > 0;
-            String color = onCooldown ? "#FF4A3030" : "#FFD5B25C";
+            String color = onCooldown ? "#FF4A3030" : "#FF6B5D00";
             String label = onCooldown
                 ? skill.displayName() + " §7(" + cooldown + "s)"
                 : skill.displayName();

@@ -3439,12 +3439,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         CurrentMapBackgroundRenderer.render(
             graphics, this.width, this.height, ClientGameState.getCurrentMapFolder());
         computeRegions();
-        // 已部署下来（不再等待部署选择）时面板背景完全透明；部署前保持淡灰半透明。
+        // 已部署下来（不再等待部署选择）时面板转为浮在画面上的薄纸卡，仍保证墨字可读。
         boolean spawned = !waitingForDeploySelection;
-        int leftBg = spawned ? 0x00000000 : PANEL_LEFT_BG;
+        int leftBg = spawned ? UiTheme.withAlpha(UiTheme.CARD_TOP, 0xE4) : PANEL_LEFT_BG;
         int centerBg = spawned ? 0x00000000 : PANEL_CENTER_BG;
-        int chromeBg = spawned ? 0x00000000 : CHROME_BG;
-        int footerBg = spawned ? 0x00000000 : PANEL_MAP_FOOTER_BG;
+        int chromeBg = spawned ? UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xDC) : CHROME_BG;
+        int footerBg = spawned ? UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xE0) : PANEL_MAP_FOOTER_BG;
         if (UiTheme.visible(leftBg)) {
             UiPaint.roundRectGradient(graphics, leftX, leftY, leftW, leftH,
                 UiTheme.RADIUS_CARD, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);

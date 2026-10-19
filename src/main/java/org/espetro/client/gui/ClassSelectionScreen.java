@@ -400,7 +400,7 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
             int errorW = this.font.width(error) + 16;
             int errorX = this.width / 2 - errorW / 2;
             int errorY = this.height / 2 - 8;
-            UiPaint.roundRect(graphics, errorX, errorY, errorW, 16, 8, UiTheme.NEGATIVE_SOFT);
+            UiPaint.roundRect(graphics, errorX, errorY, errorW, 16, UiTheme.RADIUS_INNER, UiTheme.NEGATIVE_SOFT);
             UiPaint.strokeRoundRect(graphics, errorX, errorY, errorW, 16, 8,
                 UiTheme.alpha(UiTheme.NEGATIVE, 0.55f));
             graphics.drawCenteredString(this.font, Component.literal(error),

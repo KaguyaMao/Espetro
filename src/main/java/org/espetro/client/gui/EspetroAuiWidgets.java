@@ -22,9 +22,9 @@ final class EspetroAuiWidgets {
     // ---- 语义色（保持旧名，数值换成新色板） ----
     /** 全屏静态底：不透明，避免世界/失明层穿透或闪烁。 */
     static final int BACKDROP = UiTheme.BACKDROP_TOP;
-    static final int PANEL = 0x00191C1E;
-    static final int PANEL_SOFT = 0x00212527;
-    static final int BORDER = 0x665B6260;
+    static final int PANEL = UiTheme.CARD_TOP;
+    static final int PANEL_SOFT = UiTheme.SURFACE_2;
+    static final int BORDER = UiTheme.HAIRLINE;
     static final int BORDER_ACTIVE = UiTheme.ACCENT;
     static final int TEXT = UiTheme.TEXT;
     static final int MUTED = UiTheme.TEXT_SECOND;
@@ -53,17 +53,61 @@ final class EspetroAuiWidgets {
     }
 
     /**
-     * 阶段 GUI 全屏底：深色玻璃渐变 + 暗角 + 颗粒。
-     * 底层仍是不透明填充，语义与旧版"纯黑底"一致（遮住世界）。
+     * 阶段 GUI 全屏底：纸色渐变 + 图纸网格 + 边缘压暗 + 纸纤维。
+     * 底层不透明度足够高（遮住世界），但保留一点点场景透出，避免"纯色板"的死板。
      */
     static void drawScreenShade(GuiGraphics graphics, int width, int height) {
         if (graphics == null || width <= 0 || height <= 0) {
             return;
         }
-        graphics.fill(0, 0, width, height, UiTheme.BACKDROP_TOP);
-        graphics.fillGradient(0, 0, width, height, 0x00000000, UiTheme.accentWash(0.06f));
+        UiPaint.backdrop(graphics, width, height);
         UiPaint.vignette(graphics, width, height);
-        UiPaint.grain(graphics, width, height, 0.05f);
+        UiPaint.grain(graphics, width, height, 0.035f);
+        drawChrome(graphics, width, height);
+    }
+
+    /**
+     * 屏幕外框（工业图纸的"图框"）：细线边框 + 四角 L 形角标 + 边缘刻度 +
+     * 左上信号方块与编号、右下版本号。所有阶段界面共用，保证风格是"一张图纸"。
+     */
+    static void drawChrome(GuiGraphics graphics, int width, int height) {
+        int inset = 5;
+        int frameColor = UiTheme.withAlpha(UiTheme.TEXT, 0x3A);
+        UiPaint.frame(graphics, inset, inset, width - inset * 2, height - inset * 2, frameColor);
+        UiPaint.brackets(graphics, inset, inset, width - inset * 2, height - inset * 2, 18,
+            UiTheme.withAlpha(UiTheme.TEXT, 0x66));
+
+        // 左上：信号方块 + 编号
+        graphics.fill(inset + 5, inset + 5, inset + 12, inset + 12, UiTheme.ACCENT);
+        UiPaint.label(graphics, "ESPETRO OPS", inset + 18, inset + 5, UiTheme.TEXT_THIRD);
+        // 右上：界面代号
+        String code = "END-01";
+        int codeWidth = UiPaint.spacedWidth(code, UiTheme.LETTERSPACING_MICRO);
+        UiPaint.label(graphics, code, width - inset - 8 - codeWidth, inset + 5, UiTheme.TEXT_THIRD);
+
+        // 左右边缘刻度尺（竖向），像图纸的标尺
+        int tickTop = inset + 26;
+        int tickBottom = height - inset - 26;
+        for (int y = tickTop; y < tickBottom; y += 14) {
+            int len = ((y - tickTop) / 14) % 5 == 0 ? 7 : 4;
+            graphics.fill(inset + 3, y, inset + 3 + len, y + 1, UiTheme.withAlpha(UiTheme.TICK, 0x66));
+            graphics.fill(width - inset - 3 - len, y, width - inset - 3, y + 1,
+                UiTheme.withAlpha(UiTheme.TICK, 0x66));
+        }
+
+        // 左下角：通道号；右下角：版本
+        UiPaint.label(graphics, "CH 07 // SECURE", inset + 8, height - inset - 12, UiTheme.TEXT_THIRD);
+        String version = versionLabel();
+        int versionWidth = UiPaint.spacedWidth(version, UiTheme.LETTERSPACING_MICRO);
+        UiPaint.label(graphics, version, width - inset - 8 - versionWidth, height - inset - 12,
+            UiTheme.TEXT_THIRD);
+    }
+
+    private static String versionLabel() {
+        return "v" + net.minecraftforge.fml.ModList.get()
+            .getModContainerById("espetro")
+            .map(container -> container.getModInfo().getVersion().toString())
+            .orElse("dev");
     }
 
     // ------------------------------------------------------------------
@@ -141,12 +185,13 @@ final class EspetroAuiWidgets {
     }
 
     /** 主行动按钮：强调色底 + 强调描边。 */
+    /** 主行动按钮：墨色实心块 + 纸色字，悬停转为信号黄块。 */
     static ActionButton primaryButton(int x, int y, int width, int height, String label, Runnable action) {
         return new ActionButton(x, y, width, height, label, action)
-            .setColors(UiTheme.ACCENT_SOFT, UiTheme.withAlpha(UiTheme.ACCENT, 0x3C),
-                UiTheme.withAlpha(UiTheme.ACCENT, 0x4A))
-            .setBorderColor(UiTheme.ACCENT_LINE)
-            .setAccentColor(UiTheme.ACCENT);
+            .setColors(UiTheme.INK_FILL, UiTheme.INK_FILL, UiTheme.ACCENT)
+            .setBorderColor(UiTheme.INK_FILL)
+            .setAccentColor(UiTheme.ACCENT)
+            .setTextColor(UiTheme.ON_INK);
     }
 
     static int textButtonWidth(String label) {
@@ -202,17 +247,39 @@ final class EspetroAuiWidgets {
      */
     static PhaseHeader addMutablePhaseHeader(GuiElement root, int screenWidth, String title,
                                              String status, String detail, int accentColor) {
-        int width = Math.max(1, screenWidth - 16);
-        Text titleText = centeredText(8, 5, width, title == null ? "" : title, TEXT);
-        titleText.setTextScale(UiTheme.TYPE_TITLE).setShadow(true);
-        Text statusText = centeredText(8, 20, width, status == null ? "" : status, MUTED);
-        statusText.setTextScale(0.95f);
-        Text detailText = centeredText(8, 33, width, detail == null ? "" : detail, DIM);
-        detailText.setTextScale(UiTheme.TYPE_MICRO);
+        int width = Math.max(1, screenWidth - 40);
+        root.addChild(new HeaderRule(0, 0, Math.max(1, screenWidth), PHASE_HEADER_HEIGHT, accentColor));
+        Text titleText = text(20, 16, width, title == null ? "" : title, TEXT);
+        titleText.setTextScale(UiTheme.TYPE_TITLE).setShadow(false);
+        Text statusText = text(20, 7, width, status == null ? "" : status, MUTED)
+            .setAlignRight(true);
+        statusText.setTextScale(UiTheme.TYPE_MICRO).setSpacing(UiTheme.LETTERSPACING_MICRO);
+        Text detailText = text(20, 34, width, detail == null ? "" : detail, DIM);
+        detailText.setTextScale(UiTheme.TYPE_MICRO).setSpacing(UiTheme.LETTERSPACING_MICRO);
         root.addChild(titleText);
         root.addChild(statusText);
         root.addChild(detailText);
         return new PhaseHeader(titleText, statusText, detailText);
+    }
+
+    /** 页头底饰：左侧信号黄方块 + 顶部细线 + 底部通栏发丝线。纯装饰，不参与命中测试。 */
+    static final class HeaderRule extends GuiElement {
+        private final int accent;
+
+        HeaderRule(int x, int y, int width, int height, int accent) {
+            super(x, y, width, height);
+            this.accent = accent == 0 ? UiTheme.ACCENT : accent;
+        }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
+                         int mouseX, int mouseY, float partialTick) {
+            int px = x + getX();
+            int py = y + getY();
+            graphics.fill(px + 8, py + 8, px + 14, py + 14, accent);
+            UiPaint.hairline(graphics, px + 8, py + getHeight() - 3,
+                Math.max(1, getWidth() - 16), UiTheme.HAIRLINE);
+        }
     }
 
     static final class PhaseHeader {
@@ -394,6 +461,7 @@ final class EspetroAuiWidgets {
         private float textScale = 1.0f;
         private int spacing = 0;
         private boolean shadow = false;
+        private boolean alignRight = false;
 
         Text(int x, int y, int width, String value, int color, boolean centered) {
             super(x, y, width > 0 ? width : Minecraft.getInstance().font.width(stripFormatting(value)),
@@ -429,6 +497,11 @@ final class EspetroAuiWidgets {
             return this;
         }
 
+        Text setAlignRight(boolean alignRight) {
+            this.alignRight = alignRight;
+            return this;
+        }
+
         Text setTextScale(float scale) {
             this.textScale = Math.max(0.5f, Math.min(2.0f, scale));
             setHeight(Math.max(1, Math.round(Minecraft.getInstance().font.lineHeight * textScale)));
@@ -459,6 +532,8 @@ final class EspetroAuiWidgets {
             int tx = x + getX();
             if (centered) {
                 tx += Math.max(0, (getWidth() - drawnWidth) / 2);
+            } else if (alignRight && fixedWidth) {
+                tx += Math.max(0, getWidth() - drawnWidth);
             }
             if (spacing > 0) {
                 UiPaint.textSpaced(graphics, drawnValue, tx, y + getY(), color, textScale, spacing, shadow);
@@ -517,11 +592,12 @@ final class EspetroAuiWidgets {
         private boolean selected = false;
         // 默认透明底 + 边框区分 hover/selected（避免大面积半透明当"背景墙"）。
         private int normalColor = 0x00000000;
-        private int hoverColor = 0xCC1E2A38;
-        private int selectedColor = 0xCC16303F;
+        private int hoverColor = UiTheme.INK_FILL;
+        private int selectedColor = UiTheme.ACCENT;
         private int disabledColor = 0x00000000;
-        private int borderColor = 0x66707C8C;
+        private int borderColor = UiTheme.HAIRLINE_STRONG;
         private int textColor = TEXT;
+        private int hoverTextColor = UiTheme.ON_INK;
         private float textScale = 1.0f;
         private int accentColor = UiTheme.ACCENT;
 
@@ -571,6 +647,11 @@ final class EspetroAuiWidgets {
             return this;
         }
 
+        ActionButton setHoverTextColor(int hoverTextColor) {
+            this.hoverTextColor = hoverTextColor;
+            return this;
+        }
+
         ActionButton setAccentColor(int accentColor) {
             this.accentColor = accentColor;
             return this;
@@ -611,11 +692,14 @@ final class EspetroAuiWidgets {
             }
             if (selected) {
                 UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, UiTheme.alpha(accentColor, 0.85f));
-                UiPaint.hairline(graphics, bx + radius, by, Math.max(0, w - radius * 2),
-                    UiTheme.alpha(accentColor, 0.35f));
+                graphics.fill(bx, by, bx + 2, by + h, UiTheme.INK_FILL);
             } else if (UiTheme.visible(borderColor)) {
-                int outline = hasFocus() && enabled ? UiTheme.withAlpha(0xFFFFFFFF, 0x2E) : borderColor;
+                int outline = hasFocus() && enabled ? UiTheme.ACCENT_LINE : borderColor;
                 UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, outline);
+            }
+            // 悬停：底边 2px 信号黄，工业风格的"当前指向"。
+            if (enabled && hasFocus() && !selected) {
+                graphics.fill(bx, by + h - 2, bx + w, by + h, UiTheme.ACCENT);
             }
 
             int logicalTextWidth = Math.max(8, (int) ((w - 8) / textScale));
@@ -624,11 +708,13 @@ final class EspetroAuiWidgets {
                 Minecraft.getInstance().font.width(stripFormatting(drawnLabel)) * textScale);
             int textHeight = Math.max(1,
                 Math.round(Minecraft.getInstance().font.lineHeight * textScale));
-            int color = !enabled ? DIM : selected ? UiTheme.lerp(textColor, accentColor, 0.55f) : textColor;
+            int color = !enabled ? UiTheme.TEXT_DISABLED
+                : selected ? UiTheme.TEXT_ON_ACCENT
+                : hasFocus() && UiTheme.visible(hoverColor) ? hoverTextColor : textColor;
             drawScaledString(graphics, drawnLabel,
                 bx + Math.max(4, (w - labelWidth) / 2),
                 by + Math.max(1, (h - textHeight) / 2 + 1),
-                color, textScale, true);
+                color, textScale, false);
 
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }

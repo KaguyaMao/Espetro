@@ -44,16 +44,12 @@ public final class HubScreen extends EspetroMenuScreen {
     @Override
     protected void renderBeforeMenu(net.minecraft.client.gui.GuiGraphics graphics,
                                      int mouseX, int mouseY, float partialTick) {
-        // 主城保留世界透视：只在卡片周围压一圈柔和暗角，避免世界亮度冲淡文字。
+        // 主城保留世界透视：卡片只压一层薄纸影，不再用大范围黑色暗角（纸面不需要）。
         int cardW = Math.min(320, width - 40);
         int cardH = 196;
         int x = (width - cardW) / 2;
         int y = (height - cardH) / 2;
-        for (int i = 0; i < 14; i++) {
-            int pad = 24 + i * 6;
-            graphics.fill(x - pad, y - pad, x + cardW + pad, y + cardH + pad,
-                UiTheme.withAlpha(0xFF000000, 2 + i / 2));
-        }
+        UiPaint.shadow(graphics, x, y, cardW, cardH, UiTheme.RADIUS_CARD);
     }
 
     @Override
@@ -65,48 +61,49 @@ public final class HubScreen extends EspetroMenuScreen {
         int inner = panelW - 32;
 
         root.addChild(EspetroAuiWidgets.card(x, y, panelW, panelH)
-            .setAccentColor(UiTheme.GOLD));
-        root.addChild(EspetroAuiWidgets.text(x + 16, y + 15, inner,
-                "和平区 · HUB", UiTheme.GOLD)
+            .setAccentColor(UiTheme.ACCENT));
+        // 编号 + 栏目标签：终末地式的"文件编号"表头
+        root.addChild(EspetroAuiWidgets.text(x + 16, y + 13, inner,
+                "01 / HUB", UiTheme.TEXT_THIRD)
             .setTextScale(UiTheme.TYPE_MICRO)
             .setSpacing(UiTheme.LETTERSPACING_MICRO));
-        root.addChild(EspetroAuiWidgets.text(x + 16, y + 29, inner,
-                "Espetro 主城", UiTheme.TEXT)
-            .setTextScale(UiTheme.TYPE_TITLE)
-            .setShadow(true));
+        root.addChild(EspetroAuiWidgets.text(x + 16, y + 26, inner,
+                "和平区 · 主城", UiTheme.TEXT)
+            .setTextScale(UiTheme.TYPE_TITLE));
 
         EspetroAuiWidgets.Chip chip = EspetroAuiWidgets.chip(0, 0,
             status.isEmpty() ? "待命" : EspetroAuiWidgets.trimToWidth(status, 90), UiTheme.POSITIVE);
         chip.setX(x + panelW - 16 - chip.getWidth());
-        chip.setY(y + 17);
+        chip.setY(y + 15);
         statusChip = chip;
         root.addChild(chip);
 
-        root.addChild(EspetroAuiWidgets.divider(x + 16, y + 55, inner));
+        root.addChild(EspetroAuiWidgets.divider(x + 16, y + 52, inner));
 
-        root.addChild(EspetroAuiWidgets.text(x + 16, y + 66, inner,
-                "当前在线", UiTheme.TEXT_THIRD)
+        // 数据行：micro 标题 + 大号阿拉伯数字，保持"仪表读数"的层级
+        root.addChild(EspetroAuiWidgets.text(x + 16, y + 63, inner,
+                "当前在线 / ONLINE · 人", UiTheme.TEXT_THIRD)
             .setTextScale(UiTheme.TYPE_MICRO)
             .setSpacing(UiTheme.LETTERSPACING_MICRO));
-        onlineText = EspetroAuiWidgets.text(x + 16, y + 77, inner,
-            onlineCount + " 人在线", UiTheme.TEXT);
-        onlineText.setTextScale(UiTheme.TYPE_HEADING).setShadow(true);
+        onlineText = EspetroAuiWidgets.text(x + 16, y + 74, inner,
+            Integer.toString(onlineCount), UiTheme.TEXT);
+        onlineText.setTextScale(UiTheme.TYPE_NUMERAL);
         root.addChild(onlineText);
 
-        statusText = EspetroAuiWidgets.text(x + 16, y + 99, inner, status, UiTheme.TEXT_SECOND);
+        statusText = EspetroAuiWidgets.text(x + 16, y + 103, inner, status, UiTheme.TEXT_SECOND);
         statusText.setTextScale(0.95f);
         root.addChild(statusText);
 
         root.addChild(EspetroAuiWidgets.divider(x + 16, y + 121, inner));
 
-        root.addChild(EspetroAuiWidgets.primaryButton(x + 16, y + 132, inner, 22,
+        root.addChild(EspetroAuiWidgets.primaryButton(x + 16, y + 130, inner, 22,
             "进入新手教程",
             () -> {
                 // 关闭主城菜单后由服务端推送教程（HUD + 只读阶段 GUI）
                 onClose();
                 org.espetro.network.NetworkManager.sendTutorialReopen();
             }));
-        root.addChild(EspetroAuiWidgets.button(x + 16, y + 160, inner, 22, "关闭", this::onClose));
+        root.addChild(EspetroAuiWidgets.button(x + 16, y + 158, inner, 22, "关闭", this::onClose));
 
         root.addChild(EspetroAuiWidgets.text(x + panelW - 76, y + panelH - 12, 60,
                 "ESC 关闭", UiTheme.TEXT_DISABLED)
