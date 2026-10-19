@@ -39,14 +39,18 @@ public final class FrostedBackdrop {
 
     private static DynamicTexture texture;
     private static boolean registered;
-    private static long lastCaptureMs = Long.MIN_VALUE;
+    private static boolean loggedFailure;
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
+    /** 首帧/重开界面时必须重截；用独立标志位，避免 Long.MIN_VALUE 参与减法溢出。 */
+    private static boolean dirty = true;
+    private static long lastCaptureMs;
 
     private FrostedBackdrop() {
     }
 
     /** 界面重开/窗口尺寸变化后强制重新截屏。 */
     public static void invalidate() {
-        lastCaptureMs = Long.MIN_VALUE;
+        dirty = true;
     }
 
     /**
@@ -58,16 +62,19 @@ public final class FrostedBackdrop {
             return;
         }
         long now = System.currentTimeMillis();
-        if (now - lastCaptureMs >= REFRESH_INTERVAL_MS) {
+        if (dirty || now - lastCaptureMs >= REFRESH_INTERVAL_MS) {
             lastCaptureMs = now;
+            dirty = false;
             if (!capture()) {
-                // 截屏失败（例如离屏渲染）时退回普通暗底，至少不是黑的。
-                UiPaint.backdrop(graphics, width, height);
+                // 截屏失败（离屏渲染 / 驱动拒绝读回）时只压一层暗幕：
+                // 宁可没有模糊，也不能用不透明底把玩家视野盖掉。
+                dirty = true;
+                graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
                 return;
             }
         }
         if (texture == null) {
-            UiPaint.backdrop(graphics, width, height);
+            graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
             return;
         }
         graphics.flush();
@@ -109,11 +116,19 @@ public final class FrostedBackdrop {
             GL11.glReadPixels(0, 0, pixelWidth, pixelHeight,
                 GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
         } catch (RuntimeException exception) {
+            if (!loggedFailure) {
+                loggedFailure = true;
+                LOGGER.warn("毛玻璃底图截屏失败，改为纯压暗底", exception);
+            }
             return false;
         }
         NativeImage image = new NativeImage(TEX_WIDTH, TEX_HEIGHT, false);
         try {
-            downsample(buffer, pixelWidth, pixelHeight, image);
+            long luma = downsample(buffer, pixelWidth, pixelHeight, image);
+            // 全黑说明读回没拿到画面（某些驱动/离屏情况下会全 0），不要拿黑图盖住视野。
+            if (luma < 3L) {
+                return false;
+            }
             if (texture == null) {
                 texture = new DynamicTexture(image);
                 texture.setFilter(true, false);
@@ -137,8 +152,10 @@ public final class FrostedBackdrop {
     /**
      * 块平均降采样并同时上下翻转（{@code glReadPixels} 第 0 行是屏幕底部）。
      */
-    private static void downsample(ByteBuffer buffer, int pixelWidth, int pixelHeight,
+    private static long downsample(ByteBuffer buffer, int pixelWidth, int pixelHeight,
                                    NativeImage out) {
+        long lumaTotal = 0L;
+        int lumaCount = 0;
         float stepX = (float) pixelWidth / TEX_WIDTH;
         float stepY = (float) pixelHeight / TEX_HEIGHT;
         int sampleStepX = Math.max(1, Math.round(stepX / 2.0F));
@@ -173,7 +190,10 @@ public final class FrostedBackdrop {
                 int b = (int) (blue / count);
                 // NativeImage#setPixelRGBA 期望 ABGR 顺序。
                 out.setPixelRGBA(x, y, (a << 24) | (b << 16) | (g << 8) | r);
+                lumaTotal += (r * 299L + g * 587L + b * 114L) / 1000L;
+                lumaCount++;
             }
         }
+        return lumaCount == 0 ? 0L : lumaTotal / lumaCount;
     }
 }

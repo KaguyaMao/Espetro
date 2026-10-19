@@ -64,7 +64,7 @@ public final class UiTheme {
     public static final int GLASS_PANEL_SOFT = 0x5C0A0D12;
 
     /** 毛玻璃底图之上的压暗层：把世界压成低对比色块，保证前景白字可读。 */
-    public static final int FROST_SCRIM = 0x9A07090B;
+    public static final int FROST_SCRIM = 0x8407090B;
 
     /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在暗面上。 */
     public static final int SHADOW_1 = 0x66000000;
