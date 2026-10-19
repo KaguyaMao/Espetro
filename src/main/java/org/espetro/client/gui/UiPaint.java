@@ -485,38 +485,12 @@ public final class UiPaint {
     // ------------------------------------------------------------------
 
     /**
-     * 旧版文案里的 {@code §} 颜色码是按"深色玻璃"配的：白字 {@code §f}、黄字 {@code §e}
-     * 压在纸底上会直接消失。这里统一重映射到纸墨可读的等价码（幂等，重复调用安全）：
-     * <ul>
-     *   <li>{@code §f} 白 → {@code §0} 墨（正文强调）</li>
-     *   <li>{@code §e} 黄 → {@code §8} 深灰（次级强调；黄色在纸上不可读，只作底色）</li>
-     *   <li>{@code §b} 青 → {@code §9} 蓝</li>
-     *   <li>{@code §d} 粉 → {@code §5} 紫</li>
-     * </ul>
+     * 文案色码重映射钩子。暗色系下 Minecraft 的原生色码（{@code §f} 白、{@code §7} 灰、
+     * {@code §e} 黄、{@code §c} 红…）本身就适合深底，因此当前是恒等映射；保留这个入口，
+     * 是为了将来若再换浅色主题时，只需在这里改一张映射表而不用逐屏改文案。
      */
     public static String retone(String value) {
-        if (value == null || value.isEmpty() || value.indexOf('\u00a7') < 0) {
-            return value;
-        }
-        StringBuilder out = new StringBuilder(value.length());
-        for (int i = 0; i < value.length(); i++) {
-            char c = value.charAt(i);
-            if (c == '\u00a7' && i + 1 < value.length()) {
-                char code = Character.toLowerCase(value.charAt(i + 1));
-                char mapped = switch (code) {
-                    case 'f' -> '0';
-                    case 'e' -> '8';
-                    case 'b' -> '9';
-                    case 'd' -> '5';
-                    default -> code;
-                };
-                out.append('\u00a7').append(mapped);
-                i++;
-            } else {
-                out.append(c);
-            }
-        }
-        return out.toString();
+        return value;
     }
 
     /** 普通文本（纸上不用阴影，保持印刷的干净边缘）。 */

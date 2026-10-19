@@ -28,78 +28,78 @@ public final class UiTheme {
     }
 
     // ------------------------------------------------------------------
-    // 表面（Surfaces）：纸阶，从全屏底到浮层
+    // 表面（Surfaces）：暗阶，从全屏底到浮层
     // ------------------------------------------------------------------
 
-    /** 全屏底（铺满屏幕的"纸"）：暖灰纸色，顶部略亮、底部略沉。 */
-    public static final int BACKDROP_TOP = 0xF4E9E9E3;
-    public static final int BACKDROP_BOTTOM = 0xF6E3E4DD;
+    /** 全屏底：近黑玻璃，顶部略亮、底部略沉，遮住世界但保留一点场景层次。 */
+    public static final int BACKDROP_TOP = 0xF60A0C0E;
+    public static final int BACKDROP_BOTTOM = 0xF8111418;
 
     /** 页面主容器。 */
-    public static final int SURFACE_0 = 0xF8F0F0EA;
+    public static final int SURFACE_0 = 0xF20D1013;
 
-    /** 标准卡片：纸面极浅的竖向渐变（不是玻璃渐变，只是印刷纸的微差）。 */
-    public static final int CARD_TOP = 0xFFF5F5EF;
-    public static final int CARD_BOTTOM = 0xFFEDEDE7;
+    /** 标准卡片：黑玻璃的竖向微渐变（上亮下暗，制造"压在底面上"的厚度）。 */
+    public static final int CARD_TOP = 0xFF171B20;
+    public static final int CARD_BOTTOM = 0xFF101419;
 
-    /** 浮起 / 悬停态。 */
-    public static final int SURFACE_2 = 0xFFFAFAF4;
+    /** 浮起 / 悬停态（比卡片再亮一档）。 */
+    public static final int SURFACE_2 = 0xFF1E242A;
 
-    /** 按下 / 选中态（比纸更沉一档）。 */
-    public static final int SURFACE_3 = 0xFFDCDDD6;
+    /** 按下 / 选中态（比卡片更亮，作为选中块）。 */
+    public static final int SURFACE_3 = 0xFF2A3138;
 
     /** 内凹区域（列表底、输入框、进度槽、表格行）。 */
-    public static final int SUNKEN = 0xFFE2E3DC;
+    public static final int SUNKEN = 0xFF07090B;
 
-    /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在纸上。 */
-    public static final int SHADOW_1 = 0x1C101110;
-    public static final int SHADOW_2 = 0x12101110;
-    public static final int SHADOW_3 = 0x0A101110;
+    /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在暗面上。 */
+    public static final int SHADOW_1 = 0x66000000;
+    public static final int SHADOW_2 = 0x47000000;
+    public static final int SHADOW_3 = 0x2E000000;
 
     // ------------------------------------------------------------------
     // 描边（Strokes）
     // ------------------------------------------------------------------
 
     /** 发丝线：卡片、表格、分隔线的主描边。 */
-    public static final int HAIRLINE = 0xFFD5D6D0;
+    public static final int HAIRLINE = 0x22FFFFFF;
 
     /** 更强的描边（悬停、聚焦、分组框）。 */
-    public static final int HAIRLINE_STRONG = 0xFF9A9C96;
+    public static final int HAIRLINE_STRONG = 0x3DFFFFFF;
 
-    /** 纸面顶部内高光（很轻，只是让卡片"有厚度"）。 */
-    public static final int SHEEN = 0x1AFFFFFF;
+    /** 顶面内高光（很轻，只是让卡片"有厚度"）。 */
+    public static final int SHEEN = 0x0FFFFFFF;
 
     /** 底部压暗线。 */
-    public static final int HAIRLINE_DARK = 0x26101110;
+    public static final int HAIRLINE_DARK = 0x66000000;
 
     /** 网格线：技术图纸的底纹。 */
-    public static final int GRID = 0x14101110;
+    public static final int GRID = 0x10FFFFFF;
     /** 网格主线（每 5 格一条）。 */
-    public static final int GRID_MAJOR = 0x22101110;
+    public static final int GRID_MAJOR = 0x1CFFFFFF;
     /** 角标 / 刻度的颜色。 */
-    public static final int TICK = 0xFF6E7069;
+    public static final int TICK = 0xFF6E757E;
 
     // ------------------------------------------------------------------
     // 文字（Ink）
     // ------------------------------------------------------------------
 
-    /** 正文墨色。 */
-    public static final int TEXT = 0xFF101110;
+    /** 正文（冷白）。 */
+    public static final int TEXT = 0xFFF2F5F8;
     /** 次要文字。 */
-    public static final int TEXT_SECOND = 0xFF4A4C48;
+    public static final int TEXT_SECOND = 0xFFB4BCC6;
     /** 三级文字（字段名、单位、注释）。 */
-    public static final int TEXT_THIRD = 0xFF7C7E78;
+    public static final int TEXT_THIRD = 0xFF868E99;
     /** 禁用。 */
-    public static final int TEXT_DISABLED = 0xFFA5A7A1;
-    /** 压在信号黄上的字（墨）。 */
-    public static final int TEXT_ON_ACCENT = 0xFF101110;
+    public static final int TEXT_DISABLED = 0xFF565E68;
+    /** 压在信号黄上的字（近黑）。 */
+    public static final int TEXT_ON_ACCENT = 0xFF0A0C0E;
 
-    /** 墨色实心块（主按钮、状态带）。 */
-    public static final int INK_FILL = 0xFF141513;
-    /** 压在墨色块上的字。 */
-    public static final int ON_INK = 0xFFF5F5F0;
-    /** 压在墨色块上的次级字。 */
-    public static final int ON_INK_SECOND = 0xFFA9ABA5;
+    /** 高对比实心块（主按钮、悬停反相）；暗色下就是"亮块"。 */
+    public static final int INK_FILL = 0xFFF2F5F8;
+    /** 压在高对比块上的字。 */
+    public static final int ON_INK = 0xFF0A0C0E;
+    /** 压在高对比块上的次级字。 */
+    public static final int ON_INK_SECOND = 0xFF646C77;
 
     // ------------------------------------------------------------------
     // 强调色与语义色
@@ -108,35 +108,35 @@ public final class UiTheme {
     /** 信号黄：交互、选中、焦点、强调条。大面积铺色只用于"当前项"。 */
     public static final int ACCENT = 0xFFFFF500;
     /** 加深一档（悬停、按下、描边）。 */
-    public static final int ACCENT_DIM = 0xFFE8E000;
-    /** 纸上文字用的深金（信号黄在纸上不可读）。 */
-    public static final int ACCENT_ON_PAPER = 0xFF6B5D00;
+    public static final int ACCENT_DIM = 0xFFE0D700;
+    /** 兼容名：浅色主题时期"纸上可读的深黄"，暗色下等同 ACCENT。 */
+    public static final int ACCENT_ON_PAPER = 0xFFFFF500;
     /** 半透明信号底色块。 */
-    public static final int ACCENT_SOFT = 0x33FFF500;
+    public static final int ACCENT_SOFT = 0x2EFFF500;
     /** 强调描边（1px）。 */
     public static final int ACCENT_LINE = 0xFFFFF500;
     /** 强调"光环"：用于选中外框的第二圈，很轻。 */
-    public static final int ACCENT_GLOW = 0x24FFF500;
+    public static final int ACCENT_GLOW = 0x33FFF500;
 
-    /** 品牌 / 数值金：纸上的金（深金）。 */
-    public static final int GOLD = 0xFF6B5D00;
-    public static final int GOLD_SOFT = 0x2E6B5D00;
-    public static final int GOLD_LINE = 0x8C6B5D00;
+    /** 暖强调（标题、数值、板块强调线）：比纯信号黄柔和的暖黄。 */
+    public static final int GOLD = 0xFFFFE066;
+    public static final int GOLD_SOFT = 0x2EFFE066;
+    public static final int GOLD_LINE = 0x66FFE066;
 
-    /** 语义色（纸上可读的深档）。 */
-    public static final int ATTACK = 0xFFB3352A;
-    public static final int DEFEND = 0xFF1F5FA8;
-    public static final int POSITIVE = 0xFF2F7A3E;
-    public static final int WARNING = 0xFFA8611A;
-    public static final int NEGATIVE = 0xFFB32626;
-    public static final int PURPLE = 0xFF6B4FA8;
-    public static final int SQUAD = 0xFF2B6CB0;
+    /** 语义色（暗底可读档）。 */
+    public static final int ATTACK = 0xFFFF6B5E;
+    public static final int DEFEND = 0xFF5C8CFF;
+    public static final int POSITIVE = 0xFF57D38C;
+    public static final int WARNING = 0xFFFFC24B;
+    public static final int NEGATIVE = 0xFFFF5C5C;
+    public static final int PURPLE = 0xFFC08CFF;
+    public static final int SQUAD = 0xFF67A7FF;
 
-    public static final int ATTACK_SOFT = 0x1FB3352A;
-    public static final int DEFEND_SOFT = 0x1F1F5FA8;
-    public static final int POSITIVE_SOFT = 0x1F2F7A3E;
-    public static final int WARNING_SOFT = 0x1FA8611A;
-    public static final int NEGATIVE_SOFT = 0x1FB32626;
+    public static final int ATTACK_SOFT = 0x26FF6B5E;
+    public static final int DEFEND_SOFT = 0x265C8CFF;
+    public static final int POSITIVE_SOFT = 0x2657D38C;
+    public static final int WARNING_SOFT = 0x26FFC24B;
+    public static final int NEGATIVE_SOFT = 0x26FF5C5C;
 
     // ------------------------------------------------------------------
     // 几何（Geometry）：4px 网格，全直角

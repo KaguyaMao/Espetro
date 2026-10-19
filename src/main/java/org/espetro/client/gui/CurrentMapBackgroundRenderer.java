@@ -20,7 +20,7 @@ final class CurrentMapBackgroundRenderer {
     private static final int MAX_TEXTURE_WIDTH = 320;
     private static final int MAX_TEXTURE_HEIGHT = 180;
     private static final int BLUR_RADIUS = 5;
-    private static final int DARK_OVERLAY = 0xB8F0EFE8;
+    private static final int DARK_OVERLAY = 0xAA07090B;
 
     private static final Map<String, BackgroundTexture> CACHE = new HashMap<>();
     private static final Set<String> FAILED = new HashSet<>();
