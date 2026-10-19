@@ -32,8 +32,8 @@ public final class FrostedBackdrop {
     /** 归一化底图尺寸（固定，避免窗口缩放时重建纹理）。 */
     private static final int TEX_WIDTH = 256;
     private static final int TEX_HEIGHT = 144;
-    /** 两次截屏之间的最小间隔，避免每帧读回造成卡顿。 */
-    private static final long REFRESH_INTERVAL_MS = 1000L;
+    /** 两次截屏之间的最小间隔：读回是同步的（会卡一帧），所以只做低频刷新。 */
+    private static final long REFRESH_INTERVAL_MS = 2500L;
     private static final ResourceLocation TEXTURE_ID =
         ResourceLocation.fromNamespaceAndPath("espetro", "dynamic/frosted_backdrop");
 
