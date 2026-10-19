@@ -12,10 +12,11 @@ import org.espetro.client.aui.GuiElement;
 import java.io.IOException;
 
 /**
- * Radio 范围补给状态缓存与 MUtil HUD 元素。
+ * Radio 范围补给状态缓存与 AUI HUD 元素。
  *
- * <p>关键信息变化时，整个面板在 CPU 侧重新生成并上传成一张动态纹理；
- * 相同数据不会重建或上传。普通帧只由一个 MUtil 元素提交已经生成的纹理。</p>
+ * <p>关键信息变化时，两张补给图标在 CPU 侧重新烘焙并上传成一张透明底的动态纹理；
+ * 相同数据不会重建或上传。卡片底（圆角玻璃）、进度槽与数值每帧由 {@link UiPaint}
+ * 直接绘制，普通帧没有位图重建成本。</p>
  */
 public final class FobSupplyHud {
 
@@ -23,28 +24,24 @@ public final class FobSupplyHud {
     private static final int HUD_Y = 8;
     private static final int PANEL_WIDTH = 104;
     private static final int PANEL_HEIGHT = 22;
-    private static final int BAR_Y = 3;
-    private static final int BAR_HEIGHT = 3;
-    private static final int BAR_X = 4;
-    private static final int BAR_WIDTH = 96;
-    private static final int HALF_BAR_WIDTH = BAR_WIDTH / 2;
-    private static final int AMMO_BAR_X = 4;
-    private static final int CONSTRUCTION_BAR_X = AMMO_BAR_X + HALF_BAR_WIDTH;
+    // 卡片内边距：左右各留 6px，顶部 4px，底部 2px（贴边不糊）。
+    private static final int BAR_X = 6;
+    private static final int BAR_Y = 4;
+    private static final int BAR_HEIGHT = 4;
+    private static final int BAR_WIDTH = 92;
     private static final int ICON_SIZE = 10;
-
-    private static final int PANEL_BACKGROUND = 0xD0111111;
-    private static final int PANEL_BORDER = 0xB05E646C;
-    private static final int BAR_BACKGROUND = 0xFF333333;
-    private static final int BAR_HEALTH_COLOR = 0xFF4A9BFF;
-    private static final int AMMO_COLOR = 0xFFCC4444;
-    private static final int CONSTRUCTION_COLOR = 0xFFD6B300;
+    private static final int AMMO_ICON_X = 7;
+    private static final int AMMO_ICON_Y = 10;
+    private static final int AMMO_TEXT_X = 20;
+    private static final int CONSTRUCTION_ICON_X = 56;
+    private static final int CONSTRUCTION_ICON_Y = 10;
+    private static final int CONSTRUCTION_TEXT_X = 69;
+    private static final int VALUE_TEXT_Y = 10;
 
     private static final ResourceLocation AMMO_ICON = ResourceLocation.fromNamespaceAndPath(
         "espetro", "textures/gui/squad/ammo_supply.png");
     private static final ResourceLocation CONSTRUCTION_ICON = ResourceLocation.fromNamespaceAndPath(
         "espetro", "textures/gui/squad/construction_supply.png");
-    private static final ResourceLocation VANILLA_ASCII_FONT = ResourceLocation.fromNamespaceAndPath(
-        "minecraft", "textures/font/ascii.png");
 
     private static boolean inRange;
     private static int construction;
@@ -153,7 +150,6 @@ public final class FobSupplyHud {
         private ResourceLocation textureLocation;
         private NativeImage ammoIcon;
         private NativeImage constructionIcon;
-        private NativeImage asciiFont;
         private boolean resourcesLoaded;
         private boolean dirty = true;
         private boolean failed;
@@ -179,14 +175,32 @@ public final class FobSupplyHud {
                          int drawHeight, int mouseX, int mouseY, float partialTick) {
             if (!isVisible()) return;
             if (dirty && !failed) rebuildTexture();
-            if (textureLocation == null) {
-                drawSafeFallback(graphics, parentX + getX(), parentY + getY());
-                return;
+            int panelX = parentX + getX();
+            int panelY = parentY + getY();
+
+            // 圆角玻璃卡：阴影 + 渐变底 + 发丝描边 + 顶部内高光。
+            UiPaint.card(graphics, panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT);
+            // 电台血量：内凹槽 + 渐变填充 + 高光。
+            float healthRatio = radioMaxHealth <= 0 ? 0f : radioHealth / (float) radioMaxHealth;
+            UiPaint.progress(graphics, panelX + BAR_X, panelY + BAR_Y,
+                BAR_WIDTH, BAR_HEIGHT, healthRatio, UiTheme.ACCENT);
+
+            if (textureLocation != null) {
+                HudRenderState.begin(graphics);
+                graphics.blit(textureLocation, panelX, panelY,
+                    0.0f, 0.0f, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+                HudRenderState.restore(graphics);
+            } else {
+                drawFallbackIcons(graphics, panelX, panelY);
             }
-            HudRenderState.begin(graphics);
-            graphics.blit(textureLocation, parentX + getX(), parentY + getY(),
-                0.0f, 0.0f, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
-            HudRenderState.restore(graphics);
+
+            // 关键数值：标题字号 + 投影，保持高可读。
+            UiPaint.textScaled(graphics, Integer.toString(ammunition),
+                panelX + AMMO_TEXT_X, panelY + VALUE_TEXT_Y, UiTheme.TEXT,
+                UiTheme.TYPE_HEADING, true);
+            UiPaint.textScaled(graphics, Integer.toString(construction),
+                panelX + CONSTRUCTION_TEXT_X, panelY + VALUE_TEXT_Y, UiTheme.TEXT,
+                UiTheme.TYPE_HEADING, true);
         }
 
         private void rebuildTexture() {
@@ -211,65 +225,15 @@ public final class FobSupplyHud {
             }
         }
 
+        /**
+         * 只把两张图标烤进动态纹理（其余像素透明）：卡片底、进度槽与数值都改由
+         * {@link UiPaint} 逐帧绘制，保持既有"状态变化才重上传"的缓存策略不变。
+         */
         private void paintBitmap() {
-            pixels.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT, 0x00000000);
-            fillArgb(0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_BACKGROUND);
-            fillArgb(0, 0, PANEL_WIDTH, 1, PANEL_BORDER);
-            fillArgb(0, PANEL_HEIGHT - 1, PANEL_WIDTH, 1, PANEL_BORDER);
-            fillArgb(0, 1, 1, PANEL_HEIGHT - 2, PANEL_BORDER);
-            fillArgb(PANEL_WIDTH - 1, 1, 1, PANEL_HEIGHT - 2, PANEL_BORDER);
-
-            fillArgb(BAR_X, BAR_Y, BAR_WIDTH, BAR_HEIGHT, BAR_BACKGROUND);
-            int healthWidth = scaledBarWidth(radioHealth, radioMaxHealth, BAR_WIDTH);
-            if (healthWidth > 0) {
-                fillArgb(BAR_X, BAR_Y, healthWidth, BAR_HEIGHT, BAR_HEALTH_COLOR);
-            }
-
-            drawIcon(ammoIcon, 8, 9, false);
-            drawIcon(constructionIcon, 57, 9, true);
-            drawNumber(Integer.toString(ammunition), 19, 10);
-            drawNumber(Integer.toString(construction), 68, 10);
-        }
-
-        private void fillArgb(int x, int y, int width, int height, int argb) {
-            if (width <= 0 || height <= 0) return;
-            pixels.fillRect(x, y, width, height, argbToAbgr(argb));
-        }
-
-        private void drawNumber(String value, int x, int y) {
-            if (asciiFont == null) return;
-            int cursor = x;
-            for (int i = 0; i < value.length(); i++) {
-                char character = value.charAt(i);
-                if (character < '0' || character > '9') continue;
-                int glyphX = (character & 15) * 8;
-                int glyphY = ((character >>> 4) & 15) * 8;
-                int left = 8;
-                int right = -1;
-                for (int row = 0; row < 8; row++) {
-                    for (int column = 0; column < 8; column++) {
-                        if ((asciiFont.getPixelRGBA(glyphX + column, glyphY + row) >>> 24) != 0) {
-                            left = Math.min(left, column);
-                            right = Math.max(right, column);
-                        }
-                    }
-                }
-                if (right < left) {
-                    cursor += 4;
-                    continue;
-                }
-                for (int row = 0; row < 8; row++) {
-                    for (int column = left; column <= right; column++) {
-                        int alpha = asciiFont.getPixelRGBA(glyphX + column, glyphY + row) >>> 24;
-                        int targetX = cursor + column - left;
-                        int targetY = y + row;
-                        if (alpha != 0 && targetX < PANEL_WIDTH && targetY < PANEL_HEIGHT) {
-                            pixels.blendPixel(targetX, targetY, (alpha << 24) | 0x00FFFFFF);
-                        }
-                    }
-                }
-                cursor += right - left + 2;
-            }
+            // 0 = 完全透明；底色/文字已改由 UiPaint 逐帧绘制，不再写死颜色。
+            pixels.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT, 0);
+            drawIcon(ammoIcon, AMMO_ICON_X, AMMO_ICON_Y, false);
+            drawIcon(constructionIcon, CONSTRUCTION_ICON_X, CONSTRUCTION_ICON_Y, true);
         }
 
         private void loadResourcesIfNecessary() {
@@ -277,7 +241,6 @@ public final class FobSupplyHud {
             closeSourceImages();
             ammoIcon = loadScaledIcon(AMMO_ICON);
             constructionIcon = loadScaledIcon(CONSTRUCTION_ICON);
-            asciiFont = loadIcon(VANILLA_ASCII_FONT);
             resourcesLoaded = true;
         }
 
@@ -340,7 +303,7 @@ public final class FobSupplyHud {
         }
 
         private void drawFallbackIcon(int x, int y, boolean constructionType) {
-            int symbol = argbToAbgr(constructionType ? CONSTRUCTION_COLOR : AMMO_COLOR);
+            int symbol = argbToAbgr(constructionType ? UiTheme.WARNING : UiTheme.ATTACK);
             int center = ICON_SIZE / 2;
             int radius = Math.max(2, (ICON_SIZE - 2) / 2);
             for (int row = 0; row < ICON_SIZE; row++) {
@@ -348,7 +311,8 @@ public final class FobSupplyHud {
                     int dx = column - center;
                     int dy = row - center;
                     if (dx * dx + dy * dy <= radius * radius) {
-                        pixels.setPixelRGBA(x + column, y + row, 0xFF080808);
+                        pixels.setPixelRGBA(x + column, y + row,
+                            argbToAbgr(UiTheme.TEXT_ON_ACCENT));
                     }
                 }
             }
@@ -373,20 +337,19 @@ public final class FobSupplyHud {
             }
         }
 
-        private void drawSafeFallback(GuiGraphics graphics, int x, int y) {
-            graphics.fill(x, y, x + PANEL_WIDTH, y + PANEL_HEIGHT, PANEL_BACKGROUND);
-            graphics.renderOutline(x, y, PANEL_WIDTH, PANEL_HEIGHT, PANEL_BORDER);
-            graphics.fill(x + BAR_X, y + BAR_Y,
-                x + BAR_X + BAR_WIDTH, y + BAR_Y + BAR_HEIGHT, BAR_BACKGROUND);
-            int healthWidth = scaledBarWidth(radioHealth, radioMaxHealth, BAR_WIDTH);
-            if (healthWidth > 0) {
-                graphics.fill(x + BAR_X, y + BAR_Y,
-                    x + BAR_X + healthWidth, y + BAR_Y + BAR_HEIGHT, BAR_HEALTH_COLOR);
-            }
-            graphics.drawString(Minecraft.getInstance().font, Integer.toString(ammunition),
-                x + 19, y + 11, 0xFFFFFFFF, false);
-            graphics.drawString(Minecraft.getInstance().font, Integer.toString(construction),
-                x + 68, y + 11, 0xFFFFFFFF, false);
+        /** 动态纹理不可用时的兜底：仍按新风格画两个语义色图标底，卡片与数值照常绘制。 */
+        private void drawFallbackIcons(GuiGraphics graphics, int x, int y) {
+            drawFallbackIconMark(graphics, x + AMMO_ICON_X, y + AMMO_ICON_Y, UiTheme.ATTACK);
+            drawFallbackIconMark(graphics, x + CONSTRUCTION_ICON_X, y + CONSTRUCTION_ICON_Y,
+                UiTheme.WARNING);
+        }
+
+        private void drawFallbackIconMark(GuiGraphics graphics, int x, int y, int accent) {
+            int centerX = x + ICON_SIZE / 2;
+            int centerY = y + ICON_SIZE / 2;
+            int radius = Math.max(2, ICON_SIZE / 2 - 1);
+            UiPaint.circle(graphics, centerX, centerY, radius, UiTheme.alpha(accent, 0.22f));
+            UiPaint.ring(graphics, centerX, centerY, radius, accent);
         }
 
         private void dispose() {
@@ -403,16 +366,13 @@ public final class FobSupplyHud {
             pixels = null;
             ammoIcon = null;
             constructionIcon = null;
-            asciiFont = null;
         }
 
         private void closeSourceImages() {
             if (ammoIcon != null) ammoIcon.close();
             if (constructionIcon != null) constructionIcon.close();
-            if (asciiFont != null) asciiFont.close();
             ammoIcon = null;
             constructionIcon = null;
-            asciiFont = null;
         }
 
         private static int argbToAbgr(int argb) {

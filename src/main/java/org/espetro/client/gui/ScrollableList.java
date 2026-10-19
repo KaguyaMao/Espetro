@@ -4,6 +4,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import org.espetro.client.aui.GuiElement;
 
+import java.util.List;
+
 /**
  * 垂直滚动列表容器 — 参考 mutil 的 GuiHorizontalScrollable 实现。
  * 子元素按 addChild 的顺序垂直排列，超出的部分可通过鼠标滚轮滚动。
@@ -12,10 +14,8 @@ public class ScrollableList extends GuiElement {
 
     private static final int SCROLLBAR_W = 4;
     private static final int MIN_HANDLE_H = 10;
-    private static final int TRACK_COLOR = 0x35FFFFFF;
-    private static final int TRACK_DISABLED_COLOR = 0x20FFFFFF;
-    private static final int HANDLE_COLOR = 0xB0FFFFFF;
-    private static final int HANDLE_DISABLED_COLOR = 0x45FFFFFF;
+    /** 行 hover 底色圆角（≤ 6，逐行扫描成本可控）。 */
+    private static final int ROW_RADIUS = 2;
 
     private double scrollOffset = 0;
     private double scrollVelocity = 0;
@@ -144,6 +144,7 @@ public class ScrollableList extends GuiElement {
         lastDraw = now;
 
         graphics.enableScissor(refX, refY, refX + getWidth(), refY + getHeight());
+        drawRowHover(graphics, refX, refY - (int) scrollOffset, mouseX, mouseY);
         super.drawChildren(graphics, refX, refY - (int) scrollOffset, screenWidth, screenHeight,
             mouseX, mouseY, opacity);
         graphics.disableScissor();
@@ -153,16 +154,39 @@ public class ScrollableList extends GuiElement {
             int trackY = refY;
             int trackH = getHeight();
             boolean scrollable = maxScroll > 0;
-            graphics.fill(trackX, trackY, trackX + 1, trackY + trackH,
-                scrollable ? TRACK_COLOR : TRACK_DISABLED_COLOR);
+            // 轨道：内凹圆角槽（SUNKEN），滑块：圆角胶囊。
+            UiPaint.roundRect(graphics, trackX, trackY, SCROLLBAR_W, trackH,
+                SCROLLBAR_W / 2, UiTheme.SUNKEN);
 
             int handleH = scrollable
                 ? Math.max(MIN_HANDLE_H, (int) ((double) getHeight() / (getHeight() + maxScroll) * trackH))
                 : trackH;
             int travel = Math.max(0, trackH - handleH);
             int handleY = scrollable ? trackY + (int) (scrollOffset / maxScroll * travel) : trackY;
-            graphics.fill(trackX - 1, handleY, trackX + SCROLLBAR_W - 1, handleY + handleH,
-                scrollable ? HANDLE_COLOR : HANDLE_DISABLED_COLOR);
+            UiPaint.pill(graphics, trackX - 1, handleY, SCROLLBAR_W + 2, handleH,
+                scrollable ? UiTheme.withAlpha(UiTheme.TEXT_SECOND, 0xA8)
+                    : UiTheme.withAlpha(UiTheme.TEXT_THIRD, 0x50));
+        }
+    }
+
+    /**
+     * 行 hover 底色：画在子元素之下，行本身已有不透明底板时自然被盖住；
+     * 纯文字行则透出一层 {@code SURFACE_2}，与"列表行 hover"规范一致。
+     */
+    private void drawRowHover(GuiGraphics graphics, int refX, int refY, int mouseX, int mouseY) {
+        List<GuiElement> children = getChildren();
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GuiElement child = children.get(i);
+            if (!child.isVisible()) continue;
+            int childX = refX + child.getX();
+            int childY = refY + child.getY();
+            if (mouseX < childX || mouseX >= childX + child.getWidth()
+                || mouseY < childY || mouseY >= childY + child.getHeight()) {
+                continue;
+            }
+            UiPaint.roundRect(graphics, childX, childY, child.getWidth(), child.getHeight(),
+                ROW_RADIUS, UiTheme.SURFACE_2);
+            return;
         }
     }
 }

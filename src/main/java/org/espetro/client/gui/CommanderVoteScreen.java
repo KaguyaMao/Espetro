@@ -103,11 +103,9 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         voteStatusText = null;
         int playerCount = players == null ? 0 : players.size();
         boolean votingOpen = timeRemaining > 0;
-        String teamPrefix = EspetroAuiWidgets.teamPrefix(team);
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "\u00a76\u00a7l指挥官投票 \u00a77| " + teamPrefix + "\u00a7l"
-                + EspetroAuiWidgets.teamName(team),
-            buildTimeText(), "", EspetroAuiWidgets.teamColor(team));
+            "指挥官投票 · " + EspetroAuiWidgets.teamName(team),
+            buildTimeText(), "", "ATTACK".equals(team) ? UiTheme.ATTACK : UiTheme.DEFEND);
         int phaseHeaderH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
 
         int columns = 4;
@@ -132,11 +130,11 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         int panelY = phaseHeaderH + 6
             + Math.max(0, (this.height - phaseHeaderH - 12 - panelH) / 2);
 
-        root.addChild(EspetroAuiWidgets.panel(panelX, panelY, panelW, panelH, 0x00000000, 0x00000000));
+        root.addChild(EspetroAuiWidgets.card(panelX, panelY, panelW, panelH));
 
         if (playerCount == 0) {
             root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 12, panelW,
-                "\u00a7c当前队伍没有可投票玩家", EspetroAuiWidgets.NEGATIVE));
+                "当前队伍没有可投票玩家", UiTheme.NEGATIVE));
             return;
         }
 
@@ -154,7 +152,6 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
 
         for (int i = scrollOffset; i < maxVisible; i++) {
             String playerName = players.get(i);
-            int votes = voteCounts.getOrDefault(playerName, 0);
             boolean isSelf = playerName.equals(selfName);
             boolean isSelected = playerName.equals(currentVote);
 
@@ -164,29 +161,39 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
             int x = startX + col * (cardW + gap);
             int y = startY + row * (cardH + gap);
 
-            String prefix = isSelected ? "\u00a7a\u2713 " : "\u00a7f";
-            // 名字旁边显示实时投票数：票数>0黄色，=0灰色
-            String label = prefix + playerName + (isSelf ? " \u00a78(自己)" : "") + " \u00a7e[" + votes + "]";
+            String label = buildPlayerLabel(playerName, isSelf, isSelected);
 
             var button = EspetroAuiWidgets.button(x, y, cardW, cardH, label, () -> voteFor(playerName))
                 .setEnabled(votingOpen)
-                .setSelected(isSelected)
-                .setColors(0x00000000, 0x202D3444, 0x30243A27)
-                .setBorderColor(0x00000000);
+                .setSelected(isSelected);
             root.addChild(button);
             voteButtons.put(playerName, button);
         }
 
         if (maxScrollOffset > 0) {
             root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + panelH - 26, panelW,
-                "\u00a78鼠标滚轮切换列表  " + (scrollOffset + 1) + "-" + maxVisible + "/" + playerCount,
-                EspetroAuiWidgets.DIM));
+                "鼠标滚轮切换列表  " + (scrollOffset + 1) + "-" + maxVisible + "/" + playerCount,
+                UiTheme.TEXT_THIRD));
         }
+
+        root.addChild(EspetroAuiWidgets.chip(panelX + 12, panelY + panelH - 19,
+            votingStatusLabel(), votingOpen ? UiTheme.POSITIVE : UiTheme.TEXT_THIRD));
 
         voteStatusText = EspetroAuiWidgets.centeredText(
             panelX, panelY + panelH - 13, panelW,
-            buildVoteStatusText(), EspetroAuiWidgets.TEXT);
+            buildVoteStatusText(), UiTheme.TEXT);
         root.addChild(voteStatusText);
+    }
+
+    /** 投票状态胶囊标签（供 chip 使用）。 */
+    private String votingStatusLabel() {
+        if (isWaitingForOwnVote()) {
+            return "等待开始";
+        }
+        if (timeRemaining > 0) {
+            return "投票中 " + timeRemaining + "s";
+        }
+        return "已结束";
     }
 
     private String lastVoteStatusRendered;
@@ -216,7 +223,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
                 .setLabel(buildPlayerLabel(playerName, isSelf, selected))
                 .setEnabled(votingOpen)
                 .setSelected(selected)
-                .setTextColor(EspetroAuiWidgets.TEXT);
+                .setTextColor(UiTheme.TEXT);
         }
         if (voteStatusText != null) {
             String next = buildVoteStatusText();
@@ -229,45 +236,42 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
 
     private String buildTimeText() {
         if (timeRemaining > 0) {
-            return (timeRemaining <= 10 ? "\u00a7c" : "\u00a76")
-                + "剩余时间: " + timeRemaining + "秒";
+            return "剩余时间: " + timeRemaining + "秒";
         }
         return isWaitingForOwnVote()
-            ? "\u00a77本方指挥官投票尚未开始"
-            : "\u00a77本方指挥官投票已结束";
+            ? "本方指挥官投票尚未开始"
+            : "本方指挥官投票已结束";
     }
 
     private String buildOpponentText() {
         if (opponentTeamName == null || opponentTeamName.isEmpty()) {
             return "";
         }
-        String text = ("ATTACK".equals(team) ? "\u00a79" : "\u00a7c") + opponentTeamName;
+        String text = opponentTeamName;
         if (opponentTimeRemaining >= 0) {
-            text += (opponentTimeRemaining <= 5 ? " \u00a7c" : " \u00a76")
-                + "指挥官投票剩余: " + opponentTimeRemaining + "秒";
+            text += " 指挥官投票剩余: " + opponentTimeRemaining + "秒";
         }
         if (opponentFaction != null && !opponentFaction.isEmpty()) {
-            text += " \u00a77· 编制: " + opponentFaction;
+            text += " · 编制: " + opponentFaction;
         }
         return text;
     }
 
     private String buildPlayerLabel(String playerName, boolean isSelf, boolean selected) {
-        String prefix = selected ? "\u00a7a\u2713 " : "\u00a7f";
-        return prefix + playerName + (isSelf ? " \u00a78(自己)" : "")
-            + " \u00a7e[" + voteCounts.getOrDefault(playerName, 0) + "]";
+        return (selected ? "✓ " : "") + playerName + (isSelf ? " (自己)" : "")
+            + " [" + voteCounts.getOrDefault(playerName, 0) + "]";
     }
 
     private String buildVoteStatusText() {
         if (isWaitingForOwnVote()) {
-            return "\u00a78等待本方指挥官投票开始";
+            return "等待本方指挥官投票开始";
         }
         if (timeRemaining <= 0) {
-            return "\u00a78等待对方完成指挥官投票";
+            return "等待对方完成指挥官投票";
         }
         return currentVote == null
-            ? "\u00a78尚未投票"
-            : EspetroAuiWidgets.teamPrefix(team) + "当前投票: \u00a7a" + currentVote;
+            ? "尚未投票"
+            : EspetroAuiWidgets.teamName(team) + " 当前投票: " + currentVote;
     }
 
     private void voteFor(String playerName) {

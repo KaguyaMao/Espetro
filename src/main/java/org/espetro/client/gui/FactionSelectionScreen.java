@@ -46,26 +46,35 @@ public class FactionSelectionScreen extends EspetroMenuScreen {
     protected void buildMenuRoot(GuiElement root) {
         int panelW = Math.min(520, Math.max(240, this.width - 28));
         int columns = this.width < 420 ? 1 : this.width < 680 ? 2 : 3;
-        int gap = 4;
+        int gap = UiTheme.GAP_XS;
         int cardW = (panelW - 24 - (columns - 1) * gap) / columns;
-        int cardH = 13;
+        int cardH = UiTheme.CONTROL_HEIGHT_S;
         int rows = Math.max(1, (factions.length + columns - 1) / columns);
-        int panelH = Math.min(this.height - 28, 58 + rows * cardH + Math.max(0, rows - 1) * gap + 24);
+        int headerH = 78;
+        int footerH = 46;
+        int panelH = Math.min(this.height - 20,
+            headerH + rows * cardH + Math.max(0, rows - 1) * gap + footerH);
         int panelX = (this.width - panelW) / 2;
         int panelY = Math.max(14, (this.height - panelH) / 2);
 
-        root.addChild(EspetroAuiWidgets.panel(panelX, panelY, panelW, panelH, 0x00000000, 0x00000000));
-        root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 6, panelW,
-            "\u00a76\u00a7l战术小队 - 选择阵营", EspetroAuiWidgets.TEXT));
-        root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 22, panelW,
-            "\u00a77选择一个阵营编制加入战斗", EspetroAuiWidgets.MUTED));
-        root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 36, panelW,
-            "\u00a7e当前可用阵营: " + factions.length + " 个", EspetroAuiWidgets.GOLD));
-        root.addChild(EspetroAuiWidgets.rect(panelX + 12, panelY + 51, panelW - 24, 1, 0x25FFFFFF));
+        // 主容器：玻璃卡片 + 顶部标题区
+        root.addChild(EspetroAuiWidgets.card(panelX, panelY, panelW, panelH));
+
+        EspetroAuiWidgets.Text title = EspetroAuiWidgets.centeredText(panelX, panelY + 10, panelW,
+            "战术小队 · 选择阵营", UiTheme.GOLD);
+        title.setTextScale(UiTheme.TYPE_TITLE).setShadow(true);
+        root.addChild(title);
+        root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 29, panelW,
+            "选择一个阵营编制加入战斗", UiTheme.TEXT_SECOND));
+
+        // 可用阵营数量：数字独立放大，避免"数字混在句子里"。
+        root.addChild(EspetroAuiWidgets.stat(panelX + (panelW - 64) / 2, panelY + 44, 64,
+            "AVAILABLE", String.valueOf(factions.length), UiTheme.GOLD));
+        root.addChild(EspetroAuiWidgets.divider(panelX + 12, panelY + 70, panelW - 24));
 
         int startX = panelX + 12;
-        int startY = panelY + 60;
-        int visibleRows = Math.max(1, (panelH - 86) / (cardH + gap));
+        int startY = panelY + headerH;
+        int visibleRows = Math.max(1, (panelH - headerH - footerH + gap) / (cardH + gap));
         int visibleCount = visibleRows * columns;
         maxScrollOffset = Math.max(0, factions.length - visibleCount);
         scrollOffset = Math.min(scrollOffset, maxScrollOffset);
@@ -81,24 +90,23 @@ public class FactionSelectionScreen extends EspetroMenuScreen {
 
             String icon = faction.icon == null ? "" : faction.icon + " ";
             String name = faction.name == null ? faction.id : faction.name;
-            String label = "\u00a7f" + icon + name;
+            String label = icon + name;
             var button = EspetroAuiWidgets.button(x, y, cardW, cardH, label, () -> selectFaction(faction.id))
-                .setColors(0x00000000, 0x202C3544, 0x303A3020)
-                .setBorderColor(0x00000000);
+                .setAccentColor(UiTheme.ACCENT);
             root.addChild(button);
         }
 
         if (maxScrollOffset > 0) {
-            root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + panelH - 19, panelW,
-                "\u00a78鼠标滚轮切换列表  " + (scrollOffset + 1) + "-" + maxVisible + "/" + factions.length,
-                EspetroAuiWidgets.DIM));
+            root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + panelH - 38, panelW,
+                "滚轮浏览  " + (scrollOffset + 1) + "-" + maxVisible + "/" + factions.length,
+                UiTheme.TEXT_THIRD).setTextScale(UiTheme.TYPE_MICRO));
         }
 
-        int backW = EspetroAuiWidgets.textButtonWidth("\u00a7c返回");
-        root.addChild(EspetroAuiWidgets.button(panelX + panelW / 2 - backW / 2, panelY + panelH - 16, backW, 13,
-            "\u00a7c返回", this::onClose)
-            .setColors(0x00000000, 0x20251515, 0x30251515)
-            .setBorderColor(0x00000000));
+        int backW = Math.max(64, EspetroAuiWidgets.textButtonWidth("返回"));
+        root.addChild(EspetroAuiWidgets.button(panelX + panelW / 2 - backW / 2,
+            panelY + panelH - 24, backW, 16, "返回", this::onClose)
+            .setTextColor(UiTheme.TEXT_SECOND)
+            .setAccentColor(UiTheme.WARNING));
     }
 
     private void selectFaction(String factionId) {

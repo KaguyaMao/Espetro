@@ -154,13 +154,14 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
 
             int currentCount = classCounts.getOrDefault(displayClasses[i].classId, 0);
             boolean full = currentCount >= displayClasses[i].maxPlayers;
-            String roleColor = full ? "§c" : getRoleColor(displayClasses[i].role);
             String buttonText =
-                "    " + roleColor + displayClasses[i].name + " §7[" + currentCount
-                    + "/" + displayClasses[i].maxPlayers + "]";
+                "    " + displayClasses[i].name + "  " + currentCount
+                    + "/" + displayClasses[i].maxPlayers;
             EspetroAuiWidgets.ActionButton button = EspetroAuiWidgets.button(
-                x, y, buttonWidth, buttonHeight, buttonText, () -> selectClass(classIndex))
-                .setEnabled(!full);
+                x, y, buttonWidth, buttonHeight, buttonText, () -> selectClass(classIndex));
+            button.setTextColor(full ? UiTheme.NEGATIVE
+                : getRoleAccent(displayClasses[i].role));
+            button.setEnabled(!full);
             root.addChild(button);
             classButtons.add(button);
         }
@@ -172,10 +173,11 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
             ClassDisplay cls = displayClasses[i];
             int currentCount = classCounts.getOrDefault(cls.classId, 0);
             boolean full = currentCount >= cls.maxPlayers;
-            String roleColor = full ? "§c" : getRoleColor(cls.role);
-            classButtons.get(i).setLabel(
-                "    " + roleColor + cls.name + " §7[" + currentCount + "/" + cls.maxPlayers + "]")
+            String label = "    " + cls.name + "  " + currentCount + "/" + cls.maxPlayers;
+            classButtons.get(i).setLabel(label)
                 .setEnabled(!full);
+            classButtons.get(i).setTextColor(full ? UiTheme.NEGATIVE
+                : getRoleAccent(cls.role));
         }
     }
 
@@ -214,23 +216,24 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
         this.errorDisplayTime = 100;
     }
 
-    private String getRoleColor(String role) {
-        if (role == null) return "§e";
+    /** 职业定位 → 语义色：突击=ATTACK、医疗=POSITIVE、狙击=DEFEND、工程=WARNING、侦察=PURPLE、运输=GOLD。 */
+    private int getRoleAccent(String role) {
+        if (role == null) return UiTheme.WARNING;
         role = role.toLowerCase();
         if (role.contains("突击") || role.contains("战斗") || role.contains("主力")) {
-            return "§c";
+            return UiTheme.ATTACK;
         } else if (role.contains("医疗") || role.contains("医护")) {
-            return "§a";
+            return UiTheme.POSITIVE;
         } else if (role.contains("狙击") || role.contains("远程")) {
-            return "§9";
+            return UiTheme.DEFEND;
         } else if (role.contains("工程") || role.contains("工兵") || role.contains("支援")) {
-            return "§e";
+            return UiTheme.WARNING;
         } else if (role.contains("侦察")) {
-            return "§d";
+            return UiTheme.PURPLE;
         } else if (role.contains("运输") || role.contains("护卫")) {
-            return "§6";
+            return UiTheme.GOLD;
         }
-        return "§f";
+        return UiTheme.TEXT;
     }
 
     private void selectClass(int index) {
@@ -239,7 +242,7 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
 
             int current = classCounts.getOrDefault(cls.classId, 0);
             if (current >= cls.maxPlayers) {
-                showError("§c" + cls.name + " 人数已满！请选择其他职业。");
+                showError(cls.name + " 人数已满！请选择其他职业。");
                 return;
             }
 
@@ -271,36 +274,57 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
     private void renderEquipmentPanel(GuiGraphics graphics, ClassDisplay cls) {
         int panelX = startX + buttonWidth + 20;
         int panelY = 35;
-        int panelWidth = this.width - panelX - 10;
+        int panelWidth = Math.max(24, this.width - panelX - 10);
 
-        graphics.fill(panelX - 4, panelY - 4, panelX + panelWidth, panelY + 180, 0x00000000);
+        // 右侧装备详情：玻璃卡片（阴影 + 渐变 + 极细描边）
+        UiPaint.card(graphics, panelX - 8, panelY - 8, panelWidth + 16, 124);
 
-        int lineY = panelY;
-        int lineHeight = 11;
-        int margin = 8;
+        int pad = 8;
+        int lineY = panelY + 4;
 
         int currentCount = classCounts.getOrDefault(cls.classId, 0);
-        String countColor = currentCount >= cls.maxPlayers ? "§c" : "§a";
-        graphics.drawString(this.font, Component.literal("§6§l" + cls.name + " §7- " + cls.role),
-            panelX + margin, lineY, 0xFFFFFF);
-        lineY += lineHeight + 2;
+        int countColor = currentCount >= cls.maxPlayers ? UiTheme.NEGATIVE : UiTheme.POSITIVE;
+        String name = cls.name == null ? "" : cls.name;
 
-        graphics.drawString(this.font, Component.literal(countColor + "人数: " + currentCount + "/" + cls.maxPlayers),
-            panelX + margin, lineY, 0xFFFFFF);
-        lineY += lineHeight + 6;
+        // 职业名（标题）+ 角色（次要信息）
+        EspetroAuiWidgets.drawScaledString(graphics, name,
+            panelX + pad, lineY, UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
+        int nameW = (int) (this.font.width(EspetroAuiWidgets.stripFormatting(name))
+            * UiTheme.TYPE_HEADING);
+        if (cls.role != null && !cls.role.isEmpty()) {
+            EspetroAuiWidgets.drawScaledString(graphics, "· " + cls.role,
+                panelX + pad + nameW + 4, lineY + 2, UiTheme.TEXT_SECOND, 0.9f);
+        }
+        lineY += 17;
+
+        // 人数：micro 标签 + 大号数字
+        EspetroAuiWidgets.drawScaledString(graphics, "人数", panelX + pad, lineY + 3,
+            UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO);
+        EspetroAuiWidgets.drawScaledString(graphics, currentCount + " / " + cls.maxPlayers,
+            panelX + pad + 24, lineY, countColor, UiTheme.TYPE_HEADING, true);
+        lineY += 19;
 
         if (cls.description != null && !cls.description.isEmpty()) {
-            graphics.drawString(this.font, Component.literal("§7" + cls.description), panelX + margin, lineY, 0xAAAAAA);
-            lineY += lineHeight + 3;
+            EspetroAuiWidgets.drawScaledString(graphics,
+                EspetroAuiWidgets.trimToWidth(cls.description, panelWidth - pad * 2),
+                panelX + pad, lineY, UiTheme.TEXT_SECOND, 0.9f);
+            lineY += 14;
         }
 
-        lineY += 3;
+        UiPaint.divider(graphics, panelX + pad, lineY + 1, panelWidth - pad * 2);
+        lineY += 10;
+
+        EspetroAuiWidgets.drawScaledString(graphics, "属性", panelX + pad, lineY,
+            UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO);
+        lineY += 12;
         if (cls.healthBonus != 0) {
-            graphics.drawString(this.font, Component.literal("§c生命 +" + cls.healthBonus), panelX + margin, lineY, 0xFF8888);
-            lineY += lineHeight;
+            EspetroAuiWidgets.drawScaledString(graphics, "生命 +" + cls.healthBonus,
+                panelX + pad, lineY, UiTheme.ATTACK, 0.95f);
+            lineY += 11;
         }
         if (cls.speedBonus != 0) {
-            graphics.drawString(this.font, Component.literal("§b速度 +" + String.format("%.1f", cls.speedBonus)), panelX + margin, lineY, 0x88CCFF);
+            EspetroAuiWidgets.drawScaledString(graphics, "速度 +" + String.format("%.1f", cls.speedBonus),
+                panelX + pad, lineY, UiTheme.DEFEND, 0.95f);
         }
     }
 
@@ -333,18 +357,25 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
         if (serverFactionName != null) {
             // 服务端数据
             String icon = serverFactionIcon != null ? serverFactionIcon : "";
-            graphics.drawString(this.font, Component.literal("§6§l" + icon + " " + serverFactionName),
-                10, 8, 0xFFFFFF);
+            EspetroAuiWidgets.drawScaledString(graphics,
+                (icon.isEmpty() ? "" : icon + " ") + serverFactionName,
+                10, 7, UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
             if (serverFactionDesc != null && !serverFactionDesc.isEmpty()) {
-                graphics.drawString(this.font, Component.literal("§7" + serverFactionDesc),
-                    10, 22, 0xAAAAAA);
+                EspetroAuiWidgets.drawScaledString(graphics,
+                    EspetroAuiWidgets.trimToWidth(serverFactionDesc, Math.max(80, this.width / 2 - 20)),
+                    10, 22, UiTheme.TEXT_SECOND, 0.9f);
             }
         } else if (localFaction != null) {
             // 本地数据
-            graphics.drawString(this.font, Component.literal("§6§l" + localFaction.icon + " " + localFaction.name),
-                10, 8, 0xFFFFFF);
-            graphics.drawString(this.font, Component.literal("§7" + localFaction.description),
-                10, 22, 0xAAAAAA);
+            String icon = localFaction.icon == null ? "" : localFaction.icon;
+            EspetroAuiWidgets.drawScaledString(graphics,
+                (icon.isEmpty() ? "" : icon + " ") + localFaction.name,
+                10, 7, UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
+            if (localFaction.description != null && !localFaction.description.isEmpty()) {
+                EspetroAuiWidgets.drawScaledString(graphics,
+                    EspetroAuiWidgets.trimToWidth(localFaction.description, Math.max(80, this.width / 2 - 20)),
+                    10, 22, UiTheme.TEXT_SECOND, 0.9f);
+            }
         }
 
         // 战局倒计时（右上角）
@@ -352,20 +383,28 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
         if (btRemaining > 0) {
             int min = btRemaining / 60;
             int sec = btRemaining % 60;
-            String timerColor = btRemaining <= 60 ? "§c" : (btRemaining <= 300 ? "§e" : "§a");
-            String timerText = timerColor + "§l倒计时 " + String.format("%02d:%02d", min, sec);
-            int timerW = this.font.width(timerText);
-            graphics.drawString(this.font, Component.literal(timerText),
-                this.width - timerW - 10, 8, 0xFFFFFF);
+            int timerColor = btRemaining <= 60 ? UiTheme.NEGATIVE
+                : btRemaining <= 300 ? UiTheme.WARNING : UiTheme.POSITIVE;
+            String timerText = String.format("倒计时 %02d:%02d", min, sec);
+            int timerW = (int) (this.font.width(timerText) * 0.95f);
+            EspetroAuiWidgets.drawScaledString(graphics, timerText,
+                this.width - timerW - 10, 8, timerColor, 0.95f, true);
         }
 
-        graphics.drawString(this.font, Component.literal("§e选择职业 §7(悬停查看装备)"),
-            10, 36, 0xFFFFFF);
+        EspetroAuiWidgets.drawScaledString(graphics, "选择职业（悬停查看装备）",
+            10, 36, UiTheme.TEXT_SECOND, 0.9f);
 
-        // 错误消息
+        // 错误消息：胶囊底 + 语义红，居中于屏幕
         if (errorMessage != null && errorDisplayTime > 0) {
-            graphics.drawCenteredString(this.font, Component.literal(errorMessage),
-                this.width / 2, this.height / 2, 0xFF5555);
+            String error = EspetroAuiWidgets.stripFormatting(errorMessage);
+            int errorW = this.font.width(error) + 16;
+            int errorX = this.width / 2 - errorW / 2;
+            int errorY = this.height / 2 - 8;
+            UiPaint.roundRect(graphics, errorX, errorY, errorW, 16, 8, UiTheme.NEGATIVE_SOFT);
+            UiPaint.strokeRoundRect(graphics, errorX, errorY, errorW, 16, 8,
+                UiTheme.alpha(UiTheme.NEGATIVE, 0.55f));
+            graphics.drawCenteredString(this.font, Component.literal(error),
+                this.width / 2, errorY + 4, UiTheme.NEGATIVE);
             errorDisplayTime--;
         }
 
@@ -386,19 +425,25 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
         ClassDisplay cls = displayClasses[popupClassIndex];
         int visible = Math.min(POPUP_MAX_VISIBLE, cls.variants.size());
 
-        graphics.fill(popupX, popupY, popupX + POPUP_W, popupY + popupH, 0xF0111418);
-        graphics.renderOutline(popupX, popupY, POPUP_W, popupH, 0xFFE8B85C);
-        graphics.drawString(this.font, Component.literal("§6§l" + cls.name + " §7装备变体"),
-            popupX + 6, popupY + 5, 0xFFFFFF, false);
+        UiPaint.card(graphics, popupX, popupY, POPUP_W, popupH);
+        String clsName = cls.name == null ? "" : cls.name;
+        EspetroAuiWidgets.drawScaledString(graphics, clsName,
+            popupX + 6, popupY + 4, UiTheme.GOLD, 1.0f, true);
+        int nameW = this.font.width(EspetroAuiWidgets.stripFormatting(clsName));
+        EspetroAuiWidgets.drawScaledString(graphics, "装备变体",
+            popupX + 11 + nameW, popupY + 5, UiTheme.TEXT_SECOND, 0.9f);
 
         int closeX = popupX + POPUP_W - 16;
         int closeY = popupY + 2;
         boolean closeHovered = inside(mouseX, mouseY, closeX, closeY, 13, 13);
-        graphics.fill(closeX, closeY, closeX + 13, closeY + 13,
-            closeHovered ? 0xFFD05A5A : 0xFF553535);
-        graphics.drawCenteredString(this.font, Component.literal("§fX"),
-            closeX + 6, closeY + 2, 0xFFFFFF);
+        UiPaint.roundRect(graphics, closeX, closeY, 13, 13, UiTheme.RADIUS_INNER,
+            closeHovered ? UiTheme.NEGATIVE_SOFT : UiTheme.HAIRLINE);
+        UiPaint.strokeRoundRect(graphics, closeX, closeY, 13, 13, UiTheme.RADIUS_INNER,
+            closeHovered ? UiTheme.NEGATIVE : UiTheme.HAIRLINE);
+        EspetroAuiWidgets.drawScaledString(graphics, "X", closeX + 4, closeY + 3,
+            closeHovered ? UiTheme.NEGATIVE : UiTheme.TEXT_SECOND, 0.9f);
 
+        int rowH = POPUP_ROW_H - 1;
         for (int row = 0; row < visible; row++) {
             int variantIndex = popupScroll + row;
             if (variantIndex >= cls.variants.size()) break;
@@ -410,36 +455,36 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
                 .getOrDefault(variant.variantId(), 0);
             // 非严格模式下不检查变体独立人数上限
             boolean full = cls.strictCount && count >= variant.maxPlayers();
-            boolean hovered = inside(mouseX, mouseY, rowX, rowY, rowW, POPUP_ROW_H - 1);
-            graphics.fill(rowX, rowY, rowX + rowW, rowY + POPUP_ROW_H - 1,
-                full ? 0xD02B2025 : hovered ? 0xE0435145 : 0xD01B1E20);
-            graphics.renderOutline(rowX, rowY, rowW, POPUP_ROW_H - 1,
-                hovered && !full ? 0xFFB7C9B8 : 0x8059605E);
+            boolean hovered = inside(mouseX, mouseY, rowX, rowY, rowW, rowH);
 
-            String countText;
-            if (cls.strictCount) {
-                countText = (full ? "§c" : "§a") + "[" + count + "/" + variant.maxPlayers() + "]";
-            } else {
-                // 非严格模式：仅显示当前选择人数，不显示变体上限
-                countText = "§a" + count + "人";
-            }
-            graphics.drawString(this.font,
-                Component.literal((full ? "§8" : "§f") + variant.name()),
-                rowX + 5, rowY + 4, 0xFFFFFF, false);
-            int countW = this.font.width(EspetroAuiWidgets.stripFormatting(countText));
-            graphics.drawString(this.font, Component.literal(countText),
-                rowX + rowW - countW - 5, rowY + 4, 0xFFFFFF, false);
+            int rowFill = full ? UiTheme.NEGATIVE_SOFT
+                : hovered ? UiTheme.SURFACE_2 : UiTheme.alpha(UiTheme.SURFACE_0, 0.55f);
+            UiPaint.roundRect(graphics, rowX, rowY, rowW, rowH, UiTheme.RADIUS_CONTROL, rowFill);
+            UiPaint.strokeRoundRect(graphics, rowX, rowY, rowW, rowH, UiTheme.RADIUS_CONTROL,
+                hovered && !full ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
+
+            String variantName = variant.name() == null ? "" : variant.name();
+            EspetroAuiWidgets.drawScaledString(graphics,
+                EspetroAuiWidgets.trimToWidth(variantName, rowW - 84),
+                rowX + 6, rowY + 5, full ? UiTheme.TEXT_THIRD : UiTheme.TEXT, 0.95f);
+
+            String countText = cls.strictCount
+                ? count + "/" + variant.maxPlayers()
+                : count + "人";
+            int countW = (int) (this.font.width(countText) * UiTheme.TYPE_HEADING);
+            EspetroAuiWidgets.drawScaledString(graphics, countText,
+                rowX + rowW - countW - 6, rowY + 4,
+                full ? UiTheme.NEGATIVE : UiTheme.POSITIVE, UiTheme.TYPE_HEADING, true);
             if (variant.description() != null && !variant.description().isBlank()) {
-                graphics.drawString(this.font, Component.literal("§7" +
-                    EspetroAuiWidgets.trimToWidth(variant.description(), rowW - 10)),
-                    rowX + 5, rowY + 16, EspetroAuiWidgets.DIM, false);
+                EspetroAuiWidgets.drawScaledString(graphics,
+                    EspetroAuiWidgets.trimToWidth(variant.description(), rowW - 12),
+                    rowX + 6, rowY + 17, UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO);
             }
         }
 
         if (cls.variants.size() > POPUP_MAX_VISIBLE) {
-            graphics.drawString(this.font, Component.literal("§8滚轮浏览"),
-                popupX + POPUP_W - 49, popupY + popupH - 10,
-                EspetroAuiWidgets.DIM, false);
+            EspetroAuiWidgets.drawScaledString(graphics, "滚轮浏览",
+                popupX + POPUP_W - 48, popupY + popupH - 9, UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO);
         }
     }
 

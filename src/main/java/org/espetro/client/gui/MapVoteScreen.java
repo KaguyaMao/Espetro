@@ -156,9 +156,9 @@ public final class MapVoteScreen extends EspetroMenuScreen {
     protected void buildMenuRoot(GuiElement root) {
         mapButtons.clear();
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, width,
-            "§6§l全局地图投票", buildResultText(computeDisplaySeconds()),
-            "§7全服统一计票，票数最高的地图胜出",
-            EspetroAuiWidgets.GOLD);
+            "全局地图投票", buildResultText(computeDisplaySeconds()),
+            "全服统一计票，票数最高的地图胜出",
+            UiTheme.GOLD);
 
         int count = Math.min(latest.candidates.size(), MAX_CANDIDATES);
         LayoutMetrics layout = computeLayout();
@@ -201,8 +201,8 @@ public final class MapVoteScreen extends EspetroMenuScreen {
     }
 
     private String buildResultText(int remaining) {
-        return latest.active ? "§e剩余 " + remaining + " 秒"
-            : "§a胜出地图：" + (latest.winnerDisplayName == null ? "随机" : latest.winnerDisplayName);
+        return latest.active ? "剩余 " + remaining + " 秒"
+            : "胜出地图：" + (latest.winnerDisplayName == null ? "随机" : latest.winnerDisplayName);
     }
 
     private void updateStatusHeader(boolean force) {
@@ -284,15 +284,23 @@ public final class MapVoteScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 透明卡片：仅细边框 + 选中/hover 描边
-            int border = selected ? 0xFFE8B85C
-                : hasFocus() && enabled ? 0xFFC2C8D5 : 0x805B6260;
+            // 玻璃卡片底：选中态加 ACCENT_LINE 描边 + 外发光
+            boolean hovered = hasFocus() && enabled;
+            UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
             if (selected) {
-                graphics.fill(bx, by, bx + bw, by + bh, 0x302E3529);
-            } else if (hasFocus() && enabled) {
-                graphics.fill(bx, by, bx + bw, by + bh, 0x20273038);
+                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.ACCENT_SOFT);
+                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.ACCENT_LINE);
+                UiPaint.glow(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT);
+                UiPaint.accentBarBottom(graphics, bx + 6, by + bh - 3, bw - 12, UiTheme.ACCENT);
+            } else if (hovered) {
+                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.SURFACE_2);
+                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.HAIRLINE_STRONG);
             }
-            graphics.renderOutline(bx, by, bw, bh, border);
 
             // 预览区：贴卡片顶部水平居中，固定 16:9 横向，尽量放大
             int maxImgW = Math.max(1, bw - CARD_PAD * 2);
@@ -312,33 +320,30 @@ public final class MapVoteScreen extends EspetroMenuScreen {
                     0f, 0f, preview.texW(), preview.texH(),
                     preview.texW(), preview.texH());
             } else {
-                graphics.fill(imgX, imgY, imgX + imgAreaW, imgY + imgAreaH, 0x40303030);
-                graphics.renderOutline(imgX, imgY, imgAreaW, imgAreaH, 0x605B6260);
-                String placeholder = "§8暂未添加图片";
-                graphics.drawCenteredString(Minecraft.getInstance().font,
-                    Component.literal(placeholder),
-                    bx + bw / 2, imgY + imgAreaH / 2 - 5,
-                    EspetroAuiWidgets.DIM);
+                UiPaint.sunken(graphics, imgX, imgY, imgAreaW, imgAreaH, UiTheme.RADIUS_CONTROL);
+                UiPaint.textCentered(graphics, "暂未添加图片", imgX, imgY + imgAreaH / 2 - 4,
+                    imgAreaW, UiTheme.TEXT_THIRD, UiTheme.TYPE_BODY, false);
             }
 
-            // 票数：外框右下角，只显示数字
+            // 票数：预览图右上角的数值徽章
             String voteText = String.valueOf(votes);
-            int voteW = Minecraft.getInstance().font.width(voteText);
-            int voteX = bx + bw - 4 - voteW;
-            int voteY = by + bh - 10;
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(voteText), voteX, voteY,
-                enabled ? 0xFFE8B85C : EspetroAuiWidgets.DIM, false);
+            int numeralW = Math.round(Minecraft.getInstance().font.width(voteText)
+                * UiTheme.TYPE_NUMERAL);
+            int badgeW = Math.max(16, numeralW + 10);
+            int badgeH = 16;
+            int badgeX = bx + bw - badgeW - 4;
+            int badgeY = by + 4;
+            UiPaint.pill(graphics, badgeX, badgeY, badgeW, badgeH, UiTheme.SURFACE_0);
+            UiPaint.pillOutline(graphics, badgeX, badgeY, badgeW, badgeH, UiTheme.HAIRLINE);
+            UiPaint.textCentered(graphics, voteText, badgeX, badgeY + 1, badgeW,
+                enabled ? UiTheme.GOLD : UiTheme.TEXT_DISABLED, UiTheme.TYPE_NUMERAL, true);
 
-            // 名称：固定放在外框最底下一行，与右下角票数同一行
-            int nameMaxW = Math.max(8, bw - 8 - voteW);
+            // 名称：固定放在外框最底下一行
+            int nameMaxW = Math.max(8, bw - 12);
             String mapName = EspetroAuiWidgets.trimToWidth(
-                (selected ? "§a✔ " : "§f") + candidate.displayName, nameMaxW);
-            int nameX = bx + 4;
-            int nameY = by + bh - 10;
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(mapName), nameX, nameY,
-                EspetroAuiWidgets.TEXT, false);
+                (selected ? "✔ " : "") + candidate.displayName, nameMaxW);
+            UiPaint.text(graphics, mapName, bx + 6, by + bh - 10,
+                selected ? UiTheme.POSITIVE : UiTheme.TEXT);
 
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }

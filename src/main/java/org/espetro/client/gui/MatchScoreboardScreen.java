@@ -82,26 +82,56 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                          int mouseX, int mouseY, float partialTick) {
             hitRows.clear();
             governanceHits.clear();
-            graphics.drawCenteredString(font, "§6§l本回合玩家分数板",
-                width / 2, 10, 0xFFFFFF);
-            renderTeamColumn(graphics, "ATTACK", 6, 34, width / 2 - 9, 0xFFD35B50);
+            UiPaint.textCentered(graphics, "本回合玩家分数板", 0, 8, width,
+                UiTheme.GOLD, UiTheme.TYPE_TITLE, true);
+            renderTeamColumn(graphics, "ATTACK", 6, 34, width / 2 - 9,
+                UiTheme.ATTACK, mouseX, mouseY);
             renderTeamColumn(graphics, "DEFEND", width / 2 + 3, 34,
-                width / 2 - 9, 0xFF5685C7);
+                width / 2 - 9, UiTheme.DEFEND, mouseX, mouseY);
             renderGovernance(graphics, mouseX, mouseY);
             renderContextMenu(graphics, mouseX, mouseY);
             super.draw(graphics, x, y, drawWidth, drawHeight, mouseX, mouseY, partialTick);
         }
     }
 
-    private void renderTeamColumn(GuiGraphics graphics, String team, int x, int y, int w, int accent) {
-        graphics.fill(x, y, x + w, height - 8, 0xB0181B1D);
-        graphics.renderOutline(x, y, w, height - 8 - y, accent);
-        String title = EspetroAuiWidgets.teamPrefix(team) + EspetroAuiWidgets.teamName(team);
-        graphics.drawString(font, title, x + 5, y + 5, 0xFFFFFF);
-        graphics.drawString(font, "玩家", x + 5, y + 18, 0xFFBFC3C5);
-        graphics.drawString(font, "击杀", x + w - 92, y + 18, 0xFFBFC3C5);
-        graphics.drawString(font, "死亡", x + w - 61, y + 18, 0xFFBFC3C5);
-        graphics.drawString(font, "职业", x + w - 30, y + 18, 0xFFBFC3C5);
+    /** 微标签：小号、第三级文字色（中文不加字距）。 */
+    private static void microAt(GuiGraphics graphics, String value, int x, int y) {
+        UiPaint.textScaled(graphics, value, x, y, UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO, false);
+    }
+
+    /** 右对齐微标签：给定列的右边界。 */
+    private static void microRight(GuiGraphics graphics, String value, int right, int y) {
+        int textWidth = Math.round(Minecraft.getInstance().font.width(value) * UiTheme.TYPE_MICRO);
+        microAt(graphics, value, right - textWidth, y);
+    }
+
+    private static String localPlayerName() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player == null ? null : mc.player.getName().getString();
+    }
+
+    private static int teamWash(String team) {
+        return "ATTACK".equals(team) ? UiTheme.ATTACK_SOFT : UiTheme.DEFEND_SOFT;
+    }
+
+    private void renderTeamColumn(GuiGraphics graphics, String team, int x, int y, int w, int accent,
+                                  int mouseX, int mouseY) {
+        int panelH = height - 8 - y;
+        if (panelH <= 0 || w <= 0) {
+            return;
+        }
+        UiPaint.card(graphics, x, y, w, panelH, UiTheme.RADIUS_CARD,
+            UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+        UiPaint.accentBarBottom(graphics, x + 3, y + panelH - 3, w - 6, accent);
+
+        // 阵营标题 + 表头（微标签）
+        UiPaint.textShadowed(graphics, EspetroAuiWidgets.teamName(team), x + 8, y + 7, accent);
+        int headerY = y + 21;
+        microAt(graphics, "玩家", x + 8, headerY);
+        microRight(graphics, "击杀", x + w - 69, headerY);
+        microRight(graphics, "死亡", x + w - 38, headerY);
+        microRight(graphics, "职业", x + w - 16, headerY);
+        UiPaint.divider(graphics, x + 6, y + 30, w - 12);
 
         List<MatchStatsSyncPacket.Row> rows = latestStats.rows.stream()
             .filter(r -> team.equals(r.team))
@@ -113,25 +143,40 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                     String.CASE_INSENSITIVE_ORDER))
             .toList();
 
-        int rowY = y + 31;
+        String selfName = localPlayerName();
+        int rowY = y + 33;
         String previousSquad = null;
         for (MatchStatsSyncPacket.Row row : rows) {
             if (rowY > height - 78) break;
             String group = row.online && row.squadId >= 0 ? row.squadName : "未编组/离线";
             if (!Objects.equals(group, previousSquad)) {
-                graphics.fill(x + 3, rowY, x + w - 3, rowY + 11, 0x70363B3E);
-                graphics.drawString(font, "§6" + (group == null || group.isBlank() ? "小队" : group),
-                    x + 6, rowY + 2, 0xFFFFFF);
+                UiPaint.roundRect(graphics, x + 4, rowY, w - 8, 11,
+                    UiTheme.RADIUS_INNER, UiTheme.SURFACE_2);
+                UiPaint.textScaled(graphics, group == null || group.isBlank() ? "小队" : group,
+                    x + 8, rowY + 2, UiTheme.GOLD, UiTheme.TYPE_MICRO, false);
                 rowY += 12;
                 previousSquad = group;
             }
 
-            int color = row.online ? 0xFFF1F1F1 : 0xFF777777;
-            if ((rowY / 12 & 1) == 0) graphics.fill(x + 3, rowY, x + w - 3, rowY + 12, 0x30111111);
+            boolean self = selfName != null && selfName.equals(row.name);
+            boolean hovered = mouseX >= x + 4 && mouseX < x + w - 4
+                && mouseY >= rowY && mouseY < rowY + 12;
+            int rowFill = self ? teamWash(team) : (hovered ? UiTheme.SURFACE_2 : 0);
+            if (rowFill != 0) {
+                UiPaint.roundRect(graphics, x + 4, rowY, w - 8, 12,
+                    UiTheme.RADIUS_INNER, rowFill);
+                if (self) {
+                    UiPaint.accentBarLeft(graphics, x + 5, rowY + 3, 6, accent);
+                }
+            }
+
+            int color = row.online ? UiTheme.TEXT : UiTheme.TEXT_DISABLED;
             String name = font.plainSubstrByWidth(row.name, Math.max(20, w - 105));
-            graphics.drawString(font, name, x + 6, rowY + 2, color);
-            graphics.drawString(font, Integer.toString(row.kills), x + w - 83, rowY + 2, color);
-            graphics.drawString(font, Integer.toString(row.deaths), x + w - 51, rowY + 2, color);
+            UiPaint.textShadowed(graphics, name, x + 8, rowY + 2, color);
+            UiPaint.textShadowed(graphics, Integer.toString(row.kills),
+                x + w - 83, rowY + 2, row.online ? UiTheme.TEXT_SECOND : UiTheme.TEXT_DISABLED);
+            UiPaint.textShadowed(graphics, Integer.toString(row.deaths),
+                x + w - 51, rowY + 2, row.online ? UiTheme.TEXT_SECOND : UiTheme.TEXT_DISABLED);
             // Prefer path (IconImage) then jar slug (icon), then classId fallback.
             ResourceLocation icon = RoleIconResources.resolveForScoreboard(
                 row.classIconImage, row.classIcon, row.classId);
@@ -145,10 +190,12 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                     RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE,
                     RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
             } else {
-                graphics.drawString(font, row.classId == null || row.classId.isBlank() ? "-" : "●",
-                    x + w - 24, rowY + 2, color);
+                UiPaint.textShadowed(graphics,
+                    row.classId == null || row.classId.isBlank() ? "-" : "●",
+                    x + w - 24, rowY + 2, UiTheme.TEXT_THIRD);
             }
-            hitRows.add(new HitRow(x + 3, rowY, w - 6, 12, row));
+            UiPaint.hairline(graphics, x + 8, rowY + 12, Math.max(0, w - 16), UiTheme.HAIRLINE);
+            hitRows.add(new HitRow(x + 4, rowY, w - 8, 12, row));
             rowY += 12;
         }
     }
@@ -163,8 +210,9 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
         int w = Math.min(420, width - 24);
         int x = (width - w) / 2;
         int y = height - barH - 8;
-        graphics.fill(x, y, x + w, height - 8, 0xF0191714);
-        graphics.renderOutline(x, y, w, height - 8 - y, 0xFFFFB84D);
+        UiPaint.card(graphics, x, y, w, barH, UiTheme.RADIUS_CARD,
+            UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+        UiPaint.accentBarBottom(graphics, x + 3, y + barH - 3, w - 6, UiTheme.WARNING);
 
         String stateLabel = switch (state.state) {
             case "IMPEACHMENT_VOTE" -> "弹劾投票";
@@ -172,18 +220,19 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             case "VACANCY_VOTE" -> "空缺公投";
             default -> state.state;
         };
-        graphics.drawCenteredString(font,
-            "§6" + stateLabel + " §e" + ClientGovernanceState.secondsLeft(state) + "s",
-            width / 2, y + 4, 0xFFFFFF);
+        UiPaint.textCentered(graphics, stateLabel, x, y + 6, w,
+            UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
+        String seconds = ClientGovernanceState.secondsLeft(state) + "s";
+        UiPaint.textShadowed(graphics, seconds,
+            x + w - font.width(seconds) - 12, y + 7, UiTheme.WARNING);
 
         if ("VACANCY_VOLUNTEER".equals(state.state)) {
-            graphics.drawCenteredString(font,
-                "§7小队长请按 J 打开战术面板点击「志愿补位」",
-                width / 2, y + 20, 0xFFE0E0E0);
-            graphics.drawCenteredString(font,
-                "志愿者: " + state.volunteers.stream()
-                    .map(MatchScoreboardScreen::nameFor).reduce((a, b) -> a + ", " + b).orElse("暂无"),
-                width / 2, y + 36, 0xFFB0B0B0);
+            UiPaint.textCentered(graphics, "小队长请按 J 打开战术面板点击「志愿补位」",
+                x, y + 24, w, UiTheme.TEXT_SECOND, UiTheme.TYPE_BODY, true);
+            String volunteers = "志愿者: " + state.volunteers.stream()
+                .map(MatchScoreboardScreen::nameFor).reduce((a, b) -> a + ", " + b).orElse("暂无");
+            UiPaint.textCentered(graphics, volunteers, x, y + 38, w,
+                UiTheme.TEXT_THIRD, UiTheme.TYPE_BODY, true);
             return;
         }
 
@@ -206,7 +255,8 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
         }
 
         if (candidates.isEmpty()) {
-            graphics.drawCenteredString(font, "§7等待候选人…", width / 2, y + 28, 0xFF999999);
+            UiPaint.textCentered(graphics, "等待候选人…", x, y + 28, w,
+                UiTheme.TEXT_THIRD, UiTheme.TYPE_BODY, true);
             return;
         }
 
@@ -227,17 +277,29 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             boolean mine = ClientGovernanceState.isMyVote(state, candidate);
             boolean hovered = mouseX >= sx && mouseX < sx + sw
                 && mouseY >= slotY && mouseY < slotY + slotH;
-            int bg = mine ? 0xE02A4A32 : (hovered ? 0xE0404048 : 0xE028282C);
-            int border = mine ? 0xFF6FCF97 : (hovered ? 0xFFFFB84D : 0xFF666666);
-            graphics.fill(sx, slotY, sx + sw, slotY + slotH, bg);
-            graphics.renderOutline(sx, slotY, sw, slotH, border);
+            if (mine) {
+                UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
+                    UiTheme.RADIUS_CONTROL, UiTheme.POSITIVE_SOFT);
+                UiPaint.glow(graphics, sx, slotY, sw, slotH, UiTheme.RADIUS_CONTROL,
+                    UiTheme.POSITIVE);
+                UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
+                    UiTheme.RADIUS_CONTROL, UiTheme.POSITIVE);
+            } else {
+                UiPaint.roundRectGradient(graphics, sx, slotY, sw, slotH,
+                    UiTheme.RADIUS_CONTROL, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+                UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
+                    UiTheme.RADIUS_CONTROL, hovered ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
+            }
 
             int votes = ClientGovernanceState.voteCount(state, candidate);
             String name = nameFor(candidate);
-            String title = (mine ? "§a✓ " : "") + "§f" + prefixes.get(i);
-            graphics.drawCenteredString(font, title, sx + sw / 2, slotY + 4, 0xFFFFFF);
-            graphics.drawCenteredString(font, "§e" + name, sx + sw / 2, slotY + 14, 0xFFFFFF);
-            graphics.drawCenteredString(font, "§b" + votes + " 票", sx + sw / 2, slotY + 24, 0xFFFFFF);
+            String title = (mine ? "✓ " : "") + prefixes.get(i);
+            UiPaint.textCentered(graphics, title, sx, slotY + 3, sw,
+                mine ? UiTheme.POSITIVE : UiTheme.TEXT_SECOND, UiTheme.TYPE_BODY, true);
+            UiPaint.textCentered(graphics, name, sx, slotY + 13, sw,
+                UiTheme.TEXT, UiTheme.TYPE_BODY, true);
+            UiPaint.textCentered(graphics, votes + " 票", sx, slotY + 21, sw,
+                UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
 
             governanceHits.add(new GovernanceHit(sx, slotY, sw, slotH, action, candidate));
         }
@@ -249,12 +311,15 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
         int menuH = 34;
         int x = Math.min(contextX, width - menuW - 2);
         int y = Math.min(contextY, height - menuH - 2);
-        graphics.fill(x, y, x + menuW, y + menuH, 0xF0202020);
-        graphics.renderOutline(x, y, menuW, menuH, 0xFF777777);
+        UiPaint.card(graphics, x, y, menuW, menuH, UiTheme.RADIUS_CONTROL,
+            UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
         boolean canJoin = canForceJoin(contextRow);
         boolean canKick = canKick(contextRow);
-        graphics.drawString(font, (canJoin ? "§a" : "§8") + "拉进小队", x + 6, y + 5, 0xFFFFFF);
-        graphics.drawString(font, (canKick ? "§c" : "§8") + "踢出小队", x + 6, y + 19, 0xFFFFFF);
+        UiPaint.textShadowed(graphics, "拉进小队", x + 7, y + 5,
+            canJoin ? UiTheme.POSITIVE : UiTheme.TEXT_DISABLED);
+        UiPaint.textShadowed(graphics, "踢出小队", x + 7, y + 19,
+            canKick ? UiTheme.NEGATIVE : UiTheme.TEXT_DISABLED);
+        UiPaint.hairline(graphics, x + 5, y + 17, menuW - 10, UiTheme.HAIRLINE);
     }
 
     @Override

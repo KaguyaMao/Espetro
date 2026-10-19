@@ -25,9 +25,9 @@ import java.util.Objects;
  */
 public class ClassSelectScreen extends EspetroMenuScreen {
 
-    /** 最底部一行同时放名称与票数，图片区尽量放大。 */
-    private static final int CARD_FOOTER_PAD = 2;
-    private static final int CARD_NAME_LINE = 11;
+    /** 最底部一行同时放名称与票数，图片区尽量放大（票数为大号数字，行高略增）。 */
+    private static final int CARD_FOOTER_PAD = 3;
+    private static final int CARD_NAME_LINE = 13;
     private static final int CARD_FOOTER_H = CARD_FOOTER_PAD + CARD_NAME_LINE;
     /** 约 12 逻辑像素观感的小字（相对默认字号缩小）。 */
     private static final float CARD_NAME_SCALE = 0.85f;
@@ -96,10 +96,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         int panelX = (this.width - panelW) / 2;
 
         boolean selectingOpen = timeRemaining > 0;
-        String teamPrefix = EspetroAuiWidgets.teamPrefix(team);
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "\u00a76\u00a7l编制投票 \u00a77| " + teamPrefix + "\u00a7l"
-                + EspetroAuiWidgets.teamName(team) + " \u00a77[全员投票]",
+            "编制投票 | " + EspetroAuiWidgets.teamName(team) + " [全员投票]",
             buildTimeText(), "", EspetroAuiWidgets.teamColor(team));
         int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
 
@@ -111,7 +109,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
 
         if (count == 0) {
             root.addChild(EspetroAuiWidgets.centeredText(panelX, headerH + 18, panelW,
-                "\u00a7c没有可选编制", EspetroAuiWidgets.NEGATIVE));
+                "没有可选编制", UiTheme.NEGATIVE));
             return;
         }
 
@@ -140,10 +138,12 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         }
 
         if (maxScrollOffset > 0) {
-            root.addChild(EspetroAuiWidgets.centeredText(panelX,
-                Math.max(headerH, this.height - 10), panelW,
-                "\u00a78滚轮浏览  " + (scrollOffset + 1) + "-" + maxVisible + "/" + count,
-                EspetroAuiWidgets.DIM));
+            EspetroAuiWidgets.Text hint = EspetroAuiWidgets.centeredText(panelX,
+                Math.max(headerH, this.height - 12), panelW,
+                "滚轮浏览  " + (scrollOffset + 1) + "-" + maxVisible + "/" + count,
+                UiTheme.TEXT_THIRD);
+            hint.setTextScale(UiTheme.TYPE_MICRO);
+            root.addChild(hint);
         }
     }
 
@@ -196,15 +196,17 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 透明卡片：选中/hover 用细边框与极低 alpha，无大面积面板底。
-            int border = selected ? 0xFFE8B85C
-                : hasFocus() && enabled ? 0xFFC2C8D5 : 0x805B6260;
+            // 透明卡片：选中/hover 用圆角浅色底 + 描边，选中额外发光。
+            int border = selected ? UiTheme.ACCENT_LINE
+                : hasFocus() && enabled ? UiTheme.HAIRLINE_STRONG : UiTheme.HAIRLINE;
             if (selected) {
-                graphics.fill(bx, by, bx + bw, by + bh, 0x302E3529);
+                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT_SOFT);
+                UiPaint.glow(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT);
             } else if (hasFocus() && enabled) {
-                graphics.fill(bx, by, bx + bw, by + bh, 0x20273038);
+                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.alpha(UiTheme.SURFACE_2, 0.2f));
             }
-            graphics.renderOutline(bx, by, bw, bh, border);
+            UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, border);
 
             int imageBoxY = by + 3;
             int imageBoxW = Math.max(1, bw - 6);
@@ -221,32 +223,33 @@ public class ClassSelectScreen extends EspetroMenuScreen {
                     0f, 0f, texture.width(), texture.height(), texture.width(), texture.height());
                 graphics.setColor(1f, 1f, 1f, 1f);
             } else {
-                String missing = "§7还没配置图片喵";
+                String missing = "还没配置图片喵";
                 int missingW = Minecraft.getInstance().font.width(
                     EspetroAuiWidgets.stripFormatting(missing));
                 graphics.drawString(Minecraft.getInstance().font, Component.literal(missing),
                     bx + Math.max(4, (bw - missingW) / 2),
                     imageBoxY + Math.max(8, imageSlotH / 2),
-                    EspetroAuiWidgets.DIM, false);
+                    UiTheme.TEXT_THIRD, false);
             }
 
-            // 票数：外框右下角，只显示数字
+            // 票数：右下角大号数字，TYPE_NUMERAL + 阴影。
             String voteText = String.valueOf(faction.voteCount);
-            int voteW = Minecraft.getInstance().font.width(voteText);
-            int voteX = bx + bw - 4 - voteW;
-            int voteY = by + bh - 10;
-            graphics.drawString(Minecraft.getInstance().font, Component.literal(voteText),
-                voteX, voteY, enabled ? 0xFFE8B85C : EspetroAuiWidgets.DIM, false);
+            int voteW = (int) (Minecraft.getInstance().font.width(voteText) * UiTheme.TYPE_NUMERAL);
+            int voteX = bx + bw - 6 - voteW;
+            int voteY = by + bh - 14;
+            EspetroAuiWidgets.drawScaledString(graphics, voteText, voteX, voteY,
+                enabled ? UiTheme.GOLD : UiTheme.TEXT_THIRD, UiTheme.TYPE_NUMERAL, true);
 
             // 名称：固定放在外框最底下一行，与右下角票数同一行
             String nameOnly = faction.name == null ? "" : faction.name;
             int nameMaxW = Math.max(8,
-                (int) ((bw - 8 - voteW) / CARD_NAME_SCALE));
+                (int) ((bw - 12 - voteW) / CARD_NAME_SCALE));
             String drawnName = EspetroAuiWidgets.trimToWidth(
-                (selected ? "§a✔ " : "") + nameOnly, nameMaxW);
-            int nameColor = enabled ? EspetroAuiWidgets.TEXT : EspetroAuiWidgets.DIM;
-            int nameX = bx + 4;
-            int nameY = by + bh - 10;
+                (selected ? "✔ " : "") + nameOnly, nameMaxW);
+            int nameColor = selected ? UiTheme.GOLD
+                : enabled ? UiTheme.TEXT : UiTheme.TEXT_THIRD;
+            int nameX = bx + 5;
+            int nameY = by + bh - 11;
             EspetroAuiWidgets.drawScaledString(graphics, drawnName,
                 nameX, nameY, nameColor, CARD_NAME_SCALE);
 
@@ -421,9 +424,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
 
     private void refreshDynamicElements() {
         if (phaseHeader != null) {
-            phaseHeader.setTitle("\u00a76\u00a7l编制投票 \u00a77| "
-                + EspetroAuiWidgets.teamPrefix(team) + "\u00a7l"
-                + EspetroAuiWidgets.teamName(team) + " \u00a77[全员投票]");
+            phaseHeader.setTitle("编制投票 | "
+                + EspetroAuiWidgets.teamName(team) + " [全员投票]");
             phaseHeader.setStatus(buildTimeText());
             phaseHeader.setDetail("");
         }
@@ -438,16 +440,14 @@ public class ClassSelectScreen extends EspetroMenuScreen {
 
     private String buildTimeText() {
         if (timeRemaining > 0) {
-            return (timeRemaining <= 5 ? "\u00a7c" : "\u00a76")
-                + "剩余时间: " + timeRemaining + "秒";
+            return "剩余时间: " + timeRemaining + "秒";
         }
         if (isWaitingForOwnSelection()) {
             // 等待对方时顶部第二行与投票一致：显示对方剩余倒计时
             int remaining = Math.max(0, opponentTimeRemaining);
-            return (remaining <= 5 ? "\u00a7c" : "\u00a76")
-                + "对方选择剩余: " + remaining + "秒";
+            return "对方选择剩余: " + remaining + "秒";
         }
-        return "\u00a77本方编制已确定";
+        return "本方编制已确定";
     }
 
     private String buildOpponentText() {
@@ -456,14 +456,12 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         }
         String text;
         if (opponentFaction != null && !opponentFaction.isEmpty()) {
-            text = ("ATTACK".equals(team) ? "\u00a79" : "\u00a7c")
-                + opponentTeamName + " 编制: " + opponentFaction;
+            text = opponentTeamName + " 编制: " + opponentFaction;
         } else {
-            text = "\u00a77" + opponentTeamName + " 编制尚未确定";
+            text = opponentTeamName + " 编制尚未确定";
         }
         if (opponentTimeRemaining >= 0) {
-            text += (opponentTimeRemaining <= 5 ? " \u00a7c· " : " \u00a76· ")
-                + "剩余 " + opponentTimeRemaining + "秒";
+            text += " · 剩余 " + opponentTimeRemaining + "秒";
         }
         return text;
     }
@@ -489,7 +487,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             graphics.pose().translate(centerX, centerY, 0);
             graphics.pose().scale(scale, scale, 1.0f);
             graphics.drawCenteredString(Minecraft.getInstance().font,
-                Component.literal(label), 0, 0, 0xFFE8B85C);
+                Component.literal(label), 0, 0, UiTheme.GOLD);
             graphics.pose().popPose();
         }
     }

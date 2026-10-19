@@ -41,10 +41,12 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
     private static final int TEX_W = 128, TEX_H = 128;
 
     /** 选中态边框：进攻红 / 防守蓝（不透明，始终可见）。 */
-    private static final int ATTACK_BORDER = 0xFFFF5E56;
-    private static final int DEFEND_BORDER = 0xFF5F8DFF;
-    private static final int ATTACK_HOVER = 0xFFFF8A84;
-    private static final int DEFEND_HOVER = 0xFF8AADFF;
+    private static final int ATTACK_BORDER = UiTheme.ATTACK;
+    private static final int DEFEND_BORDER = UiTheme.DEFEND;
+    private static final int ATTACK_HOVER = UiTheme.lerp(UiTheme.TEXT, UiTheme.ATTACK, 0.35f);
+    private static final int DEFEND_HOVER = UiTheme.lerp(UiTheme.TEXT, UiTheme.DEFEND, 0.35f);
+    /** 无描边哨兵：alpha 为 0，配合 UiTheme.visible(...) 判定。 */
+    private static final int BORDER_NONE = UiTheme.withAlpha(UiTheme.HAIRLINE, 0);
 
     /**
      * 固定顶栏几何：避免依赖 this.font.lineHeight（缩放/字库变化时会改 headerH，
@@ -59,6 +61,8 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
 
     private TeamFactionImageButton attackButton;
     private TeamFactionImageButton defendButton;
+    /** 倒计时状态胶囊（选中阶段才显示，橙色/红色警示）。 */
+    private EspetroAuiWidgets.Chip timerChip;
 
     public TeamSelectionScreen() {
         super(Component.literal("选择队伍"));
@@ -118,31 +122,45 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
-        // 全屏黑底由 renderBeforeMenu 绘制；此处仅文字 + 图标，无半透明色块。
-        // 计数/倒计时在 renderAfterMenu 绘制，避免每秒重建。
+        // 全屏底由 renderBeforeMenu 绘制；此处为标题/状态胶囊 + 阵营图片 + 装饰卡片。
+        // 计数与倒计时按帧刷新，不放在元素树里，避免每秒重建。
         root.addChild(EspetroAuiWidgets.centeredText(
             6, HEADER_TITLE_Y, Math.max(1, this.width - 12),
-            "§6§l队伍选择", EspetroAuiWidgets.TEXT));
+            "队伍选择", UiTheme.GOLD)
+            .setTextScale(UiTheme.TYPE_TITLE)
+            .setShadow(true));
+
         String attackName = EspetroAuiWidgets.teamName("ATTACK");
         String defendName = EspetroAuiWidgets.teamName("DEFEND");
+        EspetroAuiWidgets.Chip statusChip = EspetroAuiWidgets.chip(0, 0,
+            "请选择 " + attackName + " 或 " + defendName + " 加入战斗", UiTheme.ACCENT);
+        statusChip.setX((this.width - statusChip.getWidth()) / 2);
+        statusChip.setY(HEADER_STATUS_Y - 1);
+        root.addChild(statusChip);
+
         root.addChild(EspetroAuiWidgets.centeredText(
-            6, HEADER_STATUS_Y, Math.max(1, this.width - 12),
-            "§f请选择" + attackName + "或" + defendName + "加入战斗", EspetroAuiWidgets.MUTED));
-        root.addChild(EspetroAuiWidgets.centeredText(
-            6, HEADER_DETAIL_Y, Math.max(1, this.width - 12),
-            "§8选择后将进入编制投票阶段", EspetroAuiWidgets.DIM));
+            6, HEADER_DETAIL_Y + 3, Math.max(1, this.width - 12),
+            "选择后将进入编制投票阶段", UiTheme.TEXT_THIRD)
+            .setTextScale(UiTheme.TYPE_MICRO));
 
         // 两个图片 + 间距 + 两侧留白
         int contentW = IMG_W * 2 + IMG_GAP;
         int panelW = Math.min(540, Math.max(contentW + 40, this.width - 36));
 
-        int panelH = IMG_H + 26;
+        int panelH = IMG_H + 70;
         int panelX = (this.width - panelW) / 2;
         int panelY = HEADER_H + Math.max(8, (this.height - HEADER_H - panelH) / 2);
 
         int totalImgW = IMG_W * 2 + IMG_GAP;
         int imgsStartX = panelX + (panelW - totalImgW) / 2;
-        int imgY = panelY + 2;
+        int imgY = panelY + 6;
+
+        // 装饰性卡片：垫在图片/标签/观战按钮之下，不拦截点击。
+        int cardX = panelX;
+        int cardY = imgY - 6;
+        int cardW = panelW;
+        int cardH = IMG_H + 50;
+        root.addChild(EspetroAuiWidgets.card(cardX, cardY, cardW, cardH));
 
         ResourceLocation atkTex = resolveTexture(attackFactionImage, DEFAULT_ATTACK);
         ResourceLocation defTex = resolveTexture(defendFactionImage, DEFAULT_DEFEND);
@@ -164,21 +182,47 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
         // 图片下方的文字标签
         int labelY = imgY + IMG_H + 6;
         root.addChild(EspetroAuiWidgets.centeredText(attackImgX, labelY, IMG_W,
-            EspetroAuiWidgets.teamPrefix("ATTACK") + "§l" + attackName, EspetroAuiWidgets.ATTACK));
+            attackName, UiTheme.ATTACK)
+            .setTextScale(UiTheme.TYPE_HEADING)
+            .setShadow(true));
         root.addChild(EspetroAuiWidgets.centeredText(defendImgX, labelY, IMG_W,
-            EspetroAuiWidgets.teamPrefix("DEFEND") + "§l" + defendName, EspetroAuiWidgets.DEFEND));
+            defendName, UiTheme.DEFEND)
+            .setTextScale(UiTheme.TYPE_HEADING)
+            .setShadow(true));
 
         // 中途加入者可以直接选择观战（不再选边），由服务端设为观察者。
         int spectateW = 120;
         int spectateX = panelX + (panelW - spectateW) / 2;
-        int spectateY = labelY + 14;
+        int spectateY = labelY + 16;
         root.addChild(EspetroAuiWidgets.button(spectateX, spectateY, spectateW, 20,
             "进入观战", () -> {
                 org.espetro.network.NetworkManager.sendSpectateRequest();
                 net.minecraft.client.Minecraft.getInstance().setScreen(null);
             }));
 
+        timerChip = EspetroAuiWidgets.chip(0, HEADER_TIMER_Y - 2, "", UiTheme.WARNING);
+        root.addChild(timerChip);
+        refreshTimerChip();
+
         refreshSelectionBorders();
+    }
+
+    /** 按剩余时间刷新倒计时胶囊：正常橙色、≤10 秒红色；未开启选择时隐藏。 */
+    private void refreshTimerChip() {
+        if (timerChip == null) return;
+        timerChip.setVisible(selectionActive);
+        if (!selectionActive) return;
+        int elapsed = (int) ((System.currentTimeMillis() - receivedAtMs) / 1000L);
+        int left = Math.max(0, remainingSeconds - elapsed);
+        timerChip.setLabel("剩余 " + left + " 秒 · 可重新选择");
+        timerChip.setAccent(left <= 10 ? UiTheme.NEGATIVE : UiTheme.WARNING);
+        timerChip.setX((this.width - timerChip.getWidth()) / 2);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        refreshTimerChip();
     }
 
     private static ResourceLocation resolveTexture(String fullPath, ResourceLocation fallback) {
@@ -231,22 +275,22 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
     private void refreshSelectionBorders() {
         String team = resolveMyTeam();
         if (attackButton != null) {
-            attackButton.setSelectedBorderColor("ATTACK".equals(team) ? ATTACK_BORDER : 0x00000000);
+            attackButton.setSelectedBorderColor("ATTACK".equals(team) ? ATTACK_BORDER : BORDER_NONE);
             if ("ATTACK".equals(lockedTeam)) {
                 attackButton.setBorderColor(ATTACK_BORDER);
                 attackButton.setHoverBorderColor(ATTACK_BORDER);
             } else {
-                attackButton.setBorderColor(0x00000000);
+                attackButton.setBorderColor(BORDER_NONE);
                 attackButton.setHoverBorderColor(ATTACK_HOVER);
             }
         }
         if (defendButton != null) {
-            defendButton.setSelectedBorderColor("DEFEND".equals(team) ? DEFEND_BORDER : 0x00000000);
+            defendButton.setSelectedBorderColor("DEFEND".equals(team) ? DEFEND_BORDER : BORDER_NONE);
             if ("DEFEND".equals(lockedTeam)) {
                 defendButton.setBorderColor(DEFEND_BORDER);
                 defendButton.setHoverBorderColor(DEFEND_BORDER);
             } else {
-                defendButton.setBorderColor(0x00000000);
+                defendButton.setBorderColor(BORDER_NONE);
                 defendButton.setHoverBorderColor(DEFEND_HOVER);
             }
         }
@@ -267,23 +311,44 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderAfterMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        int elapsed = (int) ((System.currentTimeMillis() - receivedAtMs) / 1000L);
-        int left = Math.max(0, remainingSeconds - elapsed);
-        // 队伍人数计数
+        // 队伍人数：名称常态 + 数字放大（TYPE_NUMERAL），手动居中保证整体对称。
         String attackName = EspetroAuiWidgets.teamName("ATTACK");
         String defendName = EspetroAuiWidgets.teamName("DEFEND");
-        String countLine = EspetroAuiWidgets.teamPrefix("ATTACK") + attackName
-            + " §f" + attackCount + "   §7|   "
-            + EspetroAuiWidgets.teamPrefix("DEFEND") + defendName
-            + " §f" + defendCount;
-        if (lockedTeam != null) {
-            countLine += "   §c\uD83D\uDD12 " + EspetroAuiWidgets.teamName(lockedTeam) + "已锁定";
-        }
-        graphics.drawCenteredString(this.font, countLine,
-            this.width / 2, HEADER_COUNT_Y, 0xFFFFFF);
-        if (selectionActive) {
-            graphics.drawCenteredString(this.font, "§e剩余 " + left + " 秒，可重新选择",
-                this.width / 2, HEADER_TIMER_Y, 0xFFFFFF);
+        String attackValue = String.valueOf(attackCount);
+        String defendValue = String.valueOf(defendCount);
+        String lockText = lockedTeam == null ? ""
+            : "· " + EspetroAuiWidgets.teamName(lockedTeam) + " 已锁定";
+        float nameScale = 0.95f;
+        float lockScale = 0.85f;
+        int attackNameW = (int) (this.font.width(attackName) * nameScale);
+        int defendNameW = (int) (this.font.width(defendName) * nameScale);
+        int attackValueW = (int) (this.font.width(attackValue) * UiTheme.TYPE_NUMERAL);
+        int defendValueW = (int) (this.font.width(defendValue) * UiTheme.TYPE_NUMERAL);
+        int separatorW = Math.max(10, this.font.width("|") + 14);
+        int lockW = lockText.isEmpty() ? 0 : (int) (this.font.width(lockText) * lockScale) + 10;
+        int totalW = attackNameW + 4 + attackValueW + separatorW
+            + defendNameW + 4 + defendValueW + lockW;
+        int x = (this.width - totalW) / 2;
+
+        EspetroAuiWidgets.drawScaledString(graphics, attackName, x, HEADER_COUNT_Y + 1,
+            UiTheme.ATTACK, nameScale, true);
+        x += attackNameW + 4;
+        EspetroAuiWidgets.drawScaledString(graphics, attackValue, x, HEADER_COUNT_Y - 4,
+            UiTheme.TEXT, UiTheme.TYPE_NUMERAL, true);
+        x += attackValueW;
+        int sepX = x + (separatorW - this.font.width("|")) / 2;
+        EspetroAuiWidgets.drawScaledString(graphics, "|", sepX, HEADER_COUNT_Y + 1,
+            UiTheme.TEXT_THIRD, 1.0f, false);
+        x += separatorW;
+        EspetroAuiWidgets.drawScaledString(graphics, defendName, x, HEADER_COUNT_Y + 1,
+            UiTheme.DEFEND, nameScale, true);
+        x += defendNameW + 4;
+        EspetroAuiWidgets.drawScaledString(graphics, defendValue, x, HEADER_COUNT_Y - 4,
+            UiTheme.TEXT, UiTheme.TYPE_NUMERAL, true);
+        x += defendValueW;
+        if (!lockText.isEmpty()) {
+            EspetroAuiWidgets.drawScaledString(graphics, lockText, x + 10, HEADER_COUNT_Y + 1,
+                UiTheme.NEGATIVE, lockScale, true);
         }
     }
 
@@ -328,7 +393,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             this.action = action;
             this.borderColor = borderColor;
             this.hoverBorderColor = hoverBorderColor;
-            this.selectedBorderColor = 0x00000000;
+            this.selectedBorderColor = BORDER_NONE;
         }
 
         void setBorderColor(int c) { this.borderColor = c; }
@@ -351,13 +416,24 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             int bx = refX + getX();
             int by = refY + getY();
 
+            // 图片外圈：下沉槽位 + 圆角描边（选中时加辉光）。
+            int frameX = bx - 3;
+            int frameY = by - 3;
+            int frameW = dispW + 6;
+            int frameH = dispH + 6;
+            UiPaint.sunken(graphics, frameX, frameY, frameW, frameH, UiTheme.RADIUS_CARD);
             graphics.blit(texture, bx, by, dispW, dispH, 0, 0, texW, texH, texW, texH);
 
-            // 边框
-            int outColor = selectedBorderColor != 0 ? selectedBorderColor
+            boolean selected = UiTheme.visible(selectedBorderColor);
+            int outColor = selected ? selectedBorderColor
                 : hasFocus() ? hoverBorderColor : borderColor;
-            if (outColor != 0) {
-                graphics.renderOutline(bx, by, dispW, dispH, outColor);
+            if (UiTheme.visible(outColor)) {
+                if (selected) {
+                    UiPaint.glow(graphics, frameX, frameY, frameW, frameH,
+                        UiTheme.RADIUS_CARD, outColor);
+                }
+                UiPaint.strokeRoundRect(graphics, frameX, frameY, frameW, frameH,
+                    UiTheme.RADIUS_CARD, outColor);
             }
         }
     }

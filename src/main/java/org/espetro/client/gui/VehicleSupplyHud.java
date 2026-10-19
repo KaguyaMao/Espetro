@@ -20,26 +20,26 @@ import org.espetro.network.VehicleSupplySyncPacket;
 public final class VehicleSupplyHud {
 
     private static final int BAR_WIDTH = 200;
-    private static final int BAR_HEIGHT = 6;
+    private static final int BAR_HEIGHT = 5;
     private static final int PANEL_WIDTH = 220;
-    private static final int PANEL_HEIGHT = 28;
+    private static final int PANEL_HEIGHT = 34;
     private static final int TOP_MARGIN = 4;
     private static final int ICON_SIZE = 10;
     private static final int ICON_TEXTURE_SIZE = 128;
+    /** 卡片内边距：左右各 10px，标题/进度条/数值行按 4px 网格排。 */
+    private static final int PAD_X = 10;
+    private static final int LABEL_Y = 4;
+    private static final int BAR_Y = 14;
+    private static final int ICON_ROW_Y = 22;
 
     private static final ResourceLocation ICON_AMMO =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
     private static final ResourceLocation ICON_CONSTR =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/construction_supply.png");
 
-    private static final int COLOR_AMMO_FILL = 0xFFCC4444;
-    private static final int COLOR_CONSTR_FILL = 0xFFCCAA00;
-    private static final int COLOR_BAR_BG = 0xFF333333;
-    private static final int COLOR_PANEL_BG = 0xDD111111;
-    private static final int COLOR_PANEL_BORDER = 0xFF555555;
-    private static final int COLOR_HINT = 0xFFDDBB66;
     private static final double HINT_RANGE = 5.0;
     private static final int HINT_Y_OFFSET = 20;
+    private static final int HINT_PILL_HEIGHT = 13;
 
     private static boolean registered;
 
@@ -91,60 +91,67 @@ public final class VehicleSupplyHud {
         int px = (screenW - PANEL_WIDTH) / 2;
         int py = TOP_MARGIN;
 
-        // 面板背景
-        graphics.fill(px, py, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BG);
-        // 面板边框
-        graphics.fill(px, py, px + PANEL_WIDTH, py + 1, COLOR_PANEL_BORDER);
-        graphics.fill(px, py + PANEL_HEIGHT - 1, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
-        graphics.fill(px, py, px + 1, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
-        graphics.fill(px + PANEL_WIDTH - 1, py, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
+        // 顶部居中的圆角玻璃卡（阴影 + 渐变底 + 发丝描边）。
+        UiPaint.card(graphics, px, py, PANEL_WIDTH, PANEL_HEIGHT);
 
-        // 容量条背景
-        int barX = px + 10;
-        int barY = py + 4;
-        int barW = PANEL_WIDTH - 20;
-        int barH = BAR_HEIGHT;
-        graphics.fill(barX, barY, barX + barW, barY + barH, COLOR_BAR_BG);
+        // 标题微标签 + 右侧容量读数。
+        UiPaint.textScaled(graphics, "载具补给", px + PAD_X, py + LABEL_Y,
+            UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO, false);
+        String capacityText = (ammo + constr) + " / " + max;
+        int capacityWidth = Math.round(mc.font.width(capacityText) * UiTheme.TYPE_MICRO);
+        UiPaint.textScaled(graphics, capacityText,
+            px + PANEL_WIDTH - PAD_X - capacityWidth, py + LABEL_Y,
+            UiTheme.TEXT_SECOND, UiTheme.TYPE_MICRO, false);
 
-        // 弹药填充（红色，左侧优先）
-        if (ammo > 0) {
-            int ammoW = (int)((long)ammo * barW / max);
-            graphics.fill(barX, barY, barX + ammoW, barY + barH, COLOR_AMMO_FILL);
+        // 容量条：内凹槽 + 渐变填充 + 高光走 UiPaint.progress；建材段再以黄色叠在弹药段右侧。
+        int barX = px + PAD_X;
+        int barY = py + BAR_Y;
+        int barW = BAR_WIDTH;
+        int radius = Math.max(1, BAR_HEIGHT / 2);
+        int ammoW = (int) ((long) ammo * barW / max);
+        int constrW = (int) ((long) constr * barW / max);
+        int filled = Math.min(barW, ammoW + constrW);
+        UiPaint.progress(graphics, barX, barY, barW, BAR_HEIGHT,
+            filled / (float) barW, UiTheme.ATTACK);
+        if (constrW > 0) {
+            int start = Math.min(barX + ammoW, barX + barW);
+            int width = Math.min(constrW, barX + barW - start);
+            if (width > 0) {
+                UiPaint.roundRect(graphics, start, barY, width, BAR_HEIGHT, radius,
+                    UiTheme.WARNING);
+                if (width > radius * 2 + 2) {
+                    UiPaint.hairline(graphics, start + radius, barY + 1,
+                        width - radius * 2, UiTheme.SHEEN);
+                }
+            }
         }
 
-        // 建材填充（黄色，接在弹药右侧）
-        if (constr > 0) {
-            int ammoW = ammo > 0 ? (int)((long)ammo * barW / max) : 0;
-            int constrW = (int)((long)constr * barW / max);
-            int constrEnd = Math.min(barX + ammoW + constrW, barX + barW);
-            graphics.fill(barX + ammoW, barY, constrEnd, barY + barH, COLOR_CONSTR_FILL);
-        }
-
-        // 图标 + 数值行（容量条下方）
-        int iconRowY = barY + barH + 2;
-        int iconTextY = iconRowY + (ICON_SIZE - mc.font.lineHeight) / 2;
+        // 图标 + 数值行（容量条下方，数值用标题字号 + 投影）。
+        int iconRowY = py + ICON_ROW_Y;
+        int textY = iconRowY;
 
         if (supply.canCarryConstruction()) {
             // 补给载具：弹药左，建材右
             int ammoIconX = px + 35;
             drawSupplyIcon(graphics, ICON_AMMO, ammoIconX, iconRowY);
-            graphics.drawString(mc.font, String.valueOf(ammo),
-                ammoIconX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            UiPaint.textScaled(graphics, String.valueOf(ammo),
+                ammoIconX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
 
             String constrText = String.valueOf(constr);
-            int constrTextW = mc.font.width(constrText);
-            int constrIconX = px + PANEL_WIDTH - 35 - ICON_SIZE - 3 - constrTextW;
+            int constrTextW = Math.round(mc.font.width(constrText) * UiTheme.TYPE_HEADING);
+            int constrIconX = px + PANEL_WIDTH - 35 - ICON_SIZE - 4 - constrTextW;
             drawSupplyIcon(graphics, ICON_CONSTR, constrIconX, iconRowY);
-            graphics.drawString(mc.font, constrText,
-                constrIconX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            UiPaint.textScaled(graphics, constrText,
+                constrIconX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
         } else {
             // 战斗载具：弹药居中
             String ammoText = String.valueOf(ammo);
-            int totalW = ICON_SIZE + 3 + mc.font.width(ammoText);
+            int ammoTextW = Math.round(mc.font.width(ammoText) * UiTheme.TYPE_HEADING);
+            int totalW = ICON_SIZE + 4 + ammoTextW;
             int startX = px + (PANEL_WIDTH - totalW) / 2;
             drawSupplyIcon(graphics, ICON_AMMO, startX, iconRowY);
-            graphics.drawString(mc.font, ammoText,
-                startX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            UiPaint.textScaled(graphics, ammoText,
+                startX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
         }
     }
 
@@ -163,8 +170,14 @@ public final class VehicleSupplyHud {
                 int cx = mc.getWindow().getGuiScaledWidth() / 2;
                 int cy = mc.getWindow().getGuiScaledHeight() / 2;
                 String hint = "按住 F 来交互";
-                graphics.drawString(mc.font, hint,
-                    cx - mc.font.width(hint) / 2, cy + HINT_Y_OFFSET, COLOR_HINT);
+                int textWidth = mc.font.width(hint);
+                int hintY = cy + HINT_Y_OFFSET;
+                // 交互提示：胶囊底 + 强调色描边，避免直接压在世界画面上看不清。
+                UiPaint.pill(graphics, cx - textWidth / 2 - 6, hintY - 3,
+                    textWidth + 12, HINT_PILL_HEIGHT, UiTheme.alpha(UiTheme.SURFACE_0, 0.78f));
+                UiPaint.pillOutline(graphics, cx - textWidth / 2 - 6, hintY - 3,
+                    textWidth + 12, HINT_PILL_HEIGHT, UiTheme.ACCENT_LINE);
+                UiPaint.textShadowed(graphics, hint, cx - textWidth / 2, hintY, UiTheme.ACCENT);
             }
         }
     }
@@ -189,12 +202,24 @@ public final class VehicleSupplyHud {
         int cy = mc.getWindow().getGuiScaledHeight() / 2;
         var icon = org.espetro.client.vehicle.VehicleInteractionState.icon();
         int size = 18;
+        // 图标底：柔光圆盘，让图标从世界画面里"浮"起来。
+        UiPaint.circle(graphics, cx, cy - 6, size / 2 + 2, UiTheme.alpha(UiTheme.SURFACE_0, 0.72f));
+        UiPaint.ring(graphics, cx, cy - 6, size / 2 + 2, UiTheme.HAIRLINE_STRONG);
         graphics.blit(icon, cx - size / 2, cy - size / 2 - 6, size, size,
             0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
             ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
         String label = org.espetro.client.vehicle.VehicleInteractionState.label();
-        String text = String.format("§e%s §f%.0f%%", label, fill * 100f);
-        graphics.drawString(mc.font, text, cx - mc.font.width(text) / 2, cy + 16, 0xFFFFFF);
+        String percentText = Math.round(fill * 100f) + "%";
+        int labelWidth = mc.font.width(label);
+        int percentWidth = mc.font.width(percentText);
+        int totalWidth = labelWidth + 4 + percentWidth;
+        int textX = cx - totalWidth / 2;
+        int textY = cy + 16;
+        // 文本底衬：半透明深底，保证在亮色天空/雪地上也清晰。
+        UiPaint.pill(graphics, textX - 6, textY - 3, totalWidth + 12, HINT_PILL_HEIGHT,
+            UiTheme.alpha(UiTheme.SURFACE_0, 0.78f));
+        UiPaint.textShadowed(graphics, label, textX, textY, UiTheme.TEXT);
+        UiPaint.textShadowed(graphics, percentText, textX + labelWidth + 4, textY, UiTheme.GOLD);
     }
 
     private static void drawCenterMountHint(GuiGraphics graphics, Minecraft mc) {
@@ -202,11 +227,17 @@ public final class VehicleSupplyHud {
         int cy = mc.getWindow().getGuiScaledHeight() / 2;
         net.minecraft.resources.ResourceLocation mountIcon =
             org.espetro.client.vehicle.VehicleInteractionState.icon();
+        UiPaint.circle(graphics, cx, cy - 6, 11, UiTheme.alpha(UiTheme.SURFACE_0, 0.72f));
+        UiPaint.ring(graphics, cx, cy - 6, 11, UiTheme.HAIRLINE_STRONG);
         graphics.blit(mountIcon, cx - 9, cy - 15, 18, 18,
             0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
             ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
-        String text = "§7上车";
-        graphics.drawString(mc.font, text, cx - mc.font.width(text) / 2, cy + 16, 0xFFFFFF);
+        String text = "上车";
+        int textWidth = mc.font.width(text);
+        int textY = cy + 16;
+        UiPaint.pill(graphics, cx - textWidth / 2 - 6, textY - 3, textWidth + 12,
+            HINT_PILL_HEIGHT, UiTheme.alpha(UiTheme.SURFACE_0, 0.78f));
+        UiPaint.textShadowed(graphics, text, cx - textWidth / 2, textY, UiTheme.TEXT_SECOND);
     }
 
 }

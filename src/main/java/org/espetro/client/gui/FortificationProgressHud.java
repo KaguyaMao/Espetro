@@ -29,8 +29,12 @@ public final class FortificationProgressHud {
     }
 
     private static final class ProgressElement extends GuiElement {
+        private static final int PANEL_WIDTH = 144;
+        private static final int PANEL_HEIGHT = 18;
+        private static final int BAR_HEIGHT = 4;
+
         private ProgressElement() {
-            super(8, 34, 144, 18);
+            super(8, 34, PANEL_WIDTH, PANEL_HEIGHT);
         }
 
         @Override
@@ -41,17 +45,21 @@ public final class FortificationProgressHud {
             Minecraft mc = Minecraft.getInstance();
             int left = getX();
             int top = getY();
-            graphics.fill(left, top, left + 144, top + 18, 0xD0111111);
-            graphics.fill(left, top, left + 144, top + 1, 0xB05E646C);
-            graphics.fill(left, top + 17, left + 144, top + 18, 0xB05E646C);
-            int fill = Mth.clamp((int) Math.round(140.0D * snapshot.progress / snapshot.required), 0, 140);
-            int color = snapshot.building ? 0xFFE3B52B : 0xFFE34B3F;
-            graphics.fill(left + 2, top + 13, left + 142, top + 16, 0xFF333333);
-            if (fill > 0) graphics.fill(left + 2, top + 13, left + 2 + fill, top + 16, color);
+
+            // 圆角玻璃卡：阴影 + 渐变底 + 发丝描边 + 顶部内高光。
+            UiPaint.card(graphics, left, top, PANEL_WIDTH, PANEL_HEIGHT);
+
+            float ratio = snapshot.required <= 0 ? 0f
+                : Math.min(1f, snapshot.progress / (float) snapshot.required);
+            int accent = snapshot.building ? UiTheme.WARNING : UiTheme.NEGATIVE;
             int percent = Mth.clamp((int) Math.round(100.0D * snapshot.progress / snapshot.required), 0, 100);
             String text = snapshot.name + " " + percent + "%  " + snapshot.progress + "/" + snapshot.required;
-            if (mc.font.width(text) > 138) text = snapshot.name + " " + percent + "%";
-            graphics.drawString(mc.font, text, left + 3, top + 3, 0xFFFFFF, false);
+            if (mc.font.width(text) > PANEL_WIDTH - 12) text = snapshot.name + " " + percent + "%";
+            UiPaint.textShadowed(graphics, text, left + 5, top + 2, UiTheme.TEXT);
+
+            // 施工进度：内凹槽 + 渐变填充 + 高光。
+            UiPaint.progress(graphics, left + 4, top + 12, PANEL_WIDTH - 8, BAR_HEIGHT,
+                ratio, accent);
         }
     }
 }

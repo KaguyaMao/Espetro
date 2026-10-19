@@ -1,7 +1,5 @@
 package org.espetro.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.espetro.client.aui.GuiElement;
@@ -18,12 +16,12 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     private static final String[] WIN_LABELS  = {"平局", "惨烈胜利", "险胜", "决定性胜利", "重大胜利", "完胜"};
     private static final String[] LOSE_LABELS = {"平局", "功亏一篑", "险败", "决定性战败", "重大战败", "完败"};
     private static final int[] LEVEL_COLORS = {
-        0xFFFFD700, // 0 平局 金
-        0xFFFFAA00, // 1 惨烈 橙
-        0xFFFF8800, // 2 险    橙红
-        0xFFFF6600, // 3 决定性 深橙
-        0xFFFF3300, // 4 重大 红
-        0xFFFF0000  // 5 完胜 纯红
+        UiTheme.GOLD,      // 0 平局
+        UiTheme.WARNING,   // 1 惨烈
+        UiTheme.WARNING,   // 2 险
+        UiTheme.ATTACK,    // 3 决定性
+        UiTheme.ATTACK,    // 4 重大
+        UiTheme.NEGATIVE   // 5 完胜
     };
 
     private final String winner;       // "ATTACK" / "DEFEND" / "DRAW"
@@ -55,16 +53,18 @@ public final class RoundEndScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
-        // 倒计时文字
+        // 倒计时文字：大号数值 + 阴影
         countdownText = EspetroAuiWidgets.centeredText(
-            0, height - 28, width,
-            countdownLabel(), EspetroAuiWidgets.MUTED);
+            0, height - 30, width,
+            countdownLabel(), UiTheme.TEXT_SECOND)
+            .setTextScale(UiTheme.TYPE_HEADING)
+            .setShadow(true);
         root.addChild(countdownText);
     }
 
     private String countdownLabel() {
         long seconds = Math.max(0, (closesAt - System.currentTimeMillis() + 999) / 1000);
-        return "§7" + seconds + " 秒后返回主城";
+        return seconds + " 秒后返回主城";
     }
 
     @Override
@@ -87,7 +87,6 @@ public final class RoundEndScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderAfterMenu(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        Minecraft mc = Minecraft.getInstance();
         String myTeam = ClientGameState.getPlayerTeam();
         boolean isDraw = "DRAW".equals(winner);
         boolean iWon = !isDraw && winner.equals(myTeam);
@@ -95,49 +94,41 @@ public final class RoundEndScreen extends EspetroMenuScreen {
 
         // ── 1. 超大等级文字（居中上方）──
         String levelText = isDraw ? "平局" : (iWon ? WIN_LABELS[level] : LOSE_LABELS[level]);
-        int levelColor = isDraw ? LEVEL_COLORS[0] : (iWon ? LEVEL_COLORS[level] : 0xFFFF3333);
-        float levelScale = 3.5f;
-        PoseStack pose = g.pose();
-        pose.pushPose();
-        pose.translate(width / 2f, height * 0.22f, 0);
-        pose.scale(levelScale, levelScale, 1f);
-        int lw = mc.font.width(levelText);
-        g.drawString(mc.font, Component.literal(levelText), -lw / 2, 0, levelColor);
-        pose.popPose();
+        int levelColor = isDraw ? LEVEL_COLORS[0] : (iWon ? LEVEL_COLORS[level] : UiTheme.NEGATIVE);
+        UiPaint.textCentered(g, levelText, 0, (int) (height * 0.22f), width,
+            levelColor, 3.5f, true);
 
         // ── 2. "XXX赢得了胜利"（小字）──
         if (!isDraw) {
             String victorName = winnerShowName != null ? winnerShowName : (iWon ? "我方" : "敌方");
-            String subText = victorName + "赢得了胜利";
-            float subScale = 1.2f;
-            pose.pushPose();
-            pose.translate(width / 2f, height * 0.32f, 0);
-            pose.scale(subScale, subScale, 1f);
-            int sw = mc.font.width(subText);
-            g.drawString(mc.font, Component.literal(subText), -sw / 2, 0,
-                iWon ? 0xFFFFFFAA : 0xFFFFAAAA);
-            pose.popPose();
+            UiPaint.textCentered(g, victorName + "赢得了胜利", 0, (int) (height * 0.32f), width,
+                iWon ? UiTheme.POSITIVE : UiTheme.ATTACK, UiTheme.TYPE_TITLE, true);
         }
 
         // ── 3. 下半区：双方阵营名 + 票数 ──
         // 确定玩家视角下的左/右双方
         boolean isAttacker = "ATTACK".equals(myTeam);
-        boolean isDefender = "DEFEND".equals(myTeam);
 
         String leftFaction, rightFaction;
         int leftTickets, rightTickets;
+        int leftAccent = UiTheme.ATTACK;
+        int rightAccent = UiTheme.DEFEND;
 
         if (!isDraw && myTeam != null) {
             if (iWon) {
                 // 我赢了：左=赢得方，右=输方
                 leftFaction = winnerShowName != null ? winnerShowName : "我方";
                 rightFaction = loserShowName != null ? loserShowName : "敌方";
+                leftAccent = isAttacker ? UiTheme.ATTACK : UiTheme.DEFEND;
+                rightAccent = isAttacker ? UiTheme.DEFEND : UiTheme.ATTACK;
                 if (isAttacker) { leftTickets = attackTickets; rightTickets = defendTickets; }
                 else            { leftTickets = defendTickets; rightTickets = attackTickets; }
             } else {
                 // 我输了：左=我方，右=敌方（敌方是赢方）
                 leftFaction = loserShowName != null ? loserShowName : "我方";
                 rightFaction = winnerShowName != null ? winnerShowName : "敌方";
+                leftAccent = isAttacker ? UiTheme.ATTACK : UiTheme.DEFEND;
+                rightAccent = isAttacker ? UiTheme.DEFEND : UiTheme.ATTACK;
                 if (isAttacker) { leftTickets = attackTickets; rightTickets = defendTickets; }
                 else            { leftTickets = defendTickets; rightTickets = attackTickets; }
             }
@@ -152,31 +143,24 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         }
 
         // 下半区 Y 起始
-        int bottomY = (int)(height * 0.48f);
+        int bottomY = (int) (height * 0.48f);
         int leftX = width / 4;
         int rightX = width * 3 / 4;
 
-        // 阵营名（中号 1.8x）
+        // 阵营名（中号 1.8x）+ 底部阵营色条
         float nameScale = 1.8f;
-        drawScaledCentered(g, mc.font, leftFaction, leftX, bottomY, nameScale, 0xFFFFFFFF);
-        drawScaledCentered(g, mc.font, rightFaction, rightX, bottomY, nameScale, 0xFFFFFFFF);
+        UiPaint.textCentered(g, leftFaction, 0, bottomY, width / 2, leftAccent, nameScale, true);
+        UiPaint.textCentered(g, rightFaction, width / 2, bottomY, width / 2, rightAccent,
+            nameScale, true);
+        UiPaint.accentBarBottom(g, leftX - 32, bottomY + 20, 64, leftAccent);
+        UiPaint.accentBarBottom(g, rightX - 32, bottomY + 20, 64, rightAccent);
 
-        // 票数（中号 2.5x，在阵营名下方）
-        int numberY = bottomY + 32;
+        // 票数（大号数值，在阵营名下方）
+        int numberY = bottomY + 30;
         float numScale = 2.5f;
-        drawScaledCentered(g, mc.font, String.valueOf(leftTickets), leftX, numberY, numScale, 0xFFFFFF66);
-        drawScaledCentered(g, mc.font, String.valueOf(rightTickets), rightX, numberY, numScale, 0xFFFFFF66);
-    }
-
-    private static void drawScaledCentered(GuiGraphics g, net.minecraft.client.gui.Font font,
-                                           String text, int centerX, int centerY,
-                                           float scale, int color) {
-        PoseStack pose = g.pose();
-        pose.pushPose();
-        pose.translate(centerX, centerY, 0);
-        pose.scale(scale, scale, 1f);
-        int w = font.width(text);
-        g.drawString(font, Component.literal(text), -w / 2, 0, color);
-        pose.popPose();
+        UiPaint.textCentered(g, String.valueOf(leftTickets), 0, numberY, width / 2,
+            UiTheme.GOLD, numScale, true);
+        UiPaint.textCentered(g, String.valueOf(rightTickets), width / 2, numberY, width / 2,
+            UiTheme.GOLD, numScale, true);
     }
 }

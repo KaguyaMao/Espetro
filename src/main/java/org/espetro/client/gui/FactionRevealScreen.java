@@ -129,10 +129,10 @@ public class FactionRevealScreen extends EspetroMenuScreen {
     @Override
     protected void buildMenuRoot(GuiElement root) {
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "\u00a76\u00a7l双方编制确认",
-            "\u00a7f双方最终编制已经确定",
-            "\u00a78" + getSecondsRemaining() + "秒后进入部署",
-            EspetroAuiWidgets.GOLD);
+            "双方编制确认",
+            "双方最终编制已经确定",
+            getSecondsRemaining() + " 秒后进入部署",
+            UiTheme.GOLD);
         int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
         boolean stacked = this.width < IMG_MAX_W * 2 + IMG_GAP + 60;
         int cardW = stacked ? Math.min(IMG_MAX_W + 32, this.width - 28) : IMG_MAX_W + 32;
@@ -144,33 +144,38 @@ public class FactionRevealScreen extends EspetroMenuScreen {
         int panelX = (this.width - panelW) / 2;
         int panelY = headerH + Math.max(8, (this.height - headerH - panelH) / 2);
 
-        root.addChild(EspetroAuiWidgets.panel(panelX, panelY, panelW, panelH, 0x00000000, 0x00000000));
+        // 深色凹槽底板 + 两侧阵营卡片
+        root.addChild(EspetroAuiWidgets.sunken(panelX, panelY, panelW, panelH));
 
         int startX = panelX + (panelW - contentW) / 2;
         int startY = panelY;
         if (stacked) {
             addFactionCard(root, startX, startY, cardW,
-                attackTexture, attackTexW, attackTexH, attackFactionName, EspetroAuiWidgets.ATTACK);
+                attackTexture, attackTexW, attackTexH, attackFactionName, UiTheme.ATTACK);
             addFactionCard(root, startX, startY + cardH + gap, cardW,
-                defendTexture, defendTexW, defendTexH, defendFactionName, EspetroAuiWidgets.DEFEND);
+                defendTexture, defendTexW, defendTexH, defendFactionName, UiTheme.DEFEND);
         } else {
             addFactionCard(root, startX, startY, cardW,
-                attackTexture, attackTexW, attackTexH, attackFactionName, EspetroAuiWidgets.ATTACK);
+                attackTexture, attackTexW, attackTexH, attackFactionName, UiTheme.ATTACK);
             addFactionCard(root, startX + cardW + gap, startY, cardW,
-                defendTexture, defendTexW, defendTexH, defendFactionName, EspetroAuiWidgets.DEFEND);
+                defendTexture, defendTexW, defendTexH, defendFactionName, UiTheme.DEFEND);
         }
     }
 
     private void addFactionCard(GuiElement root, int x, int y, int cardW,
                                 ResourceLocation texture, int texW, int texH,
-                                String factionName, int textColor) {
+                                String factionName, int accent) {
+        int cardH = IMG_MAX_H + 22;
+        root.addChild(EspetroAuiWidgets.cardAccent(x, y, cardW, cardH, accent));
         AspectFit.Size fitted = AspectFit.within(texW, texH, IMG_MAX_W, IMG_MAX_H);
         int imgX = x + (cardW - fitted.width()) / 2;
         int imgY = y + (IMG_MAX_H - fitted.height()) / 2;
         root.addChild(new FactionImageElement(imgX, imgY, fitted.width(), fitted.height(),
             texW, texH, texture));
-        root.addChild(EspetroAuiWidgets.centeredText(x, y + IMG_MAX_H + 5, cardW,
-            fitText("\u00a7l" + factionName, cardW - 8), textColor));
+        EspetroAuiWidgets.Text label = EspetroAuiWidgets.centeredText(x, y + IMG_MAX_H + 4, cardW,
+            fitText(factionName, cardW - 8), accent);
+        label.setTextScale(UiTheme.TYPE_HEADING).setShadow(true);
+        root.addChild(label);
     }
 
     /** Draws the complete texture at an aspect-fitted size without cropping or stretching. */
@@ -228,7 +233,7 @@ public class FactionRevealScreen extends EspetroMenuScreen {
         super.tick();
         ticksRemaining--;
         if (ticksRemaining % 20 == 0 && phaseHeader != null) {
-            phaseHeader.setDetail("\u00a78" + getSecondsRemaining() + "秒后进入部署");
+            phaseHeader.setDetail(getSecondsRemaining() + " 秒后进入部署");
         }
         if (ticksRemaining <= 0 && Minecraft.getInstance().screen == this && !tutorialPreviewMode) {
             org.espetro.client.aui.AuiScreen.closeWithFade(this);

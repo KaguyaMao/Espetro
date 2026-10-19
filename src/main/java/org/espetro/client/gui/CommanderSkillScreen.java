@@ -89,21 +89,22 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
         int panelX = (this.width - panelW) / 2;
         int panelY = Math.max(8, (this.height - panelH) / 2);
 
-        root.addChild(EspetroAuiWidgets.panel(panelX, panelY, panelW, panelH,
-            EspetroAuiWidgets.PANEL, EspetroAuiWidgets.BORDER));
+        root.addChild(EspetroAuiWidgets.card(panelX, panelY, panelW, panelH));
 
-        root.addChild(EspetroAuiWidgets.text(panelX + 10, panelY + 8,
-            "\u00a76\u00a7l战术技能", EspetroAuiWidgets.GOLD));
+        EspetroAuiWidgets.Text title = EspetroAuiWidgets.text(panelX + 10, panelY + 6,
+            "战术技能", UiTheme.GOLD);
+        title.setTextScale(UiTheme.TYPE_TITLE).setShadow(true);
+        root.addChild(title);
 
         root.addChild(EspetroAuiWidgets.button(panelX + panelW - 50, panelY + 7, 40, 14,
             "关闭", () -> Minecraft.getInstance().setScreen(null)));
 
-        root.addChild(EspetroAuiWidgets.rect(panelX + 10, panelY + 26, panelW - 20, 1, 0x25FFFFFF));
+        root.addChild(EspetroAuiWidgets.divider(panelX + 10, panelY + 25, panelW - 20));
 
         // isCommander 在同步包中表示「有技能入口」；列表已由服务端按 usableBy 过滤
         if (skills.isEmpty()) {
             root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 50, panelW,
-                "\u00a77当前角色无可用技能", EspetroAuiWidgets.MUTED));
+                "当前角色无可用技能", UiTheme.TEXT_THIRD));
             lastCooldownSignature = getCooldownSignature();
             return;
         }
@@ -126,21 +127,21 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
         int cooldownSec = getRemainingCooldownSeconds(skill.id());
         boolean onCooldown = cooldownSec > 0;
 
-        int cardColor = onCooldown ? 0x55363636 : 0x60404040;
-        int borderColor = onCooldown ? EspetroAuiWidgets.BORDER : 0x806D7482;
-        EspetroAuiWidgets.Panel panel = EspetroAuiWidgets.panel(
-            x, y, width, cardH, cardColor, borderColor);
+        EspetroAuiWidgets.Panel panel = EspetroAuiWidgets.cardAccent(
+            x, y, width, cardH, onCooldown ? UiTheme.TEXT_THIRD : UiTheme.POSITIVE);
         root.addChild(panel);
 
-        root.addChild(EspetroAuiWidgets.text(x + 8, y + 6,
-            "\u00a7e" + skill.displayName(), EspetroAuiWidgets.GOLD));
+        EspetroAuiWidgets.Text name = EspetroAuiWidgets.text(x + 8, y + 6,
+            skill.displayName(), UiTheme.GOLD);
+        name.setShadow(true);
+        root.addChild(name);
 
         root.addChild(EspetroAuiWidgets.text(x + 8, y + 20,
-            "\u00a77" + skill.description(), EspetroAuiWidgets.MUTED));
+            skill.description(), UiTheme.TEXT_SECOND));
 
         String stats = skill.stats() == null ? "" : skill.stats();
         root.addChild(EspetroAuiWidgets.text(x + 8, y + 34,
-            stats, EspetroAuiWidgets.DIM));
+            stats, UiTheme.TEXT_THIRD));
 
         int btnW = 56;
         int btnH = 16;
@@ -152,7 +153,7 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
             onCooldown ? cooldownSec + "秒" : "发动",
             () -> activateSkill(skill.id()))
             .setEnabled(!onCooldown)
-            .setTextColor(onCooldown ? EspetroAuiWidgets.DIM : EspetroAuiWidgets.POSITIVE);
+            .setTextColor(onCooldown ? UiTheme.TEXT_DISABLED : UiTheme.POSITIVE);
         root.addChild(button);
         skillRows.put(skill.id(), new SkillRow(panel, button));
 
@@ -185,13 +186,11 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
             }
             int cooldownSec = getRemainingCooldownSeconds(skill.id());
             boolean onCooldown = cooldownSec > 0;
-            row.panel()
-                .setColor(onCooldown ? 0x55363636 : 0x60404040)
-                .setBorderColor(onCooldown ? EspetroAuiWidgets.BORDER : 0x806D7482);
+            row.panel().setAccentColor(onCooldown ? UiTheme.TEXT_THIRD : UiTheme.POSITIVE);
             row.button()
                 .setLabel(onCooldown ? cooldownSec + "秒" : "发动")
                 .setEnabled(!onCooldown)
-                .setTextColor(onCooldown ? EspetroAuiWidgets.DIM : EspetroAuiWidgets.POSITIVE);
+                .setTextColor(onCooldown ? UiTheme.TEXT_DISABLED : UiTheme.POSITIVE);
         }
         lastCooldownSignature = getCooldownSignature();
     }

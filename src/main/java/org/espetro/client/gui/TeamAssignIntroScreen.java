@@ -33,15 +33,25 @@ public class TeamAssignIntroScreen extends EspetroMenuScreen {
 
         // 大字（正中间）与底部黄字之间的间距，用于对齐上方白字：白字放在大字上方同样间距处。
         // 大字中心 0.50H，黄字 top 0.68H → 间距约 0.18H，白字 top 取 0.50H - 0.18H ≈ 0.32H。
-        root.addChild(EspetroAuiWidgets.centeredText(cx - 260, (int) (this.height * 0.32f), 520,
-            "§f§l您已被分配至", EspetroAuiWidgets.TEXT));
+        int introY = (int) (this.height * 0.32f);
+        EspetroAuiWidgets.Text assigned = EspetroAuiWidgets.centeredText(cx - 260, introY, 520,
+            "您已被分配至", UiTheme.TEXT_SECOND);
+        assigned.setTextScale(UiTheme.TYPE_HEADING).setShadow(true);
+        root.addChild(assigned);
+
+        // 标题下的队伍色细线：把「分配结果」与下方大字连成一组。
+        int dividerW = 160;
+        root.addChild(EspetroAuiWidgets.divider(cx - dividerW / 2, introY + 20, dividerW)
+            .setColor(UiTheme.alpha(EspetroAuiWidgets.teamColor(team), 0.55f)));
 
         // 中间（垂直正中）：大字号 进攻方/防守方（红色/蓝色）
         root.addChild(new BigTeamText(cx, (int) (this.height * 0.5f), team));
 
-        // 中下部：黄色预告
-        root.addChild(EspetroAuiWidgets.centeredText(cx - 300, (int) (this.height * 0.68f), 600,
-            "§e§l游戏即将开始，正在进入投票阶段", EspetroAuiWidgets.GOLD));
+        // 中下部：黄色预告（状态胶囊）
+        EspetroAuiWidgets.Chip entering = EspetroAuiWidgets.chip(0,
+            (int) (this.height * 0.68f), "游戏即将开始，正在进入投票阶段", UiTheme.WARNING);
+        entering.setX(cx - entering.getWidth() / 2);
+        root.addChild(entering);
     }
 
     /** 大字号队伍名（独立 GuiElement，用 PoseStack 放大绘制，避免小字号重叠）。 */
@@ -60,10 +70,15 @@ public class TeamAssignIntroScreen extends EspetroMenuScreen {
                          int mouseX, int mouseY, float partialTick) {
             if (!isVisible()) return;
             String label = "DEFEND".equals(team) ? "防守方" : "进攻方";
-            int color = "DEFEND".equals(team) ? 0xFF3FA9F5 : 0xFFE03B3B;
+            int color = "DEFEND".equals(team) ? UiTheme.DEFEND : UiTheme.ATTACK;
             float scale = 4.0f;
             // 注意：参数 y 是父布局传入的 refY（通常为 0），绝对位置必须用 getY()。
             int absY = y + getY();
+            int textW = Math.round(Minecraft.getInstance().font.width(label) * scale);
+            int textH = Math.round(Minecraft.getInstance().font.lineHeight * scale);
+            // 队伍色柔光：让超大字号从深色底上「浮」起来。
+            UiPaint.glow(graphics, cx - textW / 2 - 12, absY - 8, textW + 24, textH + 16,
+                UiTheme.RADIUS_CARD, color);
             graphics.pose().pushPose();
             graphics.pose().translate(cx, absY, 0);
             graphics.pose().scale(scale, scale, 1.0f);

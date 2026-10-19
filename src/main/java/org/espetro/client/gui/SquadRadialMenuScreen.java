@@ -35,6 +35,9 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
     private int selectedIndex = -1;
     private EspetroAuiWidgets.Text centerLabel;
 
+    /** 圆盘中心托底半径：盖住中心提示文字，又不压到最内圈选项。 */
+    private static final int HUB_RADIUS = 34;
+
     public SquadRadialMenuScreen(boolean commander, Map<String, Integer> cooldowns,
                                  List<CommanderSkillManager.SkillView> skills) {
         super(Component.literal("战术交互"));
@@ -86,7 +89,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
     protected void buildMenuRoot(GuiElement root) {
         int centerX = width / 2;
         int centerY = height / 2;
-        int radius = options.size() > 6 ? 94 : 72;
+        int radius = wheelRadius();
         double step = Math.PI * 2.0 / Math.max(1, options.size());
         for (int i = 0; i < options.size(); i++) {
             double angle = -Math.PI / 2.0 + step * i;
@@ -95,8 +98,14 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
             root.addChild(new RadialOption(i, optionX, optionY, options.get(i)));
         }
         centerLabel = EspetroAuiWidgets.centeredText(centerX - 90, centerY - 5, 180,
-            "移动鼠标选择", EspetroAuiWidgets.TEXT);
+            "移动鼠标选择", UiTheme.TEXT);
+        centerLabel.setTextScale(UiTheme.TYPE_HEADING);
+        centerLabel.setShadow(true);
         root.addChild(centerLabel);
+    }
+
+    private int wheelRadius() {
+        return options.size() > 6 ? 94 : 72;
     }
 
     @Override
@@ -106,7 +115,15 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
         double dx = mouseX - centerX;
         double dy = mouseY - centerY;
         selectedIndex = select(dx, dy);
-        graphics.fill(0, 0, width, height, 0x66000000);
+
+        // 世界压暗一层（令牌派生的半透明深底，仍能透视战场）。
+        graphics.fill(0, 0, width, height, UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0x70));
+        // 圆盘导轨 + 中心托底：轮盘"盘面"由圆环与圆盘构成，而不是直角面板。
+        UiPaint.ring(graphics, centerX, centerY, wheelRadius(),
+            UiTheme.withAlpha(UiTheme.ACCENT, 0x18));
+        UiPaint.circle(graphics, centerX, centerY, HUB_RADIUS,
+            UiTheme.withAlpha(UiTheme.SURFACE_0, 0xE6));
+        UiPaint.ring(graphics, centerX, centerY, HUB_RADIUS, UiTheme.HAIRLINE_STRONG);
         if (centerLabel != null) {
             centerLabel.setText(selectedIndex < 0 ? "移动鼠标选择"
                 : options.get(selectedIndex).label);
@@ -132,20 +149,30 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                          int mouseX, int mouseY, float partialTick) {
             boolean active = selectedIndex == index;
             int half = active ? 23 : 20;
-            graphics.fill(centerX - half - 3, centerY - half - 3,
-                centerX + half + 3, centerY + half + 3,
-                !option.enabled ? 0xD03A2424 : active ? 0xE04B5D4B : 0xD0181A1D);
-            graphics.renderOutline(centerX - half - 3, centerY - half - 3,
-                (half + 3) * 2, (half + 3) * 2,
-                active ? 0xFFFFFFFF : 0xFF777B80);
+            int ringRadius = half + 3;
+            // 未解锁=红底、选中=强调色底、常态=表面层；描边同语义。
+            int plate = !option.enabled ? UiTheme.NEGATIVE_SOFT
+                : active ? UiTheme.ACCENT_SOFT : UiTheme.SURFACE_2;
+            int border = !option.enabled ? UiTheme.alpha(UiTheme.NEGATIVE, 0.6f)
+                : active ? UiTheme.ACCENT : UiTheme.HAIRLINE_STRONG;
+            UiPaint.circle(graphics, centerX, centerY, ringRadius, plate);
+            UiPaint.ring(graphics, centerX, centerY, ringRadius, border);
+            if (active) {
+                // 选中态：一圈更亮的柔光外环。
+                UiPaint.ring(graphics, centerX, centerY, ringRadius + 1, UiTheme.ACCENT_LINE);
+                UiPaint.ring(graphics, centerX, centerY, ringRadius + 2,
+                    UiTheme.alpha(UiTheme.ACCENT, 0.25f));
+            }
             RenderSystem.setShaderColor(1f, 1f, 1f,
                 option.enabled ? (active ? 1f : 0.8f) : 0.45f);
             graphics.blit(option.icon, centerX - half, centerY - half, half * 2, half * 2,
                 0f, 0f, 128, 128, option.textureWidth, 128);
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-            graphics.drawCenteredString(font, option.label, centerX, centerY + half + 6,
-                !option.enabled ? EspetroAuiWidgets.NEGATIVE
-                    : active ? 0xFFFFFFFF : 0xFFBFC3C7);
+            int labelColor = !option.enabled ? UiTheme.NEGATIVE
+                : active ? UiTheme.TEXT : UiTheme.TEXT_SECOND;
+            int labelWidth = font.width(option.label);
+            graphics.drawString(font, option.label, centerX - labelWidth / 2,
+                centerY + half + 6, labelColor, true);
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
     }

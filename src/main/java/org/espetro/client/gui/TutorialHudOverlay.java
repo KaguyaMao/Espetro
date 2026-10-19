@@ -16,6 +16,7 @@ public final class TutorialHudOverlay {
     private static final int EXIT_MARGIN = 8;
     private static final int CARD_MARGIN = 10;
     private static final int CARD_MAX_W = 320;
+    private static final int CARD_PAD = 10;
 
     private TutorialHudOverlay() {
     }
@@ -47,32 +48,43 @@ public final class TutorialHudOverlay {
 
         int cardW = Math.min(CARD_MAX_W, Math.max(180, sw - CARD_MARGIN * 2));
         String bodyText = body.getString();
-        int bodyH = font.wordWrapHeight(bodyText, cardW - 16);
-        int cardH = 12 + font.lineHeight + 6 + bodyH + 8 + font.lineHeight + 10;
+        int titleH = Math.round(font.lineHeight * UiTheme.TYPE_HEADING);
+        int footerH = Math.round(font.lineHeight * UiTheme.TYPE_MICRO);
+        int bodyW = cardW - CARD_PAD * 2;
+        int bodyH = font.wordWrapHeight(bodyText, bodyW);
+        int cardH = titleH + bodyH + footerH + 30;
         int cardX = (sw - cardW) / 2;
         int cardY = sh - cardH - EXIT_MARGIN - EXIT_H - 6;
+        int titleY = cardY + 8;
+        int bodyY = titleY + titleH + 6;
+        int dividerY = bodyY + bodyH + 4;
+        int footerY = dividerY + 4;
 
-        // 半透明说明卡（底部居中，不挡左下退出）
-        graphics.fill(cardX, cardY, cardX + cardW, cardY + cardH, 0xCC111416);
-        graphics.renderOutline(cardX, cardY, cardW, cardH, 0x90E0B85A);
-        graphics.drawString(font, title, cardX + 8, cardY + 6, 0xFFE0B85A, false);
-        graphics.drawWordWrap(font, Component.literal(bodyText),
-            cardX + 8, cardY + 6 + font.lineHeight + 6, cardW - 16, 0xFFE8E8E8);
-        graphics.drawString(font, footer,
-            cardX + 8, cardY + cardH - font.lineHeight - 6, 0xFFAEB4BF, false);
+        // 底部居中的圆角玻璃说明卡（不挡左下退出）：金色强调条 + 发丝分割线。
+        UiPaint.card(graphics, cardX, cardY, cardW, cardH);
+        UiPaint.accentBarLeft(graphics, cardX + 1, cardY + 4, cardH - 8, UiTheme.GOLD);
+        UiPaint.textScaled(graphics,
+            EspetroAuiWidgets.trimToWidth(title.getString(), bodyW),
+            cardX + CARD_PAD, titleY, UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
+        graphics.drawWordWrap(font, body,
+            cardX + CARD_PAD, bodyY, bodyW, UiTheme.TEXT);
+        UiPaint.hairline(graphics, cardX + CARD_PAD, dividerY, bodyW, UiTheme.HAIRLINE);
+        UiPaint.textScaled(graphics, footer, cardX + CARD_PAD, footerY,
+            UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO, false);
 
-        // 左下「退出教程」
+        // 左下「退出教程」：内凹底色 + 危险色描边，hover 只换色不位移。
         int exitX = EXIT_MARGIN;
         int exitY = sh - EXIT_MARGIN - EXIT_H;
         boolean hover = isOverExit(mc.mouseHandler.xpos(), mc.mouseHandler.ypos(), mc);
-        graphics.fill(exitX, exitY, exitX + EXIT_W, exitY + EXIT_H,
-            hover ? 0xC0403030 : 0xA0181818);
-        graphics.renderOutline(exitX, exitY, EXIT_W, EXIT_H, hover ? 0xFFFF6666 : 0x80FF6666);
+        int exitAccent = UiTheme.NEGATIVE;
+        UiPaint.roundRect(graphics, exitX, exitY, EXIT_W, EXIT_H, UiTheme.RADIUS_CONTROL,
+            hover ? UiTheme.NEGATIVE_SOFT : UiTheme.withAlpha(UiTheme.SURFACE_0, 0xE0));
+        UiPaint.strokeRoundRect(graphics, exitX, exitY, EXIT_W, EXIT_H, UiTheme.RADIUS_CONTROL,
+            hover ? exitAccent : UiTheme.withAlpha(exitAccent, 0x66));
         String exitLabel = "退出教程";
-        int tw = font.width(exitLabel);
-        graphics.drawString(font, exitLabel,
-            exitX + (EXIT_W - tw) / 2, exitY + (EXIT_H - font.lineHeight) / 2,
-            0xFFFF8888, false);
+        UiPaint.textCentered(graphics, exitLabel, exitX,
+            exitY + (EXIT_H - font.lineHeight) / 2, EXIT_W,
+            hover ? exitAccent : UiTheme.alpha(exitAccent, 0.85f), 1f, true);
     }
 
     public static boolean mouseClicked(double mouseX, double mouseY, int button) {

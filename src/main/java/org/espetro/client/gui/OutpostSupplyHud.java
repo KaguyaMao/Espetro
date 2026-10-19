@@ -2,7 +2,6 @@ package org.espetro.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.network.OutpostSupplySyncPacket;
 import org.espetro.client.aui.GuiElement;
@@ -22,12 +21,11 @@ public final class OutpostSupplyHud {
     private static final ResourceLocation CONSTRUCTION_ICON =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/construction_supply.png");
 
-    private static final int PANEL_BACKGROUND = 0xD0111111;
-    private static final int PANEL_BORDER = 0xB05E646C;
-    private static final int BAR_BACKGROUND = 0xFF333333;
-    private static final int BAR_HEALTH = 0xFF4A9BFF;
-    private static final int HAB_ENABLED_COLOR = 0xFF55AAFF;
-    private static final int HAB_DISABLED_COLOR = 0xFFFF5555;
+    private static final int TEXTURE_SIZE = 128;
+    private static final int PAD = 6;
+    private static final int STATUS_ICON_SIZE = 12;
+    private static final int SUPPLY_ICON_SIZE = 10;
+    private static final int STATUS_PILL_HEIGHT = 11;
 
     private static boolean inRange;
     private static int radioHealth;
@@ -90,56 +88,54 @@ public final class OutpostSupplyHud {
             int bw = getWidth();
             int bh = getHeight();
 
-            graphics.fill(bx, by, bx + bw, by + bh, PANEL_BACKGROUND);
-            graphics.renderOutline(bx, by, bw, bh, PANEL_BORDER);
+            // 圆角玻璃卡：阴影 + 渐变底 + 发丝描边。
+            UiPaint.card(graphics, bx, by, bw, bh);
 
-            // 左上角 fob_status 图标 + 电台血量蓝条
-            int iconSize = 12;
-            int iconX = bx + 6;
-            int iconY = by + 6;
+            // 左上角 fob_status 图标 + 电台血量进度条（内凹槽 + 渐变填充）。
+            int iconX = bx + PAD;
+            int iconY = by + PAD;
             graphics.blit(FOB_STATUS_ICON, iconX, iconY,
-                iconSize, iconSize, 0f, 0f, 128, 128, 128, 128);
+                STATUS_ICON_SIZE, STATUS_ICON_SIZE, 0f, 0f,
+                TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
 
-            int barX = iconX + iconSize + 4;
+            int barX = iconX + STATUS_ICON_SIZE + 5;
             int barY = by + 9;
-            int barW = bw - (barX - bx) - 6;
-            int barH = 6;
-            graphics.fill(barX, barY, barX + barW, barY + barH, BAR_BACKGROUND);
-            int healthW = Math.max(0, (int) Math.round(
-                (double) Math.min(radioHealth, radioMaxHealth) * barW / radioMaxHealth));
-            if (healthW > 0) {
-                graphics.fill(barX, barY, barX + healthW, barY + barH, BAR_HEALTH);
-            }
+            int barW = bw - (barX - bx) - PAD;
+            float health = radioMaxHealth <= 0 ? 0f
+                : Math.min(radioHealth, radioMaxHealth) / (float) radioMaxHealth;
+            UiPaint.progress(graphics, barX, barY, barW, 6, health, UiTheme.ACCENT);
 
-            // 弹药 / 建材存量行
+            // 分割线：状态条与存量行之间。
+            UiPaint.hairline(graphics, bx + PAD, by + 22, bw - PAD * 2, UiTheme.HAIRLINE);
+
+            // 弹药 / 建材存量行（数值用标题字号 + 投影）。
             int supplyY = by + 24;
-            int supplyIconSize = 10;
-            graphics.blit(AMMO_ICON, bx + 6, supplyY,
-                supplyIconSize, supplyIconSize,
-                0f, 0f, 128, 128, 128, 128);
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(String.valueOf(ammunition)),
-                bx + 6 + supplyIconSize + 3, supplyY + 1, 0xFFFFFFFF, false);
+            graphics.blit(AMMO_ICON, bx + PAD, supplyY,
+                SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
+                TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            UiPaint.textScaled(graphics, Integer.toString(ammunition),
+                bx + PAD + SUPPLY_ICON_SIZE + 4, supplyY, UiTheme.TEXT,
+                UiTheme.TYPE_HEADING, true);
 
             int constructionIconX = bx + 78;
             graphics.blit(CONSTRUCTION_ICON, constructionIconX, supplyY,
-                supplyIconSize, supplyIconSize,
-                0f, 0f, 128, 128, 128, 128);
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(String.valueOf(construction)),
-                constructionIconX + supplyIconSize + 3, supplyY + 1, 0xFFFFFFFF, false);
+                SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
+                TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            UiPaint.textScaled(graphics, Integer.toString(construction),
+                constructionIconX + SUPPLY_ICON_SIZE + 4, supplyY, UiTheme.TEXT,
+                UiTheme.TYPE_HEADING, true);
 
-            // 最底下一行：兵站是否启用
-            int statusY = by + 40;
-            if (habEnabled) {
-                graphics.drawString(Minecraft.getInstance().font,
-                    Component.literal("重生功能已启用"),
-                    bx + 6, statusY, HAB_ENABLED_COLOR, false);
-            } else {
-                graphics.drawString(Minecraft.getInstance().font,
-                    Component.literal("兵站未启用"),
-                    bx + 6, statusY, HAB_DISABLED_COLOR, false);
-            }
+            // 最底下一行：兵站状态胶囊（绿=已启用，红=未启用）。
+            String status = habEnabled ? "重生功能已启用" : "兵站未启用";
+            int accent = habEnabled ? UiTheme.POSITIVE : UiTheme.NEGATIVE;
+            int pillX = bx + PAD;
+            int pillY = by + 38;
+            int pillW = Minecraft.getInstance().font.width(status) + 12;
+            UiPaint.pill(graphics, pillX, pillY, pillW, STATUS_PILL_HEIGHT,
+                UiTheme.alpha(accent, 0.16f));
+            UiPaint.pillOutline(graphics, pillX, pillY, pillW, STATUS_PILL_HEIGHT,
+                UiTheme.alpha(accent, 0.5f));
+            UiPaint.text(graphics, status, pillX + 6, pillY + 1, accent);
 
             super.draw(graphics, parentX, parentY, drawWidth, drawHeight,
                 mouseX, mouseY, partialTick);

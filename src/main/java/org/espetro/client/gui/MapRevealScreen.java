@@ -73,10 +73,10 @@ public class MapRevealScreen extends EspetroMenuScreen {
     @Override
     protected void buildMenuRoot(GuiElement root) {
         phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "§6§l地图揭晓",
-            "§f胜出地图: §e" + mapDisplayName,
-            "§7" + getSecondsRemaining() + " 秒后进入装载",
-            EspetroAuiWidgets.GOLD);
+            "地图揭晓",
+            "胜出地图: " + mapDisplayName,
+            getSecondsRemaining() + " 秒后进入装载",
+            UiTheme.GOLD);
 
         int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
         // 预览图区域：全屏宽度减去边距，保持 16:9，垂直居中于标题下方
@@ -92,6 +92,7 @@ public class MapRevealScreen extends EspetroMenuScreen {
             int imgX = (this.width - imgW) / 2;
             int imgY = headerH + Math.max(0, (this.height - headerH - imgH) / 2 - 20);
             root.addChild(new RevealImageElement(imgX, imgY, imgW, imgH, tex));
+            addMapTitle(root, imgY + imgH + 10);
         } else {
             // 无图占位：灰色方框 + 「暂无图片」
             imgW = Math.max(240, Math.min(availW, this.width / 2));
@@ -99,7 +100,17 @@ public class MapRevealScreen extends EspetroMenuScreen {
             int imgX = (this.width - imgW) / 2;
             int imgY = headerH + Math.max(0, (this.height - headerH - imgH) / 2 - 20);
             root.addChild(new PlaceholderElement(imgX, imgY, imgW, imgH));
+            addMapTitle(root, imgY + imgH + 10);
         }
+    }
+
+    /** 地图名：大号数值字 + 阴影，居中于图片下方。 */
+    private void addMapTitle(GuiElement root, int y) {
+        int titleY = Math.min(y, this.height - 16);
+        EspetroAuiWidgets.Text title = EspetroAuiWidgets.centeredText(0, titleY, this.width,
+            mapDisplayName, UiTheme.GOLD);
+        title.setTextScale(UiTheme.TYPE_NUMERAL).setShadow(true);
+        root.addChild(title);
     }
 
     /** 居中预览图绘制。 */
@@ -117,8 +128,15 @@ public class MapRevealScreen extends EspetroMenuScreen {
             if (!isVisible() || tex == null) return;
             int bx = x + getX();
             int by = y + getY();
-            graphics.blit(tex.location(), bx, by, getWidth(), getHeight(),
+            int bw = getWidth();
+            int bh = getHeight();
+            // 相框式卡片 + 发丝描边
+            UiPaint.card(graphics, bx - 8, by - 8, bw + 16, bh + 16, UiTheme.RADIUS_CARD,
+                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+            graphics.blit(tex.location(), bx, by, bw, bh,
                 0, 0, tex.texW(), tex.texH(), tex.texW(), tex.texH());
+            UiPaint.strokeRoundRect(graphics, bx - 1, by - 1, bw + 2, bh + 2,
+                UiTheme.RADIUS_INNER, UiTheme.HAIRLINE_STRONG);
         }
     }
 
@@ -136,11 +154,11 @@ public class MapRevealScreen extends EspetroMenuScreen {
             int by = y + getY();
             int bw = getWidth();
             int bh = getHeight();
-            graphics.fill(bx, by, bx + bw, by + bh, 0x60303030);
-            graphics.renderOutline(bx, by, bw, bh, 0x805B6260);
-            graphics.drawCenteredString(Minecraft.getInstance().font,
-                Component.literal("§7暂无图片"),
-                bx + bw / 2, by + bh / 2 - 4, 0xFFAAAAAA);
+            UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+            UiPaint.sunken(graphics, bx + 6, by + 6, bw - 12, bh - 12, UiTheme.RADIUS_CONTROL);
+            UiPaint.textCentered(graphics, "暂无图片", bx, by + bh / 2 - 4, bw,
+                UiTheme.TEXT_THIRD, UiTheme.TYPE_HEADING, false);
         }
     }
 
@@ -154,7 +172,7 @@ public class MapRevealScreen extends EspetroMenuScreen {
         if (done) return;
         ticksLeft--;
         if (phaseHeader != null && ticksLeft % 20 == 0) {
-            phaseHeader.setDetail("§7" + getSecondsRemaining() + " 秒后进入装载");
+            phaseHeader.setDetail(getSecondsRemaining() + " 秒后进入装载");
         }
         if (ticksLeft <= 0 && Minecraft.getInstance().screen == this && !tutorialPreviewMode) {
             done = true;
