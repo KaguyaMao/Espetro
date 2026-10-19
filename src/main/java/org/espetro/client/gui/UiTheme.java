@@ -1,157 +1,172 @@
 package org.espetro.client.gui;
 
 /**
- * Espetro UI design tokens — "END-01 · 纸墨工业"（参照《明日方舟：终末地》的工业编辑风）。
- *
- * <p>上一版 "Tactical Glass"（冷调深色玻璃 / 圆角 / 青强调色）已归档：
- * git tag {@code ui/tactical-glass-v1}，源码快照见 {@code docs/archive/tactical-glass/}。
- *
- * <p>本版三条硬规则：
- * <ul>
- *   <li><b>纸与墨是主体，强调色是信号。</b>表面是带暖灰的"纸"（{@link #PAPER}），
- *       文字是"墨"（{@link #INK}）；信号黄 {@link #ACCENT} 只出现在需要被看见的那一处——
- *       选中、悬停、焦点、关键数值、强调条。</li>
- *   <li><b>全直角。</b>圆角会把界面推向"柔和产品"，直角把它推向"工程图纸"。
- *       只有本身是圆的东西（状态点、头像、环形进度）保留圆形；
- *       卡片允许切角（{@link #CHAMFER_CARD}），不使用圆弧。</li>
- *   <li><b>靠线与字距分层，不靠阴影。</b>1px 发丝线、角标、刻度、字距微标签构成层次；
- *       阴影只保留 1~2px 的硬投影，用来把卡片"钉"在纸上。</li>
- * </ul>
- *
- * <p>对比度：墨 {@code #101110} 压在纸 {@code #F2F2EC} 上约 17:1；
- * 信号黄作为文字在纸上不可读，故纸上文字用深金 {@link #GOLD}（{@code #6B5D00}，约 5.4:1），
- * 黄色只作底色/描边/图形（黄底压墨字约 16.5:1）。
+ * END-02 / Endfield-inspired industrial UI tokens.
+ * Two matte palettes share one geometry and typography system. Color fields are
+ * deliberately live values: never cache them in static final aliases elsewhere.
+ * Theme changes run on the client thread; primitives never branch on a theme.
+ * Previous palette: docs/archive/endfield-dark-v1/.
  */
 public final class UiTheme {
+    private UiTheme() { }
 
-    private UiTheme() {
+    public enum Mode { LIGHT, DARK }
+
+    private static Mode mode = Mode.DARK;
+    private static long revision;
+    private static final java.util.List<Runnable> CHANGE_LISTENERS = new java.util.ArrayList<>();
+
+    public static Mode mode() { return mode; }
+    public static long revision() { return revision; }
+
+    /** Refresh legacy aliases without introducing renderer dependencies. */
+    public static void addChangeListener(Runnable listener) {
+        CHANGE_LISTENERS.add(java.util.Objects.requireNonNull(listener));
     }
 
-    // ------------------------------------------------------------------
-    // 表面（Surfaces）：暗阶，从全屏底到浮层
-    // ------------------------------------------------------------------
+    /** Apply on the client thread; commands and persistence live outside tokens. */
+    public static void setMode(Mode next) {
+        java.util.Objects.requireNonNull(next, "mode");
+        if (next == mode) return;
+        mode = next;
+        applyPalette();
+        revision++;
+        for (Runnable listener : java.util.List.copyOf(CHANGE_LISTENERS)) listener.run();
+    }
 
-    /** 全屏底：近黑玻璃，顶部略亮、底部略沉，遮住世界但保留一点场景层次。 */
-    public static final int BACKDROP_TOP = 0xF60A0C0E;
-    public static final int BACKDROP_BOTTOM = 0xF8111418;
+    // Fixed colors for textures, world markers, and contrast on colored fills.
+    public static final int TRANSPARENT = 0x00000000;
+    public static final int DARK_INK = 0xFF151719;
+    public static final int LIGHT_INK = 0xFFF5F5EE;
+    public static final int WORLD_SCRIM = 0xCC101410;
+    public static final int WORLD_TEXT = 0xFFF5F5EE;
+    public static final int WORLD_INK = 0xFF101410;
+    public static final int WORLD_MUTED = 0xFFBFC6B7;
+    public static final int WORLD_POSITIVE = 0xFF7BE39D;
+    public static final int WORLD_NEGATIVE = 0xFFFF766B;
+    public static final int WORLD_WARNING = 0xFFFFD45C;
+    public static final int TEXTURE_WHITE = 0xFFFFFFFF;
+    public static final int ICON_PLATE = 0xFF252B23;
 
-    /** 页面主容器。 */
-    public static final int SURFACE_0 = 0xF20D1013;
+    /** ARGB form used by EsRadial's CSS color API. */
+    public static String hex(int argb) {
+        return String.format(java.util.Locale.ROOT, "#%08X", argb);
+    }
 
-    /** 标准卡片：黑玻璃的竖向微渐变（上亮下暗，制造"压在底面上"的厚度）。 */
-    public static final int CARD_TOP = 0xFF171B20;
-    public static final int CARD_BOTTOM = 0xFF101419;
+    /** Signal yellow is a graphic color; use its readable ink variant for text. */
+    public static int readableText(int color) {
+        return color == ACCENT || color == ACCENT_DIM || color == ACCENT_LINE ? GOLD : color;
+    }
 
-    /** 浮起 / 悬停态（比卡片再亮一档）。 */
-    public static final int SURFACE_2 = 0xFF1E242A;
+    // Live semantic colors, read during drawing or widget construction.
+    public static int BACKDROP_TOP = 0xFF111410;
+    public static int BACKDROP_BOTTOM = 0xFF111410;
+    public static int SURFACE_0 = 0xFF191D18;
+    public static int CARD_TOP = 0xFF22271F;
+    public static int CARD_BOTTOM = 0xFF22271F;
+    public static int SURFACE_2 = 0xFF2D3329;
+    public static int SURFACE_3 = 0xFF3B4235;
+    public static int SUNKEN = 0xFF10140F;
+    public static int SOLID_PAGE = 0xFF171B15;
+    public static int COLUMN_SCRIM = 0xF0191D17;
+    public static int GLASS_PANEL = 0xB41B2019;
+    public static int GLASS_PANEL_SOFT = 0x9E252B21;
+    public static int FROST_SCRIM = 0x7A0D110C;
+    public static int SHADOW_1 = 0x66000000;
+    public static int SHADOW_2 = 0x47000000;
+    public static int SHADOW_3 = 0x2E000000;
+    public static int HAIRLINE = 0x22FFFFFF;
+    public static int HAIRLINE_STRONG = 0x3DFFFFFF;
+    public static int SHEEN = 0x00000000;
+    public static int HAIRLINE_DARK = 0x66000000;
+    public static int GRID = 0x10FFFFFF;
+    public static int GRID_MAJOR = 0x1CFFFFFF;
+    public static int TICK = 0xFF6E757E;
+    public static int TEXT = 0xFFF0F2E8;
+    public static int TEXT_SECOND = 0xFFC0C6B8;
+    public static int TEXT_THIRD = 0xFF9CA591;
+    public static int TEXT_DISABLED = 0xFF6E7864;
+    public static int TEXT_ON_ACCENT = 0xFF0A0C0E;
+    public static int INK_FILL = 0xFFF0F2E8;
+    public static int ON_INK = 0xFF171A16;
+    public static int ON_INK_SECOND = 0xFF4B5046;
+    public static int ACCENT = 0xFFFFE500;
+    public static int ACCENT_DIM = 0xFFE2CB00;
+    public static int ACCENT_ON_PAPER = 0xFFFFE500;
+    public static int ACCENT_SOFT = 0x30FFE500;
+    public static int ACCENT_LINE = 0xFFFFE500;
+    public static int ACCENT_GLOW = 0x33FFE500;
+    public static int GOLD = 0xFFFFE579;
+    public static int GOLD_SOFT = 0x2EFFE579;
+    public static int GOLD_LINE = 0x66FFE579;
+    public static int ATTACK = 0xFFFF6B5E;
+    public static int DEFEND = 0xFF5C8CFF;
+    public static int POSITIVE = 0xFF57D38C;
+    public static int WARNING = 0xFFFFC24B;
+    public static int NEGATIVE = 0xFFFF5C5C;
+    public static int PURPLE = 0xFFC08CFF;
+    public static int SQUAD = 0xFF67A7FF;
+    public static int ATTACK_SOFT = 0x26FF6B5E;
+    public static int DEFEND_SOFT = 0x265C8CFF;
+    public static int POSITIVE_SOFT = 0x2657D38C;
+    public static int WARNING_SOFT = 0x26FFC24B;
+    public static int NEGATIVE_SOFT = 0x26FF5C5C;
 
-    /** 按下 / 选中态（比卡片更亮，作为选中块）。 */
-    public static final int SURFACE_3 = 0xFF2A3138;
-
-    /** 内凹区域（列表底、输入框、进度槽、表格行）。 */
-    public static final int SUNKEN = 0xFF07090B;
-
-    /** 纯色深灰页底：没有地图/世界可露出的页面（组队匹配）用一整块实色。 */
-    public static final int SOLID_PAGE = 0xFF15181C;
-
-    /** 黑色半透明栏底：战术面板各栏、浮在地图上的信息栏（不是玻璃，只是压暗）。 */
-    public static final int COLUMN_SCRIM = 0xB8060A0D;
-
-    /** 更透的黑底：铺在毛玻璃视野上的板块/按钮，能透出背后的世界色块。 */
-    public static final int GLASS_PANEL = 0x8C0A0D12;
-
-    /** 最轻的黑色蒙层：只做层次区分，几乎不挡背后内容。 */
-    public static final int GLASS_PANEL_SOFT = 0x5C0A0D12;
-
-    /** 毛玻璃底图之上的压暗层：把世界压成低对比色块，保证前景白字可读。 */
-    public static final int FROST_SCRIM = 0x8407090B;
-
-    /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在暗面上。 */
-    public static final int SHADOW_1 = 0x66000000;
-    public static final int SHADOW_2 = 0x47000000;
-    public static final int SHADOW_3 = 0x2E000000;
-
-    // ------------------------------------------------------------------
-    // 描边（Strokes）
-    // ------------------------------------------------------------------
-
-    /** 发丝线：卡片、表格、分隔线的主描边。 */
-    public static final int HAIRLINE = 0x22FFFFFF;
-
-    /** 更强的描边（悬停、聚焦、分组框）。 */
-    public static final int HAIRLINE_STRONG = 0x3DFFFFFF;
-
-    /** 顶面内高光（很轻，只是让卡片"有厚度"）。 */
-    public static final int SHEEN = 0x0FFFFFFF;
-
-    /** 底部压暗线。 */
-    public static final int HAIRLINE_DARK = 0x66000000;
-
-    /** 网格线：技术图纸的底纹。 */
-    public static final int GRID = 0x10FFFFFF;
-    /** 网格主线（每 5 格一条）。 */
-    public static final int GRID_MAJOR = 0x1CFFFFFF;
-    /** 角标 / 刻度的颜色。 */
-    public static final int TICK = 0xFF6E757E;
-
-    // ------------------------------------------------------------------
-    // 文字（Ink）
-    // ------------------------------------------------------------------
-
-    /** 正文（冷白）。 */
-    public static final int TEXT = 0xFFF2F5F8;
-    /** 次要文字。 */
-    public static final int TEXT_SECOND = 0xFFB4BCC6;
-    /** 三级文字（字段名、单位、注释）。 */
-    public static final int TEXT_THIRD = 0xFF868E99;
-    /** 禁用。 */
-    public static final int TEXT_DISABLED = 0xFF565E68;
-    /** 压在信号黄上的字（近黑）。 */
-    public static final int TEXT_ON_ACCENT = 0xFF0A0C0E;
-
-    /** 高对比实心块（主按钮、悬停反相）；暗色下就是"亮块"。 */
-    public static final int INK_FILL = 0xFFF2F5F8;
-    /** 压在高对比块上的字。 */
-    public static final int ON_INK = 0xFF0A0C0E;
-    /** 压在高对比块上的次级字。 */
-    public static final int ON_INK_SECOND = 0xFF646C77;
-
-    // ------------------------------------------------------------------
-    // 强调色与语义色
-    // ------------------------------------------------------------------
-
-    /** 信号黄：交互、选中、焦点、强调条。大面积铺色只用于"当前项"。 */
-    public static final int ACCENT = 0xFFFFF500;
-    /** 加深一档（悬停、按下、描边）。 */
-    public static final int ACCENT_DIM = 0xFFE0D700;
-    /** 兼容名：浅色主题时期"纸上可读的深黄"，暗色下等同 ACCENT。 */
-    public static final int ACCENT_ON_PAPER = 0xFFFFF500;
-    /** 半透明信号底色块。 */
-    public static final int ACCENT_SOFT = 0x2EFFF500;
-    /** 强调描边（1px）。 */
-    public static final int ACCENT_LINE = 0xFFFFF500;
-    /** 强调"光环"：用于选中外框的第二圈，很轻。 */
-    public static final int ACCENT_GLOW = 0x33FFF500;
-
-    /** 暖强调（标题、数值、板块强调线）：比纯信号黄柔和的暖黄。 */
-    public static final int GOLD = 0xFFFFE066;
-    public static final int GOLD_SOFT = 0x2EFFE066;
-    public static final int GOLD_LINE = 0x66FFE066;
-
-    /** 语义色（暗底可读档）。 */
-    public static final int ATTACK = 0xFFFF6B5E;
-    public static final int DEFEND = 0xFF5C8CFF;
-    public static final int POSITIVE = 0xFF57D38C;
-    public static final int WARNING = 0xFFFFC24B;
-    public static final int NEGATIVE = 0xFFFF5C5C;
-    public static final int PURPLE = 0xFFC08CFF;
-    public static final int SQUAD = 0xFF67A7FF;
-
-    public static final int ATTACK_SOFT = 0x26FF6B5E;
-    public static final int DEFEND_SOFT = 0x265C8CFF;
-    public static final int POSITIVE_SOFT = 0x2657D38C;
-    public static final int WARNING_SOFT = 0x26FFC24B;
-    public static final int NEGATIVE_SOFT = 0x26FF5C5C;
+    private static void applyPalette() {
+        boolean light = mode == Mode.LIGHT;
+        BACKDROP_TOP = light ? 0xFFF2F2EC : 0xFF111410;
+        BACKDROP_BOTTOM = light ? 0xFFF2F2EC : 0xFF111410;
+        SURFACE_0 = light ? 0xFFF0F0E9 : 0xFF191D18;
+        CARD_TOP = light ? 0xFFFAFAF4 : 0xFF22271F;
+        CARD_BOTTOM = light ? 0xFFFAFAF4 : 0xFF22271F;
+        SURFACE_2 = light ? 0xFFE8E9DF : 0xFF2D3329;
+        SURFACE_3 = light ? 0xFFDCDDD2 : 0xFF3B4235;
+        SUNKEN = light ? 0xFFE0E1D8 : 0xFF10140F;
+        SOLID_PAGE = light ? 0xFFECEDE5 : 0xFF171B15;
+        COLUMN_SCRIM = light ? 0xF0F2F2EA : 0xF0191D17;
+        GLASS_PANEL = light ? 0xC6F4F4ED : 0xB41B2019;
+        GLASS_PANEL_SOFT = light ? 0xB2E7E8DE : 0x9E252B21;
+        FROST_SCRIM = light ? 0x96EEEFE6 : 0x7A0D110C;
+        SHADOW_1 = light ? 0x23131517 : 0x66000000;
+        SHADOW_2 = light ? 0x18131517 : 0x47000000;
+        SHADOW_3 = light ? 0x10131517 : 0x2E000000;
+        HAIRLINE = light ? 0x30202420 : 0x22FFFFFF;
+        HAIRLINE_STRONG = light ? 0x66202420 : 0x3DFFFFFF;
+        SHEEN = light ? 0x00000000 : 0x00000000;
+        HAIRLINE_DARK = light ? 0x30202420 : 0x66000000;
+        GRID = light ? 0x08202420 : 0x10FFFFFF;
+        GRID_MAJOR = light ? 0x10202420 : 0x1CFFFFFF;
+        TICK = light ? 0xFF85887B : 0xFF6E757E;
+        TEXT = light ? 0xFF171A16 : 0xFFF0F2E8;
+        TEXT_SECOND = light ? 0xFF4B5046 : 0xFFC0C6B8;
+        TEXT_THIRD = light ? 0xFF62675C : 0xFF9CA591;
+        TEXT_DISABLED = light ? 0xFF858A7F : 0xFF6E7864;
+        TEXT_ON_ACCENT = light ? 0xFF151719 : 0xFF0A0C0E;
+        INK_FILL = light ? 0xFF20251F : 0xFFF0F2E8;
+        ON_INK = light ? 0xFFF5F5EE : 0xFF171A16;
+        ON_INK_SECOND = light ? 0xFFC4C8BA : 0xFF4B5046;
+        ACCENT = light ? 0xFFFFE500 : 0xFFFFE500;
+        ACCENT_DIM = light ? 0xFFDFCA00 : 0xFFE2CB00;
+        ACCENT_ON_PAPER = light ? 0xFF6B5C00 : 0xFFFFE500;
+        ACCENT_SOFT = light ? 0x38FFE500 : 0x30FFE500;
+        ACCENT_LINE = light ? 0xFFAA9300 : 0xFFFFE500;
+        ACCENT_GLOW = light ? 0x33FFE500 : 0x33FFE500;
+        GOLD = light ? 0xFF6B5C00 : 0xFFFFE579;
+        GOLD_SOFT = light ? 0x226B5C00 : 0x2EFFE579;
+        GOLD_LINE = light ? 0x666B5C00 : 0x66FFE579;
+        ATTACK = light ? 0xFFB23E33 : 0xFFFF6B5E;
+        DEFEND = light ? 0xFF2E58A6 : 0xFF5C8CFF;
+        POSITIVE = light ? 0xFF256B42 : 0xFF57D38C;
+        WARNING = light ? 0xFF865500 : 0xFFFFC24B;
+        NEGATIVE = light ? 0xFFB22E32 : 0xFFFF5C5C;
+        PURPLE = light ? 0xFF7750A0 : 0xFFC08CFF;
+        SQUAD = light ? 0xFF3268A1 : 0xFF67A7FF;
+        ATTACK_SOFT = light ? 0x1FB23E33 : 0x26FF6B5E;
+        DEFEND_SOFT = light ? 0x1F2E58A6 : 0x265C8CFF;
+        POSITIVE_SOFT = light ? 0x1F256B42 : 0x2657D38C;
+        WARNING_SOFT = light ? 0x1F865500 : 0x26FFC24B;
+        NEGATIVE_SOFT = light ? 0x1FB22E32 : 0x26FF5C5C;
+    }
 
     // ------------------------------------------------------------------
     // 几何（Geometry）：4px 网格，全直角
@@ -249,13 +264,26 @@ public final class UiTheme {
         return ((Math.max(0, Math.min(255, alpha)) & 0xFF) << 24) | (argb & 0x00FFFFFF);
     }
 
-    /** 取反色（用于强调色底上的文字）。 */
+    /** Choose the fixed ink with the strongest sRGB contrast on an opaque fill. */
     public static int contrastText(int background) {
-        int r = (background >>> 16) & 0xFF;
-        int g = (background >>> 8) & 0xFF;
-        int b = background & 0xFF;
-        double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255.0;
-        return luminance > 0.55 ? TEXT : ON_INK;
+        double luminance = relativeLuminance(background);
+        return contrastRatio(luminance, relativeLuminance(DARK_INK))
+            >= contrastRatio(luminance, relativeLuminance(LIGHT_INK)) ? DARK_INK : LIGHT_INK;
+    }
+
+    private static double relativeLuminance(int color) {
+        return 0.2126 * linearChannel((color >>> 16) & 0xFF)
+            + 0.7152 * linearChannel((color >>> 8) & 0xFF)
+            + 0.0722 * linearChannel(color & 0xFF);
+    }
+
+    private static double linearChannel(int channel) {
+        double value = channel / 255.0;
+        return value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+    }
+
+    private static double contrastRatio(double first, double second) {
+        return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
     }
 
     /** 是否具备可见 alpha（0 表示完全不画）。 */

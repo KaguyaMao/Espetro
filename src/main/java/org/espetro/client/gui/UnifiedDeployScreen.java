@@ -64,7 +64,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int VEHICLE_POPUP_ROW_H = BTN_H + 2;
     private static final int VEHICLE_POPUP_MAX_ROWS = 6;
     /** 需求 3-3：就绪载具行的淡金高亮底（对应上拉菜单的"选中项高亮"观感）。 */
-    private static final int VEHICLE_ROW_READY_TINT = UiTheme.GOLD_SOFT;
+    private static int vehicleRowReadyTintColor() { return UiTheme.GOLD_SOFT; }
     private static final float UI_TEXT_SCALE = 0.72f;
     private static final float TOOLTIP_TEXT_SCALE = 0.68f;
     private static final float SQUAD_TEXT_SCALE = 0.68f;
@@ -77,45 +77,45 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /** 本轮需求 2：动作行所有按钮（创建/退出/队伍类型/解散/锁定）高度降为原先（2 倍行高）的一半。 */
     private static final int SQUAD_CREATE_BTN_H_MUL = 1;
     /** 创建小队按钮：正向语义色玻璃底（Tactical Glass 语义色）。 */
-    private static final int SQUAD_CREATE_BG = UiTheme.withAlpha(UiTheme.POSITIVE, 0xCC);
-    private static final int SQUAD_CREATE_BG_HOVER = UiTheme.withAlpha(UiTheme.POSITIVE, 0xF0);
+    private static int squadCreateBgColor() { return UiTheme.POSITIVE_SOFT; }
+    private static int squadCreateBgHoverColor() { return UiTheme.withAlpha(UiTheme.POSITIVE, 0x30); }
     /** 退出小队按钮：与创建小队同位置同尺寸，警示色玻璃底。 */
-    private static final int SQUAD_LEAVE_BG = UiTheme.withAlpha(UiTheme.ATTACK, 0xCC);
-    private static final int SQUAD_LEAVE_BG_HOVER = UiTheme.withAlpha(UiTheme.ATTACK, 0xF0);
+    private static int squadLeaveBgColor() { return UiTheme.ATTACK_SOFT; }
+    private static int squadLeaveBgHoverColor() { return UiTheme.withAlpha(UiTheme.ATTACK, 0x30); }
     /** 队伍类型上拉按钮：品牌金玻璃底。 */
-    private static final int SQUAD_CATEGORY_BG = UiTheme.withAlpha(UiTheme.GOLD, 0xCC);
-    private static final int SQUAD_CATEGORY_BG_HOVER = UiTheme.withAlpha(UiTheme.GOLD, 0xF0);
+    private static int squadCategoryBgColor() { return UiTheme.GOLD_SOFT; }
+    private static int squadCategoryBgHoverColor() { return UiTheme.withAlpha(UiTheme.GOLD, 0x30); }
     /** 内联「小队名称」输入框：内凹深底 + 亮字。 */
-    private static final int SQUAD_INLINE_FIELD_BG = UiTheme.SUNKEN;
-    private static final int SQUAD_INLINE_FIELD_BG_ACTIVE = UiTheme.SURFACE_2;
-    private static final int SQUAD_INLINE_FIELD_TEXT = UiTheme.TEXT;
-    private static final int SQUAD_INLINE_FIELD_DIM = UiTheme.TEXT_THIRD;
+    private static int squadInlineFieldBgColor() { return UiTheme.SUNKEN; }
+    private static int squadInlineFieldBgActiveColor() { return UiTheme.SURFACE_2; }
+    private static int squadInlineFieldTextColor() { return UiTheme.TEXT; }
+    private static int squadInlineFieldDimColor() { return UiTheme.TEXT_THIRD; }
     /** 动作行内元素间距。 */
     private static final int SQUAD_INLINE_GAP = 2;
     /** 退出/解散等二次确认弹窗的深色底（外框略淡 + 内底更实；其它面板保持半透明玻璃）。 */
-    private static final int SQUAD_CONFIRM_OUTER_BG = UiTheme.alpha(UiTheme.BACKDROP_TOP, 0.86f);
-    private static final int SQUAD_CONFIRM_INNER_BG = UiTheme.GLASS_PANEL;
+    private static int squadConfirmOuterBgColor() { return UiTheme.alpha(UiTheme.BACKDROP_TOP, 0.86f); }
+    private static int squadConfirmInnerBgColor() { return UiTheme.GLASS_PANEL; }
 
     // EspButton 颜色：统一圆角玻璃按钮；无自带底色的按钮使用半透明内凹底。
     /** 无自带底色的按钮的统一底色（半透明深玻璃，透出后面的世界/地图）。 */
-    private static final int BTN_BG_PLAIN_BLACK = UiTheme.GLASS_PANEL;
-    private static final int BTN_BG_HOVER    = UiTheme.HAIRLINE_STRONG;   // 悬停高亮：叠在常态底色之上
+    private static int btnBgPlainBlackColor() { return UiTheme.GLASS_PANEL; }
+    private static int btnBgHoverColor() { return UiTheme.HAIRLINE_STRONG; }   // 悬停高亮：叠在常态底色之上
     /** 禁用态：比常态更淡的玻璃底，禁用按钮依然可见。 */
-    private static final int BTN_BG_DISABLED = UiTheme.alpha(UiTheme.SUNKEN, 0.55f);
-    private static final int CLASS_BG_UNAVAILABLE = UiTheme.ATTACK_SOFT;
-    private static final int CLASS_BG_SELECTED   = UiTheme.GOLD_SOFT;
-    private static final int CLASS_BORDER_UNAVAILABLE = UiTheme.withAlpha(UiTheme.ATTACK, 0x8C);
-    private static final int BTN_TEXT        = UiTheme.TEXT;
+    private static int btnBgDisabledColor() { return UiTheme.alpha(UiTheme.SUNKEN, 0.55f); }
+    private static int classBgUnavailableColor() { return UiTheme.ATTACK_SOFT; }
+    private static int classBgSelectedColor() { return UiTheme.GOLD_SOFT; }
+    private static int classBorderUnavailableColor() { return UiTheme.withAlpha(UiTheme.ATTACK, 0x8C); }
+    private static int btnTextColor() { return UiTheme.TEXT; }
     /** 重新部署按钮：警示色系（需二次确认）。 */
-    private static final int REDEPLOY_BG_NORMAL = UiTheme.withAlpha(UiTheme.ATTACK, 0xB8);
-    private static final int REDEPLOY_BG_HOVER  = UiTheme.withAlpha(UiTheme.ATTACK, 0xE0);
+    private static int redeployBgNormalColor() { return UiTheme.ATTACK_SOFT; }
+    private static int redeployBgHoverColor() { return UiTheme.withAlpha(UiTheme.ATTACK, 0x30); }
     /** 面板底色：全部走玻璃令牌，不再出现裸 ARGB。 */
-    private static final int CHROME_BG       = UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xBE);
-    private static final int PANEL_LEFT_BG   = UiTheme.GLASS_PANEL;
-    private static final int PANEL_CENTER_BG = UiTheme.GLASS_PANEL;
-    private static final int PANEL_MAP_FOOTER_BG = UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xB4);
-    private static final int SCREEN_SHADE    = UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xFF);
-    private static final int STATIC_DIVIDER = UiTheme.HAIRLINE_STRONG;
+    private static int chromeBgColor() { return UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xBE); }
+    private static int panelLeftBgColor() { return UiTheme.GLASS_PANEL; }
+    private static int panelCenterBgColor() { return UiTheme.GLASS_PANEL; }
+    private static int panelMapFooterBgColor() { return UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xB4); }
+    private static int screenShadeColor() { return UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xFF); }
+    private static int staticDividerColor() { return UiTheme.HAIRLINE_STRONG; }
     private static final Pattern COORDINATE_PATTERN =
         Pattern.compile("[-+]?\\d+(?:\\.\\d+)?");
     private static final ResourceLocation HAB_ICON =
@@ -287,6 +287,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private ScrollableList classScrollList;
     private ScrollableList deployScrollList;
     private ScrollableList squadScrollList;
+    private ThemeViewState themeViewState;
+
+    private record ThemeViewState(double squads, double classes, double deploys,
+                                  boolean categoriesOpen, boolean vehiclesOpen, double vehicles,
+                                  String confirmationTitle, String confirmationBody, Runnable confirmation) { }
 
     // ===== 可独立重建的区域容器 =====
     private GuiElement squadSectionRoot;
@@ -810,7 +815,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return;
             }
             int size = getWidth();
-            graphics.setColor(1.0f, 0.85f, 0.25f, 1.0f);      // 黄色
+            UiPaint.tint(graphics, UiTheme.GOLD);
             graphics.blit(texture, x + getX(), y + getY(), size, size, 0.0f, 0.0f, 128, 128, 128, 128);
             graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
@@ -848,12 +853,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private String label;
         private boolean enabled = true;
         private boolean hovered = false;
-        private int normalColor = BTN_BG_PLAIN_BLACK;
-        private int hoverColor = BTN_BG_HOVER;
-        private int disabledColor = BTN_BG_DISABLED;
+        private int normalColor = btnBgPlainBlackColor();
+        private int hoverColor = btnBgHoverColor();
+        private int disabledColor = btnBgDisabledColor();
         private int disabledBorderColor = UiTheme.TEXT_DISABLED;
-        private int disabledTextColor = 0x666666;
-        private int textColor = BTN_TEXT;
+        private int disabledTextColor = UiTheme.TEXT_DISABLED;
+        private int textColor = btnTextColor();
         private ResourceLocation icon;
         private int iconTextureWidth = 128;
         private int iconTextureHeight = 128;
@@ -898,11 +903,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
          */
         /** 完全透明：常态不铺底色、无边框，仅悬停高亮 / 选中黄底。 */
         void setTransparentIdle() {
-            normalColor = 0x00000000;
+            normalColor = UiTheme.TRANSPARENT;
             hoverColor = UiTheme.HAIRLINE_STRONG;
         }
 
-        void setPlainBlack() { normalColor = BTN_BG_PLAIN_BLACK; }
+        void setPlainBlack() { normalColor = btnBgPlainBlackColor(); }
 
         void setSelected(boolean selected, int color) { selectedColor = selected ? color : 0; }
         /** 禁用态样式；border 参数在需求 6（全局去边框）后不再绘制，保留以兼容现有调用点。 */
@@ -933,12 +938,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             int bx = x + getX(), by = y + getY(), bw = getWidth(), bh = getHeight();
 
-            // 选中 > 禁用 > 悬停 > 常态；统一圆角玻璃面 + 1px 发丝描边
+            // 选中 > 禁用 > 悬停 > 常态；平涂无描边（边框在悬停/选中等所有状态下都不画）
             int radius = Math.min(UiTheme.RADIUS_CONTROL, Math.max(1, bh / 2));
             boolean selected = selectedColor != 0;
+            // 选中态永远按"可用"渲染：职业一旦被选中，即便当前人数已满或冷却中也不灰显。
+            boolean displayEnabled = enabled || selected;
             if (selected) {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, radius, selectedColor);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, radius, UiTheme.ACCENT_LINE);
             } else if (!enabled) {
                 if ((disabledColor >>> 24) != 0) {
                     UiPaint.roundRect(graphics, bx, by, bw, bh, radius, disabledColor);
@@ -949,27 +955,28 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     UiPaint.roundRect(graphics, bx, by, bw, bh, radius, normalColor);
                 }
                 UiPaint.roundRect(graphics, bx, by, bw, bh, radius, hoverColor);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, radius, UiTheme.HAIRLINE_STRONG);
             } else {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, radius, normalColor);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, radius, UiTheme.HAIRLINE);
+            }
+            if (displayEnabled && hovered && !selected && icon == null) {
+                UiPaint.accentBarLeft(graphics, bx, by, bh, UiTheme.ACCENT);
             }
             // 平涂：不再画顶部内高光（那圈浅色亮线就是用户看到的"玻璃反光"）。
 
-            int textCol = enabled ? textColor : disabledTextColor;
+            int textCol = displayEnabled ? textColor : disabledTextColor;
             int contentLeft = bx + 3;
             if (icon != null) {
                 int drawnIconSize = Math.min(iconSize, bh - 3);
+                // White mask icons use the same ink as their labels in both palettes.
+                UiPaint.tint(graphics, displayEnabled ? UiTheme.TEXT : UiTheme.TEXT_DISABLED);
                 // 需求 3-4：禁用态不再铺底色，改为把图标压暗，仍能区分可用 / 不可用
-                if (!enabled) {
+                if (!displayEnabled) {
                     graphics.setColor(0.45f, 0.45f, 0.45f, 1.0f);
                 }
                 graphics.blit(icon, bx + 2, by + (bh - drawnIconSize) / 2,
                     drawnIconSize, drawnIconSize, 0.0f, 0.0f,
                     iconTextureWidth, iconTextureHeight, iconTextureWidth, iconTextureHeight);
-                if (!enabled) {
-                    graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-                }
+                graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
                 contentLeft = bx + drawnIconSize + 4;
             }
             int rightLabelWidth = rightLabel.isEmpty() ? 0 : Math.round(
@@ -1039,10 +1046,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int by = y + getY();
             int bar = SQUAD_ACCENT_BAR_W;
             int rowRadius = UiTheme.RADIUS_INNER;
+            // 班组成员行：只留一层玻璃底色，不画描边（常态/悬停都不画）。
             UiPaint.roundRect(graphics, bx, by, getWidth(), getHeight(), rowRadius,
-                hasFocus() ? UiTheme.SURFACE_2 : UiTheme.CARD_BOTTOM);
-            UiPaint.strokeRoundRect(graphics, bx, by, getWidth(), getHeight(), rowRadius,
-                hasFocus() ? UiTheme.HAIRLINE_STRONG : UiTheme.HAIRLINE);
+                hasFocus() ? UiTheme.SURFACE_2 : UiTheme.GLASS_PANEL_SOFT);
             // 最左：火力组色条（圆角胶囊）
             UiPaint.roundRect(graphics, bx + 1, by + 2, bar, Math.max(1, getHeight() - 4), 1,
                 fireteamColor);
@@ -1058,7 +1064,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 Math.round(Minecraft.getInstance().font.lineHeight * SQUAD_MEMBER_TEXT_SCALE));
             drawScaledString(graphics, drawnLabel, textX,
                 by + Math.max(0, (getHeight() - textHeight) / 2),
-                BTN_TEXT, SQUAD_MEMBER_TEXT_SCALE);
+                btnTextColor(), SQUAD_MEMBER_TEXT_SCALE);
         }
     }
 
@@ -1066,11 +1072,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private static void drawScaledString(GuiGraphics graphics, String text, int x, int y,
                                          int color, float scale) {
-        graphics.pose().pushPose();
-        graphics.pose().scale(scale, scale, 1.0f);
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(text),
-            Math.round(x / scale), Math.round(y / scale), color, false);
-        graphics.pose().popPose();
+        UiPaint.textScaled(graphics, text, x, y, color, scale, false);
     }
 
     /**
@@ -1169,7 +1171,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 typing ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
 
             String drawn = value.isEmpty() ? hint : value;
-            int color = value.isEmpty() ? SQUAD_INLINE_FIELD_DIM : SQUAD_INLINE_FIELD_TEXT;
+            int color = value.isEmpty() ? squadInlineFieldDimColor() : squadInlineFieldTextColor();
             int logicalWidth = Math.max(8, (int) ((getWidth() - 8) / FIELD_TEXT_SCALE));
             String trimmed = Minecraft.getInstance().font.plainSubstrByWidth(drawn, logicalWidth);
             int textHeight = Math.max(1,
@@ -1238,8 +1240,36 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.root = root;
         dirtySections.clear();
         populateGui();
+        if (themeViewState != null) {
+            ThemeViewState state = themeViewState;
+            themeViewState = null;
+            if (squadScrollList != null) squadScrollList.setOffset(state.squads());
+            if (classScrollList != null) classScrollList.setOffset(state.classes());
+            if (deployScrollList != null) deployScrollList.setOffset(state.deploys());
+            if (state.categoriesOpen()) openSquadCategoryPopup();
+            if (state.vehiclesOpen()) {
+                openVehicleInfoPopup();
+                if (vehicleInfoScrollList != null) vehicleInfoScrollList.setOffset(state.vehicles());
+            }
+            if (state.confirmation() != null) {
+                openSquadConfirm(state.confirmationTitle(), state.confirmationBody(), state.confirmation());
+            }
+        }
         // 打开包已携带服务端最新人数，后续变更也由服务端主动推送，
         // 不再打开界面后立即发起第二次请求。
+    }
+
+    @Override
+    protected void onThemeChanged() {
+        super.onThemeChanged();
+        themeViewState = new ThemeViewState(
+            squadScrollList == null ? 0 : squadScrollList.getOffset(),
+            classScrollList == null ? 0 : classScrollList.getOffset(),
+            deployScrollList == null ? 0 : deployScrollList.getOffset(),
+            hasSquadCategoryPopup(), hasVehicleInfoPopup(),
+            vehicleInfoScrollList == null ? 0 : vehicleInfoScrollList.getOffset(),
+            squadConfirmTitle, squadConfirmBody, hasSquadConfirm() ? squadConfirmAction : null);
+        FrostedBackdrop.invalidate();
     }
 
     private void populateGui() {
@@ -1268,7 +1298,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             // 同上：中列底色由 renderBeforeMenu 动态绘制
         }
         root.addChild(new GuiRect(mapX, mapY + Math.max(0, mapH - MAP_FOOTER_H),
-            mapW, MAP_FOOTER_H, PANEL_MAP_FOOTER_BG));
+            mapW, MAP_FOOTER_H, panelMapFooterBgColor()));
 
         squadSectionRoot = new GuiElement(0, 0, this.width, this.height);
         mapControlsRoot = new GuiElement(0, 0, this.width, this.height);
@@ -1462,13 +1492,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (factionDescription != null && !factionDescription.isEmpty())
             sub += " \u00a7f· " + factionDescription;
         PlainText subtitle = new PlainText(5, 15,
-            EspetroAuiWidgets.trimToWidth(sub, Math.max(80, this.width - 16)), BTN_TEXT);
+            EspetroAuiWidgets.trimToWidth(sub, Math.max(80, this.width - 16)), btnTextColor());
         root.addChild(subtitle);
 
         PlainText hint = new PlainText(5, 25,
             EspetroAuiWidgets.trimToWidth(
                 "\u00a77选择班组、职业与部署点，确认后等待部署",
-                Math.max(80, this.width - 16)), BTN_TEXT);
+                Math.max(80, this.width - 16)), btnTextColor());
         root.addChild(hint);
 
         statusTimerText = new PlainText(this.width - 6, 4, "", UiTheme.GOLD);
@@ -1700,8 +1730,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             inSquadNow ? this::openLeaveSquadConfirm : this::createSquadInline);
         squadCreateLeaveButton.setTextScale(actionTextScale);   // 需求 3-2：与队伍类型按钮同一个字号
         // 需求 6：原本就有底色（绿/红）→ 只去掉边框，底色保留
-        squadCreateLeaveButton.normalColor = inSquadNow ? SQUAD_LEAVE_BG : SQUAD_CREATE_BG;
-        squadCreateLeaveButton.hoverColor = inSquadNow ? SQUAD_LEAVE_BG_HOVER : SQUAD_CREATE_BG_HOVER;
+        squadCreateLeaveButton.normalColor = inSquadNow ? squadLeaveBgColor() : squadCreateBgColor();
+        squadCreateLeaveButton.hoverColor = inSquadNow ? squadLeaveBgHoverColor() : squadCreateBgHoverColor();
         squadActionRoot.addChild(squadCreateLeaveButton);
 
         int rightX = squadActionX + createW + gap;
@@ -1725,8 +1755,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             squadCategoryDropButton = new EspButton(rightX, y, ddW, rowH,
                 squadCategoryDropLabel(), this::toggleSquadCategoryPopup);
             squadCategoryDropButton.setTextScale(actionTextScale);   // 需求 3-2：与创建小队同一个字号
-            squadCategoryDropButton.normalColor = SQUAD_CATEGORY_BG;          // 黄色
-            squadCategoryDropButton.hoverColor = SQUAD_CATEGORY_BG_HOVER;
+            squadCategoryDropButton.normalColor = squadCategoryBgColor();          // 黄色
+            squadCategoryDropButton.hoverColor = squadCategoryBgHoverColor();
             squadActionRoot.addChild(squadCategoryDropButton);
 
             // 队名输入框：与按钮等高（需求 3），无边框 + 淡灰底
@@ -1899,7 +1929,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     /** 黄色上拉按钮文案：当前选中的队伍类型（黑字 + 上三角）。 */
     private String squadCategoryDropLabel() {
-        return "\u00a70\u25b2 " + currentSquadCategoryName();
+        return "\u25b2 " + currentSquadCategoryName();
     }
 
     private String currentSquadCategoryName() {
@@ -2058,7 +2088,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             row.setCenteredText(false);
             row.setPlainBlack();
             // 就绪（未满、无冷却）的行加一层淡金高亮，对应菜单的"选中/可用项高亮"
-            row.setSelected(vehicleReady(vehicle), VEHICLE_ROW_READY_TINT);
+            row.setSelected(vehicleReady(vehicle), vehicleRowReadyTintColor());
             vehicleInfoScrollList.addChild(row);
             vehicleInfoRowButtons.add(row);
             vehicleInfoRowVehicles.add(vehicle);
@@ -2086,7 +2116,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             UnifiedDeployScreenPacket.VehicleInfo vehicle = vehicleInfoRowVehicles.get(i);
             vehicleInfoRowButtons.get(i).setLabel(vehicleInfoRowLabel(vehicle));
             vehicleInfoRowButtons.get(i).setSelected(
-                vehicleReady(vehicle), VEHICLE_ROW_READY_TINT);
+                vehicleReady(vehicle), vehicleRowReadyTintColor());
         }
     }
 
@@ -2232,8 +2262,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 }
             });
         ok.setTextScale(UI_TEXT_SCALE);
-        ok.normalColor = UiTheme.withAlpha(UiTheme.ATTACK, 0xB8);
-        ok.hoverColor = UiTheme.withAlpha(UiTheme.ATTACK, 0xE0);
+        ok.normalColor = UiTheme.ATTACK_SOFT;
+        ok.hoverColor = UiTheme.withAlpha(UiTheme.ATTACK, 0x30);
         squadConfirmRoot.addChild(ok);
         // 默认高亮"取消"：视觉上加亮 + 置于左侧（Enter 无绑定，避免误确认）
         EspButton cancel = new EspButton(x + 8, by, 64, BTN_H, "\u00a7e取消",
@@ -2383,6 +2413,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             EspButton btn = new EspButton(0, gy, contentW, ICON_BTN + 2, label,
                 () -> selectClass(classes.indexOf(cls)));
             btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
+            btn.setSelected(isSelectedClass(cls), classBgSelectedColor());
             btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
                 RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
             btn.setIconSize(ICON_BTN);
@@ -2394,8 +2425,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
                 // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
                 btn.setDisabledStyle(
-                    0x00000000,
-                    coolingDown ? UiTheme.TEXT_DISABLED : CLASS_BORDER_UNAVAILABLE,
+                    UiTheme.TRANSPARENT,
+                    coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                     coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
             }
             classScrollList.addChild(btn);
@@ -2415,6 +2446,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         EspButton btn = new EspButton(bx, by, size, size, "", () -> selectClass(clsIdx));
         btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
+        btn.setSelected(isSelectedClass(cls), classBgSelectedColor());
         btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
             RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
         btn.setIconSize(size - 2);
@@ -2425,8 +2457,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
             // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
             btn.setDisabledStyle(
-                0x00000000,
-                coolingDown ? UiTheme.TEXT_DISABLED : CLASS_BORDER_UNAVAILABLE,
+                UiTheme.TRANSPARENT,
+                coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                 coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
         }
         classScrollList.addChild(btn);
@@ -2997,7 +3029,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             // 待用（已点击、尚未使用）金色高亮；可用为玻璃底 + 悬停提亮；冷却/不可用压暗
             int fill;
             if (pending) {
-                fill = hover ? UiTheme.withAlpha(UiTheme.GOLD, 0xCC) : UiTheme.GOLD_SOFT;
+                fill = hover ? UiTheme.withAlpha(UiTheme.GOLD, 0x30) : UiTheme.GOLD_SOFT;
             } else if (usable) {
                 fill = hover ? UiTheme.SURFACE_3 : UiTheme.SUNKEN;
             } else {
@@ -3014,8 +3046,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             // ① 技能图标（居中）
             if (skillIcon != null) {
-                float iconAlpha = usable ? 1f : 0.45f;
-                graphics.setColor(1f, 1f, 1f, iconAlpha);
+                UiPaint.tint(graphics, usable ? UiTheme.TEXT : UiTheme.TEXT_DISABLED);
                 graphics.blit(skillIcon, centerX - ICON_SIZE / 2, py + 4, 0, 0,
                     ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
                 graphics.setColor(1f, 1f, 1f, 1f);
@@ -3098,8 +3129,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             this::openRedeployConfirm);
         redeploy.setTextScale(UI_TEXT_SCALE);
         // 需求 6：原本就有底色（红色）→ 只去掉边框，底色保留
-        redeploy.normalColor = REDEPLOY_BG_NORMAL;
-        redeploy.hoverColor = REDEPLOY_BG_HOVER;
+        redeploy.normalColor = redeployBgNormalColor();
+        redeploy.hoverColor = redeployBgHoverColor();
         redeploy.setEnabled(!waitingForDeploySelection);
         sectionRoot.addChild(redeploy);
         nextX += 76;
@@ -3153,8 +3184,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int h = Math.min(VACANCY_WINDOW_HEADER_H + bodyH + 6,
             Math.max(64, mapH - MAP_FOOTER_H - 16));
 
-        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0x00000000));
-        sectionRoot.addChild(new GuiRect(x, y, w, h, 0x00000000));
+        sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, UiTheme.TRANSPARENT));
+        sectionRoot.addChild(new GuiRect(x, y, w, h, UiTheme.TRANSPARENT));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
             (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
@@ -3241,9 +3272,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private void buildStatusBar(GuiElement sectionRoot) {
         int barY = this.height - STATUS_BAR_H;
         sectionRoot.addChild(new GuiRect(0, barY, this.width, STATUS_BAR_H,
-            UiTheme.alpha(CHROME_BG, 0.92f)));
+            UiTheme.alpha(chromeBgColor(), 0.92f)));
 
-        statusText = new PlainText(5, barY + 3, buildStatusText(), BTN_TEXT);
+        statusText = new PlainText(5, barY + 3, buildStatusText(), btnTextColor());
         sectionRoot.addChild(statusText);
 
         boolean hasOutpost = bastions.stream().anyMatch(UnifiedDeployScreenPacket.BastionItem::isOutpost);
@@ -3355,7 +3386,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             button.setEnabled(waitingForDeploySelection && ready && hasClass);
             String position = deployButtonPositions.get(button);
             button.setSelected(pendingDeployPosition != null
-                && pendingDeployPosition.equals(position), CLASS_BG_SELECTED);
+                && pendingDeployPosition.equals(position), classBgSelectedColor());
             if (waitingForDeploySelection && ready && !hasClass) {
                 button.setDisabledAction(() ->
                     EspetroTipNotifier.showDenial("未选择职业", "请先选择职业，再选择部署点。"));
@@ -3442,9 +3473,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 已部署下来（不再等待部署选择）时面板转为浮在画面上的薄卡，仍保证白字可读。
         // 各栏底色统一为"黑色半透明"平涂，透出后面的世界色块。
         int leftBg = UiTheme.GLASS_PANEL;
-        int centerBg = waitingForDeploySelection ? UiTheme.GLASS_PANEL : 0x00000000;
-        int chromeBg = CHROME_BG;
-        int footerBg = PANEL_MAP_FOOTER_BG;
+        int centerBg = waitingForDeploySelection ? UiTheme.GLASS_PANEL : UiTheme.TRANSPARENT;
+        int chromeBg = chromeBgColor();
+        int footerBg = panelMapFooterBgColor();
         if (UiTheme.visible(leftBg)) {
             UiPaint.roundRect(graphics, leftX, leftY, leftW, leftH,
                 UiTheme.RADIUS_CARD, leftBg);
@@ -3487,9 +3518,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         UiPaint.roundRect(graphics, 0, 0, 4, TITLE_H, 1, teamAccentColor());
         int barY = this.height - STATUS_BAR_H;
         if (barY > TITLE_H) {
-            if (UiTheme.visible(CHROME_BG)) {
+            if (UiTheme.visible(chromeBgColor())) {
                 graphics.fillGradient(0, barY, this.width, this.height,
-                    UiTheme.alpha(CHROME_BG, 0.55f), CHROME_BG);
+                    UiTheme.alpha(chromeBgColor(), 0.55f), chromeBgColor());
             }
         }
         renderStaticDividers(graphics);
@@ -3537,7 +3568,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
      * 不加入任何会因网络数据更新而清空、替换的 MUtil 区域容器。
      */
     private void renderStaticDividers(GuiGraphics graphics) {
-        UiPaint.hairline(graphics, 4, TITLE_H, Math.max(1, this.width - 8), STATIC_DIVIDER);
+        UiPaint.hairline(graphics, 4, TITLE_H, Math.max(1, this.width - 8), staticDividerColor());
 
         int dividerBottom = Math.max(TITLE_H + 2, this.height - STATUS_BAR_H - 2);
         UiPaint.dividerV(graphics, leftX + leftW, TITLE_H + 2,
@@ -3551,7 +3582,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int regionDividerY = classBottom + Math.max(0, (deployAreaY - classBottom) / 2);
             regionDividerY = Math.max(TITLE_H + 2, Math.min(dividerBottom - 1, regionDividerY));
             UiPaint.hairline(graphics, centerX + 1, regionDividerY,
-                Math.max(1, centerW - 2), STATIC_DIVIDER);
+                Math.max(1, centerW - 2), staticDividerColor());
         }
         // 板块标题下的短强调线：把「标题 + 内容」分成两个视觉层级。
         if (centerW > 0) {
@@ -3648,7 +3679,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private void renderMapViewportBackground(GuiGraphics graphics, int viewportH) {
         UiPaint.roundRect(graphics, mapX, mapY, mapW, viewportH,
-            UiTheme.RADIUS_CARD, PANEL_MAP_FOOTER_BG);
+            UiTheme.RADIUS_CARD, panelMapFooterBgColor());
     }
 
     private void renderMapViewportBorder(GuiGraphics graphics, int viewportH) {
@@ -3869,7 +3900,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             for (String line : lines) {
                 drawScaledString(graphics,
                     EspetroAuiWidgets.trimToWidth(line, logicalWidth),
-                    px + 4, ty, BTN_TEXT, TOOLTIP_TEXT_SCALE);
+                    px + 4, ty, btnTextColor(), TOOLTIP_TEXT_SCALE);
                 ty += lineH;
             }
             break;
@@ -3884,8 +3915,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         UiPaint.card(graphics, variantPopupX, variantPopupY,
             VARIANT_POPUP_W, variantPopupH);
-        graphics.drawString(this.font, Component.literal("§6§l" + cls.name + " §7装备变体"),
-            variantPopupX + 6, variantPopupY + 5, BTN_TEXT, false);
+        UiPaint.text(graphics, cls.name + " / 装备变体",
+            variantPopupX + 6, variantPopupY + 5, UiTheme.TEXT);
         UiPaint.hairline(graphics, variantPopupX + 4, variantPopupY + VARIANT_HEADER_H - 2,
             VARIANT_POPUP_W - 8, UiTheme.HAIRLINE_STRONG);
 
@@ -3894,7 +3925,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean closeHovered = inside(mouseX, mouseY, closeX, closeY, 13, 13);
         UiPaint.roundRect(graphics, closeX, closeY, 13, 13, UiTheme.RADIUS_INNER,
             closeHovered ? UiTheme.ATTACK : UiTheme.withAlpha(UiTheme.ATTACK, 0x55));
-        graphics.drawCenteredString(this.font, Component.literal("§fX"), closeX + 6, closeY + 2, BTN_TEXT);
+        UiPaint.textCentered(graphics, "X", closeX, closeY + 2, 13,
+            closeHovered ? UiTheme.contrastText(UiTheme.ATTACK) : UiTheme.TEXT, 1f, false);
 
         for (int row = 0; row < visible; row++) {
             int variantIndex = variantPopupScroll + row;
@@ -3917,27 +3949,26 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             String countText;
             if (cls.strictCount) {
-                countText = (full ? "§c" : "§a") + "[" + count + "/" + variant.maxPlayers + "]";
+                countText = "[" + count + "/" + variant.maxPlayers + "]";
             } else {
                 // 非严格模式：仅显示当前选择人数，不显示变体上限
-                countText = "§a" + count + "人";
+                countText = count + "人";
             }
-            graphics.drawString(this.font, Component.literal((full ? "§8" : "§f") + variant.name),
-                rowX + 5, rowY + 4, BTN_TEXT, false);
+            UiPaint.text(graphics, variant.name, rowX + 5, rowY + 4,
+                full ? UiTheme.TEXT_DISABLED : UiTheme.TEXT);
             int countW = this.font.width(EspetroAuiWidgets.stripFormatting(countText));
-            graphics.drawString(this.font, Component.literal(countText),
-                rowX + rowW - countW - 5, rowY + 4, BTN_TEXT, false);
+            UiPaint.text(graphics, countText, rowX + rowW - countW - 5, rowY + 4,
+                full ? UiTheme.NEGATIVE : UiTheme.POSITIVE);
             if (variant.description != null && !variant.description.isBlank()) {
-                graphics.drawString(this.font, Component.literal("§7" +
-                    EspetroAuiWidgets.trimToWidth(variant.description, rowW - 10)),
-                    rowX + 5, rowY + 16, EspetroAuiWidgets.DIM, false);
+                UiPaint.text(graphics, EspetroAuiWidgets.trimToWidth(variant.description, rowW - 10),
+                    rowX + 5, rowY + 16, UiTheme.TEXT_SECOND);
             }
         }
 
         if (variants.size() > VARIANT_MAX_VISIBLE) {
-            graphics.drawString(this.font, Component.literal("§8滚轮浏览"),
+            UiPaint.text(graphics, "滚轮浏览",
                 variantPopupX + VARIANT_POPUP_W - 49, variantPopupY + variantPopupH - 10,
-                EspetroAuiWidgets.DIM, false);
+                UiTheme.TEXT_THIRD);
         }
     }
 
@@ -4255,6 +4286,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return false;
     }
 
+    /** 该职业是否就是本地玩家当前选中的职业（选中的职业永远黄底、不灰显）。 */
+    private boolean isSelectedClass(UnifiedDeployScreenPacket.ClassInfo cls) {
+        return cls != null && selectedClassId != null && selectedClassId.equals(cls.classId);
+    }
+
     private void refreshClassButtons() {
         boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
         for (EspButton btn : classButtons) {
@@ -4278,17 +4314,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             btn.setEnabled(!disabled);
             final int classIndex = clsIdx;
             btn.setDisabledAction(() -> selectClass(classIndex));
+            // 选中状态与"能不能点"解耦：被选中的职业永远黄底、永远不灰显。
+            btn.setSelected(isSelected, classBgSelectedColor());
             if (disabled) {
                 if (isSelected) {
                     btn.setDisabledStyle(
-                        CLASS_BG_SELECTED,
+                        classBgSelectedColor(),
                         UiTheme.GOLD_LINE,
                         UiTheme.TEXT);
                 } else {
                     // 需求 3-4：禁用态同样不铺底色（只靠图标压暗 + 文字变色）
                     btn.setDisabledStyle(
-                        0x00000000,
-                        coolingDown ? UiTheme.TEXT_DISABLED : CLASS_BORDER_UNAVAILABLE,
+                        UiTheme.TRANSPARENT,
+                        coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                         coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
                 }
             } else {
@@ -4296,7 +4334,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 // 需求 3-4：职业按钮常态一律无底色、无边框（仅悬停高亮 / 选中黄底）。
                 // 这里必须跟随刷新，否则会覆盖构建时的透明态、重新铺上黑底。
                 btn.setTransparentIdle();
-                btn.setSelected(isSelected, CLASS_BG_SELECTED);   // 选中显示黄底
             }
         }
     }
