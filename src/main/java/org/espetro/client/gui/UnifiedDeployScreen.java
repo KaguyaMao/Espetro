@@ -954,11 +954,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, radius, normalColor);
                 UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, radius, UiTheme.HAIRLINE);
             }
-            // 顶部内高光：让玻璃面有一点厚度
-            if (enabled && bh > 4) {
-                UiPaint.roundRect(graphics, bx + radius, by + 1, Math.max(1, bw - radius * 2), 1, 1,
-                    UiTheme.SHEEN);
-            }
+            // 平涂：不再画顶部内高光（那圈浅色亮线就是用户看到的"玻璃反光"）。
 
             int textCol = enabled ? textColor : disabledTextColor;
             int contentLeft = bx + 3;
@@ -3440,14 +3436,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             graphics, this.width, this.height, ClientGameState.getCurrentMapFolder());
         computeRegions();
         // 已部署下来（不再等待部署选择）时面板转为浮在画面上的薄纸卡，仍保证墨字可读。
-        boolean spawned = !waitingForDeploySelection;
-        int leftBg = spawned ? UiTheme.withAlpha(UiTheme.CARD_TOP, 0xE4) : PANEL_LEFT_BG;
-        int centerBg = spawned ? 0x00000000 : PANEL_CENTER_BG;
-        int chromeBg = spawned ? UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xDC) : CHROME_BG;
-        int footerBg = spawned ? UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xE0) : PANEL_MAP_FOOTER_BG;
+        // 各栏底色统一为"黑色半透明"平涂：不再是会泛白的玻璃渐变，
+        // 地图仍然透出来，但栏内文字有稳定的深底可压。
+        int leftBg = UiTheme.COLUMN_SCRIM;
+        int centerBg = waitingForDeploySelection ? UiTheme.COLUMN_SCRIM : 0x00000000;
+        int chromeBg = CHROME_BG;
+        int footerBg = PANEL_MAP_FOOTER_BG;
         if (UiTheme.visible(leftBg)) {
-            UiPaint.roundRectGradient(graphics, leftX, leftY, leftW, leftH,
-                UiTheme.RADIUS_CARD, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+            UiPaint.roundRect(graphics, leftX, leftY, leftW, leftH,
+                UiTheme.RADIUS_CARD, leftBg);
             UiPaint.strokeRoundRect(graphics, leftX, leftY, leftW, leftH,
                 UiTheme.RADIUS_CARD, UiTheme.HAIRLINE);
         }
@@ -3472,8 +3469,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         resetGuiRenderState(graphics);
         // 再盖一次左/中列，挡住地图 scissor 外溢。
         if (UiTheme.visible(leftBg)) {
-            UiPaint.roundRectGradient(graphics, leftX, leftY, leftW, leftH,
-                UiTheme.RADIUS_CARD, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+            UiPaint.roundRect(graphics, leftX, leftY, leftW, leftH,
+                UiTheme.RADIUS_CARD, leftBg);
         }
         if (UiTheme.visible(centerBg)) {
             UiPaint.roundRect(graphics, centerX, centerY, centerW, centerH,

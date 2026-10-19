@@ -303,9 +303,10 @@ public final class UiPaint {
             return;
         }
         shadow(graphics, x, y, width, height, radius);
-        roundRectGradient(graphics, x, y, width, height, radius, topColor, bottomColor);
+        // 暗色系下卡片是"实色块"，不做玻璃渐变、不留顶部高光：
+        // 半透明渐变压在深底上会被看成一层白雾（用户明确要求去掉这种玻璃感）。
+        roundRect(graphics, x, y, width, height, radius, topColor);
         strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
-        hairline(graphics, x + radius, y, Math.max(0, width - radius * 2), UiTheme.SHEEN);
         hairline(graphics, x + radius, y + height - 1, Math.max(0, width - radius * 2),
             UiTheme.HAIRLINE_DARK);
     }

@@ -144,9 +144,8 @@ public class FactionRevealScreen extends EspetroMenuScreen {
         int panelX = (this.width - panelW) / 2;
         int panelY = headerH + Math.max(8, (this.height - headerH - panelH) / 2);
 
-        // 深色凹槽底板 + 两侧阵营卡片
-        root.addChild(EspetroAuiWidgets.sunken(panelX, panelY, panelW, panelH));
-
+        // 两张阵营卡片直接浮在地图背景上；原来这里还有一块深色凹槽底板，
+        // 会在两张卡之间露出黑条（用户要求去掉）。
         int startX = panelX + (panelW - contentW) / 2;
         int startY = panelY;
         if (stacked) {
@@ -225,7 +224,9 @@ public class FactionRevealScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        // 与地图投票/地图揭晓同一套背景：当前地图预览图铺满屏幕再压暗。
+        CurrentMapBackgroundRenderer.render(
+            graphics, this.width, this.height, ClientGameState.getCurrentMapFolder());
     }
 
     @Override

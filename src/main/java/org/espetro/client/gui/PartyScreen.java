@@ -35,7 +35,10 @@ public final class PartyScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        // 组队匹配页没有地图可露出：整屏一块深灰实色（不是玻璃渐变），
+        // 只保留终端风图框/刻度，避免"没有背景"的空洞感。
+        graphics.fill(0, 0, this.width, this.height, UiTheme.SOLID_PAGE);
+        EspetroAuiWidgets.drawChrome(graphics, this.width, this.height);
     }
 
     @Override

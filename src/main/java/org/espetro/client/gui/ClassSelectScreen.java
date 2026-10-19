@@ -196,17 +196,21 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 透明卡片：选中/hover 用圆角浅色底 + 描边，选中额外发光。
-            int border = selected ? UiTheme.ACCENT_LINE
-                : hasFocus() && enabled ? UiTheme.HAIRLINE_STRONG : UiTheme.HAIRLINE;
+            // 与地图投票卡片一致的外壳：实底卡片，选中叠黄描边+发光+底边黄条，悬停亮一档。
+            // 票数仍在右下角、名称在左下角（位置按用户要求保持不动）。
+            boolean hovered = hasFocus() && enabled;
+            UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
             if (selected) {
-                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT_SOFT);
+                UiPaint.accentBarBottom(graphics, bx + 6, by + bh - 3, Math.max(1, bw - 12),
+                    UiTheme.ACCENT);
                 UiPaint.glow(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT);
-            } else if (hasFocus() && enabled) {
-                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.alpha(UiTheme.SURFACE_2, 0.2f));
+                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.ACCENT_LINE);
+            } else if (hovered) {
+                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
+                    UiTheme.HAIRLINE_STRONG);
             }
-            UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, border);
 
             int imageBoxY = by + 3;
             int imageBoxW = Math.max(1, bw - 6);

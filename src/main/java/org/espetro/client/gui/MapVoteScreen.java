@@ -325,21 +325,17 @@ public final class MapVoteScreen extends EspetroMenuScreen {
                     imgAreaW, UiTheme.TEXT_THIRD, UiTheme.TYPE_BODY, false);
             }
 
-            // 票数：预览图右上角的数值徽章
+            // 票数：右下角大号数字（与编制投票页面一致，不再用预览图上的胶囊徽章）
             String voteText = String.valueOf(votes);
-            int numeralW = Math.round(Minecraft.getInstance().font.width(voteText)
+            int voteW = Math.round(Minecraft.getInstance().font.width(voteText)
                 * UiTheme.TYPE_NUMERAL);
-            int badgeW = Math.max(16, numeralW + 10);
-            int badgeH = 16;
-            int badgeX = bx + bw - badgeW - 4;
-            int badgeY = by + 4;
-            UiPaint.pill(graphics, badgeX, badgeY, badgeW, badgeH, UiTheme.SURFACE_0);
-            UiPaint.pillOutline(graphics, badgeX, badgeY, badgeW, badgeH, UiTheme.HAIRLINE);
-            UiPaint.textCentered(graphics, voteText, badgeX, badgeY + 1, badgeW,
-                enabled ? UiTheme.GOLD : UiTheme.TEXT_DISABLED, UiTheme.TYPE_NUMERAL, true);
+            int voteX = bx + bw - 6 - voteW;
+            int voteY = by + bh - 14;
+            EspetroAuiWidgets.drawScaledString(graphics, voteText, voteX, voteY,
+                enabled ? UiTheme.GOLD : UiTheme.TEXT_THIRD, UiTheme.TYPE_NUMERAL, true);
 
-            // 名称：固定放在外框最底下一行
-            int nameMaxW = Math.max(8, bw - 12);
+            // 名称：固定放在外框最底下一行，左侧留出票数宽度
+            int nameMaxW = Math.max(8, bw - 12 - voteW);
             String mapName = EspetroAuiWidgets.trimToWidth(
                 (selected ? "✔ " : "") + candidate.displayName, nameMaxW);
             UiPaint.text(graphics, mapName, bx + 6, by + bh - 10,

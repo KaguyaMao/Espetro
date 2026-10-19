@@ -67,7 +67,8 @@ public class MapRevealScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        // 与地图投票页同一套背景：当前选中/胜出地图的预览图铺满屏幕再压暗。
+        CurrentMapBackgroundRenderer.render(graphics, this.width, this.height, mapFolder);
     }
 
     @Override

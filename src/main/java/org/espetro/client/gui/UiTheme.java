@@ -51,6 +51,12 @@ public final class UiTheme {
     /** 内凹区域（列表底、输入框、进度槽、表格行）。 */
     public static final int SUNKEN = 0xFF07090B;
 
+    /** 纯色深灰页底：没有地图/世界可露出的页面（组队匹配）用一整块实色。 */
+    public static final int SOLID_PAGE = 0xFF15181C;
+
+    /** 黑色半透明栏底：战术面板各栏、浮在地图上的信息栏（不是玻璃，只是压暗）。 */
+    public static final int COLUMN_SCRIM = 0xB8060A0D;
+
     /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在暗面上。 */
     public static final int SHADOW_1 = 0x66000000;
     public static final int SHADOW_2 = 0x47000000;

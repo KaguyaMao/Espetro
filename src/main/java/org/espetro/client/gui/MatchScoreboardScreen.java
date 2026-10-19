@@ -285,8 +285,8 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                 UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
                     UiTheme.RADIUS_CONTROL, UiTheme.POSITIVE);
             } else {
-                UiPaint.roundRectGradient(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
+                UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
+                    UiTheme.RADIUS_CONTROL, UiTheme.CARD_TOP);
                 UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
                     UiTheme.RADIUS_CONTROL, hovered ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
             }

@@ -191,7 +191,8 @@ final class EspetroAuiWidgets {
             .setColors(UiTheme.INK_FILL, UiTheme.INK_FILL, UiTheme.ACCENT)
             .setBorderColor(UiTheme.INK_FILL)
             .setAccentColor(UiTheme.ACCENT)
-            .setTextColor(UiTheme.ON_INK);
+            .setTextColor(UiTheme.ON_INK)
+            .setHoverTextColor(UiTheme.ON_INK);
     }
 
     static int textButtonWidth(String label) {
@@ -590,14 +591,14 @@ final class EspetroAuiWidgets {
         private String label;
         private boolean enabled = true;
         private boolean selected = false;
-        // 默认透明底 + 边框区分 hover/selected（避免大面积半透明当"背景墙"）。
-        private int normalColor = 0x00000000;
-        private int hoverColor = UiTheme.INK_FILL;
+        // 常态是"黑色半透明平底"：透明底压在地图上会像磨砂玻璃，用户要求去掉。
+        private int normalColor = UiTheme.COLUMN_SCRIM;
+        private int hoverColor = UiTheme.SURFACE_3;
         private int selectedColor = UiTheme.ACCENT;
         private int disabledColor = 0x00000000;
         private int borderColor = UiTheme.HAIRLINE_STRONG;
         private int textColor = TEXT;
-        private int hoverTextColor = UiTheme.ON_INK;
+        private int hoverTextColor = TEXT;
         private float textScale = 1.0f;
         private int accentColor = UiTheme.ACCENT;
 
