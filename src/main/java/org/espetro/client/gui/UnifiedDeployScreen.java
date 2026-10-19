@@ -2412,7 +2412,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             EspButton btn = new EspButton(0, gy, contentW, ICON_BTN + 2, label,
                 () -> selectClass(classes.indexOf(cls)));
-            btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
+            btn.setPlainBlack();   // 统一黑底（原全透明，压在毛玻璃上看不出是按钮）
             btn.setSelected(isSelectedClass(cls), classBgSelectedColor());
             btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
                 RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
@@ -2425,7 +2425,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
                 // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
                 btn.setDisabledStyle(
-                    UiTheme.TRANSPARENT,
+                    UiTheme.alpha(UiTheme.BUTTON_BLACK, 0.62f),
                     coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                     coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
             }
@@ -2445,7 +2445,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean emphasizeRed = isClassEmphasizeRed(cls, disabled);
 
         EspButton btn = new EspButton(bx, by, size, size, "", () -> selectClass(clsIdx));
-        btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
+        btn.setPlainBlack();   // 统一黑底（原全透明，压在毛玻璃上看不出是按钮）
         btn.setSelected(isSelectedClass(cls), classBgSelectedColor());
         btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
             RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
@@ -2457,7 +2457,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
             // 需求 3-4：职业按钮任何状态都不铺底色（禁用只靠图标变暗 + 文字变色）
             btn.setDisabledStyle(
-                UiTheme.TRANSPARENT,
+                UiTheme.alpha(UiTheme.BUTTON_BLACK, 0.62f),
                 coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                 coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
         }
@@ -4325,15 +4325,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 } else {
                     // 需求 3-4：禁用态同样不铺底色（只靠图标压暗 + 文字变色）
                     btn.setDisabledStyle(
-                        UiTheme.TRANSPARENT,
+                        UiTheme.alpha(UiTheme.BUTTON_BLACK, 0.62f),
                         coolingDown ? UiTheme.TEXT_DISABLED : classBorderUnavailableColor(),
                         coolingDown ? UiTheme.TEXT_THIRD : UiTheme.ATTACK);
                 }
             } else {
                 btn.setDisabledAction(null);
-                // 需求 3-4：职业按钮常态一律无底色、无边框（仅悬停高亮 / 选中黄底）。
+                // 统一黑底 + 无边框（悬停高亮 / 选中黄底覆盖黑底）。
                 // 这里必须跟随刷新，否则会覆盖构建时的透明态、重新铺上黑底。
-                btn.setTransparentIdle();
+                btn.setPlainBlack();
             }
         }
     }
