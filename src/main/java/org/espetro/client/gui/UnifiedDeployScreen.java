@@ -94,11 +94,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int SQUAD_INLINE_GAP = 2;
     /** 退出/解散等二次确认弹窗的深色底（外框略淡 + 内底更实；其它面板保持半透明玻璃）。 */
     private static final int SQUAD_CONFIRM_OUTER_BG = UiTheme.alpha(UiTheme.BACKDROP_TOP, 0.86f);
-    private static final int SQUAD_CONFIRM_INNER_BG = UiTheme.SURFACE_0;
+    private static final int SQUAD_CONFIRM_INNER_BG = UiTheme.GLASS_PANEL;
 
     // EspButton 颜色：统一圆角玻璃按钮；无自带底色的按钮使用半透明内凹底。
     /** 无自带底色的按钮的统一底色（半透明深玻璃，透出后面的世界/地图）。 */
-    private static final int BTN_BG_PLAIN_BLACK = UiTheme.SUNKEN;
+    private static final int BTN_BG_PLAIN_BLACK = UiTheme.GLASS_PANEL;
     private static final int BTN_BG_HOVER    = UiTheme.HAIRLINE_STRONG;   // 悬停高亮：叠在常态底色之上
     /** 禁用态：比常态更淡的玻璃底，禁用按钮依然可见。 */
     private static final int BTN_BG_DISABLED = UiTheme.alpha(UiTheme.SUNKEN, 0.55f);
@@ -110,10 +110,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int REDEPLOY_BG_NORMAL = UiTheme.withAlpha(UiTheme.ATTACK, 0xB8);
     private static final int REDEPLOY_BG_HOVER  = UiTheme.withAlpha(UiTheme.ATTACK, 0xE0);
     /** 面板底色：全部走玻璃令牌，不再出现裸 ARGB。 */
-    private static final int CHROME_BG       = UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xE8);
-    private static final int PANEL_LEFT_BG   = UiTheme.SURFACE_0;
-    private static final int PANEL_CENTER_BG = UiTheme.withAlpha(UiTheme.SURFACE_0, 0xD0);
-    private static final int PANEL_MAP_FOOTER_BG = UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xE0);
+    private static final int CHROME_BG       = UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0xBE);
+    private static final int PANEL_LEFT_BG   = UiTheme.GLASS_PANEL;
+    private static final int PANEL_CENTER_BG = UiTheme.GLASS_PANEL;
+    private static final int PANEL_MAP_FOOTER_BG = UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xB4);
     private static final int SCREEN_SHADE    = UiTheme.withAlpha(UiTheme.BACKDROP_BOTTOM, 0xFF);
     private static final int STATIC_DIVIDER = UiTheme.HAIRLINE_STRONG;
     private static final Pattern COORDINATE_PATTERN =
@@ -1161,9 +1161,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
             int bx = x + getX();
             int by = y + getY();
-            // 内凹深底 + 聚焦时强调色描边（Tactical Glass 输入框）
+            // 半透明内凹底（压在世界/毛玻璃上）+ 聚焦时强调色描边
             int radius = UiTheme.RADIUS_INNER;
-            UiPaint.sunken(graphics, bx, by, getWidth(), getHeight(), radius);
+            UiPaint.roundRect(graphics, bx, by, getWidth(), getHeight(), radius,
+                UiTheme.GLASS_PANEL_SOFT);
             UiPaint.strokeRoundRect(graphics, bx, by, getWidth(), getHeight(), radius,
                 typing ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
 
@@ -1227,6 +1228,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         TacticalRadialController.closeWheelIfOpen();
         // J 菜单打开时立刻关掉 V 键小地图，避免两块地图同时占屏
         org.espetro.client.HcrTacticalMapBridge.hideMinimap();
+        // 毛玻璃底图要按这次打开时的画面重新截：换地图/换局后不复用旧快照。
+        FrostedBackdrop.invalidate();
         super.init();
     }
 
@@ -1870,7 +1873,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        squadCategoryRoot.addChild(EspetroAuiWidgets.card(px, py, w, h));
+        squadCategoryRoot.addChild(EspetroAuiWidgets.panel(px, py, w, h, UiTheme.GLASS_PANEL, UiTheme.HAIRLINE_STRONG));
         int y = py + 2;
         for (var option : options) {
             final String categoryId = option.id;
@@ -2029,7 +2032,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        vehicleInfoRoot.addChild(EspetroAuiWidgets.card(px, py, w, h));
+        vehicleInfoRoot.addChild(EspetroAuiWidgets.panel(px, py, w, h, UiTheme.GLASS_PANEL, UiTheme.HAIRLINE_STRONG));
 
         vehicleInfoScrollList = new ScrollableList(px + 2, py + 2, w - 4, listH)
             .setScrollStep(rowH)
@@ -2211,7 +2214,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
         });
         // 二次确认弹窗：玻璃卡片（自带阴影/发丝边，比底层面板更"实"以压住背景）
-        squadConfirmRoot.addChild(EspetroAuiWidgets.card(x, y, w, h));
+        squadConfirmRoot.addChild(EspetroAuiWidgets.panel(x, y, w, h, UiTheme.GLASS_PANEL, UiTheme.HAIRLINE_STRONG));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
             squadConfirmTitle, UiTheme.GOLD));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
@@ -3432,14 +3435,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        CurrentMapBackgroundRenderer.render(
-            graphics, this.width, this.height, ClientGameState.getCurrentMapFolder());
+        // 战术面板不再铺战术地图照片：直接透出玩家视野，上面盖一层毛玻璃。
+        FrostedBackdrop.draw(graphics, this.width, this.height);
+        renderTerminalFrame(graphics);
         computeRegions();
-        // 已部署下来（不再等待部署选择）时面板转为浮在画面上的薄纸卡，仍保证墨字可读。
-        // 各栏底色统一为"黑色半透明"平涂：不再是会泛白的玻璃渐变，
-        // 地图仍然透出来，但栏内文字有稳定的深底可压。
-        int leftBg = UiTheme.COLUMN_SCRIM;
-        int centerBg = waitingForDeploySelection ? UiTheme.COLUMN_SCRIM : 0x00000000;
+        // 已部署下来（不再等待部署选择）时面板转为浮在画面上的薄卡，仍保证白字可读。
+        // 各栏底色统一为"黑色半透明"平涂，透出后面的世界色块。
+        int leftBg = UiTheme.GLASS_PANEL;
+        int centerBg = waitingForDeploySelection ? UiTheme.GLASS_PANEL : 0x00000000;
         int chromeBg = CHROME_BG;
         int footerBg = PANEL_MAP_FOOTER_BG;
         if (UiTheme.visible(leftBg)) {
@@ -3490,6 +3493,30 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
         }
         renderStaticDividers(graphics);
+    }
+
+    /**
+     * 终端风格的整屏图框：细框 + 四角 L 标 + 侧边刻度 + 角上一个信号黄方块。
+     * 面板背景改透明后，这套线框负责把"浮在世界上的操作台"框住。
+     */
+    private void renderTerminalFrame(GuiGraphics graphics) {
+        int inset = 4;
+        int w = this.width - inset * 2;
+        int h = this.height - inset * 2;
+        if (w <= 8 || h <= 8) {
+            return;
+        }
+        UiPaint.frame(graphics, inset, inset, w, h, UiTheme.withAlpha(UiTheme.TEXT, 0x1C));
+        UiPaint.brackets(graphics, inset, inset, w, h, 16,
+            UiTheme.alpha(UiTheme.ACCENT, 0.55f));
+        int tickTop = TITLE_H + 6;
+        int tickHeight = Math.max(0, h - TITLE_H - STATUS_BAR_H - 12);
+        UiPaint.ticksV(graphics, inset, tickTop, tickHeight, 14, 3,
+            UiTheme.withAlpha(UiTheme.TEXT, 0x33));
+        UiPaint.ticksV(graphics, inset + w - 3, tickTop, tickHeight, 14, 3,
+            UiTheme.withAlpha(UiTheme.TEXT, 0x33));
+        // 左上角的信号黄小方块：终端"运行中"指示灯。
+        graphics.fill(inset + 1, inset + 1, inset + 7, inset + 7, UiTheme.ACCENT);
     }
 
     /**
@@ -4520,7 +4547,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 return true;
             }
         });
-        fireteamContextRoot.addChild(EspetroAuiWidgets.card(
+        fireteamContextRoot.addChild(EspetroAuiWidgets.panel(
             fireteamContextX, fireteamContextY,
             FIRETEAM_CONTEXT_W, menuH));
         int y = fireteamContextY + 3;

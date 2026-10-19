@@ -57,6 +57,15 @@ public final class UiTheme {
     /** 黑色半透明栏底：战术面板各栏、浮在地图上的信息栏（不是玻璃，只是压暗）。 */
     public static final int COLUMN_SCRIM = 0xB8060A0D;
 
+    /** 更透的黑底：铺在毛玻璃视野上的板块/按钮，能透出背后的世界色块。 */
+    public static final int GLASS_PANEL = 0x8C0A0D12;
+
+    /** 最轻的黑色蒙层：只做层次区分，几乎不挡背后内容。 */
+    public static final int GLASS_PANEL_SOFT = 0x5C0A0D12;
+
+    /** 毛玻璃底图之上的压暗层：把世界压成低对比色块，保证前景白字可读。 */
+    public static final int FROST_SCRIM = 0x9A07090B;
+
     /** 硬投影（无模糊，只向下偏 2px）：把卡片钉在暗面上。 */
     public static final int SHADOW_1 = 0x66000000;
     public static final int SHADOW_2 = 0x47000000;
