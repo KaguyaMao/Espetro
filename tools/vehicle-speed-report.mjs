@@ -28,6 +28,8 @@ const SERVER = path.join(CACHE, 'server');
 const WDPACKS = path.join(CACHE, 'wdpacks');
 const NS = ['dragonrise_reforge', 'fcp', 'superbwarfare', 'vvp'];
 const OFFLINE = process.argv.includes('--offline');
+// --kubejs-only：只统计服务端 kubejs/data 里存在覆盖的载具（服主实际调过的那批）
+const KUBEJS_ONLY = process.argv.includes('--kubejs-only');
 const GAP = 1500;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -297,10 +299,12 @@ if (worldOverrides) console.log(`世界数据包覆盖 ${worldOverrides} 个`);
 const rows = [];
 const cleanName = (s) => String(s ?? '').replace(/§./g, '').trim();
 for (const v of byKey.values()) {
+  if (KUBEJS_ONLY && !v.fromServer && !v.fromWorld) continue;
   const name = cleanName(lang[`${v.ns}.${v.id}`] ?? lang[`${v.ns}:${v.id}`] ?? '');
   rows.push({ ...v, name, sim: simulate(v) });
 }
 rows.sort((a, b) => (a.ns + a.id).localeCompare(b.ns + b.id));
+const SUFFIX = KUBEJS_ONLY ? '-kubejs' : '';
 
 // CSV
 const csvEsc = (s) => `"${String(s ?? '').replaceAll('"', '""')}"`;
@@ -317,7 +321,7 @@ for (const r of rows) {
     csvEsc(r.fromWorld ? '世界数据包' : r.fromServer ? 'kubejs/data' : 'jar'),
   ].join(','));
 }
-fs.writeFileSync(path.join(CACHE, 'vehicle-speed.csv'), '\ufeff' + lines.join('\r\n'), 'utf8');
+fs.writeFileSync(path.join(CACHE, `vehicle-speed${SUFFIX}.csv`), '\ufeff' + lines.join('\r\n'), 'utf8');
 
 // Markdown
 const TYPES = ['Track', 'Wheel', 'WheelChair', 'Ship', 'AirShip'];
@@ -363,7 +367,7 @@ if (rest.length) {
   for (const r of rest) md.push(`- ${r.name || r.id} — ${r.ns}:${r.id}（${r.engineType || '无引擎字段'}）`);
   md.push('');
 }
-fs.writeFileSync(path.join(CACHE, 'vehicle-speed.md'), md.join('\n'), 'utf8');
+fs.writeFileSync(path.join(CACHE, `vehicle-speed${SUFFIX}.md`), md.join('\n'), 'utf8');
 
 // 控制台摘要
 const withSim = rows.filter((r) => r.sim);

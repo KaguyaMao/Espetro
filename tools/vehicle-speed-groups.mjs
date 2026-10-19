@@ -11,8 +11,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CSV = path.join(ROOT, 'docs/vehicle-speed-report.csv');
-const OUT = path.join(ROOT, 'docs/vehicle-speed-groups.md');
+// --kubejs：只聚合 kubejs/data 覆盖的那批（对应 docs/vehicle-speed-report-kubejs.csv）
+const SUFFIX = process.argv.includes('--kubejs') ? '-kubejs' : '';
+const CSV = path.join(ROOT, `docs/vehicle-speed-report${SUFFIX}.csv`);
+const OUT = path.join(ROOT, `docs/vehicle-speed-groups${SUFFIX}.md`);
 
 /** 最小 CSV 解析（支持双引号包裹与 "" 转义） */
 function parseCsv(text) {
