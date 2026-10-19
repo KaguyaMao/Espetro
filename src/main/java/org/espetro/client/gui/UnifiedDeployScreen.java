@@ -1453,7 +1453,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         String teamColor = EspetroAuiWidgets.teamPrefix(team);
         // Phase text — update dynamically by refreshTitleTimer()
         phaseTitleText = new PlainText(5, 3,
-            "\u00a76\u00a7l部署阶段 \u00a77| " + teamColor + "\u00a7l"
+            "部署阶段 \u00a77| " + teamColor + "\u00a7l"
                 + factionIcon + " " + factionName,
             UiTheme.TEXT);
         root.addChild(phaseTitleText);
@@ -1507,7 +1507,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaW = squadAreaW;
         int areaH = squadAreaH;
 
-        sectionRoot.addChild(new PlainText(sx, sy, "\u00a76\u00a7l班组", UiTheme.GOLD));
+        sectionRoot.addChild(new PlainText(sx, sy, "班组", UiTheme.GOLD));
         // 底部动作行：改版后固定 1 行（需求 7/9）
         // 未入队：[创建小队(1/5 宽·1 倍行高·绿底)] [黄色队伍类型上拉] [名称输入框(等高)]
         // 已入队：[退出小队(同位置同尺寸)]，队长时右侧追加 [解散] [锁定/解锁]（黑半透底）
@@ -2217,7 +2217,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 二次确认弹窗：玻璃卡片（自带阴影/发丝边，比底层面板更"实"以压住背景）
         squadConfirmRoot.addChild(EspetroAuiWidgets.card(x, y, w, h));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
-            "\u00a76\u00a7l" + squadConfirmTitle, UiTheme.GOLD));
+            squadConfirmTitle, UiTheme.GOLD));
         squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
             EspetroAuiWidgets.trimToWidth("\u00a7f" + squadConfirmBody,
                 Math.max(60, (int) ((w - 16) / UI_TEXT_SCALE))),
@@ -3158,7 +3158,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(new GuiRect(x, y, w, h, 0x00000000));
 
         sectionRoot.addChild(new PlainText(x + 6, y + 4,
-            "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
+            (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
             UiTheme.GOLD));
         governanceTimerText = new PlainText(x + 6, y + 17,
             "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", UiTheme.GOLD);
@@ -3264,7 +3264,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private String buildDeployTitle() {
-        return "\u00a76\u00a7l部署点";
+        return "部署点";
     }
 
     private String formatTime(int seconds) {
@@ -4285,8 +4285,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private String buildClassTitle() {
         int remaining = getClassSwitchCooldownRemaining();
         return remaining > 0
-            ? "\u00a76职业选择 \u00a77| \u00a7e" + remaining + "秒后可更换"
-            : "\u00a76职业选择";
+            ? "职业选择 \u00a77| \u00a7e" + remaining + "秒后可更换"
+            : "职业选择";
     }
 
     private void refreshClassSwitchCooldown() {
