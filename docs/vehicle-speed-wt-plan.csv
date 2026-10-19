@@ -1,0 +1,41 @@
+ns,id,type,source,turbine,sec,note,beforeRf,beforeInc,beforeTop,beforeT95,afterRf,afterRb,afterInc,afterTop,afterT95,afterRev,errKmh,errSec
+dragonrise_reforge,bmp3,Track,wt,false,20,BMP-3,0.82,0.025,51.9,5.7,1.1051,0.3157,0.006894,70,20,20,0,0
+dragonrise_reforge,m113,Track,wt,false,20,M113A1 (TOW) 同底盘近似,0.82,0.025,51.9,5.7,1.0104,0.2368,0.006894,64,20,15,0,0
+dragonrise_reforge,m1a2sepv1,Track,wt,true,14,M1A2 SEP,0.85,0.02,53.8,7.1,1.0735,0.6315,0.009889,68,14.05,40,0,0.05
+dragonrise_reforge,m1a2sepv2,Track,wt,true,14,M1A2 SEPv2,0.85,0.02,53.8,7.1,1.0735,0.6315,0.009889,68,14.05,40,0,0.05
+dragonrise_reforge,m3a3,Track,wt,false,20,M3A3 Bradley,0.65,0.018,41.2,7.8,1.0419,0.2368,0.006894,66,20,15,0,0
+dragonrise_reforge,t72b3,Track,wt,false,20,T-72B3,0.825,0.01,52.3,13.9,0.9472,0.0631,0.006894,60,20,4,0,0
+dragonrise_reforge,t90mh,Track,wt,false,20,T-90M,0.825,0.01,52.3,13.9,0.9472,0.0631,0.006894,60,20,4,0,0
+dragonrise_reforge,zbd04a,Track,wt,false,20,ZBD04A,0.7,0.02,44.3,7.1,1.1051,0.2684,0.006894,70,20,17,0,0
+dragonrise_reforge,zsd89a_covered,Track,wt,false,20,ZSD63/PG87 同族近似,0.82,0.025,51.9,5.7,0.9472,0.1421,0.006894,60,20,9,0,0
+dragonrise_reforge,ztz96a,Track,wt,false,20,ZTZ96A,0.825,0.01,52.3,13.9,0.9314,0.0947,0.006894,59,20.05,6,0,0.05
+dragonrise_reforge,ztz99a,Track,wt,false,20,ZTZ99A,0.85,0.02,53.8,7.1,1.184,0.5368,0.006894,75,20.05,34,0,0.05
+fcp,bmp1am,Track,wt,false,20,BMP-1 同族近似,0.57,0.022,36.1,6.5,1.0262,0.1737,0.006894,65,20.05,11,0,0.05
+fcp,bmp2,Track,wt,false,20,BMP-2,0.57,0.022,36.1,6.5,1.0262,0.1737,0.006894,65,20.05,11,0,0.05
+fcp,bmp2d,Track,wt,false,20,BMP-2 近似,0.57,0.022,36.1,6.5,1.0262,0.1737,0.006894,65,20.05,11,0,0.05
+fcp,bmp2m,Track,wt,false,20,BMP-2M,0.57,0.022,36.1,6.5,1.0262,0.1737,0.006894,65,20.05,11,0,0.05
+fcp,t72av,Track,wt,false,20,T-72AV (TURMS-T),0.65,0.0125,41.2,11.2,0.9472,0.0631,0.006894,60,20,4,0,0
+dragonrise_reforge,m1126,Wheel,wt,false,20,M1296 同底盘近似,1.1,0.0087,69.7,15.9,1.5787,0.2052,0.006894,100,20,13,0,0
+dragonrise_reforge,m1128,Wheel,wt,false,20,M1128,1.1,0.0087,69.7,15.9,1.5156,0.1894,0.006894,96,20,12,0,0
+dragonrise_reforge,m1296,Wheel,wt,false,20,M1296,1.1,0.01,69.7,13.9,1.5787,0.2052,0.006894,100,20,13,0,0
+fcp,stryker_dragoon,Wheel,wt,false,20,M1296,1.02375,0.025,64.8,5.7,1.5787,0.2052,0.006894,100,20,13,0,0
+fcp,stryker_m2,Wheel,wt,false,20,M1296 同底盘近似,1.02375,0.025,64.8,5.7,1.5787,0.2052,0.006894,100,20,13,0,0
+fcp,stryker_mgs,Wheel,wt,false,20,M1128 同底盘近似,1.02375,0.025,64.8,5.7,1.5156,0.1894,0.006894,96,20,12,0,0
+fcp,stryker_mortar,Wheel,wt,false,20,M1296 同底盘近似,1.02375,0.025,64.8,5.7,1.5787,0.2052,0.006894,100,20,13,0,0
+dragonrise_reforge,zbl08,Wheel,wt,false,20,ZLT11 同底盘近似,1.1,0.01,69.7,13.9,1.5787,0.1421,0.006894,100,20,9,0,0
+dragonrise_reforge,zlt11,Wheel,wt,false,20,ZLT11,1.5,0.015,95,9.3,1.5787,0.1421,0.006894,100,20,9,0,0
+dragonrise_reforge,zsl10,Wheel,wt,false,20,ZSL92 同族近似,1.1,0.01,69.7,13.9,1.3893,0.1105,0.006894,88,20.05,7,0,0.05
+fcp,btr80,Wheel,wt,false,20,BTR-80A,0.95,0.025,60.2,5.7,1.3735,0.1894,0.006894,87,20.05,12,0,0.05
+fcp,btr82,Wheel,wt,false,20,BTR-82AT,0.95,0.025,60.2,5.7,1.263,0.1737,0.006894,80,20.05,11,0,0.05
+dragonrise_reforge,zbd05,Track,real,false,20,ZBD-05 公开极速,0.82,0.025,51.9,5.7,1.0262,0.35,0.006894,65,20.05,22.2,0,0.05
+dragonrise_reforge,ztd05,Track,real,false,20,ZTD-05 公开极速,0.82,0.025,51.9,5.7,1.0262,0.35,0.006894,65,20.05,22.2,0,0.05
+dragonrise_reforge,csk181,Wheel,real,false,20,CSK-181 公开极速,1.5,0.015,95,9.3,1.7366,0.5,0.006894,110,20,31.7,0,0
+fcp,matv,Wheel,real,false,20,M-ATV 公开极速,1.1,0.025,69.7,5.7,1.6576,0.2,0.006894,105,20.05,12.7,0,0.05
+fcp,matv_9in1,Wheel,real,false,20,M-ATV 公开极速,1.1,0.025,69.7,5.7,1.6576,0.2,0.006894,105,20.05,12.7,0,0.05
+fcp,matv_crow,Wheel,real,false,20,M-ATV 公开极速,1.1,0.025,69.7,5.7,1.6576,0.2,0.006894,105,20.05,12.7,0,0.05
+fcp,matv_tow,Wheel,real,false,20,M-ATV 公开极速,1.1,0.025,69.7,5.7,1.6576,0.2,0.006894,105,20.05,12.7,0,0.05
+fcp,gaz_tigr_gl,Wheel,real,false,20,GAZ Tigr 公开极速,1.27,0.025,80.4,5.7,1.8944,0.2,0.006894,120,20,12.7,0,0
+fcp,gaz_tigr_mg,Wheel,real,false,20,GAZ Tigr 公开极速,1.27,0.025,80.4,5.7,1.8944,0.2,0.006894,120,20,12.7,0,0
+fcp,gaz_tigr_rws,Wheel,real,false,20,GAZ Tigr 公开极速,1.27,0.025,80.4,5.7,1.8944,0.2,0.006894,120,20,12.7,0,0
+fcp,humveem2,Wheel,real,false,20,HMMWV 公开极速,1.26,0.025,79.8,5.7,1.7839,0.33,0.006894,113,20.05,20.9,0,0.05
+dragonrise_reforge,sx1,Wheel,keep-speed,false,20,SX-1 极速保持现值，仅延长到达时间,1.9,0.031,120.4,4.7,1.9,0.7,0.006894,120.4,20.05,44.3,0,0.05

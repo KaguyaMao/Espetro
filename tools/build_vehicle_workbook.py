@@ -21,7 +21,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(ROOT, "docs", "vehicle-speed-report-kubejs.csv")
-OUT_PATH = os.path.join(ROOT, "docs", "vehicle-speed-kubejs.xlsx")
+OUT_PATH = os.environ.get("VEHICLE_XLSX") or os.path.join(ROOT, "docs", "vehicle-speed-kubejs.xlsx")
 
 # lang 文件里没有条目的载具，手工补名字
 EXTRA_NAMES = {
@@ -298,6 +298,7 @@ def build():
         ("达 95% s", "水平速度达到极速 95% 所需时间"),
         ("", ""),
         ("注意", "模拟假设平地、直行、无伤、无漂移；坡度、障碍、受损阻力会让实际值低于表中数值。"),
+    ("本轮标定", "极速按 War Thunder 地面载具数据设定；达到极速的时间按动力类型统一：燃气轮机约 14 s、柴油机约 20 s（指达到极速 95%）。"),
     ]
 
     skipped = [x for x in rows if not x["top"]]

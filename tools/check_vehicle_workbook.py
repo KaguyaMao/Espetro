@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(ROOT, "docs", "vehicle-speed-report-kubejs.csv")
-XLSX_PATH = os.path.join(ROOT, "docs", "vehicle-speed-kubejs.xlsx")
+XLSX_PATH = os.environ.get("VEHICLE_XLSX") or os.path.join(ROOT, "docs", "vehicle-speed-kubejs.xlsx")
 
 problems = []
 
