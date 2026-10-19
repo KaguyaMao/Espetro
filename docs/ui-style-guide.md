@@ -62,6 +62,20 @@
 
 主城 `HubScreen` 是「浮在世界上的一块黑玻璃」：只画卡片硬投影，不压大面积黑幕。
 
+### 5.1 战术面板：毛玻璃视野底
+
+`UnifiedDeployScreen` 不再铺战术地图照片，改为 **截屏降采样模糊**：
+
+- `FrostedBackdrop.draw()` 在界面内容之前调用，此时主帧缓冲里只有世界画面；
+- 每秒最多一次 `glReadPixels` 读主目标，CPU 块平均到 256×144（同时上下翻转），
+  上传 `DynamicTexture` 后用双线性放大铺满屏幕 → 近似高斯模糊；
+- 之上再压一层 `UiTheme.FROST_SCRIM`（`0x9A07090B`）和 3% 颗粒；
+- 图框由 `UnifiedDeployScreen#renderTerminalFrame` 画（细框 + 四角 L 标 + 侧边刻度 + 信号黄方块）。
+
+**新界面不要每帧读回帧缓冲**：`FrostedBackdrop` 有 1s 节流，只有需要"透出世界"的页面才用。
+半透明分层令牌：`GLASS_PANEL`（板块/按钮 55%）、`GLASS_PANEL_SOFT`（输入框 36%）、`COLUMN_SCRIM`（90% 压暗）。
+卡片 `UiPaint.card()` 是**纯色平涂**（无渐变、无高光），不要再往卡片里叠半透明渐变，否则会重新出现"玻璃感"。
+
 ## 6. 已知限制 / 待办
 
 - `EsRadial` 轮盘（`RadioRadialController`、`TacticalRadialController`、`VehicleWheelController`）
