@@ -330,6 +330,8 @@ public class VoteManager {
                 }
             }
         }
+        // 指挥官换人后全服重推技能同步：旧指挥官客户端要立刻收回技能入口
+        org.espetro.network.NetworkManager.syncCommanderSkillsToAll(server);
     }
 
     /**
@@ -580,5 +582,7 @@ public class VoteManager {
         defendPlayers.clear();
         attackCommander = null;
         defendCommander = null;
+        // 指挥官身份已清空：立即让全服收回技能入口（否则上一任指挥官整局都能看到技能按钮）
+        org.espetro.network.NetworkManager.syncCommanderSkillsToAll(Espetro.getServer());
     }
 }

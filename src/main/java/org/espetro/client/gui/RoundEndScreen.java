@@ -15,15 +15,6 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     // ── 结算等级文案 ──
     private static final String[] WIN_LABELS  = {"平局", "惨烈胜利", "险胜", "决定性胜利", "重大胜利", "完胜"};
     private static final String[] LOSE_LABELS = {"平局", "功亏一篑", "险败", "决定性战败", "重大战败", "完败"};
-    private static final int[] LEVEL_COLORS = {
-        UiTheme.GOLD,      // 0 平局
-        UiTheme.WARNING,   // 1 惨烈
-        UiTheme.WARNING,   // 2 险
-        UiTheme.ATTACK,    // 3 决定性
-        UiTheme.ATTACK,    // 4 重大
-        UiTheme.NEGATIVE   // 5 完胜
-    };
-
     private final String winner;       // "ATTACK" / "DEFEND" / "DRAW"
     private final long closesAt;
     /** 赢方 show_name，平局时为 null */
@@ -94,7 +85,19 @@ public final class RoundEndScreen extends EspetroMenuScreen {
 
         // ── 1. 超大等级文字（居中上方）──
         String levelText = isDraw ? "平局" : (iWon ? WIN_LABELS[level] : LOSE_LABELS[level]);
-        int levelColor = isDraw ? LEVEL_COLORS[0] : (iWon ? LEVEL_COLORS[level] : UiTheme.NEGATIVE);
+        int levelColor = isDraw ? UiTheme.GOLD : !iWon ? UiTheme.NEGATIVE : switch (level) {
+            case 1, 2 -> UiTheme.WARNING;
+            case 3, 4 -> UiTheme.ATTACK;
+            case 5 -> UiTheme.NEGATIVE;
+            default -> UiTheme.GOLD;
+        };
+        int resultW = Math.min(620, Math.max(1, width - UiTheme.GAP_L * 2));
+        int resultX = (width - resultW) / 2;
+        int resultY = Math.max(24, (int) (height * 0.12f));
+        UiPaint.label(g, "END / ROUND REPORT", resultX + UiTheme.GAP_M, resultY,
+            UiTheme.TEXT_THIRD);
+        UiPaint.hairline(g, resultX, resultY + 14, resultW, UiTheme.HAIRLINE_STRONG);
+        UiPaint.accentBarBottom(g, resultX, resultY + 14, Math.min(48, resultW), UiTheme.ACCENT);
         UiPaint.textCentered(g, levelText, 0, (int) (height * 0.22f), width,
             levelColor, 3.5f, true);
 
@@ -146,6 +149,10 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         int bottomY = (int) (height * 0.48f);
         int leftX = width / 4;
         int rightX = width * 3 / 4;
+        UiPaint.hairlineV(g, width / 2, bottomY - 8, 74, UiTheme.HAIRLINE_STRONG);
+        UiPaint.label(g, "TICKETS REMAINING", resultX + UiTheme.GAP_M, bottomY + 79,
+            UiTheme.TEXT_THIRD);
+        UiPaint.hairline(g, resultX, bottomY + 73, resultW, UiTheme.HAIRLINE);
 
         // 阵营名（中号 1.8x）+ 底部阵营色条
         float nameScale = 1.8f;

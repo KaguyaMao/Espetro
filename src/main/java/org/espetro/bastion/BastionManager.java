@@ -618,6 +618,41 @@ public class BastionManager {
         return status != null && status.equals("HAB 可部署");
     }
 
+    /**
+     * 实时判断 HAB 是否仍被己方 Radio 建造半径覆盖（不读缓存，供部署列表过滤用）。
+     * <p>
+     * 与 {@link #recomputeHabCoverage()} 同一套判定，但每次现算：读档后缓存尚未重算、
+     * 或缓存与实际不一致时，不会把可部署的 HAB 误判成不可部署。
+     */
+    public boolean hasFriendlyRadioCovering(BastionData hab) {
+        if (hab == null || !hab.isActive()) {
+            return false;
+        }
+        if (hab.isRadio() && hab.isLegacyCombined()) {
+            return true;
+        }
+        if (!hab.isHab()) {
+            return false;
+        }
+        double buildRadius = LogisticsConfig.get().radioBuildRadius;
+        double radiusSq = buildRadius * buildRadius;
+        for (BastionData radio : bastions.values()) {
+            if (radio == hab || !radio.isActive() || !radio.isRadio()) {
+                continue;
+            }
+            if (radio.getLevel() != hab.getLevel()) {
+                continue;
+            }
+            if (!Objects.equals(radio.getTeam(), hab.getTeam())) {
+                continue;
+            }
+            if (radio.getPosition().distSqr(hab.getPosition()) <= radiusSq) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** HAB 或旧版合并 FOB 是否仍被己方 Radio 建造半径覆盖。 */
     public boolean isCoveredByFriendlyRadio(BastionData hab) {
         if (hab == null || !hab.isActive()) {
@@ -1673,6 +1708,12 @@ public class BastionManager {
 
         // 传送玩家到原部署点。该坐标由队伍复活点 JSON 配置保存，不再因目标区块未加载而取消。
         player.teleportTo(deployPoint.level, deployPoint.pos.getX() + 0.5, deployPoint.pos.getY() + 0.1, deployPoint.pos.getZ() + 0.5, 0f, 0f);
+        // 原版重生点直接写进战场维度：阵亡后由原版复活流程直接生在新战场，
+        // 不再"复活到主城 overworld → 再被传送回战场"连跳两次维度。
+        // 光影（Oculus）客户端每次维度切换都要重建渲染管线，连续两次极易卡死/掉线。
+        player.setRespawnPosition(deployPoint.level.dimension(),
+            new BlockPos(deployPoint.pos.getX(), deployPoint.pos.getY(), deployPoint.pos.getZ()),
+            0f, true, false);
         // 先传送后清除等待，防止空窗期间移动包绕过检查
         clearWaiting(player.getUUID());
 

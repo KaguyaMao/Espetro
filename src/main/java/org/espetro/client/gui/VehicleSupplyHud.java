@@ -107,7 +107,6 @@ public final class VehicleSupplyHud {
         int barX = px + PAD_X;
         int barY = py + BAR_Y;
         int barW = BAR_WIDTH;
-        int radius = Math.max(1, BAR_HEIGHT / 2);
         int ammoW = (int) ((long) ammo * barW / max);
         int constrW = (int) ((long) constr * barW / max);
         int filled = Math.min(barW, ammoW + constrW);
@@ -117,11 +116,14 @@ public final class VehicleSupplyHud {
             int start = Math.min(barX + ammoW, barX + barW);
             int width = Math.min(constrW, barX + barW - start);
             if (width > 0) {
-                UiPaint.roundRect(graphics, start, barY, width, BAR_HEIGHT, radius,
-                    UiTheme.WARNING);
-                if (width > radius * 2 + 2) {
-                    UiPaint.hairline(graphics, start + radius, barY + 1,
-                        width - radius * 2, UiTheme.SHEEN);
+                // 建材段沿用弹药填充的内缩与厚度（槽内 2px 边距、高度 - 4），
+                // 不再整块盖住凹槽，避免建材条看起来比弹药条粗。
+                int innerY = barY + 2;
+                int innerH = Math.max(1, BAR_HEIGHT - 4);
+                int x1 = Math.max(barX + 2, start);
+                int x2 = Math.min(barX + barW - 2, start + width);
+                if (x2 > x1) {
+                    graphics.fill(x1, innerY, x2, innerY + innerH, UiTheme.WARNING);
                 }
             }
         }
@@ -156,6 +158,7 @@ public final class VehicleSupplyHud {
     }
 
     private static void drawSupplyIcon(GuiGraphics graphics, ResourceLocation icon, int x, int y) {
+        graphics.fill(x, y, x + ICON_SIZE, y + ICON_SIZE, UiTheme.ICON_PLATE);
         graphics.blit(icon, x, y, ICON_SIZE, ICON_SIZE,
             0.0F, 0.0F, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
             ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
@@ -177,7 +180,7 @@ public final class VehicleSupplyHud {
                     textWidth + 12, HINT_PILL_HEIGHT, UiTheme.alpha(UiTheme.SURFACE_0, 0.78f));
                 UiPaint.pillOutline(graphics, cx - textWidth / 2 - 6, hintY - 3,
                     textWidth + 12, HINT_PILL_HEIGHT, UiTheme.ACCENT_LINE);
-                UiPaint.textShadowed(graphics, hint, cx - textWidth / 2, hintY, UiTheme.ACCENT);
+                UiPaint.textShadowed(graphics, hint, cx - textWidth / 2, hintY, UiTheme.GOLD);
             }
         }
     }
@@ -203,7 +206,7 @@ public final class VehicleSupplyHud {
         var icon = org.espetro.client.vehicle.VehicleInteractionState.icon();
         int size = 18;
         // 图标底：柔光圆盘，让图标从世界画面里"浮"起来。
-        UiPaint.circle(graphics, cx, cy - 6, size / 2 + 2, UiTheme.alpha(UiTheme.SURFACE_0, 0.72f));
+        UiPaint.circle(graphics, cx, cy - 6, size / 2 + 2, UiTheme.ICON_PLATE);
         UiPaint.ring(graphics, cx, cy - 6, size / 2 + 2, UiTheme.HAIRLINE_STRONG);
         graphics.blit(icon, cx - size / 2, cy - size / 2 - 6, size, size,
             0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
@@ -227,7 +230,7 @@ public final class VehicleSupplyHud {
         int cy = mc.getWindow().getGuiScaledHeight() / 2;
         net.minecraft.resources.ResourceLocation mountIcon =
             org.espetro.client.vehicle.VehicleInteractionState.icon();
-        UiPaint.circle(graphics, cx, cy - 6, 11, UiTheme.alpha(UiTheme.SURFACE_0, 0.72f));
+        UiPaint.circle(graphics, cx, cy - 6, 11, UiTheme.ICON_PLATE);
         UiPaint.ring(graphics, cx, cy - 6, 11, UiTheme.HAIRLINE_STRONG);
         graphics.blit(mountIcon, cx - 9, cy - 15, 18, 18,
             0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,

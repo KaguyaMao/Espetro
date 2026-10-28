@@ -87,8 +87,7 @@ public final class TroopCountOverlay {
         int troops = attack ? attackTroops : defendTroops;
         String label = EspetroAuiWidgets.teamPrefix(team) + "■ "
             + EspetroAuiWidgets.teamName(team);
-        String color = troops > 50 ? "§a" : (troops > 20 ? "§e" : "§c");
-        displayLine = label + ": " + color + troops;
+        displayLine = label + ": " + troops;
     }
 
     private static void notifyDeployScreen() {

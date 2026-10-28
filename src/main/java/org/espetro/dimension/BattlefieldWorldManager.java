@@ -637,6 +637,8 @@ public final class BattlefieldWorldManager {
 
         BlockPos hubSpawn = server.overworld().getSharedSpawnPos();
         for (var player : new ArrayList<>(level.players())) {
+            // 战场即将卸载：重生点必须写回主城，否则下次复活/登录会指向已移除的维度
+            player.setRespawnPosition(net.minecraft.world.level.Level.OVERWORLD, hubSpawn, 0f, true, false);
             player.teleportTo(server.overworld(),
                 hubSpawn.getX() + 0.5, hubSpawn.getY(), hubSpawn.getZ() + 0.5, 0f, 0f);
         }

@@ -33,9 +33,6 @@ public final class ResupplyRadialController {
     private static final ResourceLocation NAVIGATE = id("resupply/navigate");
     /** 步兵补给不再分页：一次把服务端目录里的全部项目放进同一页（512 项足够）。 */
     private static final int PAGE_SIZE = 512;
-    private static final String AVAILABLE = "#FFFFD54F";
-    private static final String UNAVAILABLE = "#FFFF4D4D";
-    private static final String HOVER = "#FFFFFFFF";
 
     private static boolean initialized;
     private static UUID token;
@@ -48,6 +45,7 @@ public final class ResupplyRadialController {
     private static List<ResupplyCatalogPacket.Entry> entries = List.of();
     private static boolean menuWasActive;
     private static long rebuildCount;
+    private static long themeRevision = -1L;
 
     private ResupplyRadialController() {
     }
@@ -151,6 +149,7 @@ public final class ResupplyRadialController {
             && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
         if (menuWasActive && !active) clear(true);
         menuWasActive = active;
+        if (active && themeRevision != UiTheme.revision()) replacePage();
     }
 
     public static boolean isActive() {
@@ -173,6 +172,7 @@ public final class ResupplyRadialController {
             RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
         }
         rebuildCount++;
+        themeRevision = UiTheme.revision();
         menuWasActive = true;
     }
 
@@ -199,7 +199,7 @@ public final class ResupplyRadialController {
             .title(Component.literal("步兵补给 · 弹药余额 " + balance))
             .radii(44, 108)
             .animationSpeed(1.25F)
-            .ringColors(List.of("#B824292B", "#C832383A"));
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
         int first = page * PAGE_SIZE;
         int end = Math.min(entries.size(), first + PAGE_SIZE);
         for (int i = first; i < end; i++) {
@@ -209,30 +209,30 @@ public final class ResupplyRadialController {
             iconStack.setCount(1);
             String itemName = entry.icon().isEmpty() ? entry.configuredId()
                 : entry.icon().getHoverName().getString();
-            String label = itemName + " §f+" + entry.count() + " §7"
-                + entry.current() + "/" + entry.max() + " §b[" + entry.ammoCost() + "]";
+            String label = itemName + " +" + entry.count() + " "
+                + entry.current() + "/" + entry.max() + " [" + entry.ammoCost() + "]";
             if (!entry.selectable() && !entry.reason().isBlank()) {
-                label += " §c" + entry.reason();
+                label += " " + entry.reason();
             }
             builder = builder.persistentSlot("espetro.resupply.entry." + entry.index(),
                 new ItemIcon(iconStack, 1.15F),
                 Actions.script(SELECT, Map.of("index", Integer.toString(entry.index()))),
-                Component.literal(label), HOVER,
-                entry.selectable() ? AVAILABLE : UNAVAILABLE);
+                Component.literal(label), UiTheme.hex(UiTheme.ACCENT),
+                UiTheme.hex(entry.selectable() ? UiTheme.ACCENT : UiTheme.WORLD_NEGATIVE));
             if (!entry.selectable()) builder.disabledLast(Component.literal(entry.reason()));
         }
         builder = builder.persistentSlot("espetro.resupply.back", GlyphIcon.BACK,
             Actions.script(NAVIGATE, Map.of("action", "back")),
-            Component.literal("返回  §b余额 " + balance), "#FFAAAAAA", "#FF44484D");
+            Component.literal("返回  余额 " + balance), UiTheme.hex(UiTheme.WORLD_MUTED), UiTheme.hex(UiTheme.WORLD_MUTED));
         if (page > 0) {
             builder = builder.persistentSlot("espetro.resupply.previous", GlyphIcon.PREVIOUS,
                 Actions.script(NAVIGATE, Map.of("action", "previous")),
-                Component.literal("上一页 " + page + "/" + pages), "#FFFFFFFF", "#FF506070");
+                Component.literal("上一页 " + page + "/" + pages), UiTheme.hex(UiTheme.WORLD_TEXT), UiTheme.hex(UiTheme.ACCENT));
         }
         if (page + 1 < pages) {
             builder = builder.persistentSlot("espetro.resupply.next", GlyphIcon.NEXT,
                 Actions.script(NAVIGATE, Map.of("action", "next")),
-                Component.literal("下一页 " + (page + 2) + "/" + pages), "#FFFFFFFF", "#FF506070");
+                Component.literal("下一页 " + (page + 2) + "/" + pages), UiTheme.hex(UiTheme.WORLD_TEXT), UiTheme.hex(UiTheme.ACCENT));
         }
         return builder.build();
     }
@@ -322,7 +322,7 @@ public final class ResupplyRadialController {
             graphics.pose().translate(x, y, 0);
             graphics.pose().scale(drawScale, drawScale, 1.0F);
             graphics.drawString(minecraft.font, glyph, -minecraft.font.width(glyph) / 2,
-                -minecraft.font.lineHeight / 2, (opacity << 24) | 0xFFFFFF, false);
+                -minecraft.font.lineHeight / 2, UiTheme.withAlpha(UiTheme.WORLD_TEXT, opacity), false);
             graphics.pose().popPose();
         }
 

@@ -84,6 +84,7 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             governanceHits.clear();
             UiPaint.textCentered(graphics, "本回合玩家分数板", 0, 8, width,
                 UiTheme.GOLD, UiTheme.TYPE_TITLE, true);
+            UiPaint.label(graphics, "COMBAT / PERSONNEL", 9, 24, UiTheme.TEXT_THIRD);
             renderTeamColumn(graphics, "ATTACK", 6, 34, width / 2 - 9,
                 UiTheme.ATTACK, mouseX, mouseY);
             renderTeamColumn(graphics, "DEFEND", width / 2 + 3, 34,
@@ -279,14 +280,13 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                 && mouseY >= slotY && mouseY < slotY + slotH;
             if (mine) {
                 UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.POSITIVE_SOFT);
-                UiPaint.glow(graphics, sx, slotY, sw, slotH, UiTheme.RADIUS_CONTROL,
-                    UiTheme.POSITIVE);
+                    UiTheme.RADIUS_CONTROL, UiTheme.ACCENT_SOFT);
+                UiPaint.accentBarLeft(graphics, sx, slotY, slotH, UiTheme.ACCENT);
                 UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.POSITIVE);
+                    UiTheme.RADIUS_CONTROL, UiTheme.ACCENT_LINE);
             } else {
                 UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.CARD_TOP);
+                    UiTheme.RADIUS_CONTROL, hovered ? UiTheme.SURFACE_2 : UiTheme.CARD_TOP);
                 UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
                     UiTheme.RADIUS_CONTROL, hovered ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
             }
@@ -295,7 +295,7 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             String name = nameFor(candidate);
             String title = (mine ? "✓ " : "") + prefixes.get(i);
             UiPaint.textCentered(graphics, title, sx, slotY + 3, sw,
-                mine ? UiTheme.POSITIVE : UiTheme.TEXT_SECOND, UiTheme.TYPE_BODY, true);
+                mine ? UiTheme.GOLD : UiTheme.TEXT_SECOND, UiTheme.TYPE_BODY, true);
             UiPaint.textCentered(graphics, name, sx, slotY + 13, sw,
                 UiTheme.TEXT, UiTheme.TYPE_BODY, true);
             UiPaint.textCentered(graphics, votes + " 票", sx, slotY + 21, sw,
@@ -315,6 +315,16 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
         boolean canJoin = canForceJoin(contextRow);
         boolean canKick = canKick(contextRow);
+        boolean joinHovered = canJoin && mouseX >= x && mouseX < x + menuW
+            && mouseY >= y && mouseY < y + 17;
+        boolean kickHovered = canKick && mouseX >= x && mouseX < x + menuW
+            && mouseY >= y + 17 && mouseY < y + menuH;
+        if (joinHovered || kickHovered) {
+            int hoverY = joinHovered ? y + 1 : y + 18;
+            UiPaint.roundRect(graphics, x + 1, hoverY, menuW - 2, 15,
+                UiTheme.RADIUS_CONTROL, UiTheme.SURFACE_2);
+            UiPaint.accentBarLeft(graphics, x + 1, hoverY, 15, UiTheme.ACCENT);
+        }
         UiPaint.textShadowed(graphics, "拉进小队", x + 7, y + 5,
             canJoin ? UiTheme.POSITIVE : UiTheme.TEXT_DISABLED);
         UiPaint.textShadowed(graphics, "踢出小队", x + 7, y + 19,

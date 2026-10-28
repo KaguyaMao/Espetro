@@ -20,6 +20,7 @@ import org.espetro.Espetro;
 import org.espetro.network.NetworkManager;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,36 +76,40 @@ public final class FixedWeaponExchange {
             return;
         }
         FortificationConfig.FixedWeapon spec = def.fixedWeapon;
-        int cost = Math.max(0, spec.fobAmmoCost);
         List<BastionData> radios = BastionManager.getInstance()
             .findCoveringRadios(level, weapon.blockPosition(), owner);
         int fobAmmo = radios.isEmpty() ? 0 : radios.get(0).getAmmunitionSupplies();
-        boolean affordable;
-        String reason = "";
-        if (radios.isEmpty()) {
-            affordable = false;
-            reason = "必须在己方 Radio（FOB）范围内";
-        } else if (fobAmmo < cost) {
-            affordable = false;
-            reason = "FOB 弹药不足";
-        } else {
-            affordable = true;
-        }
-        String ammoItemId = "";
-        ItemStack ammoTemplate = resolveAmmoStack(weapon, spec);
-        if (ammoTemplate != null && !ammoTemplate.isEmpty()) {
-            ResourceLocation key = BuiltInRegistries.ITEM.getKey(ammoTemplate.getItem());
-            if (key != null) {
-                ammoItemId = key.toString();
+        List<org.espetro.network.FixedWeaponWheelPacket.Slot> slots = new ArrayList<>();
+        int entryCount = Math.max(1,
+            Math.min(org.espetro.network.FixedWeaponWheelPacket.MAX_SLOTS, spec.entryCount()));
+        for (int index = 0; index < entryCount; index++) {
+            int cost = spec.entryCost(index);
+            int amount = spec.entryAmount(index);
+            String label = spec.entryLabel(index);
+            if (label.isEmpty()) {
+                label = amount + " 发";
             }
+            boolean affordable;
+            String reason = "";
+            if (radios.isEmpty()) {
+                affordable = false;
+                reason = "必须在己方 Radio（FOB）范围内";
+            } else if (fobAmmo < cost) {
+                affordable = false;
+                reason = "FOB 弹药不足";
+            } else {
+                affordable = true;
+            }
+            ItemStack template = resolveAmmoStack(weapon, spec, spec.entryAmmoItem(index));
+            slots.add(new org.espetro.network.FixedWeaponWheelPacket.Slot(label, itemIdOf(template),
+                amount, cost, affordable, reason));
         }
         NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player),
-            new org.espetro.network.FixedWeaponWheelPacket(weaponEntityId, def.displayName, ammoItemId,
-                Math.max(1, spec.exchangeAmount), cost, fobAmmo, affordable, reason));
+            new org.espetro.network.FixedWeaponWheelPacket(weaponEntityId, def.displayName, fobAmmo, slots));
     }
 
     /** 客户端发起的兑换请求（服务端线程执行）。 */
-    public static void handle(ServerPlayer player, @Nullable UUID weaponEntityId) {
+    public static void handle(ServerPlayer player, @Nullable UUID weaponEntityId, int index) {
         if (player == null || weaponEntityId == null) {
             return;
         }
@@ -137,8 +142,9 @@ public final class FixedWeaponExchange {
             return;
         }
         BastionData fob = radios.get(0);
-        int cost = Math.max(0, spec.fobAmmoCost);
-        int amount = Math.max(1, spec.exchangeAmount);
+        int entry = Math.max(0, Math.min(spec.entryCount() - 1, index));
+        int cost = Math.max(0, spec.entryCost(entry));
+        int amount = Math.max(1, spec.entryAmount(entry));
         if (fob.getAmmunitionSupplies() < cost) {
             message(player, "§cFOB 弹药不足（需要 " + cost + "，当前 " + fob.getAmmunitionSupplies() + "）。");
             return;
@@ -150,7 +156,7 @@ public final class FixedWeaponExchange {
         // container：只把弹药放进武器自身的物品箱，交给武器自己的装填逻辑消耗
         // （例如 dragonrise 的反坦克导弹：右键装填时从发射器容器取弹，玩家背包里的不会被消耗）
         boolean toContainer = "container".equals(outputMode);
-        ItemStack ammoTemplate = resolveAmmoStack(weapon, spec);
+        ItemStack ammoTemplate = resolveAmmoStack(weapon, spec, spec.entryAmmoItem(entry));
         if (toPlayer && ammoTemplate == null) {
             message(player, "§c该武器使用虚拟弹药，无法放入背包（请把 output 设为 vehicle）。");
             return;
@@ -355,11 +361,17 @@ public final class FixedWeaponExchange {
      * {@code isAmmoItem(stack)} 判定，只复制物品、丢掉 NBT 会导致"右键无法装填"。
      */
     @Nullable
-    private static ItemStack resolveAmmoStack(Entity weapon, FortificationConfig.FixedWeapon spec) {
-        String configured = spec.ammoItem == null ? "" : spec.ammoItem.trim();
+    private static ItemStack resolveAmmoStack(Entity weapon, FortificationConfig.FixedWeapon spec,
+                                              String ammoOverride) {
+        String configured = ammoOverride == null ? "" : ammoOverride.trim();
         if (!configured.isEmpty()) {
-            return resolveAmmoItem(weapon, spec) == null ? null
-                : new ItemStack(resolveAmmoItem(weapon, spec));
+            Item item = resolveItem(configured);
+            return item == null ? null : new ItemStack(item);
+        }
+        String fallback = spec.ammoItem == null ? "" : spec.ammoItem.trim();
+        if (!fallback.isEmpty()) {
+            Item item = resolveItem(fallback);
+            return item == null ? null : new ItemStack(item);
         }
         if (!(weapon instanceof VehicleEntity vehicle)) {
             return null;
@@ -404,14 +416,32 @@ public final class FixedWeaponExchange {
         return null;
     }
 
+    /** 弹药物品注册名 → 物品；无效返回 null。 */
+    @Nullable
+    private static Item resolveItem(String itemId) {
+        if (itemId == null || itemId.isBlank()) {
+            return null;
+        }
+        ResourceLocation id = ResourceLocation.tryParse(itemId.trim());
+        Item item = id == null ? null : BuiltInRegistries.ITEM.get(id);
+        return item == null || item == net.minecraft.world.item.Items.AIR ? null : item;
+    }
+
+    /** 物品栈 → 注册名（空栈返回空串）。 */
+    private static String itemIdOf(@Nullable ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return "";
+        }
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return key == null ? "" : key.toString();
+    }
+
     /** 兑换用的弹药物品：配置 {@code ammo_item} 优先，留空则取该武器实际消耗的弹药物品。 */
     @Nullable
     private static Item resolveAmmoItem(Entity weapon, FortificationConfig.FixedWeapon spec) {
         String configured = spec.ammoItem == null ? "" : spec.ammoItem.trim();
         if (!configured.isEmpty()) {
-            ResourceLocation id = ResourceLocation.tryParse(configured);
-            Item item = id == null ? null : BuiltInRegistries.ITEM.get(id);
-            return item == null || item == net.minecraft.world.item.Items.AIR ? null : item;
+            return resolveItem(configured);
         }
         if (!(weapon instanceof VehicleEntity vehicle)) {
             return null;

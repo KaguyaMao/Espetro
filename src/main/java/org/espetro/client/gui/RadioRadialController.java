@@ -41,6 +41,7 @@ public final class RadioRadialController {
             "espetro", "textures/gui/commander_skills/unavailable.png");
 
     private static boolean initialized;
+    private static long themeRevision = -1L;
     private static BlockPos lastRadioPos = BlockPos.ZERO;
     private static java.util.UUID pendingVehicleId; // 车辆换职业时非 null
     /** 车辆换职业时是否只允许驾驶员/载具队长（补给载具与无标签载具）。 */
@@ -158,7 +159,14 @@ public final class RadioRadialController {
 
     /** 客户端 END tick：处理 EsRadial 的关闭动画和延迟二/三级菜单导航。 */
     public static void tick(Minecraft mc) {
-        // EsRadial replace() makes navigation synchronous; retained for the existing tick hook.
+        if (!initialized || themeRevision == UiTheme.revision()) return;
+        publishMenus();
+        RadialMenuClientApi.activeMenuId().ifPresent(menuId -> {
+            var data = RadialMenuRegistry.getRuntimeMenu(menuId);
+            boolean ownPage = ROOT.equals(menuId) || CLASS_MENU.equals(menuId)
+                || cachedClasses.stream().anyMatch(entry -> variantMenuId(entry.classId).equals(menuId));
+            if (ownPage && data != null) RadialMenuClientApi.replace(data);
+        });
     }
 
     private static void publishMenus() {
@@ -172,6 +180,7 @@ public final class RadioRadialController {
             }
         }
         RadialMenuRegistry.setMenus(OWNER, menus);
+        themeRevision = UiTheme.revision();
     }
 
     private static org.esradial.client.RadialMenuData rootMenu() {
@@ -180,13 +189,13 @@ public final class RadioRadialController {
             .radii(44, 96)
             .squadLayout()
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"))
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
             .persistentSlot("espetro.radio.resupply", ICON_RESUPPLY,
                 Actions.script(DO_ACTION, Map.of("action", "RESUPPLY")),
-                Component.literal("补给步兵"), "#FFFFFFFF", "#FFFFD54F")
+                Component.literal("补给步兵"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
             .persistentSlot("espetro.radio.change_class", ICON_CLASS,
                 Actions.script(NAVIGATE, Map.of("target", "classes")),
-                Component.literal("更换职业"), "#FFFFFFFF", "#FFFFD54F")
+                Component.literal("更换职业"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
             .build();
     }
 
@@ -206,15 +215,15 @@ public final class RadioRadialController {
             .title(Component.literal("更换职业"))
             .radii(44, 100)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"))
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
             .persistentSlot("espetro.radio.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "root")),
-                Component.literal("↩"), "#FF888888");
+                Component.literal("↩"), UiTheme.hex(UiTheme.WORLD_MUTED));
         java.util.Set<String> usedClassSlots = new java.util.HashSet<>();
         if (cachedClasses.isEmpty()) {
             builder = builder.slot("espetro.radio.no_class", ICON_UNAVAILABLE,
                 Actions.script(NAVIGATE, Map.of("target", "root")),
-                Component.literal("无可用职业"), "#FF4A3030").disabledLast(Component.literal("没有职业列表"));
+                Component.literal("无可用职业"), UiTheme.hex(UiTheme.WORLD_NEGATIVE)).disabledLast(Component.literal("没有职业列表"));
         } else {
             for (RadioRadialPacket.ClassEntry e : visibleClassEntries()) {
                 ResourceLocation icon = resolveClassIcon(e);
@@ -222,21 +231,18 @@ public final class RadioRadialController {
                     "espetro.radio.class." + sanitizeSlotId(e.classId));
                 String displayName = e.name != null && !e.name.isBlank() ? e.name : e.classId;
                 String count = e.showCount
-                    ? " " + (e.enabled ? "§a" : e.cooldownBlocked ? "§7" : "§c")
-                        + "[" + e.currentCount + "/" + e.maxCount + "]"
-                    : "";
-                String nameColor = e.enabled ? "§f" : e.cooldownBlocked ? "§7" : "§c";
-                String highlight = e.enabled ? "#FF8CB4D5"
-                    : e.cooldownBlocked ? "#FF44484D" : "#FF4A3030";
+                    ? " [" + e.currentCount + "/" + e.maxCount + "]" : "";
+                String highlight = UiTheme.hex(e.enabled ? UiTheme.ACCENT
+                    : e.cooldownBlocked ? UiTheme.WORLD_MUTED : UiTheme.WORLD_NEGATIVE);
                 if (e.variants.size() > 1 && e.enabled) {
                     builder = builder.persistentSlot(slotName, icon,
                         Actions.script(NAVIGATE,
                             Map.of("target", "variants:" + e.classId)),
-                        Component.literal(nameColor + displayName + count), highlight);
+                        Component.literal(displayName + count), highlight);
                 } else {
                     builder = builder.slot(slotName, icon,
                         pickAction(e.classId, e.defaultVariantId, e.enabled, e.denialMessage),
-                        Component.literal(nameColor + displayName + count), highlight);
+                        Component.literal(displayName + count), highlight);
                 }
                 if (!e.enabled) builder.disabledLast(Component.literal(e.denialMessage == null ? "当前无法选择" : e.denialMessage));
             }
@@ -269,28 +275,26 @@ public final class RadioRadialController {
             .title(Component.literal("选择职业装备"))
             .radii(44, 100)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"))
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
             .persistentSlot("espetro.radio.variant.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "back")),
-                Component.literal("返回"), "#FF888888");
+                Component.literal("返回"), UiTheme.hex(UiTheme.WORLD_MUTED));
         ResourceLocation icon = resolveClassIcon(entry);
         java.util.Set<String> usedVariantSlots = new java.util.HashSet<>();
         for (RadioRadialPacket.VariantEntry variant : entry.variants) {
             String label = variant.name != null && !variant.name.isBlank()
                 ? variant.name : variant.variantId;
             String count = variant.strictCount
-                ? " " + (variant.enabled ? "§a" : "§c")
-                    + "[" + variant.currentCount + "/" + variant.maxCount + "]"
-                : " §a" + variant.currentCount + "人";
-            String nameColor = variant.enabled ? "§f" : "§c";
+                ? " [" + variant.currentCount + "/" + variant.maxCount + "]"
+                : " " + variant.currentCount + "人";
             builder = builder.slot(
                 uniqueSlotId(usedVariantSlots, "espetro.radio.variant."
                     + sanitizeSlotId(entry.classId) + "." + sanitizeSlotId(variant.variantId)),
                 icon,
                 pickAction(entry.classId, variant.variantId,
                     variant.enabled, variant.denialMessage),
-                Component.literal(nameColor + label + count),
-                variant.enabled ? "#FF8CB4D5" : "#FF4A3030");
+                Component.literal(label + count),
+                UiTheme.hex(variant.enabled ? UiTheme.ACCENT : UiTheme.WORLD_NEGATIVE));
             if (!variant.enabled) builder.disabledLast(Component.literal(variant.denialMessage == null ? "当前无法选择" : variant.denialMessage));
         }
         return builder.build();
@@ -390,7 +394,7 @@ public final class RadioRadialController {
             String glyph = "↩";
             float glyphScale = 1.75f * scale;
             int opacity = Math.max(0, Math.min(255, Math.round(alpha * 255.0f)));
-            int color = (opacity << 24) | 0x00FFFFFF;
+            int color = UiTheme.withAlpha(UiTheme.WORLD_TEXT, opacity);
             graphics.pose().pushPose();
             graphics.pose().translate(x, y, 0);
             graphics.pose().scale(glyphScale, glyphScale, 1.0f);

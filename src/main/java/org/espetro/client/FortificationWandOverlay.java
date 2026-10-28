@@ -14,6 +14,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.espetro.network.FortificationWandPacket;
+import org.espetro.client.gui.UiPaint;
+import org.espetro.client.gui.UiTheme;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -91,24 +93,33 @@ public final class FortificationWandOverlay {
         GuiGraphics graphics = event.getGuiGraphics();
 
         List<String> rows = new ArrayList<>();
-        rows.add("§e工事选区 §f" + current.sizeX() + "×" + current.sizeY() + "×" + current.sizeZ()
-            + " §7方块 §f" + current.blockCount() + " §7实体 §f" + current.entityCount());
+        List<Integer> colors = new ArrayList<>();
+        rows.add("工事选区 " + current.sizeX() + "×" + current.sizeY() + "×" + current.sizeZ()
+            + "  方块 " + current.blockCount() + "  实体 " + current.entityCount());
+        colors.add(UiTheme.TEXT);
         if (current.anchor() == null) {
-            rows.add("§e还需设锚点（潜行+右键）");
+            rows.add("还需设锚点（潜行+右键）");
+            colors.add(UiTheme.WARNING);
         } else {
             BlockPos pivot = current.anchor().subtract(minOf(current.a(), current.b()));
-            rows.add("§7锚点 §f" + current.anchor().getX() + ", " + current.anchor().getY() + ", "
-                + current.anchor().getZ() + " §7pivot §f" + pivot.getX() + ", " + pivot.getY()
-                + ", " + pivot.getZ() + " §7基准朝向 §f北");
+            rows.add("锚点 " + current.anchor().getX() + ", " + current.anchor().getY() + ", "
+                + current.anchor().getZ() + "  pivot " + pivot.getX() + ", " + pivot.getY()
+                + ", " + pivot.getZ() + "  基准朝向 北");
+            colors.add(UiTheme.TEXT_SECOND);
         }
         if (!current.problem().isEmpty()) {
-            rows.add(current.ready() ? "§e! " + current.problem() : "§c✗ " + current.problem());
+            rows.add((current.ready() ? "! " : "✗ ") + current.problem());
+            colors.add(current.ready() ? UiTheme.WARNING : UiTheme.NEGATIVE);
         } else if (current.ready()) {
-            rows.add("§a✓ 预检通过：/espetro fort save <名字>");
+            rows.add("✓ 预检通过：/espetro fort save <名字>");
+            colors.add(UiTheme.POSITIVE);
         }
+        int panelWidth = rows.stream().mapToInt(mc.font::width).max().orElse(0) + 12;
+        UiPaint.card(graphics, 2, 2, panelWidth, rows.size() * 10 + 8);
+        UiPaint.accentBarLeft(graphics, 2, 2, rows.size() * 10 + 8, UiTheme.ACCENT);
         int y = 6;
-        for (String row : rows) {
-            graphics.drawString(mc.font, Component.literal(row), 6, y, 0xFFFFFF, true);
+        for (int i = 0; i < rows.size(); i++) {
+            UiPaint.text(graphics, rows.get(i), 8, y, colors.get(i));
             y += 10;
         }
     }

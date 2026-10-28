@@ -31,6 +31,8 @@ public final class FortificationCatalogPacket {
         List<Entry> entries = new ArrayList<>();
         for (FortificationConfig.FortificationDef def : FortificationConfig.list()) {
             if (!FortificationManager.canUse(player, def) || entries.size() >= MAX_ENTRIES) continue;
+            // 阵营数量已满：轮盘里不再显示（避免选了之后被拒）
+            if (FortificationManager.getInstance().isFactionLimitReached(player, def)) continue;
             entries.add(new Entry(def.id, def.displayName, def.icon,
                 def.constructionCost, def.ammunitionCost));
         }

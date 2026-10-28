@@ -156,6 +156,13 @@ public class EspetroAPI {
         return ClassCountManager.getInstance().getPlayerClass(playerId);
     }
 
+    /** 该玩家当前职业是否配置为医疗兵（EsFactions 职业里的 {@code "med": true}）。 */
+    public static boolean isMedicPlayer(UUID playerId) {
+        String classId = getPlayerClass(playerId);
+        return classId != null && classId.length() > 0
+            && org.espetro.team.FactionDataProvider.getOrCreateLoader().isMedicClass(classId);
+    }
+
     public static String getPlayerClassVariant(UUID playerId) {
         return ClassCountManager.getInstance().getPlayerVariant(playerId);
     }

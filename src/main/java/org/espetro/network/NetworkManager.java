@@ -499,6 +499,20 @@ public class NetworkManager {
         NET.registerMessage(nextId(), FixedWeaponWheelPacket.class,
             FixedWeaponWheelPacket::write, FixedWeaponWheelPacket::read,
             FixedWeaponWheelPacket::handle);
+        // 医疗兵身份同步（协议 1.14）：客户端据此绘制倒地队友标识
+        NET.registerMessage(nextId(), MedicFlagPacket.class,
+            MedicFlagPacket::write, MedicFlagPacket::read,
+            MedicFlagPacket::handle);
+    }
+
+    /** 同步"本机玩家是否为医疗兵"：登录、选职、清职时调用；并记录状态供 {@link MedicFlagSync} 对账。 */
+    public static void sendMedicFlag(net.minecraft.server.level.ServerPlayer player) {
+        if (player == null) return;
+        String classId = org.espetro.api.EspetroAPI.getPlayerClass(player.getUUID());
+        boolean medic = org.espetro.team.FactionDataProvider.getOrCreateLoader().isMedicClass(classId);
+        MedicFlagSync.note(player.getUUID(), medic);
+        NET.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
+            new MedicFlagPacket(medic));
     }
 
     public static void sendBuildFortification(String fortId) {
@@ -529,11 +543,11 @@ public class NetworkManager {
     }
 
     /** 固定武器：请求用所在 FOB 的弹药兑换一次。 */
-    public static void sendFixedWeaponExchange(UUID weaponEntityId) {
+    public static void sendFixedWeaponExchange(UUID weaponEntityId, int index) {
         if (weaponEntityId == null) {
             return;
         }
-        NET.sendToServer(new FixedWeaponExchangePacket(weaponEntityId));
+        NET.sendToServer(new FixedWeaponExchangePacket(weaponEntityId, Math.max(0, index)));
     }
 
     public static void requestFortificationCatalog() {
@@ -965,9 +979,66 @@ public class NetworkManager {
                 totalImageBytes += imageData.length;
             }
             list.add(new ClassSelectScreenPacket.FactionInfo(
-                id, name, selectionImage, voteCounts.getOrDefault(id, 0), imageData));
+                id, name, selectionImage, voteCounts.getOrDefault(id, 0), imageData,
+                faction != null && faction.showName != null && !faction.showName.isBlank()
+                    ? faction.showName : name,
+                faction != null && faction.description != null ? faction.description : "",
+                buildFactionVehicleLines(loader, id),
+                buildFactionFortLines(id)));
         }
         return list;
+    }
+
+    /** 编制投票卡片「?」面板：该编制的载具显示名与刷新时间（分钟）。 */
+    private static List<ClassSelectScreenPacket.VehicleLine> buildFactionVehicleLines(
+            FactionDataLoader loader, String factionId) {
+        java.util.Map<String, FactionDataLoader.VehicleData> vehicles = loader.getFactionVehicles(factionId);
+        if (vehicles == null || vehicles.isEmpty()) return java.util.List.of();
+        List<ClassSelectScreenPacket.VehicleLine> lines = new ArrayList<>(vehicles.size());
+        for (java.util.Map.Entry<String, FactionDataLoader.VehicleData> entry : vehicles.entrySet()) {
+            FactionDataLoader.VehicleData data = entry.getValue();
+            if (data == null) continue;
+            String display = data.displayName != null && !data.displayName.isBlank()
+                ? data.displayName : entry.getKey();
+            int minutes = data.respawnMinutes > 0
+                ? data.respawnMinutes : FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES;
+            int slots = data.entities != null && !data.entities.isEmpty() ? data.entities.size() : 1;
+            int count = slots * Math.max(1, data.perMaxCount);
+            lines.add(new ClassSelectScreenPacket.VehicleLine(stripFormatting(display), minutes, count));
+        }
+        return lines;
+    }
+
+    /** 编制投票卡片「?」面板：仅限该编制部署的专属工事与单编制数量上限。 */
+    private static List<ClassSelectScreenPacket.FortLine> buildFactionFortLines(String factionId) {
+        List<ClassSelectScreenPacket.FortLine> lines = new ArrayList<>();
+        for (org.espetro.bastion.FortificationConfig.FortificationDef def
+                : org.espetro.bastion.FortificationConfig.list()) {
+            if (def == null || def.requirements == null) continue;
+            List<String> factions = def.requirements.factions;
+            if (factions == null || factions.isEmpty() || !factions.contains(factionId)) continue;
+            if (def.requirements.maxPerFaction <= 0) continue;
+            String display = def.displayName != null && !def.displayName.isBlank()
+                ? def.displayName : def.id;
+            lines.add(new ClassSelectScreenPacket.FortLine(
+                stripFormatting(display), def.requirements.maxPerFaction));
+        }
+        return lines;
+    }
+
+    /** 去掉 § 色码：AUI 自绘文本不解析格式化码。 */
+    private static String stripFormatting(String value) {
+        if (value == null || value.isEmpty()) return "";
+        StringBuilder out = new StringBuilder(value.length());
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (c == '\u00a7') {
+                i++;
+                continue;
+            }
+            out.append(c);
+        }
+        return out.toString().trim();
     }
 
     /**
@@ -1654,6 +1725,9 @@ public class NetworkManager {
         for (org.espetro.bastion.BastionData bd : bm.getTeamBastions(team)) {
             // 已被摧毁的兵站不再出现在部署列表里（否则旧按钮会残留、点了必然失败）
             if (!bd.isActive()) continue;
+            // 兵站失去己方 Radio（FOB 被拆/被摧毁）后永久不可部署：直接从列表剔除，
+            // 否则条目会一直挂在部署点栏里、点了才报错。
+            if (bd.isHab() && !bm.hasFriendlyRadioCovering(bd)) continue;
             net.minecraft.core.BlockPos armorStandPos = bm.getRecordedArmorStandPosition(bd);
             if (armorStandPos == null) continue;
             items.add(new UnifiedDeployScreenPacket.BastionItem(
@@ -1839,6 +1913,19 @@ public class NetworkManager {
         boolean showSkillsEntry = isCommander || !views.isEmpty();
         CommanderSkillSyncPacket packet = new CommanderSkillSyncPacket(showSkillsEntry, cooldowns, views);
         NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+
+    /**
+     * 重新推送全服玩家的技能同步包。
+     * <p>指挥官/小队长变化时调用：技能入口与列表都要同步收回，否则客户端会残留上一次的身份。</p>
+     */
+    public static void syncCommanderSkillsToAll(MinecraftServer server) {
+        if (server == null) {
+            return;
+        }
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            sendCommanderSkillSync(player);
+        }
     }
 
     // ===== multi-dimension helpers =====

@@ -48,10 +48,6 @@ public final class VehicleWheelController {
         id("textures/gui/squad/vehicle_supply_unload.png");
     private static final ResourceLocation ICON_RESUPPLY =
         id("textures/gui/squad/ammo_crate.png");
-    private static final String COLOR_LOAD = "#FFFFFFFF";
-    /** 建材操作的进度环颜色（与载具 HUD 的建材填充同色）。 */
-    private static final String COLOR_CONSTRUCTION_PROGRESS = "#FFCCAA00";
-    private static final String COLOR_UNLOAD = "#FFFF4A4A";
 
     private static boolean initialized;
     private static boolean keyWasDown;
@@ -61,6 +57,7 @@ public final class VehicleWheelController {
     private static int heldTicks;
     private static UUID currentVehicleId;
     private static VehicleSupplySyncPacket cachedSupply;
+    private static long themeRevision = -1L;
 
     private static String holdAction;
     private static int holdProgress;
@@ -171,6 +168,7 @@ public final class VehicleWheelController {
     private static void publishMenu() {
         if (cachedSupply == null || !cachedSupply.hasAnyAction()) return;
         RadialMenuRegistry.setMenus(OWNER, List.of(buildRootMenu()));
+        themeRevision = UiTheme.revision();
     }
 
     private static org.esradial.client.RadialMenuData buildRootMenu() {
@@ -178,43 +176,43 @@ public final class VehicleWheelController {
             .title(Component.literal("载具交互"))
             .radii(WHEEL_INNER, WHEEL_OUTER)
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"))
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
             .gap(130, 40).gap(260, 35)
             .progress(() -> {
                 float value = org.espetro.client.vehicle.VehicleInteractionState.progress();
                 return value < 0 ? RadialMenuData.Progress.NONE : new RadialMenuData.Progress(null, value,
-                    String.format(java.util.Locale.ROOT, "#%08X", org.espetro.client.vehicle.VehicleInteractionState.color()));
+                    UiTheme.hex(org.espetro.client.vehicle.VehicleInteractionState.color()));
             });
 
         if (cachedSupply.canTransferAmmo()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_ammo", ICON_AMMO_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_AMMO")),
-                    Component.literal("装载弹药"), COLOR_LOAD, "#FF3D4650").sectorLast(-30, 55).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
+                    Component.literal("装载弹药"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(-30, 55).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_ammo", ICON_AMMO_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_AMMO")),
-                    Component.literal("卸下弹药"), COLOR_UNLOAD, "#FF5C2525").sectorLast(25, 45).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+                    Component.literal("卸下弹药"), UiTheme.hex(UiTheme.WORLD_NEGATIVE), UiTheme.hex(UiTheme.WORLD_NEGATIVE)).sectorLast(25, 45).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canTransferConstruction()) {
             builder = builder
                 .persistentSlot("espetro.veh.load_construction", ICON_CONSTRUCTION_WHITE,
                     Actions.script(ACTION_ID, Map.of("action", "LOAD_CONSTRUCTION")),
-                    Component.literal("装载建材"), COLOR_LOAD, "#FF3D4650")
-                .progressColorLast(COLOR_CONSTRUCTION_PROGRESS).sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
+                    Component.literal("装载建材"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
+                .progressColorLast(UiTheme.hex(UiTheme.WORLD_WARNING)).sectorLast(70, 60).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
                 .persistentSlot("espetro.veh.unload_construction", ICON_CONSTRUCTION_RED,
                     Actions.script(ACTION_ID, Map.of("action", "UNLOAD_CONSTRUCTION")),
-                    Component.literal("卸下建材"), COLOR_UNLOAD, "#FF5C2525")
-                .progressColorLast(COLOR_CONSTRUCTION_PROGRESS).sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+                    Component.literal("卸下建材"), UiTheme.hex(UiTheme.WORLD_NEGATIVE), UiTheme.hex(UiTheme.WORLD_NEGATIVE))
+                .progressColorLast(UiTheme.hex(UiTheme.WORLD_WARNING)).sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
         }
         if (cachedSupply.canResupplyInfantry()) {
             builder = builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,
                 Actions.script(ACTION_ID, Map.of("action", "RESUPPLY_INFANTRY")),
-                Component.literal("补给步兵"), COLOR_LOAD, "#FF725E19").sectorLast(205, 55);
+                Component.literal("补给步兵"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(205, 55);
         }
         if (cachedSupply.isSupplyVehicle() || cachedSupply.isFightVehicle()) {
             builder = builder.persistentSlot("espetro.veh.change_class", ICON_AMMO_WHITE,
                 Actions.script(ACTION_ID, Map.of("action", "CHANGE_CLASS")),
-                Component.literal("更换职业"), COLOR_LOAD, "#FF3D4650").sectorLast(295, 35);
+                Component.literal("更换职业"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(295, 35);
         }
         return builder.build();
     }
@@ -248,6 +246,12 @@ public final class VehicleWheelController {
         if (!initialized || minecraft == null || minecraft.player == null) {
             reset();
             return;
+        }
+        if (cachedSupply != null && themeRevision != UiTheme.revision()) {
+            publishMenu();
+            if (isWheelActive() && RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
+                RadialMenuClientApi.replace(buildRootMenu());
+            }
         }
         if (minecraft.screen != null) {
             closeOwnedOverlay();

@@ -1,8 +1,11 @@
 package org.espetro.client.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -323,7 +326,7 @@ public final class UiPaint {
     public static void sunken(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
         roundRect(graphics, x, y, width, height, radius, UiTheme.SUNKEN);
         strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
-        hairline(graphics, x, y, width, 0x14000000);
+        hairline(graphics, x, y, width, UiTheme.HAIRLINE_DARK);
     }
 
     /** 1px 水平细线。 */
@@ -411,7 +414,7 @@ public final class UiPaint {
         // 刻度：每 10% 一条 1px 的纸色隔断，让进度"可读数"。
         int step = Math.max(6, width / 10);
         for (int i = step; i < width - 2; i += step) {
-            graphics.fill(x + i, innerY, x + i + 1, innerY + innerH, UiTheme.withAlpha(0xFF000000, 0x22));
+            graphics.fill(x + i, innerY, x + i + 1, innerY + innerH, UiTheme.withAlpha(UiTheme.DARK_INK, 0x22));
         }
     }
 
@@ -446,19 +449,19 @@ public final class UiPaint {
         for (int i = 0; i < bandX; i += 2) {
             float t = 1f - i / (float) bandX;
             int a = Math.round(14 * t);
-            graphics.fill(i, 0, Math.min(i + 2, width), height, UiTheme.withAlpha(0xFF101110, a));
+            graphics.fill(i, 0, Math.min(i + 2, width), height, UiTheme.withAlpha(UiTheme.DARK_INK, a));
             int x = width - i - 2;
             if (x >= 0) {
-                graphics.fill(x, 0, x + 2, height, UiTheme.withAlpha(0xFF101110, a));
+                graphics.fill(x, 0, x + 2, height, UiTheme.withAlpha(UiTheme.DARK_INK, a));
             }
         }
         for (int i = 0; i < bandY; i += 2) {
             float t = 1f - i / (float) bandY;
             int a = Math.round(16 * t);
-            graphics.fill(0, i, width, Math.min(i + 2, height), UiTheme.withAlpha(0xFF101110, a));
+            graphics.fill(0, i, width, Math.min(i + 2, height), UiTheme.withAlpha(UiTheme.DARK_INK, a));
             int y = height - i - 2;
             if (y >= 0) {
-                graphics.fill(0, y, width, y + 2, UiTheme.withAlpha(0xFF101110, a));
+                graphics.fill(0, y, width, y + 2, UiTheme.withAlpha(UiTheme.DARK_INK, a));
             }
         }
     }
@@ -491,30 +494,76 @@ public final class UiPaint {
      * 是为了将来若再换浅色主题时，只需在这里改一张映射表而不用逐屏改文案。
      */
     public static String retone(String value) {
-        return value;
+        return value == null ? "" : value.replaceAll("(?i)\u00a7[0-9a-f]", "");
+    }
+
+    /** Resolve legacy colors into the active palette; preserve emphasis and resets. */
+    public static Component themed(String value, int baseColor) {
+        baseColor = UiTheme.readableText(baseColor);
+        MutableComponent result = Component.empty();
+        Style style = Style.EMPTY.withColor(baseColor & 0x00FFFFFF);
+        String text = value == null ? "" : value;
+        int start = 0;
+        for (int i = 0; i < text.length() - 1; i++) {
+            if (text.charAt(i) != '\u00a7') continue;
+            ChatFormatting format = ChatFormatting.getByCode(text.charAt(i + 1));
+            if (format == null) continue;
+            if (i > start) result.append(Component.literal(text.substring(start, i)).setStyle(style));
+            if (format.isColor()) {
+                style = Style.EMPTY.withColor(legacyColor(Character.toLowerCase(text.charAt(i + 1)), baseColor)
+                    & 0x00FFFFFF);
+            } else if (format == ChatFormatting.RESET) {
+                style = Style.EMPTY.withColor(baseColor & 0x00FFFFFF);
+            } else {
+                style = style.applyFormat(format);
+            }
+            i++;
+            start = i + 1;
+        }
+        if (start < text.length()) result.append(Component.literal(text.substring(start)).setStyle(style));
+        return result;
+    }
+
+    private static int legacyColor(char code, int baseColor) {
+        return switch (code) {
+            case '0', '8' -> UiTheme.TEXT_THIRD;
+            case '1', '3', '9', 'b' -> UiTheme.DEFEND;
+            case '2', 'a' -> UiTheme.POSITIVE;
+            case '4', 'c' -> UiTheme.NEGATIVE;
+            case '5', 'd' -> UiTheme.PURPLE;
+            case '6', 'e' -> UiTheme.GOLD;
+            case '7' -> UiTheme.TEXT_SECOND;
+            default -> baseColor;
+        };
+    }
+
+    /** Tint monochrome texture masks with a palette color. Reset to white after blitting. */
+    public static void tint(GuiGraphics graphics, int color) {
+        graphics.setColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f,
+            (color & 0xFF) / 255f, ((color >>> 24) & 0xFF) / 255f);
     }
 
     /** 普通文本（纸上不用阴影，保持印刷的干净边缘）。 */
     public static void text(GuiGraphics graphics, String value, int x, int y, int color) {
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(retone(value)), x, y, color, false);
+        graphics.drawString(Minecraft.getInstance().font, themed(value, color), x, y, color, false);
     }
 
     /** 带投影的文本（仅用于压在墨块/图片上的文字）。 */
     public static void textShadowed(GuiGraphics graphics, String value, int x, int y, int color) {
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(retone(value)), x, y, color, true);
+        graphics.drawString(Minecraft.getInstance().font, themed(value, color), x, y, color, true);
     }
 
     /** 缩放文本（左上角锚点）。 */
     public static void textScaled(GuiGraphics graphics, String value, int x, int y, int color,
                                   float scale, boolean shadow) {
-        String text = retone(value);
+        Component text = themed(value, color);
         if (scale == 1f) {
-            graphics.drawString(Minecraft.getInstance().font, Component.literal(text), x, y, color, shadow);
+            graphics.drawString(Minecraft.getInstance().font, text, x, y, color, shadow);
             return;
         }
         graphics.pose().pushPose();
         graphics.pose().scale(scale, scale, 1f);
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(text),
+        graphics.drawString(Minecraft.getInstance().font, text,
             Math.round(x / scale), Math.round(y / scale), color, shadow);
         graphics.pose().popPose();
     }
@@ -522,14 +571,14 @@ public final class UiPaint {
     /** 居中缩放文本（相对给定矩形）。 */
     public static void textCentered(GuiGraphics graphics, String value, int x, int y, int width,
                                     int color, float scale, boolean shadow) {
-        int textWidth = Math.round(Minecraft.getInstance().font.width(value) * scale);
+        int textWidth = Math.round(Minecraft.getInstance().font.width(themed(value, color)) * scale);
         textScaled(graphics, value, x + (width - textWidth) / 2, y, color, scale, shadow);
     }
 
     /** 右对齐文本。 */
     public static void textRight(GuiGraphics graphics, String value, int rightX, int y, int color,
                                  float scale) {
-        int textWidth = Math.round(Minecraft.getInstance().font.width(value) * scale);
+        int textWidth = Math.round(Minecraft.getInstance().font.width(themed(value, color)) * scale);
         textScaled(graphics, value, rightX - textWidth, y, color, scale, false);
     }
 
@@ -537,21 +586,25 @@ public final class UiPaint {
     public static void textSpaced(GuiGraphics graphics, String value, int x, int y, int color,
                                   float scale, int spacing, boolean shadow) {
         var font = Minecraft.getInstance().font;
-        float cursor = x;
-        for (int i = 0; i < value.length(); i++) {
-            String ch = String.valueOf(value.charAt(i));
-            int advance = font.width(ch) + spacing;
-            if (scale == 1f) {
-                graphics.drawString(font, Component.literal(ch), Math.round(cursor), y, color, shadow);
-            } else {
-                graphics.pose().pushPose();
-                graphics.pose().scale(scale, scale, 1f);
-                graphics.drawString(font, Component.literal(ch),
-                    Math.round(cursor / scale), Math.round(y / scale), color, shadow);
-                graphics.pose().popPose();
+        float[] cursor = {x};
+        themed(value, color).visit((style, part) -> {
+            for (int offset = 0; offset < part.length();) {
+                int codePoint = part.codePointAt(offset);
+                offset += Character.charCount(codePoint);
+                Component glyph = Component.literal(new String(Character.toChars(codePoint))).setStyle(style);
+                if (scale == 1f) {
+                    graphics.drawString(font, glyph, Math.round(cursor[0]), y, color, shadow);
+                } else {
+                    graphics.pose().pushPose();
+                    graphics.pose().scale(scale, scale, 1f);
+                    graphics.drawString(font, glyph,
+                        Math.round(cursor[0] / scale), Math.round(y / scale), color, shadow);
+                    graphics.pose().popPose();
+                }
+                cursor[0] += (font.width(glyph) + spacing) * scale;
             }
-            cursor += advance * scale;
-        }
+            return java.util.Optional.empty();
+        }, Style.EMPTY);
     }
 
     /** 微标签：小号 + 字距 + 可选的左侧 2px 信号色方块。 */
@@ -565,11 +618,9 @@ public final class UiPaint {
         if (value == null || value.isEmpty()) {
             return 0;
         }
-        int total = spacing * (value.length() - 1);
-        for (int i = 0; i < value.length(); i++) {
-            total += font.width(String.valueOf(value.charAt(i)));
-        }
-        return total;
+        String plain = value.replaceAll("(?i)\u00a7[0-9a-fk-or]", "");
+        int count = plain.codePointCount(0, plain.length());
+        return font.width(themed(value, UiTheme.TEXT)) + spacing * Math.max(0, count - 1);
     }
 
     private static int clampRadius(int radius, int width, int height) {

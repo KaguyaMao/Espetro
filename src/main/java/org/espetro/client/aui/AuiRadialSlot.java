@@ -21,7 +21,8 @@ public record AuiRadialSlot(
         Objects.requireNonNull(label, "label");
         Objects.requireNonNull(action, "action");
         item = item == null ? ItemStack.EMPTY : item;
-        accent = accent == null || accent.isBlank() ? "#FFD5B25C" : accent;
+        accent = accent == null || accent.isBlank()
+            ? org.espetro.client.gui.UiTheme.hex(org.espetro.client.gui.UiTheme.ACCENT) : accent;
     }
 
     public static AuiRadialSlot texture(String id, Component label, ResourceLocation texture,

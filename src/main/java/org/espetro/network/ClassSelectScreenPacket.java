@@ -25,6 +25,31 @@ public class ClassSelectScreenPacket {
     private final int opponentTimeRemaining;
     private final String selectedFactionId;
 
+    /** 编制详情里的一行载具：显示名 + 刷新时间（分钟）+ 该型载具总数量。 */
+    public static final class VehicleLine {
+        public final String name;
+        public final int respawnMinutes;
+        /** 该型载具可同时存在的总数量（实体槽位数 × 每槽上限）。 */
+        public final int count;
+
+        public VehicleLine(String name, int respawnMinutes, int count) {
+            this.name = name != null ? name : "";
+            this.respawnMinutes = Math.max(0, respawnMinutes);
+            this.count = Math.max(0, count);
+        }
+    }
+
+    /** 编制详情里的一行专属工事：显示名 + 可部署数量上限。 */
+    public static final class FortLine {
+        public final String name;
+        public final int limit;
+
+        public FortLine(String name, int limit) {
+            this.name = name != null ? name : "";
+            this.limit = Math.max(0, limit);
+        }
+    }
+
     public static class FactionInfo {
         public final String id;
         public final String name;
@@ -32,17 +57,35 @@ public class ClassSelectScreenPacket {
         public final int voteCount;
         /** 服务端从 EsFactions/ 读取的图片数据（可为 null） */
         public final byte[] imageData;
+        /** 所属阵营展示名（faction.show_name，回退 name）。 */
+        public final String showName;
+        /** 编制性质（faction.description）。 */
+        public final String description;
+        /** 载具列表（显示名 + 刷新分钟），无配置时为空表。 */
+        public final List<VehicleLine> vehicles;
+        /** 专属工事列表（显示名 + 可部署数量），无配置时为空表。 */
+        public final List<FortLine> forts;
 
         public FactionInfo(String id, String name, String selectionImage, int voteCount) {
             this(id, name, selectionImage, voteCount, null);
         }
 
         public FactionInfo(String id, String name, String selectionImage, int voteCount, byte[] imageData) {
+            this(id, name, selectionImage, voteCount, imageData, "", "", List.of(), List.of());
+        }
+
+        public FactionInfo(String id, String name, String selectionImage, int voteCount, byte[] imageData,
+                           String showName, String description,
+                           List<VehicleLine> vehicles, List<FortLine> forts) {
             this.id = id;
             this.name = name;
             this.selectionImage = selectionImage != null ? selectionImage : "";
             this.voteCount = voteCount;
             this.imageData = imageData;
+            this.showName = showName != null ? showName : "";
+            this.description = description != null ? description : "";
+            this.vehicles = vehicles == null ? List.of() : List.copyOf(vehicles);
+            this.forts = forts == null ? List.of() : List.copyOf(forts);
         }
     }
 
@@ -80,7 +123,20 @@ public class ClassSelectScreenPacket {
             String selectionImage = buf.readUtf();
             int voteCount = buf.readVarInt();
             byte[] imageData = buf.readBoolean() ? buf.readByteArray() : null;
-            factions.add(new FactionInfo(id, name, selectionImage, voteCount, imageData));
+            String showName = buf.readUtf();
+            String description = buf.readUtf();
+            int vehicleCount = buf.readVarInt();
+            List<VehicleLine> vehicles = new ArrayList<>(Math.max(0, vehicleCount));
+            for (int j = 0; j < vehicleCount; j++) {
+                vehicles.add(new VehicleLine(buf.readUtf(), buf.readVarInt(), buf.readVarInt()));
+            }
+            int fortCount = buf.readVarInt();
+            List<FortLine> forts = new ArrayList<>(Math.max(0, fortCount));
+            for (int j = 0; j < fortCount; j++) {
+                forts.add(new FortLine(buf.readUtf(), buf.readVarInt()));
+            }
+            factions.add(new FactionInfo(id, name, selectionImage, voteCount, imageData,
+                showName, description, vehicles, forts));
         }
         String opponentTeamName = buf.readUtf();
         String opponentFaction = buf.readUtf();
@@ -103,6 +159,19 @@ public class ClassSelectScreenPacket {
             boolean hasImage = info.imageData != null;
             buf.writeBoolean(hasImage);
             if (hasImage) buf.writeByteArray(info.imageData);
+            buf.writeUtf(info.showName != null ? info.showName : "");
+            buf.writeUtf(info.description != null ? info.description : "");
+            buf.writeVarInt(info.vehicles.size());
+            for (VehicleLine line : info.vehicles) {
+                buf.writeUtf(line.name);
+                buf.writeVarInt(line.respawnMinutes);
+                buf.writeVarInt(line.count);
+            }
+            buf.writeVarInt(info.forts.size());
+            for (FortLine line : info.forts) {
+                buf.writeUtf(line.name);
+                buf.writeVarInt(line.limit);
+            }
         }
         buf.writeUtf(opponentTeamName != null ? opponentTeamName : "");
         buf.writeUtf(opponentFaction != null ? opponentFaction : "");

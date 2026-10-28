@@ -5,6 +5,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.ModList;
 import org.espetro.Espetro;
+import org.espetro.client.gui.UiPaint;
+import org.espetro.client.gui.UiTheme;
 
 import java.lang.reflect.Method;
 
@@ -186,17 +188,16 @@ public final class HcrTacticalMapBridge {
     }
 
     private static void renderFallback(GuiGraphics graphics, int x, int y, int width, int height) {
-        graphics.fill(x, y, x + width, y + height, 0xCC202020);
-        graphics.renderOutline(x, y, width, height, 0xFF000000);
+        UiPaint.sunken(graphics, x, y, width, height, UiTheme.RADIUS_INNER);
 
-        String text = "\u00a77战术地图不可用";
+        String text = "战术地图不可用";
         int textWidth = Minecraft.getInstance().font.width(text);
         graphics.drawString(
             Minecraft.getInstance().font,
             Component.literal(text),
             x + (width - textWidth) / 2,
             y + (height - 8) / 2,
-            0xAAAAAA,
+            UiTheme.TEXT_THIRD,
             false
         );
     }

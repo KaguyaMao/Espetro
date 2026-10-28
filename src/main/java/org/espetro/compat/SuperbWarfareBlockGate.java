@@ -2,6 +2,7 @@ package org.espetro.compat;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
@@ -13,6 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.espetro.Espetro;
+import org.espetro.bastion.FortificationManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,10 +80,25 @@ public final class SuperbWarfareBlockGate {
             return; // CustomExplosion 的方块表在事件前已被自身清空，走 mixin
         }
         int before = affected.size();
-        affected.removeIf((pos) -> !isAllowed(level.getBlockState(pos)));
+        int fortParts = 0;
+        var iterator = affected.iterator();
+        while (iterator.hasNext()) {
+            BlockPos pos = iterator.next();
+            if (damageFortPart(level, pos, FortificationManager.DamageKind.EXPLOSION)) {
+                iterator.remove();
+                fortParts++;
+                continue;
+            }
+            if (!isAllowed(level.getBlockState(pos))) {
+                iterator.remove();
+            }
+        }
         int removed = before - affected.size();
         if (removed > 0) {
             logOnce("detonate", "[SBW] 原生爆炸白名单已生效：剔除 " + removed + " 个非玻璃/门/活板门方块（保留 " + affected.size() + " 个）");
+        }
+        if (fortParts > 0) {
+            logOnce("detonate.fort", "[SBW] 原生爆炸命中的工事部件 " + fortParts + " 个：已转为工事完整度伤害");
         }
     }
 
@@ -113,8 +130,17 @@ public final class SuperbWarfareBlockGate {
             return blocks;
         }
         List<BlockPos> kept = new ArrayList<>(blocks.size());
+        int fortParts = 0;
         for (BlockPos pos : blocks) {
-            if (pos != null && isAllowed(level.getBlockState(pos))) {
+            if (pos == null) {
+                continue;
+            }
+            // 工事方块：不直接炸掉方块，改为扣工事完整度（由 FortificationManager 统一拆除）。
+            if (damageFortPart(level, pos, FortificationManager.DamageKind.EXPLOSION)) {
+                fortParts++;
+                continue;
+            }
+            if (isAllowed(level.getBlockState(pos))) {
                 kept.add(pos);
             }
         }
@@ -122,6 +148,9 @@ public final class SuperbWarfareBlockGate {
         if (removed > 0) {
             logOnce("processBlockList", "[SBW] 爆炸白名单(入参过滤)已生效：剔除 " + removed
                 + " 个非玻璃/门/活板门方块（保留 " + kept.size() + " 个）");
+        }
+        if (fortParts > 0) {
+            logOnce("processBlockList.fort", "[SBW] 爆炸命中的工事部件 " + fortParts + " 个：已转为工事完整度伤害");
         }
         return kept;
     }
@@ -133,6 +162,9 @@ public final class SuperbWarfareBlockGate {
 
     /** 真正执行破坏的那一次调用（hooks ②），命中的方块被记一次日志便于开服后核对。 */
     public static boolean allowExplodedBlock(Level level, BlockPos pos) {
+        if (damageFortPart(level, pos, FortificationManager.DamageKind.EXPLOSION)) {
+            return false;
+        }
         boolean allowed = isExplosionBreakable(level, pos);
         if (!allowed) {
             logOnce("onBlockExploded", "[SBW] 爆炸白名单(破坏兜底)已生效：拦下 "
@@ -162,8 +194,13 @@ public final class SuperbWarfareBlockGate {
             if (isAllowed(state)) {
                 return false;
             }
+            // 只有卓越前线发起的破坏才介入（玩家/其它模组的破坏流程完全不碰）。
             if (!isSuperbWarfareCaller()) {
                 return false;
+            }
+            // 工事方块：钻地/预破坏同样不直接拆方块，改为扣工事完整度。
+            if (damageFortPart(level, pos, FortificationManager.DamageKind.PROJECTILE)) {
+                return true;
             }
             logOnce("level#destroyBlock", "[SBW] 方块破坏白名单(钻地/预破坏兜底)已生效：拦下 "
                 + describe(level, pos) + " 被卓越前线直接破坏");
@@ -192,6 +229,30 @@ public final class SuperbWarfareBlockGate {
             }
         }
         return false;
+    }
+
+    // ------------------------------------------------------------------
+    // 工事分支：把“炸方块”转成“扣工事完整度”
+    // ------------------------------------------------------------------
+
+    /**
+     * 命中的坐标若是 Espetro 工事部件，则按对应伤害类型扣工事完整度并返回 {@code true}。
+     *
+     * <p>SBW 的白名单只针对方块本体：工事方块当然不在玻璃/门白名单里，如果直接走原逻辑就会被
+     * 整条拦掉。这里把它折算成工事系统的完整度伤害——工事打空后由
+     * {@code FortificationManager} 自己拆除方块，因此“炮弹/爆炸打不掉工事”变成
+     * “炮弹/爆炸按工事伤害减免扣完整度”。</p>
+     */
+    private static boolean damageFortPart(Level level, BlockPos pos, FortificationManager.DamageKind kind) {
+        if (!(level instanceof ServerLevel serverLevel) || pos == null) {
+            return false;
+        }
+        FortificationManager manager = FortificationManager.getInstance();
+        if (!manager.contains(serverLevel, pos)) {
+            return false;
+        }
+        manager.damageAt(serverLevel, pos, null, kind);
+        return true;
     }
 
     // ------------------------------------------------------------------

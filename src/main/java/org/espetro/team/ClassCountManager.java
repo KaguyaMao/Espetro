@@ -206,7 +206,12 @@ public class ClassCountManager {
     }
 
     public boolean selectClass(ServerPlayer player, String classId, String variantId) {
-        return selectClassVariant(player, classId, variantId) == SelectionResult.SUCCESS;
+        boolean ok = selectClassVariant(player, classId, variantId) == SelectionResult.SUCCESS;
+        if (ok) {
+            // 职业可能带 "med": true —— 选职成功后把医疗兵身份同步给客户端。
+            org.espetro.network.NetworkManager.sendMedicFlag(player);
+        }
+        return ok;
     }
 
     /** 服务端权威、原子地选择职业及装备变体。 */

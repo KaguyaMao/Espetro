@@ -24,7 +24,18 @@ public class TeamAssignIntroScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        // 与地图投票页保持一致的「模糊地图图」背景；地图未定/加载失败时渲染器自动回退为暗幕。
+        CurrentMapBackgroundRenderer.render(
+            graphics, this.width, this.height, resolveBackgroundMapFolder());
+    }
+
+    /** 优先本局已装载的地图，其次走投票页的「本人投票 → 胜出 → 首个候选」回退链。 */
+    private static String resolveBackgroundMapFolder() {
+        String current = ClientGameState.getCurrentMapFolder();
+        if (current != null && !current.isBlank()) {
+            return current;
+        }
+        return MapVoteScreen.resolveBackgroundMapFolder();
     }
 
     @Override
@@ -76,15 +87,13 @@ public class TeamAssignIntroScreen extends EspetroMenuScreen {
             int absY = y + getY();
             int textW = Math.round(Minecraft.getInstance().font.width(label) * scale);
             int textH = Math.round(Minecraft.getInstance().font.lineHeight * scale);
-            // 队伍色柔光：让超大字号从深色底上「浮」起来。
-            UiPaint.glow(graphics, cx - textW / 2 - 12, absY - 8, textW + 24, textH + 16,
-                UiTheme.RADIUS_CARD, color);
-            graphics.pose().pushPose();
-            graphics.pose().translate(cx, absY, 0);
-            graphics.pose().scale(scale, scale, 1.0f);
-            graphics.drawCenteredString(Minecraft.getInstance().font,
-                Component.literal(label), 0, 0, color);
-            graphics.pose().popPose();
+            // 工业角标标记分配结果，保留阵营色文字与单一黄色确认信号。
+            UiPaint.brackets(graphics, cx - textW / 2 - 12, absY - 8,
+                textW + 24, textH + 16, UiTheme.ACCENT_LINE);
+            UiPaint.label(graphics, "TEAM / ASSIGNED", cx - textW / 2 - 12,
+                absY - 21, UiTheme.TEXT_THIRD);
+            UiPaint.textCentered(graphics, label, 0, absY, cx * 2,
+                color, scale, false);
         }
     }
 

@@ -102,7 +102,8 @@ public final class MapVoteScreen extends EspetroMenuScreen {
             graphics, this.width, this.height, resolveBackgroundMapFolder());
     }
 
-    private static String resolveBackgroundMapFolder() {
+    /** 本局背景地图：本人投票 → 胜出地图 → 已加载地图 → 首个候选。其它阶段页复用同一回退链。 */
+    static String resolveBackgroundMapFolder() {
         if (latest.myVoteMapFolder != null && !latest.myVoteMapFolder.isBlank()) {
             return latest.myVoteMapFolder;
         }
@@ -284,7 +285,7 @@ public final class MapVoteScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 玻璃卡片底：选中态加 ACCENT_LINE 描边 + 外发光
+            // 纸墨卡片：黄色端线和角标标记当前项，悬停保持细线反馈。
             boolean hovered = hasFocus() && enabled;
             UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
                 UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
@@ -293,13 +294,14 @@ public final class MapVoteScreen extends EspetroMenuScreen {
                     UiTheme.ACCENT_SOFT);
                 UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
                     UiTheme.ACCENT_LINE);
-                UiPaint.glow(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, UiTheme.ACCENT);
+                UiPaint.brackets(graphics, bx - 2, by - 2, bw + 4, bh + 4,
+                    UiTheme.ACCENT_LINE);
                 UiPaint.accentBarBottom(graphics, bx + 6, by + bh - 3, bw - 12, UiTheme.ACCENT);
             } else if (hovered) {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
                     UiTheme.SURFACE_2);
                 UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.HAIRLINE_STRONG);
+                    UiTheme.ACCENT_LINE);
             }
 
             // 预览区：贴卡片顶部水平居中，固定 16:9 横向，尽量放大
@@ -339,7 +341,7 @@ public final class MapVoteScreen extends EspetroMenuScreen {
             String mapName = EspetroAuiWidgets.trimToWidth(
                 (selected ? "✔ " : "") + candidate.displayName, nameMaxW);
             UiPaint.text(graphics, mapName, bx + 6, by + bh - 10,
-                selected ? UiTheme.POSITIVE : UiTheme.TEXT);
+                selected ? UiTheme.GOLD : enabled ? UiTheme.TEXT : UiTheme.TEXT_DISABLED);
 
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }

@@ -94,6 +94,8 @@ public final class OutpostSupplyHud {
             // 左上角 fob_status 图标 + 电台血量进度条（内凹槽 + 渐变填充）。
             int iconX = bx + PAD;
             int iconY = by + PAD;
+            graphics.fill(iconX, iconY, iconX + STATUS_ICON_SIZE, iconY + STATUS_ICON_SIZE,
+                UiTheme.ICON_PLATE);
             graphics.blit(FOB_STATUS_ICON, iconX, iconY,
                 STATUS_ICON_SIZE, STATUS_ICON_SIZE, 0f, 0f,
                 TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
@@ -110,6 +112,8 @@ public final class OutpostSupplyHud {
 
             // 弹药 / 建材存量行（数值用标题字号 + 投影）。
             int supplyY = by + 24;
+            graphics.fill(bx + PAD, supplyY, bx + PAD + SUPPLY_ICON_SIZE,
+                supplyY + SUPPLY_ICON_SIZE, UiTheme.ICON_PLATE);
             graphics.blit(AMMO_ICON, bx + PAD, supplyY,
                 SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
                 TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
@@ -118,6 +122,8 @@ public final class OutpostSupplyHud {
                 UiTheme.TYPE_HEADING, true);
 
             int constructionIconX = bx + 78;
+            graphics.fill(constructionIconX, supplyY, constructionIconX + SUPPLY_ICON_SIZE,
+                supplyY + SUPPLY_ICON_SIZE, UiTheme.ICON_PLATE);
             graphics.blit(CONSTRUCTION_ICON, constructionIconX, supplyY,
                 SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
                 TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);

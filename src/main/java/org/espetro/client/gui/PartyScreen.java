@@ -233,6 +233,23 @@ public final class PartyScreen extends EspetroMenuScreen {
 
     // ==================== 子界面：创建队伍 ====================
 
+    /** 原版输入行为保留，外观与纸墨面板统一，并随亮暗主题实时更新。 */
+    private static void drawPasswordField(GuiGraphics graphics, EditBox field,
+                                          int mouseX, int mouseY, float partialTick) {
+        if (field == null) return;
+        field.setBordered(false);
+        field.setTextColor(UiTheme.TEXT);
+        field.setTextColorUneditable(UiTheme.TEXT_DISABLED);
+        int x = field.getX() - UiTheme.GAP_XS;
+        int y = field.getY() - UiTheme.HAIRLINE_WIDTH;
+        int w = field.getWidth() + UiTheme.GAP_XS * 2;
+        int h = field.getHeight() + UiTheme.HAIRLINE_WIDTH * 2;
+        UiPaint.sunken(graphics, x, y, w, h, UiTheme.RADIUS_CONTROL);
+        UiPaint.frame(graphics, x, y, w, h,
+            field.isFocused() ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE_STRONG);
+        field.render(graphics, mouseX, mouseY, partialTick);
+    }
+
     /** 简单输入密码并创建队伍。 */
     private static final class CreatePartyScreen extends EspetroMenuScreen {
         private final PartyScreen parent;
@@ -245,24 +262,38 @@ public final class PartyScreen extends EspetroMenuScreen {
 
         @Override
         protected void init() {
+            boolean passwordFocused = passwordField == null || passwordField.isFocused();
             super.init();
             int pw = Math.min(280, width - 40);
             int px = (width - pw) / 2;
             int py = (height - 100) / 2;
             int bw = pw - 60;
             int bx = px + 30;
-            passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 42, bw, 14,
-                Component.literal("密码"));
+            if (passwordField == null) {
+                passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 42, bw, 14,
+                    Component.literal("密码"));
+            } else {
+                // Reuse the widget so chat returns and resizing retain cursor and selection.
+                passwordField.setX(bx);
+                passwordField.setY(py + 42);
+                passwordField.setWidth(bw);
+            }
             passwordField.setMaxLength(64);
-            passwordField.setBordered(true);
+            passwordField.setBordered(false);
             passwordField.setCanLoseFocus(true);
             addRenderableWidget(passwordField);
-            setFocused(passwordField);
+            setFocused(passwordFocused ? passwordField : null);
+            passwordField.setFocused(passwordFocused);
         }
 
         @Override
         protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        }
+
+        @Override
+        protected void renderAfterMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            drawPasswordField(graphics, passwordField, mouseX, mouseY, partialTick);
         }
 
         @Override
@@ -327,24 +358,37 @@ public final class PartyScreen extends EspetroMenuScreen {
 
         @Override
         protected void init() {
+            boolean passwordFocused = passwordField == null || passwordField.isFocused();
             super.init();
             int pw = Math.min(260, width - 40);
             int px = (width - pw) / 2;
             int py = (height - 84) / 2;
             int bw = pw - 60;
             int bx = px + 30;
-            passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 28, bw, 14,
-                Component.literal("队伍密码"));
+            if (passwordField == null) {
+                passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 28, bw, 14,
+                    Component.literal("队伍密码"));
+            } else {
+                passwordField.setX(bx);
+                passwordField.setY(py + 28);
+                passwordField.setWidth(bw);
+            }
             passwordField.setMaxLength(64);
-            passwordField.setBordered(true);
+            passwordField.setBordered(false);
             passwordField.setCanLoseFocus(true);
             addRenderableWidget(passwordField);
-            setFocused(passwordField);
+            setFocused(passwordFocused ? passwordField : null);
+            passwordField.setFocused(passwordFocused);
         }
 
         @Override
         protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        }
+
+        @Override
+        protected void renderAfterMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            drawPasswordField(graphics, passwordField, mouseX, mouseY, partialTick);
         }
 
         @Override
@@ -399,24 +443,37 @@ public final class PartyScreen extends EspetroMenuScreen {
 
         @Override
         protected void init() {
+            boolean passwordFocused = passwordField == null || passwordField.isFocused();
             super.init();
             int pw = Math.min(240, width - 40);
             int px = (width - pw) / 2;
             int py = (height - 70) / 2;
             int bw = pw - 60;
             int bx = px + 30;
-            passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 26, bw, 14,
-                Component.literal("队伍密码"));
+            if (passwordField == null) {
+                passwordField = new EditBox(Minecraft.getInstance().font, bx, py + 26, bw, 14,
+                    Component.literal("队伍密码"));
+            } else {
+                passwordField.setX(bx);
+                passwordField.setY(py + 26);
+                passwordField.setWidth(bw);
+            }
             passwordField.setMaxLength(64);
-            passwordField.setBordered(true);
+            passwordField.setBordered(false);
             passwordField.setCanLoseFocus(true);
             addRenderableWidget(passwordField);
-            setFocused(passwordField);
+            setFocused(passwordFocused ? passwordField : null);
+            passwordField.setFocused(passwordFocused);
         }
 
         @Override
         protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             EspetroAuiWidgets.drawScreenShade(graphics, this.width, this.height);
+        }
+
+        @Override
+        protected void renderAfterMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            drawPasswordField(graphics, passwordField, mouseX, mouseY, partialTick);
         }
 
         @Override

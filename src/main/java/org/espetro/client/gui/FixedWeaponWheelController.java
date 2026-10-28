@@ -32,15 +32,13 @@ public final class FixedWeaponWheelController {
     private static final String OWNER = "espetro_fixed_weapon";
     private static final ResourceLocation MENU = id("fixed_weapon/exchange");
     private static final ResourceLocation SELECT = id("fixed_weapon/select");
-    private static final String AVAILABLE = "#FFFFD54F";
-    private static final String HOVER = "#FFFFFFFF";
-    private static final String UNAVAILABLE = "#FF44484D";
 
     private static boolean initialized;
     private static UUID weaponId;
     private static FixedWeaponWheelPacket latest;
     private static boolean menuWasActive;
     private static boolean holdKeyWasDown;
+    private static long themeRevision = -1L;
 
     private FixedWeaponWheelController() {
     }
@@ -54,15 +52,26 @@ public final class FixedWeaponWheelController {
             if (weaponId == null || latest == null) {
                 return;
             }
-            if (!latest.affordable()) {
-                if (!latest.reason().isBlank()) {
-                    EspetroTipNotifier.showDenial("无法兑换", latest.reason());
+            int index;
+            try {
+                index = Integer.parseInt(params.getString("index", "-1"));
+            } catch (NumberFormatException ignored) {
+                return;
+            }
+            List<FixedWeaponWheelPacket.Slot> slots = latest.slots();
+            if (index < 0 || index >= slots.size()) {
+                return;
+            }
+            FixedWeaponWheelPacket.Slot slot = slots.get(index);
+            if (!slot.affordable()) {
+                if (!slot.reason().isBlank()) {
+                    EspetroTipNotifier.showDenial("无法兑换", slot.reason());
                 }
                 return;
             }
             // 兑换后**不关闭**轮盘：按住 F 期间保持开启，便于连续兑换；
             // 服务端兑换成功后会回发刷新后的轮盘数据（FOB 弹药已扣除）。
-            NetworkManager.sendFixedWeaponExchange(weaponId);
+            NetworkManager.sendFixedWeaponExchange(weaponId, index);
         });
     }
 
@@ -78,6 +87,7 @@ public final class FixedWeaponWheelController {
 
     private static void show(FixedWeaponWheelPacket packet) {
         RadialMenuData data = build(packet);
+        themeRevision = UiTheme.revision();
         RadialMenuRegistry.setMenus(OWNER, List.of(data));
         boolean existing = RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
         if (!existing || !RadialMenuClientApi.replace(data)) {
@@ -115,6 +125,7 @@ public final class FixedWeaponWheelController {
             return;
         }
         menuWasActive = isActive();
+        if (menuWasActive && latest != null && themeRevision != UiTheme.revision()) show(latest);
     }
 
     public static boolean isActive() {
@@ -123,23 +134,34 @@ public final class FixedWeaponWheelController {
     }
 
     private static RadialMenuData build(FixedWeaponWheelPacket packet) {
-        ItemStack icon = resolveIcon(packet.ammoItemId());
-        String label = "兑换 " + packet.amount() + " 发 §b[" + packet.ammoCost() + "]";
-        if (!packet.affordable() && !packet.reason().isBlank()) {
-            label += " §c" + packet.reason();
-        }
         RadialMenuBuilder builder = new RadialMenuBuilder(MENU)
             .title(Component.literal(packet.displayName() + " · FOB 弹药 " + packet.fobAmmo()))
             .radii(44, 108)
             .animationSpeed(1.25F)
-            .ringColors(List.of("#B824292B", "#C832383A"))
-            .persistentSlot("espetro.fixed_weapon.exchange", new ItemIcon(icon, 1.15F),
-                Actions.script(SELECT, Map.of()), Component.literal(label),
-                packet.affordable() ? HOVER : UNAVAILABLE,
-                packet.affordable() ? AVAILABLE : UNAVAILABLE);
-        if (!packet.affordable()) {
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
+        List<FixedWeaponWheelPacket.Slot> slots = packet.slots();
+        boolean anyAffordable = false;
+        for (int i = 0; i < slots.size(); i++) {
+            FixedWeaponWheelPacket.Slot slot = slots.get(i);
+            ItemStack icon = resolveIcon(slot.ammoItemId());
+            String label = (slot.label().isBlank() ? slot.amount() + " 发" : slot.label())
+                + " [" + slot.cost() + "]";
+            if (!slot.affordable() && !slot.reason().isBlank()) {
+                label += " " + slot.reason();
+            }
+            String accent = UiTheme.hex(slot.affordable() ? UiTheme.ACCENT : UiTheme.WORLD_NEGATIVE);
+            builder = builder.persistentSlot("espetro.fixed_weapon.exchange." + i,
+                new ItemIcon(icon, 1.15F),
+                Actions.script(SELECT, Map.of("index", Integer.toString(i))),
+                Component.literal(label), accent, accent);
+            if (slot.affordable()) {
+                anyAffordable = true;
+            }
+        }
+        if (!anyAffordable) {
+            String reason = slots.isEmpty() ? "当前不可兑换" : slots.get(0).reason();
             builder = builder.disabledLast(Component.literal(
-                packet.reason().isBlank() ? "当前不可兑换" : packet.reason()));
+                reason == null || reason.isBlank() ? "当前不可兑换" : reason));
         }
         return builder.build();
     }

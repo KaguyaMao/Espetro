@@ -8,10 +8,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.espetro.client.gui.ClientGameState;
 import org.espetro.client.gui.ClientTacticalState;
+import org.espetro.client.gui.UiTheme;
 import org.joml.Matrix4f;
 
 /**
@@ -50,6 +53,14 @@ public final class LeaderOverheadRenderer {
     /** 本队 B / C 组普通成员（普通玩家标识）。 */
     private static final ResourceLocation FIRETEAMMATE_B_TEX = texture("fireteammate_b.png");
     private static final ResourceLocation FIRETEAMMATE_C_TEX = texture("fireteammate_c.png");
+    /** 医疗兵视角：倒地队友的伤员标识（红色 75% 半透明，本文件 assets/espetro/textures/gui/overhead/wounded.png）。 */
+    private static final ResourceLocation WOUNDED_TEX = texture("wounded.png");
+    /** 伤员标识颜色：纯红 + 75% 透明度（0.75*255 = 191 = 0xBF）。 */
+    private static final int WOUNDED_COLOR = 0xBFFF0000;
+    /** 伤员标识尺寸 = 队长标识的 2 倍。 */
+    private static final float WOUNDED_HALF = HALF * 2f;
+    /** 伤员标识高度再抬 1/3 个自身高度，避免和队长标识重叠。 */
+    private static final double WOUNDED_LIFT = WOUNDED_HALF * 2f / 3.0;
 
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) return;
@@ -86,6 +97,8 @@ public final class LeaderOverheadRenderer {
             Entity v = mc.level.getEntity(e.getKey());
             if (v != null) render(ps, buf, v, pt, e.getValue().info, camera);
         }
+        // 医疗兵：倒地队友头顶的伤员标识（全距离可见）
+        renderWoundedAllies(ps, buf, pt, camera);
         buf.endBatch();
     }
 
@@ -132,7 +145,7 @@ public final class LeaderOverheadRenderer {
         // 普通成员标识与其它小队的小蓝标都是小号（队长标识的一半）
         float half = (info.type == T.MEMBER || smallAllyMarker) ? HALF_MEMBER : HALF;
         ps.scale(half, half, 1f);
-        quadFlippedX(buf.getBuffer(iconLayer), ps.last().pose(), 0xFFFFFFFF);
+        quadFlippedX(buf.getBuffer(iconLayer), ps.last().pose(), UiTheme.TEXTURE_WHITE);
         ps.popPose();
         // 先提交不透明图标，再把数字写入字体缓冲，确保数字最终覆盖在图标上。
         buf.endBatch(iconLayer);
@@ -146,6 +159,43 @@ public final class LeaderOverheadRenderer {
             buf.endBatch();
         }
         ps.popPose();
+    }
+
+    /**
+     * 医疗兵专属：倒地队友头顶最高图层画伤员标识（全距离可见）。
+     * 只有本地玩家职业带 {@code "med": true} 时才绘制；倒地者自己与普通玩家看不到。
+     */
+    private static void renderWoundedAllies(PoseStack ps, MultiBufferSource.BufferSource buf,
+                                            float pt, Camera camera) {
+        if (!ClientMedicState.isMedic()) return;
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) return;
+        Team myTeam = mc.player.getTeam();
+        for (Player p : mc.level.players()) {
+            if (p == mc.player || !p.isAlive() || p.isSpectator()) continue;
+            // 倒地判据：隐身。realgrisly 倒地时除了 setForcedPose(SWIMMING)（最终由
+            // Player.updatePlayerPose() 转成 DATA_POSE），还会 setInvisible(true)；
+            // 姿态可能被其它逻辑或同步时序吃掉，隐身是同一 tick 内必定生效的标记，
+            // 因此用隐身判定，避免医疗兵头顶标识时有时无。
+            if (!p.isInvisible()) continue;
+            if (myTeam != null && p.getTeam() != myTeam) continue;
+
+            double x = p.xo + (p.getX() - p.xo) * pt;
+            double baseY = p.yo + (p.getY() - p.yo) * pt;
+            double y = baseY + p.getBbHeight() + 1.0 + WOUNDED_LIFT;
+            double z = p.zo + (p.getZ() - p.zo) * pt;
+
+            RenderType layer = RenderType.textSeeThrough(WOUNDED_TEX);
+            ps.pushPose();
+            ps.translate(x - camera.getPosition().x, y - camera.getPosition().y, z - camera.getPosition().z);
+            ps.mulPose(camera.rotation());
+            ps.pushPose();
+            ps.scale(WOUNDED_HALF, WOUNDED_HALF, 1f);
+            quadFlippedX(buf.getBuffer(layer), ps.last().pose(), WOUNDED_COLOR);
+            ps.popPose();
+            buf.endBatch(layer);
+            ps.popPose();
+        }
     }
 
     private static ResourceLocation textureFor(OverheadInfo info) {
@@ -181,7 +231,7 @@ public final class LeaderOverheadRenderer {
         font.drawInBatch(label,
             -textWidth / 2f,
             -font.lineHeight / 2f,
-            0xFF000000, false, ps.last().pose(), buf,
+            UiTheme.WORLD_INK, false, ps.last().pose(), buf,
             net.minecraft.client.gui.Font.DisplayMode.SEE_THROUGH, 0, 0xF000F0);
         ps.popPose();
     }

@@ -200,6 +200,10 @@ public class FactionRevealScreen extends EspetroMenuScreen {
             int bx = refX + getX();
             int by = refY + getY();
             graphics.blit(texture, bx, by, dispW, dispH, 0, 0, texW, texH, texW, texH);
+            UiPaint.frame(graphics, bx - 1, by - 1, dispW + 2, dispH + 2,
+                UiTheme.HAIRLINE_STRONG);
+            UiPaint.brackets(graphics, bx - 3, by - 3, dispW + 6, dispH + 6,
+                UiTheme.TICK);
         }
     }
 

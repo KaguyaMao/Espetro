@@ -155,6 +155,9 @@ public class BastionEventHandler {
 
         TeamPackManager.getInstance().syncTeamPackItem(player);
 
+        // 登录后补发医疗兵标识（职业可能在进入前就已确定，客户端需要它来渲染伤员图标）
+        player.server.execute(() -> org.espetro.network.NetworkManager.sendMedicFlag(player));
+
         // 如果玩家在等待兵站选择状态
         if (BastionManager.getInstance().isWaitingForBastion(player.getUUID())) {
             // 重新登录不能绕过部署选择：继续保持统一等待状态。

@@ -138,6 +138,8 @@ public class MapRevealScreen extends EspetroMenuScreen {
                 0, 0, tex.texW(), tex.texH(), tex.texW(), tex.texH());
             UiPaint.strokeRoundRect(graphics, bx - 1, by - 1, bw + 2, bh + 2,
                 UiTheme.RADIUS_INNER, UiTheme.HAIRLINE_STRONG);
+            UiPaint.brackets(graphics, bx - 4, by - 4, bw + 8, bh + 8,
+                UiTheme.ACCENT_LINE);
         }
     }
 

@@ -21,6 +21,7 @@ public abstract class AuiScreen extends Screen {
     private boolean rebuildingRoot;
     private Object structureSignature;
     private long lastThrottleEpochSec = -1;
+    private long themeRevision = -1;
 
     /** 打开淡入：从黑幕到清晰（0.5s = 10 ticks）。 */
     private static final int FADE_IN_TICKS = 10;
@@ -260,9 +261,14 @@ public abstract class AuiScreen extends Screen {
         }
         rebuildingRoot = true;
         try {
+            if (root != null && themeRevision != org.espetro.client.gui.UiTheme.revision()) {
+                onThemeChanged();
+            }
+            beforeMenuRebuild();
             GuiElement next = new GuiElement(0, 0, this.width, this.height);
             buildMenuRoot(next);
             this.root = next;
+            themeRevision = org.espetro.client.gui.UiTheme.revision();
         } finally {
             rebuildingRoot = false;
         }
@@ -303,6 +309,12 @@ public abstract class AuiScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        // Chat returns to the same screen instance. Recreate color-bearing widgets
+        // before the first frame, including menus held by tutorial/party previews.
+        if (themeRevision != org.espetro.client.gui.UiTheme.revision()) {
+            rebuildMenuRootNow();
+            rootRebuildPending = false;
+        }
         graphics.flush();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -355,6 +367,13 @@ public abstract class AuiScreen extends Screen {
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** Refresh custom cached drawing data before rebuilding the element tree. */
+    protected void onThemeChanged() {
+    }
+
+    protected void beforeMenuRebuild() {
     }
 
     @Override

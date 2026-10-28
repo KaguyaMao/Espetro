@@ -56,7 +56,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                     ? null : ResourceLocation.tryParse(skill.icon());
                 if (icon == null) icon = COMMAND;
                 String label = cooldown > 0
-                    ? skill.displayName() + " §7(" + cooldown + "s)"
+                    ? skill.displayName() + " (" + cooldown + "s)"
                     : skill.displayName();
                 options.add(new Option(label, icon, 128, cooldown <= 0,
                     () -> {
@@ -127,6 +127,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
         if (centerLabel != null) {
             centerLabel.setText(selectedIndex < 0 ? "移动鼠标选择"
                 : options.get(selectedIndex).label);
+            centerLabel.setColor(UiTheme.TEXT);
         }
     }
 
@@ -163,6 +164,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                 UiPaint.ring(graphics, centerX, centerY, ringRadius + 2,
                     UiTheme.alpha(UiTheme.ACCENT, 0.25f));
             }
+            UiPaint.circle(graphics, centerX, centerY, half, UiTheme.ICON_PLATE);
             RenderSystem.setShaderColor(1f, 1f, 1f,
                 option.enabled ? (active ? 1f : 0.8f) : 0.45f);
             graphics.blit(option.icon, centerX - half, centerY - half, half * 2, half * 2,

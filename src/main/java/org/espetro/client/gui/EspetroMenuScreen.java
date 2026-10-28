@@ -15,6 +15,22 @@ abstract class EspetroMenuScreen extends AuiScreen {
     private long lastBindingEpochSec = -1;
     private final List<DynamicBinding> dynamicBindings = new ArrayList<>();
 
+    @Override
+    protected void onThemeChanged() {
+        for (var child : children()) {
+            if (child instanceof net.minecraft.client.gui.components.EditBox box) {
+                box.setTextColor(UiTheme.TEXT);
+                box.setTextColorUneditable(UiTheme.TEXT_DISABLED);
+            }
+        }
+    }
+
+    @Override
+    protected void beforeMenuRebuild() {
+        dynamicBindings.clear();
+        lastBindingEpochSec = -1;
+    }
+
     private record DynamicBinding(EspetroAuiWidgets.Text widget, Supplier<String> supplier) {
     }
 

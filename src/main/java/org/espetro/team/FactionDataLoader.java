@@ -509,6 +509,12 @@ public class FactionDataLoader {
         return classKits.get(classId);
     }
 
+    /** 该职业是否配置为医疗兵（{@code "med": true}）；未知职业或旧配置返回 false。 */
+    public boolean isMedicClass(String classId) {
+        ClassKitData kit = classId == null ? null : classKits.get(classId);
+        return kit != null && Boolean.TRUE.equals(kit.med);
+    }
+
     public ClassVariantData getClassVariant(String classId, String variantId) {
         ClassKitData kit = getClassKit(classId);
         return kit != null ? kit.getVariant(variantId) : null;
@@ -633,6 +639,12 @@ public class FactionDataLoader {
          */
         @SerializedName(value = "vehicle_crew", alternate = {"vehicleCrew"})
         public Boolean vehicleCrew;
+        /**
+         * 是否医疗兵：true 时该职业的玩家可在战场上看到倒地队友的头顶/地图标识。
+         * 配置键 {@code med}，缺省 false（不影响其他职业行为）。
+         */
+        @SerializedName(value = "med", alternate = {"medic", "is_medic"})
+        public Boolean med;
         /**
          * 完整文件系统路径的职业图标（优先于 {@link #icon}）。
          * 例：{@code /home/shu/图片/Icon/rifleman.png}，不是 jar 内 ResourceLocation。

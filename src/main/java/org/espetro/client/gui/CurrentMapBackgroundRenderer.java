@@ -20,7 +20,6 @@ final class CurrentMapBackgroundRenderer {
     private static final int MAX_TEXTURE_WIDTH = 320;
     private static final int MAX_TEXTURE_HEIGHT = 180;
     private static final int BLUR_RADIUS = 5;
-    private static final int DARK_OVERLAY = 0xAA07090B;
 
     private static final Map<String, BackgroundTexture> CACHE = new HashMap<>();
     private static final Set<String> FAILED = new HashSet<>();
@@ -44,7 +43,7 @@ final class CurrentMapBackgroundRenderer {
         Crop crop = aspectFillCrop(texture.width, texture.height, screenWidth, screenHeight);
         graphics.blit(texture.location, 0, 0, screenWidth, screenHeight,
             crop.u, crop.v, crop.width, crop.height, texture.width, texture.height);
-        graphics.fill(0, 0, screenWidth, screenHeight, DARK_OVERLAY);
+        graphics.fill(0, 0, screenWidth, screenHeight, UiTheme.FROST_SCRIM);
     }
 
     static Crop aspectFillCrop(int textureWidth, int textureHeight,

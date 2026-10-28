@@ -1287,8 +1287,25 @@ public final class FortificationConfig {
         @SerializedName(value = "factions", alternate = {"usable_factions", "faction_ids"})
         public List<String> factions = new ArrayList<>();
 
+        /**
+         * 同一阵营内**同时存在**的数量上限（施工中 + 已建成一起计）；≤0 = 不限。
+         *
+         * <p>被摧毁或主动拆除后就释放名额（因为统计的是"当前存在"而不是"累计建造"）。</p>
+         */
+        @SerializedName(value = "max_per_faction", alternate = {"maxPerFaction", "faction_limit"})
+        public int maxPerFaction = 0;
+
+        /**
+         * 数量限制分组（可选）：填写后，{@code max_per_faction} 按**整组**合计
+         * （例如三种反坦克导弹共用一组 = 合计 2 具）；留空 = 只按该定义自身计数。
+         */
+        @SerializedName(value = "limit_group", alternate = {"limitGroup", "group"})
+        public String limitGroup = "";
+
         void normalize(List<String> errors, String path) {
             normalizeFactions(path);
+            maxPerFaction = Math.max(0, maxPerFaction);
+            limitGroup = limitGroup == null ? "" : limitGroup.trim();
             if (usableBy == null || usableBy.isEmpty()) {
                 errors.add(path + ".usable_by: 不得为空");
                 return;
@@ -1373,22 +1390,112 @@ public final class FortificationConfig {
         @SerializedName("fob_ammo_cost")
         public int fobAmmoCost = 0;
         public String output = "vehicle";
+        /** 轮盘里这一个条目的显示名（可空，会回退到武器显示名 + 弹药名）。 */
+        public String label = "";
+        /**
+         * 多弹药条目（可选）：每个条目独立配置弹种/产出/价格（例如迫击炮的"高爆 / 烟幕"）。
+         * 非空时优先于上面的单档 {@code ammo_item / exchange_amount / fob_ammo_cost}。
+         */
+        public List<Entry> entries = new ArrayList<>();
+
+        /** 单个弹药条目。 */
+        public static final class Entry {
+            public String label = "";
+            @SerializedName("ammo_item")
+            public String ammoItem = "";
+            @SerializedName("exchange_amount")
+            public int exchangeAmount = 1;
+            @SerializedName("fob_ammo_cost")
+            public int fobAmmoCost = 0;
+
+            void normalize(List<String> errors, String path) {
+                label = label == null ? "" : label.trim();
+                ammoItem = ammoItem == null ? "" : ammoItem.trim();
+                exchangeAmount = Math.max(0, exchangeAmount);
+                fobAmmoCost = Math.max(0, fobAmmoCost);
+                if (exchangeAmount <= 0) {
+                    errors.add(path + ".exchange_amount: 必须大于 0");
+                }
+            }
+        }
+
+        /** 是否使用多条目模式。 */
+        public boolean hasEntries() {
+            return entries != null && !entries.isEmpty();
+        }
+
+        /** 条目总数（单档模式下恒为 1）。 */
+        public int entryCount() {
+            return hasEntries() ? entries.size() : 1;
+        }
+
+        /** 第 index 个条目的显示名。 */
+        public String entryLabel(int index) {
+            if (!hasEntries()) {
+                return label == null ? "" : label.trim();
+            }
+            Entry e = entries.get(clamp(index));
+            return e.label == null ? "" : e.label.trim();
+        }
+
+        public String entryAmmoItem(int index) {
+            if (!hasEntries()) {
+                return ammoItem == null ? "" : ammoItem.trim();
+            }
+            return entries.get(clamp(index)).ammoItem;
+        }
+
+        public int entryAmount(int index) {
+            if (!hasEntries()) {
+                return Math.max(1, exchangeAmount);
+            }
+            return Math.max(1, entries.get(clamp(index)).exchangeAmount);
+        }
+
+        public int entryCost(int index) {
+            if (!hasEntries()) {
+                return Math.max(0, fobAmmoCost);
+            }
+            return Math.max(0, entries.get(clamp(index)).fobAmmoCost);
+        }
+
+        private int clamp(int index) {
+            return Math.max(0, Math.min(entries.size() - 1, index));
+        }
 
         void normalize(List<String> errors, String path) {
             if (ammoItem == null) {
                 ammoItem = "";
             }
             ammoItem = ammoItem.trim();
+            label = label == null ? "" : label.trim();
             exchangeAmount = Math.max(0, exchangeAmount);
             fobAmmoCost = Math.max(0, fobAmmoCost);
+            if (entries != null) {
+                List<Entry> cleaned = new ArrayList<>();
+                int i = 0;
+                for (Entry entry : entries) {
+                    if (entry == null) {
+                        i++;
+                        continue;
+                    }
+                    entry.normalize(errors, path + ".entries[" + i + "]");
+                    cleaned.add(entry);
+                    i++;
+                }
+                entries = cleaned;
+            }
             String out = output == null ? "" : output.trim().toLowerCase(Locale.ROOT);
             if (!"player".equals(out) && !"vehicle".equals(out) && !"container".equals(out)) {
                 errors.add(path + ".output: 只能是 player / vehicle / container");
                 out = "vehicle";
             }
             output = out;
-            if (enabled && exchangeAmount <= 0) {
-                errors.add(path + ".exchange_amount: 启用固定武器时必须大于 0");
+            if (enabled && !hasEntries() && exchangeAmount <= 0) {
+                errors.add(path + ".exchange_amount: 启用固定武器时必须大于 0（或改用 entries）");
+            }
+            if (enabled && hasEntries() && entries.isEmpty()) {
+                errors.add(path + ".entries: 不得为空");
             }
         }
     }

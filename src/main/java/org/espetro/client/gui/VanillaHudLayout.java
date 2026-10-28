@@ -383,7 +383,7 @@ public final class VanillaHudLayout {
         int textY = VanillaHudNameLayout.nameY(slotY);
         graphics.fill(textX - 2, textY - 2, textX + textWidth + 2, textY + 9 + 2,
             VanillaHudNameLayout.nameBackgroundColor(fade));
-        graphics.drawString(font, tip, textX, textY, 0xFFFFFF | fade << 24, true);
+        graphics.drawString(font, tip, textX, textY, UiTheme.withAlpha(UiTheme.WORLD_TEXT, fade), true);
     }
 
     private static void renderHealthLine(GuiGraphics graphics, Minecraft mc,
@@ -412,8 +412,8 @@ public final class VanillaHudLayout {
         }
 
         if (healthFilled > 0) {
-            graphics.fill(x, healthY, x + healthFilled, healthY + HEALTH_HEIGHT, UiTheme.NEGATIVE);
-            graphics.fill(x, healthY, x + healthFilled, healthY + 2, UiTheme.withAlpha(UiTheme.TEXT, 0x1A));
+            graphics.fill(x, healthY, x + healthFilled, healthY + HEALTH_HEIGHT, UiTheme.WORLD_NEGATIVE);
+            graphics.fill(x, healthY, x + healthFilled, healthY + 2, UiTheme.withAlpha(UiTheme.WORLD_TEXT, 0x1A));
         }
         HudRenderState.restore(graphics);
     }

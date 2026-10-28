@@ -86,6 +86,7 @@ public final class TacticalRadialController {
     private static final List<FortificationCatalogPacket.Entry> cachedFortifications = new ArrayList<>();
     /** 上次 rebuildMenus 时使用的签名；相同签名不重建 */
     private static String lastMenuSignature = "";
+    private static long themeRevision = -1L;
 
     // === 网络线程写入的待确认数据 ===
     private static volatile boolean skillsDirty;
@@ -259,7 +260,7 @@ public final class TacticalRadialController {
      */
     private static String computeSignature() {
         StringBuilder sb = new StringBuilder();
-        sb.append(cachedIsCommander ? '1' : '0');
+        sb.append(cachedIsCommander ? '1' : '0').append(':').append(UiTheme.revision());
         sb.append('|');
         for (CommanderSkillManager.SkillView skill : cachedSkills) {
             sb.append(skill.id()).append(':')
@@ -283,6 +284,7 @@ public final class TacticalRadialController {
         menus.addAll(buildDirectoryMenus());
         menus.add(skillsMenu());
         RadialMenuRegistry.setMenus(OWNER, menus);
+        themeRevision = UiTheme.revision();
     }
 
     // ==================== Tick ====================
@@ -298,6 +300,7 @@ public final class TacticalRadialController {
         // 客户端线程中消费网络线程的技能更新
         flushSkillUpdate();
         flushFortificationUpdate();
+        if (themeRevision != UiTheme.revision()) pendingRebuild = true;
 
         boolean down = key.isDown();
         if (!down) {
@@ -394,7 +397,7 @@ public final class TacticalRadialController {
     private static org.esradial.client.RadialMenuData rootMenu() {
         var builder = base(ROOT_MENU);
         if (!isFireteamLeaderOnly()) builder.slot("espetro.rally", RALLY,
-            action(RadialActionPacket.Action.DEPLOY_RALLY), Component.literal("队包获取"), "#FF6B5D00")
+            action(RadialActionPacket.Action.DEPLOY_RALLY), Component.literal("队包获取"), UiTheme.hex(UiTheme.ACCENT))
             .sectorLast(0,60);
         cachedFortifications.stream().filter(f -> f != null && FIRETEAM_FORBIDDEN_FORT_ID.equals(f.id()))
             .filter(f -> !isFireteamLeaderOnly()).findFirst().ifPresent(f -> {
@@ -402,7 +405,7 @@ public final class TacticalRadialController {
             });
         if (!cachedFortifications.isEmpty()) builder.slot("espetro.build", BUILD_ICON,
             Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "build")),
-            Component.literal("工事建造"), "#FF6B5D00", false).submenuLast().tintLast(UiTheme.GOLD).sectorLast(270,30);
+            Component.literal("工事建造"), UiTheme.hex(UiTheme.ACCENT), false).submenuLast().tintLast(UiTheme.ACCENT).sectorLast(270,30);
         return builder.build();
     }
 
@@ -418,7 +421,7 @@ public final class TacticalRadialController {
             String path = "tactical_build_" + category.name().toLowerCase(java.util.Locale.ROOT);
             root.slot("espetro.build.directory." + category.name(), ui(category.icon),
                 Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", path)),
-                Component.literal(category.title), "#FF6B5D00", false).submenuLast().sectorLast(quarter++*90,90);
+                Component.literal(category.title), UiTheme.hex(UiTheme.ACCENT), false).submenuLast().sectorLast(quarter++*90,90);
             var group = base(id(path)).title(Component.literal(category.title));
             if (category == FortificationMenuCategory.FOUNDATION) {
                 String[][] functional = {{"espetro:hab", "兵站", "radialhab"},
@@ -428,7 +431,7 @@ public final class TacticalRadialController {
                     var item = functional[i];
                     var fort = entries.stream().filter(f -> item[0].equals(f.id())).findFirst().orElse(null);
                     if (fort != null) addFort(group, fort, item[1]);
-                    else group.slot("espetro.unavailable."+item[0],ui(item[2]),()->{},Component.literal(item[1]),"#FF6B5D00")
+                    else group.slot("espetro.unavailable."+item[0],ui(item[2]),()->{},Component.literal(item[1]),UiTheme.hex(UiTheme.WORLD_MUTED))
                         .disabledLast(Component.literal("当前建造目录未开放"));
                     group.sectorLast(i*90,90);
                 }
@@ -440,7 +443,7 @@ public final class TacticalRadialController {
                         String childPath=path+"_"+first/11;
                         String title=category.title+" · "+(first/11+1);
                         group.slot("espetro.build.group."+childPath,ui(category.icon),
-                            Actions.script(OPEN_SUBMENU_ACTION,Map.of("menu",childPath)),Component.literal(title),"#FF6B5D00",false).submenuLast();
+                            Actions.script(OPEN_SUBMENU_ACTION,Map.of("menu",childPath)),Component.literal(title),UiTheme.hex(UiTheme.ACCENT),false).submenuLast();
                         var child=base(id(childPath)).title(Component.literal(title));
                         for (var fort:entries.subList(first,Math.min(first+11,entries.size()))) addFort(child,fort);
                         child.backSlot(() -> RadialMenuClientApi.back()); pages.add(child.build());
@@ -463,7 +466,7 @@ public final class TacticalRadialController {
         if (icon == null) icon = UNAVAILABLE_ICON;
         StringBuilder label = new StringBuilder(displayName);
         if (fort.constructionCost() > 0 || fort.ammunitionCost() > 0) {
-            label.append(" §7(");
+            label.append(" (");
             if (fort.constructionCost() > 0) label.append("建材 ").append(fort.constructionCost());
             if (fort.constructionCost() > 0 && fort.ammunitionCost() > 0) label.append(" / ");
             if (fort.ammunitionCost() > 0) label.append("弹药 ").append(fort.ammunitionCost());
@@ -471,7 +474,7 @@ public final class TacticalRadialController {
         }
         builder.slot("espetro.fort." + fort.id(), icon,
             Actions.script(BUILD_FORT_ACTION, Map.of("fortId", fort.id())),
-            Component.literal(label.toString()), "#FF6B5D00");
+            Component.literal(label.toString()), UiTheme.hex(UiTheme.ACCENT));
     }
 
     private static org.esradial.client.RadialMenuData skillsMenu() {
@@ -480,14 +483,14 @@ public final class TacticalRadialController {
         if (!hasSkillSnapshot) {
             builder = builder.slot("espetro.skills_loading", UNAVAILABLE_ICON,
                 Actions.script(EXECUTE_ACTION, Map.of("action", "FOB_STATUS")),
-                Component.literal("加载中…"), "#FF4A3030").disabledLast(Component.literal("等待服务端技能列表"));
+                Component.literal("加载中…"), UiTheme.hex(UiTheme.WORLD_MUTED)).disabledLast(Component.literal("等待服务端技能列表"));
             return builder.build();
         }
         // 服务端已按 usableBy 过滤；列表空 = 当前角色无可用技能
         if (cachedSkills.isEmpty()) {
             builder = builder.slot("espetro.no_skills", UNAVAILABLE_ICON,
                 Actions.script(EXECUTE_ACTION, Map.of("action", "FOB_STATUS")),
-                Component.literal("无可用技能"), "#FF4A3030").disabledLast(Component.literal("当前身份没有可用技能"));
+                Component.literal("无可用技能"), UiTheme.hex(UiTheme.WORLD_MUTED)).disabledLast(Component.literal("当前身份没有可用技能"));
             return builder.build();
         }
 
@@ -498,9 +501,9 @@ public final class TacticalRadialController {
             }
             int cooldown = cachedCooldowns.getOrDefault(skill.id(), 0);
             boolean onCooldown = cooldown > 0;
-            String color = onCooldown ? "#FF4A3030" : "#FF6B5D00";
+            String color = UiTheme.hex(onCooldown ? UiTheme.WORLD_NEGATIVE : UiTheme.ACCENT);
             String label = onCooldown
-                ? skill.displayName() + " §7(" + cooldown + "s)"
+                ? skill.displayName() + " (" + cooldown + "s)"
                 : skill.displayName();
             ResourceLocation icon = resolveSkillIcon(skill);
             builder = builder.slot("espetro.skill." + skill.id(), icon,
@@ -635,7 +638,7 @@ public final class TacticalRadialController {
             .radii(44, 96)
             .squadLayout()
             .animationSpeed(1.25f)
-            .ringColors(List.of("#B824292B", "#C832383A"));
+            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
     }
 
     private static Runnable action(

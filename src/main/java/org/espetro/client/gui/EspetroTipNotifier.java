@@ -70,8 +70,12 @@ public final class EspetroTipNotifier {
         }
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
-            String line = "\u00a7" + (error ? "c" : "e") + title + "\u00a7r\n\u00a7f" + body;
-            mc.player.displayClientMessage(Component.literal(line), false);
+            Component line = Component.empty()
+                .append(Component.literal(title == null ? "" : title)
+                    .withStyle(style -> style.withColor(error ? UiTheme.WORLD_NEGATIVE : UiTheme.WORLD_WARNING)))
+                .append(Component.literal("\n" + (body == null ? "" : body))
+                    .withStyle(style -> style.withColor(UiTheme.WORLD_TEXT)));
+            mc.player.displayClientMessage(line, false);
         }
     }
 
@@ -120,13 +124,13 @@ public final class EspetroTipNotifier {
                     }
                     // 不设置 animationFrom/To，使用 offset 动画，避免覆盖 RIGHT_CENTER 停靠点
                     visual.getClass().getMethod("themeColor", String.class)
-                        .invoke(visual, error ? "#FFE05A5A" : "#FFE0B85A");
+                        .invoke(visual, UiTheme.hex(error ? UiTheme.NEGATIVE : UiTheme.GOLD));
                     visual.getClass().getMethod("stripeWidth", int.class).invoke(visual, 3);
                     Object solid = Enum.valueOf(
                         (Class<Enum>) bgTypeClz.asSubclass(Enum.class), "SOLID");
                     visual.getClass()
                         .getMethod("background", bgTypeClz, List.class, int.class)
-                        .invoke(visual, solid, List.of("#EE111416"), 0);
+                        .invoke(visual, solid, List.of(UiTheme.hex(UiTheme.CARD_TOP)), 0);
                     visual.getClass().getMethod("backgroundRounded", boolean.class)
                         .invoke(visual, false);
                 } catch (ReflectiveOperationException e) {
@@ -155,9 +159,11 @@ public final class EspetroTipNotifier {
             Object pageConsumer = (java.util.function.Consumer<Object>) page -> {
                 try {
                     page.getClass().getMethod("title", Component.class)
-                        .invoke(page, Component.literal(title == null ? "" : title));
+                        .invoke(page, Component.literal(title == null ? "" : title)
+                            .withStyle(style -> style.withColor(error ? UiTheme.NEGATIVE : UiTheme.GOLD)));
                     page.getClass().getMethod("content", Component.class)
-                        .invoke(page, Component.literal(body == null ? "" : body));
+                        .invoke(page, Component.literal(body == null ? "" : body)
+                            .withStyle(style -> style.withColor(UiTheme.TEXT)));
                 } catch (ReflectiveOperationException e) {
                     throw new RuntimeException(e);
                 }

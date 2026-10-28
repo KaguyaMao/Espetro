@@ -53,7 +53,15 @@ public final class FortificationEventHandler {
             }
             radius += 1.5D;
         }
-        FortificationManager.getInstance().damageExplosion(level,
+        FortificationManager manager = FortificationManager.getInstance();
+        if (affected.isEmpty()) {
+            // 卓越前线的 CustomExplosion 会把方块表清空后再发事件（见 SuperbWarfareBlockGate），
+            // 这里退回“按坐标空间索引 + 半径”结算，否则高爆弹永远打不掉工事。
+            manager.damageNearby(level, explosion.getPosition(), (float) radius,
+                explosion.getIndirectSourceEntity());
+            return;
+        }
+        manager.damageExplosion(level,
             explosion.getPosition(), (float) radius, affected,
             explosion.getIndirectSourceEntity());
     }
@@ -63,12 +71,12 @@ public final class FortificationEventHandler {
     public static void onProjectileImpact(ProjectileImpactEvent event) {
         if (event.getEntity().level().isClientSide()
             || !(event.getEntity().level() instanceof ServerLevel level)) return;
-        // 只处理 superb_warfare 小口径炮弹及其派生（不含 TaCZ/步枪/机枪弹）
+        // 只处理 superb_warfare / dragonrise 的炮弹、火箭、航弹等投射物（不含 TaCZ/步枪/机枪弹）
         String projectileClass = event.getEntity().getClass().getName();
-        boolean smallCaliberShell =
-            "com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity".equals(projectileClass)
+        boolean sbwProjectile =
+            projectileClass.startsWith("com.atsuishio.superbwarfare.entity.projectile.")
                 || "com.redabysslucia.dragonrise_reforge.entities.projectile.AAshellEntity".equals(projectileClass);
-        if (!smallCaliberShell) return;
+        if (!sbwProjectile) return;
         HitResult ray = event.getRayTraceResult();
         net.minecraft.world.entity.Entity projectile = event.getEntity();
         net.minecraft.world.entity.Entity attacker = projectile instanceof net.minecraft.world.entity.projectile.Projectile p

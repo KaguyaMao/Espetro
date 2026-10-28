@@ -2931,8 +2931,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
      */
     private void buildSkillColumn(GuiElement sectionRoot) {
         skillButtons.clear();
-        if (!TacticalRadialController.hasSkillSnapshot()
-            || !TacticalRadialController.isCommanderSnapshot()) {
+        // 只对本队指挥官显示技能列：isCommander 来自服务端 UnifiedDeployScreenPacket（权威）。
+        // 旧实现只信技能快照里的 isCommander，而该字段实际是「有技能入口」，且同步包只在
+        // 入服/当选时下发——被弹劾、换人、跨回合后客户端会残留 true，导致非指挥官也看到技能按钮。
+        if (!isCommander || !TacticalRadialController.hasSkillSnapshot()) {
             lastSkillSignature = Integer.MIN_VALUE;
             return;
         }

@@ -40,14 +40,6 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
     // 纹理原始尺寸（128x128 含透明留白，避免边缘黑边）
     private static final int TEX_W = 128, TEX_H = 128;
 
-    /** 选中态边框：进攻红 / 防守蓝（不透明，始终可见）。 */
-    private static final int ATTACK_BORDER = UiTheme.ATTACK;
-    private static final int DEFEND_BORDER = UiTheme.DEFEND;
-    private static final int ATTACK_HOVER = UiTheme.lerp(UiTheme.TEXT, UiTheme.ATTACK, 0.35f);
-    private static final int DEFEND_HOVER = UiTheme.lerp(UiTheme.TEXT, UiTheme.DEFEND, 0.35f);
-    /** 无描边哨兵：alpha 为 0，配合 UiTheme.visible(...) 判定。 */
-    private static final int BORDER_NONE = UiTheme.withAlpha(UiTheme.HAIRLINE, 0);
-
     /**
      * 固定顶栏几何：避免依赖 this.font.lineHeight（缩放/字库变化时会改 headerH，
      * 导致整页按钮纵坐标每秒抖动）。
@@ -143,15 +135,19 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             "选择后将进入编制投票阶段", UiTheme.TEXT_THIRD)
             .setTextScale(UiTheme.TYPE_MICRO));
 
-        // 两个图片 + 间距 + 两侧留白
-        int contentW = IMG_W * 2 + IMG_GAP;
+        // 保持双列16:9，在常见GUI缩放下缩小图片，避免固定432px内容越过屏幕边缘。
+        int imageGap = Math.min(IMG_GAP, Math.max(UiTheme.GAP_L, this.width / 12));
+        int imageW = Math.max(1, Math.min(IMG_W,
+            (this.width - UiTheme.GAP_L * 4 - imageGap) / 2));
+        int imageH = Math.max(1, imageW * IMG_H / IMG_W);
+        int contentW = imageW * 2 + imageGap;
         int panelW = Math.min(540, Math.max(contentW + 40, this.width - 36));
 
-        int panelH = IMG_H + 70;
+        int panelH = imageH + 70;
         int panelX = (this.width - panelW) / 2;
         int panelY = HEADER_H + Math.max(8, (this.height - HEADER_H - panelH) / 2);
 
-        int totalImgW = IMG_W * 2 + IMG_GAP;
+        int totalImgW = imageW * 2 + imageGap;
         int imgsStartX = panelX + (panelW - totalImgW) / 2;
         int imgY = panelY + 6;
 
@@ -159,7 +155,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
         int cardX = panelX;
         int cardY = imgY - 6;
         int cardW = panelW;
-        int cardH = IMG_H + 50;
+        int cardH = imageH + 50;
         root.addChild(EspetroAuiWidgets.card(cardX, cardY, cardW, cardH));
 
         ResourceLocation atkTex = resolveTexture(attackFactionImage, DEFAULT_ATTACK);
@@ -167,25 +163,25 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
 
         // 攻击方图片（左侧，16:9 横向）
         int attackImgX = imgsStartX;
-        attackButton = new TeamFactionImageButton(attackImgX, imgY, IMG_W, IMG_H, TEX_W, TEX_H, atkTex,
+        attackButton = new TeamFactionImageButton(attackImgX, imgY, imageW, imageH, TEX_W, TEX_H, atkTex,
             () -> { if (!"ATTACK".equals(lockedTeam)) TeamSelectionGui.selectTeam("ATTACK"); },
-            ATTACK_BORDER, ATTACK_HOVER);
+            UiTheme.ATTACK, UiTheme.ACCENT_LINE);
         root.addChild(attackButton);
 
         // 防守方图片（右侧，16:9 横向）
-        int defendImgX = imgsStartX + IMG_W + IMG_GAP;
-        defendButton = new TeamFactionImageButton(defendImgX, imgY, IMG_W, IMG_H, TEX_W, TEX_H, defTex,
+        int defendImgX = imgsStartX + imageW + imageGap;
+        defendButton = new TeamFactionImageButton(defendImgX, imgY, imageW, imageH, TEX_W, TEX_H, defTex,
             () -> { if (!"DEFEND".equals(lockedTeam)) TeamSelectionGui.selectTeam("DEFEND"); },
-            DEFEND_BORDER, DEFEND_HOVER);
+            UiTheme.DEFEND, UiTheme.ACCENT_LINE);
         root.addChild(defendButton);
 
         // 图片下方的文字标签
-        int labelY = imgY + IMG_H + 6;
-        root.addChild(EspetroAuiWidgets.centeredText(attackImgX, labelY, IMG_W,
+        int labelY = imgY + imageH + 6;
+        root.addChild(EspetroAuiWidgets.centeredText(attackImgX, labelY, imageW,
             attackName, UiTheme.ATTACK)
             .setTextScale(UiTheme.TYPE_HEADING)
             .setShadow(true));
-        root.addChild(EspetroAuiWidgets.centeredText(defendImgX, labelY, IMG_W,
+        root.addChild(EspetroAuiWidgets.centeredText(defendImgX, labelY, imageW,
             defendName, UiTheme.DEFEND)
             .setTextScale(UiTheme.TYPE_HEADING)
             .setShadow(true));
@@ -275,23 +271,23 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
     private void refreshSelectionBorders() {
         String team = resolveMyTeam();
         if (attackButton != null) {
-            attackButton.setSelectedBorderColor("ATTACK".equals(team) ? ATTACK_BORDER : BORDER_NONE);
+            attackButton.setSelectedBorderColor("ATTACK".equals(team) ? UiTheme.ACCENT_LINE : 0);
             if ("ATTACK".equals(lockedTeam)) {
-                attackButton.setBorderColor(ATTACK_BORDER);
-                attackButton.setHoverBorderColor(ATTACK_BORDER);
+                attackButton.setBorderColor(UiTheme.ATTACK);
+                attackButton.setHoverBorderColor(UiTheme.ATTACK);
             } else {
-                attackButton.setBorderColor(BORDER_NONE);
-                attackButton.setHoverBorderColor(ATTACK_HOVER);
+                attackButton.setBorderColor(UiTheme.HAIRLINE);
+                attackButton.setHoverBorderColor(UiTheme.ACCENT_LINE);
             }
         }
         if (defendButton != null) {
-            defendButton.setSelectedBorderColor("DEFEND".equals(team) ? DEFEND_BORDER : BORDER_NONE);
+            defendButton.setSelectedBorderColor("DEFEND".equals(team) ? UiTheme.ACCENT_LINE : 0);
             if ("DEFEND".equals(lockedTeam)) {
-                defendButton.setBorderColor(DEFEND_BORDER);
-                defendButton.setHoverBorderColor(DEFEND_BORDER);
+                defendButton.setBorderColor(UiTheme.DEFEND);
+                defendButton.setHoverBorderColor(UiTheme.DEFEND);
             } else {
-                defendButton.setBorderColor(BORDER_NONE);
-                defendButton.setHoverBorderColor(DEFEND_HOVER);
+                defendButton.setBorderColor(UiTheme.HAIRLINE);
+                defendButton.setHoverBorderColor(UiTheme.ACCENT_LINE);
             }
         }
     }
@@ -393,7 +389,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             this.action = action;
             this.borderColor = borderColor;
             this.hoverBorderColor = hoverBorderColor;
-            this.selectedBorderColor = BORDER_NONE;
+            this.selectedBorderColor = 0;
         }
 
         void setBorderColor(int c) { this.borderColor = c; }
@@ -416,7 +412,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             int bx = refX + getX();
             int by = refY + getY();
 
-            // 图片外圈：下沉槽位 + 圆角描边（选中时加辉光）。
+            // 图片外圈：直角槽位、细线角标；黄色只标记交互和当前选择。
             int frameX = bx - 3;
             int frameY = by - 3;
             int frameW = dispW + 6;
@@ -429,8 +425,10 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
                 : hasFocus() ? hoverBorderColor : borderColor;
             if (UiTheme.visible(outColor)) {
                 if (selected) {
-                    UiPaint.glow(graphics, frameX, frameY, frameW, frameH,
-                        UiTheme.RADIUS_CARD, outColor);
+                    UiPaint.accentBarBottom(graphics, frameX, frameY + frameH - 2,
+                        frameW, UiTheme.ACCENT);
+                    UiPaint.brackets(graphics, frameX - 2, frameY - 2, frameW + 4,
+                        frameH + 4, UiTheme.ACCENT_LINE);
                 }
                 UiPaint.strokeRoundRect(graphics, frameX, frameY, frameW, frameH,
                     UiTheme.RADIUS_CARD, outColor);

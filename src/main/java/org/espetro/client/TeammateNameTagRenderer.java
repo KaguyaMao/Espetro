@@ -12,6 +12,7 @@ import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.eventbus.api.Event;
 import org.espetro.client.gui.ClientGameState;
 import org.espetro.client.gui.ClientTacticalState;
+import org.espetro.client.gui.UiTheme;
 import org.espetro.team.TeamManager;
 
 /**
@@ -22,9 +23,6 @@ import org.espetro.team.TeamManager;
  * </ul>
  */
 public final class TeammateNameTagRenderer {
-
-    /** 主城名牌固定白色（无阵营着色）。 */
-    private static final int HUB_NAME_COLOR = 0xFFFFFF;
 
     private TeammateNameTagRenderer() {
     }
@@ -45,7 +43,7 @@ public final class TeammateNameTagRenderer {
         if (ClientGameState.getCurrentPhase().isLobbyLike()) {
             String name = target.getName().getString();
             event.setContent(Component.literal(name)
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(HUB_NAME_COLOR))));
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(UiTheme.WORLD_TEXT))));
             event.setResult(Event.Result.ALLOW);
             return;
         }

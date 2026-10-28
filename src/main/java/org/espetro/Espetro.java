@@ -303,6 +303,8 @@ public class Espetro {
                 GameStateManager.getInstance().onPlayerJoin(serverPlayer);
                 // 同步碰撞体积显示策略（F3+B）
                 org.espetro.network.HitboxPolicyController.syncToPlayer(serverPlayer);
+                // 同步"本机玩家是否为医疗兵"（倒地队友标识的渲染开关）
+                NetworkManager.sendMedicFlag(serverPlayer);
                 NetworkManager.NET.send(
                     net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> serverPlayer),
                     org.espetro.network.FortificationCatalogPacket.forPlayer(serverPlayer));

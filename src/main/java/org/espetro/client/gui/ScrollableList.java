@@ -15,7 +15,7 @@ public class ScrollableList extends GuiElement {
     private static final int SCROLLBAR_W = 4;
     private static final int MIN_HANDLE_H = 10;
     /** 行 hover 底色圆角（≤ 6，逐行扫描成本可控）。 */
-    private static final int ROW_RADIUS = 2;
+    private static final int ROW_RADIUS = UiTheme.RADIUS_CONTROL;
 
     private double scrollOffset = 0;
     private double scrollVelocity = 0;
@@ -156,7 +156,7 @@ public class ScrollableList extends GuiElement {
             boolean scrollable = maxScroll > 0;
             // 轨道：内凹圆角槽（SUNKEN），滑块：圆角胶囊。
             UiPaint.roundRect(graphics, trackX, trackY, SCROLLBAR_W, trackH,
-                SCROLLBAR_W / 2, UiTheme.SUNKEN);
+                UiTheme.RADIUS_INNER, UiTheme.SUNKEN);
 
             int handleH = scrollable
                 ? Math.max(MIN_HANDLE_H, (int) ((double) getHeight() / (getHeight() + maxScroll) * trackH))

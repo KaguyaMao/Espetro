@@ -604,9 +604,10 @@ public final class CommanderGovernanceManager {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
             if (p != null) {
                 name = p.getName().getString();
-                NetworkManager.sendCommanderSkillSync(p);
             }
         }
+        // 换任后全服重推技能同步（新指挥官拿到入口，旧指挥官立刻收回）
+        NetworkManager.syncCommanderSkillsToAll(server);
         NetworkManager.syncSquadsToTeam(team);
         NetworkManager.broadcastGovernanceState(this);
         Espetro.LOGGER.info("任命指挥官 {} 为 {} ({})", name, team, reason);
@@ -622,6 +623,8 @@ public final class CommanderGovernanceManager {
         }
         getTeam(team).commander = null;
         Espetro.LOGGER.info("清除 {} 指挥官 ({})", team, reason);
+        // 被弹劾/卸任的玩家客户端必须立刻收回技能入口
+        NetworkManager.syncCommanderSkillsToAll(Espetro.getServer());
     }
 
     /**

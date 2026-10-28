@@ -24,6 +24,9 @@ public class EspetroClient {
         net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus()
             .addListener(EspetroClient::onClientSetup);
 
+        org.espetro.client.gui.ClientUiCommands.initialize(
+            net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus());
+
         // 注册 FORGE 事件总线（Tick + HUD 渲染 + 隐藏玩家名字）
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onClientTick);

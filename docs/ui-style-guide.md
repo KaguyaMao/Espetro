@@ -1,85 +1,108 @@
-# Espetro UI 风格指南 — 「终末地」工业编辑风 · 暗色（Endfield Editorial / Dark）
+# Espetro UI — END-02 终末地工业风 / 亮暗双模式
 
-> 历史版本：`ui/tactical-glass-v1`（深色玻璃，已归档 `docs/archive/tactical-glass/`）；
-> 纸白版见提交 `f38fe650`。本文件描述当前**暗色**版本。
+参照《明日方舟：终末地》的工业终端视觉：纸白或石墨底、直角卡片、细线、编号与信号黄。
+上一版固定暗色的令牌、原语、控件和指南已保存到 `docs/archive/endfield-dark-v1/`。
+更早的 Tactical Glass 版本保留在 `docs/archive/tactical-glass/`。
+视觉参考：[终末地官方网站](https://endfield.gryphline.com/en-us)。
 
-## 1. 设计语言
+## 使用
 
-参照《明日方舟：终末地》：**黑玻璃底 + 冷白字 + 信号黄**，直角、发丝线、编号、刻度、贴边排版。
-整体像一台作战终端上的工程文件，而不是游戏 HUD；结构（图框、页头、卡片、按钮语义）
-完全沿用纸白版，只把"纸/墨"换成"黑玻璃/冷白"。
-
-| 原则 | 做法 |
+| 客户端指令 | 功能 |
 | --- | --- |
-| 暗面优先 | 全屏底是近黑渐变（`BACKDROP_TOP→BOTTOM`）+ 24px 白色方格 + 噪点；卡片是更亮一档的黑玻璃 |
-| 冷白文字 | 正文 `TEXT`(#F2F5F8)、次级 `TEXT_SECOND`(#B4BCC6)、微标签 `TEXT_THIRD`(#868E99) |
-| 信号黄只做信号 | `ACCENT`(#FFF500) 只用于 3–6px 方块、边线、选中条、进度块；不做大面积底色 |
-| 直角 | `RADIUS_*`/`CHAMFER_*` 全为 0；只有圆点、环形菜单允许圆弧 |
-| 发丝线 | `HAIRLINE`(14% 白)/`HAIRLINE_STRONG`(24% 白) 分隔一切；表格化、贴边 |
-| 编号与刻度 | 微标签带 1px 字距；`01 / HUB`、`END-01`、`CH 07`；屏幕四周有图框与刻度尺 |
-| 排版层级 | 微标签 0.8 → 正文 1.0 → 小标题 1.1 → 标题 1.25 → 数字 1.5 |
-| 硬阴影 | 卡片右下 3px 实心黑影（`UiPaint.card`），不是高斯模糊 |
+| `/esui theme light` | 纸白亮色 |
+| `/esui theme dark` | 石墨暗色（默认） |
+| `/esui theme toggle` | 亮暗互换 |
+| `/esui` 或 `/esui theme` | 当前主题与用法 |
 
-## 2. 令牌（`org.espetro.client.gui.UiTheme`）
+指令无需 OP，仅影响自己的客户端。切换立即生效；通过聊天返回原菜单时，首帧重建带颜色的控件。
+设置保存于游戏实例的 `config/espetro-ui.properties`（`theme=light` 或 `theme=dark`），客户端启动时载入。
+非法、损坏或无法读取的设置回退暗色并写日志。保存失败时当前主题仍生效，聊天提示无法保存。
+安装新版模组 jar 需要重启客户端；此后的主题切换不需要 `/reload` 或重启。
 
-- 底：`BACKDROP_TOP` #0A0C0E / `BACKDROP_BOTTOM` #111418（带 alpha）
-- 面：`SURFACE_0` #0D1013 / `CARD_TOP` #171B20 → `CARD_BOTTOM` #101419 / `SURFACE_2` #1E242A / `SURFACE_3` #2A3138 / `SUNKEN` #07090B
-- 字：`TEXT` #F2F5F8 / `TEXT_SECOND` #B4BCC6 / `TEXT_THIRD` #868E99 / `TEXT_DISABLED` #565E68
-- 反相块：`INK_FILL` #F2F5F8 + `ON_INK` #0A0C0E（主按钮、悬停反相、选中条）
-- 黄：`ACCENT` #FFF500 / `ACCENT_DIM` / `ACCENT_SOFT`(18% ) / `ACCENT_LINE` / `ACCENT_GLOW`
-- 暖强调：`GOLD` #FFE066（标题、数值、板块强调线 `GOLD_LINE`）
-- 语义：`ATTACK` #FF6B5E / `DEFEND` #5C8CFF / `POSITIVE` #57D38C / `WARNING` #FFC24B / `NEGATIVE` #FF5C5C / `PURPLE` #C08CFF / `SQUAD` #67A7FF
-- 度量：`ACCENT_BAR` 3、`TICK_LENGTH` 6、`PAD_CARD` 12、`CONTROL_HEIGHT` 20、`TYPE_*`、`LETTERSPACING_MICRO` 1
-- 动效：`MOTION_HOVER_MS` 90 / `MOTION_SELECT_MS` 120 / `MOTION_ENTER_MS` 160
+## 令牌与视觉
 
-## 3. 绘制原语（`UiPaint`）
+所有 ARGB 色值只放在 `client/gui/UiTheme.java`，绘制层允许 alpha/通道位运算掩码。
+亮暗模式共用几何、字号与布局；`setMode()` 更新语义色并递增 `revision()`。
+不要在其他类的 `static final` 字段或数组中缓存主题颜色。
 
-`chamfer` 系列（切角矩形，radius>0 时 45° 切角而非圆弧）、`card`（硬投影+黑玻璃+发丝边）、
-`accentCard`、`sunken`、`hairline`、`hairlineV`、`divider`、`frame`（图框）、`brackets`（四角 L 标）、
-`ticksH/ticksV`（刻度尺）、`grid`、`hatch`、`progress`（方块+刻度）、`glow`（黄框微光）、
-`backdrop`、`vignette`、`grain`、`label`（微标签）、`text/textCentered/textRight/textSpaced`。
+| 语义 | LIGHT 亮色 | DARK 暗色 |
+| --- | --- | --- |
+| 页底 `BACKDROP_TOP/BOTTOM` | #F2F2EC | #111410 |
+| 容器 `SURFACE_0` | #F0F0E9 | #191D18 |
+| 卡片 `CARD_TOP/BOTTOM` | #FAFAF4 | #22271F |
+| 悬停 `SURFACE_2` | #E8E9DF | #2D3329 |
+| 选中底 `SURFACE_3` | #DCDDD2 | #3B4235 |
+| 凹槽 `SUNKEN` | #E0E1D8 | #10140F |
+| 正文 `TEXT` | #171A16 | #F0F2E8 |
+| 次级 `TEXT_SECOND` | #4B5046 | #C0C6B8 |
+| 微标签 `TEXT_THIRD` | #62675C | #9CA591 |
+| 反相块 `INK_FILL / ON_INK` | 深墨 / 纸白 | 纸白 / 深墨 |
+| 信号图形 `ACCENT` | #FFE500 | #FFE500 |
+| 强调文字 `GOLD` | #6B5C00 | #FFE579 |
+| 攻 / 守 | #B23E33 / #2E58A6 | #FF6B5E / #5C8CFF |
+| 成功 / 警告 / 错误 | #256B42 / #865500 / #B22E32 | #57D38C / #FFC24B / #FF5C5C |
 
-> `retone()` 是文案色码重映射钩子：暗色下 Minecraft 原生色码（`§f` 白、`§7` 灰、`§e` 黄…）
-> 本身适合深底，因此当前为恒等映射；将来若再换浅色主题，只改这里一张映射表即可。
+- 平涂表面与短硬投影；不用渐变高光制造玻璃反射。
+- `RADIUS_* = 0`、`CHAMFER_* = 0`；细框 1px、强调条 3px、卡片内边距 12px。
+- 字号：微标签 0.8、正文 1.0、小标题 1.1、标题 1.25、数值 1.5。
+- 信号黄作图形和选中块，亮底强调文字必须用 `GOLD`。`readableText()` 也会保护原语里传入的黄色文字。
+- `contrastText()` 根据实际底色选择固定深墨或纸白，不随当前模式错误反转。
+- `WORLD_*` 用于世界名牌、地图标记、原版暗底提示等独立于页面底色的内容。
+- 白色遮罩图标随文字染色；需要保留原图颜色的图标放在固定 `ICON_PLATE` 上。
 
-## 4. 控件（`EspetroAuiWidgets`）
+## 绘制与控件契约
 
-- `panel/card`：黑玻璃 + 发丝边 + 可选强调条（顶部 2px 黄或左侧 3px 黄）
-- `button`：默认透明底 + 24% 白发丝边；悬停 → 亮实心块 + 深色字 + 底边 2px 黄；选中 → 信号黄块 + 深色字
-- `primaryButton`：亮实心块 + 深色字，悬停变黄块
-- `chip`：1px 边 + 语义色小方块 + 微标签
-- `stat`：上微标签、下大号数字
-- `bar`：4px 凹槽 + 方块填充 + 右上 1px 刻度
-- `sectionLabel`：微标签 + 右侧渐隐细线
-- `phase header`：左对齐 —— 左侧信号黄方块、第二行大标题、右上状态微标签、底部通栏发丝线
-- `Text` 支持 `setAlignRight` / `setSpacing` / `setTextScale`
+`UiTheme` 是唯一配色源。`UiPaint` 只读令牌，不判断模式；保留卡片、凹槽、框线、角标、刻度、进度和文本原语。
+`EspetroAuiWidgets` 保留原工厂、构造器、setter 与颜色别名；旧别名通过主题变更监听刷新。
 
-## 5. 屏幕骨架
+普通按钮使用细边与实色层，悬停有黄色边线，选中用黄色块和深墨字；禁用用凹槽底与弱字。
+主按钮使用反相块，悬停变黄色且保持深字。语义操作使用淡语义色底，避免同色字压同色实底。
+输入框采用直角凹槽与焦点描边，保留原版输入行为。
 
-所有阶段界面调用 `EspetroAuiWidgets.drawScreenShade()`：黑玻璃底 → 压暗 → 噪点 → `drawChrome()`。
-`drawChrome` 画 5px 内缩图框、四角 L 标、左右刻度尺、左上信号方块 + `ESPETRO OPS`、
-右上 `END-01`、左下 `CH 07 // SECURE`、右下模组版本号。**新界面不要再自己画全屏底**。
+旧数据文案仍可能携带 Minecraft 色码，必须经过 `UiPaint.themed()` / 文本原语：
+颜色转为当前语义令牌，保留粗体等格式，重置回传入基色；带字距文本也解析格式，不能逐字画出色码。
+原版聊天和原版 tooltip 保持其固定深底的颜色体系。
 
-主城 `HubScreen` 是「浮在世界上的一块黑玻璃」：只画卡片硬投影，不压大面积黑幕。
+## 覆盖与缓存
 
-### 5.1 战术面板：毛玻璃视野底
+- 阶段页、主城、队伍、攻守/地图/编制选择、揭晓、部署、职业、载具、指挥官投票、分数板与结算共享亮暗色板。
+- `AuiScreen` 在主题版本变化后的首帧重建控件树；不重新 `init()`，密码输入框对象与输入值保留。
+- 战术部署页的静态颜色缓存改为即时读取，职业、变体、小队、治理弹窗走统一文字原语。
+- 补给、兵力、教程、工事进度 HUD 读实时令牌；FOB 位图缓存跟随主题版本失效。
+- 地图照片与模糊世界底图用 `FROST_SCRIM` 做纸白/石墨处理。同步读回最多每 2500ms 一次，失败也节流；失败只画遮罩，不画占位网格。
+- 各轮盘槽/环/图标传入颜色由令牌提供，主题版本变化时刷新缓存。
 
-`UnifiedDeployScreen` 不再铺战术地图照片，改为 **截屏降采样模糊**：
+### 外部绘制边界
 
-- `FrostedBackdrop.draw()` 在界面内容之前调用，此时主帧缓冲里只有世界画面；
-- 每秒最多一次 `glReadPixels` 读主目标，CPU 块平均到 256×144（同时上下翻转），
-  上传 `DynamicTexture` 后用双线性放大铺满屏幕 → 近似高斯模糊；
-- 之上再压一层 `UiTheme.FROST_SCRIM`（`0x9A07090B`）和 3% 颗粒；
-- 图框由 `UnifiedDeployScreen#renderTerminalFrame` 画（细框 + 四角 L 标 + 侧边刻度 + 信号黄方块）。
+EsRadial 前置的中心、返回按钮、面包屑和标签 CSS 由 EsRadial 自绘，标签内容被其转成纯字符串，
+无法从 Espetro 完整替换为亮色。为保持它的固定白字可读，轮盘环底使用固定深色；本模组可控的强调色、图标色和槽状态跟随令牌。
+`com/example/hcrpoints/**` 被本 jar 排除，属于独立 EsPoints，修改它需要在对应项目构建。
+原版 Minecraft 菜单与第三方模组界面不属于此模组的控件树。
 
-**新界面不要每帧读回帧缓冲**：`FrostedBackdrop` 有 1s 节流，只有需要"透出世界"的页面才用。
-半透明分层令牌：`GLASS_PANEL`（板块/按钮 55%）、`GLASS_PANEL_SOFT`（输入框 36%）、`COLUMN_SCRIM`（90% 压暗）。
-卡片 `UiPaint.card()` 是**纯色平涂**（无渐变、无高光），不要再往卡片里叠半透明渐变，否则会重新出现"玻璃感"。
+## 验证
 
-## 6. 已知限制 / 待办
+自动验证覆盖两套模式的正文/次级文字对比度、反相与黄底文字、重复切换和全部动态颜色恢复；
+覆盖配置缺失、大小写、非法值、损坏内容、不可读路径、保存与失败清理。
+构建参数：JDK 21，离线，`-Papricityui_version=1.2.6`，
+`-PauratipJar=D:\minecraft\Java\Projects\AuraTip\build\libs\auratip-forge-1.20.1-1.1.3-beta-espetro.1.jar`。
 
-- `EsRadial` 轮盘（`RadioRadialController`、`TacticalRadialController`、`VehicleWheelController`）
-  的样式由 **EsRadial 模组**自己绘制，本模组只提供图标与文案，暂不受本风格影响。
-- `UnifiedDeployScreen` 内部仍有历史布局假设（三栏固定宽度、状态栏 13px），改版优先调列宽/留白。
-- HUD 类（`FobSupplyHud`、`OutpostSupplyHud`、`VehicleSupplyHud`、`TutorialHudOverlay`）
-  已切到黑玻璃卡；若压在亮色地形（雪地/沙漠）上可读性不足，优先加 `sunken` 底而不是改字色。
+游戏内仍需实景核对：J 部署页、地图投票、组队密码框、FOB/载具 HUD，分别执行 light/dark/toggle，
+检查聊天返回、窗口缩放和资源重载；实际客户端画面未作为自动测试结果。
+
+### 2026-10-19 验证记录
+
+- `compileJava`、`build`、`publishToMavenLocal` 成功；构建日志 `build/ui-final-build.log`。
+- 最终限定 UI 套件：32 项通过，0 失败；其中新增主题/格式/配置 17 项。
+- jar ZIP 完整性及命令、配置、主题、屏幕主类打包检查通过，ApricityUI 元数据为 1.2.6。
+- 可安装产物：`build/libs/espetro-1.1.3-l.jar`，未向运行中的 Minecraft 实例部署。
+- 此次未启动游戏做实景截图验收。
+
+现有全量测试的两类问题未修改：
+`VehicleSeatAccessPolicyTest` 引用已经移除的 `legacyVehicleCrewSeatCount`，阻断全量测试编译；
+`ResupplyRadialControllerTest` 两个旧分页断言按 5 项分页，而现有实现 `PAGE_SIZE=512` 为单页。
+首次扩展回归为 35 项中 33 项通过、上述两项失败；最终通过的 32 项不包含该旧分页测试类。
+
+重现限定验证可在离线构建参数前添加 `-I tools/ui-tests.init.gradle`，
+并使用 `test --tests '*UiThemeTest' --tests '*UiPaintTextTest' --tests '*ClientUiPreferencesTest'`
+运行新增套件。初始化脚本只对显式调用生效，不改变正常项目配置；
+它限定 UI 测试源，并关闭本机被 Windows 内存映射锁住的 Gradle 增量快照写入。

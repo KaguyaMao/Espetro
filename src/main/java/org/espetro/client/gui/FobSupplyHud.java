@@ -153,6 +153,7 @@ public final class FobSupplyHud {
         private boolean resourcesLoaded;
         private boolean dirty = true;
         private boolean failed;
+        private long themeRevision = -1L;
 
         private SupplyElement() {
             super(HUD_X, HUD_Y, PANEL_WIDTH, PANEL_HEIGHT);
@@ -174,6 +175,10 @@ public final class FobSupplyHud {
         public void draw(GuiGraphics graphics, int parentX, int parentY, int drawWidth,
                          int drawHeight, int mouseX, int mouseY, float partialTick) {
             if (!isVisible()) return;
+            if (themeRevision != UiTheme.revision()) {
+                themeRevision = UiTheme.revision();
+                dirty = true;
+            }
             if (dirty && !failed) rebuildTexture();
             int panelX = parentX + getX();
             int panelY = parentY + getY();
@@ -184,6 +189,14 @@ public final class FobSupplyHud {
             float healthRatio = radioMaxHealth <= 0 ? 0f : radioHealth / (float) radioMaxHealth;
             UiPaint.progress(graphics, panelX + BAR_X, panelY + BAR_Y,
                 BAR_WIDTH, BAR_HEIGHT, healthRatio, UiTheme.ACCENT);
+
+            // Keep source sprite colors legible on either paper or ink surfaces.
+            graphics.fill(panelX + AMMO_ICON_X, panelY + AMMO_ICON_Y,
+                panelX + AMMO_ICON_X + ICON_SIZE, panelY + AMMO_ICON_Y + ICON_SIZE,
+                UiTheme.ICON_PLATE);
+            graphics.fill(panelX + CONSTRUCTION_ICON_X, panelY + CONSTRUCTION_ICON_Y,
+                panelX + CONSTRUCTION_ICON_X + ICON_SIZE, panelY + CONSTRUCTION_ICON_Y + ICON_SIZE,
+                UiTheme.ICON_PLATE);
 
             if (textureLocation != null) {
                 HudRenderState.begin(graphics);
@@ -303,7 +316,7 @@ public final class FobSupplyHud {
         }
 
         private void drawFallbackIcon(int x, int y, boolean constructionType) {
-            int symbol = argbToAbgr(constructionType ? UiTheme.WARNING : UiTheme.ATTACK);
+            int symbol = argbToAbgr(constructionType ? UiTheme.WORLD_WARNING : UiTheme.WORLD_NEGATIVE);
             int center = ICON_SIZE / 2;
             int radius = Math.max(2, (ICON_SIZE - 2) / 2);
             for (int row = 0; row < ICON_SIZE; row++) {
@@ -312,7 +325,7 @@ public final class FobSupplyHud {
                     int dy = row - center;
                     if (dx * dx + dy * dy <= radius * radius) {
                         pixels.setPixelRGBA(x + column, y + row,
-                            argbToAbgr(UiTheme.TEXT_ON_ACCENT));
+                            argbToAbgr(UiTheme.ICON_PLATE));
                     }
                 }
             }
@@ -339,9 +352,9 @@ public final class FobSupplyHud {
 
         /** 动态纹理不可用时的兜底：仍按新风格画两个语义色图标底，卡片与数值照常绘制。 */
         private void drawFallbackIcons(GuiGraphics graphics, int x, int y) {
-            drawFallbackIconMark(graphics, x + AMMO_ICON_X, y + AMMO_ICON_Y, UiTheme.ATTACK);
+            drawFallbackIconMark(graphics, x + AMMO_ICON_X, y + AMMO_ICON_Y, UiTheme.WORLD_NEGATIVE);
             drawFallbackIconMark(graphics, x + CONSTRUCTION_ICON_X, y + CONSTRUCTION_ICON_Y,
-                UiTheme.WARNING);
+                UiTheme.WORLD_WARNING);
         }
 
         private void drawFallbackIconMark(GuiGraphics graphics, int x, int y, int accent) {
