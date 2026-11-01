@@ -1401,7 +1401,14 @@ public class VehicleManager {
 
     /** Team-filterable map data; unloaded vehicles use last known positions without loading chunks. */
     public record TacticalVehicleSnapshot(UUID id, String type, String name, String team,
-            double x, double z, float yaw, int passengers, int squadId, boolean loaded) { }
+            double x, double z, float yaw, int passengers, int squadId, boolean loaded,
+            @Nullable String mapIcon) {
+        /** 兼容不含地图图标字段的旧调用点。 */
+        public TacticalVehicleSnapshot(UUID id, String type, String name, String team,
+                double x, double z, float yaw, int passengers, int squadId, boolean loaded) {
+            this(id, type, name, team, x, z, yaw, passengers, squadId, loaded, null);
+        }
+    }
     public List<TacticalVehicleSnapshot> tacticalVehicleSnapshots(ServerLevel level) {
         List<TacticalVehicleSnapshot> result = new ArrayList<>();
         for (var entry : activeVehicleData.entrySet()) {
@@ -1419,10 +1426,24 @@ public class VehicleManager {
                 vehicle == null ? position.getX() + .5 : vehicle.getX(),
                 vehicle == null ? position.getZ() + .5 : vehicle.getZ(),
                 vehicle == null ? 0 : vehicle.getYRot(), passengers,
-                vehicle == null ? -1 : VehicleSquadOwnership.getSquadId(vehicle), vehicle != null));
+                vehicle == null ? -1 : VehicleSquadOwnership.getSquadId(vehicle), vehicle != null,
+                mapIconFor(data)));
         }
         result.sort(Comparator.comparing(v -> v.id().toString()));
         return List.copyOf(result);
+    }
+
+    /**
+     * 取该载具类型在编制里配置的地图图标文件名；配置缺失或已清空时返回 null，
+     * 由 EsPoints 客户端回退到车型关键字图标表。载具实体未加载时同样可用。
+     */
+    @Nullable
+    private static String mapIconFor(ActiveVehicleData data) {
+        if (data.vehicleType() == null) return null;
+        var config = VehicleConfig.getVehicleConfig(data.factionId(), data.vehicleType());
+        if (config == null || config.mapIcon == null) return null;
+        String icon = config.mapIcon.trim();
+        return icon.isEmpty() ? null : icon;
     }
 
     /**

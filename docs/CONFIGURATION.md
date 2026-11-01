@@ -729,6 +729,24 @@ Radio 能足额支付职业变体的 `ammo_cost` 时才会提交；满弹或库�
 | `capacity` | 按类型 | 弹药与建材共享总容量；战斗载具默认 500、补给载具默认 3000、其它载具默认 300 |
 | `initial_deploy_delay_seconds.attack` | 0 | 此编制作为进攻方时，从布防阶段开始到系统自动生成首批载具的等待秒数 |
 | `initial_deploy_delay_seconds.defend` | 0 | 此编制作为防守方时，从布防阶段开始到系统自动生成首批载具的等待秒数 |
+| `map_icon` | 空（按车型关键字兜底） | 该车型在战术地图上使用的图标**文件名**，例如 `"map_trackedheavyifv.png"` |
+
+#### 载具地图图标 `map_icon`
+
+`vehicles.<vehicle_type>` 可选的 `map_icon` 字段用于指定该车型在己方战术地图上显示的图标：
+
+- 只写**文件名**，不要写路径或命名空间：`"map_icon": "map_trackedheavyifv.png"`。
+- 客户端只会从 `espoints:textures/gui/mark/friendly/` 目录取图，合法格式为 `[a-z0-9_]+\.png`（小写字母、数字、下划线）。
+- 可选文件名以 EsPoints 的 `assets/espoints/textures/gui/mark/friendly/` 目录为准，例如
+  `map_tank.png`、`map_ifv.png`、`map_trackedifv.png`、`map_trackedheavyifv.png`、`map_apc.png`、
+  `map_trackedapc.png`、`map_jeep.png`、`map_jeep_antitank.png`、`map_jeep_turret.png`、
+  `map_truck_logistics.png`、`map_truck_transport.png`、`map_truck_antiair.png`、
+  `map_transporthelo.png`、`map_attackhelo.png`、`map_uav.png`、`map_antiair.png`、`map_boat.png`、
+  `map_motorcycle.png`、`map_genericinfantry.png` 以及 `t_map_*.png` 系列。
+- `map_icon` 缺失、为空、格式非法，或对应贴图不存在时，客户端自动回退到旧的关键字图标表（坦克/步战/APC/卡车/直升机……），不会显示紫黑格，也不会崩。
+- 服务端只在`编制 JSON → 载具配置 → 战术地图同步包`之间透传这个文件名，不做任何贴图校验；改图标只影响客户端显示，不影响载具实体与平衡。
+
+`map_icon` 是随 EsPoints 协议版本 19 一起新增的同步字段：只升级 Espetro 不升级 EsPoints（或反之）会被握手直接拒绝。
 
 编制文件不再保存部署坐标。部署位置完全由获胜地图的 `VehSpawn.json` 决定。
 布防阶段开始时为每个类型设置首次部署倒计时；倒计时结束后，系统按 `entity` 数组与

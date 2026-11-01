@@ -3,6 +3,7 @@ package org.espetro.api;
 import net.minecraft.server.level.ServerPlayer;
 import org.espetro.bastion.BastionData;
 import org.espetro.bastion.BastionManager;
+import org.espetro.bastion.FortificationManager;
 import org.espetro.Espetro;
 import org.espetro.team.CommanderSkillManager;
 import org.espetro.team.ClassCountManager;
@@ -383,6 +384,14 @@ public class EspetroAPI {
     }
 
     /**
+     * 返回战术地图使用的固定武器快照（{@code fixed_weapon.enabled} 的工事），
+     * 不遍历世界实体，也不会加载区块。
+     */
+    public static List<TacticalMapStateSnapshot.FixedWeaponSnapshot> getFixedWeapons() {
+        return getTacticalMapStateSnapshot().fixedWeapons();
+    }
+
+    /**
      * 返回战术地图使用的载具补给站快照，不遍历世界实体，也不会加载区块。
      */
     public static List<VehicleManager.SupplyStationSnapshot> getVehicleSupplyStations() {
@@ -440,11 +449,25 @@ public class EspetroAPI {
                     station.x(), station.y(), station.z()))
                 .sorted(java.util.Comparator.comparing(snapshot -> snapshot.id().toString()))
                 .toList();
+        // 固定武器：只含 fixed_weapon.enabled 的已建成工事，判定复用 FortificationManager。
+        List<TacticalMapStateSnapshot.FixedWeaponSnapshot> fixedWeapons =
+            FortificationManager.getInstance().placedFixedWeapons().stream()
+                .map(weapon -> new TacticalMapStateSnapshot.FixedWeaponSnapshot(
+                    // 短且稳定的客户端键：工事 id + 方块位置（维度由 dimension 字段承载）。
+                    // 这样即使 id 用满 128 字符也不会超出包内 128 字符上限。
+                    weapon.fortId() + "@" + weapon.pos().asLong(),
+                    weapon.fortId(), weapon.team(), weapon.dimension(),
+                    weapon.pos().getX(), weapon.pos().getY(), weapon.pos().getZ(),
+                    weapon.fortId(), weapon.mapIcon()))
+                .sorted(java.util.Comparator.comparing(
+                    TacticalMapStateSnapshot.FixedWeaponSnapshot::id))
+                .toList();
 
         tacticalSnapshotSession = session;
         tacticalRevision++;
         lastTacticalSnapshot = new TacticalMapStateSnapshot(
-            tacticalRevision, session, structures, rallies, teamBases, deployPoints, stations);
+            tacticalRevision, session, structures, rallies, teamBases, deployPoints, stations,
+            fixedWeapons);
         tacticalBuiltRevision = tacticalDirtyRevision;
         return lastTacticalSnapshot;
     }
