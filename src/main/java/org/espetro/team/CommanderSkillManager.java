@@ -260,6 +260,12 @@ public class CommanderSkillManager {
         return beginArtilleryTargetSelection(commander, EspetroCommanderSkills.DEFAULT_ARTILLERY_SKILL_ID);
     }
 
+    /** A request approval must not consume a different skill's outstanding map selection. */
+    public boolean hasConflictingPendingTarget(UUID playerId, String skillId) {
+        String pending = pendingTargetSkillIds.get(playerId);
+        return pending != null && !pending.equals(skillId);
+    }
+
     public boolean beginArtilleryTargetSelection(ServerPlayer commander, String skillId) {
         if (commander == null) {
             return false;

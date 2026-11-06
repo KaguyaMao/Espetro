@@ -88,6 +88,10 @@ public class Espetro {
     public static Object KEY_FORT_ROTATE; // R - 工事预览顺时针旋转 90°
 
     public Espetro() {
+        net.minecraftforge.fml.ModLoadingContext.get().registerConfig(
+            net.minecraftforge.fml.config.ModConfig.Type.SERVER,
+            org.espetro.support.FireRequestConfig.SPEC, "espetro-fire-requests-server.toml");
+        org.espetro.support.FireRequestNetwork.register();
         ensureKubeJSDefaultScriptsIfLoaded();
         org.espetro.debug.EspetroDebugRules.register();
         // SERVER 类型（而非 COMMON）：载具交互/白名单在客户端也有一半判定，

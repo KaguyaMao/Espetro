@@ -66,5 +66,6 @@
   "tutorial.msg.complete": "§aTutorial finished.",
   "tutorial.msg.skipped": "§eTutorial skipped for this session.",
   "tutorial.msg.skip_disabled": "§cSkipping is disabled.",
-  "tutorial.msg.disabled": "§cTutorials are disabled."
+  "tutorial.msg.disabled": "§cTutorials are disabled.",
+  "key.espetro.fire_requests": "Open fire requests and approvals"
 }
