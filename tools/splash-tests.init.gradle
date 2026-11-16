@@ -1,0 +1,20 @@
+// Startup-video regression suite; avoids unrelated stale test APIs elsewhere.
+gradle.projectsEvaluated {
+    rootProject.tasks.withType(JavaCompile).configureEach {
+        options.incremental = false
+    }
+    rootProject.tasks.named('compileTestJava').configure {
+        setSource(rootProject.fileTree('src/test/java') {
+            include 'org/espetro/client/splash/**'
+        })
+    }
+    rootProject.tasks.named('test').configure {
+        filter { includeTestsMatching 'org.espetro.client.splash.*' }
+        maxParallelForks = 1
+        // Use the already-cached Minecraft LWJGL natives, without adding mod dependencies.
+        classpath += rootProject.files(rootProject.fileTree(
+            new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1/org.lwjgl')) {
+            include '**/3.3.1/**/*-natives-windows.jar'
+        })
+    }
+}

@@ -101,6 +101,35 @@ public class EspetroAPI {
     }
 
     /**
+     * Notify Espetro that one whole capture-point batch has been completed.
+     *
+     * <p>用于抢滩登陆「前哨载具出生点」：地图在 {@code VehSpawn.json} 里用
+     * {@code outpost_spawn_points} + {@code outpost_activate_after_batch} 声明，
+     * 到达指定批次后由 {@link org.espetro.vehicle.OutpostSpawnGate} 放行。</p>
+     *
+     * @param batch         刚完成的批次号（从 1 开始）
+     * @param capturingTeam ATTACK / DEFEND
+     */
+    public static boolean onCaptureBatchCompleted(int batch, String capturingTeam) {
+        org.espetro.vehicle.OutpostSpawnGate.onBatchCompleted(batch);
+        net.minecraft.server.MinecraftServer server =
+            net.minecraftforge.server.ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+            return false;
+        }
+        Optional<net.minecraft.server.level.ServerLevel> level = getActiveBattlefieldLevel(server);
+        if (level.isEmpty()) {
+            return false;
+        }
+        int spawned = org.espetro.vehicle.VehicleManager.getInstance()
+            .spawnOutpostSupplyStations(level.get(), capturingTeam);
+        org.espetro.Espetro.LOGGER.info(
+            "批次 {} 完成（{}），抢滩前哨载具点已启用，前哨坑补给站: {} 个",
+            batch, capturingTeam, spawned);
+        return true;
+    }
+
+    /**
      * Notify Espetro that an owned capture point has just become neutral.
      * Both values may use ATTACK/DEFEND or Espetro scoreboard team IDs. The
      * attacking value may be null; the old owner's opposing side is then used.

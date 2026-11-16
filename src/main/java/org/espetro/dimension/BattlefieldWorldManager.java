@@ -29,6 +29,7 @@ import org.espetro.bastion.FortificationConfig;
 import org.espetro.mapconfig.ActiveMapConfig;
 import org.espetro.mapconfig.BattlefieldContext;
 import org.espetro.mapconfig.ExternalConfigBootstrap;
+import org.espetro.naval.AmphibiousDeployment;
 import org.espetro.vehicle.VehicleManager;
 
 import javax.annotation.Nullable;
@@ -306,6 +307,7 @@ public final class BattlefieldWorldManager {
      * directory. EsWorld is never written.
      */
     public void cleanupBattlefield(MinecraftServer server, @Nullable ActiveMapConfig map, Runnable onDone) {
+        AmphibiousDeployment.reset();
         cleanupBattlefield(server, map, ignored -> {
             if (onDone != null) {
                 onDone.run();
@@ -450,6 +452,8 @@ public final class BattlefieldWorldManager {
             addSpawnArea(map.spawnPoints.attack, output);
             addSpawnArea(map.spawnPoints.defend, output);
         }
+        // 两栖：舰船占用的区块一起预载，避免粘贴时同步生成区块。
+        AmphibiousDeployment.collectShipChunks(map, output);
         if (map.vehSpawn == null) {
             return;
         }
@@ -507,7 +511,21 @@ public final class BattlefieldWorldManager {
             return;
         }
 
+        // 两栖登陆：激活前粘贴舰船并合并载具点，激活后覆盖攻方出生点。
+        try {
+            AmphibiousDeployment.prepare(level.getServer(), level, map);
+            AmphibiousDeployment.applyData(map);
+        } catch (Exception e) {
+            Espetro.LOGGER.error("两栖舰船部署失败，按普通侵攻运行", e);
+            AmphibiousDeployment.reset();
+        }
         BattlefieldContext.activate(map);
+        try {
+            AmphibiousDeployment.applySpawnPoint();
+        } catch (Exception e) {
+            Espetro.LOGGER.error("两栖出生点覆盖失败", e);
+            AmphibiousDeployment.reset();
+        }
         lastLoaded = map;
         // 部署点弹药箱与主重生点补给站延迟到玩家进入战场后再放置
         // （与初始载具刷新队列同条件，避免生成时客户端区块未加载导致实体丢失）。
@@ -634,7 +652,12 @@ public final class BattlefieldWorldManager {
         if (level == null) {
             return null;
         }
+        evacuateToHub(server, level);
+        return unregisterLevel(server, level, key);
+    }
 
+    /** 卸载维度前把里面的玩家送回主城，并把重生点写回主城。 */
+    private static void evacuateToHub(MinecraftServer server, ServerLevel level) {
         BlockPos hubSpawn = server.overworld().getSharedSpawnPos();
         for (var player : new ArrayList<>(level.players())) {
             // 战场即将卸载：重生点必须写回主城，否则下次复活/登录会指向已移除的维度
@@ -642,7 +665,9 @@ public final class BattlefieldWorldManager {
             player.teleportTo(server.overworld(),
                 hubSpawn.getX() + 0.5, hubSpawn.getY(), hubSpawn.getZ() + 0.5, 0f, 0f);
         }
+    }
 
+    private ServerLevel unregisterLevel(MinecraftServer server, ServerLevel level, ResourceKey<Level> key) {
         MinecraftForge.EVENT_BUS.post(new LevelEvent.Unload(level));
         Map<ResourceKey<Level>, ServerLevel> levels = server.forgeGetWorldMap();
         if (levels.get(key) == level) {
@@ -654,6 +679,84 @@ public final class BattlefieldWorldManager {
         level.invalidateCaps();
         Espetro.LOGGER.info("已从服务器 Tick 列表摘除可丢弃战场维度: {}", key.location());
         return level;
+    }
+
+    // ===================== 地图编辑模式支持 =====================
+    // 编辑模式复用战场的"拷模板 → 挂载 → 卸载 → 删档"管线，只是生命周期由
+    // MapEditManager 驱动，因此这里把需要的私有能力以包内可见的方式暴露出来。
+
+    /** 编辑模式独占锁：与战场切图共用 busy，避免两边同时改维度目录。 */
+    public boolean acquireEditorLock() {
+        return busy.compareAndSet(false, true);
+    }
+
+    public void releaseEditorLock() {
+        busy.set(false);
+    }
+
+    static java.util.concurrent.ExecutorService ioExecutor() {
+        return IO;
+    }
+
+    @Nullable
+    ServerLevel mountEditorDimension(MinecraftServer server, ResourceKey<Level> key) {
+        return createServerLevel(server, key);
+    }
+
+    Path editorDimensionDirectory(MinecraftServer server, ResourceKey<Level> key) {
+        return dimensionDirectory(server, key);
+    }
+
+    Result copyTemplateForEditor(ActiveMapConfig map, Path dimPath, Path tempPath) {
+        return copyTemplate(map, dimPath, tempPath);
+    }
+
+    /** 保存编辑：先把玩家送回主城并强制刷盘，再摘除维度（不再触发一次保存）。 */
+    @Nullable
+    ServerLevel detachEditorForSave(MinecraftServer server, ResourceKey<Level> key) {
+        ServerLevel level = server.getLevel(key);
+        if (level == null) {
+            return null;
+        }
+        evacuateToHub(server, level);
+        try {
+            level.save(null, true, false);
+            Espetro.LOGGER.info("编辑维度已刷盘: {}", key.location());
+        } catch (Exception e) {
+            Espetro.LOGGER.error("编辑维度刷盘失败: {}", key.location(), e);
+        }
+        return unregisterLevel(server, level, key);
+    }
+
+    /** 放弃编辑：不保存，直接摘除维度。 */
+    @Nullable
+    ServerLevel detachEditorWithoutSave(MinecraftServer server, ResourceKey<Level> key) {
+        ServerLevel level = server.getLevel(key);
+        if (level == null) {
+            return null;
+        }
+        evacuateToHub(server, level);
+        return unregisterLevel(server, level, key);
+    }
+
+    Result closeEditorLevel(@Nullable ServerLevel level) {
+        return closeDiscardedLevel(level);
+    }
+
+    Result deleteEditorDirectory(@Nullable ServerLevel level, Path dimPath) {
+        return discardAndDelete(level, dimPath, importingPath(dimPath));
+    }
+
+    static Path importingPathFor(Path dimPath) {
+        return importingPath(dimPath);
+    }
+
+    static void copyEditorTree(Path source, Path target) throws IOException {
+        copyDirectory(source, target);
+    }
+
+    static void deleteEditorTree(Path path) throws IOException {
+        deleteRecursively(path);
     }
 
     private static void removeBorderDelegate(MinecraftServer server, ServerLevel level) {

@@ -99,14 +99,10 @@ final class SquadNameField extends GuiElement {
 
         int bx = x + getX();
         int by = y + getY();
-        // 内凹输入框：圆角 2 深色内凹底，聚焦时换强调色描边（不再用直角底 + 直角外框）。
-        UiPaint.sunken(graphics, bx, by, getWidth(), getHeight(), UiTheme.RADIUS_INNER);
-        UiPaint.strokeRoundRect(graphics, bx, by, getWidth(), getHeight(), UiTheme.RADIUS_INNER,
-            active ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE_STRONG);
-        if (active) {
-            UiPaint.roundRect(graphics, bx + 1, by + 1, getWidth() - 2, getHeight() - 2,
-                UiTheme.RADIUS_INNER, UiTheme.withAlpha(UiTheme.ACCENT, 0x14));
-        }
+        // 输入槽仅通过透明度区分聚焦与悬停，保留文字和光标作为交互线索。
+        UiPaint.glassPanel(graphics, bx, by, getWidth(), getHeight(),
+            active ? UiTheme.CONTROL_SELECTED
+                : hasFocus() ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
 
         String drawn = value.isEmpty() ? placeholder : value;
         int color = value.isEmpty() ? UiTheme.TEXT_THIRD : UiTheme.TEXT;

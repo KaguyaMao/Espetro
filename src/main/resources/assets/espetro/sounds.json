@@ -1,0 +1,33 @@
+{
+  "splash_audio": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "splash/audio"
+      }
+    ]
+  },
+  "splash_a": {
+    "category": "master",
+    "sounds": [
+      "splash/audio"
+    ]
+  },
+  "splash_b": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "espetro:splash/audio"
+      }
+    ]
+  },
+  "splash_c": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "splash/audio",
+        "stream": true
+      }
+    ]
+  }
+}

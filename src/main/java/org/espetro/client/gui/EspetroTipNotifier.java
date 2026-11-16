@@ -125,12 +125,12 @@ public final class EspetroTipNotifier {
                     // 不设置 animationFrom/To，使用 offset 动画，避免覆盖 RIGHT_CENTER 停靠点
                     visual.getClass().getMethod("themeColor", String.class)
                         .invoke(visual, UiTheme.hex(error ? UiTheme.NEGATIVE : UiTheme.GOLD));
-                    visual.getClass().getMethod("stripeWidth", int.class).invoke(visual, 3);
+                    visual.getClass().getMethod("stripeWidth", int.class).invoke(visual, 0);
                     Object solid = Enum.valueOf(
                         (Class<Enum>) bgTypeClz.asSubclass(Enum.class), "SOLID");
                     visual.getClass()
                         .getMethod("background", bgTypeClz, List.class, int.class)
-                        .invoke(visual, solid, List.of(UiTheme.hex(UiTheme.CARD_TOP)), 0);
+                        .invoke(visual, solid, List.of(UiTheme.hex(UiTheme.GLASS_PANEL)), 0);
                     visual.getClass().getMethod("backgroundRounded", boolean.class)
                         .invoke(visual, false);
                 } catch (ReflectiveOperationException e) {

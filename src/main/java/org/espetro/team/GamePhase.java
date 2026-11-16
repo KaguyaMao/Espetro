@@ -26,6 +26,8 @@ public enum GamePhase {
     ATTACK_COMMANDER_VOTE("攻方指挥官投票"),
     DEFEND_FACTION_SELECT("守方编制选择"),
     ATTACK_FACTION_SELECT("攻方编制选择"),
+    /** 地图已指定某一方编制时的展示页（不投票，5s）。 */
+    FACTION_LOCK_REVEAL("编制指定展示"),
     FACTION_REVEAL("双方编制揭示"),
     DEPLOYING("部署阶段"),
     BATTLE("对战开始"),

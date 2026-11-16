@@ -26,11 +26,15 @@
     "dragonrise.DragonVehicleDeployerIdleClearMixin"
   ],
   "client": [
+    "client.EsRadialGlassMixin",
     "sbw.ClickDismountMixin",
     "sbw.MinecraftSeatMixin",
     "sbw.VehicleChangeSeatDelayMixin",
     "client.ClientLevelEntityRetryMixin",
-    "client.ClientLevelEntityRetryAccessor"
+    "client.ClientLevelEntityRetryAccessor",
+    "client.SplashBufferSwapMixin",
+    "client.SplashStartupReloadMixin",
+    "client.SoundEngineStateAccessor"
   ],
   "injectors": {
     "defaultRequire": 0

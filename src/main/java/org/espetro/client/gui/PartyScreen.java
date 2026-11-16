@@ -35,10 +35,8 @@ public final class PartyScreen extends EspetroMenuScreen {
 
     @Override
     protected void renderBeforeMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // 组队匹配页没有地图可露出：整屏一块深灰实色（不是玻璃渐变），
-        // 只保留终端风图框/刻度，避免"没有背景"的空洞感。
-        graphics.fill(0, 0, this.width, this.height, UiTheme.SOLID_PAGE);
-        EspetroAuiWidgets.drawChrome(graphics, this.width, this.height);
+        // Shared Aui host supplies the blurred world/menu backdrop.
+        super.renderBeforeMenu(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
@@ -116,7 +114,7 @@ public final class PartyScreen extends EspetroMenuScreen {
 
             EspetroAuiWidgets.Text nameLine = EspetroAuiWidgets.text(panelX + 16, listY,
                 EspetroAuiWidgets.trimToWidth(lockIcon + nameText + pwIcon + "  " + infoText, listW - 120),
-                isMyParty ? UiTheme.ACCENT : UiTheme.TEXT);
+                UiTheme.TEXT);
             nameLine.setShadow(true);
             root.addChild(nameLine);
 
@@ -197,11 +195,10 @@ public final class PartyScreen extends EspetroMenuScreen {
             int bh = getHeight();
             if (mine) {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CONTROL,
-                    UiTheme.ACCENT_SOFT);
-                UiPaint.accentBarLeft(graphics, bx + 1, by + 2, bh - 4, UiTheme.ACCENT);
+                    UiTheme.CONTROL_SELECTED);
             } else if (mouseX >= bx && mouseX < bx + bw && mouseY >= by && mouseY < by + bh) {
                 UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CONTROL,
-                    UiTheme.SURFACE_2);
+                    UiTheme.CONTROL_HOVER);
             }
         }
     }
@@ -244,9 +241,9 @@ public final class PartyScreen extends EspetroMenuScreen {
         int y = field.getY() - UiTheme.HAIRLINE_WIDTH;
         int w = field.getWidth() + UiTheme.GAP_XS * 2;
         int h = field.getHeight() + UiTheme.HAIRLINE_WIDTH * 2;
-        UiPaint.sunken(graphics, x, y, w, h, UiTheme.RADIUS_CONTROL);
-        UiPaint.frame(graphics, x, y, w, h,
-            field.isFocused() ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE_STRONG);
+        UiPaint.glassPanel(graphics, x, y, w, h,
+            field.isFocused() ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
+
         field.render(graphics, mouseX, mouseY, partialTick);
     }
 

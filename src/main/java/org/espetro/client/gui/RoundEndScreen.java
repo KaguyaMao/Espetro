@@ -94,10 +94,8 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         int resultW = Math.min(620, Math.max(1, width - UiTheme.GAP_L * 2));
         int resultX = (width - resultW) / 2;
         int resultY = Math.max(24, (int) (height * 0.12f));
-        UiPaint.label(g, "END / ROUND REPORT", resultX + UiTheme.GAP_M, resultY,
-            UiTheme.TEXT_THIRD);
+
         UiPaint.hairline(g, resultX, resultY + 14, resultW, UiTheme.HAIRLINE_STRONG);
-        UiPaint.accentBarBottom(g, resultX, resultY + 14, Math.min(48, resultW), UiTheme.ACCENT);
         UiPaint.textCentered(g, levelText, 0, (int) (height * 0.22f), width,
             levelColor, 3.5f, true);
 
@@ -150,8 +148,7 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         int leftX = width / 4;
         int rightX = width * 3 / 4;
         UiPaint.hairlineV(g, width / 2, bottomY - 8, 74, UiTheme.HAIRLINE_STRONG);
-        UiPaint.label(g, "TICKETS REMAINING", resultX + UiTheme.GAP_M, bottomY + 79,
-            UiTheme.TEXT_THIRD);
+
         UiPaint.hairline(g, resultX, bottomY + 73, resultW, UiTheme.HAIRLINE);
 
         // 阵营名（中号 1.8x）+ 底部阵营色条

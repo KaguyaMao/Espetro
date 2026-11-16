@@ -154,9 +154,9 @@ public class ScrollableList extends GuiElement {
             int trackY = refY;
             int trackH = getHeight();
             boolean scrollable = maxScroll > 0;
-            // 轨道：内凹圆角槽（SUNKEN），滑块：圆角胶囊。
+            // 轻量透明轨道与滑块，不绘制外框。
             UiPaint.roundRect(graphics, trackX, trackY, SCROLLBAR_W, trackH,
-                UiTheme.RADIUS_INNER, UiTheme.SUNKEN);
+                UiTheme.RADIUS_INNER, UiTheme.CONTROL_NORMAL);
 
             int handleH = scrollable
                 ? Math.max(MIN_HANDLE_H, (int) ((double) getHeight() / (getHeight() + maxScroll) * trackH))
@@ -171,7 +171,7 @@ public class ScrollableList extends GuiElement {
 
     /**
      * 行 hover 底色：画在子元素之下，行本身已有不透明底板时自然被盖住；
-     * 纯文字行则透出一层 {@code SURFACE_2}，与"列表行 hover"规范一致。
+     * 纯文字行则透出一层透明悬停底色。
      */
     private void drawRowHover(GuiGraphics graphics, int refX, int refY, int mouseX, int mouseY) {
         List<GuiElement> children = getChildren();
@@ -185,7 +185,7 @@ public class ScrollableList extends GuiElement {
                 continue;
             }
             UiPaint.roundRect(graphics, childX, childY, child.getWidth(), child.getHeight(),
-                ROW_RADIUS, UiTheme.SURFACE_2);
+                ROW_RADIUS, UiTheme.CONTROL_HOVER);
             return;
         }
     }

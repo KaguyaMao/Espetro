@@ -43,16 +43,8 @@ public final class GameConfigBridge {
         }
         GameConfig.applySnapshot(config.game);
         if (config.spawnPoints != null && config.spawnPoints.valid) {
-            SpawnPointConfig.setSpawnPoint("ATTACK",
-                config.spawnPoints.attack.x(),
-                config.spawnPoints.attack.y(),
-                config.spawnPoints.attack.z(),
-                config.spawnPoints.attack.yaw());
-            SpawnPointConfig.setSpawnPoint("DEFEND",
-                config.spawnPoints.defend.x(),
-                config.spawnPoints.defend.y(),
-                config.spawnPoints.defend.z(),
-                config.spawnPoints.defend.yaw());
+            SpawnPointConfig.setSpawnPoints("ATTACK", toRuntimePoints(config.spawnPoints.attackPoints));
+            SpawnPointConfig.setSpawnPoints("DEFEND", toRuntimePoints(config.spawnPoints.defendPoints));
         }
         BastionManager.getInstance().applyExternalJson(config.bastionJson);
         OutpostManager.getInstance().applyExternalJson(config.outpostsJson);
@@ -64,6 +56,25 @@ public final class GameConfigBridge {
         if (cpJson != null && !cpJson.isEmpty()) {
             parseCapturePointsConfig(cpJson);
         }
+    }
+
+    /**
+     * 把地图快照里的主基地列表转成运行期 {@link SpawnPointConfig.SpawnPoint} 列表。
+     */
+    private static java.util.List<SpawnPointConfig.SpawnPoint> toRuntimePoints(
+        java.util.List<SpawnPointsSnapshot.Point> points) {
+        java.util.List<SpawnPointConfig.SpawnPoint> out = new java.util.ArrayList<>();
+        if (points == null) {
+            return out;
+        }
+        for (SpawnPointsSnapshot.Point point : points) {
+            if (point == null) {
+                continue;
+            }
+            out.add(new SpawnPointConfig.SpawnPoint(point.x(), point.y(), point.z(),
+                point.yaw(), point.name()));
+        }
+        return out;
     }
 
     /**

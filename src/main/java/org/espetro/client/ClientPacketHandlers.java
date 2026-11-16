@@ -23,6 +23,11 @@ public class ClientPacketHandlers {
         org.espetro.client.gui.ResupplyRadialController.onDelta(packet);
     }
 
+    /** 己方载具名单：用于准心“按 X 来互动”提示的归属判断。 */
+    public static void handleFriendlyVehicles(FriendlyVehiclesPacket packet) {
+        org.espetro.client.vehicle.ClientFriendlyVehicles.update(packet.getVehicles());
+    }
+
     /** 本地玩家是否处于旁观（观战）模式：观战者在投票阶段只显示等待提示。 */
     private static boolean isLocalSpectator() {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
@@ -140,6 +145,20 @@ public class ClientPacketHandlers {
         org.espetro.client.aui.AuiScreen.openWithFade(
             new org.espetro.client.gui.MapRevealScreen(
                 packet.getMapDisplayName(), packet.getMapFolder(), packet.getDurationSeconds()),
+            mc.screen);
+    }
+
+    // ==================== FactionLockRevealPacket ====================
+
+    public static void handleFactionLockReveal(org.espetro.network.FactionLockRevealPacket packet) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.player == null) return;
+        org.espetro.client.aui.AuiScreen.openWithFade(
+            new org.espetro.client.gui.FactionLockRevealScreen(
+                packet.getTeam(),
+                packet.getFactionDisplayName(),
+                packet.getFactionSelectionImage(),
+                packet.getDurationSeconds()),
             mc.screen);
     }
 
@@ -376,11 +395,7 @@ public class ClientPacketHandlers {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player == null) return;
 
-        if ("LOBBY".equals(phaseName) || "WAITING_FOR_PLAYERS".equals(phaseName)) {
-            mc.setScreen(new org.espetro.client.gui.HubScreen(0,
-                "等待管理员开始下一局"));
-            return;
-        }
+        // 主城弹窗已整体移除：LOBBY / WAITING_FOR_PLAYERS 阶段不再自动打开任何界面。
         if ("MAP_VOTE".equals(phaseName)) {
             if (!(mc.screen instanceof org.espetro.client.gui.MapVoteScreen)) {
                 mc.setScreen(new org.espetro.client.gui.MapVoteScreen());
@@ -439,8 +454,7 @@ public class ClientPacketHandlers {
     /**
      * 关闭当前打开的对局内模组界面（被设为观察者/移出对局时由服务端调用）。
      * 服务端已清空队伍/小队/职业记录；客户端同步置空己方队伍/编制并关闭残留的
-     * 部署、投票、选职等界面，避免其残留到后续阶段。主城菜单(HubScreen)与
-     * 组队面板(PartyScreen)不属于对局界面，保留。
+     * 部署、投票、选职等界面，避免其残留到后续阶段。组队面板(PartyScreen)不属于对局界面，保留。
      */
     public static void handleCloseModScreens() {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
@@ -471,16 +485,12 @@ public class ClientPacketHandlers {
     }
 
     public static void handleOpenHubScreen(OpenHubScreenPacket packet) {
+        // 主城窗口已彻底移除：即使服务端仍下发该包，客户端也不打开任何界面，
+        // 只清理队伍/编制状态，避免残留。
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player == null) return;
         org.espetro.client.gui.ClientGameState.setPlayerTeam(null);
         org.espetro.client.gui.ClientGameState.setPlayerFactionId(null);
-        // 已打开主城菜单时只更新文案，避免 setScreen 整页重建闪烁。
-        if (mc.screen instanceof org.espetro.client.gui.HubScreen hub) {
-            hub.updateStatus(packet.onlineCount, packet.statusMessage);
-            return;
-        }
-        mc.setScreen(new org.espetro.client.gui.HubScreen(packet.onlineCount, packet.statusMessage));
     }
 
     public static void handleClassSelectTimer(ClassSelectTimerPacket packet) {

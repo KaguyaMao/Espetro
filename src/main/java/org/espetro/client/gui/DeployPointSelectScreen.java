@@ -64,12 +64,15 @@ public class DeployPointSelectScreen extends EspetroMenuScreen {
 
         // 兵站按钮（正向语义色）
         for (DeployPointSelectPacket.BastionItem b : bastions) {
-            String label = b.name + " · " + b.pos;
+            // 主基地条目用 UUID MSB=1 标记（与统一部署界面一致），点它就走 bastion deploy <序号>
+            boolean main = b.id.getMostSignificantBits() == 1L;
+            int mainIndex = (int) b.id.getLeastSignificantBits();
+            String label = main ? ("◆ " + b.name + " · " + b.pos) : (b.name + " · " + b.pos);
+            String command = main ? ("bastion deploy " + mainIndex) : ("bastion select " + b.id);
             root.addChild(EspetroAuiWidgets.button(startX, y, BUTTON_WIDTH, BUTTON_HEIGHT,
                 label, () -> {
                 if (Minecraft.getInstance().player != null) {
-                    Minecraft.getInstance().player.connection.sendCommand(
-                        "bastion select " + b.id.toString());
+                    Minecraft.getInstance().player.connection.sendCommand(command);
                 }
             }).setTextColor(UiTheme.POSITIVE).setAccentColor(UiTheme.POSITIVE));
             y += BUTTON_HEIGHT + VERTICAL_SPACING;

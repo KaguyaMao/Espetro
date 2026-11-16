@@ -30,6 +30,8 @@ public class GameConfig {
     private static int factionPoolSize = 6;
     private static int respawnInvincibilityTicks = 60;
     private static double mainBaseInvulnerabilityRadius = 150.0;
+    private static double mainBaseBarrierRadius = 45.0;
+    private static int mainBaseBarrierHeight = 12;
     private static int classSwitchCooldownSeconds = 0;
     private static double teammateNameTagDistance = 10.0;
     private static double waitingY = 200.0;
@@ -51,6 +53,7 @@ public class GameConfig {
     // ========== 多维度战局新增字段 ==========
     private static int teamSelectSeconds = 60;
     private static int factionRevealSeconds = 5;
+    private static int factionLockRevealSeconds = 5;
     private static int roundEndSeconds = 10;
     private static int impeachmentVoteSeconds = 60;
     private static int impeachmentCooldownSeconds = 600;
@@ -148,6 +151,20 @@ public class GameConfig {
         return mainBaseInvulnerabilityRadius;
     }
 
+    /**
+     * 主基地部署等待屏障的半边长（格）。0 或负数视为关闭屏障。
+     */
+    public static double getMainBaseBarrierRadius() {
+        return mainBaseBarrierRadius;
+    }
+
+    /**
+     * 主基地部署等待屏障的高度（格）。
+     */
+    public static int getMainBaseBarrierHeight() {
+        return mainBaseBarrierHeight;
+    }
+
     public static int getClassSwitchCooldownSeconds() {
         return classSwitchCooldownSeconds;
     }
@@ -208,6 +225,11 @@ public class GameConfig {
         return factionRevealSeconds;
     }
 
+    /** 地图指定编制时的展示页时长（秒）。 */
+    public static int getFactionLockRevealSeconds() {
+        return factionLockRevealSeconds;
+    }
+
     public static int getRoundEndSeconds() {
         return roundEndSeconds;
     }
@@ -245,9 +267,12 @@ public class GameConfig {
         attackFactionSelectSeconds = s.attackFactionSelectSeconds;
         factionPoolSize = s.factionPoolSize;
         factionRevealSeconds = s.factionRevealSeconds;
+        factionLockRevealSeconds = s.factionLockRevealSeconds;
         roundEndSeconds = s.roundEndSeconds;
         respawnInvincibilityTicks = s.respawnInvincibilityTicks;
         mainBaseInvulnerabilityRadius = s.mainBaseInvulnerabilityRadius;
+        mainBaseBarrierRadius = s.mainBaseBarrierRadius;
+        mainBaseBarrierHeight = s.mainBaseBarrierHeight;
         classSwitchCooldownSeconds = s.classSwitchCooldownSeconds;
         teammateNameTagDistance = s.teammateNameTagDistance;
         waitingY = s.waitingY;

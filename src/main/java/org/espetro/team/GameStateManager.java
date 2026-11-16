@@ -56,12 +56,20 @@ public class GameStateManager {
     private int battleTickCounter = 0;
     // 双方编制揭示阶段计时器
     private int factionRevealTickCounter = 0;
+    /** 编制指定展示页：被指定的队伍与本阶段计时。 */
+    private String lockRevealTeam = null;
+    private int lockRevealTickCounter = 0;
     private static final int TICKS_PER_SECOND = 20;
     /** 队伍平衡：双方人数差异上限，达到此值时锁定人多的一方。 */
     static final int TEAM_BALANCE_MAX_DIFF = 3;
-    /** 硬上限：防止配置/默认值过大导致单 tick 上万 setBlock（S100 尖峰）。 */
-    private static final int ATTACK_WAITING_BARRIER_SIDE = 80;
+    /** 屏障尺寸缺省值；实际值由地图 game.json 的 main_base_barrier_* 覆盖。 */
+    private static final int ATTACK_WAITING_BARRIER_SIDE = 90;
     private static final int ATTACK_WAITING_BARRIER_HEIGHT = 12;
+    /** 顶盖层数：只有一格厚。 */
+    private static final int ATTACK_WAITING_BARRIER_CAP_LAYERS = 1;
+    /** 屏障单边上限（格）：防止配置失误导致单 tick 上万 setBlock（S100 尖峰）。 */
+    private static final int MAX_BARRIER_SIDE = 512;
+    private static final int MAX_BARRIER_HEIGHT = 256;
     /** 每 tick 最多放置/恢复的屏障块数（分帧，避免开战假死）。 */
     private static final int BARRIER_BLOCKS_PER_TICK = 400;
 
@@ -158,6 +166,10 @@ public class GameStateManager {
      */
     public boolean prestart(MinecraftServer server) {
         if (server == null || !currentPhase.isLobbyLike()) {
+            return false;
+        }
+        if (org.espetro.dimension.MapEditManager.getInstance().hasSession()) {
+            Espetro.broadcastToAll("§c[Espetro] 地图编辑模式进行中，请先 /espetro editsave 或 /espetro editabandon。");
             return false;
         }
         if (!BattlefieldWorldManager.getInstance().isStartupReady()) {
@@ -700,10 +712,52 @@ public class GameStateManager {
     }
 
     private void startFactionSelectForTeam(String team) {
+        // 地图已指定该方编制：不投票，先播 5 秒展示页。
+        String locked = ClassSelectManager.factionLockFor(team);
+        if (locked != null) {
+            ClassSelectManager.getInstance().forceFaction(team, locked);
+            startFactionLockReveal(team, locked);
+            return;
+        }
         if ("DEFEND".equals(team)) {
             startDefendFactionSelect();
         } else {
             startAttackFactionSelect();
+        }
+    }
+
+    /**
+     * 地图已指定该方编制时的展示页（不投票，版式同地图揭晓页）。
+     */
+    private void startFactionLockReveal(String team, String factionId) {
+        setPhase(GamePhase.FACTION_LOCK_REVEAL);
+        lockRevealTeam = team;
+        lockRevealTickCounter = 0;
+        int seconds = GameConfig.getFactionLockRevealSeconds();
+        NetworkManager.broadcastFactionLockReveal(team,
+            NetworkManager.getFactionDisplayName(factionId),
+            NetworkManager.getFactionSelectionImage(factionId), seconds);
+        Espetro.LOGGER.info("{} 编制由地图指定，展示 {} 秒", team, seconds);
+    }
+
+    /**
+     * 展示结束：另一方还没定案就切到另一方的编制投票，双方都定案则进入双方揭示。
+     */
+    private void finishFactionLockReveal() {
+        String team = lockRevealTeam;
+        lockRevealTeam = null;
+        lockRevealTickCounter = 0;
+        ClassSelectManager selection = ClassSelectManager.getInstance();
+        String other = "ATTACK".equals(team) ? "DEFEND" : "ATTACK";
+        boolean otherDecided = "ATTACK".equals(other)
+            ? selection.getFinalAttackClass() != null
+            : selection.getFinalDefendClass() != null;
+        Espetro.LOGGER.info("编制指定展示结束（{}），{}", team,
+            otherDecided ? "进入双方编制揭示" : ("进入 " + other + " 编制投票"));
+        if (otherDecided) {
+            startFactionReveal();
+        } else {
+            startFactionSelectForTeam(other);
         }
     }
 
@@ -959,30 +1013,79 @@ public class GameStateManager {
         SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint("ATTACK");
         BlockPos center = new BlockPos((int) Math.floor(spawn.x), (int) Math.floor(spawn.y), (int) Math.floor(spawn.z));
 
-        int half = ATTACK_WAITING_BARRIER_SIDE / 2;
-        int minX = center.getX() - half;
-        int maxX = minX + ATTACK_WAITING_BARRIER_SIDE - 1;
-        int minZ = center.getZ() - half;
-        int maxZ = minZ + ATTACK_WAITING_BARRIER_SIDE - 1;
-        int baseY = center.getY();
-        // 仅外壳；入队分帧放置，避免单 tick 上万 setBlock
+        // 仅外壳 + 单层顶盖；入队分帧放置，避免单 tick 上万 setBlock
         pendingBarrierPlace.clear();
-        for (int y = baseY; y < baseY + ATTACK_WAITING_BARRIER_HEIGHT; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                pendingBarrierPlace.add(new BlockPos(x, y, minZ));
-                pendingBarrierPlace.add(new BlockPos(x, y, maxZ));
-            }
-            for (int z = minZ + 1; z < maxZ; z++) {
-                pendingBarrierPlace.add(new BlockPos(minX, y, z));
-                pendingBarrierPlace.add(new BlockPos(maxX, y, z));
-            }
+        if (org.espetro.naval.AmphibiousDeployment.hasActiveLayout()) {
+            pendingBarrierPlace.addAll(org.espetro.naval.AmphibiousDeployment.barrierBlocks());
+        } else {
+            forEachAttackWaitingBarrierBlock(spawn, pendingBarrierPlace::add);
         }
 
         int queued = pendingBarrierPlace.size();
         processBarrierWork();
-        Espetro.LOGGER.info("已排队攻方等待屏障: center={}, side={}, height={}, queued={}, placedNow={}",
-            center, ATTACK_WAITING_BARRIER_SIDE, ATTACK_WAITING_BARRIER_HEIGHT,
+        Espetro.LOGGER.info(
+            "已排队攻方等待屏障: center={}, side={}, height={}, capY={}, capLayers={}, queued={}, placedNow={}",
+            center, barrierSide(), barrierHeight(),
+            center.getY() + barrierHeight(), ATTACK_WAITING_BARRIER_CAP_LAYERS,
             queued, attackWaitingBarrierBlocks.size());
+    }
+
+    /**
+     * 攻方等待屏障的完整占地：四壁外壳 + 单层顶盖。
+     *
+     * <p>放置与孤儿清理共用这一份几何，避免两处各算一套坐标后走形。</p>
+     */
+    private static void forEachAttackWaitingBarrierBlock(SpawnPointConfig.SpawnPoint spawn,
+                                                         Consumer<BlockPos> consumer) {
+        BlockPos center = new BlockPos((int) Math.floor(spawn.x), (int) Math.floor(spawn.y),
+            (int) Math.floor(spawn.z));
+        int side = barrierSide();
+        int height = barrierHeight();
+        int half = side / 2;
+        int minX = center.getX() - half;
+        int maxX = minX + side - 1;
+        int minZ = center.getZ() - half;
+        int maxZ = minZ + side - 1;
+        int baseY = center.getY();
+
+        for (int y = baseY; y < baseY + height; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                consumer.accept(new BlockPos(x, y, minZ));
+                consumer.accept(new BlockPos(x, y, maxZ));
+            }
+            for (int z = minZ + 1; z < maxZ; z++) {
+                consumer.accept(new BlockPos(minX, y, z));
+                consumer.accept(new BlockPos(maxX, y, z));
+            }
+        }
+        // 封顶：盖在墙体顶端之上，只有一格厚。
+        for (int layer = 0; layer < ATTACK_WAITING_BARRIER_CAP_LAYERS; layer++) {
+            int capY = baseY + height + layer;
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    consumer.accept(new BlockPos(x, capY, z));
+                }
+            }
+        }
+    }
+
+    /** 当前地图配置的主基地屏障边长（= 半径 × 2，沿用它原来的“边长”几何）。 */
+    public static int barrierSide() {
+        double radius = org.espetro.config.GameConfig.getMainBaseBarrierRadius();
+        if (radius <= 0) {
+            return ATTACK_WAITING_BARRIER_SIDE;
+        }
+        int side = (int) Math.round(radius * 2.0);
+        return Math.max(2, Math.min(MAX_BARRIER_SIDE, side));
+    }
+
+    /** 当前地图配置的主基地屏障高度。 */
+    public static int barrierHeight() {
+        int height = org.espetro.config.GameConfig.getMainBaseBarrierHeight();
+        if (height <= 0) {
+            return ATTACK_WAITING_BARRIER_HEIGHT;
+        }
+        return Math.min(MAX_BARRIER_HEIGHT, height);
     }
 
     private void setTemporaryBarrier(ServerLevel level, BlockPos pos) {
@@ -1082,29 +1185,14 @@ public class GameStateManager {
     }
 
     private int removeOrphanedAttackWaitingBarriers(ServerLevel level) {
-        SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint("ATTACK");
-        BlockPos center = new BlockPos(
-            (int) Math.floor(spawn.x), (int) Math.floor(spawn.y), (int) Math.floor(spawn.z));
-        int half = ATTACK_WAITING_BARRIER_SIDE / 2;
-        int minX = center.getX() - half;
-        int maxX = minX + ATTACK_WAITING_BARRIER_SIDE - 1;
-        int minZ = center.getZ() - half;
-        int maxZ = minZ + ATTACK_WAITING_BARRIER_SIDE - 1;
-        int baseY = center.getY();
-        int removed = 0;
-
-        for (int y = baseY; y < baseY + ATTACK_WAITING_BARRIER_HEIGHT; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                removed += removeBarrierAt(level, new BlockPos(x, y, minZ));
-                removed += removeBarrierAt(level, new BlockPos(x, y, maxZ));
-            }
-            for (int z = minZ + 1; z < maxZ; z++) {
-                removed += removeBarrierAt(level, new BlockPos(minX, y, z));
-                removed += removeBarrierAt(level, new BlockPos(maxX, y, z));
-            }
+        if (org.espetro.naval.AmphibiousDeployment.hasActiveLayout()) {
+            return 0;
         }
-
-        return removed;
+        SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint("ATTACK");
+        if (spawn == null) return 0;
+        int[] removed = {0};
+        forEachAttackWaitingBarrierBlock(spawn, pos -> removed[0] += removeBarrierAt(level, pos));
+        return removed[0];
     }
 
     private int removeBarrierAt(ServerLevel level, BlockPos pos) {
@@ -1213,7 +1301,7 @@ public class GameStateManager {
         boolean voting = switch (currentPhase) {
             case MAP_VOTE, MAP_REVEAL, MAP_LOADING, TEAM_SELECT, TEAM_ASSIGN_SHOW,
                  COMMANDER_VOTE, DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE,
-                 DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT, FACTION_REVEAL -> true;
+                 DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT, FACTION_LOCK_REVEAL, FACTION_REVEAL -> true;
             default -> false;
         };
         if (!voting) return;
@@ -1299,6 +1387,12 @@ public class GameStateManager {
                 ClassSelectManager.getInstance().onServerTick();
                 if (ClassSelectManager.getInstance().isCurrentSelectTimedOut()) {
                     onFactionSelectFinished();
+                }
+                break;
+            case FACTION_LOCK_REVEAL:
+                lockRevealTickCounter++;
+                if (lockRevealTickCounter >= GameConfig.getFactionLockRevealSeconds() * TICKS_PER_SECOND) {
+                    finishFactionLockReveal();
                 }
                 break;
             case FACTION_REVEAL:
@@ -1516,8 +1610,6 @@ public class GameStateManager {
                 clearPlayerRoundAssignment(player);
                 player.removeAllEffects();
                 applyHubState(player);
-                NetworkManager.sendOpenHubScreen(player, server.getPlayerCount(),
-                    "对局已结束，等待管理员开始下一局");
             }
             broadcastHubStatus();
             if (cleanupResult.success()) {
@@ -1607,8 +1699,6 @@ public class GameStateManager {
         switch (currentPhase) {
             case LOBBY, WAITING_FOR_PLAYERS -> {
                 forcePlayerToHub(player);
-                NetworkManager.sendOpenHubScreen(player, player.server.getPlayerCount(),
-                    "等待管理员开始下一局");
             }
             case MAP_VOTE -> {
                 // 投票中途加入：直接 MatchHold，勿 hub（会摘失明）。
@@ -2279,8 +2369,6 @@ public class GameStateManager {
             setPhase(GamePhase.LOBBY);
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 applyHubState(player);
-                NetworkManager.sendOpenHubScreen(player, server.getPlayerCount(),
-                    "等待管理员开始下一局");
             }
             broadcastHubStatus();
             if (!cleanupResult.success()) {

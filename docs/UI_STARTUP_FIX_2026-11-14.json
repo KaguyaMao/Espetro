@@ -1,0 +1,83 @@
+{
+  "backup": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\espetro-backups\\20261114-094513-before-startup-fix",
+  "root_cause": "FancyMenuBundleMixin target de.keksuccino.fancymenu.FancyMenu loaded before mixin PREPARE; MixinTargetAlreadyLoadedException in latest.log 09:29:47.",
+  "artifact": "C:\\Users\\Administrator\\.m2\\repository\\org\\espetro\\espetro\\1.1.3-l\\espetro-1.1.3-l.jar",
+  "installed": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\mods\\espetro-1.1.3-x.jar",
+  "sha256": "67ba80ea377a8998949d8ef01bd2b4701627a5fe7625699346a193f6513afb99",
+  "size": 217336041,
+  "bundle_files_verified": 283,
+  "tests": [
+    {
+      "name": "org.espetro.client.aui.AuiScreenHostTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.ClientUiPreferencesTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.CurrentMapBackgroundRendererTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FancyMenuGlassGeometryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FobSupplyHudTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.IconRasterizerTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiPaintTextTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiThemeTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.VanillaHudLayoutTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.ui.BundledMenuInstallerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "build_log": "build/ui-startup-fix-build.log",
+  "runtime_log": "build/ui-startup-production-console.log",
+  "runtime": {
+    "identity": "EspetroUITest (offline, no user account token)",
+    "pid": 19344,
+    "menu_installer": "successful,0 changed files",
+    "resource_reload": "FINISHED 09:51:07",
+    "title_screen": "registered 09:51:07",
+    "game_startup_seconds": 62.809,
+    "test_process_closed": true,
+    "visual_ui_control": "unavailable: node_repl failed to write kernel assets; no screenshot taken"
+  }
+}

@@ -42,23 +42,58 @@ class UiThemeTest {
     }
 
     @Test
-    void bodyAndSecondaryTextRemainReadableInBothPalettes() {
+    void glassControlsRemainReadableOverBrightAndDarkScenesInBothPalettes() {
         for (UiTheme.Mode mode : UiTheme.Mode.values()) {
             UiTheme.setMode(mode);
-            Map<String, Integer> surfaces = Map.of(
-                "backdrop", UiTheme.BACKDROP_TOP,
-                "surface 0", UiTheme.SURFACE_0,
-                "card", UiTheme.CARD_TOP,
-                "surface 2", UiTheme.SURFACE_2,
-                "surface 3", UiTheme.SURFACE_3,
-                "sunken", UiTheme.SUNKEN,
-                "page", UiTheme.SOLID_PAGE);
-            for (var surface : surfaces.entrySet()) {
-                assertContrast(UiTheme.TEXT, surface.getValue(), 7,
-                    mode + " body on " + surface.getKey());
-                assertContrast(UiTheme.TEXT_SECOND, surface.getValue(), 4.5,
-                    mode + " secondary text on " + surface.getKey());
+            Map<String, Integer> scenes = Map.of("black scene", 0xFF000000,
+                "white scene", 0xFFFFFFFF);
+            Map<String, Integer> controls = glassControls();
+            for (var scene : scenes.entrySet()) {
+                int shadedScene = composite(UiTheme.FROST_SCRIM, scene.getValue());
+                int panel = composite(UiTheme.GLASS_PANEL, shadedScene);
+                String context = mode + " over " + scene.getKey();
+                assertContrast(composite(UiTheme.TEXT, panel), panel, 4.5,
+                    context + " card body");
+                assertContrast(composite(UiTheme.TEXT_SECOND, panel), panel, 4.5,
+                    context + " card secondary text");
+
+                for (var control : controls.entrySet()) {
+                    int renderedControl = composite(control.getValue(), panel);
+                    // Disabled labels intentionally communicate lower emphasis.
+                    if (!control.getKey().equals("disabled")) {
+                        assertContrast(composite(UiTheme.TEXT, renderedControl),
+                            renderedControl, 4.5, context + " " + control.getKey());
+                    }
+                }
             }
+        }
+    }
+
+    @Test
+    void glassSurfacesStayTranslucentAndControlStatesRemainDistinct() {
+        for (UiTheme.Mode mode : UiTheme.Mode.values()) {
+            UiTheme.setMode(mode);
+            assertTranslucent(UiTheme.FROST_SCRIM, mode + " scene scrim");
+            assertTranslucent(UiTheme.GLASS_PANEL, mode + " panel");
+            for (var control : glassControls().entrySet()) {
+                assertTranslucent(control.getValue(), mode + " " + control.getKey());
+            }
+            int normalAlpha = UiTheme.CONTROL_NORMAL >>> 24;
+            assertTrue((UiTheme.CONTROL_HOVER >>> 24) > normalAlpha,
+                mode + " hover must visibly strengthen the control tint");
+            assertTrue((UiTheme.CONTROL_SELECTED >>> 24) > normalAlpha,
+                mode + " selection must remain visible without a border");
+            assertTrue((UiTheme.CONTROL_PRIMARY >>> 24) > normalAlpha,
+                mode + " primary controls need more emphasis than normal controls");
+            assertTrue((UiTheme.CONTROL_DISABLED >>> 24) < normalAlpha,
+                mode + " disabled controls must have less emphasis");
+        }
+    }
+
+    @Test
+    void opaqueInverseSurfacesKeepReadableTextInBothPalettes() {
+        for (UiTheme.Mode mode : UiTheme.Mode.values()) {
+            UiTheme.setMode(mode);
             assertContrast(UiTheme.ON_INK, UiTheme.INK_FILL, 7, mode + " inverse body");
             assertContrast(UiTheme.ON_INK_SECOND, UiTheme.INK_FILL, 4.5,
                 mode + " inverse secondary text");
@@ -66,17 +101,19 @@ class UiThemeTest {
     }
 
     @Test
-    void accentUsesDarkInkAndDarkFillsUseLightInkInBothModes() {
+    void contrastTextChoosesTheStrongerInkForOpaqueFillsInBothModes() {
         for (UiTheme.Mode mode : UiTheme.Mode.values()) {
             UiTheme.setMode(mode);
-            assertEquals(UiTheme.DARK_INK, UiTheme.contrastText(UiTheme.ACCENT),
-                mode + " accent must keep dark text");
-            assertEquals(UiTheme.LIGHT_INK, UiTheme.contrastText(UiTheme.DARK_INK),
-                mode + " dark fill must keep light text");
-            assertContrast(UiTheme.contrastText(UiTheme.ACCENT), UiTheme.ACCENT, 7,
-                mode + " accent contrast");
-            assertContrast(UiTheme.contrastText(UiTheme.DARK_INK), UiTheme.DARK_INK, 7,
-                mode + " dark fill contrast");
+            for (int fill : new int[] {UiTheme.ACCENT, UiTheme.DARK_INK, UiTheme.LIGHT_INK}) {
+                double darkContrast = contrastRatio(UiTheme.DARK_INK, fill);
+                double lightContrast = contrastRatio(UiTheme.LIGHT_INK, fill);
+                int expected = darkContrast >= lightContrast
+                    ? UiTheme.DARK_INK : UiTheme.LIGHT_INK;
+                assertEquals(expected, UiTheme.contrastText(fill),
+                    mode + " must select the ink with greater contrast");
+                assertContrast(UiTheme.contrastText(fill), fill, 7,
+                    mode + " opaque fill contrast");
+            }
         }
     }
 
@@ -140,13 +177,48 @@ class UiThemeTest {
         }
     }
 
+    private static Map<String, Integer> glassControls() {
+        return Map.of("normal", UiTheme.CONTROL_NORMAL,
+            "hover", UiTheme.CONTROL_HOVER,
+            "selected", UiTheme.CONTROL_SELECTED,
+            "disabled", UiTheme.CONTROL_DISABLED,
+            "primary", UiTheme.CONTROL_PRIMARY);
+    }
+
+    private static void assertTranslucent(int color, String label) {
+        int alpha = color >>> 24;
+        assertTrue(alpha > 0 && alpha < 255,
+            () -> label + " alpha must be visible and translucent, was " + alpha);
+    }
+
+    /** Straight-alpha source-over, matching the order used by the GUI layers. */
+    private static int composite(int foreground, int background) {
+        double foregroundAlpha = (foreground >>> 24) / 255.0;
+        double backgroundAlpha = (background >>> 24) / 255.0;
+        double outputAlpha = foregroundAlpha + backgroundAlpha * (1 - foregroundAlpha);
+        if (outputAlpha == 0) return 0;
+        int result = (int) Math.round(outputAlpha * 255) << 24;
+        for (int shift : new int[] {16, 8, 0}) {
+            double foregroundChannel = (foreground >>> shift) & 255;
+            double backgroundChannel = (background >>> shift) & 255;
+            int channel = (int) Math.round((foregroundChannel * foregroundAlpha
+                + backgroundChannel * backgroundAlpha * (1 - foregroundAlpha)) / outputAlpha);
+            result |= channel << shift;
+        }
+        return result;
+    }
+
     private static void assertContrast(int foreground, int background,
             double minimum, String label) {
+        double ratio = contrastRatio(foreground, background);
+        assertTrue(ratio >= minimum, () -> label + " contrast " + ratio + " < " + minimum);
+    }
+
+    private static double contrastRatio(int foreground, int background) {
         double foregroundLuminance = luminance(foreground);
         double backgroundLuminance = luminance(background);
-        double ratio = (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
+        return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
             / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
-        assertTrue(ratio >= minimum, () -> label + " contrast " + ratio + " < " + minimum);
     }
 
     private static double luminance(int color) {

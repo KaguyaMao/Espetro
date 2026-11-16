@@ -33,7 +33,7 @@ public class MapRevealScreen extends EspetroMenuScreen {
     private final String mapFolder;
     private int ticksLeft;
     private boolean done;
-    private EspetroAuiWidgets.PhaseHeader phaseHeader;
+    private VotePhase phaseHeader;
 
     public MapRevealScreen(String mapDisplayName, String mapFolder, int durationSeconds) {
         super(Component.literal("地图揭晓"));
@@ -73,16 +73,13 @@ public class MapRevealScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
-        phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "地图揭晓",
-            "胜出地图: " + mapDisplayName,
-            getSecondsRemaining() + " 秒后进入装载",
-            UiTheme.GOLD);
-
-        int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
-        // 预览图区域：全屏宽度减去边距，保持 16:9，垂直居中于标题下方
-        int availW = Math.max(200, Math.min(IMG_MAX_W, this.width - 80));
-        int availH = Math.max(112, Math.min(IMG_MAX_H, this.height - headerH - 100));
+        phaseHeader = VotePhase.add(root, width, height, "地图揭晓",
+            "胜出地图：" + mapDisplayName,
+            () -> getSecondsRemaining() + " 秒后进入装载", () -> VotePhase.Stage.MAP);
+        int headerH = VotePhase.contentTop(height);
+        int availableH = Math.max(1, VotePhase.contentBottom(height) - headerH - 36);
+        int availW = Math.max(1, Math.min(IMG_MAX_W, width - 48));
+        int availH = Math.max(1, Math.min(IMG_MAX_H, availableH));
         RevealTexture tex = TEXTURE_CACHE.get(mapFolder);
         int imgW;
         int imgH;
@@ -91,15 +88,15 @@ public class MapRevealScreen extends EspetroMenuScreen {
             imgW = Math.max(1, Math.round(tex.texW() * scale));
             imgH = Math.max(1, Math.round(tex.texH() * scale));
             int imgX = (this.width - imgW) / 2;
-            int imgY = headerH + Math.max(0, (this.height - headerH - imgH) / 2 - 20);
+            int imgY = headerH + Math.max(0, (availableH - imgH) / 2 + 8);
             root.addChild(new RevealImageElement(imgX, imgY, imgW, imgH, tex));
             addMapTitle(root, imgY + imgH + 10);
         } else {
             // 无图占位：灰色方框 + 「暂无图片」
-            imgW = Math.max(240, Math.min(availW, this.width / 2));
-            imgH = Math.max(135, imgW * 9 / 16);
+            imgW = Math.min(availW, Math.max(1, availH * 16 / 9));
+            imgH = Math.max(1, imgW * 9 / 16);
             int imgX = (this.width - imgW) / 2;
-            int imgY = headerH + Math.max(0, (this.height - headerH - imgH) / 2 - 20);
+            int imgY = headerH + Math.max(0, (availableH - imgH) / 2 + 8);
             root.addChild(new PlaceholderElement(imgX, imgY, imgW, imgH));
             addMapTitle(root, imgY + imgH + 10);
         }
@@ -107,7 +104,7 @@ public class MapRevealScreen extends EspetroMenuScreen {
 
     /** 地图名：大号数值字 + 阴影，居中于图片下方。 */
     private void addMapTitle(GuiElement root, int y) {
-        int titleY = Math.min(y, this.height - 16);
+        int titleY = Math.min(y, VotePhase.contentBottom(height) - 14);
         EspetroAuiWidgets.Text title = EspetroAuiWidgets.centeredText(0, titleY, this.width,
             mapDisplayName, UiTheme.GOLD);
         title.setTextScale(UiTheme.TYPE_NUMERAL).setShadow(true);
@@ -136,10 +133,7 @@ public class MapRevealScreen extends EspetroMenuScreen {
                 UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
             graphics.blit(tex.location(), bx, by, bw, bh,
                 0, 0, tex.texW(), tex.texH(), tex.texW(), tex.texH());
-            UiPaint.strokeRoundRect(graphics, bx - 1, by - 1, bw + 2, bh + 2,
-                UiTheme.RADIUS_INNER, UiTheme.HAIRLINE_STRONG);
-            UiPaint.brackets(graphics, bx - 4, by - 4, bw + 8, bh + 8,
-                UiTheme.ACCENT_LINE);
+
         }
     }
 

@@ -25,14 +25,9 @@ public final class MapVoteScreen extends EspetroMenuScreen {
     private static final int MAX_ROWS = 2;
     private static final int MAX_CANDIDATES = COLUMNS * MAX_ROWS;
     /** 与编制选择 ClassSelectScreen 同级的卡片间距。 */
-    private static final int GAP = 4;
     private static final int CARD_PAD = 4;
     /** 最底部仅保留名称/票数一行。 */
     private static final int FOOTER_H = 14;
-    private static final int SIDE_PAD = 8;
-    private static final int BOTTOM_PAD = 8;
-    private static final int MIN_CARD_W = 120;
-    private static final int MIN_CARD_H = 90;
 
     private static MapVoteStatePacket latest = new MapVoteStatePacket(
         false, 0, 0L, List.of(), java.util.Map.of(), null, null, null);
@@ -46,7 +41,7 @@ public final class MapVoteScreen extends EspetroMenuScreen {
     private final List<MapCardButton> mapButtons = new ArrayList<>();
     private long receivedAtMs;
     private int receivedRemaining;
-    private EspetroAuiWidgets.PhaseHeader phaseHeader;
+    private VotePhase phaseHeader;
     /** 上次写入顶栏的显示秒，避免每 tick 改字符串加重闪烁感。 */
     private int lastStatusSecond = Integer.MIN_VALUE;
 
@@ -118,61 +113,24 @@ public final class MapVoteScreen extends EspetroMenuScreen {
     }
 
     /**
-     * 与编制选择一致：3 列 × 2 行铺满标题下方整块可用区域。
-     * 候选不足 6 个时仍用满格卡片尺寸，从左上起填格（不把单卡拉成整行）。
+     * 候选卡片紧凑居中，逐行居中排列，底部始终预留真实阶段与倒计时。
      */
-    private LayoutMetrics computeLayout() {
-        int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
-        int startY = headerH + 8;
-        // 几乎占满屏：左右/底边少量边距，卡片均分剩余宽高
-        int contentW = Math.max(MIN_CARD_W * COLUMNS, this.width - SIDE_PAD * 2);
-        int contentH = Math.max(MIN_CARD_H * MAX_ROWS,
-            this.height - startY - BOTTOM_PAD);
-
-        int cardW = Math.max(MIN_CARD_W, (contentW - (COLUMNS - 1) * GAP) / COLUMNS);
-        int cardH = Math.max(MIN_CARD_H, (contentH - (MAX_ROWS - 1) * GAP) / MAX_ROWS);
-
-        // 预览区：固定 16:9 横向画框，宽度优先；高度不足时按高度反推宽度
-        int imgW = Math.max(1, cardW - CARD_PAD * 2);
-        int maxImgH = Math.max(1, cardH - FOOTER_H - 4);
-        int imgH = Math.max(1, imgW * 9 / 16);
-        if (imgH > maxImgH) {
-            imgH = Math.max(1, maxImgH);
-            imgW = Math.max(1, imgH * 16 / 9);
-        }
-
-        int panelW = COLUMNS * cardW + (COLUMNS - 1) * GAP;
-        int panelH = MAX_ROWS * cardH + (MAX_ROWS - 1) * GAP;
-        int startX = (this.width - panelW) / 2;
-        // 垂直：紧贴标题下，若仍有余量则略微居中
-        int gridStartY = startY + Math.max(0, (contentH - panelH) / 2);
-        return new LayoutMetrics(cardW, cardH, imgW, imgH, startX, gridStartY);
-    }
-
-    private record LayoutMetrics(int cardW, int cardH, int imgW, int imgH,
-                                 int startX, int startY) {
-    }
-
     @Override
     protected void buildMenuRoot(GuiElement root) {
         mapButtons.clear();
-        phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, width,
-            "全局地图投票", buildResultText(computeDisplaySeconds()),
-            "全服统一计票，票数最高的地图胜出",
-            UiTheme.GOLD);
-
+        phaseHeader = VotePhase.add(root, width, height, "全局地图投票",
+            "全服统一计票，票数最高的地图胜出", () -> buildResultText(computeDisplaySeconds()),
+            () -> VotePhase.Stage.MAP);
         int count = Math.min(latest.candidates.size(), MAX_CANDIDATES);
-        LayoutMetrics layout = computeLayout();
+        VotePhase.Grid layout = VotePhase.grid(width, height, count, 3, FOOTER_H);
 
         for (int i = 0; i < count; i++) {
             MapVoteStatePacket.Candidate candidate = latest.candidates.get(i);
-            int col = i % COLUMNS;
-            int row = i / COLUMNS;
             var button = new MapCardButton(
-                layout.startX + col * (layout.cardW + GAP),
-                layout.startY + row * (layout.cardH + GAP),
-                layout.cardW, layout.cardH,
-                layout.imgW, layout.imgH,
+                layout.x(i), layout.y(i),
+                layout.cardWidth(), layout.cardHeight(),
+                Math.max(1, layout.cardWidth() - CARD_PAD * 2),
+                Math.max(1, layout.cardHeight() - FOOTER_H - 4),
                 candidate,
                 () -> {
                     if (tutorialPreviewMode) {
@@ -285,24 +243,12 @@ public final class MapVoteScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 纸墨卡片：黄色端线和角标标记当前项，悬停保持细线反馈。
+            // 无边框玻璃卡片，以浅色底反馈悬停与选中。
             boolean hovered = hasFocus() && enabled;
-            UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
-            if (selected) {
-                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.ACCENT_SOFT);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.ACCENT_LINE);
-                UiPaint.brackets(graphics, bx - 2, by - 2, bw + 4, bh + 4,
-                    UiTheme.ACCENT_LINE);
-                UiPaint.accentBarBottom(graphics, bx + 6, by + bh - 3, bw - 12, UiTheme.ACCENT);
-            } else if (hovered) {
-                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.SURFACE_2);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.ACCENT_LINE);
-            }
+            UiPaint.glassPanel(graphics, bx, by, bw, bh,
+                selected ? UiTheme.CONTROL_SELECTED
+                    : !enabled ? UiTheme.CONTROL_DISABLED
+                    : hovered ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
 
             // 预览区：贴卡片顶部水平居中，固定 16:9 横向，尽量放大
             int maxImgW = Math.max(1, bw - CARD_PAD * 2);

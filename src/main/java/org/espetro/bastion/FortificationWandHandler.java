@@ -58,6 +58,23 @@ public final class FortificationWandHandler {
                 right.setUseItem(net.minecraftforge.eventbus.api.Event.Result.DENY);
             }
             BlockPos pos = event.getPos();
+            // 舰船编排模式：同一个棒子，会话存在时把点选派发给舰船编排器
+            if (org.espetro.naval.NavalAuthoringManager.getInstance().isNavalMode(player)) {
+                org.espetro.naval.NavalAuthoringManager naval =
+                    org.espetro.naval.NavalAuthoringManager.getInstance();
+                if (player.isShiftKeyDown()) {
+                    if (attack) {
+                        naval.clear(player);
+                        player.displayClientMessage(Component.literal("§e舰船选区已清空。"), false);
+                        return;
+                    }
+                    player.displayClientMessage(Component.literal(naval.setAnchor(player, pos)), true);
+                } else {
+                    player.displayClientMessage(
+                        Component.literal(naval.setCorner(player, attack, pos)), true);
+                }
+                return;
+            }
             FortificationAuthoringManager manager = FortificationAuthoringManager.getInstance();
             String message;
             if (player.isShiftKeyDown()) {

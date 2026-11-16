@@ -22,6 +22,10 @@ public final class VehSpawnSnapshot {
     public final List<String> vehicleTypes;
     /** type -> ordered spawn points */
     public final Map<String, List<SpawnPoint>> spawnPointsByType;
+    /** type -> 抢滩前哨出生点（占领指定批次后启用；可为空）。 */
+    public final Map<String, List<SpawnPoint>> outpostPointsByType;
+    /** 前哨点在「第几批据点全部被占领」后启用（默认 1）。 */
+    public final int outpostActivateAfterBatch;
     public final List<String> errors;
 
     public record Pose(double x, double y, double z, float yaw) {
@@ -33,13 +37,42 @@ public final class VehSpawnSnapshot {
     public VehSpawnSnapshot(List<String> vehicleTypes,
                             Map<String, List<SpawnPoint>> spawnPointsByType,
                             List<String> errors) {
+        this(vehicleTypes, spawnPointsByType, Map.of(), 1, errors);
+    }
+
+    public VehSpawnSnapshot(List<String> vehicleTypes,
+                            Map<String, List<SpawnPoint>> spawnPointsByType,
+                            Map<String, List<SpawnPoint>> outpostPointsByType,
+                            int outpostActivateAfterBatch,
+                            List<String> errors) {
         this.vehicleTypes = List.copyOf(vehicleTypes);
+        this.spawnPointsByType = copyPoints(spawnPointsByType);
+        this.outpostPointsByType = copyPoints(outpostPointsByType);
+        this.outpostActivateAfterBatch = Math.max(1, outpostActivateAfterBatch);
+        this.errors = List.copyOf(errors);
+    }
+
+    private static Map<String, List<SpawnPoint>> copyPoints(Map<String, List<SpawnPoint>> source) {
         Map<String, List<SpawnPoint>> copy = new LinkedHashMap<>();
-        for (Map.Entry<String, List<SpawnPoint>> e : spawnPointsByType.entrySet()) {
+        if (source == null) {
+            return Collections.unmodifiableMap(copy);
+        }
+        for (Map.Entry<String, List<SpawnPoint>> e : source.entrySet()) {
+            if (e.getKey() == null || e.getValue() == null) {
+                continue;
+            }
             copy.put(e.getKey(), List.copyOf(e.getValue()));
         }
-        this.spawnPointsByType = Collections.unmodifiableMap(copy);
-        this.errors = List.copyOf(errors);
+        return Collections.unmodifiableMap(copy);
+    }
+
+    public boolean hasOutpostPoints() {
+        for (List<SpawnPoint> list : outpostPointsByType.values()) {
+            if (list != null && !list.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isValid() {
@@ -111,41 +144,69 @@ public final class VehSpawnSnapshot {
                 errors.add("spawn_points 缺少类型: " + type);
                 continue;
             }
-            JsonElement typeEl = spawnRoot.get(type);
-            List<SpawnPoint> list = new ArrayList<>();
-            if (typeEl.isJsonArray()) {
-                int idx = 0;
-                for (JsonElement pointEl : typeEl.getAsJsonArray()) {
-                    idx++;
-                    if (!pointEl.isJsonObject()) {
-                        errors.add(type + " 的第 " + idx + " 个出生点不是对象");
-                        continue;
-                    }
-                    Optional<SpawnPoint> parsed = parsePoint(type, pointEl.getAsJsonObject(), idx, errors);
-                    parsed.ifPresent(list::add);
-                }
-            } else if (typeEl.isJsonObject()) {
-                // legacy object map: preserve insertion order of keys
-                int idx = 0;
-                for (Map.Entry<String, JsonElement> entry : typeEl.getAsJsonObject().entrySet()) {
-                    idx++;
-                    if (!entry.getValue().isJsonObject()) {
-                        errors.add(type + "." + entry.getKey() + " 不是对象");
-                        continue;
-                    }
-                    JsonObject obj = entry.getValue().getAsJsonObject();
-                    if (!obj.has("id")) {
-                        obj.addProperty("id", entry.getKey());
-                    }
-                    Optional<SpawnPoint> parsed = parsePoint(type, obj, idx, errors);
-                    parsed.ifPresent(list::add);
-                }
-            } else {
-                errors.add("spawn_points." + type + " 必须是数组或对象");
-            }
-            points.put(type, list);
+            points.put(type, parseType(type, spawnRoot.get(type), errors));
         }
-        return new VehSpawnSnapshot(types, points, errors);
+
+        int outpostBatch = 1;
+        if (root.has("outpost_activate_after_batch")) {
+            try {
+                outpostBatch = Math.max(1, root.get("outpost_activate_after_batch").getAsInt());
+            } catch (Exception e) {
+                errors.add("outpost_activate_after_batch 不是整数");
+            }
+        }
+        Map<String, List<SpawnPoint>> outpost = new LinkedHashMap<>();
+        if (root.has("outpost_spawn_points") && root.get("outpost_spawn_points").isJsonObject()) {
+            JsonObject outpostRoot = root.getAsJsonObject("outpost_spawn_points");
+            for (String type : types) {
+                if (!outpostRoot.has(type)) {
+                    continue;
+                }
+                List<SpawnPoint> list = parseType(type, outpostRoot.get(type), new ArrayList<>());
+                if (!list.isEmpty()) {
+                    outpost.put(type, list);
+                }
+            }
+        }
+        return new VehSpawnSnapshot(types, points, outpost, outpostBatch, errors);
+    }
+
+    private static List<SpawnPoint> parseType(String type, JsonElement typeEl, List<String> errors) {
+        List<SpawnPoint> list = new ArrayList<>();
+        if (typeEl == null) {
+            return list;
+        }
+        if (typeEl.isJsonArray()) {
+            int idx = 0;
+            for (JsonElement pointEl : typeEl.getAsJsonArray()) {
+                idx++;
+                if (!pointEl.isJsonObject()) {
+                    errors.add(type + " 的第 " + idx + " 个出生点不是对象");
+                    continue;
+                }
+                Optional<SpawnPoint> parsed = parsePoint(type, pointEl.getAsJsonObject(), idx, errors);
+                parsed.ifPresent(list::add);
+            }
+        } else if (typeEl.isJsonObject()) {
+            // legacy object map: preserve insertion order of keys
+            int idx = 0;
+            for (Map.Entry<String, JsonElement> entry : typeEl.getAsJsonObject().entrySet()) {
+                idx++;
+                if (!entry.getValue().isJsonObject()) {
+                    errors.add(type + "." + entry.getKey() + " 不是对象");
+                    continue;
+                }
+                JsonObject obj = entry.getValue().getAsJsonObject();
+                if (!obj.has("id")) {
+                    obj.addProperty("id", entry.getKey());
+                }
+                Optional<SpawnPoint> parsed = parsePoint(type, obj, idx, errors);
+                parsed.ifPresent(list::add);
+            }
+        } else {
+            errors.add("spawn_points." + type + " 必须是数组或对象");
+        }
+        return list;
     }
 
     private static Optional<SpawnPoint> parsePoint(String type, JsonObject obj, int idx, List<String> errors) {

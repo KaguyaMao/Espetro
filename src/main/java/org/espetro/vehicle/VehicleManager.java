@@ -495,7 +495,7 @@ public class VehicleManager {
         if (slotIndex < 0) return false;
         VehicleConfig.VehicleSlotConfig slot = cfg.slots.isEmpty() ? null : cfg.slots.get(slotIndex);
         VehicleConfig.DeploymentPointConfig deployment =
-            slot != null ? slot.forTeam(team) : resolveDeploymentPoint(cfg, team);
+            resolveSpawnDeployment(cfg, slot, team, slotIndex);
         BlockPos spawnPos = resolveSpawnPosition(deployment);
         if (spawnPos == null) return false;
         if (!level.hasChunkAt(spawnPos)) {
@@ -621,7 +621,7 @@ public class VehicleManager {
         ServerLevel level = resolveDeployLevel(commander);
         VehicleConfig.VehicleSlotConfig slot = cfg.slots.isEmpty() ? null : cfg.slots.get(slotIndex);
         VehicleConfig.DeploymentPointConfig deployment =
-            slot != null ? slot.forTeam(team) : resolveDeploymentPoint(cfg, team);
+            resolveSpawnDeployment(cfg, slot, team, slotIndex);
         BlockPos spawnPos = resolveSpawnPosition(deployment);
         if (spawnPos == null) {
             return "§c该载具未在编制 JSON 中配置当前阵营的 deployment." + team + ".position 坐标！";
@@ -983,9 +983,10 @@ public class VehicleManager {
 
         int expected = 0;
         for (String team : new String[]{"ATTACK", "DEFEND"}) {
-            if (SpawnPointConfig.getSpawnPoint(team) != null) {
-                expected++;
-            }
+            expected += SpawnPointConfig.getSpawnPoints(team).size();
+        }
+        if (expected <= 0) {
+            expected = 2;
         }
 
         int deployStations = 0;
@@ -1856,6 +1857,23 @@ public class VehicleManager {
         return cfg.deployment.forTeam(team);
     }
 
+    /**
+     * 选出生点：抢滩前哨点解锁后优先用前哨点，否则用编制配置的主基地/坑位点。
+     */
+    @Nullable
+    private VehicleConfig.DeploymentPointConfig resolveSpawnDeployment(
+        VehicleConfig.VehicleTypeConfig cfg, @Nullable VehicleConfig.VehicleSlotConfig slot,
+        String team, int slotIndex) {
+        if (cfg != null && cfg.hasOutpostPoints(team)
+            && org.espetro.vehicle.OutpostSpawnGate.isUnlocked(cfg.outpostActivateAfterBatch)) {
+            VehicleConfig.DeploymentPointConfig outpost = cfg.outpostForTeam(team, slotIndex);
+            if (outpost != null && outpost.position != null && outpost.position.length >= 3) {
+                return outpost;
+            }
+        }
+        return slot != null ? slot.forTeam(team) : resolveDeploymentPoint(cfg, team);
+    }
+
     @Nullable
     private BlockPos resolveSpawnPosition(@Nullable VehicleConfig.DeploymentPointConfig deployment) {
         if (deployment == null) {
@@ -2215,8 +2233,48 @@ public class VehicleManager {
         return spawned;
     }
 
-    public int clearPadSupplyStations(@Nullable ServerLevel level) {
-        if (level == null) return 0;
+    /**
+     * 抢滩前哨载具点解锁后，为这些点补上载具坑补给站（只补该阵营一侧）。
+     */
+    public int spawnOutpostSupplyStations(ServerLevel level, String team) {
+        if (level == null || team == null) return 0;
+        EntityType<?> stationType = BuiltInRegistries.ENTITY_TYPE
+            .getOptional(SUPPLY_STATION_ID).orElse(null);
+        if (stationType == null) {
+            return 0;
+        }
+        int spawned = 0;
+        for (Map.Entry<String, Map<String, VehicleConfig.VehicleTypeConfig>> formation
+                : VehicleConfig.getAllConfigs().entrySet()) {
+            for (Map.Entry<String, VehicleConfig.VehicleTypeConfig> entry
+                    : formation.getValue().entrySet()) {
+                String type = entry.getKey();
+                VehicleConfig.VehicleTypeConfig cfg = entry.getValue();
+                if (cfg == null || !cfg.hasOutpostPoints(team)
+                    || !org.espetro.vehicle.OutpostSpawnGate.isUnlocked(cfg.outpostActivateAfterBatch)) {
+                    continue;
+                }
+                List<VehicleConfig.DeploymentPointConfig> points = "ATTACK".equalsIgnoreCase(team)
+                    ? cfg.outpostAttack : cfg.outpostDefend;
+                for (int i = 0; i < points.size(); i++) {
+                    VehicleConfig.DeploymentPointConfig point = points.get(i);
+                    if (point == null || point.position == null || point.position.length < 3) {
+                        continue;
+                    }
+                    int[] p = point.position;
+                    VehSpawnSnapshot.Pose pose = new VehSpawnSnapshot.Pose(
+                        p[0] + 0.5D, p[1], p[2] + 0.5D, point.yaw);
+                    if (spawnOnePadSupply(level, stationType, pose, team, type,
+                            "outpost_" + type + "_" + i)) {
+                        spawned++;
+                    }
+                }
+            }
+        }
+        return spawned;
+    }
+
+    public int clearPadSupplyStations(@Nullable ServerLevel level) {        if (level == null) return 0;
         String dimension = level.dimension().location().toString();
         int removed = 0;
         boolean mappedStationsChanged = false;
@@ -2255,10 +2313,13 @@ public class VehicleManager {
 
         int spawned = 0;
         for (String team : new String[]{"ATTACK", "DEFEND"}) {
-            SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint(team);
-            if (spawn == null) continue;
-            if (spawnOneMainBaseSupply(level, stationType, spawn, team)) {
-                spawned++;
+            java.util.List<SpawnPointConfig.SpawnPoint> spawns = SpawnPointConfig.getSpawnPoints(team);
+            for (int i = 0; i < spawns.size(); i++) {
+                SpawnPointConfig.SpawnPoint spawn = spawns.get(i);
+                if (spawn == null) continue;
+                if (spawnOneMainBaseSupply(level, stationType, spawn, team + "#" + i)) {
+                    spawned++;
+                }
             }
         }
         Espetro.LOGGER.info("主重生点弹药补给站生成完成: {} 个 (维度 {})",

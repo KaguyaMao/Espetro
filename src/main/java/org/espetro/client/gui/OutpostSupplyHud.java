@@ -16,10 +16,6 @@ public final class OutpostSupplyHud {
 
     private static final ResourceLocation FOB_STATUS_ICON =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/fob_status.png");
-    private static final ResourceLocation AMMO_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
-    private static final ResourceLocation CONSTRUCTION_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/construction_supply.png");
 
     private static final int TEXTURE_SIZE = 128;
     private static final int PAD = 6;
@@ -88,10 +84,10 @@ public final class OutpostSupplyHud {
             int bw = getWidth();
             int bh = getHeight();
 
-            // 圆角玻璃卡：阴影 + 渐变底 + 发丝描边。
+            // 无框玻璃卡保留补给状态的阅读对比。
             UiPaint.card(graphics, bx, by, bw, bh);
 
-            // 左上角 fob_status 图标 + 电台血量进度条（内凹槽 + 渐变填充）。
+            // 左上角 fob_status 图标与电台血量进度条。
             int iconX = bx + PAD;
             int iconY = by + PAD;
             graphics.fill(iconX, iconY, iconX + STATUS_ICON_SIZE, iconY + STATUS_ICON_SIZE,
@@ -112,21 +108,13 @@ public final class OutpostSupplyHud {
 
             // 弹药 / 建材存量行（数值用标题字号 + 投影）。
             int supplyY = by + 24;
-            graphics.fill(bx + PAD, supplyY, bx + PAD + SUPPLY_ICON_SIZE,
-                supplyY + SUPPLY_ICON_SIZE, UiTheme.ICON_PLATE);
-            graphics.blit(AMMO_ICON, bx + PAD, supplyY,
-                SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
-                TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            SupplyIcons.ammunition(graphics, bx + PAD, supplyY, SUPPLY_ICON_SIZE);
             UiPaint.textScaled(graphics, Integer.toString(ammunition),
                 bx + PAD + SUPPLY_ICON_SIZE + 4, supplyY, UiTheme.TEXT,
                 UiTheme.TYPE_HEADING, true);
 
             int constructionIconX = bx + 78;
-            graphics.fill(constructionIconX, supplyY, constructionIconX + SUPPLY_ICON_SIZE,
-                supplyY + SUPPLY_ICON_SIZE, UiTheme.ICON_PLATE);
-            graphics.blit(CONSTRUCTION_ICON, constructionIconX, supplyY,
-                SUPPLY_ICON_SIZE, SUPPLY_ICON_SIZE, 0f, 0f,
-                TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            SupplyIcons.construction(graphics, constructionIconX, supplyY, SUPPLY_ICON_SIZE);
             UiPaint.textScaled(graphics, Integer.toString(construction),
                 constructionIconX + SUPPLY_ICON_SIZE + 4, supplyY, UiTheme.TEXT,
                 UiTheme.TYPE_HEADING, true);
@@ -139,8 +127,6 @@ public final class OutpostSupplyHud {
             int pillW = Minecraft.getInstance().font.width(status) + 12;
             UiPaint.pill(graphics, pillX, pillY, pillW, STATUS_PILL_HEIGHT,
                 UiTheme.alpha(accent, 0.16f));
-            UiPaint.pillOutline(graphics, pillX, pillY, pillW, STATUS_PILL_HEIGHT,
-                UiTheme.alpha(accent, 0.5f));
             UiPaint.text(graphics, status, pillX + 6, pillY + 1, accent);
 
             super.draw(graphics, parentX, parentY, drawWidth, drawHeight,

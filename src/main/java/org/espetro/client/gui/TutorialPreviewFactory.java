@@ -23,7 +23,7 @@ final class TutorialPreviewFactory {
             return null;
         }
         return switch (step) {
-            case WELCOME, HUB -> new HubScreen(0, "教程预览 · 主城");
+            case WELCOME, HUB -> null; // 主城窗口已移除
             case MAP_VOTE -> mapVotePreview();
             case MAP_LOADING -> null; // 仅 HUD
             case TEAM_SELECT -> new TeamSelectionScreen();

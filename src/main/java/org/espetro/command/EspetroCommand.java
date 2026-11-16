@@ -30,8 +30,30 @@ public class EspetroCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // 工事可视化编辑器（/espetro fort ...，仅管理员）。Brigadier 会自动合并到下面的子树。
         FortCommand.register(dispatcher);
+        // 地图编辑维度内的点位/出生点/载具点编辑（/espetro edit point|spawn|veh|capture ...，仅管理员）
+        MapEditCommands.register(dispatcher);
         dispatcher.register(Commands.literal("espetro")
             .requires(source -> source.hasPermission(2)) // 需要管理员权限
+            .then(Commands.literal("edit")
+                .then(Commands.argument("map", StringArgumentType.word())
+                    .suggests((ctx, builder) -> {
+                        for (org.espetro.mapconfig.ActiveMapConfig candidate
+                                : org.espetro.mapconfig.ExternalConfigBootstrap.getUsableMaps()) {
+                            builder.suggest(candidate.mapFolder, Component.literal(candidate.displayName));
+                        }
+                        return builder.buildFuture();
+                    })
+                    .executes(ctx -> org.espetro.dimension.MapEditManager.getInstance()
+                        .create(ctx.getSource(), StringArgumentType.getString(ctx, "map"))))
+                .then(Commands.literal("in")
+                    .executes(ctx -> org.espetro.dimension.MapEditManager.getInstance()
+                        .enter(ctx.getSource()))))
+            .then(Commands.literal("editsave")
+                .executes(ctx -> org.espetro.dimension.MapEditManager.getInstance()
+                    .save(ctx.getSource())))
+            .then(Commands.literal("editabandon")
+                .executes(ctx -> org.espetro.dimension.MapEditManager.getInstance()
+                    .abandon(ctx.getSource())))
             .then(Commands.literal("freeunlock")
                 .executes(ctx -> {
                     ctx.getSource().sendSystemMessage(Component.literal(
@@ -128,6 +150,45 @@ public class EspetroCommand {
                     }
                     return maps.size();
                 }))
+            .then(org.espetro.naval.NavalCommand.node())
+            .then(Commands.literal("mapfolders")
+                .executes(ctx -> {
+                    java.nio.file.Path root = mapFoldersRoot();
+                    java.util.List<org.espetro.mapconfig.WorldFolderTools.Entry> entries;
+                    try {
+                        entries = org.espetro.mapconfig.WorldFolderTools.list(root);
+                    } catch (java.io.IOException ex) {
+                        ctx.getSource().sendSystemMessage(Component.literal("§c[Espetro] 读取 EsWorld 失败：" + ex.getMessage()));
+                        return 0;
+                    }
+                    ctx.getSource().sendSystemMessage(Component.literal("§6========== EsWorld 目录 =========="));
+                    for (var entry : entries) {
+                        ctx.getSource().sendSystemMessage(Component.literal("§7[" + entry.index() + "] §f"
+                            + entry.display() + (entry.nameValid() ? "" : " §c（名称损坏，需改名）")));
+                    }
+                    ctx.getSource().sendSystemMessage(Component.literal(
+                        "§7改名：/espetro mapfolders rename <序号> <新名称>（新名称仅限字母/数字/下划线/短横线）"));
+                    return entries.size();
+                })
+                .then(Commands.literal("rename")
+                    .then(Commands.argument("index", IntegerArgumentType.integer(0))
+                        .then(Commands.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                int index = IntegerArgumentType.getInteger(ctx, "index");
+                                String name = StringArgumentType.getString(ctx, "name");
+                                try {
+                                    java.nio.file.Path target = org.espetro.mapconfig.WorldFolderTools
+                                        .rename(mapFoldersRoot(), index, name);
+                                    ctx.getSource().sendSystemMessage(Component.literal(
+                                        "§a[Espetro] 已改名 -> " + target.getFileName()
+                                            + " §7（如需注册为可用地图，请把它加入 EsDimensions.json 后重启）"));
+                                    return 1;
+                                } catch (Exception ex) {
+                                    ctx.getSource().sendSystemMessage(Component.literal(
+                                        "§c[Espetro] 改名失败：" + ex.getMessage()));
+                                    return 0;
+                                }
+                            })))))
             .then(Commands.literal("reset")
                 .executes(ctx -> {
                     var server = ctx.getSource().getServer();
@@ -544,48 +605,13 @@ public class EspetroCommand {
         );
 
 
-        // 新手教程：任意玩家可用（不继承管理员 requires）
-        dispatcher.register(Commands.literal("espetro")
-            .then(Commands.literal("tutorial")
-                .executes(ctx -> {
-                    ServerPlayer player = ctx.getSource().getPlayerOrException();
-                    org.espetro.tutorial.TutorialManager.getInstance().reopen(player);
-                    return 1;
-                })
-                .then(Commands.literal("next")
-                    .executes(ctx -> {
-                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-                        org.espetro.tutorial.TutorialManager.getInstance()
-                            .handleAction(player, org.espetro.tutorial.TutorialManager.Action.NEXT, null);
-                        return 1;
-                    })
-                )
-                .then(Commands.literal("skip")
-                    .executes(ctx -> {
-                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-                        org.espetro.tutorial.TutorialManager.getInstance().skipAll(player);
-                        return 1;
-                    })
-                )
-                .then(Commands.literal("dismiss")
-                    .executes(ctx -> {
-                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-                        org.espetro.tutorial.TutorialManager.getInstance()
-                            .handleAction(player, org.espetro.tutorial.TutorialManager.Action.DISMISS, null);
-                        return 1;
-                    })
-                )
-                .then(Commands.literal("status")
-                    .executes(ctx -> {
-                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-                        String status = org.espetro.tutorial.TutorialManager.getInstance().statusLine(player);
-                        ctx.getSource().sendSystemMessage(
-                            Component.literal("§6[Espetro 教程] §f" + status));
-                        return 1;
-                    })
-                )
-            )
-        );
+        // 新手教程已移除（教程命令与主城入口一并下线）。
 
+    }
+
+    /** EsWorld 根目录（与 ExternalConfigBootstrap 的解析方式一致）。 */
+    private static java.nio.file.Path mapFoldersRoot() {
+        return net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get()
+            .resolve(org.espetro.mapconfig.ExternalConfigBootstrap.WORLD_DIR);
     }
 }

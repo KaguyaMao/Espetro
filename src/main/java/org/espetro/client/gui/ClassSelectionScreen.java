@@ -401,8 +401,7 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
             int errorX = this.width / 2 - errorW / 2;
             int errorY = this.height / 2 - 8;
             UiPaint.roundRect(graphics, errorX, errorY, errorW, 16, UiTheme.RADIUS_INNER, UiTheme.NEGATIVE_SOFT);
-            UiPaint.strokeRoundRect(graphics, errorX, errorY, errorW, 16, UiTheme.RADIUS_INNER,
-                UiTheme.alpha(UiTheme.NEGATIVE, 0.55f));
+
             UiPaint.textCentered(graphics, error, 0, errorY + 4, this.width,
                 UiTheme.NEGATIVE, UiTheme.TYPE_BODY, false);
             errorDisplayTime--;
@@ -437,9 +436,8 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
         int closeY = popupY + 2;
         boolean closeHovered = inside(mouseX, mouseY, closeX, closeY, 13, 13);
         UiPaint.roundRect(graphics, closeX, closeY, 13, 13, UiTheme.RADIUS_INNER,
-            closeHovered ? UiTheme.NEGATIVE_SOFT : UiTheme.HAIRLINE);
-        UiPaint.strokeRoundRect(graphics, closeX, closeY, 13, 13, UiTheme.RADIUS_INNER,
-            closeHovered ? UiTheme.NEGATIVE : UiTheme.HAIRLINE);
+            closeHovered ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
+
         EspetroAuiWidgets.drawScaledString(graphics, "X", closeX + 4, closeY + 3,
             closeHovered ? UiTheme.NEGATIVE : UiTheme.TEXT_SECOND, 0.9f);
 
@@ -458,10 +456,8 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
             boolean hovered = inside(mouseX, mouseY, rowX, rowY, rowW, rowH);
 
             int rowFill = full ? UiTheme.NEGATIVE_SOFT
-                : hovered ? UiTheme.SURFACE_2 : UiTheme.alpha(UiTheme.SURFACE_0, 0.55f);
+                : hovered ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL;
             UiPaint.roundRect(graphics, rowX, rowY, rowW, rowH, UiTheme.RADIUS_CONTROL, rowFill);
-            UiPaint.strokeRoundRect(graphics, rowX, rowY, rowW, rowH, UiTheme.RADIUS_CONTROL,
-                hovered && !full ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
 
             String variantName = variant.name() == null ? "" : variant.name();
             EspetroAuiWidgets.drawScaledString(graphics,

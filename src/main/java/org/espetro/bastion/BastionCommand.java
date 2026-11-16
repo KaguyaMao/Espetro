@@ -1,6 +1,7 @@
 package org.espetro.bastion;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -47,6 +48,14 @@ public class BastionCommand {
                     if (player == null) return 0;
                     return respawnAtDeployPoint(player);
                 })
+                .then(Commands.argument("index", IntegerArgumentType.integer(1))
+                    .executes(context -> {
+                        ServerPlayer player = context.getSource().getPlayer();
+                        if (player == null) return 0;
+                        return respawnAtDeployPoint(player,
+                            IntegerArgumentType.getInteger(context, "index") - 1);
+                    })
+                )
             )
             .then(Commands.literal("list")
                 .requires(source -> source.hasPermission(0))
@@ -109,6 +118,28 @@ public class BastionCommand {
      * 在原部署点复活
      */
     private static int respawnAtDeployPoint(ServerPlayer player) {
+        return respawnAtDeployPoint(player, -1);
+    }
+
+    /**
+     * 在指定主基地重生点复活（index &lt; 0 表示沿用玩家已保存的部署点）。
+     */
+    private static int respawnAtDeployPoint(ServerPlayer player, int index) {
+        if (index >= 0) {
+            String team = ClassCountManager.getInstance().getPlayerTeam(player.getUUID());
+            java.util.List<org.espetro.team.SpawnPointConfig.SpawnPoint> mains =
+                org.espetro.team.SpawnPointConfig.getSpawnPoints(team);
+            if (index >= mains.size()) {
+                player.sendSystemMessage(Component.literal("§c没有第 " + (index + 1) + " 个主基地！"));
+                return 0;
+            }
+            org.espetro.team.SpawnPointConfig.SpawnPoint sp = mains.get(index);
+            net.minecraft.server.level.ServerLevel level =
+                org.espetro.mapconfig.BattlefieldContext.requireBattlefield(player.server);
+            net.minecraft.core.BlockPos pos = net.minecraft.core.BlockPos.containing(
+                sp.x, sp.y, sp.z);
+            BastionManager.getInstance().savePlayerDeployPoint(player, pos, level);
+        }
         // 检查是否在对战阶段或部署阶段（战局中加入允许部署阶段）
         org.espetro.team.GamePhase phase = GameStateManager.getInstance().getCurrentPhase();
         if (phase != org.espetro.team.GamePhase.BATTLE

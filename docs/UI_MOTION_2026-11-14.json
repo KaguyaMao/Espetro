@@ -1,0 +1,98 @@
+{
+  "backup": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\espetro-backups\\20261114-101200-before-ui-motion",
+  "backup_files": 76,
+  "artifact": "C:\\Users\\Administrator\\.m2\\repository\\org\\espetro\\espetro\\1.1.3-l\\espetro-1.1.3-l.jar",
+  "installed": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\mods\\espetro-1.1.3-x.jar",
+  "sha256": "807e8c00fb3fd768083140c483a5cf42fce167234f6bd6864810feeecf09cbac",
+  "size": 217349297,
+  "bundled_menu_files": 283,
+  "tests": [
+    {
+      "name": "org.espetro.client.aui.AuiScreenHostTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.ClientUiPreferencesTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.CurrentMapBackgroundRendererTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FancyMenuGlassGeometryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FobSupplyHudTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.IconRasterizerTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiMotionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiPaintTextTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiThemeTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.VanillaHudLayoutTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.ui.BundledMenuInstallerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "build_log": "build/ui-motion-build.log",
+  "runtime_probe": "build/ui-motion-runtime-5.log",
+  "commander_layout_checks": {
+    "scenarios": 48,
+    "candidate_bounds": 348
+  },
+  "radial_unification": {
+    "inner": "#B824292B",
+    "outer": "#C832383A",
+    "source": "Current EsPoints command_root fallback.ringColors matched in local runtime jar bytecode."
+  },
+  "runtime_verification": {
+    "startup": "passed",
+    "commander_eight_and_single": "passed",
+    "foreground_fade": "visually verified",
+    "compositor_fallback_warning": false,
+    "screenshots": "design/ui-motion-2026-11-14",
+    "temporary_script_removed": true,
+    "owned_test_process_stopped": true,
+    "server_gameplay": "not exercised"
+  }
+}

@@ -85,6 +85,6 @@ public final class ClientUiCommands {
     }
 
     private static String modeLabel(UiTheme.Mode mode) {
-        return mode == UiTheme.Mode.LIGHT ? "亮色（light）" : "暗色（dark）";
+        return mode == UiTheme.Mode.LIGHT ? "亮色毛玻璃（light）" : "暗色毛玻璃（dark）";
     }
 }

@@ -45,7 +45,8 @@ public final class DeploySupplyStationPlacer {
     }
 
     /**
-     * 清除本维度旧站后，在 ATTACK / DEFEND 原部署点旁各放一座无限弹药箱。
+     * 清除本维度旧站后，在 ATTACK / DEFEND 的<b>每一个</b>主基地重生点旁各放一座无限弹药箱。
+     * <p>索引 0 是第一主基地；其余点只要在地图里配了也给（多主基地机制）。</p>
      *
      * @return 成功放置数量
      */
@@ -57,15 +58,18 @@ public final class DeploySupplyStationPlacer {
 
         int placed = 0;
         for (String team : new String[]{"ATTACK", "DEFEND"}) {
-            SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint(team);
-            if (spawn == null) {
-                continue;
-            }
-            if (placeOne(level, spawn, team)) {
-                placed++;
+            List<SpawnPointConfig.SpawnPoint> spawns = SpawnPointConfig.getSpawnPoints(team);
+            for (int i = 0; i < spawns.size(); i++) {
+                SpawnPointConfig.SpawnPoint spawn = spawns.get(i);
+                if (spawn == null) {
+                    continue;
+                }
+                if (placeOne(level, spawn, team + "#" + i)) {
+                    placed++;
+                }
             }
         }
-        Espetro.LOGGER.info("原部署点无限弹药箱预放完成: {} 个 (维度 {})",
+        Espetro.LOGGER.info("主基地无限弹药箱预放完成: {} 个 (维度 {})",
             placed, level.dimension().location());
         return placed;
     }

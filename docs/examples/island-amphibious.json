@@ -1,0 +1,216 @@
+{
+  "enabled": true,
+  "beach_direction": 0.0,
+  "water_surface_y": 12,
+  "ships": [
+    {
+      "id": "lhd_01",
+      "role": "lhd",
+      "structure": "espetro:naval/lhd_placeholder",
+      "source": "builtin",
+      "draft_adjust": 0,
+      "anchor": {
+        "x": 1158,
+        "y": 12,
+        "z": 2100
+      },
+      "rotation": "none",
+      "barrier": {
+        "mode": "box",
+        "height": 24,
+        "cap": true
+      },
+      "spawn_from_markers": false
+    },
+    {
+      "id": "ddg_01",
+      "role": "destroyer",
+      "structure": "espetro:naval/ddg_placeholder",
+      "source": "builtin",
+      "draft_adjust": 0,
+      "anchor": {
+        "x": 1051,
+        "y": 18,
+        "z": 1828
+      },
+      "rotation": "none",
+      "solid": true,
+      "barrier": {
+        "mode": "none"
+      },
+      "spawn_from_markers": false
+    }
+  ],
+  "override_spawn": {
+    "attack": {
+      "x": 1188.5,
+      "y": 27,
+      "z": 2113.5,
+      "yaw": 180.0
+    },
+    "vehicles": {
+      "mbt": [
+        {
+          "id": "mbt_1",
+          "attack": {
+            "x": 1159.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "mbt_2",
+          "attack": {
+            "x": 1165.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "mgs": [
+        {
+          "id": "mgs_1",
+          "attack": {
+            "x": 1165.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "ifv": [
+        {
+          "id": "ifv_1",
+          "attack": {
+            "x": 1171.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "ifv_2",
+          "attack": {
+            "x": 1171.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "acv": [
+        {
+          "id": "acv_1",
+          "attack": {
+            "x": 1177.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "acv_2",
+          "attack": {
+            "x": 1177.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "apc": [
+        {
+          "id": "apc_1",
+          "attack": {
+            "x": 1183.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "apc_2",
+          "attack": {
+            "x": 1183.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "car": [
+        {
+          "id": "car_1",
+          "attack": {
+            "x": 1189.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "truck": [
+        {
+          "id": "truck_1",
+          "attack": {
+            "x": 1195.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "truck_2",
+          "attack": {
+            "x": 1189.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "supply_truck": [
+        {
+          "id": "supply_truck_1",
+          "attack": {
+            "x": 1201.5,
+            "y": 27,
+            "z": 2105.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "supply_truck_2",
+          "attack": {
+            "x": 1195.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ],
+      "transport_helicopter": [
+        {
+          "id": "transport_helicopter_1",
+          "attack": {
+            "x": 1159.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        },
+        {
+          "id": "transport_helicopter_2",
+          "attack": {
+            "x": 1201.5,
+            "y": 27,
+            "z": 2116.5,
+            "yaw": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

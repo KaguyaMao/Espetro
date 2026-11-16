@@ -20,7 +20,6 @@ import net.minecraftforge.event.TickEvent;
 import org.espetro.client.gui.UiTheme;
 
 public final class VanillaHudLayout {
-    private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/widgets.png");
     private static final ResourceLocation GUI_ICONS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
 
     private static final float HOTBAR_SCALE = 0.82F;
@@ -288,11 +287,13 @@ public final class VanillaHudLayout {
 
         for (int slot = 0; slot < HOTBAR_SLOTS; slot++) {
             int slotY = baseY + slot * SLOT_STEP;
-            graphics.blit(WIDGETS_LOCATION, baseX, slotY, 0, 0, SLOT_SIZE, SLOT_SIZE);
+            UiPaint.roundRect(graphics, baseX, slotY, SLOT_SIZE, SLOT_SIZE,
+                UiTheme.RADIUS_CONTROL, UiTheme.CONTROL_NORMAL);
         }
 
         int selectedY = baseY + player.getInventory().selected * SLOT_STEP;
-        graphics.blit(WIDGETS_LOCATION, baseX - 1, selectedY - 1, 0, 22, 24, 22);
+        UiPaint.roundRect(graphics, baseX, selectedY, SLOT_SIZE, SLOT_SIZE,
+            UiTheme.RADIUS_CONTROL, UiTheme.CONTROL_SELECTED);
 
         int seed = 1;
         for (int slot = 0; slot < HOTBAR_SLOTS; slot++) {
@@ -303,7 +304,8 @@ public final class VanillaHudLayout {
 
         if (!offhand.isEmpty()) {
             int offhandY = baseY + SLOT_SIZE + (HOTBAR_SLOTS - 1) * SLOT_STEP + OFFHAND_GAP;
-            graphics.blit(WIDGETS_LOCATION, baseX, offhandY, 0, 0, SLOT_SIZE, SLOT_SIZE);
+            UiPaint.roundRect(graphics, baseX, offhandY, SLOT_SIZE, SLOT_SIZE,
+                UiTheme.RADIUS_CONTROL, UiTheme.CONTROL_NORMAL);
             renderSlot(graphics, mc, player, offhand, baseX + 3, offhandY + 3, partialTick, seed);
         }
 
@@ -413,7 +415,6 @@ public final class VanillaHudLayout {
 
         if (healthFilled > 0) {
             graphics.fill(x, healthY, x + healthFilled, healthY + HEALTH_HEIGHT, UiTheme.WORLD_NEGATIVE);
-            graphics.fill(x, healthY, x + healthFilled, healthY + 2, UiTheme.withAlpha(UiTheme.WORLD_TEXT, 0x1A));
         }
         HudRenderState.restore(graphics);
     }

@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -79,6 +80,23 @@ public final class FortificationManager {
     private final Map<UUID, Long> lastWorkTick = new HashMap<>();
     /** 部件的最近受击 tick（键为 {@link #posKey}），只用于爆炸去重。 */
     private final Map<String, Long> lastPartDamageTick = new HashMap<>();
+    /**
+     * 单次爆炸的命中部件缓冲：同一次爆炸命中的部件先收集，再在 tick 末**一次性**结算。
+     *
+     * <p>过去是「每命中一个部件就扣一次」，而单件伤害是 {@code ceil(SV/部件数)}，
+     * 于是一次覆盖全部部件的爆炸总伤害恒等于 {@code SV × (1-减免)}——不管工事多大、
+     * 多少部件，爆炸减免 0.5 就是“两发必掉”，配置看上去完全没生效。现在总伤害只跟
+     * 覆盖比例与爆炸威力有关，减免只乘一次。</p>
+     */
+    private final Map<UUID, PendingExplosion> pendingExplosions = new HashMap<>();
+    /**
+     * 减免后不足 1 点的伤害余量（按工事累计）。
+     *
+     * <p>{@code projectile: 0.95} 时单件伤害只有 0.85 点，旧代码用 {@code Math.max(1, …)}
+     * 把它抬到 1 点，等于“配置成 0.95 和配置成 0 完全一样”。现在小数部分会累计，
+     * 取整后扣血。</p>
+     */
+    private final Map<UUID, Double> damageResidue = new HashMap<>();
     private final FortificationSpatialIndex spatialIndex = new FortificationSpatialIndex();
 
     private FortificationManager() {
@@ -208,6 +226,10 @@ public final class FortificationManager {
         }
 
         int required() { return blueprint.profile.requiredProgress; }
+    }
+
+    /** 一次爆炸对某个工事的命中部件集合，{@code attacker} 取第一条命中的来源。 */
+    private record PendingExplosion(Set<BlockPos> parts, @Nullable Entity attacker) {
     }
 
     private record WorldSlot(int templateIndex, BlockPos pos, @Nullable BlockState state,
@@ -485,7 +507,6 @@ public final class FortificationManager {
                     .filter(slot -> slot.touch == FortificationTemplateCompiler.Touch.BLOCK)
                     .toList()
                 : List.of();
-            boolean changed = false;
             if (construction.complete) {
                 for (WorldSlot slot : parts) {
                     BlockPos pos = slot.pos;
@@ -494,24 +515,59 @@ public final class FortificationManager {
                         destroy(level, construction, attacker, true);
                         break;
                     }
-                    if (!acceptPartDamage(level, construction, slot, pos)) continue;
-                    changed = true;
-                    damageConstruction(level, construction, pos, attacker, DamageKind.EXPLOSION);
-                    if (!constructions.containsKey(construction.id)) break;
+                    markPartMissing(level, construction, slot, pos);
+                    noteExplosionHit(construction, pos, attacker);
                 }
             } else {
                 for (BlockPos pos : construction.footprint) {
                     if (!hitPart.test(pos)) continue;
-                    if (!acceptPartDamage(level, construction, null, pos)) continue;
-                    changed = true;
-                    damageConstruction(level, construction, pos, attacker, DamageKind.EXPLOSION);
-                    if (!constructions.containsKey(construction.id)) break;
+                    noteExplosionHit(construction, pos, attacker);
                 }
             }
-            if (changed
-                && construction.blueprint.definition.behaviorType
-                    == FortificationConfig.Behavior.RADIO
-                && constructions.containsKey(construction.id)) {
+        }
+    }
+
+    /** 记录一次爆炸对某工事的命中部件；真正的扣血在 {@link #settleExplosionDamage} 里按覆盖比例结算一次。 */
+    private void noteExplosionHit(Construction construction, BlockPos pos, @Nullable Entity attacker) {
+        PendingExplosion pending = pendingExplosions.get(construction.id);
+        if (pending == null) {
+            pending = new PendingExplosion(new LinkedHashSet<>(), attacker);
+            pendingExplosions.put(construction.id, pending);
+        }
+        pending.parts().add(pos.immutable());
+    }
+
+    /**
+     * tick 末统一结算本 tick 收集到的爆炸命中。
+     *
+     * <p>一次爆炸 = 一次结算：总伤害 = {@code explosion_damage × 覆盖比例}，再乘
+     * 一次 {@code damage_reduction.explosion}。覆盖比例按“命中部件数 / 可受伤部件数”算，
+     * 因此炸到 6 件沙袋墙的 2 件只有 1/3 伤害，而不再是每件各扣一次。</p>
+     */
+    public void settleExplosionDamage(MinecraftServer server) {
+        if (pendingExplosions.isEmpty() || server == null) return;
+        for (UUID id : new ArrayList<>(pendingExplosions.keySet())) {
+            PendingExplosion pending = pendingExplosions.remove(id);
+            if (pending == null) continue;
+            Construction construction = constructions.get(id);
+            if (construction == null) {
+                damageResidue.remove(id);
+                continue;
+            }
+            ServerLevel level = levelFor(construction);
+            if (level == null) {
+                damageResidue.remove(id);
+                continue;
+            }
+            int parts = construction.complete
+                ? damageablePartCount(construction)
+                : Math.max(1, construction.footprint.size());
+            double coverage = Math.min(1.0D, pending.parts().size() / (double) parts);
+            double raw = Math.max(0.0D,
+                construction.blueprint.definition.durability.explosionDamage) * coverage;
+            applyDamage(level, construction, pending.attacker(), DamageKind.EXPLOSION, raw);
+            if (constructions.containsKey(id)
+                && construction.blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO) {
                 FobSupplyTracker.notifyConstructionProgressChanged(
                     level, construction.anchor, construction.team);
             }
@@ -538,8 +594,15 @@ public final class FortificationManager {
                 && slot.touch == FortificationTemplateCompiler.Touch.BLOCK)
             .findFirst().orElse(null);
         if (part == null) return;
+        if (kind == DamageKind.EXPLOSION) {
+            // 爆炸走“tick 末按覆盖比例结算一次”，这里只登记命中；
+            // 同一次爆炸的多条钩子在同一个 tick 内由 PendingExplosion 的 Set 去重。
+            markPartMissing(level, construction, part, pos);
+            noteExplosionHit(construction, pos, attacker);
+            return;
+        }
         if (!acceptPartDamage(level, construction, part, pos)) return;
-        damageConstruction(level, construction, pos, attacker, kind);
+        applyDamage(level, construction, attacker, kind, partDamage(construction));
         if (construction.blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO
             && constructions.containsKey(construction.id)) {
             FobSupplyTracker.notifyConstructionProgressChanged(level, construction.anchor, construction.team);
@@ -561,11 +624,23 @@ public final class FortificationManager {
         Long last = lastPartDamageTick.get(key);
         if (last != null && now - last < PART_DAMAGE_INTERVAL_TICKS) return false;
         lastPartDamageTick.put(key, now);
+        markPartMissing(level, construction, part, pos);
+        return true;
+    }
+
+    /**
+     * 部件方块真的从世界上消失时记进 {@code missing}。
+     *
+     * <p>爆炸改成一 tick 一次结算后不再走 {@link #acceptPartDamage} 的冷却，
+     * 但这段记录仍然要每次命中都做——否则修复时回填不回来、拆除时又会被跳过。</p>
+     */
+    private static void markPartMissing(ServerLevel level, Construction construction,
+                                        @Nullable WorldSlot part, @Nullable BlockPos pos) {
+        if (pos == null) return;
         if (part != null && part.state != null
             && !level.getBlockState(pos).equals(part.state)) {
             construction.missing.add(pos.immutable());
         }
-        return true;
     }
 
     /** 炮弹/导弹直接命中工事实体时扣除一次完整度。 */
@@ -576,7 +651,7 @@ public final class FortificationManager {
         if (construction == null || !Boolean.TRUE.equals(damageableEntityIndex.get(entityId))
             || construction.blueprint.kind == Kind.ENTITY
             || !construction.settledEntityParts.add(entityId)) return;
-        damageConstruction(level, construction, null, attacker, DamageKind.PROJECTILE);
+        applyDamage(level, construction, attacker, DamageKind.PROJECTILE, partDamage(construction));
     }
 
     /** Entity fortifications are a single integrity part. */
@@ -597,7 +672,7 @@ public final class FortificationManager {
             construction.structuralValue = 0;
             destroy(level, construction, null, true);
         } else {
-            damageConstruction(level, construction, null, null, DamageKind.DIRECT_BREAK);
+            applyDamage(level, construction, null, DamageKind.DIRECT_BREAK, partDamage(construction));
         }
     }
 
@@ -608,18 +683,38 @@ public final class FortificationManager {
             && pos.equals(construction.anchor);
     }
 
-    private void damageConstruction(ServerLevel level, Construction construction,
-                                    @Nullable BlockPos part, @Nullable Entity attacker,
-                                    DamageKind kind) {
+    /**
+     * 单次命中的基础伤害：把工事总完整度摊到每个可受伤部件上。
+     *
+     * <p>只用于直击（{@link DamageKind#PROJECTILE}）、徒手/铲子拆除
+     * （{@link DamageKind#DIRECT_BREAK}）这类“一次只打到一件”的伤害；爆炸不按部件算，
+     * 见 {@link #settleExplosionDamage}。</p>
+     */
+    private static double partDamage(Construction construction) {
         int maximum = construction.complete
             ? construction.blueprint.definition.durability.structuralValue
             : construction.required();
         int parts = construction.complete ? damageablePartCount(construction)
             : Math.max(1, construction.footprint.size());
-        int baseDamage = Math.max(1, (int) Math.ceil((double) maximum / parts));
+        return Math.max(1.0D, Math.ceil((double) maximum / parts));
+    }
+
+    /**
+     * 结算一次伤害。
+     *
+     * <p>减免后允许出现不足 1 点的伤害：小数部分记在 {@link #damageResidue} 里累计，
+     * 攒够 1 点再扣。这样 {@code damage_reduction.projectile = 0.95} 才真的是“只吃 5%”，
+     * 而不是被 {@code Math.max(1, …)} 抬成“和 0 减免一模一样”。</p>
+     */
+    private void applyDamage(ServerLevel level, Construction construction, @Nullable Entity attacker,
+                             DamageKind kind, double rawDamage) {
+        if (rawDamage <= 0.0D) return;
         double reduction = construction.blueprint.definition.durability.damageReduction.forKind(kind);
-        int damage = reduction >= 1.0 ? 0
-            : Math.max(1, (int) Math.ceil(baseDamage * (1.0 - reduction)));
+        double effective = reduction >= 1.0D ? 0.0D : rawDamage * (1.0D - reduction);
+        if (effective <= 0.0D) return;
+        double banked = damageResidue.getOrDefault(construction.id, 0.0D) + effective;
+        int damage = (int) Math.floor(banked);
+        damageResidue.put(construction.id, banked - damage);
         if (damage <= 0) return;
         if (construction.complete) {
             construction.structuralValue = Math.max(0, construction.structuralValue - damage);
@@ -1245,6 +1340,8 @@ public final class FortificationManager {
         }
         if (c.bastionId != null) bastionIndex.remove(c.bastionId, c.id);
         spatialIndex.remove(c.id);
+        pendingExplosions.remove(c.id);
+        damageResidue.remove(c.id);
     }
 
     private static List<WorldSlot> transform(List<Slot> slots, BlockPos anchor, Direction facing) {

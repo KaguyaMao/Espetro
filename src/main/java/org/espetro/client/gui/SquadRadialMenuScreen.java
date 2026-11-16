@@ -98,7 +98,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
             root.addChild(new RadialOption(i, optionX, optionY, options.get(i)));
         }
         centerLabel = EspetroAuiWidgets.centeredText(centerX - 90, centerY - 5, 180,
-            "移动鼠标选择", UiTheme.TEXT);
+            "移动鼠标选择", UiTheme.WORLD_TEXT);
         centerLabel.setTextScale(UiTheme.TYPE_HEADING);
         centerLabel.setShadow(true);
         root.addChild(centerLabel);
@@ -116,18 +116,12 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
         double dy = mouseY - centerY;
         selectedIndex = select(dx, dy);
 
-        // 世界压暗一层（令牌派生的半透明深底，仍能透视战场）。
-        graphics.fill(0, 0, width, height, UiTheme.withAlpha(UiTheme.BACKDROP_TOP, 0x70));
-        // 圆盘导轨 + 中心托底：轮盘"盘面"由圆环与圆盘构成，而不是直角面板。
-        UiPaint.ring(graphics, centerX, centerY, wheelRadius(),
-            UiTheme.withAlpha(UiTheme.ACCENT, 0x18));
-        UiPaint.circle(graphics, centerX, centerY, HUB_RADIUS,
-            UiTheme.withAlpha(UiTheme.SURFACE_0, 0xE6));
-        UiPaint.ring(graphics, centerX, centerY, HUB_RADIUS, UiTheme.HAIRLINE_STRONG);
+        // The host draws one blurred backdrop; the wheel only adds a translucent hub.
+        UiPaint.circle(graphics, centerX, centerY, HUB_RADIUS, UiTheme.RADIAL_CENTER);
         if (centerLabel != null) {
             centerLabel.setText(selectedIndex < 0 ? "移动鼠标选择"
                 : options.get(selectedIndex).label);
-            centerLabel.setColor(UiTheme.TEXT);
+            centerLabel.setColor(UiTheme.WORLD_TEXT);
         }
     }
 
@@ -151,27 +145,17 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
             boolean active = selectedIndex == index;
             int half = active ? 23 : 20;
             int ringRadius = half + 3;
-            // 未解锁=红底、选中=强调色底、常态=表面层；描边同语义。
-            int plate = !option.enabled ? UiTheme.NEGATIVE_SOFT
-                : active ? UiTheme.ACCENT_SOFT : UiTheme.SURFACE_2;
-            int border = !option.enabled ? UiTheme.alpha(UiTheme.NEGATIVE, 0.6f)
-                : active ? UiTheme.ACCENT : UiTheme.HAIRLINE_STRONG;
+            // Borderless translucent plates keep the wheel consistent with menus.
+            int plate = !option.enabled ? UiTheme.RADIAL_DISABLED
+                : active ? UiTheme.RADIAL_HOVER : UiTheme.RADIAL_BACKGROUND;
             UiPaint.circle(graphics, centerX, centerY, ringRadius, plate);
-            UiPaint.ring(graphics, centerX, centerY, ringRadius, border);
-            if (active) {
-                // 选中态：一圈更亮的柔光外环。
-                UiPaint.ring(graphics, centerX, centerY, ringRadius + 1, UiTheme.ACCENT_LINE);
-                UiPaint.ring(graphics, centerX, centerY, ringRadius + 2,
-                    UiTheme.alpha(UiTheme.ACCENT, 0.25f));
-            }
-            UiPaint.circle(graphics, centerX, centerY, half, UiTheme.ICON_PLATE);
             RenderSystem.setShaderColor(1f, 1f, 1f,
                 option.enabled ? (active ? 1f : 0.8f) : 0.45f);
             graphics.blit(option.icon, centerX - half, centerY - half, half * 2, half * 2,
                 0f, 0f, 128, 128, option.textureWidth, 128);
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-            int labelColor = !option.enabled ? UiTheme.NEGATIVE
-                : active ? UiTheme.TEXT : UiTheme.TEXT_SECOND;
+            int labelColor = !option.enabled ? UiTheme.WORLD_NEGATIVE
+                : active ? UiTheme.WORLD_TEXT : UiTheme.WORLD_MUTED;
             int labelWidth = font.width(option.label);
             graphics.drawString(font, option.label, centerX - labelWidth / 2,
                 centerY + half + 6, labelColor, true);

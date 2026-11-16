@@ -138,7 +138,7 @@ public final class FixedWeaponWheelController {
             .title(Component.literal(packet.displayName() + " · FOB 弹药 " + packet.fobAmmo()))
             .radii(44, 108)
             .animationSpeed(1.25F)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
+            .ringColors(RadialGlassStyle.ringColors());
         List<FixedWeaponWheelPacket.Slot> slots = packet.slots();
         boolean anyAffordable = false;
         for (int i = 0; i < slots.size(); i++) {

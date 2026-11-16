@@ -44,33 +44,23 @@ public class FactionSelectionScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
-        int panelW = Math.min(520, Math.max(240, this.width - 28));
-        int columns = this.width < 420 ? 1 : this.width < 680 ? 2 : 3;
+        VotePhase.add(root, width, height, "选择阵营编制",
+            "共有 " + factions.length + " 个可选编制",
+            () -> "选择一个阵营编制加入战斗", () -> VotePhase.currentStage(VotePhase.Stage.NONE));
+        int panelW = Math.max(1, Math.min(660, width - 32));
+        int columns = Math.max(1, Math.min(3, Math.min(Math.max(1, factions.length), (width - 32) / 150)));
         int gap = UiTheme.GAP_XS;
-        int cardW = (panelW - 24 - (columns - 1) * gap) / columns;
-        int cardH = UiTheme.CONTROL_HEIGHT_S;
+        int cardW = Math.max(1, (panelW - 24 - (columns - 1) * gap) / columns);
+        int cardH = UiTheme.CONTROL_HEIGHT;
         int rows = Math.max(1, (factions.length + columns - 1) / columns);
-        int headerH = 78;
-        int footerH = 46;
-        int panelH = Math.min(this.height - 20,
+        int headerH = 10;
+        int footerH = 42;
+        int availableH = Math.max(1, VotePhase.contentBottom(height) - VotePhase.contentTop(height) - 8);
+        int panelH = Math.min(availableH,
             headerH + rows * cardH + Math.max(0, rows - 1) * gap + footerH);
-        int panelX = (this.width - panelW) / 2;
-        int panelY = Math.max(14, (this.height - panelH) / 2);
-
-        // 主容器：玻璃卡片 + 顶部标题区
+        int panelX = (width - panelW) / 2;
+        int panelY = VotePhase.contentTop(height) + Math.max(0, (availableH - panelH) / 2);
         root.addChild(EspetroAuiWidgets.card(panelX, panelY, panelW, panelH));
-
-        EspetroAuiWidgets.Text title = EspetroAuiWidgets.centeredText(panelX, panelY + 10, panelW,
-            "战术小队 · 选择阵营", UiTheme.GOLD);
-        title.setTextScale(UiTheme.TYPE_TITLE).setShadow(true);
-        root.addChild(title);
-        root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 29, panelW,
-            "选择一个阵营编制加入战斗", UiTheme.TEXT_SECOND));
-
-        // 可用阵营数量：数字独立放大，避免"数字混在句子里"。
-        root.addChild(EspetroAuiWidgets.stat(panelX + (panelW - 64) / 2, panelY + 44, 64,
-            "AVAILABLE", String.valueOf(factions.length), UiTheme.GOLD));
-        root.addChild(EspetroAuiWidgets.divider(panelX + 12, panelY + 70, panelW - 24));
 
         int startX = panelX + 12;
         int startY = panelY + headerH;

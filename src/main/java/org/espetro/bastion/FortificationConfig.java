@@ -1227,6 +1227,14 @@ public final class FortificationConfig {
         public int structuralValue = 100;
         @SerializedName("repair_per_hit")
         public int repairPerHit = 5;
+        /**
+         * 一次“覆盖全部部件”的爆炸在减免前的伤害。
+         *
+         * <p>爆炸是按覆盖比例结算一次的：{@code 实际伤害 = explosion_damage × 覆盖比例 × (1 - 减免)}。
+         * 60 大致等于“普通坦克炮弹一发打掉 40% 血再吃减免”。</p>
+         */
+        @SerializedName("explosion_damage")
+        public double explosionDamage = 60.0D;
         @SerializedName("damageable_structure_entities")
         public List<Integer> damageableStructureEntities = new ArrayList<>();
         @SerializedName("damage_reduction")
@@ -1237,6 +1245,11 @@ public final class FortificationConfig {
                 path + ".structural_value", errors);
             repairPerHit = boundedPositive(repairPerHit, structuralValue,
                 path + ".repair_per_hit", errors);
+            if (!Double.isFinite(explosionDamage) || explosionDamage < 0.0D
+                || explosionDamage > 1_000_000.0D) {
+                errors.add(path + ".explosion_damage: 需为 0~1000000 的数字");
+                explosionDamage = 60.0D;
+            }
             if (damageReduction == null) damageReduction = new DamageReduction();
             damageReduction.normalize(errors, path + ".damage_reduction");
             if (damageableStructureEntities == null) damageableStructureEntities = new ArrayList<>();

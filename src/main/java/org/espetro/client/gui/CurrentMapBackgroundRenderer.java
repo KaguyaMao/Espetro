@@ -43,7 +43,10 @@ final class CurrentMapBackgroundRenderer {
         Crop crop = aspectFillCrop(texture.width, texture.height, screenWidth, screenHeight);
         graphics.blit(texture.location, 0, 0, screenWidth, screenHeight,
             crop.u, crop.v, crop.width, crop.height, texture.width, texture.height);
-        graphics.fill(0, 0, screenWidth, screenHeight, UiTheme.FROST_SCRIM);
+        if (!FancyMenuGlass.draw(graphics, 0, 0, screenWidth, screenHeight,
+                UiTheme.GLASS_BLUR_RADIUS, UiTheme.FROST_SCRIM, 0.0F)) {
+            graphics.fill(0, 0, screenWidth, screenHeight, UiTheme.FROST_SCRIM);
+        }
     }
 
     static Crop aspectFillCrop(int textureWidth, int textureHeight,

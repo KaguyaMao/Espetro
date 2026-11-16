@@ -4,6 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.espetro.client.gui.UiMotion;
+import org.espetro.client.gui.UiTheme;
+import org.espetro.client.gui.UiForegroundLayer;
 
 import java.util.Objects;
 
@@ -23,11 +26,9 @@ public abstract class AuiScreen extends Screen {
     private long lastThrottleEpochSec = -1;
     private long themeRevision = -1;
 
-    /** 打开淡入：从黑幕到清晰（0.5s = 10 ticks）。 */
-    private static final int FADE_IN_TICKS = 10;
-    private static final int FADE_OUT_TICKS = 10;
-    private int fadeInTicksLeft;
-    private int fadeOutTicksLeft;
+    /** Real-time foreground opacity; the photo/world background is never faded to black. */
+    private final UiMotion.Value foregroundOpacity = new UiMotion.Value(0f);
+    private boolean fadeStarted;
     private Runnable fadeOutAction;
     /** 淡出进行中（阻止投票类页面的 onClose 重开自身把淡出后的切屏顶掉）。 */
     private boolean fadeOutClosing;
@@ -41,12 +42,11 @@ public abstract class AuiScreen extends Screen {
 
     protected AuiScreen(Component title) {
         super(title);
-        fadeInTicksLeft = FADE_IN_TICKS;
     }
 
     /** 当前是否处于关闭淡出中（外部切屏前先调 {@link #startFadeOut} 等待完成）。 */
     public final boolean isFadingOut() {
-        return fadeOutTicksLeft > 0;
+        return fadeOutClosing;
     }
 
     /** 淡出进行中（onClose 应放行，不再重开自身）。 */
@@ -59,9 +59,9 @@ public abstract class AuiScreen extends Screen {
      * 已在淡出中则链式追加：前一个 action 执行后继续执行新的。
      */
     public final void startFadeOut(Runnable action) {
-        if (fadeOutTicksLeft <= 0) {
-            fadeOutTicksLeft = FADE_OUT_TICKS;
+        if (!fadeOutClosing) {
             fadeOutClosing = true;
+            foregroundOpacity.to(0f, UiTheme.MOTION_EXIT_MS);
             fadeOutAction = action;
         } else {
             // 追加：旧的完成后再执行新目标
@@ -77,7 +77,6 @@ public abstract class AuiScreen extends Screen {
     private void completeFadeOut() {
         Runnable action = fadeOutAction;
         fadeOutAction = null;
-        fadeOutTicksLeft = 0;
         fadeOutClosing = false;
         // 屏已被外部切换时忽略残留 action（例如阶段同步包直接 setScreen）。
         if (action != null && net.minecraft.client.Minecraft.getInstance().screen == this) {
@@ -85,31 +84,40 @@ public abstract class AuiScreen extends Screen {
         }
     }
 
-    /** 立即结束淡入（例如重复打开同一界面时避免二次黑幕闪烁）。 */
+    /** 立即结束前景淡入；重复打开同一界面时不重播动效。 */
     public final void skipFadeIn() {
-        fadeInTicksLeft = 0;
+        fadeStarted = true;
+        foregroundOpacity.snap(1f);
+    }
+
+    private void beginFadeIn() {
+        fadeStarted = true;
+        fadeOutClosing = false;
+        foregroundOpacity.snap(0f);
+        foregroundOpacity.to(1f, UiTheme.MOTION_ENTER_MS);
+    }
+
+    private static void showFadingScreen(Screen next) {
+        if (next instanceof AuiScreen aui) aui.beginFadeIn();
+        net.minecraft.client.Minecraft.getInstance().setScreen(next);
     }
 
     /** 由外部驱动的统一切屏：若当前屏允许淡出则等待，否则直接切。 */
     public static void openWithFade(Screen next, Screen current) {
-        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (current instanceof AuiScreen aui) {
             if (aui.isFadingOut()) {
                 // 已在淡出中：丢弃旧关闭动作，替换为切换到 next（避免连续 setScreen 闪屏）。
                 aui.fadeOutAction = () -> {
-                    mc.setScreen(next);
-                    if (next instanceof AuiScreen n) n.fadeInTicksLeft = FADE_IN_TICKS;
+                    showFadingScreen(next);
                 };
             } else {
                 aui.startFadeOut(() -> {
-                    mc.setScreen(next);
-                    if (next instanceof AuiScreen n) n.fadeInTicksLeft = FADE_IN_TICKS;
+                    showFadingScreen(next);
                 });
             }
             return;
         }
-        mc.setScreen(next);
-        if (next instanceof AuiScreen n) n.fadeInTicksLeft = FADE_IN_TICKS;
+        showFadingScreen(next);
     }
 
     /** 切到「从下方滑入/滑出」模式（职业部署菜单用）。 */
@@ -117,7 +125,7 @@ public abstract class AuiScreen extends Screen {
         this.slideFromBottom = true;
         this.slideOutPending = false;
         this.slideStartMs = System.currentTimeMillis();
-        this.fadeInTicksLeft = 0;
+        skipFadeIn();
     }
 
     /** 是否处于滑动模式。 */
@@ -154,7 +162,7 @@ public abstract class AuiScreen extends Screen {
     /**
      * 菜单层当前应平移的像素（正数=向下）。
      * 入场：+高度 → 0（自下方滑入）；出场：0 → +高度（向下滑出）。
-     * 用 partialTick 做子帧插值，避免 20Hz 的顿感。
+     * 按真实时间逐帧取样，避免 20Hz 的顿感。
      */
     public final double currentSlideOffset() {
         if (!slideFromBottom) return 0.0D;
@@ -201,16 +209,10 @@ public abstract class AuiScreen extends Screen {
         }
     }
 
-    /** 当前 fade 黑幕 alpha（1=全黑，0=透明）。 */
+    /** Legacy API: amount the foreground is faded out; never draws a black overlay. */
     public float currentFadeAlpha() {
         if (slideFromBottom) return 0f;
-        if (fadeInTicksLeft > 0) {
-            return Math.max(0f, fadeInTicksLeft / (float) FADE_IN_TICKS);
-        }
-        if (fadeOutTicksLeft > 0) {
-            return 1f - fadeOutTicksLeft / (float) FADE_OUT_TICKS;
-        }
-        return 0f;
+        return 1f - foregroundOpacity.get();
     }
 
     public static void runWithDocument(Object ignored, Runnable action) {
@@ -252,6 +254,7 @@ public abstract class AuiScreen extends Screen {
     @Override
     protected void init() {
         super.init();
+        if (!fadeStarted && !slideFromBottom) beginFadeIn();
         rebuildMenuRootNow();
     }
 
@@ -288,14 +291,7 @@ public abstract class AuiScreen extends Screen {
                 && System.currentTimeMillis() - slideStartMs >= SLIDE_MS) {
             completeSlideOut();
         }
-        if (fadeInTicksLeft > 0) {
-            fadeInTicksLeft--;
-        } else if (fadeOutTicksLeft > 0) {
-            fadeOutTicksLeft--;
-            if (fadeOutTicksLeft <= 0) {
-                completeFadeOut();
-            }
-        }
+        if (fadeOutClosing && foregroundOpacity.isSettled()) completeFadeOut();
     }
 
     protected abstract void buildMenuRoot(GuiElement root);
@@ -319,31 +315,30 @@ public abstract class AuiScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.pose().pushPose();
+        org.espetro.client.gui.FrostedBackdrop.beginScreen();
         try {
-            // 整屏一起平移：背景遮罩、地图、控件、菜单后层都跟着滑，避免"瞬间出现"
+            if (shadeWorld()) {
+                org.espetro.client.gui.FrostedBackdrop.draw(graphics, this.width, this.height);
+            }
+            // Glass stays behind the content; menu geometry retains its slide animation.
             graphics.pose().pushPose();
             graphics.pose().translate(0.0D, currentSlideOffset(), 0.0D);
             try {
                 renderBeforeMenu(graphics, mouseX, mouseY, partialTick);
-                if (root != null) {
-                    root.updateFocusState(0, 0, mouseX, mouseY);
-                    root.draw(graphics, 0, 0, this.width, this.height, mouseX, mouseY, partialTick);
-                    var tooltip = root.getTooltipLines();
-                    if (tooltip != null && !tooltip.isEmpty()) {
-                        graphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+                UiForegroundLayer.draw(graphics, this.width, this.height,
+                    1f - currentFadeAlpha(), () -> {
+                    if (root != null) {
+                        root.updateFocusState(0, 0, mouseX, mouseY);
+                        root.draw(graphics, 0, 0, this.width, this.height, mouseX, mouseY, partialTick);
+                        var tooltip = root.getTooltipLines();
+                        if (tooltip != null && !tooltip.isEmpty()) {
+                            graphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+                        }
                     }
-                }
-                renderAfterMenu(graphics, mouseX, mouseY, partialTick);
+                    renderAfterMenu(graphics, mouseX, mouseY, partialTick);
+                });
             } finally {
                 graphics.pose().popPose();
-            }
-            // 投票页淡入淡出黑幕层
-            float alpha = currentFadeAlpha();
-            if (alpha > 0.001f) {
-                int argb = ((int) (alpha * 255f) << 24) & 0xFF000000;
-                if (argb != 0) {
-                    graphics.fill(0, 0, this.width, this.height, argb);
-                }
             }
             // 聊天栏渲染在本模组界面之上：界面是全屏不透明的，否则聊天消息会被完全遮住。
             if (minecraft != null && minecraft.gui != null) {
@@ -355,6 +350,7 @@ public abstract class AuiScreen extends Screen {
             graphics.pose().popPose();
             graphics.setColor(1f, 1f, 1f, 1f);
             RenderSystem.disableBlend();
+            org.espetro.client.gui.FrostedBackdrop.endScreen();
         }
     }
 

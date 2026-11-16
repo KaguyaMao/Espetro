@@ -11,11 +11,11 @@ import org.espetro.team.TeamDisplayNames;
 import java.util.regex.Pattern;
 
 /**
- * 阶段界面 / 菜单共用的即时绘制控件库（"END-02" 亮暗工业风格）。
+ * 阶段界面 / 菜单共用的即时绘制控件库（亮暗简约毛玻璃）。
  *
  * <p>公开 API 与旧版保持一致（颜色常量、{@code panel/button/text/...} 工厂、
  * {@link PhaseHeader}），因此所有既有界面无需改动即可换肤；内部绘制全部改走
- * {@link UiPaint}：直角、实色、发丝描边、硬投影、微标签。
+ * {@link UiPaint}：直角、透明平涂、无边框和清晰状态反馈。
  */
 final class EspetroAuiWidgets {
 
@@ -83,9 +83,6 @@ final class EspetroAuiWidgets {
             return;
         }
         UiPaint.backdrop(graphics, width, height);
-        UiPaint.vignette(graphics, width, height);
-        UiPaint.grain(graphics, width, height, 0.035f);
-        drawChrome(graphics, width, height);
     }
 
     /**
@@ -93,37 +90,8 @@ final class EspetroAuiWidgets {
      * 左上信号方块与编号、右下版本号。所有阶段界面共用，保证风格是"一张图纸"。
      */
     static void drawChrome(GuiGraphics graphics, int width, int height) {
-        int inset = 5;
-        int frameColor = UiTheme.withAlpha(UiTheme.TEXT, 0x3A);
-        UiPaint.frame(graphics, inset, inset, width - inset * 2, height - inset * 2, frameColor);
-        UiPaint.brackets(graphics, inset, inset, width - inset * 2, height - inset * 2, 18,
-            UiTheme.withAlpha(UiTheme.TEXT, 0x66));
-
-        // 左上：信号方块 + 编号
-        graphics.fill(inset + 5, inset + 5, inset + 12, inset + 12, UiTheme.ACCENT);
-        UiPaint.label(graphics, "ESPETRO OPS", inset + 18, inset + 5, UiTheme.TEXT_THIRD);
-        // 右上：界面代号
-        String code = "END-02 / " + UiTheme.mode().name();
-        int codeWidth = UiPaint.spacedWidth(code, UiTheme.LETTERSPACING_MICRO);
-        UiPaint.label(graphics, code, width - inset - 8 - codeWidth, inset + 5, UiTheme.TEXT_THIRD);
-
-        // 左右边缘刻度尺（竖向），像图纸的标尺
-        int tickTop = inset + 26;
-        int tickBottom = height - inset - 26;
-        for (int y = tickTop; y < tickBottom; y += 14) {
-            int len = ((y - tickTop) / 14) % 5 == 0 ? 7 : 4;
-            graphics.fill(inset + 3, y, inset + 3 + len, y + 1, UiTheme.withAlpha(UiTheme.TICK, 0x66));
-            graphics.fill(width - inset - 3 - len, y, width - inset - 3, y + 1,
-                UiTheme.withAlpha(UiTheme.TICK, 0x66));
+        // No terminal frame, fake channel labels, ruler ticks or corner brackets.
         }
-
-        // 左下角：通道号；右下角：版本
-        UiPaint.label(graphics, "CH 07 // SECURE", inset + 8, height - inset - 12, UiTheme.TEXT_THIRD);
-        String version = versionLabel();
-        int versionWidth = UiPaint.spacedWidth(version, UiTheme.LETTERSPACING_MICRO);
-        UiPaint.label(graphics, version, width - inset - 8 - versionWidth, height - inset - 12,
-            UiTheme.TEXT_THIRD);
-    }
 
     private static String versionLabel() {
         return "v" + net.minecraftforge.fml.ModList.get()
@@ -210,11 +178,11 @@ final class EspetroAuiWidgets {
     /** 主行动按钮：墨色实心块 + 纸色字，悬停转为信号黄块。 */
     static ActionButton primaryButton(int x, int y, int width, int height, String label, Runnable action) {
         return new ActionButton(x, y, width, height, label, action)
-            .setColors(UiTheme.INK_FILL, UiTheme.ACCENT, UiTheme.ACCENT)
-            .setBorderColor(UiTheme.INK_FILL)
+            .setColors(UiTheme.CONTROL_PRIMARY, UiTheme.CONTROL_HOVER, UiTheme.CONTROL_SELECTED)
+            .setBorderColor(UiTheme.TRANSPARENT)
             .setAccentColor(UiTheme.ACCENT)
-            .setTextColor(UiTheme.ON_INK)
-            .setHoverTextColor(UiTheme.TEXT_ON_ACCENT);
+            .setTextColor(UiTheme.TEXT)
+            .setHoverTextColor(UiTheme.TEXT);
     }
 
     static int textButtonWidth(String label) {
@@ -299,7 +267,6 @@ final class EspetroAuiWidgets {
                          int mouseX, int mouseY, float partialTick) {
             int px = x + getX();
             int py = y + getY();
-            graphics.fill(px + 8, py + 8, px + 14, py + 14, accent);
             UiPaint.hairline(graphics, px + 8, py + getHeight() - 3,
                 Math.max(1, getWidth() - 16), UiTheme.HAIRLINE);
         }
@@ -375,6 +342,43 @@ final class EspetroAuiWidgets {
     // 控件
     // ------------------------------------------------------------------
 
+    /** Interpolate state weights so colors always come from the current palette. */
+    private static final class ControlMotion {
+        private final UiMotion.Value hover = new UiMotion.Value(0f);
+        private final UiMotion.Value selection = new UiMotion.Value(0f);
+        private long themeRevision = UiTheme.revision();
+
+        void update(boolean hovered, boolean selected, boolean enabled) {
+            float hoverTarget = enabled && hovered ? 1f : 0f;
+            float selectionTarget = selected ? 1f : 0f;
+            if (!enabled || themeRevision != UiTheme.revision()) {
+                hover.snap(hoverTarget);
+                selection.snap(selectionTarget);
+                themeRevision = UiTheme.revision();
+                return;
+            }
+            hover.to(hoverTarget, UiTheme.MOTION_HOVER_MS);
+            selection.to(selectionTarget, UiTheme.MOTION_SELECT_MS);
+        }
+
+        int selectedFirst(int normal, int hovered, int selected) {
+            return UiTheme.lerp(UiTheme.lerp(normal, hovered, hover.get()), selected, selection.get());
+        }
+
+        int hoverFirst(int normal, int hovered, int selected) {
+            return UiTheme.lerp(UiTheme.lerp(normal, selected, selection.get()), hovered, hover.get());
+        }
+    }
+
+    private static java.util.function.IntSupplier liveControlColor(int color) {
+        if (color == UiTheme.CONTROL_NORMAL) return () -> UiTheme.CONTROL_NORMAL;
+        if (color == UiTheme.CONTROL_HOVER) return () -> UiTheme.CONTROL_HOVER;
+        if (color == UiTheme.CONTROL_SELECTED) return () -> UiTheme.CONTROL_SELECTED;
+        if (color == UiTheme.CONTROL_PRIMARY) return () -> UiTheme.CONTROL_PRIMARY;
+        if (color == UiTheme.CONTROL_DISABLED) return () -> UiTheme.CONTROL_DISABLED;
+        return () -> color;
+    }
+
     static class Panel extends GuiElement {
         private int color;
         private int borderColor;
@@ -429,40 +433,19 @@ final class EspetroAuiWidgets {
 
         @Override
         public void draw(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
-            if (!isVisible()) {
-                return;
-            }
-
+            if (!isVisible()) return;
             int bx = x + getX();
             int by = y + getY();
             int w = getWidth();
             int h = getHeight();
-            if (w <= 0 || h <= 0) {
-                super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
-                return;
-            }
-
-            if (glass) {
-                UiPaint.card(graphics, bx, by, w, h, radius, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
-            } else {
-                if (sunken) {
+            if (w > 0 && h > 0) {
+                if (glass) {
+                    UiPaint.card(graphics, bx, by, w, h);
+                } else if (sunken) {
                     UiPaint.sunken(graphics, bx, by, w, h, radius);
-                } else {
-                    if (UiTheme.visible(color)) {
-                        if (color == PANEL && createdWithDefaultBorder) {
-                            UiPaint.card(graphics, bx, by, w, h, radius,
-                                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
-                        } else {
-                            UiPaint.roundRect(graphics, bx, by, w, h, radius, color);
-                        }
-                    }
-                    if (UiTheme.visible(borderColor)) {
-                        UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, borderColor);
-                    }
+                } else if (UiTheme.visible(color)) {
+                    UiPaint.glassPanel(graphics, bx, by, w, h, color);
                 }
-            }
-            if (UiTheme.visible(accentColor)) {
-                UiPaint.accentBarLeft(graphics, bx + 1, by + 2, Math.max(0, h - 4), accentColor);
             }
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
@@ -602,14 +585,15 @@ final class EspetroAuiWidgets {
 
     static class ActionButton extends GuiElement {
         private final Runnable action;
+        private final ControlMotion motion = new ControlMotion();
         private String label;
         private boolean enabled = true;
         private boolean selected = false;
-        // 常态是"黑色半透明平底"：透明底压在地图上会像磨砂玻璃，用户要求去掉。
-        private int normalColor = UiTheme.COLUMN_SCRIM;
-        private int hoverColor = UiTheme.SURFACE_3;
-        private int selectedColor = UiTheme.ACCENT;
-        private int disabledColor = UiTheme.SUNKEN;
+        // Shared frosted background supplies blur; controls only add translucent state fills.
+        private java.util.function.IntSupplier normalColor = () -> UiTheme.CONTROL_NORMAL;
+        private java.util.function.IntSupplier hoverColor = () -> UiTheme.CONTROL_HOVER;
+        private java.util.function.IntSupplier selectedColor = () -> UiTheme.CONTROL_SELECTED;
+        private java.util.function.IntSupplier disabledColor = () -> UiTheme.CONTROL_DISABLED;
         private int borderColor = UiTheme.HAIRLINE_STRONG;
         private int textColor = TEXT;
         private int hoverTextColor = TEXT;
@@ -641,14 +625,14 @@ final class EspetroAuiWidgets {
         }
 
         ActionButton setColors(int normalColor, int hoverColor, int selectedColor) {
-            this.normalColor = normalColor;
-            this.hoverColor = hoverColor;
-            this.selectedColor = selectedColor;
+            this.normalColor = liveControlColor(normalColor);
+            this.hoverColor = liveControlColor(hoverColor);
+            this.selectedColor = liveControlColor(selectedColor);
             return this;
         }
 
         ActionButton setDisabledColor(int disabledColor) {
-            this.disabledColor = disabledColor;
+            this.disabledColor = liveControlColor(disabledColor);
             return this;
         }
 
@@ -691,46 +675,26 @@ final class EspetroAuiWidgets {
 
         @Override
         public void draw(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
-            if (!isVisible()) {
-                return;
-            }
-
+            if (!isVisible()) return;
             int bx = x + getX();
             int by = y + getY();
             int w = getWidth();
             int h = getHeight();
-            int radius = Math.min(UiTheme.RADIUS_CONTROL, Math.max(1, h / 2));
-
-            int fillColor = !enabled ? disabledColor : selected ? selectedColor : hasFocus() ? hoverColor : normalColor;
-            if (UiTheme.visible(fillColor)) {
-                UiPaint.roundRect(graphics, bx, by, w, h, radius, fillColor);
-            }
-            if (selected) {
-                UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, UiTheme.alpha(accentColor, 0.85f));
-                graphics.fill(bx, by, bx + 2, by + h, UiTheme.INK_FILL);
-            } else if (UiTheme.visible(borderColor)) {
-                int outline = hasFocus() && enabled ? UiTheme.ACCENT_LINE : borderColor;
-                UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, outline);
-            }
-            // 悬停：底边 2px 信号黄，工业风格的"当前指向"。
-            if (enabled && hasFocus() && !selected) {
-                graphics.fill(bx, by + h - 2, bx + w, by + h, UiTheme.ACCENT);
-            }
-
+            motion.update(hasFocus(), selected, enabled);
+            int fill = !enabled ? UiTheme.controlFill(disabledColor.getAsInt(), UiTheme.CONTROL_DISABLED)
+                : motion.selectedFirst(UiTheme.controlFill(normalColor.getAsInt(), UiTheme.CONTROL_PRIMARY),
+                    UiTheme.controlFill(hoverColor.getAsInt(), UiTheme.CONTROL_HOVER),
+                    UiTheme.controlFill(selectedColor.getAsInt(), UiTheme.CONTROL_SELECTED));
+            UiPaint.roundRect(graphics, bx, by, w, h, UiTheme.RADIUS_CONTROL,
+                fill);
             int logicalTextWidth = Math.max(8, (int) ((w - 8) / textScale));
             String drawnLabel = trimToWidth(label, logicalTextWidth);
-            int labelWidth = Math.round(
-                Minecraft.getInstance().font.width(stripFormatting(drawnLabel)) * textScale);
-            int textHeight = Math.max(1,
-                Math.round(Minecraft.getInstance().font.lineHeight * textScale));
+            int labelWidth = Math.round(Minecraft.getInstance().font.width(stripFormatting(drawnLabel)) * textScale);
+            int textHeight = Math.max(1, Math.round(Minecraft.getInstance().font.lineHeight * textScale));
             int color = !enabled ? UiTheme.TEXT_DISABLED
-                : selected ? UiTheme.TEXT_ON_ACCENT
-                : hasFocus() && UiTheme.visible(hoverColor) ? hoverTextColor : textColor;
-            drawScaledString(graphics, drawnLabel,
-                bx + Math.max(4, (w - labelWidth) / 2),
-                by + Math.max(1, (h - textHeight) / 2 + 1),
-                color, textScale, false);
-
+                : UiTheme.controlText(hasFocus() ? hoverTextColor : textColor);
+            drawScaledString(graphics, drawnLabel, bx + Math.max(4, (w - labelWidth) / 2),
+                by + Math.max(1, (h - textHeight) / 2 + 1), color, textScale, false);
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
 
@@ -762,22 +726,15 @@ final class EspetroAuiWidgets {
 
         @Override
         public void draw(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
-            if (!isVisible()) {
-                return;
-            }
-            int bx = x + getX();
-            int by = y + getY() + 1;
-            int w = getWidth();
-            if (w > 0 && UiTheme.visible(color)) {
-                int half = Math.max(1, w / 2);
-                UiPaint.hairline(graphics, bx, by, w, color);
-            }
+            if (!isVisible()) return;
+            UiPaint.hairline(graphics, x + getX(), y + getY(), getWidth(), color);
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
     }
 
     /** 胶囊：主色描边 + 8% 底色。 */
     static class Chip extends GuiElement {
+        private final ControlMotion motion = new ControlMotion();
         private String label;
         private int accent;
         private float textScale = 0.85f;
@@ -829,10 +786,11 @@ final class EspetroAuiWidgets {
             int w = getWidth();
             int h = getHeight();
             int radius = UiTheme.RADIUS_CONTROL;
+            motion.update(hasFocus(), solid, true);
             UiPaint.roundRect(graphics, bx, by, w, h, radius,
-                solid ? UiTheme.alpha(accent, 0.85f) : UiTheme.alpha(accent, 0.14f));
-            UiPaint.strokeRoundRect(graphics, bx, by, w, h, radius, UiTheme.alpha(accent, 0.55f));
-            int textColor = solid ? UiTheme.contrastText(accent) : accent;
+                motion.hoverFirst(UiTheme.alpha(accent, 0.10f),
+                    UiTheme.alpha(accent, 0.30f), UiTheme.alpha(accent, 0.22f)));
+            int textColor = solid ? UiTheme.TEXT : UiTheme.readableText(accent);
             int textHeight = Math.max(1, Math.round(Minecraft.getInstance().font.lineHeight * textScale));
             int tw = Math.round(Minecraft.getInstance().font.width(stripFormatting(label)) * textScale);
             drawScaledString(graphics, label, bx + (w - tw) / 2, by + (h - textHeight) / 2,
@@ -926,23 +884,9 @@ final class EspetroAuiWidgets {
 
         @Override
         public void draw(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
-            if (!isVisible()) {
-                return;
-            }
-            int bx = x + getX();
-            int by = y + getY();
-            int textWidth = UiPaint.spacedWidth(label, UiTheme.LETTERSPACING_MICRO);
-            if (UiTheme.visible(accent)) {
-                graphics.fill(bx, by + 2, bx + 2, by + 9, accent);
-            }
-            UiPaint.textSpaced(graphics, label, bx + 7, by + 1, accent, UiTheme.TYPE_MICRO,
-                UiTheme.LETTERSPACING_MICRO, false);
-            int lineStart = bx + 7 + textWidth + 8;
-            int lineEnd = bx + getWidth();
-            if (lineEnd - lineStart > 8) {
-                graphics.fillGradient(lineStart, by + 5, lineEnd, by + 6,
-                    UiTheme.withAlpha(accent, 0x40), UiTheme.TRANSPARENT);
-            }
+            if (!isVisible()) return;
+            UiPaint.textSpaced(graphics, label, x + getX(), y + getY() + 1,
+                UiTheme.readableText(accent), UiTheme.TYPE_MICRO, UiTheme.LETTERSPACING_MICRO, false);
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
     }
@@ -978,11 +922,12 @@ final class EspetroAuiWidgets {
     }
 
     /**
-     * 可点击的图片按钮（带 hover 高亮边框，等比例缩放）
+     * 可点击的图片按钮（半透明底色缓动，图片保持原位并等比例缩放）
      */
     static class ImageButton extends GuiElement {
         private final ResourceLocation texture;
         private final Runnable action;
+        private final ControlMotion motion = new ControlMotion();
         private final int texW, texH;
         private int borderColor = UiTheme.TRANSPARENT;
         private int hoverBorderColor = UiTheme.ACCENT_LINE;
@@ -1034,21 +979,12 @@ final class EspetroAuiWidgets {
             int drawX = bx + (maxW - drawW) / 2;
             int drawY = by + (maxH - drawH) / 2;
 
-            // 选中态用圆角发光底，替代旧的方形描边。
-            if (hasAlpha(selectedBorderColor)) {
-                int pad = 3;
-                UiPaint.roundRect(graphics, drawX - pad, drawY - pad, drawW + pad * 2, drawH + pad * 2,
-                    UiTheme.RADIUS_CONTROL, UiTheme.alpha(selectedBorderColor, 0.16f));
-                UiPaint.strokeRoundRect(graphics, drawX - pad, drawY - pad, drawW + pad * 2,
-                    drawH + pad * 2, UiTheme.RADIUS_CONTROL,
-                    hasFocus() && hasAlpha(hoverBorderColor) ? hoverBorderColor : selectedBorderColor);
-            } else {
-                int outlineColor = hasFocus() ? hoverBorderColor : borderColor;
-                if (hasAlpha(outlineColor)) {
-                    UiPaint.strokeRoundRect(graphics, drawX - 2, drawY - 2, drawW + 4, drawH + 4,
-                        UiTheme.RADIUS_CONTROL, outlineColor);
-                }
-            }
+            // A fixed plate bounds avoids a size jump while hover and selection crossfade.
+            motion.update(hasFocus(), hasAlpha(selectedBorderColor), true);
+            int plate = motion.hoverFirst(UiTheme.TRANSPARENT,
+                UiTheme.CONTROL_HOVER, UiTheme.CONTROL_SELECTED);
+            UiPaint.roundRect(graphics, drawX - 3, drawY - 3, drawW + 6, drawH + 6,
+                UiTheme.RADIUS_CONTROL, plate);
 
             // 目标区域与源纹理尺寸必须分别传入。
             graphics.blit(texture, drawX, drawY, drawW, drawH,

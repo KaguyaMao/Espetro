@@ -84,7 +84,7 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             governanceHits.clear();
             UiPaint.textCentered(graphics, "本回合玩家分数板", 0, 8, width,
                 UiTheme.GOLD, UiTheme.TYPE_TITLE, true);
-            UiPaint.label(graphics, "COMBAT / PERSONNEL", 9, 24, UiTheme.TEXT_THIRD);
+
             renderTeamColumn(graphics, "ATTACK", 6, 34, width / 2 - 9,
                 UiTheme.ATTACK, mouseX, mouseY);
             renderTeamColumn(graphics, "DEFEND", width / 2 + 3, 34,
@@ -280,15 +280,12 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
                 && mouseY >= slotY && mouseY < slotY + slotH;
             if (mine) {
                 UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.ACCENT_SOFT);
-                UiPaint.accentBarLeft(graphics, sx, slotY, slotH, UiTheme.ACCENT);
-                UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, UiTheme.ACCENT_LINE);
+                    UiTheme.RADIUS_CONTROL, UiTheme.CONTROL_SELECTED);
+
             } else {
                 UiPaint.roundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, hovered ? UiTheme.SURFACE_2 : UiTheme.CARD_TOP);
-                UiPaint.strokeRoundRect(graphics, sx, slotY, sw, slotH,
-                    UiTheme.RADIUS_CONTROL, hovered ? UiTheme.ACCENT_LINE : UiTheme.HAIRLINE);
+                    UiTheme.RADIUS_CONTROL, hovered ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
+
             }
 
             int votes = ClientGovernanceState.voteCount(state, candidate);
@@ -322,8 +319,7 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
         if (joinHovered || kickHovered) {
             int hoverY = joinHovered ? y + 1 : y + 18;
             UiPaint.roundRect(graphics, x + 1, hoverY, menuW - 2, 15,
-                UiTheme.RADIUS_CONTROL, UiTheme.SURFACE_2);
-            UiPaint.accentBarLeft(graphics, x + 1, hoverY, 15, UiTheme.ACCENT);
+                UiTheme.RADIUS_CONTROL, UiTheme.CONTROL_HOVER);
         }
         UiPaint.textShadowed(graphics, "拉进小队", x + 7, y + 5,
             canJoin ? UiTheme.POSITIVE : UiTheme.TEXT_DISABLED);

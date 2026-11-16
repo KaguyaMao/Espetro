@@ -21,6 +21,7 @@ import org.espetro.vehicle.VehicleClassChangePolicy;
 import org.espetro.vehicle.VehicleConfig;
 import org.espetro.vehicle.VehicleManager;
 import org.espetro.vehicle.VehicleNativeWhitelist;
+import org.espetro.vehicle.VehiclePoseReset;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -38,10 +39,16 @@ public final class VehicleSupplyActionPacket {
         UNLOAD_CONSTRUCTION,
         /** 任何载具轮盘的“补给步兵”，消耗载具弹药。 */
         RESUPPLY_INFANTRY,
-        CHANGE_CLASS
+        CHANGE_CLASS,
+        /** 轮盘 2~3 点位置：长按 10 秒后把载具姿态回正并抬到正上方三格。 */
+        RESET_VEHICLE
     }
 
     private static final Map<UUID, Long> LAST_TRANSFER_TICK = new HashMap<>();
+
+    /** 重置载具的服务端冷却：客户端要长按 10 秒，这里只兜住重复包。 */
+    private static final int RESET_COOLDOWN_TICKS = 40;
+    private static final Map<UUID, Long> LAST_RESET_TICK = new HashMap<>();
 
     private final UUID vehicleId;
     private final Action action;
@@ -98,6 +105,10 @@ public final class VehicleSupplyActionPacket {
             sendSync(player, interaction);
             return;
         }
+        if (action == Action.RESET_VEHICLE) {
+            handleResetVehicle(player, interaction);
+            return;
+        }
 
         if (!allowTransferNow(player)) {
             return;
@@ -133,12 +144,35 @@ public final class VehicleSupplyActionPacket {
         return true;
     }
 
+    /** 轮盘「重置载具」：姿态回正 + 抬到正上方三格。检查与实体解析全部服务端重算。 */
+    private static void handleResetVehicle(ServerPlayer player, Interaction interaction) {
+        long now = player.serverLevel().getGameTime();
+        long previous = LAST_RESET_TICK.getOrDefault(player.getUUID(), Long.MIN_VALUE / 2);
+        if (now - previous < RESET_COOLDOWN_TICKS) return;
+        Entity vehicle = VehicleManager.getInstance()
+            .getLoadedVehicle(player, interaction.vehicleId());
+        if (vehicle == null) {
+            player.displayClientMessage(Component.literal("§c载具已不在加载范围内。"), true);
+            return;
+        }
+        if (!VehiclePoseReset.reset(vehicle)) {
+            player.displayClientMessage(Component.literal("§c该目标无法重置。"), true);
+            return;
+        }
+        LAST_RESET_TICK.put(player.getUUID(), now);
+        player.displayClientMessage(Component.literal(
+            "§a载具已重置：姿态回正，并抬到正上方 "
+                + (int) VehiclePoseReset.LIFT_BLOCKS + " 格。"), true);
+        sendSync(player, interaction);
+    }
+
     public static void clearPlayerRateLimit(UUID playerId) {
         LAST_TRANSFER_TICK.remove(playerId);
     }
 
     public static void clearRateLimits() {
         LAST_TRANSFER_TICK.clear();
+        LAST_RESET_TICK.clear();
     }
 
     private static void loadAmmo(ServerPlayer player, Interaction interaction, int chunk) {

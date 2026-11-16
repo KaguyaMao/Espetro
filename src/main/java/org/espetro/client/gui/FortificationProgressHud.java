@@ -46,7 +46,7 @@ public final class FortificationProgressHud {
             int left = getX();
             int top = getY();
 
-            // 圆角玻璃卡：阴影 + 渐变底 + 发丝描边 + 顶部内高光。
+            // 无框玻璃卡。
             UiPaint.card(graphics, left, top, PANEL_WIDTH, PANEL_HEIGHT);
 
             float ratio = snapshot.required <= 0 ? 0f
@@ -57,7 +57,7 @@ public final class FortificationProgressHud {
             if (mc.font.width(text) > PANEL_WIDTH - 12) text = snapshot.name + " " + percent + "%";
             UiPaint.textShadowed(graphics, text, left + 5, top + 2, UiTheme.TEXT);
 
-            // 施工进度：内凹槽 + 渐变填充 + 高光。
+            // 施工与拆除通过进度语义色区分。
             UiPaint.progress(graphics, left + 4, top + 12, PANEL_WIDTH - 8, BAR_HEIGHT,
                 ratio, accent);
         }

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import org.espetro.naval.AmphibiousConfig;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -45,13 +46,16 @@ public final class ActiveMapConfig {
 
     public final GameSettingsSnapshot game;
     public final SpawnPointsSnapshot spawnPoints;
-    public final VehSpawnSnapshot vehSpawn;
+    /** 本轮载具点快照；两栖部署会在激活后替换为合并后的副本（只改内存）。 */
+    public VehSpawnSnapshot vehSpawn;
     public final SquadTypesSnapshot squadTypes;
     public final String outpostsJson;
     public final String bastionJson;
     public final String logisticsJson;
     public final String teamPackJson;
     public final ESPointsMapSnapshot esPoints;
+    /** 两栖登陆配置；普通地图为 null。 */
+    public final AmphibiousConfig amphibious;
 
     /**
      * 获取 CapturePoints.json 原始内容，供 HCRPoints 运行时使用
@@ -67,9 +71,10 @@ public final class ActiveMapConfig {
         }
         return new ActiveMapConfig(
             displayName, mapFolder, dimensionId, templateWorldDir, esConfigDir,
-            dimensionJson, game, spawnPoints, vehSpawn, squadTypes,
+            dimensionJson, game, spawnPoints,
+            org.espetro.naval.AmphibiousDeployment.mergedVehSpawn(vehSpawn), squadTypes,
             outpostsJson, bastionJson, logisticsJson, teamPackJson,
-            esPoints.forRound(seed), rejectionReasons
+            esPoints.forRound(seed), amphibious, rejectionReasons
         );
     }
 
@@ -92,6 +97,7 @@ public final class ActiveMapConfig {
         String logisticsJson,
         String teamPackJson,
         ESPointsMapSnapshot esPoints,
+        AmphibiousConfig amphibious,
         List<String> rejectionReasons
     ) {
         this.displayName = displayName;
@@ -110,6 +116,7 @@ public final class ActiveMapConfig {
         this.logisticsJson = logisticsJson;
         this.teamPackJson = teamPackJson;
         this.esPoints = esPoints;
+        this.amphibious = amphibious;
         this.rejectionReasons = List.copyOf(rejectionReasons);
         this.usable = rejectionReasons.isEmpty();
     }
@@ -121,7 +128,7 @@ public final class ActiveMapConfig {
             new SpawnPointsSnapshot(null, null, false, reason),
             new VehSpawnSnapshot(List.of(), java.util.Map.of(), List.of(reason)),
             SquadTypesSnapshot.defaults(),
-            null, null, null, null, null,
+            null, null, null, null, null, null,
             List.of(reason)
         );
     }
@@ -181,6 +188,12 @@ public final class ActiveMapConfig {
             String logisticsJson = Files.readString(esConfig.resolve("logistics.json"), StandardCharsets.UTF_8);
             String teamPackJson = Files.readString(esConfig.resolve("team_pack.json"), StandardCharsets.UTF_8);
             ESPointsMapSnapshot esPoints = ESPointsMapSnapshot.load(esConfig);
+            AmphibiousConfig amphibious = AmphibiousConfig.load(esConfig).orElse(null);
+            if (amphibious != null && amphibious.enabled) {
+                for (String error : amphibious.errors) {
+                    errors.add(" amphibious: " + error);
+                }
+            }
 
             // Validate JSON syntax of remaining configs
             validateOutposts(outpostsJson, errors);
@@ -195,7 +208,7 @@ public final class ActiveMapConfig {
             return new ActiveMapConfig(
                 displayName, mapFolder, dimensionId, templateWorldDir, esConfig, dimensionJson,
                 game, spawnPoints, vehSpawn, squadTypes,
-                outpostsJson, bastionJson, logisticsJson, teamPackJson, esPoints,
+                outpostsJson, bastionJson, logisticsJson, teamPackJson, esPoints, amphibious,
                 List.of()
             );
         } catch (Exception e) {

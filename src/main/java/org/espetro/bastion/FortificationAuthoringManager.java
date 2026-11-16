@@ -180,7 +180,8 @@ public final class FortificationAuthoringManager {
                 if (first) session.a = null;
                 else session.b = null;
                 session.cachedStats = null;
-                return "§c选区 " + dx + "×" + dy + "×" + dz + " 超过单轴上限 " + axis + "，已撤销该角。";
+                return "§c选区 " + dx + "×" + dy + "×" + dz + " 超过单轴上限 " + axis + "，已撤销该角。"
+                    + "§7（若要编排舰船，请先执行 /espetro naval wand）";
             }
             // 锚点若不在新选区内则清空
             if (session.anchor != null && !inside(session.anchor, session.a, session.b)) {

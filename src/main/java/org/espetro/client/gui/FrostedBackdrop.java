@@ -2,6 +2,7 @@ package org.espetro.client.gui;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
@@ -11,20 +12,24 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
 
 /**
- * 主目标截屏 → 强降采样 → 线性放大，得到一层"毛玻璃"底：不遮死玩家视野，
- * 但足以把世界压成不易读的色块，让叠在上面的文字仍然清楚。
+ * 界面共用的毛玻璃背景：优先使用 FancyMenu 的实时 GPU 局部模糊，
+ * 同一次界面渲染中的嵌套预览复用已绘制的背景，避免把 UI 文字再次采样进去。
  *
- * <p>实现取舍：不引入 post-chain / FBO 后处理（1.20.1 原版没有模糊链，自己写 shader
- * 在整合包里风险高），而是每 2.5 秒对主帧缓冲做一次 {@code glReadPixels}，在 CPU 上
- * 块平均到 160×90 再叠一次 3×3 盒式模糊，最后用双线性过滤放大铺满屏幕。</p>
+ * <p>实时模糊不可用时，保留低频 CPU 降级：每 2.5 秒读取主帧缓冲，块平均到
+ * 160×90 后再做 3×3 盒式模糊，以双线性过滤放大。读回仅切换 READ_FRAMEBUFFER，
+ * 不改变绘制目标或 viewport；读回和绘制各自通过 finally 恢复调用方状态。</p>
  *
  * <p>读回有两个已知的"看起来像满屏白噪点"的失败模式，必须显式挡掉：
  * <ol>
@@ -55,8 +60,24 @@ public final class FrostedBackdrop {
     /** 首帧/重开界面时必须重截；用独立标志位，避免 Long.MIN_VALUE 参与减法溢出。 */
     private static boolean dirty = true;
     private static long lastCaptureMs;
+    private static int screenDepth;
+    private static boolean screenLayerDrawn;
 
     private FrostedBackdrop() {
+    }
+
+    /** Nested tutorial previews share their host's blur rather than sampling UI text. */
+    public static void beginScreen() {
+        if (screenDepth++ == 0) screenLayerDrawn = false;
+    }
+
+    public static void endScreen() {
+        screenDepth = Math.max(0, screenDepth - 1);
+        if (screenDepth == 0) screenLayerDrawn = false;
+    }
+
+    public static boolean isScreenLayerActive() {
+        return screenDepth > 0 && screenLayerDrawn;
     }
 
     /** 界面重开/窗口尺寸变化后强制重新截屏。 */
@@ -72,41 +93,56 @@ public final class FrostedBackdrop {
         if (width <= 0 || height <= 0) {
             return;
         }
-        long now = System.currentTimeMillis();
-        if (dirty || now - lastCaptureMs >= REFRESH_INTERVAL_MS) {
-            lastCaptureMs = now;
-            dirty = false;
-            if (!capture() || texture == null) {
-                // 截不到可用帧时只压一层暗幕：宁可没有模糊，也不能用噪点/黑块盖住视野。
+        if (isScreenLayerActive()) return;
+        if (screenDepth > 0) screenLayerDrawn = true;
+        if (FancyMenuGlass.draw(graphics, 0, 0, width, height,
+                UiTheme.GLASS_BLUR_RADIUS, UiTheme.FROST_SCRIM, 0.0F)) {
+            return;
+        }
+        // Capture before flush: GuiGraphics.flush() itself changes depth testing.
+        FallbackRenderState state = new FallbackRenderState();
+        try {
+            graphics.flush();
+            RenderSystem.disableDepthTest();
+            RenderSystem.depthMask(false);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            long now = System.currentTimeMillis();
+            if (dirty || now - lastCaptureMs >= REFRESH_INTERVAL_MS) {
+                lastCaptureMs = now;
+                dirty = false;
+                if (!capture() || texture == null) {
+                    // 截不到可用帧时只压一层暗幕，不使用噪点/黑块盖住视野。
+                    graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
+                    return;
+                }
+            }
+            if (texture == null) {
                 graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
                 return;
             }
+            // 直接画四边形，不经过把纹理当作 atlas 算 UV 的 GuiGraphics#blit。
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, TEXTURE_ID);
+            Matrix4f matrix = graphics.pose().last().pose();
+            BufferBuilder builder = Tesselator.getInstance().getBuilder();
+            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            builder.vertex(matrix, 0.0F, height, 0.0F).uv(0.0F, 1.0F).endVertex();
+            builder.vertex(matrix, width, height, 0.0F).uv(1.0F, 1.0F).endVertex();
+            builder.vertex(matrix, width, 0.0F, 0.0F).uv(1.0F, 0.0F).endVertex();
+            builder.vertex(matrix, 0.0F, 0.0F, 0.0F).uv(0.0F, 0.0F).endVertex();
+            BufferUploader.drawWithShader(builder.end());
+            // 只压暗，不再叠会被误认为白噪点的颗粒。
+            graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
+        } finally {
+            try {
+                // Complete queued tint while its temporary blend/color state is active.
+                graphics.flush();
+            } finally {
+                state.restore();
+            }
         }
-        graphics.flush();
-        boolean depthEnabled = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
-        RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        // 直接画一个全屏四边形，不经过 GuiGraphics#blit（后者会把纹理当作 atlas 算 UV）。
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, TEXTURE_ID);
-        Matrix4f matrix = graphics.pose().last().pose();
-        BufferBuilder builder = Tesselator.getInstance().getBuilder();
-        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        builder.vertex(matrix, 0.0F, height, 0.0F).uv(0.0F, 1.0F).endVertex();
-        builder.vertex(matrix, width, height, 0.0F).uv(1.0F, 1.0F).endVertex();
-        builder.vertex(matrix, width, 0.0F, 0.0F).uv(1.0F, 0.0F).endVertex();
-        builder.vertex(matrix, 0.0F, 0.0F, 0.0F).uv(0.0F, 0.0F).endVertex();
-        BufferUploader.drawWithShader(builder.end());
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        if (depthEnabled) {
-            RenderSystem.enableDepthTest();
-        }
-        RenderSystem.depthMask(true);
-        // 只压暗，不再叠颗粒：深色底上 3% 的白噪点会被看成"满屏白噪点"。
-        graphics.fill(0, 0, width, height, UiTheme.FROST_SCRIM);
     }
 
     /** @return 是否拿到了可用帧。 */
@@ -122,19 +158,25 @@ public final class FrostedBackdrop {
             return false;
         }
         ByteBuffer buffer;
+        int readFramebuffer = GL11.glGetInteger(GL30.GL_READ_FRAMEBUFFER_BINDING);
+        int packAlignment = GL11.glGetInteger(GL11.GL_PACK_ALIGNMENT);
         try {
             // 先把之前残留的 GL 错误清掉，才能判断这次读回是否真的失败。
             while (GL11.glGetError() != GL11.GL_NO_ERROR) {
                 // drain
             }
             buffer = ByteBuffer.allocateDirect(pixelWidth * pixelHeight * 4);
-            target.bindWrite(true);
+            // Reading needs neither a new draw target nor a viewport change.
+            GlStateManager._glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, target.frameBufferId);
             GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
             GL11.glReadPixels(0, 0, pixelWidth, pixelHeight,
                 GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
         } catch (RuntimeException exception) {
             logFailure(exception);
             return false;
+        } finally {
+            GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, packAlignment);
+            GlStateManager._glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, readFramebuffer);
         }
         int error = GL11.glGetError();
         if (error != GL11.GL_NO_ERROR) {
@@ -160,7 +202,11 @@ public final class FrostedBackdrop {
                     registered = true;
                 }
             } else {
+                // setPixels 会接管这张图片的所有权（旧图由它自己关闭），
+                // 置空以免 finally 把纹理正在使用的图关掉，导致
+                // "Image is not allocated" 崩溃。
                 texture.setPixels(image);
+                image = null;
                 texture.upload();
             }
             return true;
@@ -168,6 +214,48 @@ public final class FrostedBackdrop {
             if (image != null) {
                 image.close();
             }
+        }
+    }
+
+    /** Only state this fallback changes; independent of FancyMenu availability. */
+    private static final class FallbackRenderState {
+        private final boolean depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
+        private final boolean depthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+        private final boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
+        private final int srcRgb = GL11.glGetInteger(GL14.GL_BLEND_SRC_RGB);
+        private final int dstRgb = GL11.glGetInteger(GL14.GL_BLEND_DST_RGB);
+        private final int srcAlpha = GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA);
+        private final int dstAlpha = GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA);
+        private final float[] shaderColor = RenderSystem.getShaderColor().clone();
+        private final ShaderInstance shader = RenderSystem.getShader();
+        private final int shaderTexture = RenderSystem.getShaderTexture(0);
+        private final int activeTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        private final int activeBinding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        private final int texture0Binding;
+
+        private FallbackRenderState() {
+            RenderSystem.activeTexture(GL13.GL_TEXTURE0);
+            try {
+                texture0Binding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+            } finally {
+                RenderSystem.activeTexture(activeTexture);
+            }
+        }
+
+        private void restore() {
+            RenderSystem.setShaderTexture(0, shaderTexture);
+            RenderSystem.activeTexture(GL13.GL_TEXTURE0);
+            RenderSystem.bindTexture(texture0Binding);
+            RenderSystem.activeTexture(activeTexture);
+            RenderSystem.bindTexture(activeBinding);
+            RenderSystem.setShader(() -> shader);
+            RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], shaderColor[3]);
+            RenderSystem.blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
+            if (blend) RenderSystem.enableBlend();
+            else RenderSystem.disableBlend();
+            RenderSystem.depthMask(depthMask);
+            if (depthTest) RenderSystem.enableDepthTest();
+            else RenderSystem.disableDepthTest();
         }
     }
 

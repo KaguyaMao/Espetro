@@ -4,13 +4,17 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.PacketDistributor;
 import org.espetro.Espetro;
 import org.espetro.bastion.BastionData;
@@ -54,6 +58,8 @@ public final class ResupplySessionManager {
      * can park the supplied item in the offhand to keep claiming past the cap.
      */
     private static final int OFFHAND_SLOT = -1;
+    /** "No such slot" sentinel returned by {@link #findSpentSlot}. */
+    private static final int NO_SLOT = -2;
     private static final int RATE_LIMIT_CACHE_SIZE = 8192;
     private static final long SESSION_TIMEOUT_TICKS = 20L * 30L;
     private static final AtomicLong NEXT_CATALOGUE_REVISION = new AtomicLong(1L);
@@ -289,7 +295,13 @@ public final class ResupplySessionManager {
         int wanted = org.espetro.logistics.AmmoResupplyPolicy.grantCount(
             current, spec.max, spec.count);
         int grant = Math.min(wanted, insertionCapacity(player, spec.template));
-        if (grant <= 0) return TransactionResult.fail(current >= spec.max ? "已达到补给上限" : "背包没有空间");
+        if (grant <= 0) {
+            int spent = spec.magazineIdentity == null ? findSpentSlot(player, spec) : NO_SLOT;
+            if (spent != NO_SLOT && current >= spec.max) {
+                return replaceSpent(player, source, spec, spent);
+            }
+            return TransactionResult.fail(current >= spec.max ? "已达到补给上限" : "背包没有空间");
+        }
 
         List<ItemStack> before = snapshotInventory(player);
         if (!source.consume(spec.ammoCost)) return TransactionResult.fail("来源弹药刚刚发生变化");
@@ -422,7 +434,8 @@ public final class ResupplySessionManager {
             : countFullMagazines(player, spec, MagazineCompatProvider.get());
         String reason = spec.unavailableReason;
         boolean selectable = reason.isEmpty();
-        if (selectable && current >= spec.max) {
+        boolean canReplace = spec.magazineIdentity == null && findSpentSlot(player, spec) != NO_SLOT;
+        if (selectable && current >= spec.max && !canReplace) {
             selectable = false;
             reason = spec.magazineIdentity == null ? "已达到上限" : "满弹匣已达到上限";
         }
@@ -430,7 +443,7 @@ public final class ResupplySessionManager {
             selectable = false;
             reason = "来源弹药不足";
         }
-        if (selectable) {
+        if (selectable && current < spec.max) {
             if (spec.magazineIdentity == null && insertionCapacity(player, spec.template) <= 0) {
                 selectable = false;
                 reason = "背包没有空间";
@@ -452,13 +465,74 @@ public final class ResupplySessionManager {
         }
         ItemStack offhand = player.getInventory().offhand.get(0);
         if (matchesCountedNormal(offhand, spec)) count += offhand.getCount();
+        if (taczGunId(spec.template) != null) count += countLoose(player, spec);
+        return count;
+    }
+
+    /**
+     * Counts matching stacks that the player has dropped nearby (on the ground or in an
+     * item frame). Only gun entries use this: guns are the only capped entry a player can
+     * shed without losing it, which used to reset the cap and allow unlimited farming.
+     */
+    private static int countLoose(ServerPlayer player, EntrySpec spec) {
+        int count = 0;
+        AABB area = player.getBoundingBox().inflate(64.0D);
+        for (ItemEntity entity : player.level().getEntitiesOfClass(ItemEntity.class, area)) {
+            if (matchesCountedNormal(entity.getItem(), spec)) count += entity.getItem().getCount();
+        }
+        for (ItemFrame frame : player.level().getEntitiesOfClass(ItemFrame.class, area)) {
+            if (matchesCountedNormal(frame.getItem(), spec)) count += frame.getItem().getCount();
+        }
         return count;
     }
 
     private static boolean matchesCountedNormal(ItemStack stack, EntrySpec spec) {
-        return !stack.isEmpty() && ResupplyItemIdentity.matchesNormal(spec.exactTag,
-            stack.is(spec.template.getItem()),
+        if (stack.isEmpty() || !stack.is(spec.template.getItem())) return false;
+        String gun = taczGunId(stack);
+        if (gun != null && gun.equals(taczGunId(spec.template))) return true;
+        return ResupplyItemIdentity.matchesNormal(spec.exactTag, true,
             ItemStack.isSameItemSameTags(stack, spec.template));
+    }
+
+    /**
+     * The TaCZ gun id baked into an item stack, or null for non-gun stacks. Two stacks of
+     * the same gun differ by ammo count / barrel state / attachments, so counting guns by
+     * exact NBT equality reports a fired launcher as "not owned".
+     */
+    @Nullable
+    private static String taczGunId(ItemStack stack) {
+        if (stack.isEmpty()) return null;
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (key == null || !"tacz".equals(key.getNamespace())) return null;
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains("GunId", Tag.TAG_STRING)) return null;
+        return tag.getString("GunId");
+    }
+
+    private static int findSpentSlot(ServerPlayer player, EntrySpec spec) {
+        for (int i = 0; i < player.getInventory().items.size(); i++) {
+            if (isSpentGun(player.getInventory().items.get(i), spec)) return i;
+        }
+        return isSpentGun(player.getInventory().offhand.get(0), spec) ? OFFHAND_SLOT : NO_SLOT;
+    }
+
+    private static boolean isSpentGun(ItemStack stack, EntrySpec spec) {
+        if (!matchesCountedNormal(stack, spec)) return false;
+        if (ItemStack.isSameItemSameTags(stack, spec.template)) return false;
+        CompoundTag tag = stack.getTag();
+        return tag != null && tag.getInt("GunCurrentAmmoCount") <= 0 && !tag.getBoolean("HasBulletInBarrel");
+    }
+
+    private static TransactionResult replaceSpent(ServerPlayer player, ResolvedSource source,
+                                                  EntrySpec spec, int slot) {
+        if (!source.consume(spec.ammoCost)) return TransactionResult.fail("来源弹药刚刚发生变化");
+        ItemStack fresh = spec.template.copy();
+        fresh.setCount(1);
+        if (slot == OFFHAND_SLOT) player.getInventory().offhand.set(0, fresh);
+        else player.getInventory().items.set(slot, fresh);
+        finish(player, source);
+        return TransactionResult.ok("已更换打空的 " + spec.template.getHoverName().getString()
+            + "，消耗 " + spec.ammoCost + " 弹药");
     }
 
     private static int insertionCapacity(ServerPlayer player, ItemStack template) {

@@ -78,6 +78,24 @@ public class Espetro {
     public static final String MOD_ID = "espetro";
     public static final Logger LOGGER = LoggerFactory.getLogger(Espetro.class);
 
+    /** 启动视频音频：必须注册进 SOUND_EVENT，否则 SoundManager 查不到事件（播放静默失败）。 */
+    public static final net.minecraftforge.registries.DeferredRegister<net.minecraft.sounds.SoundEvent> SOUND_EVENTS =
+        net.minecraftforge.registries.DeferredRegister.create(
+            net.minecraft.core.registries.Registries.SOUND_EVENT, MOD_ID);
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.sounds.SoundEvent> SPLASH_AUDIO =
+        SOUND_EVENTS.register("splash_audio", () -> net.minecraft.sounds.SoundEvent.createVariableRangeEvent(
+            new net.minecraft.resources.ResourceLocation(MOD_ID, "splash_audio")));
+    // 诊断用：四种 sounds.json 写法各注册一个事件，用来定位哪种写法能被 SoundManager 收录
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.sounds.SoundEvent> SPLASH_A =
+        SOUND_EVENTS.register("splash_a", () -> net.minecraft.sounds.SoundEvent.createVariableRangeEvent(
+            new net.minecraft.resources.ResourceLocation(MOD_ID, "splash_a")));
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.sounds.SoundEvent> SPLASH_B =
+        SOUND_EVENTS.register("splash_b", () -> net.minecraft.sounds.SoundEvent.createVariableRangeEvent(
+            new net.minecraft.resources.ResourceLocation(MOD_ID, "splash_b")));
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.sounds.SoundEvent> SPLASH_C =
+        SOUND_EVENTS.register("splash_c", () -> net.minecraft.sounds.SoundEvent.createVariableRangeEvent(
+            new net.minecraft.resources.ResourceLocation(MOD_ID, "splash_c")));
+
     private static MinecraftServer serverInstance;
 
     // 快捷键 (客户端专用，使用 Object 类型避免服务端加载问题)
@@ -89,6 +107,7 @@ public class Espetro {
 
     public Espetro() {
         ensureKubeJSDefaultScriptsIfLoaded();
+        SOUND_EVENTS.register(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus());
         org.espetro.debug.EspetroDebugRules.register();
         // SERVER 类型（而非 COMMON）：载具交互/白名单在客户端也有一半判定，
         // 必须由服务端统一下发，避免两边 toml 不一致导致"客户端读条、服务端已放行"。

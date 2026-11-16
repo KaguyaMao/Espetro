@@ -85,13 +85,8 @@ public class TeamAssignIntroScreen extends EspetroMenuScreen {
             float scale = 4.0f;
             // 注意：参数 y 是父布局传入的 refY（通常为 0），绝对位置必须用 getY()。
             int absY = y + getY();
-            int textW = Math.round(Minecraft.getInstance().font.width(label) * scale);
-            int textH = Math.round(Minecraft.getInstance().font.lineHeight * scale);
-            // 工业角标标记分配结果，保留阵营色文字与单一黄色确认信号。
-            UiPaint.brackets(graphics, cx - textW / 2 - 12, absY - 8,
-                textW + 24, textH + 16, UiTheme.ACCENT_LINE);
-            UiPaint.label(graphics, "TEAM / ASSIGNED", cx - textW / 2 - 12,
-                absY - 21, UiTheme.TEXT_THIRD);
+            // Team color alone communicates the assignment result.
+
             UiPaint.textCentered(graphics, label, 0, absY, cx * 2,
                 color, scale, false);
         }

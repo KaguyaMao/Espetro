@@ -28,7 +28,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
     private String currentVote = null;
     private int scrollOffset = 0;
     private int maxScrollOffset = 0;
-    private EspetroAuiWidgets.PhaseHeader phaseHeader;
+    private VotePhase phaseHeader;
     private final Map<String, EspetroAuiWidgets.ActionButton> voteButtons = new HashMap<>();
     private EspetroAuiWidgets.Text voteStatusText;
 
@@ -103,47 +103,47 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         voteStatusText = null;
         int playerCount = players == null ? 0 : players.size();
         boolean votingOpen = timeRemaining > 0;
-        phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "指挥官投票 · " + EspetroAuiWidgets.teamName(team),
-            buildTimeText(), "", "ATTACK".equals(team) ? UiTheme.ATTACK : UiTheme.DEFEND);
-        int phaseHeaderH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
-
+        phaseHeader = VotePhase.add(root, width, height, "指挥官投票",
+            EspetroAuiWidgets.teamName(team) + " · 选择一名玩家担任指挥官",
+            this::buildTimeText, () -> VotePhase.Stage.COMMANDER);
+        int phaseHeaderH = VotePhase.contentTop(height);
         int columns = 4;
-        int gap = this.height < 320 ? 2 : 4;
-        int cardH = this.height < 320 ? 12 : 14;
-        int targetRows = VISIBLE_NAME_COUNT / columns;
-        int listHeaderH = 6;
-        int footerH = 24;
-
-        // 面板宽度：每列最小150像素，确保名字和票数有足够空间
-        int minCardW = 150;
-        int minPanelW = 24 + columns * minCardW + (columns - 1) * gap;
-        int panelW = Math.min(this.width - 16, Math.max(minPanelW, this.width - 28));
-        int cardW = (panelW - 24 - (columns - 1) * gap) / columns;
-
-        int requestedPanelH = listHeaderH + targetRows * cardH
-            + Math.max(0, targetRows - 1) * gap + footerH;
-        int availablePanelH = Math.max(cardH + listHeaderH + footerH,
-            this.height - phaseHeaderH - 12);
-        int panelH = Math.min(availablePanelH, requestedPanelH);
-        int panelX = (this.width - panelW) / 2;
-        int panelY = phaseHeaderH + 6
-            + Math.max(0, (this.height - phaseHeaderH - 12 - panelH) / 2);
-
-        root.addChild(EspetroAuiWidgets.card(panelX, panelY, panelW, panelH));
+        int gap = height < 320 ? 6 : 8;
+        int listHeaderH = 12;
+        int footerH = 32;
+        int panelW = Math.max(1, Math.min(800, width - 32));
+        int columnW = Math.max(1, (panelW - 24 - (columns - 1) * gap) / columns);
+        int availablePanelH = Math.max(1, VotePhase.contentBottom(height) - phaseHeaderH - 8);
+        int panelH = availablePanelH;
+        int panelX = (width - panelW) / 2;
+        int panelY = phaseHeaderH;
+        int listH = Math.max(1, panelH - listHeaderH - footerH);
+        Minecraft minecraft = Minecraft.getInstance();
+        String selfName = minecraft.player == null ? "" : minecraft.player.getName().getString();
+        int labelWidth = 1;
+        for (String playerName : players) {
+            String self = playerName.equals(selfName) ? " (自己)" : "";
+            int largestCount = Math.max(playerCount, voteCounts.getOrDefault(playerName, 0));
+            labelWidth = Math.max(labelWidth, minecraft.font.width(
+                "✓ " + playerName + self + " [" + largestCount + "]"));
+        }
+        float labelScale = Math.max(0.5F, Math.min(1.0F, (columnW - 12) / (float) labelWidth));
+        int cardW = Math.min(columnW, Math.max(1, Math.round(labelWidth * labelScale) + 12));
+        int cardH = Math.max(1, Math.min(Math.round(minecraft.font.lineHeight * labelScale) + 6, listH));
+        int targetRows = (VISIBLE_NAME_COUNT + columns - 1) / columns;
+        // A soft pane fills the available body without a heavy empty black frame.
+        root.addChild(new CandidatePanel(panelX, panelY, panelW, panelH));
 
         if (playerCount == 0) {
-            root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + 12, panelW,
+            root.addChild(EspetroAuiWidgets.centeredText(panelX, panelY + panelH / 2 - 4, panelW,
                 "当前队伍没有可投票玩家", UiTheme.NEGATIVE));
             return;
         }
 
-        String selfName = Minecraft.getInstance().player == null ? "" : Minecraft.getInstance().player.getName().getString();
         int startX = panelX + 12;
         int startY = panelY + listHeaderH;
 
-        // 计算可见范围：优先固定显示4列×15行=60人，小屏幕再自动减少行数并滚动。
-        int listH = Math.max(cardH, panelH - listHeaderH - footerH);
+        // Keep up to sixty visible entries, with scrolling when the available body is full.
         int usableRows = Math.max(1, Math.min(targetRows, (listH + gap) / (cardH + gap)));
         int visibleCount = Math.min(VISIBLE_NAME_COUNT, usableRows * columns);
         maxScrollOffset = Math.max(0, playerCount - visibleCount);
@@ -165,6 +165,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
 
             var button = EspetroAuiWidgets.button(x, y, cardW, cardH, label, () -> voteFor(playerName))
                 .setEnabled(votingOpen)
+                .setTextScale(labelScale)
                 .setSelected(isSelected);
             root.addChild(button);
             voteButtons.put(playerName, button);
@@ -176,8 +177,6 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
                 UiTheme.TEXT_THIRD));
         }
 
-        root.addChild(EspetroAuiWidgets.chip(panelX + 12, panelY + panelH - 19,
-            votingStatusLabel(), votingOpen ? UiTheme.POSITIVE : UiTheme.TEXT_THIRD));
 
         voteStatusText = EspetroAuiWidgets.centeredText(
             panelX, panelY + panelH - 13, panelW,
@@ -185,15 +184,16 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         root.addChild(voteStatusText);
     }
 
-    /** 投票状态胶囊标签（供 chip 使用）。 */
-    private String votingStatusLabel() {
-        if (isWaitingForOwnVote()) {
-            return "等待开始";
+    private static final class CandidatePanel extends GuiElement {
+        CandidatePanel(int x, int y, int width, int height) { super(x, y, width, height); }
+
+        @Override
+        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
+                         int mouseX, int mouseY, float partialTick) {
+            if (!isVisible()) return;
+            UiPaint.glassPanel(graphics, x + getX(), y + getY(), getWidth(), getHeight(),
+                UiTheme.GLASS_PANEL_SOFT);
         }
-        if (timeRemaining > 0) {
-            return "投票中 " + timeRemaining + "s";
-        }
-        return "已结束";
     }
 
     private String lastVoteStatusRendered;
@@ -239,7 +239,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
             return "剩余时间: " + timeRemaining + "秒";
         }
         return isWaitingForOwnVote()
-            ? "本方指挥官投票尚未开始"
+            ? "本方等待开始 · 对方剩余 " + Math.max(0, opponentTimeRemaining) + " 秒"
             : "本方指挥官投票已结束";
     }
 

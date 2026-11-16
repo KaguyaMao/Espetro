@@ -6,6 +6,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -64,6 +65,18 @@ public final class FortificationEventHandler {
         manager.damageExplosion(level,
             explosion.getPosition(), (float) radius, affected,
             explosion.getIndirectSourceEntity());
+    }
+
+    /**
+     * 每 tick 末把本 tick 收集到的爆炸命中按“一次爆炸 = 一次结算”扣血。
+     *
+     * <p>必须等一 tick：卓越前线的自研爆炸是逐方块回调的（{@code SuperbWarfareBlockGate}），
+     * 在原版 {@code Detonate} 路径里也拿不到“这一发到底覆盖了哪些部件”的完整集合。</p>
+     */
+    @SubscribeEvent
+    public static void onServerTickEnd(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        FortificationManager.getInstance().settleExplosionDamage(Espetro.getServer());
     }
 
     /** 炮弹/导弹等投射物直接命中工事方块或工事实体时扣除完整度。 */

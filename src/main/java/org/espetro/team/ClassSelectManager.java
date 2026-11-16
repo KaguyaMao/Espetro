@@ -159,6 +159,11 @@ public class ClassSelectManager {
      * 第二方选择时会排除第一方最终编制所属 faction_id 下的全部编制。
      */
     public List<String> getAvailableFactionPoolForTeam(String team) {
+        // 两栖登陆图：攻方编制由 amphibious.json 的 assault_faction 锁定，不给选择余地。
+        String locked = getAssaultFactionLock();
+        if (locked != null && "ATTACK".equals(team) && isFactionLockUsable(locked)) {
+            return new ArrayList<>(Collections.singletonList(locked));
+        }
         List<String> source = selectedFactionPool != null && !selectedFactionPool.isEmpty()
             ? selectedFactionPool
             : getAllPlayableFactionIds();
@@ -204,9 +209,93 @@ public class ClassSelectManager {
             org.espetro.mapconfig.BattlefieldContext.getOrNull())) {
             return false;
         }
+        // 两栖登陆图：攻方只能是锁定的冲滩编制；守方必须避开与之同阵营（faction_id）的编制，
+        // 否则攻方会被锁到自己阵营的对手上。锁定的编制若与地图不兼容则视作没有锁定。
+        String locked = effectiveAssaultLock();
+        if (locked != null) {
+            if ("ATTACK".equals(team)) {
+                return locked.equals(factionId);
+            }
+            if (hasSameFactionId(factionId, locked)) {
+                return false;
+            }
+        }
         String opponentFaction = "ATTACK".equals(team) ? finalDefendClass
             : "DEFEND".equals(team) ? finalAttackClass : null;
         return opponentFaction == null || !hasSameFactionId(factionId, opponentFaction);
+    }
+
+    /**
+     * 当前地图是否用 amphibious.json 锁定了攻方编制。
+     *
+     * @return 锁定的编制 ID；没有锁定则返回 null
+     */
+    public static String getAssaultFactionLock() {
+        org.espetro.mapconfig.ActiveMapConfig map = org.espetro.mapconfig.BattlefieldContext.getOrNull();
+        if (map == null || map.amphibious == null) {
+            return null;
+        }
+        String locked = map.amphibious.assaultFaction;
+        return (locked == null || locked.isBlank()) ? null : locked;
+    }
+
+    /**
+     * 锁定的冲滩编制是否真的能在地图上用（VehTypes 与地图载具点兼容、实体已注册）。
+     * 不兼容时回退到正常随机池，避免攻方拿到一个选不了的编制而卡住开局。
+     */
+    public static boolean isFactionLockUsable(String factionId) {
+        org.espetro.mapconfig.ActiveMapConfig map = org.espetro.mapconfig.BattlefieldContext.getOrNull();
+        if (map == null || factionId == null) {
+            return false;
+        }
+        FactionDataLoader loader = FactionDataProvider.getOrCreateLoader();
+        boolean compatible = loader.isCompatibleWithMap(factionId, map);
+        if (!compatible) {
+            org.espetro.Espetro.LOGGER.warn("两栖冲滩编制 {} 与地图 {} 不兼容，攻方回退到随机池",
+                factionId, map.displayName);
+        }
+        return compatible;
+    }
+
+    /**
+     * 该队是否被地图锁定编制（目前只有两栖图锁定攻方）。
+     *
+     * @return 锁定的编制 ID；没有锁定或锁不可用时返回 {@code null}
+     */
+    public static String factionLockFor(String team) {
+        if (!"ATTACK".equals(team)) {
+            return null;
+        }
+        String locked = getAssaultFactionLock();
+        return locked != null && isFactionLockUsable(locked) ? locked : null;
+    }
+
+    /**
+     * 直接把某一方的最终编制定案（地图指定编制时用，不发起投票）。
+     */
+    public void forceFaction(String team, String factionId) {
+        if (factionId == null || factionId.isBlank()) {
+            return;
+        }
+        selectingActive = false;
+        currentSelectingTeam = team;
+        String name = getClassDisplayName(factionId);
+        if ("DEFEND".equals(team)) {
+            finalDefendClass = factionId;
+            Espetro.broadcastToTeam("DEFEND", "§6===== "
+                + TeamDisplayNames.displayName("DEFEND") + "编制已由地图指定: §9" + name + "§6 =====");
+        } else {
+            finalAttackClass = factionId;
+            Espetro.broadcastToTeam("ATTACK", "§6===== "
+                + TeamDisplayNames.displayName("ATTACK") + "编制已由地图指定: §c" + name + "§6 =====");
+        }
+        Espetro.LOGGER.info("{} 编制由地图指定: {} ({})", team, name, factionId);
+    }
+
+    /** 可用的冲滩编制锁定；不兼容时返回 {@code null}（等价于没有锁定）。 */
+    private static String effectiveAssaultLock() {
+        String locked = getAssaultFactionLock();
+        return locked != null && isFactionLockUsable(locked) ? locked : null;
     }
 
     private boolean hasSameFactionId(String firstFormationId, String secondFormationId) {

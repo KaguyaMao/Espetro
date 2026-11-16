@@ -40,6 +40,27 @@ public class VehicleConfig {
         public Integer vehicleCrewSeats;
         public Set<String> entityTags = new LinkedHashSet<>();
         public DeploymentConfig deployment = new DeploymentConfig();
+        /** 抢滩前哨出生点（按下标与实体槽位对应；为空表示该类型没有前哨点）。 */
+        public List<DeploymentPointConfig> outpostAttack = new ArrayList<>();
+        public List<DeploymentPointConfig> outpostDefend = new ArrayList<>();
+        /** 前哨点在「第几批据点全部被占领」后启用。 */
+        public int outpostActivateAfterBatch = 1;
+
+        @Nullable
+        public DeploymentPointConfig outpostForTeam(String team, int slotIndex) {
+            List<DeploymentPointConfig> list = "ATTACK".equalsIgnoreCase(team)
+                ? outpostAttack : outpostDefend;
+            if (list == null || list.isEmpty()) {
+                return null;
+            }
+            return list.get(Math.floorMod(slotIndex, list.size()));
+        }
+
+        public boolean hasOutpostPoints(String team) {
+            List<DeploymentPointConfig> list = "ATTACK".equalsIgnoreCase(team)
+                ? outpostAttack : outpostDefend;
+            return list != null && !list.isEmpty();
+        }
         /** Ordered entity slots; index matches the map's ordered spawn points. */
         public List<VehicleSlotConfig> slots = new ArrayList<>();
         /** Type-level SNBT applied to every slot unless a slot overrides it. */
@@ -197,6 +218,8 @@ public class VehicleConfig {
      */
     public static void applyActiveMap(ActiveMapConfig map) {
         VEHICLE_CONFIGS.clear();
+        // 换图 / 开图 = 前哨点回到未解锁状态。
+        org.espetro.vehicle.OutpostSpawnGate.reset();
         if (map == null || !map.usable) return;
         int legacyVehicleTypes = 0;
         FactionDataLoader loader = FactionDataProvider.getOrCreateLoader();
@@ -248,6 +271,15 @@ public class VehicleConfig {
                     cfg.entityTypeStr = cfg.slots.get(0).entityTypeStr;
                     cfg.deployment.attack = cfg.slots.get(0).attack;
                     cfg.deployment.defend = cfg.slots.get(0).defend;
+                }
+                List<VehSpawnSnapshot.SpawnPoint> outposts =
+                    map.vehSpawn.outpostPointsByType.get(type);
+                if (outposts != null && !outposts.isEmpty()) {
+                    cfg.outpostActivateAfterBatch = map.vehSpawn.outpostActivateAfterBatch;
+                    for (VehSpawnSnapshot.SpawnPoint point : outposts) {
+                        cfg.outpostAttack.add(fromPose(point.attack()));
+                        cfg.outpostDefend.add(fromPose(point.defend()));
+                    }
                 }
                 typeMap.put(type, cfg);
             }

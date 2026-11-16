@@ -189,7 +189,7 @@ public final class RadioRadialController {
             .radii(44, 96)
             .squadLayout()
             .animationSpeed(1.25f)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
+            .ringColors(RadialGlassStyle.ringColors())
             .persistentSlot("espetro.radio.resupply", ICON_RESUPPLY,
                 Actions.script(DO_ACTION, Map.of("action", "RESUPPLY")),
                 Component.literal("补给步兵"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
@@ -215,7 +215,7 @@ public final class RadioRadialController {
             .title(Component.literal("更换职业"))
             .radii(44, 100)
             .animationSpeed(1.25f)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
+            .ringColors(RadialGlassStyle.ringColors())
             .persistentSlot("espetro.radio.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "root")),
                 Component.literal("↩"), UiTheme.hex(UiTheme.WORLD_MUTED));
@@ -275,7 +275,7 @@ public final class RadioRadialController {
             .title(Component.literal("选择职业装备"))
             .radii(44, 100)
             .animationSpeed(1.25f)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)))
+            .ringColors(RadialGlassStyle.ringColors())
             .persistentSlot("espetro.radio.variant.back", ICON_BACK,
                 Actions.script(NAVIGATE, Map.of("target", "back")),
                 Component.literal("返回"), UiTheme.hex(UiTheme.WORLD_MUTED));

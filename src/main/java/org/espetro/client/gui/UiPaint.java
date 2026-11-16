@@ -9,14 +9,11 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Immediate-mode paint primitives for the Espetro UI — "END-01 · 纸墨工业".
+ * Immediate-mode primitives for Espetro's minimal translucent glass UI.
  *
- * <p>上一版（圆角玻璃）已归档：git tag {@code ui/tactical-glass-v1}，
- * 源码快照 {@code docs/archive/tactical-glass/}。
- *
- * <p>这一版把 {@link GuiGraphics#fill} 组织成"印刷工业"的元件：直角/切角面板、发丝线框、
- * 角标（L 形短线）、刻度尺、图纸网格、实心强调条、硬投影，以及带字距的微标签。
- * 方法名与签名尽量与旧版保持一致，逐屏迁移时调用方不需要改。
+ * <p>Colors come from {@link UiTheme}. Legacy decorative entry points retain their
+ * signatures but draw nothing; functional geometry and text retain their behavior.
+ * Glass surfaces use the shared blur bridge before foreground content is drawn.
  */
 public final class UiPaint {
 
@@ -91,31 +88,7 @@ public final class UiPaint {
     /** 竖向渐变实心填充（纸面微差，或墨块的从深到更深）。 */
     public static void roundRectGradient(GuiGraphics graphics, int x, int y, int width, int height,
                                          int radius, int topColor, int bottomColor) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        if (!UiTheme.visible(topColor) && !UiTheme.visible(bottomColor)) {
-            return;
-        }
-        int r = clampRadius(radius, width, height);
-        if (r == 0) {
-            graphics.fillGradient(x, y, x + width, y + height, topColor, bottomColor);
-            return;
-        }
-        int[] table = insets(r);
-        for (int row = 0; row < height; row++) {
-            float t = height <= 1 ? 0f : row / (float) (height - 1);
-            int color = UiTheme.lerp(topColor, bottomColor, t);
-            if (!UiTheme.visible(color)) {
-                continue;
-            }
-            int inset = insetAt(row, height, r, table);
-            int left = x + inset;
-            int right = x + width - inset;
-            if (right > left) {
-                graphics.fill(left, y + row, right, y + row + 1, color);
-            }
-        }
+        roundRect(graphics, x, y, width, height, radius, topColor);
     }
 
     /** 1px 描边（直角或切角）。 */
@@ -202,83 +175,35 @@ public final class UiPaint {
 
     /** 四角 L 形角标：画在矩形外侧，强调"这是一个被框定的区域"。 */
     public static void brackets(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-        brackets(graphics, x, y, width, height, UiTheme.TICK_LENGTH, color);
+        // Retained for existing callers; this skin does not draw corner brackets.
     }
 
     public static void brackets(GuiGraphics graphics, int x, int y, int width, int height,
                                 int length, int color) {
-        if (!UiTheme.visible(color) || width <= 2 || height <= 2) {
-            return;
-        }
-        int len = Math.max(2, Math.min(Math.min(length, width / 2), height / 2));
-        // 左上
-        graphics.fill(x, y, x + len, y + 1, color);
-        graphics.fill(x, y, x + 1, y + len, color);
-        // 右上
-        graphics.fill(x + width - len, y, x + width, y + 1, color);
-        graphics.fill(x + width - 1, y, x + width, y + len, color);
-        // 左下
-        graphics.fill(x, y + height - 1, x + len, y + height, color);
-        graphics.fill(x, y + height - len, x + 1, y + height, color);
-        // 右下
-        graphics.fill(x + width - len, y + height - 1, x + width, y + height, color);
-        graphics.fill(x + width - 1, y + height - len, x + width, y + height, color);
+        // Retained for existing callers; this skin does not draw corner brackets.
     }
 
     /** 水平刻度尺（每 step 一格，可指定短线长度）。 */
     public static void ticksH(GuiGraphics graphics, int x, int y, int width, int step, int length,
                               int color) {
-        if (!UiTheme.visible(color) || width <= 0 || step <= 0) {
-            return;
-        }
-        for (int i = 0; i <= width; i += step) {
-            graphics.fill(x + i, y, x + Math.min(i + 1, width), y + Math.max(1, length), color);
-        }
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 竖直刻度尺。 */
     public static void ticksV(GuiGraphics graphics, int x, int y, int height, int step, int length,
                               int color) {
-        if (!UiTheme.visible(color) || height <= 0 || step <= 0) {
-            return;
-        }
-        for (int i = 0; i <= height; i += step) {
-            graphics.fill(x, y + i, x + Math.max(1, length), y + Math.min(i + 1, height), color);
-        }
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 图纸网格：minor 每格、major 每 5 格一条更实的线。 */
     public static void grid(GuiGraphics graphics, int x, int y, int width, int height, int step) {
-        if (width <= 0 || height <= 0 || step <= 0) {
-            return;
-        }
-        int i = 0;
-        for (int gx = x; gx < x + width; gx += step, i++) {
-            int color = (i % 5 == 0) ? UiTheme.GRID_MAJOR : UiTheme.GRID;
-            graphics.fill(gx, y, Math.min(gx + 1, x + width), y + height, color);
-        }
-        i = 0;
-        for (int gy = y; gy < y + height; gy += step, i++) {
-            int color = (i % 5 == 0) ? UiTheme.GRID_MAJOR : UiTheme.GRID;
-            graphics.fill(x, gy, x + width, Math.min(gy + 1, y + height), color);
-        }
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 45° 斜线填充（"禁用 / 不可用"区域的工业语汇）。 */
     public static void hatch(GuiGraphics graphics, int x, int y, int width, int height,
                              int step, int color) {
-        if (!UiTheme.visible(color) || width <= 0 || height <= 0 || step <= 0) {
-            return;
-        }
-        int span = width + height;
-        for (int i = -height; i < span; i += step) {
-            for (int row = 0; row < height; row++) {
-                int px = i + row;
-                if (px >= 0 && px < width) {
-                    graphics.fill(x + px, y + row, x + px + 1, y + row + 1, color);
-                }
-            }
-        }
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     // ------------------------------------------------------------------
@@ -287,11 +212,7 @@ public final class UiPaint {
 
     /** 硬投影：向下 2px 的两层直角块，不做模糊。 */
     public static void shadow(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        roundRect(graphics, x + 1, y + 2, width, height, radius, UiTheme.SHADOW_1);
-        roundRect(graphics, x, y + 1, width, height, radius, UiTheme.SHADOW_3);
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 标准纸卡片：硬投影 + 纸面 + 1px 发丝框 + 顶部高光。 */
@@ -299,34 +220,33 @@ public final class UiPaint {
         card(graphics, x, y, width, height, UiTheme.RADIUS_CARD, UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
     }
 
+    /** Glass for a HUD region, or a translucent plate over the screen's shared blur. */
+    public static void glassPanel(GuiGraphics graphics, int x, int y, int width, int height, int tint) {
+        if (graphics == null || width <= 0 || height <= 0 || !UiTheme.visible(tint)) return;
+        int color = UiTheme.glassSurface(tint);
+        if (!FrostedBackdrop.isScreenLayerActive()
+            && FancyMenuGlass.draw(graphics, x, y, width, height,
+                UiTheme.GLASS_BLUR_RADIUS, color, 0.0F)) {
+            return;
+        }
+        graphics.fill(x, y, x + width, y + height, color);
+    }
+
     /** 自定义底色/切角的卡片。 */
     public static void card(GuiGraphics graphics, int x, int y, int width, int height,
                             int radius, int topColor, int bottomColor) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        shadow(graphics, x, y, width, height, radius);
-        // 暗色系下卡片是"实色块"，不做玻璃渐变、不留顶部高光：
-        // 半透明渐变压在深底上会被看成一层白雾（用户明确要求去掉这种玻璃感）。
-        roundRect(graphics, x, y, width, height, radius, topColor);
-        strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
-        hairline(graphics, x + radius, y + height - 1, Math.max(0, width - radius * 2),
-            UiTheme.HAIRLINE_DARK);
+        glassPanel(graphics, x, y, width, height, topColor);
     }
 
     /** 带强调条的卡片：左侧实心信号黄竖条 + 右上角标。 */
     public static void accentCard(GuiGraphics graphics, int x, int y, int width, int height,
                                   int accent) {
         card(graphics, x, y, width, height);
-        graphics.fill(x, y + 1, x + UiTheme.ACCENT_BAR, y + height - 1, accent);
-        brackets(graphics, x + width - 9, y - 5, 8, 8, 4, UiTheme.alpha(accent, 0.85f));
     }
 
     /** 内凹容器（列表底、输入框、进度槽、表格体）。 */
     public static void sunken(GuiGraphics graphics, int x, int y, int width, int height, int radius) {
-        roundRect(graphics, x, y, width, height, radius, UiTheme.SUNKEN);
-        strokeRoundRect(graphics, x, y, width, height, radius, UiTheme.HAIRLINE);
-        hairline(graphics, x, y, width, UiTheme.HAIRLINE_DARK);
+        glassPanel(graphics, x, y, width, height, UiTheme.SUNKEN);
     }
 
     /** 1px 水平细线。 */
@@ -347,11 +267,7 @@ public final class UiPaint {
 
     /** 水平分割线：一条实线 + 一段末端刻度，编辑风的"分栏"。 */
     public static void divider(GuiGraphics graphics, int x, int y, int width) {
-        if (width <= 0) {
-            return;
-        }
-        graphics.fill(x, y, x + width, y + 1, UiTheme.HAIRLINE);
-        graphics.fill(x, y, x + 1, y + 5, UiTheme.TICK);
+        hairline(graphics, x, y, width, UiTheme.HAIRLINE);
     }
 
     /** 竖直分割线。 */
@@ -385,7 +301,7 @@ public final class UiPaint {
 
     /** 标签描边。 */
     public static void pillOutline(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-        strokeRoundRect(graphics, x, y, width, height, UiTheme.RADIUS_CONTROL, color);
+        roundRect(graphics, x, y, width, height, UiTheme.RADIUS_CONTROL, UiTheme.alpha(color, 0.12f));
     }
 
     /**
@@ -395,35 +311,18 @@ public final class UiPaint {
      */
     public static void progress(GuiGraphics graphics, int x, int y, int width, int height,
                                 float progress, int fillColor) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        sunken(graphics, x, y, width, height, UiTheme.RADIUS_INNER);
-        float clamped = Math.max(0f, Math.min(1f, progress));
-        int filled = Math.round(width * clamped);
-        if (filled <= 0) {
-            return;
-        }
-        int innerY = y + 2;
-        int innerH = Math.max(1, height - 4);
-        graphics.fill(x + 2, innerY, x + Math.max(2, filled - 1), innerY + innerH, fillColor);
-        if (filled > 4) {
-            graphics.fill(x + Math.max(2, filled - 1), innerY, x + filled, innerY + innerH,
-                UiTheme.lerp(fillColor, UiTheme.INK_FILL, 0.45f));
-        }
-        // 刻度：每 10% 一条 1px 的纸色隔断，让进度"可读数"。
-        int step = Math.max(6, width / 10);
-        for (int i = step; i < width - 2; i += step) {
-            graphics.fill(x + i, innerY, x + i + 1, innerY + innerH, UiTheme.withAlpha(UiTheme.DARK_INK, 0x22));
+        if (width <= 0 || height <= 0) return;
+        roundRect(graphics, x, y, width, height, UiTheme.RADIUS_INNER, UiTheme.SUNKEN);
+        int filled = Math.round(width * Math.max(0f, Math.min(1f, progress)));
+        if (filled > 0) {
+            graphics.fill(x, y, x + filled, y + height, fillColor);
         }
     }
 
     /** 选中框：1px 信号黄实线 + 外一圈更淡的黄，替代旧版的"发光"。 */
     public static void glow(GuiGraphics graphics, int x, int y, int width, int height,
                             int radius, int accent) {
-        strokeRoundRect(graphics, x, y, width, height, radius, accent);
-        strokeRoundRect(graphics, x - 2, y - 2, width + 4, height + 4, radius,
-            UiTheme.alpha(accent, 0.22f));
+        roundRect(graphics, x, y, width, height, radius, UiTheme.alpha(accent, 0.12f));
     }
 
     // ------------------------------------------------------------------
@@ -432,56 +331,22 @@ public final class UiPaint {
 
     /** 全屏纸底：纸色渐变 + 极淡网格。 */
     public static void backdrop(GuiGraphics graphics, int width, int height) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        graphics.fillGradient(0, 0, width, height, UiTheme.BACKDROP_TOP, UiTheme.BACKDROP_BOTTOM);
-        grid(graphics, 0, 0, width, height, 24);
+        FrostedBackdrop.draw(graphics, width, height);
     }
 
     /** 屏幕暗角：四边向内轻微压暗（编辑风的"纸张边缘阴影"，很轻）。 */
     public static void vignette(GuiGraphics graphics, int width, int height) {
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        int bandX = Math.max(20, width / 7);
-        int bandY = Math.max(16, height / 8);
-        for (int i = 0; i < bandX; i += 2) {
-            float t = 1f - i / (float) bandX;
-            int a = Math.round(14 * t);
-            graphics.fill(i, 0, Math.min(i + 2, width), height, UiTheme.withAlpha(UiTheme.DARK_INK, a));
-            int x = width - i - 2;
-            if (x >= 0) {
-                graphics.fill(x, 0, x + 2, height, UiTheme.withAlpha(UiTheme.DARK_INK, a));
-            }
-        }
-        for (int i = 0; i < bandY; i += 2) {
-            float t = 1f - i / (float) bandY;
-            int a = Math.round(16 * t);
-            graphics.fill(0, i, width, Math.min(i + 2, height), UiTheme.withAlpha(UiTheme.DARK_INK, a));
-            int y = height - i - 2;
-            if (y >= 0) {
-                graphics.fill(0, y, width, y + 2, UiTheme.withAlpha(UiTheme.DARK_INK, a));
-            }
-        }
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 全屏颗粒（单次拉伸 blit，成本固定）。 */
     public static void grain(GuiGraphics graphics, int width, int height, float alpha) {
-        if (width <= 0 || height <= 0 || alpha <= 0.01f) {
-            return;
-        }
-        int a = Math.max(0, Math.min(255, Math.round(alpha * 255f)));
-        graphics.setColor(1f, 1f, 1f, a / 255f);
-        graphics.blit(NOISE, 0, 0, width, height, 0f, 0f, 256, 256, 256, 256);
-        graphics.setColor(1f, 1f, 1f, 1f);
+        // Decorative industrial chrome is intentionally absent in the minimal glass skin.
     }
 
     /** 阶段界面统一底：纸底 + 网格 + 边缘压暗 + 纸纤维。 */
     public static void screenBackdrop(GuiGraphics graphics, int width, int height) {
         backdrop(graphics, width, height);
-        vignette(graphics, width, height);
-        grain(graphics, width, height, 0.035f);
     }
 
     // ------------------------------------------------------------------

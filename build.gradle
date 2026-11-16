@@ -130,6 +130,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 sourceSets.main.java.exclude 'com/example/hcrpoints/**'
 sourceSets.main.resources.exclude 'assets/hcrpoints/**'
 sourceSets.main.resources.exclude 'data/hcrpoints/**'
+// Authoring sources and local editor/OS residue are never runtime resources.
+// Menu runtime dependencies and their manifest are selected by package-client-menus.py.
+sourceSets.main.resources.exclude '**/*.psd', '**/*.xcf', '**/*.blend', '**/*.bak',
+    '**/*.bak-*', '**/*.old', '**/*.orig', '**/*.tmp', '**/*.log', '**/*~',
+    '**/.DS_Store', '**/Thumbs.db', '**/__pycache__/**'
 
 def fixedAuraTipJar = providers.gradleProperty('auratipJar')
     .map { file(it) }
@@ -277,6 +282,17 @@ tasks.named('jar', Jar).configure {
     exclude 'com/example/hcrpoints/**'
     exclude 'assets/hcrpoints/**'
     exclude 'data/hcrpoints/**'
+    // processResources is a copy task: deleted source assets can remain in its
+    // output directory. Only the current installer manifest owns shipped payloads.
+    def bundlePrefix = 'assets/espetro/ui-bundle/files/'
+    def bundledMenuPaths = file('src/main/resources/assets/espetro/ui-bundle/manifest.tsv')
+        .readLines('UTF-8').findAll { !it.isBlank() && !it.startsWith('#') }
+        .collect { it.split('\t', -1)[2] }.toSet()
+    exclude { element -> !element.isDirectory() && element.path.startsWith(bundlePrefix) &&
+        !bundledMenuPaths.contains(element.path.substring(bundlePrefix.length())) }
+    exclude '**/*.psd', '**/*.xcf', '**/*.blend', '**/*.bak', '**/*.bak-*',
+        '**/*.old', '**/*.orig', '**/*.tmp', '**/*.log', '**/*~',
+        '**/.DS_Store', '**/Thumbs.db', '**/__pycache__/**'
 
     manifest {
         attributes(["Specification-Title"     : mod_id,

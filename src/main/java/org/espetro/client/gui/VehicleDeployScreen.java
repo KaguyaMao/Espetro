@@ -152,8 +152,7 @@ public class VehicleDeployScreen extends EspetroMenuScreen {
             int bw = getWidth();
             int bh = getHeight();
 
-            UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CONTROL, UiTheme.SURFACE_2);
-            UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CONTROL, UiTheme.HAIRLINE);
+            UiPaint.glassPanel(graphics, bx, by, bw, bh, UiTheme.CONTROL_NORMAL);
 
             if (info == null) {
                 EspetroAuiWidgets.drawScaledString(graphics, "当前编制无载具配置",
@@ -176,7 +175,7 @@ public class VehicleDeployScreen extends EspetroMenuScreen {
             EspetroAuiWidgets.drawScaledString(graphics, info.respawnMinutes + "分钟刷新",
                 bx + 10, by + 18, UiTheme.TEXT_THIRD, 0.8f);
 
-            // 状态标记：直角软色底与细线框，保持终端式信息密度。
+            // 冷却/满员状态以文字和低饱和语义底色表示。
             float chipScale = 0.85f;
             int chipTextW = (int) (Minecraft.getInstance().font.width(stateText) * chipScale);
             int chipW = Math.max(24, chipTextW + 12);
@@ -185,8 +184,7 @@ public class VehicleDeployScreen extends EspetroMenuScreen {
             int chipY = by + (bh - chipH) / 2;
             UiPaint.roundRect(graphics, chipX, chipY, chipW, chipH, UiTheme.RADIUS_CONTROL,
                 UiTheme.alpha(stateColor, 0.14f));
-            UiPaint.strokeRoundRect(graphics, chipX, chipY, chipW, chipH, UiTheme.RADIUS_CONTROL,
-                UiTheme.alpha(stateColor, 0.55f));
+
             EspetroAuiWidgets.drawScaledString(graphics, stateText,
                 chipX + (chipW - chipTextW) / 2, chipY + 3, stateColor, chipScale);
 

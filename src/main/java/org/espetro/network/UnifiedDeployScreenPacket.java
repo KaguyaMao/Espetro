@@ -588,6 +588,7 @@ public class UnifiedDeployScreenPacket {
         public static final String TYPE_HAB = "hab";
         public static final String TYPE_RALLY = "rally";
         public static final String TYPE_OUTPOST = "outpost";
+        public static final String TYPE_MAIN = "main";
 
         public final java.util.UUID id;
         public final String name;
@@ -676,6 +677,20 @@ public class UnifiedDeployScreenPacket {
          * 获取前哨基地索引（从0开始）
          */
         public int getOutpostIndex() {
+            return (int) (id.getLeastSignificantBits() - 1);
+        }
+
+        /**
+         * 判断是否为主基地重生点（用特殊 UUID 标记：MSB=1, LSB=index+1）。
+         */
+        public boolean isMain() {
+            return TYPE_MAIN.equals(type) || id.getMostSignificantBits() == 1L;
+        }
+
+        /**
+         * 获取主基地重生点索引（从0开始）。
+         */
+        public int getMainIndex() {
             return (int) (id.getLeastSignificantBits() - 1);
         }
     }

@@ -638,7 +638,7 @@ public final class TacticalRadialController {
             .radii(44, 96)
             .squadLayout()
             .animationSpeed(1.25f)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
+            .ringColors(RadialGlassStyle.ringColors());
     }
 
     private static Runnable action(

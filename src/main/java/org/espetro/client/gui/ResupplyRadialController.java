@@ -199,7 +199,7 @@ public final class ResupplyRadialController {
             .title(Component.literal("步兵补给 · 弹药余额 " + balance))
             .radii(44, 108)
             .animationSpeed(1.25F)
-            .ringColors(List.of(UiTheme.hex(UiTheme.WORLD_SCRIM), UiTheme.hex(UiTheme.ICON_PLATE)));
+            .ringColors(RadialGlassStyle.ringColors());
         int first = page * PAGE_SIZE;
         int end = Math.min(entries.size(), first + PAGE_SIZE);
         for (int i = first; i < end; i++) {

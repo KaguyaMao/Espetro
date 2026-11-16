@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 public class NetworkManager {
 
-    public static final String PROTOCOL_VERSION = "1.35";
+    public static final String PROTOCOL_VERSION = "1.39";
 
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(
         ResourceLocation.fromNamespaceAndPath(Espetro.MOD_ID, "main"),
@@ -503,6 +503,19 @@ public class NetworkManager {
         NET.registerMessage(nextId(), MedicFlagPacket.class,
             MedicFlagPacket::write, MedicFlagPacket::read,
             MedicFlagPacket::handle);
+        // 编制指定展示页（协议 1.38）：地图已指定某方编制时，跳过投票只展示 N 秒。
+        NET.registerMessage(nextId(), FactionLockRevealPacket.class,
+            FactionLockRevealPacket::write, FactionLockRevealPacket::read,
+            FactionLockRevealPacket::handle);
+        // 己方载具名单（协议 1.39）：客户端准心提示据此判断载具归属。
+        NET.registerMessage(nextId(), FriendlyVehiclesPacket.class,
+            FriendlyVehiclesPacket::write, FriendlyVehiclesPacket::read,
+            FriendlyVehiclesPacket::handle);
+        // 注册总数与协议版本一起打印：客户端出现 "invalid discriminator byte N" 时，
+        // 这里的 N 必须小于本行打印的数量，否则说明客户端 jar 是旧的。
+        org.espetro.Espetro.LOGGER.info(
+            "Espetro 网络协议 {}: 已注册 {} 个网络包（判别号 0~{}）",
+            PROTOCOL_VERSION, packetId, packetId - 1);
     }
 
     /** 同步"本机玩家是否为医疗兵"：登录、选职、清职时调用；并记录状态供 {@link MedicFlagSync} 对账。 */
@@ -914,7 +927,7 @@ public class NetworkManager {
             new TeamSelectStatePacket(attack, defend, 0, end, false, myTeam, null, atkImg, defImg));
     }
 
-    private static String getFactionSelectionImage(String factionId) {
+    public static String getFactionSelectionImage(String factionId) {
         return getFactionSelectionImageStatic(factionId);
     }
 
@@ -1277,6 +1290,22 @@ public class NetworkManager {
     /**
      * 广播双方最终编制揭示界面给所有在线玩家。
      */
+    /**
+     * 广播“编制指定”展示页：地图已指定该方编制时使用（不投票，仅展示 N 秒）。
+     */
+    public static void broadcastFactionLockReveal(String team, String factionDisplayName,
+                                                  String factionSelectionImage, int durationSeconds) {
+        MinecraftServer server = Espetro.getServer();
+        if (server == null) {
+            return;
+        }
+        FactionLockRevealPacket packet = new FactionLockRevealPacket(
+            team, factionDisplayName, factionSelectionImage, durationSeconds);
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
+        }
+    }
+
     public static void broadcastFactionRevealScreen(String attackFactionId, String defendFactionId, int durationSeconds) {
         MinecraftServer server = Espetro.getServer();
         if (server == null) return;
@@ -1574,6 +1603,8 @@ public class NetworkManager {
         }
 
         java.util.List<UnifiedDeployScreenPacket.BastionItem> bastionList = new java.util.ArrayList<>();
+        // 多个主基地重生点：每个都作为一条可部署项（UUID MSB=1, LSB=index+1）。
+        bastionList.addAll(mainSpawnItems(team));
         // 列出全部己方 HAB（含启用倒计时/无覆盖等），状态文案供 UI 展示；选择时再 isHabOperational
         for (org.espetro.bastion.BastionData bd : bm.getTeamBastions(team)) {
             net.minecraft.core.BlockPos armorStandPos = bm.getRecordedArmorStandPosition(bd);
@@ -1718,10 +1749,32 @@ public class NetworkManager {
         }
     }
 
+    /** 主基地重生点条目（多主基地）：UUID MSB=1, LSB=index+1，类型 main。 */
+    private static java.util.List<UnifiedDeployScreenPacket.BastionItem> mainSpawnItems(String team) {
+        java.util.List<UnifiedDeployScreenPacket.BastionItem> items = new java.util.ArrayList<>();
+        java.util.List<org.espetro.team.SpawnPointConfig.SpawnPoint> mains =
+            org.espetro.team.SpawnPointConfig.getSpawnPoints(team);
+        for (int i = 0; i < mains.size(); i++) {
+            org.espetro.team.SpawnPointConfig.SpawnPoint sp = mains.get(i);
+            if (sp == null) {
+                continue;
+            }
+            items.add(new UnifiedDeployScreenPacket.BastionItem(
+                new java.util.UUID(1L, i + 1L),
+                sp.name == null || sp.name.isBlank() ? ("主基地 #" + (i + 1)) : sp.name,
+                Math.round(sp.x) + ", " + Math.round(sp.y) + ", " + Math.round(sp.z),
+                UnifiedDeployScreenPacket.BastionItem.TYPE_MAIN,
+                "主基地"));
+        }
+        return items;
+    }
+
     private static java.util.List<UnifiedDeployScreenPacket.BastionItem> buildDeployPointItems(
             ServerPlayer player, String team) {
         org.espetro.bastion.BastionManager bm = org.espetro.bastion.BastionManager.getInstance();
         java.util.List<UnifiedDeployScreenPacket.BastionItem> items = new java.util.ArrayList<>();
+        // 主基地必须与统一部署界面一致，否则随后的 DeployPointSyncPacket 会把它们“刷掉”。
+        items.addAll(mainSpawnItems(team));
         for (org.espetro.bastion.BastionData bd : bm.getTeamBastions(team)) {
             // 已被摧毁的兵站不再出现在部署列表里（否则旧按钮会残留、点了必然失败）
             if (!bd.isActive()) continue;
@@ -1856,7 +1909,7 @@ public class NetworkManager {
         return getFactionDisplayName(opponentFactionId);
     }
 
-    private static String getFactionDisplayName(String factionId) {
+    public static String getFactionDisplayName(String factionId) {
         if (factionId == null || factionId.isEmpty()) return null;
 
         org.espetro.team.FactionDataLoader loader =

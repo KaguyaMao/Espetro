@@ -106,6 +106,7 @@ const TARGETS = [
   { id: 'zlt11', kind: 'wt', fwd: 100, rev: 9, note: 'ZLT11' },
   { id: 'zsl10', kind: 'wt', fwd: 88, rev: 7, note: 'ZSL92 同族近似' },
   { id: 'btr80', kind: 'wt', fwd: 87, rev: 12, note: 'BTR-80A' },
+  { id: 'btr90', kind: 'real', fwd: 100, note: 'BTR-90 公开极速' },
   { id: 'btr82', kind: 'wt', fwd: 80, rev: 11, note: 'BTR-82AT' },
   // ---- 现实公开数据（WT 无对应，倒车不动） ----
   { id: 'zbd05', kind: 'real', fwd: 65, note: 'ZBD-05 公开极速' },

@@ -116,7 +116,6 @@ public final class FortificationWandOverlay {
         }
         int panelWidth = rows.stream().mapToInt(mc.font::width).max().orElse(0) + 12;
         UiPaint.card(graphics, 2, 2, panelWidth, rows.size() * 10 + 8);
-        UiPaint.accentBarLeft(graphics, 2, 2, rows.size() * 10 + 8, UiTheme.ACCENT);
         int y = 6;
         for (int i = 0; i < rows.size(); i++) {
             UiPaint.text(graphics, rows.get(i), 8, y, colors.get(i));

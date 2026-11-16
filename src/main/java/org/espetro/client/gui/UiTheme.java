@@ -1,11 +1,11 @@
 package org.espetro.client.gui;
 
 /**
- * END-02 / Endfield-inspired industrial UI tokens.
- * Two matte palettes share one geometry and typography system. Color fields are
+ * Minimal frosted-glass UI tokens shared by screens, controls and HUD.
+ * Two translucent palettes share one geometry and typography system. Color fields are
  * deliberately live values: never cache them in static final aliases elsewhere.
  * Theme changes run on the client thread; primitives never branch on a theme.
- * Previous palette: docs/archive/endfield-dark-v1/.
+ * Previous working UI: docs/archive/end02-before-minimal-glass-2026-11-14/.
  */
 public final class UiTheme {
     private UiTheme() { }
@@ -47,6 +47,15 @@ public final class UiTheme {
     public static final int WORLD_WARNING = 0xFFFFD45C;
     public static final int TEXTURE_WHITE = 0xFFFFFFFF;
     public static final int ICON_PLATE = 0xFF252B23;
+    /** Explicit selection and category accents requested for the class picker. */
+    public static final int SIGNAL_YELLOW = 0xFFFFD45C;
+    public static final int TEXT_ON_SIGNAL = 0xFF151719;
+    /** Match the existing EsPoints/Alt command wheel's neutral translucent surfaces. */
+    public static final int RADIAL_BACKGROUND = 0xB824292B;
+    public static final int RADIAL_BACKGROUND_OUTER = 0xC832383A;
+    public static final int RADIAL_HOVER = 0xB8000000;
+    public static final int RADIAL_DISABLED = 0x60000000;
+    public static final int RADIAL_CENTER = 0x99000000;
 
     /** ARGB form used by EsRadial's CSS color API. */
     public static String hex(int argb) {
@@ -58,32 +67,48 @@ public final class UiTheme {
         return color == ACCENT || color == ACCENT_DIM || color == ACCENT_LINE ? GOLD : color;
     }
 
+    /** Existing semantic fills remain tinted, but never become opaque UI plates. */
+    public static int glassSurface(int color) {
+        return (color >>> 24) == 255 ? withAlpha(color, 112) : color;
+    }
+
+    /** Keep caller tint/transparent text buttons while capping the state's opacity. */
+    public static int controlFill(int color, int stateToken) {
+        return withAlpha(color, Math.min(color >>> 24, stateToken >>> 24));
+    }
+
+    /** Old inverse-button ink cannot be used over the new translucent controls. */
+    public static int controlText(int color) {
+        return color == ON_INK || color == TEXT_ON_ACCENT || color == DARK_INK
+            ? TEXT : readableText(color);
+    }
+
     // Live semantic colors, read during drawing or widget construction.
-    public static int BACKDROP_TOP = 0xFF111410;
-    public static int BACKDROP_BOTTOM = 0xFF111410;
-    public static int SURFACE_0 = 0xFF191D18;
-    public static int CARD_TOP = 0xFF22271F;
-    public static int CARD_BOTTOM = 0xFF22271F;
-    public static int SURFACE_2 = 0xFF2D3329;
-    public static int SURFACE_3 = 0xFF3B4235;
-    public static int SUNKEN = 0xFF10140F;
-    public static int SOLID_PAGE = 0xFF171B15;
-    public static int COLUMN_SCRIM = 0xF0191D17;
-    public static int GLASS_PANEL = 0xB41B2019;
-    public static int GLASS_PANEL_SOFT = 0x9E252B21;
+    public static int BACKDROP_TOP = 0x66111410;
+    public static int BACKDROP_BOTTOM = 0x66111410;
+    public static int SURFACE_0 = 0x77111410;
+    public static int CARD_TOP = 0xA6111410;
+    public static int CARD_BOTTOM = 0xA6111410;
+    public static int SURFACE_2 = 0x38F0F2E8;
+    public static int SURFACE_3 = 0x4DF0F2E8;
+    public static int SUNKEN = 0x66111410;
+    public static int SOLID_PAGE = 0x88111410;
+    public static int COLUMN_SCRIM = 0x99111410;
+    public static int GLASS_PANEL = 0xA6111410;
+    public static int GLASS_PANEL_SOFT = 0x66111410;
     /** 按钮常态黑底：比栏目玻璃更实，保证"按钮是实体控件"可读。 */
-    public static int BUTTON_BLACK = 0xE612100E;
-    public static int FROST_SCRIM = 0x7A0D110C;
-    public static int SHADOW_1 = 0x66000000;
-    public static int SHADOW_2 = 0x47000000;
-    public static int SHADOW_3 = 0x2E000000;
-    public static int HAIRLINE = 0x22FFFFFF;
-    public static int HAIRLINE_STRONG = 0x3DFFFFFF;
+    public static int BUTTON_BLACK = 0x1AF0F2E8;
+    public static int FROST_SCRIM = 0x99111410;
+    public static int SHADOW_1 = 0x00000000;
+    public static int SHADOW_2 = 0x00000000;
+    public static int SHADOW_3 = 0x00000000;
+    public static int HAIRLINE = 0x10FFFFFF;
+    public static int HAIRLINE_STRONG = 0x30FFFFFF;
     public static int SHEEN = 0x00000000;
-    public static int HAIRLINE_DARK = 0x66000000;
-    public static int GRID = 0x10FFFFFF;
-    public static int GRID_MAJOR = 0x1CFFFFFF;
-    public static int TICK = 0xFF6E757E;
+    public static int HAIRLINE_DARK = 0x00000000;
+    public static int GRID = 0x00000000;
+    public static int GRID_MAJOR = 0x00000000;
+    public static int TICK = 0x00000000;
     public static int TEXT = 0xFFF0F2E8;
     public static int TEXT_SECOND = 0xFFC0C6B8;
     public static int TEXT_THIRD = 0xFF9CA591;
@@ -92,15 +117,15 @@ public final class UiTheme {
     public static int INK_FILL = 0xFFF0F2E8;
     public static int ON_INK = 0xFF171A16;
     public static int ON_INK_SECOND = 0xFF4B5046;
-    public static int ACCENT = 0xFFFFE500;
-    public static int ACCENT_DIM = 0xFFE2CB00;
-    public static int ACCENT_ON_PAPER = 0xFFFFE500;
-    public static int ACCENT_SOFT = 0x30FFE500;
-    public static int ACCENT_LINE = 0xFFFFE500;
-    public static int ACCENT_GLOW = 0x33FFE500;
-    public static int GOLD = 0xFFFFE579;
-    public static int GOLD_SOFT = 0x2EFFE579;
-    public static int GOLD_LINE = 0x66FFE579;
+    public static int ACCENT = 0xFFE5E7DD;
+    public static int ACCENT_DIM = 0xFFC0C6B8;
+    public static int ACCENT_ON_PAPER = 0xFFE5E7DD;
+    public static int ACCENT_SOFT = 0x24F0F2E8;
+    public static int ACCENT_LINE = 0x60F0F2E8;
+    public static int ACCENT_GLOW = 0x00000000;
+    public static int GOLD = 0xFFF0F2E8;
+    public static int GOLD_SOFT = 0x18F0F2E8;
+    public static int GOLD_LINE = 0x30F0F2E8;
     public static int ATTACK = 0xFFFF6B5E;
     public static int DEFEND = 0xFF5C8CFF;
     public static int POSITIVE = 0xFF57D38C;
@@ -114,32 +139,45 @@ public final class UiTheme {
     public static int WARNING_SOFT = 0x26FFC24B;
     public static int NEGATIVE_SOFT = 0x26FF5C5C;
 
+    public static int CONTROL_NORMAL = 0x1AF0F2E8;
+    public static int CONTROL_HOVER = 0x4DF0F2E8;
+    public static int CONTROL_SELECTED = 0x40F0F2E8;
+    public static int CONTROL_DISABLED = 0x0AF0F2E8;
+    public static int CONTROL_PRIMARY = 0x38F0F2E8;
+
+    public static final float GLASS_BLUR_RADIUS = 4.0F;
+
     private static void applyPalette() {
         boolean light = mode == Mode.LIGHT;
-        BACKDROP_TOP = light ? 0xFFF2F2EC : 0xFF111410;
-        BACKDROP_BOTTOM = light ? 0xFFF2F2EC : 0xFF111410;
-        SURFACE_0 = light ? 0xFFF0F0E9 : 0xFF191D18;
-        CARD_TOP = light ? 0xFFFAFAF4 : 0xFF22271F;
-        CARD_BOTTOM = light ? 0xFFFAFAF4 : 0xFF22271F;
-        SURFACE_2 = light ? 0xFFE8E9DF : 0xFF2D3329;
-        SURFACE_3 = light ? 0xFFDCDDD2 : 0xFF3B4235;
-        SUNKEN = light ? 0xFFE0E1D8 : 0xFF10140F;
-        SOLID_PAGE = light ? 0xFFECEDE5 : 0xFF171B15;
-        COLUMN_SCRIM = light ? 0xF0F2F2EA : 0xF0191D17;
-        GLASS_PANEL = light ? 0xC6F4F4ED : 0xB41B2019;
-        GLASS_PANEL_SOFT = light ? 0xB2E7E8DE : 0x9E252B21;
-        BUTTON_BLACK = light ? 0xF5F1F1EA : 0xE612100E;
-        FROST_SCRIM = light ? 0x96EEEFE6 : 0x7A0D110C;
-        SHADOW_1 = light ? 0x23131517 : 0x66000000;
-        SHADOW_2 = light ? 0x18131517 : 0x47000000;
-        SHADOW_3 = light ? 0x10131517 : 0x2E000000;
-        HAIRLINE = light ? 0x30202420 : 0x22FFFFFF;
-        HAIRLINE_STRONG = light ? 0x66202420 : 0x3DFFFFFF;
+        CONTROL_NORMAL = light ? 0x1A20251F : 0x1AF0F2E8;
+        CONTROL_HOVER = light ? 0x4D20251F : 0x4DF0F2E8;
+        CONTROL_SELECTED = light ? 0x4020251F : 0x40F0F2E8;
+        CONTROL_DISABLED = light ? 0x0A20251F : 0x0AF0F2E8;
+        CONTROL_PRIMARY = light ? 0x3820251F : 0x38F0F2E8;
+        BACKDROP_TOP = light ? 0x66F2F2EC : 0x66111410;
+        BACKDROP_BOTTOM = light ? 0x66F2F2EC : 0x66111410;
+        SURFACE_0 = light ? 0xA6F0F0E9 : 0x77111410;
+        CARD_TOP = light ? 0xA6F4F4ED : 0xA6111410;
+        CARD_BOTTOM = light ? 0xA6F4F4ED : 0xA6111410;
+        SURFACE_2 = light ? 0x3820251F : 0x38F0F2E8;
+        SURFACE_3 = light ? 0x4D20251F : 0x4DF0F2E8;
+        SUNKEN = light ? 0x66E0E1D8 : 0x66111410;
+        SOLID_PAGE = light ? 0xA6F0F0E9 : 0x88111410;
+        COLUMN_SCRIM = light ? 0xA6F2F2EA : 0x99111410;
+        GLASS_PANEL = light ? 0xA6F4F4ED : 0xA6111410;
+        GLASS_PANEL_SOFT = light ? 0x66F4F4ED : 0x66111410;
+        BUTTON_BLACK = light ? 0x1A20251F : 0x1AF0F2E8;
+        FROST_SCRIM = light ? 0xB2EEEFE6 : 0x99111410;
+        SHADOW_1 = light ? 0x00000000 : 0x00000000;
+        SHADOW_2 = light ? 0x00000000 : 0x00000000;
+        SHADOW_3 = light ? 0x00000000 : 0x00000000;
+        HAIRLINE = light ? 0x10202420 : 0x10FFFFFF;
+        HAIRLINE_STRONG = light ? 0x30202420 : 0x30FFFFFF;
         SHEEN = light ? 0x00000000 : 0x00000000;
-        HAIRLINE_DARK = light ? 0x30202420 : 0x66000000;
-        GRID = light ? 0x08202420 : 0x10FFFFFF;
-        GRID_MAJOR = light ? 0x10202420 : 0x1CFFFFFF;
-        TICK = light ? 0xFF85887B : 0xFF6E757E;
+        HAIRLINE_DARK = light ? 0x00000000 : 0x00000000;
+        GRID = light ? 0x00000000 : 0x00000000;
+        GRID_MAJOR = light ? 0x00000000 : 0x00000000;
+        TICK = light ? 0x00000000 : 0x00000000;
         TEXT = light ? 0xFF171A16 : 0xFFF0F2E8;
         TEXT_SECOND = light ? 0xFF4B5046 : 0xFFC0C6B8;
         TEXT_THIRD = light ? 0xFF62675C : 0xFF9CA591;
@@ -148,15 +186,15 @@ public final class UiTheme {
         INK_FILL = light ? 0xFF20251F : 0xFFF0F2E8;
         ON_INK = light ? 0xFFF5F5EE : 0xFF171A16;
         ON_INK_SECOND = light ? 0xFFC4C8BA : 0xFF4B5046;
-        ACCENT = light ? 0xFFFFE500 : 0xFFFFE500;
-        ACCENT_DIM = light ? 0xFFDFCA00 : 0xFFE2CB00;
-        ACCENT_ON_PAPER = light ? 0xFF6B5C00 : 0xFFFFE500;
-        ACCENT_SOFT = light ? 0x38FFE500 : 0x30FFE500;
-        ACCENT_LINE = light ? 0xFFAA9300 : 0xFFFFE500;
-        ACCENT_GLOW = light ? 0x33FFE500 : 0x33FFE500;
-        GOLD = light ? 0xFF6B5C00 : 0xFFFFE579;
-        GOLD_SOFT = light ? 0x226B5C00 : 0x2EFFE579;
-        GOLD_LINE = light ? 0x666B5C00 : 0x66FFE579;
+        ACCENT = light ? 0xFF20251F : 0xFFE5E7DD;
+        ACCENT_DIM = light ? 0xFF4B5046 : 0xFFC0C6B8;
+        ACCENT_ON_PAPER = light ? 0xFF20251F : 0xFFE5E7DD;
+        ACCENT_SOFT = light ? 0x2420251F : 0x24F0F2E8;
+        ACCENT_LINE = light ? 0x6020251F : 0x60F0F2E8;
+        ACCENT_GLOW = light ? 0x00000000 : 0x00000000;
+        GOLD = light ? 0xFF171A16 : 0xFFF0F2E8;
+        GOLD_SOFT = light ? 0x1820251F : 0x18F0F2E8;
+        GOLD_LINE = light ? 0x3020251F : 0x30F0F2E8;
         ATTACK = light ? 0xFFB23E33 : 0xFFFF6B5E;
         DEFEND = light ? 0xFF2E58A6 : 0xFF5C8CFF;
         POSITIVE = light ? 0xFF256B42 : 0xFF57D38C;
@@ -223,7 +261,7 @@ public final class UiTheme {
     public static final float TYPE_NUMERAL = 1.5f;
 
     /** 微标签字距（像素，仅在缩放下叠加）。 */
-    public static final int LETTERSPACING_MICRO = 1;
+    public static final int LETTERSPACING_MICRO = 0;
     /** 正文轻微字距。 */
     public static final int LETTERSPACING_BODY = 0;
 
@@ -232,11 +270,12 @@ public final class UiTheme {
     // ------------------------------------------------------------------
 
     /** 悬停过渡时长。 */
-    public static final long MOTION_HOVER_MS = 90L;
+    public static final long MOTION_HOVER_MS = 160L;
     /** 选中/切换过渡时长。 */
-    public static final long MOTION_SELECT_MS = 120L;
+    public static final long MOTION_SELECT_MS = 180L;
     /** 面板入场时长。 */
-    public static final long MOTION_ENTER_MS = 160L;
+    public static final long MOTION_ENTER_MS = 220L;
+    public static final long MOTION_EXIT_MS = 180L;
 
     // ------------------------------------------------------------------
     // 工具方法

@@ -47,7 +47,7 @@ public class FactionRevealScreen extends EspetroMenuScreen {
     private final int defendTexW;
     private final int defendTexH;
     private int ticksRemaining;
-    private EspetroAuiWidgets.PhaseHeader phaseHeader;
+    private VotePhase phaseHeader;
 
     public FactionRevealScreen(String attackFactionName, String defendFactionName,
                                String attackFactionImage, String defendFactionImage,
@@ -128,50 +128,27 @@ public class FactionRevealScreen extends EspetroMenuScreen {
 
     @Override
     protected void buildMenuRoot(GuiElement root) {
-        phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "双方编制确认",
-            "双方最终编制已经确定",
-            getSecondsRemaining() + " 秒后进入部署",
-            UiTheme.GOLD);
-        int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
-        boolean stacked = this.width < IMG_MAX_W * 2 + IMG_GAP + 60;
-        int cardW = stacked ? Math.min(IMG_MAX_W + 32, this.width - 28) : IMG_MAX_W + 32;
-        int gap = IMG_GAP;
-        int contentW = stacked ? cardW : cardW * 2 + gap;
-        int panelW = Math.min(this.width - 18, Math.max(contentW + 20, stacked ? cardW + 40 : 430));
-        int cardH = IMG_MAX_H + 22;
-        int panelH = stacked ? cardH * 2 + gap : cardH;
-        int panelX = (this.width - panelW) / 2;
-        int panelY = headerH + Math.max(8, (this.height - headerH - panelH) / 2);
-
-        // 两张阵营卡片直接浮在地图背景上；原来这里还有一块深色凹槽底板，
-        // 会在两张卡之间露出黑条（用户要求去掉）。
-        int startX = panelX + (panelW - contentW) / 2;
-        int startY = panelY;
-        if (stacked) {
-            addFactionCard(root, startX, startY, cardW,
-                attackTexture, attackTexW, attackTexH, attackFactionName, UiTheme.ATTACK);
-            addFactionCard(root, startX, startY + cardH + gap, cardW,
-                defendTexture, defendTexW, defendTexH, defendFactionName, UiTheme.DEFEND);
-        } else {
-            addFactionCard(root, startX, startY, cardW,
-                attackTexture, attackTexW, attackTexH, attackFactionName, UiTheme.ATTACK);
-            addFactionCard(root, startX + cardW + gap, startY, cardW,
-                defendTexture, defendTexW, defendTexH, defendFactionName, UiTheme.DEFEND);
-        }
+        phaseHeader = VotePhase.add(root, width, height, "双方编制确认",
+            "双方最终编制已经确定", () -> getSecondsRemaining() + " 秒后进入部署",
+            () -> VotePhase.Stage.RESULT);
+        VotePhase.Grid layout = VotePhase.grid(width, height, 2, 2, 22);
+        addFactionCard(root, layout.x(0), layout.y(0), layout.cardWidth(), layout.cardHeight(),
+            attackTexture, attackTexW, attackTexH, attackFactionName, UiTheme.ATTACK);
+        addFactionCard(root, layout.x(1), layout.y(1), layout.cardWidth(), layout.cardHeight(),
+            defendTexture, defendTexW, defendTexH, defendFactionName, UiTheme.DEFEND);
     }
 
-    private void addFactionCard(GuiElement root, int x, int y, int cardW,
+    private void addFactionCard(GuiElement root, int x, int y, int cardW, int cardH,
                                 ResourceLocation texture, int texW, int texH,
                                 String factionName, int accent) {
-        int cardH = IMG_MAX_H + 22;
         root.addChild(EspetroAuiWidgets.cardAccent(x, y, cardW, cardH, accent));
-        AspectFit.Size fitted = AspectFit.within(texW, texH, IMG_MAX_W, IMG_MAX_H);
+        int imageH = Math.max(1, cardH - 22);
+        AspectFit.Size fitted = AspectFit.within(texW, texH, Math.max(1, cardW - 8), imageH);
         int imgX = x + (cardW - fitted.width()) / 2;
-        int imgY = y + (IMG_MAX_H - fitted.height()) / 2;
+        int imgY = y + (imageH - fitted.height()) / 2;
         root.addChild(new FactionImageElement(imgX, imgY, fitted.width(), fitted.height(),
             texW, texH, texture));
-        EspetroAuiWidgets.Text label = EspetroAuiWidgets.centeredText(x, y + IMG_MAX_H + 4, cardW,
+        EspetroAuiWidgets.Text label = EspetroAuiWidgets.centeredText(x, y + imageH + 4, cardW,
             fitText(factionName, cardW - 8), accent);
         label.setTextScale(UiTheme.TYPE_HEADING).setShadow(true);
         root.addChild(label);
@@ -200,10 +177,7 @@ public class FactionRevealScreen extends EspetroMenuScreen {
             int bx = refX + getX();
             int by = refY + getY();
             graphics.blit(texture, bx, by, dispW, dispH, 0, 0, texW, texH, texW, texH);
-            UiPaint.frame(graphics, bx - 1, by - 1, dispW + 2, dispH + 2,
-                UiTheme.HAIRLINE_STRONG);
-            UiPaint.brackets(graphics, bx - 3, by - 3, dispW + 6, dispH + 6,
-                UiTheme.TICK);
+
         }
     }
 

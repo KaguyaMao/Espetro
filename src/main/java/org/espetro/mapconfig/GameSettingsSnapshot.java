@@ -16,6 +16,8 @@ public final class GameSettingsSnapshot {
     public final int attackFactionSelectSeconds;
     public final int factionPoolSize;
     public final int factionRevealSeconds;
+    /** 地图指定编制时的展示页时长（秒）。 */
+    public final int factionLockRevealSeconds;
     public final int roundEndSeconds;
     public final int respawnInvincibilityTicks;
     public final double mainBaseInvulnerabilityRadius;
@@ -42,6 +44,11 @@ public final class GameSettingsSnapshot {
     public final boolean deprecatedRequiredPlayersPresent;
     public final boolean deprecatedTutorialPresent;
 
+    /** 主基地部署等待屏障的半边长（格），以第一主基地为中心。 */
+    public final double mainBaseBarrierRadius;
+    /** 主基地部署等待屏障的高度（格）。 */
+    public final int mainBaseBarrierHeight;
+
     public GameSettingsSnapshot(
         int teamSelectSeconds,
         int deployTimeoutSeconds,
@@ -52,6 +59,7 @@ public final class GameSettingsSnapshot {
         int attackFactionSelectSeconds,
         int factionPoolSize,
         int factionRevealSeconds,
+        int factionLockRevealSeconds,
         int roundEndSeconds,
         int respawnInvincibilityTicks,
         double mainBaseInvulnerabilityRadius,
@@ -72,7 +80,9 @@ public final class GameSettingsSnapshot {
         int commanderVacancySeconds,
         int battleTimeoutSeconds,
         boolean deprecatedRequiredPlayersPresent,
-        boolean deprecatedTutorialPresent
+        boolean deprecatedTutorialPresent,
+        double mainBaseBarrierRadius,
+        int mainBaseBarrierHeight
     ) {
         this.teamSelectSeconds = teamSelectSeconds;
         this.deployTimeoutSeconds = deployTimeoutSeconds;
@@ -83,6 +93,7 @@ public final class GameSettingsSnapshot {
         this.attackFactionSelectSeconds = attackFactionSelectSeconds;
         this.factionPoolSize = factionPoolSize;
         this.factionRevealSeconds = factionRevealSeconds;
+        this.factionLockRevealSeconds = factionLockRevealSeconds;
         this.roundEndSeconds = roundEndSeconds;
         this.respawnInvincibilityTicks = respawnInvincibilityTicks;
         this.mainBaseInvulnerabilityRadius = mainBaseInvulnerabilityRadius;
@@ -104,15 +115,18 @@ public final class GameSettingsSnapshot {
         this.battleTimeoutSeconds = battleTimeoutSeconds;
         this.deprecatedRequiredPlayersPresent = deprecatedRequiredPlayersPresent;
         this.deprecatedTutorialPresent = deprecatedTutorialPresent;
+        this.mainBaseBarrierRadius = mainBaseBarrierRadius;
+        this.mainBaseBarrierHeight = mainBaseBarrierHeight;
     }
 
     public static GameSettingsSnapshot defaults() {
         return new GameSettingsSnapshot(
-            60, 240, 30, 20, 20, 30, 30, 6, 5, 10, 60, 150.0, 0, 10.0, 200.0,
+            60, 240, 30, 20, 20, 30, 30, 6, 5, 5, 10, 60, 150.0, 0, 10.0, 200.0,
             280, 1200, 2,
             100, 5, 15, 2, 2, 12,
             60, 600, 180, 3600,
-            false, false
+            false, false,
+            45.0, 12
         );
     }
 
@@ -130,12 +144,15 @@ public final class GameSettingsSnapshot {
         int atkFac = d.attackFactionSelectSeconds;
         int pool = d.factionPoolSize;
         int reveal = d.factionRevealSeconds;
+        int lockReveal = d.factionLockRevealSeconds;
         int roundEnd = d.roundEndSeconds;
         int invuln = d.respawnInvincibilityTicks;
         double mainBaseInvulnerabilityRadius = d.mainBaseInvulnerabilityRadius;
         int classSwitchCooldown = d.classSwitchCooldownSeconds;
         double nameTag = d.teammateNameTagDistance;
         double waitingY = d.waitingY;
+        double mainBaseBarrierRadius = d.mainBaseBarrierRadius;
+        int mainBaseBarrierHeight = d.mainBaseBarrierHeight;
 
         int atkTroops = d.initialAttackTroops;
         int defTroops = d.initialDefendTroops;
@@ -167,10 +184,15 @@ public final class GameSettingsSnapshot {
             atkFac = getInt(game, "attack_faction_select_seconds", atkFac);
             pool = getInt(game, "faction_pool_size", pool);
             reveal = getInt(game, "faction_reveal_seconds", reveal);
+            lockReveal = getInt(game, "faction_lock_reveal_seconds", lockReveal);
             roundEnd = getInt(game, "round_end_seconds", roundEnd);
             invuln = getInt(game, "respawn_invincibility_ticks", invuln);
             mainBaseInvulnerabilityRadius = getDouble(
                 game, "main_base_invulnerability_radius", mainBaseInvulnerabilityRadius);
+            mainBaseBarrierRadius = getDouble(
+                game, "main_base_barrier_radius", mainBaseBarrierRadius);
+            mainBaseBarrierHeight = getInt(
+                game, "main_base_barrier_height", mainBaseBarrierHeight);
             classSwitchCooldown = getInt(
                 game, "class_switch_cooldown_seconds", classSwitchCooldown);
             nameTag = getDouble(game, "teammate_name_tag_distance", nameTag);
@@ -214,6 +236,7 @@ public final class GameSettingsSnapshot {
             Math.max(1, atkFac),
             Math.max(2, pool),
             Math.max(1, reveal),
+            Math.max(1, lockReveal),
             Math.max(1, roundEnd),
             Math.max(0, invuln),
             Math.max(0.0, mainBaseInvulnerabilityRadius),
@@ -234,7 +257,9 @@ public final class GameSettingsSnapshot {
             Math.max(1, vacancy),
             Math.max(1, battleTimeout),
             deprecatedRequired,
-            deprecatedTutorial
+            deprecatedTutorial,
+            Math.max(0.0, mainBaseBarrierRadius),
+            Math.max(1, mainBaseBarrierHeight)
         );
     }
 

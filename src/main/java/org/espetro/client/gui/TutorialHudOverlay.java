@@ -60,9 +60,8 @@ public final class TutorialHudOverlay {
         int dividerY = bodyY + bodyH + 4;
         int footerY = dividerY + 4;
 
-        // 底部居中的圆角玻璃说明卡（不挡左下退出）：金色强调条 + 发丝分割线。
+        // 底部居中的无框玻璃说明卡，不遮挡左下退出按钮。
         UiPaint.card(graphics, cardX, cardY, cardW, cardH);
-        UiPaint.accentBarLeft(graphics, cardX + 1, cardY + 4, cardH - 8, UiTheme.GOLD);
         UiPaint.textScaled(graphics,
             EspetroAuiWidgets.trimToWidth(title.getString(), bodyW),
             cardX + CARD_PAD, titleY, UiTheme.GOLD, UiTheme.TYPE_HEADING, true);
@@ -72,15 +71,13 @@ public final class TutorialHudOverlay {
         UiPaint.textScaled(graphics, footer, cardX + CARD_PAD, footerY,
             UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO, false);
 
-        // 左下「退出教程」：内凹底色 + 危险色描边，hover 只换色不位移。
+        // 左下「退出教程」以透明度提示悬停，危险语义保留在文字中。
         int exitX = EXIT_MARGIN;
         int exitY = sh - EXIT_MARGIN - EXIT_H;
         boolean hover = isOverExit(mc.mouseHandler.xpos(), mc.mouseHandler.ypos(), mc);
         int exitAccent = UiTheme.NEGATIVE;
-        UiPaint.roundRect(graphics, exitX, exitY, EXIT_W, EXIT_H, UiTheme.RADIUS_CONTROL,
-            hover ? UiTheme.NEGATIVE_SOFT : UiTheme.withAlpha(UiTheme.SURFACE_0, 0xE0));
-        UiPaint.strokeRoundRect(graphics, exitX, exitY, EXIT_W, EXIT_H, UiTheme.RADIUS_CONTROL,
-            hover ? exitAccent : UiTheme.withAlpha(exitAccent, 0x66));
+        UiPaint.glassPanel(graphics, exitX, exitY, EXIT_W, EXIT_H,
+            hover ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
         String exitLabel = "退出教程";
         UiPaint.textCentered(graphics, exitLabel, exitX,
             exitY + (EXIT_H - font.lineHeight) / 2, EXIT_W,

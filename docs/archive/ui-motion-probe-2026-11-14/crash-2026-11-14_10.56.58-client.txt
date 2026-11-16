@@ -1,0 +1,334 @@
+---- Minecraft Crash Report ----
+// Embeddium instance tainted by mods: [sodiumoptionsapi, ruokmod, sodiumextras, oculus, sodiumdynamiclights, embeddium_extra]
+// Please do not reach out for Embeddium support without removing these mods first.
+// -------
+// I let you down. Sorry :(
+
+Time: 2026-11-14 10:56:58
+Description: Unexpected error
+
+dev.latvian.mods.rhino.EvaluatorException: Java class "net.minecraft.client.Minecraft" has no public instance field or method named "m_91087_". (client_scripts:zz_espetro_motion_probe_20261114.js#26)
+	at dev.latvian.mods.rhino.DefaultErrorReporter.runtimeError(DefaultErrorReporter.java:67) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError(Context.java:133) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError(Context.java:173) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError2(Context.java:150) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaMembers.reportMemberNotFound(JavaMembers.java:866) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.NativeJavaClass.get(NativeJavaClass.java:167) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.ScriptableObject.getProperty(ScriptableObject.java:949) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:mixin,re:classloading}
+	at dev.latvian.mods.rhino.ScriptRuntime.getPropFunctionAndThisHelper(ScriptRuntime.java:1783) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.ScriptRuntime.getPropFunctionAndThis(ScriptRuntime.java:1775) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Interpreter.interpretLoop(Interpreter.java:869) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Interpreter.interpret(Interpreter.java:370) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.InterpretedFunction.call(InterpretedFunction.java:72) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.callSync(Context.java:1357) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.doTopCall(Context.java:1374) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.InterpretedFunction.call(InterpretedFunction.java:70) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaAdapter.doCall(JavaAdapter.java:479) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaAdapter.callMethod(JavaAdapter.java:464) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at adapter1.tick(<adapter>) ~[?:?] {}
+	at dev.architectury.event.forge.EventHandlerImplClient.event(EventHandlerImplClient.java:58) ~[architectury-9.2.14-forge.jar%23296!/:?] {re:classloading,pl:runtimedistcleaner:A}
+	at dev.architectury.event.forge.__EventHandlerImplClient_event_ClientTickEvent.invoke(.dynamic) ~[architectury-9.2.14-forge.jar%23296!/:?] {re:classloading,pl:eventbus:B}
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:55) ~[eventbus-6.2.33.jar%23137!/:?] {re:mixin}
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:312) ~[eventbus-6.2.33.jar%23137!/:?] {}
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:298) ~[eventbus-6.2.33.jar%23137!/:?] {}
+	at net.minecraftforge.event.ForgeEventFactory.onPostClientTick(ForgeEventFactory.java:965) ~[forge-1.20.1-47.4.22-universal.jar%23375!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.potential_spawns_alloc.ForgeEventFactoryMixin,pl:mixin:APP:lithium.mixins.json:collections.mob_spawning.ForgeEventFactoryMixin,pl:mixin:A}
+	at net.minecraft.client.Minecraft.m_91398_(Minecraft.java:1875) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,re:classloading,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,pl:mixin:A}
+	at net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1112) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,re:classloading,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,pl:mixin:A}
+	at net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,re:classloading,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,pl:mixin:A}
+	at net.minecraft.client.main.Main.main(Main.java:218) ~[Squad%e9%a2%84%e5%8f%91%e5%b8%83%e6%b5%8b%e8%af%95.jar:?] {re:mixin,re:classloading,pl:mixin:APP:lightspeed.mixins.json:MinecraftMainMixin,pl:mixin:APP:physicsmod.mixins.json:MixinMain,pl:mixin:APP:smoothboot.mixins.json:client.MainMixin,pl:mixin:A}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?] {re:mixin}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Suspected Mods: 
+	Architectury (architectury), Version: 9.2.14
+		Issue tracker URL: https://github.com/shedaniel/architectury/issues
+		at TRANSFORMER/architectury@9.2.14/dev.architectury.event.forge.EventHandlerImplClient.event(EventHandlerImplClient.java:58)
+
+	Rhino (rhino), Version: 2001.2.3-build.10
+		Issue tracker URL: https://github.com/KubeJS-Mods/Rhino/issues
+		at TRANSFORMER/rhino@2001.2.3-build.10/dev.latvian.mods.rhino.DefaultErrorReporter.runtimeError(DefaultErrorReporter.java:67)
+Stacktrace:
+	at dev.latvian.mods.rhino.DefaultErrorReporter.runtimeError(DefaultErrorReporter.java:67) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError(Context.java:133) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError(Context.java:173) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.reportRuntimeError2(Context.java:150) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaMembers.reportMemberNotFound(JavaMembers.java:866) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.NativeJavaClass.get(NativeJavaClass.java:167) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.ScriptableObject.getProperty(ScriptableObject.java:949) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:mixin,re:classloading}
+	at dev.latvian.mods.rhino.ScriptRuntime.getPropFunctionAndThisHelper(ScriptRuntime.java:1783) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.ScriptRuntime.getPropFunctionAndThis(ScriptRuntime.java:1775) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Interpreter.interpretLoop(Interpreter.java:869) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Interpreter.interpret(Interpreter.java:370) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.InterpretedFunction.call(InterpretedFunction.java:72) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.callSync(Context.java:1357) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.Context.doTopCall(Context.java:1374) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.InterpretedFunction.call(InterpretedFunction.java:70) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaAdapter.doCall(JavaAdapter.java:479) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at dev.latvian.mods.rhino.JavaAdapter.callMethod(JavaAdapter.java:464) ~[rhino-forge-2001.2.3-build.10.jar%23345!/:2001.2.3-build.10] {re:classloading}
+	at adapter1.tick(<adapter>) ~[?:?] {}
+	at dev.architectury.event.forge.EventHandlerImplClient.event(EventHandlerImplClient.java:58) ~[architectury-9.2.14-forge.jar%23296!/:?] {re:classloading,pl:runtimedistcleaner:A}
+	at dev.architectury.event.forge.__EventHandlerImplClient_event_ClientTickEvent.invoke(.dynamic) ~[architectury-9.2.14-forge.jar%23296!/:?] {re:classloading,pl:eventbus:B}
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:55) ~[eventbus-6.2.33.jar%23137!/:?] {re:mixin}
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:312) ~[eventbus-6.2.33.jar%23137!/:?] {}
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:298) ~[eventbus-6.2.33.jar%23137!/:?] {}
+	at net.minecraftforge.event.ForgeEventFactory.onPostClientTick(ForgeEventFactory.java:965) ~[forge-1.20.1-47.4.22-universal.jar%23375!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.potential_spawns_alloc.ForgeEventFactoryMixin,pl:mixin:APP:lithium.mixins.json:collections.mob_spawning.ForgeEventFactoryMixin,pl:mixin:A}
+-- Last reload --
+Details:
+	Reload number: 1
+	Reload reason: initial
+	Finished: Yes
+	Packs: vanilla, tacz_resources, mod_resources, KubeJS Resource Pack [assets]
+Stacktrace:
+	at net.minecraft.client.ResourceLoadStateTracker.m_168562_(ResourceLoadStateTracker.java:49) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,re:classloading,pl:mixin:APP:fancymenu.mixins.json:client.MixinResourceLoadStateTracker,pl:mixin:A}
+	at net.minecraft.client.Minecraft.m_91354_(Minecraft.java:2326) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,re:classloading,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,pl:mixin:A}
+	at net.minecraft.client.Minecraft.m_91374_(Minecraft.java:740) ~[client-1.20.1-20230612.114412-srg.jar%23370!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,re:classloading,pl:accesstransformer:B,xf:fml:customskinloader:MinecraftTransformer,pl:mixin:A}
+	at net.minecraft.client.main.Main.main(Main.java:218) ~[Squad%e9%a2%84%e5%8f%91%e5%b8%83%e6%b5%8b%e8%af%95.jar:?] {re:mixin,re:classloading,pl:mixin:APP:lightspeed.mixins.json:MinecraftMainMixin,pl:mixin:APP:physicsmod.mixins.json:MixinMain,pl:mixin:APP:smoothboot.mixins.json:client.MainMixin,pl:mixin:A}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?] {re:mixin}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25) ~[fmlloader-1.20.1-47.4.22.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.12, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 602073088 bytes (574 MiB) / 3728736256 bytes (3556 MiB) up to 6442450944 bytes (6144 MiB)
+	CPUs: 12
+	Processor Vendor: GenuineIntel
+	Processor Name: 11th Gen Intel(R) Core(TM) i5-11260H @ 2.60GHz
+	Identifier: Intel64 Family 6 Model 141 Stepping 1
+	Microarchitecture: unknown
+	Frequency (GHz): 2.61
+	Number of physical packages: 1
+	Number of physical CPUs: 6
+	Number of logical CPUs: 12
+	Graphics card #0 name: Todesk Virtual Display Adapter
+	Graphics card #0 vendor: Hainan YouQu Info Tech
+	Graphics card #0 VRAM (MB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: DriverVersion=16.44.2.509
+	Graphics card #1 name: Intel(R) UHD Graphics
+	Graphics card #1 vendor: Intel Corporation (0x8086)
+	Graphics card #1 VRAM (MB): 2048.00
+	Graphics card #1 deviceId: 0x9a68
+	Graphics card #1 versionInfo: DriverVersion=32.0.101.6647
+	Graphics card #2 name: NVIDIA GeForce RTX 3060 Laptop GPU
+	Graphics card #2 vendor: NVIDIA (0x10de)
+	Graphics card #2 VRAM (MB): 4095.00
+	Graphics card #2 deviceId: 0x2520
+	Graphics card #2 versionInfo: DriverVersion=32.0.16.1692
+	Memory slot #0 capacity (MB): 16384.00
+	Memory slot #0 clockSpeed (GHz): 3.20
+	Memory slot #0 type: DDR4
+	Memory slot #1 capacity (MB): 16384.00
+	Memory slot #1 clockSpeed (GHz): 3.20
+	Memory slot #1 type: DDR4
+	Virtual memory max (MB): 41251.30
+	Virtual memory used (MB): 27367.83
+	Swap memory total (MB): 8704.00
+	Swap memory used (MB): 74.38
+	JVM Flags: 3 total; -Xms1G -Xmx6G -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump
+	Loaded Shaderpack: (off)
+	Launched Version: Squad预发布测试
+	Backend library: LWJGL version 3.3.1 build 7
+	Backend API: NVIDIA GeForce RTX 3060 Laptop GPU/PCIe/SSE2 GL version 4.6.0 NVIDIA 616.92, NVIDIA Corporation
+	Window size: 1280x720
+	GL Caps: Using framebuffer using OpenGL 3.2
+	GL debug messages: 
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'forge'
+	Type: Client (map_client.txt)
+	Graphics mode: fancy
+	Resource Packs: 
+	Current Language: zh_cn
+	CPU: 12x 11th Gen Intel(R) Core(TM) i5-11260H @ 2.60GHz
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeclient
+	ModLauncher naming: srg
+	ModLauncher services: 
+		mixin-0.8.5.jar mixin PLUGINSERVICE 
+		eventbus-6.2.33.jar eventbus PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar slf4jfixer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar object_holder_definalize PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtime_enum_extender PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar capability_token_subclass PLUGINSERVICE 
+		accesstransformers-8.0.4.jar accesstransformer PLUGINSERVICE 
+		fmlloader-1.20.1-47.4.22.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar taczexpands_coremod TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		minecraft@1.0
+		kotlinforforge@4.12.0
+		javafml@null
+		lowcodefml@null
+	Mod List: 
+		smsn-forge-1.4.3-1.20.1.jar                       |Save My Shit Network          |smsn                          |1.4.3-1.20.1        |DONE      |Manifest: NOSIGNATURE
+		saturn-mc1.20.1-0.1.3.jar                         |Saturn                        |saturn                        |0.1.3               |DONE      |Manifest: NOSIGNATURE
+		[晴雪UI] ApricityUI-forge-1.20.1-1.2.6.jar          |ApricityUI                    |apricityui                    |1.2.6               |DONE      |Manifest: NOSIGNATURE
+		sodiumextras-forge-1.0.7-1.20.1.jar               |Sodium Extras                 |sodiumextras                  |1.0.6               |DONE      |Manifest: NOSIGNATURE
+		geckolib-forge-1.20.1-4.8.3.jar                   |GeckoLib 4                    |geckolib                      |4.8.3               |DONE      |Manifest: NOSIGNATURE
+		recipeessentials-1.20.1-4.7.jar                   |recipeessentials mod          |recipeessentials              |1.20.1-4.7          |DONE      |Manifest: NOSIGNATURE
+		player-animation-lib-forge-1.0.2-rc1+1.20.jar     |Player Animator               |playeranimator                |1.0.2-rc1+1.20      |DONE      |Manifest: NOSIGNATURE
+		tetrachordlib-1.20+1.0.3.jar                      |Tetrachord Lib                |tetrachordlib                 |1.20+1.0.3          |DONE      |Manifest: NOSIGNATURE
+		auratip-forge-1.20.1-1.1.3-beta-espetro.1.jar     |AuraTip                       |auratip                       |1.1.3-beta-espetro.1|DONE      |Manifest: NOSIGNATURE
+		grand-teleport-forge-1.20.1-forge-build300.jar    |Grand Teleport                |gtalike_teleport              |1.20.1-forge-build30|DONE      |Manifest: NOSIGNATURE
+		[假死修复：土豆版] nanhealthfixer-1.20.1-0.0.1.jar        |NaNHealthFixer                |nanhealthfixer                |1.20.1-0.0.1        |DONE      |Manifest: NOSIGNATURE
+		esradial-forge-1.20.1-0.3.2.jar                   |EsRadial                      |esradial                      |0.3.2               |DONE      |Manifest: NOSIGNATURE
+		暂时不可更新EnhancedVisuals_FORGE_v1.8.2_mc1.20.1.jar   |EnhancedVisuals               |enhancedvisuals               |1.8.2               |DONE      |Manifest: NOSIGNATURE
+		[Xaero的世界地图] xaeroworldmap-forge-1.20.1-1.44.2.jar|Xaero's World Map             |xaeroworldmap                 |1.44.2              |DONE      |Manifest: NOSIGNATURE
+		viewmodel_tuner-forge-1.20.1-1.0.5.jar            |ViewModel Tuner               |viewmodel_tuner               |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		[现代化修复] modernfix-forge-5.27.87+mc1.20.1.jar      |ModernFix                     |modernfix                     |5.27.87+mc1.20.1    |DONE      |Manifest: NOSIGNATURE
+		[卓越前线] superbwarfare-0.8.9.1-hotfix-mc1.20.1-99306|Superb Warfare                |superbwarfare                 |0.8.9.1             |DONE      |Manifest: NOSIGNATURE
+		sodiumoptionsapi-forge-1.0.10-1.20.1.jar          |Sodium Options API            |sodiumoptionsapi              |1.0.10              |DONE      |Manifest: NOSIGNATURE
+		melody_forge_1.0.3_MC_1.20.1-1.20.4.jar           |Melody                        |melody                        |1.0.2               |DONE      |Manifest: NOSIGNATURE
+		cloth-config-11.1.136-forge.jar                   |Cloth Config v10 API          |cloth_config                  |11.1.136            |DONE      |Manifest: NOSIGNATURE
+		fzzy_config-0.7.7+1.20.1+forge.jar                |Fzzy Config                   |fzzy_config                   |0.7.7+1.20.1+forge  |DONE      |Manifest: NOSIGNATURE
+		[钌] ruok-forge_1.20.1_Pre-Release_6-1.7.4.jar     |RuOK Mod                      |ruokmod                       |1.7.4               |DONE      |Manifest: NOSIGNATURE
+		konkrete_forge_1.8.0_MC_1.20-1.20.1.jar           |Konkrete                      |konkrete                      |1.8.0               |DONE      |Manifest: NOSIGNATURE
+		embeddium-0.3.31+mc1.20.1.jar                     |Embeddium                     |embeddium                     |0.3.31+mc1.20.1     |DONE      |Manifest: NOSIGNATURE
+		[钠／Embeddium：动态光源] sodiumdynamiclights-forge-1.0.1|Sodium Dynamic Lights         |sodiumdynamiclights           |1.0.9               |DONE      |Manifest: NOSIGNATURE
+		crashexploitfixer-forge-2.0.0+1.20.4-all-srg.jar  |CrashExploitFixer             |crashexploitfixer             |2.0.0               |DONE      |Manifest: NOSIGNATURE
+		immersive_ballistic-1.3.jar                       |Immersive Ballistic           |immersive_ballistic           |1.3                 |DONE      |Manifest: NOSIGNATURE
+		fast-ip-ping-v1.0.12-mc1.20.4-forge (1).jar       |Fast IP Ping                  |fastipping                    |1.0.12              |DONE      |Manifest: NOSIGNATURE
+		getittogetherdrops-forge-1.20-1.3.jar             |Get It Together, Drops!       |getittogetherdrops            |1.3                 |DONE      |Manifest: NOSIGNATURE
+		fcp-1.1.1-更改特化版.jar                               |Frontline Combat Pack         |fcp                           |1.1.1               |DONE      |Manifest: NOSIGNATURE
+		servercore-forge-1.5.2+1.20.1.jar                 |ServerCore                    |servercore                    |1.5.2+1.20.1        |DONE      |Manifest: NOSIGNATURE
+		[火花] spark-1.10.53-forge.jar                      |spark                         |spark                         |1.10.53             |DONE      |Manifest: NOSIGNATURE
+		lightspeed-1.20.1-1.1.2hotfix-优化启动时间.jar          |Lightspeed                    |lightspeed                    |1.20.1-1.1.2hotfix  |DONE      |Manifest: NOSIGNATURE
+		curios-forge-5.14.1+1.20.1.jar                    |Curios API                    |curios                        |5.14.1+1.20.1       |DONE      |Manifest: NOSIGNATURE
+		simplebedrockmodel-2.5.1-forge-mc1.20.1.jar       |SimpleBedrockModel            |simplebedrockmodel            |2.5.1-forge-mc1.20.1|DONE      |Manifest: NOSIGNATURE
+		sbwarcanacompat-1.0.0.jar                         |SuperbWarfare x TACZ Arcana Co|sbwarcanacompat               |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		oculus-mc1.20.1-1.8.0.jar                         |Oculus                        |oculus                        |1.8.0               |DONE      |Manifest: NOSIGNATURE
+		taczadditions-1.20.1-1.3.5.jar                    |TaCZ: Additions               |taczadditions                 |1.3.5               |DONE      |Manifest: NOSIGNATURE
+		noisium-forge-2.3.0+mc1.20-1.20.1.jar             |Noisium                       |noisium                       |2.3.0+mc1.20-1.20.1 |DONE      |Manifest: NOSIGNATURE
+		[创世神] worldedit-mod-7.2.15.jar                    |WorldEdit                     |worldedit                     |7.2.15+6463-5ca4dff |DONE      |Manifest: NOSIGNATURE
+		architectury-9.2.14-forge.jar                     |Architectury                  |architectury                  |9.2.14              |DONE      |Manifest: NOSIGNATURE
+		[AI改进] AI-Improvements-1.20-0.5.2.jar             |AI-Improvements               |aiimprovements                |0.5.2               |DONE      |Manifest: NOSIGNATURE
+		cupboard-1.20.1-4.2.jar                           |Cupboard utilities            |cupboard                      |1.20.1-4.2          |DONE      |Manifest: NOSIGNATURE
+		conditional-mixin-forge-0.6.4.jar                 |conditional mixin             |conditional_mixin             |0.6.4               |DONE      |Manifest: NOSIGNATURE
+		TRansition-1.0.26-1.20.1-forge-SNAPSHOT.jar       |TRansition                    |transition                    |1.0.26              |DONE      |Manifest: NOSIGNATURE
+		soundofrain-0.6.0.jar                             |Sound of Rain                 |soundofrain                   |0.6.0               |DONE      |Manifest: NOSIGNATURE
+		particle_core-0.3.3+1.20.1+forge.jar              |Particle Core                 |particle_core                 |0.3.3+1.20.1+forge  |DONE      |Manifest: NOSIGNATURE
+		[末日装饰] doomsday_decoration-1.1.3-forge-1.20.1.jar |Doomsday Decoration           |doomsday_decoration           |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		[氪Forge版] KryptonReforged-0.2.3.jar               |Krypton Reforged              |krypton                       |0.2.3               |DONE      |Manifest: NOSIGNATURE
+		FastEvent-1.20.1-1.1.1.jar                        |FastEvent                     |fast_event                    |1.1.1               |DONE      |Manifest: NOSIGNATURE
+		Kiwi-1.20.1-Forge-11.10.3.jar                     |Kiwi Library                  |kiwi                          |11.10.3+forge       |DONE      |Manifest: NOSIGNATURE
+		[镭] radium-mc1.20.1-0.12.4+git.26c9d8e.jar        |Radium                        |radium                        |0.12.4+git.26c9d8e  |DONE      |Manifest: NOSIGNATURE
+		rhino-forge-2001.2.3-build.10.jar                 |Rhino                         |rhino                         |2001.2.3-build.10   |DONE      |Manifest: NOSIGNATURE
+		kubejs-forge-2001.6.5-build.26.jar                |KubeJS                        |kubejs                        |2001.6.5-build.26   |DONE      |Manifest: NOSIGNATURE
+		remove_third_person-1.0-1.20.1-1.20.2.jar         |Remove Third Person           |remove_third_person           |1.0-1.20.1-1.20.2   |DONE      |Manifest: NOSIGNATURE
+		CustomSkinLoader_ForgeV2-14.28.jar                |CustomSkinLoader              |customskinloader              |14.28               |DONE      |Manifest: 4a:31:8b:cf:34:eb:d0:13:f3:19:39:d5:d2:b9:12:78:b5:f2:8d:91:3e:6f:8f:ed:97:48:00:69:e1:30:3a:54
+		snassets_particles-1.0.1异步粒子.jar                  |SnAssets Particles            |snassets_particles            |1.0.1               |DONE      |Manifest: NOSIGNATURE
+		xaerolib-forge-1.20.1-1.7.1.jar                   |XaeroLib                      |xaerolib                      |1.7.1               |DONE      |Manifest: NOSIGNATURE
+		[永恒枪械工坊：零] tacz-1.20.1-1.1.8-release.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8               |DONE      |Manifest: NOSIGNATURE
+		tacz-tweaks-2.14.2-all.jar                        |TaCZ Tweaks                   |tacztweaks                    |2.14.2              |DONE      |Manifest: NOSIGNATURE
+		Tacz-Animation-Additions-1.2.5-backgun.jar        |Tacz Animation Additions      |locknar_doorkick              |1.2.5               |DONE      |Manifest: NOSIGNATURE
+		tacz_presence-1.4.jar                             |TaCZ: Presence                |tacz_presence                 |1.4                 |DONE      |Manifest: NOSIGNATURE
+		tacz_tactical_breaching-forge-1.20.1-1.0.5-破门，破窗等，|TaCZ Tactical Breaching       |tacz_tactical_breaching       |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		Ping-Wheel-1.12.1-forge-1.20.1.jar                |Ping Wheel                    |pingwheel                     |1.12.1              |DONE      |Manifest: NOSIGNATURE
+		flerovium-forge-1.20.1-1.2.19-all.jar             |Flerovium                     |flerovium                     |1.2.19              |DONE      |Manifest: NOSIGNATURE
+		TRender-1.0.17-1.20.1-forge-SNAPSHOT.jar          |TRender                       |trender                       |1.0.17              |DONE      |Manifest: NOSIGNATURE
+		sbw_addition-1.1.116-all.jar                      |SBW Addition                  |sbw_addition                  |1.1.116             |DONE      |Manifest: NOSIGNATURE
+		taczjs-forge-1.4.2+mc1.20.1.jar                   |TaCZ JS                       |taczjs                        |1.4.2+mc1.20.1      |DONE      |Manifest: NOSIGNATURE
+		[叶间穿行 🌳] PassableFoliage-1.20.1-forge-8.2.1.jar  |Passable Foliage              |passablefoliage               |8.2.1               |DONE      |Manifest: NOSIGNATURE
+		taczmagazines-1.20.1-0.1.6-Beta.jar               |TaCZ: Magazines               |taczmagazines                 |0.1.6               |DONE      |Manifest: NOSIGNATURE
+		alternate_current-mc1.20-1.7.0.jar                |Alternate Current             |alternate_current             |1.7.0               |DONE      |Manifest: NOSIGNATURE
+		[配置界面] configured-forge-1.20.1-2.2.3.jar          |Configured                    |configured                    |2.2.3               |DONE      |Manifest: 0d:78:5f:44:c0:47:0c:8c:e2:63:a3:04:43:d4:12:7d:b0:7c:35:37:dc:40:b1:c1:98:ec:51:eb:3b:3c:45:99
+		realgrisly-1.0.0.jar                              |RealGrisly                    |realgrisly                    |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		OELib-forge-1.20.1-0.2.4.1.jar                    |OELib                         |oelib                         |0.2.4.1             |DONE      |Manifest: NOSIGNATURE
+		vvp-alpha-beta-1.20.1-0.2.1-更改特化版.jar             |Vintage Vehicle Pack          |vvp                           |0.2.0               |DONE      |Manifest: NOSIGNATURE
+		[内存泄漏修复] memoryleakfix-forge-1.17+-1.1.5.jar      |Memory Leak Fix               |memoryleakfix                 |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		forge-1.20.1-47.4.22-universal.jar                |Forge                         |forge                         |47.4.22             |DONE      |Manifest: NOSIGNATURE
+		0World2Create-Universal-1.19-1.20.X-1.0.0.jar     |0World2Create                 |oworld2create                 |0.0NONE             |DONE      |Manifest: NOSIGNATURE
+		[自定义游戏加载界面] drippyloadingscreen_forge_3.1.5_MC_1.2|Drippy Loading Screen         |drippyloadingscreen           |3.1.5               |DONE      |Manifest: NOSIGNATURE
+		GPUTape-1.18x-1.21x-1.0.5.1.jar                   |GPUTape                       |gpu_tape                      |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		client-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |DONE      |Manifest: a1:d4:5e:04:4f:d3:d6:e0:7b:37:97:cf:77:b0:de:ad:4a:47:ce:8c:96:49:5f:0a:cf:8c:ae:b2:6d:4b:8a:3f
+		mm_armor-1.1.0-forge-1.20.1.jar                   |miklos_military_armor_r       |mm_armor                      |1.1.0               |DONE      |Manifest: NOSIGNATURE
+		[平滑区块保存] smoothchunk-1.20.1-4.1.jar               |Smoothchunk mod               |smoothchunk                   |1.20.1-4.1          |DONE      |Manifest: NOSIGNATURE
+		voicechat-forge-1.20.1-2.6.20.jar                 |Simple Voice Chat             |voicechat                     |1.20.1-2.6.20       |DONE      |Manifest: NOSIGNATURE
+		[物理声效重制版] sound-physics-remastered-forge-1.20.1-1.|Sound Physics Remastered      |sound_physics_remastered      |1.20.1-1.5.1        |DONE      |Manifest: NOSIGNATURE
+		[真实物理] physics-mod-3.0.20-mc-1.20.1-forge.jar     |Physics Mod                   |physicsmod                    |3.0.20              |DONE      |Manifest: NOSIGNATURE
+		fabric-api-base-0.4.31+ef105b4977.jar             |Fabric API Base               |fabric_api_base               |0.4.31+ef105b4977   |DONE      |Manifest: NOSIGNATURE
+		mixinsquared-forge-0.3.6-beta.1.jar               |MixinSquared                  |mixinsquared                  |0.3.6-beta.1        |DONE      |Manifest: NOSIGNATURE
+		CreativeCore_FORGE_v2.12.39_mc1.20.1.jar          |CreativeCore                  |creativecore                  |2.12.39             |DONE      |Manifest: NOSIGNATURE
+		alltheleaks-1.1.3+1.20.1-forge.jar                |All The Leaks                 |alltheleaks                   |1.1.3+1.20.1-forge  |DONE      |Manifest: NOSIGNATURE
+		[流畅加载重置版] smoothboot(reloaded)-mc1.20.1-0.0.4.jar |Smooth Boot (Reloaded)        |smoothboot                    |0.0.4               |DONE      |Manifest: NOSIGNATURE
+		betterfpsdist-1.20.1-6.0.jar                      |betterfpsdist mod             |betterfpsdist                 |1.20.1-6.0          |DONE      |Manifest: NOSIGNATURE
+		kffmod-4.12.0.jar                                 |Kotlin For Forge              |kotlinforforge                |4.12.0              |DONE      |Manifest: NOSIGNATURE
+		flywheel-forge-1.20.1-1.0.5.jar                   |Flywheel                      |flywheel                      |1.0.5               |DONE      |Manifest: NOSIGNATURE
+		Ponder-Forge-1.20.1-1.0.91.jar                    |Ponder                        |ponder                        |1.0.91              |DONE      |Manifest: NOSIGNATURE
+		[机械动力] create-1.20.1-6.0.8.jar                    |Create                        |create                        |6.0.8               |DONE      |Manifest: NOSIGNATURE
+		mutil-1.20.1-6.3.0.jar                            |mutil                         |mutil                         |6.3.0               |DONE      |Manifest: NOSIGNATURE
+		tmp_6602183581167497499.tmp                       |TACZExpands                   |taczexpands                   |1.1.5               |DONE      |Manifest: NOSIGNATURE
+		bocchium-1.20.1-0.0.3.jar                         |Bocchium                      |bocchium                      |1.20.1-0.0.3        |DONE      |Manifest: NOSIGNATURE
+		suppressionmod-1.1.1.jar                          |Suppression Mod               |suppressionmod                |1.1.1               |DONE      |Manifest: NOSIGNATURE
+		[实体渲染机制优化] entityculling-forge-1.11.3-mc1.20.1.jar|EntityCulling                 |entityculling                 |1.11.3              |DONE      |Manifest: NOSIGNATURE
+		esico-1.0.0.jar                                   |EsICO                         |esico                         |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		fancymenu_forge_3.9.9_MC_1.20.1.jar               |FancyMenu                     |fancymenu                     |3.9.9               |DONE      |Manifest: NOSIGNATURE
+		[铁氧体磁芯] ferritecore-6.0.1-forge.jar               |Ferrite Core                  |ferritecore                   |6.0.1               |DONE      |Manifest: 41:ce:50:66:d1:a0:05:ce:a1:0e:02:85:9b:46:64:e0:bf:2e:cf:60:30:9a:fe:0c:27:e0:63:66:9a:84:ce:8a
+		yet_another_config_lib_v3-3.6.6+1.20.1-forge.jar  |YetAnotherConfigLib           |yet_another_config_lib_v3     |3.6.6+1.20.1-forge  |DONE      |Manifest: NOSIGNATURE
+		[铷 · 扩展] rubidium-extra-0.5.4.4+mc1.20.1-build.131|Embeddium Extra               |embeddium_extra               |0.5.4.4+mc1.20.1-bui|DONE      |Manifest: NOSIGNATURE
+		tacz_x_guns_lights_addon-2.4.3.jar                |TaCZ x Guns Lights Addon      |tacz_x_guns_lights_addon      |2.4.3               |DONE      |Manifest: NOSIGNATURE
+		[现代化 UI] ModernUI-Forge-1.20.1-3.12.0.1-universal.|Modern UI                     |modernui                      |3.12.0.1            |DONE      |Manifest: 01:c4:52:25:b1:6e:5f:ac:fe:88:35:7e:cf:65:2f:69:1d:56:db:2b:93:f8:dd:7c:93:47:04:8c:e4:22:13:91
+		dragonrise_reforge-1.5.1-20261113.jar             |DragonRise:Reforge            |dragonrise_reforge            |1.5.1-20261113      |DONE      |Manifest: NOSIGNATURE
+		espetro-1.1.3-x.jar                               |Espetro                       |espetro                       |1.1.3-l             |DONE      |Manifest: NOSIGNATURE
+		esvoice-1.0.0-final.jar                           |Esvoice                       |esvoice                       |1.0.0-final         |DONE      |Manifest: NOSIGNATURE
+		espoints-1.1.1e.jar                               |EsPoints                      |espoints                      |1.1.1e              |DONE      |Manifest: NOSIGNATURE
+		Presence Footsteps [FORGE] 1.0.0.jar              |Presence Footsteps [FORGE]    |presencefootsteps             |1.0.0               |DONE      |Manifest: NOSIGNATURE
+		IBEEditor-1.20-2.2.8-forge-发布需删除.jar              |IBE Editor                    |ibeeditor                     |2.2.8               |DONE      |Manifest: NOSIGNATURE
+	Crash Report UUID: 3c78eae2-efbe-441e-b3ec-8904d3cffc97
+	FML: 47.4
+	Forge: net.minecraftforge:47.4.22
+	Flywheel Backend: flywheel:indirect
+	Kiwi Modules: 
+		kiwi:contributors
+		kiwi:data
+		passablefoliage:core
+		passablefoliage:enchantment
+	Fragments: Back Stack Index: 0
+FragmentManager misc state:
+  mHost=icyllis.modernui.mc.UIManager$HostCallbacks@1669818f
+  mContainer=icyllis.modernui.mc.UIManager$HostCallbacks@1669818f
+  mCurState=7 mStateSaved=false mStopped=false mDestroyed=false
+
+	AllTheLeaks: 
+		Events:
+		  Client Level Updates: 1
+		  Client Player Logout: 1
+		Explicit GC Last Run: 58ms ago
+		Leaking objects:

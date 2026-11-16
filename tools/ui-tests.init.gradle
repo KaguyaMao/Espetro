@@ -1,0 +1,31 @@
+// Limit source compilation to the UI regression suite. The repository's unrelated
+// VehicleSeatAccessPolicyTest currently calls a removed legacy API.
+gradle.projectsEvaluated {
+    // Windows has the old incremental snapshot memory-mapped. A full compiler
+    // invocation avoids replacing that locked file without stopping any JVM.
+    rootProject.tasks.withType(JavaCompile).configureEach {
+        options.incremental = false
+    }
+    rootProject.tasks.named('compileTestJava').configure {
+        setSource(rootProject.fileTree('src/test/java') {
+            include 'org/espetro/client/gui/UiThemeTest.java'
+            include 'org/espetro/client/gui/UiPaintTextTest.java'
+            include 'org/espetro/client/gui/ClientUiPreferencesTest.java'
+            include 'org/espetro/client/gui/FobSupplyHudTest.java'
+            include 'org/espetro/client/gui/IconRasterizerTest.java'
+            include 'org/espetro/client/gui/UiMotionTest.java'
+            include 'org/espetro/client/gui/VanillaHudLayoutTest.java'
+            include 'org/espetro/client/gui/RadioRadialControllerTest.java'
+            include 'org/espetro/client/gui/TacticalRadialControllerTest.java'
+            include 'org/espetro/client/gui/ResupplyRadialControllerTest.java'
+            include 'org/espetro/client/gui/VehicleWheelControllerTest.java'
+            include 'org/espetro/client/gui/CurrentMapBackgroundRendererTest.java'
+            include 'org/espetro/client/gui/MapVotePreviewResolverTest.java'
+            include 'org/espetro/client/gui/FactionSelectionImageResolverTest.java'
+            include 'org/espetro/client/gui/FancyMenuGlassGeometryTest.java'
+            include 'org/espetro/client/aui/AuiScreenHostTest.java'
+            include 'org/espetro/client/ui/BundledMenuInstallerTest.java'
+            include 'org/espetro/client/ui/BundledPreviewInstallerTest.java'
+        })
+    }
+}

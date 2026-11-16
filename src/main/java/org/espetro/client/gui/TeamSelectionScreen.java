@@ -412,27 +412,16 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
             int bx = refX + getX();
             int by = refY + getY();
 
-            // 图片外圈：直角槽位、细线角标；黄色只标记交互和当前选择。
+            // 图片保持原比例；选中与悬停只改变图片托底。
             int frameX = bx - 3;
             int frameY = by - 3;
             int frameW = dispW + 6;
             int frameH = dispH + 6;
-            UiPaint.sunken(graphics, frameX, frameY, frameW, frameH, UiTheme.RADIUS_CARD);
-            graphics.blit(texture, bx, by, dispW, dispH, 0, 0, texW, texH, texW, texH);
-
             boolean selected = UiTheme.visible(selectedBorderColor);
-            int outColor = selected ? selectedBorderColor
-                : hasFocus() ? hoverBorderColor : borderColor;
-            if (UiTheme.visible(outColor)) {
-                if (selected) {
-                    UiPaint.accentBarBottom(graphics, frameX, frameY + frameH - 2,
-                        frameW, UiTheme.ACCENT);
-                    UiPaint.brackets(graphics, frameX - 2, frameY - 2, frameW + 4,
-                        frameH + 4, UiTheme.ACCENT_LINE);
-                }
-                UiPaint.strokeRoundRect(graphics, frameX, frameY, frameW, frameH,
-                    UiTheme.RADIUS_CARD, outColor);
-            }
+            UiPaint.glassPanel(graphics, frameX, frameY, frameW, frameH,
+                selected ? UiTheme.CONTROL_SELECTED
+                    : hasFocus() ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
+            graphics.blit(texture, bx, by, dispW, dispH, 0, 0, texW, texH, texW, texH);
         }
     }
 }

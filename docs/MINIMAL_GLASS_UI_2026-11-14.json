@@ -1,0 +1,229 @@
+{
+  "backup": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\espetro-backups\\20261114-011106-before-mod-glass-ui",
+  "artifact": "C:\\Users\\Administrator\\.m2\\repository\\org\\espetro\\espetro\\1.1.3-l\\espetro-1.1.3-l.jar",
+  "artifact_sha256": "c6b075c15a2d951577c51e75a114114a4e0cf03dbe60063a50b80377fbe0d083",
+  "artifact_size": 22927500,
+  "tests": [
+    {
+      "name": "org.espetro.client.aui.AuiScreenHostTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.ClientUiPreferencesTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.CurrentMapBackgroundRendererTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FancyMenuGlassGeometryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.FobSupplyHudTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiPaintTextTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.UiThemeTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "org.espetro.client.gui.VanillaHudLayoutTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "changed_client_classes": 77,
+  "unchanged_classes": 636,
+  "server_classes_changed": [],
+  "added_entries": [
+    "org/espetro/client/gui/FancyMenuGlass$Area.class",
+    "org/espetro/client/gui/FancyMenuGlass$Bridge.class",
+    "org/espetro/client/gui/FancyMenuGlass.class",
+    "org/espetro/client/gui/FrostedBackdrop$FallbackRenderState.class"
+  ],
+  "modified_ui_sources": [
+    "src/main/java/org/espetro/client/FortificationWandOverlay.java",
+    "src/main/java/org/espetro/client/aui/AuiScreen.java",
+    "src/main/java/org/espetro/client/gui/ClassSelectionScreen.java",
+    "src/main/java/org/espetro/client/gui/ClassSelectScreen.java",
+    "src/main/java/org/espetro/client/gui/ClientUiCommands.java",
+    "src/main/java/org/espetro/client/gui/CurrentMapBackgroundRenderer.java",
+    "src/main/java/org/espetro/client/gui/EspetroAuiWidgets.java",
+    "src/main/java/org/espetro/client/gui/EspetroTipNotifier.java",
+    "src/main/java/org/espetro/client/gui/FactionLockRevealScreen.java",
+    "src/main/java/org/espetro/client/gui/FactionRevealScreen.java",
+    "src/main/java/org/espetro/client/gui/FancyMenuGlass.java",
+    "src/main/java/org/espetro/client/gui/FixedWeaponWheelController.java",
+    "src/main/java/org/espetro/client/gui/FobSupplyHud.java",
+    "src/main/java/org/espetro/client/gui/FortificationProgressHud.java",
+    "src/main/java/org/espetro/client/gui/FrostedBackdrop.java",
+    "src/main/java/org/espetro/client/gui/MapRevealScreen.java",
+    "src/main/java/org/espetro/client/gui/MapVoteScreen.java",
+    "src/main/java/org/espetro/client/gui/MatchScoreboardScreen.java",
+    "src/main/java/org/espetro/client/gui/OutpostSupplyHud.java",
+    "src/main/java/org/espetro/client/gui/PartyScreen.java",
+    "src/main/java/org/espetro/client/gui/RadioRadialController.java",
+    "src/main/java/org/espetro/client/gui/ResupplyRadialController.java",
+    "src/main/java/org/espetro/client/gui/RoundEndScreen.java",
+    "src/main/java/org/espetro/client/gui/ScrollableList.java",
+    "src/main/java/org/espetro/client/gui/SquadNameField.java",
+    "src/main/java/org/espetro/client/gui/SquadRadialMenuScreen.java",
+    "src/main/java/org/espetro/client/gui/TacticalRadialController.java",
+    "src/main/java/org/espetro/client/gui/TeamAssignIntroScreen.java",
+    "src/main/java/org/espetro/client/gui/TeamSelectionScreen.java",
+    "src/main/java/org/espetro/client/gui/TutorialHudOverlay.java",
+    "src/main/java/org/espetro/client/gui/UiPaint.java",
+    "src/main/java/org/espetro/client/gui/UiTheme.java",
+    "src/main/java/org/espetro/client/gui/UnifiedDeployScreen.java",
+    "src/main/java/org/espetro/client/gui/VanillaHudLayout.java",
+    "src/main/java/org/espetro/client/gui/VehicleDeployScreen.java",
+    "src/main/java/org/espetro/client/gui/VehicleSupplyHud.java",
+    "src/main/java/org/espetro/client/gui/VehicleWheelController.java"
+  ],
+  "screens": [
+    {
+      "screen": "ClassSelectionScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/ClassSelectionScreen.java"
+    },
+    {
+      "screen": "ClassSelectScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/ClassSelectScreen.java"
+    },
+    {
+      "screen": "CommanderSkillScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/CommanderSkillScreen.java"
+    },
+    {
+      "screen": "CommanderVoteScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/CommanderVoteScreen.java"
+    },
+    {
+      "screen": "DeployPointSelectScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/DeployPointSelectScreen.java"
+    },
+    {
+      "screen": "EspetroMenuScreen",
+      "parent": "AuiScreen",
+      "file": "src/main/java/org/espetro/client/gui/EspetroMenuScreen.java"
+    },
+    {
+      "screen": "FactionLockRevealScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/FactionLockRevealScreen.java"
+    },
+    {
+      "screen": "FactionRevealScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/FactionRevealScreen.java"
+    },
+    {
+      "screen": "FactionSelectionScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/FactionSelectionScreen.java"
+    },
+    {
+      "screen": "MapRevealScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/MapRevealScreen.java"
+    },
+    {
+      "screen": "MapVoteScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/MapVoteScreen.java"
+    },
+    {
+      "screen": "MatchScoreboardScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/MatchScoreboardScreen.java"
+    },
+    {
+      "screen": "PartyScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/PartyScreen.java"
+    },
+    {
+      "screen": "CreatePartyScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/PartyScreen.java"
+    },
+    {
+      "screen": "SetPartyPasswordScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/PartyScreen.java"
+    },
+    {
+      "screen": "JoinPartyScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/PartyScreen.java"
+    },
+    {
+      "screen": "RoundEndScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/RoundEndScreen.java"
+    },
+    {
+      "screen": "SquadRadialMenuScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/SquadRadialMenuScreen.java"
+    },
+    {
+      "screen": "TeamAssignIntroScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/TeamAssignIntroScreen.java"
+    },
+    {
+      "screen": "TeamSelectionScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/TeamSelectionScreen.java"
+    },
+    {
+      "screen": "UnifiedDeployScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/UnifiedDeployScreen.java"
+    },
+    {
+      "screen": "VehicleDeployScreen",
+      "parent": "EspetroMenuScreen",
+      "file": "src/main/java/org/espetro/client/gui/VehicleDeployScreen.java"
+    }
+  ],
+  "visual_verification": "Build/static/tests only; OpenGL/UI still needs an actual client run.",
+  "backup_integrity": "All 925 manifest entries matched SHA256; client configs unchanged.",
+  "deployment": {
+    "target": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\mods\\espetro-1.1.3-x.jar",
+    "sha256": "c6b075c15a2d951577c51e75a114114a4e0cf03dbe60063a50b80377fbe0d083",
+    "size": 22927500,
+    "deployed_at_local": "2026-11-14T01:50:08",
+    "java_check": "NO_JAVA immediately before deploy",
+    "fancymenu_installed": [
+      "fancymenu_forge_3.9.9_MC_1.20.1.jar"
+    ],
+    "backup_old_jar_preserved": true
+  }
+}

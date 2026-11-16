@@ -158,3 +158,11 @@ mandatory = true
 versionRange = "[${esradial_version}]"
 ordering = "AFTER"
 side = "CLIENT"
+
+# Live glass rendering is supplied by FancyMenu on the client only.
+[[dependencies."${mod_id}"]]
+modId = "fancymenu"
+mandatory = true
+versionRange = "[3.9.9,4)"
+ordering = "AFTER"
+side = "CLIENT"

@@ -46,7 +46,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
     private int scrollStep = 1;
     /** 当前展开「?」详情面板的编制 id；null 表示关闭。 */
     private String openInfoId;
-    private EspetroAuiWidgets.PhaseHeader phaseHeader;
+    private VotePhase phaseHeader;
     private final Map<String, FactionCardButton> factionCards = new HashMap<>();
 
     public ClassSelectScreen(String team, boolean isCommander, List<ClassSelectScreenPacket.FactionInfo> factions,
@@ -74,34 +74,22 @@ public class ClassSelectScreen extends EspetroMenuScreen {
     protected void buildMenuRoot(GuiElement root) {
         factionCards.clear();
         int count = factions == null ? 0 : factions.size();
-        // 编制候选池固定为六个：始终按 Squad 风格的 3 列 × 2 行展示。
-        int columns = 3;
-        int visibleRows = 2;
-        int cardGap = 6;
-        int panelW = Math.min(this.width - 16,
-            24 + columns * 360 + (columns - 1) * cardGap);
-        int cardW = (panelW - 24 - (columns - 1) * cardGap) / columns;
-        int startY = EspetroAuiWidgets.PHASE_HEADER_HEIGHT + 8;
-        int availableH = Math.max(2 * 67 + cardGap, this.height - startY - 18);
-        int maxCardH = Math.max(67, (availableH - cardGap) / visibleRows);
-        // 图片画框固定 16:9 横向：先按卡片宽计算高度，放不下时再按高度反推宽度
-        int imageW = Math.max(1, cardW - 6);
-        int imageH = Math.max(1, imageW * 9 / 16);
-        int maxImageSlotH = Math.max(36, maxCardH - CARD_FOOTER_H);
-        int imageSlotH = imageH + 6;
-        if (imageSlotH > maxImageSlotH) {
-            imageSlotH = maxImageSlotH;
-            imageH = Math.max(1, imageSlotH - 6);
-            imageW = Math.max(1, imageH * 16 / 9);
-        }
-        int cardH = imageSlotH + CARD_FOOTER_H;
-        int panelX = (this.width - panelW) / 2;
-
+        VotePhase.Grid layout = VotePhase.grid(width, height, Math.min(6, count), 3, CARD_FOOTER_H);
+        int columns = layout.columns();
+        int visibleRows = (Math.min(6, Math.max(1, count)) + columns - 1) / columns;
+        int cardW = layout.cardWidth();
+        int cardH = layout.cardHeight();
+        int imageSlotH = Math.max(1, cardH - CARD_FOOTER_H);
+        int panelW = Math.max(1, width - 24);
+        int panelX = (width - panelW) / 2;
+        int headerH = VotePhase.contentTop(height);
         boolean selectingOpen = timeRemaining > 0;
-        phaseHeader = EspetroAuiWidgets.addMutablePhaseHeader(root, this.width,
-            "编制投票 | " + EspetroAuiWidgets.teamName(team) + " [全员投票]",
-            buildTimeText(), "", EspetroAuiWidgets.teamColor(team));
-        int headerH = EspetroAuiWidgets.PHASE_HEADER_HEIGHT;
+        phaseHeader = VotePhase.add(root, width, height, "编制投票",
+            EspetroAuiWidgets.teamName(team) + " · 全员共同选择作战编制",
+            this::buildTimeText, () -> VotePhase.factionStage(team, isWaitingForOwnSelection()));
+        phaseHeader.completedFaction(() -> opponentFaction != null && !opponentFaction.isBlank()
+            ? ("ATTACK".equals(team) ? VotePhase.Stage.DEFEND : VotePhase.Stage.ATTACK)
+            : VotePhase.Stage.NONE);
 
         // 等待对方投票：不渲染编制卡片，仅屏幕正中显示稍大字号提示。
         if (isWaitingForOwnSelection()) {
@@ -115,7 +103,6 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             return;
         }
 
-        int startX = panelX + 12;
         int visibleCount = Math.max(columns, visibleRows * columns);
         maxScrollOffset = Math.max(0,
             ((count - visibleCount + columns - 1) / columns) * columns);
@@ -129,10 +116,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         for (int i = scrollOffset; i < maxVisible; i++) {
             ClassSelectScreenPacket.FactionInfo faction = factions.get(i);
             int localIndex = i - scrollOffset;
-            int col = localIndex % columns;
-            int row = localIndex / columns;
-            int x = startX + col * (cardW + cardGap);
-            int y = startY + row * (cardH + cardGap);
+            int x = layout.x(localIndex);
+            int y = layout.y(localIndex);
 
             boolean selected = faction.id != null && faction.id.equals(lastSelectedFaction);
             FactionCardButton card = new FactionCardButton(x, y, cardW, cardH, imageSlotH, faction,
@@ -156,8 +141,8 @@ public class ClassSelectScreen extends EspetroMenuScreen {
                 int popupH = FactionInfoPopup.heightFor(openFaction);
                 int popupX = openCardX + cardW - popupW;
                 int popupY = openCardY + 22;
-                if (popupY + popupH > this.height - 4) {
-                    popupY = Math.max(4, this.height - 4 - popupH);
+                if (popupY + popupH > VotePhase.contentBottom(height) - 4) {
+                    popupY = Math.max(headerH, VotePhase.contentBottom(height) - 4 - popupH);
                 }
                 popupX = Math.max(4, Math.min(popupX, this.width - popupW - 4));
                 popupY = Math.max(4, popupY);
@@ -168,7 +153,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
 
         if (maxScrollOffset > 0) {
             EspetroAuiWidgets.Text hint = EspetroAuiWidgets.centeredText(panelX,
-                Math.max(headerH, this.height - 12), panelW,
+                Math.max(headerH, VotePhase.contentBottom(height) - 10), panelW,
                 "滚轮浏览  " + (scrollOffset + 1) + "-" + maxVisible + "/" + count,
                 UiTheme.TEXT_THIRD);
             hint.setTextScale(UiTheme.TYPE_MICRO);
@@ -199,10 +184,6 @@ public class ClassSelectScreen extends EspetroMenuScreen {
         private static final int HELP_RADIUS = 7;
         private static final int HELP_MARGIN = 4;
         private static final int HELP_HIT_PAD = 2;
-        /** 70% 黑圆底（0xB3 ≈ 179/255）。 */
-        private static final int HELP_CIRCLE_BG = 0xB3000000;
-        private static final int HELP_CIRCLE_RING = 0x59FFFFFF;
-        private static final int HELP_CIRCLE_GLYPH = 0xFFFFFFFF;
 
         private ClassSelectScreenPacket.FactionInfo faction;
         private final int imageHeight;
@@ -272,24 +253,13 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             absX = bx;
             absY = by;
 
-            // 与地图投票卡片一致：直角实底、黄色端线与角标，悬停亮一档。
+            // 与地图投票卡片一致：无边框玻璃，悬停和选中靠底色区分。
             // 票数仍在右下角、名称在左下角（位置按用户要求保持不动）。
             boolean hovered = hasFocus() && enabled;
-            UiPaint.card(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                UiTheme.CARD_TOP, UiTheme.CARD_BOTTOM);
-            if (selected) {
-                UiPaint.accentBarBottom(graphics, bx + 6, by + bh - 3, Math.max(1, bw - 12),
-                    UiTheme.ACCENT);
-                UiPaint.brackets(graphics, bx - 2, by - 2, bw + 4, bh + 4,
-                    UiTheme.ACCENT_LINE);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.ACCENT_LINE);
-            } else if (hovered) {
-                UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.SURFACE_2);
-                UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                    UiTheme.ACCENT_LINE);
-            }
+            UiPaint.glassPanel(graphics, bx, by, bw, bh,
+                selected ? UiTheme.CONTROL_SELECTED
+                    : !enabled ? UiTheme.CONTROL_DISABLED
+                    : hovered ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
 
             int imageBoxY = by + 3;
             int imageBoxW = Math.max(1, bw - 6);
@@ -333,16 +303,16 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             EspetroAuiWidgets.drawScaledString(graphics, drawnName,
                 nameX, nameY, nameColor, CARD_NAME_SCALE);
 
-            // 右上角「?」圆钮：70% 黑色圆底 + 白色问号，点击展开编制详情。
+            // 无边框帮助按钮；点击仍展开编制详情。
             int helpCx = bx + bw - HELP_MARGIN - HELP_RADIUS;
             int helpCy = by + HELP_MARGIN + HELP_RADIUS;
             UiPaint.roundRect(graphics, helpCx - HELP_RADIUS, helpCy - HELP_RADIUS,
-                HELP_RADIUS * 2, HELP_RADIUS * 2, HELP_RADIUS, HELP_CIRCLE_BG);
-            UiPaint.strokeRoundRect(graphics, helpCx - HELP_RADIUS, helpCy - HELP_RADIUS,
-                HELP_RADIUS * 2, HELP_RADIUS * 2, HELP_RADIUS, HELP_CIRCLE_RING);
+                HELP_RADIUS * 2, HELP_RADIUS * 2, HELP_RADIUS, isInHelpCircle(mouseX, mouseY)
+                    ? UiTheme.CONTROL_HOVER : UiTheme.CONTROL_NORMAL);
+
             int questionW = Minecraft.getInstance().font.width("?");
             EspetroAuiWidgets.drawScaledString(graphics, "?", helpCx - questionW / 2,
-                helpCy - 4, HELP_CIRCLE_GLYPH, 1.0f, true);
+                helpCy - 4, UiTheme.TEXT, 1.0f, true);
 
             super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
         }
@@ -515,8 +485,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
 
     private void refreshDynamicElements() {
         if (phaseHeader != null) {
-            phaseHeader.setTitle("编制投票 | "
-                + EspetroAuiWidgets.teamName(team) + " [全员投票]");
+            phaseHeader.setTitle("编制投票");
             phaseHeader.setStatus(buildTimeText());
             phaseHeader.setDetail("");
         }
@@ -628,9 +597,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             int by = refY + getY();
             int bw = getWidth();
             int bh = getHeight();
-            UiPaint.roundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD, 0xF0121216);
-            UiPaint.strokeRoundRect(graphics, bx, by, bw, bh, UiTheme.RADIUS_CARD,
-                UiTheme.ACCENT_LINE);
+            UiPaint.glassPanel(graphics, bx, by, bw, bh, UiTheme.GLASS_PANEL);
 
             int halfW = bw / 2;
             int leftX = bx + PAD;

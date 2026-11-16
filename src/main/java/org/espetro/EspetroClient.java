@@ -15,6 +15,12 @@ public class EspetroClient {
      */
     @SuppressWarnings({"unchecked", "removal"})
     public static void init() {
+        // Normally already installed by EspetroMixinPlugin. A failed early disk
+        // operation must not abort startup; retry without injecting FancyMenu.
+        org.espetro.client.ui.BundledMenuInstaller.installForClient(
+            net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get());
+        org.espetro.client.ui.BundledPreviewInstaller.installForClient(
+            net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get());
         // 注册 MOD 事件总线（快捷键注册）
         // FMLJavaModLoadingContext.get() 在 Forge 1.20+ 已过时，但 1.20.1 仍可用
         net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus()
@@ -65,6 +71,20 @@ public class EspetroClient {
             .addListener(org.espetro.client.FortificationWandOverlay::render);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(org.espetro.client.FortificationWandOverlay::renderHud);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.splash.SplashVideoController::onScreenInit);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.splash.SplashEarlyRenderer::onClientTick);
+        net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus()
+            .addListener(EspetroClient::onSoundEngineLoad);
+    }
+
+    /** 原版声音引擎加载完成后才允许碰 OpenAL。 */
+    public static void onSoundEngineLoad(
+        net.minecraftforge.client.event.sound.SoundEngineLoadEvent event) {
+        // Forge also fires this event from the constructor, before OpenAL initialization.
+        boolean loaded = ((org.espetro.mixin.client.SoundEngineStateAccessor) event.getEngine()).espetro$isLoaded();
+        org.espetro.client.splash.SplashWavAudio.setAlReady(loaded);
     }
 
     // ==================== 事件处理方法 ====================
