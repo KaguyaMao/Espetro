@@ -1,6 +1,7 @@
 package org.espetro.audio;
 
-import java.util.Locale;
+import org.espetro.team.Side;
+
 
 /** Pure policy helpers for team mapping and the per-round easter-egg roll. */
 public final class AudioCuePolicy {
@@ -10,12 +11,8 @@ public final class AudioCuePolicy {
     }
 
     public static String normalizeTeam(String team) {
-        if (team == null) return null;
-        return switch (team.trim().toUpperCase(Locale.ROOT)) {
-            case "ATTACK", "ESPETRO_ATTACK" -> "ATTACK";
-            case "DEFEND", "ESPETRO_DEFEND" -> "DEFEND";
-            default -> null;
-        };
+        Side side = Side.parse(team);
+        return side == null ? null : side.id();
     }
 
     public static String opposingTeam(String team) {

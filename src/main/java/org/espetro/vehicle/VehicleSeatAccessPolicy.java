@@ -18,14 +18,14 @@ import org.espetro.team.GameStateManager;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import org.espetro.util.PlayerRateLimiter;
 
 /** Event-driven, server-authoritative access policy for restricted SBW seats. */
 @Mod.EventBusSubscriber(modid = Espetro.MOD_ID)
 public final class VehicleSeatAccessPolicy {
 
     private static final long DENIAL_MESSAGE_INTERVAL_MS = 1_000L;
-    private static final Map<UUID, Long> LAST_DENIAL_MESSAGE = new ConcurrentHashMap<>();
+    private static final PlayerRateLimiter DENIAL_MESSAGES = new PlayerRateLimiter(DENIAL_MESSAGE_INTERVAL_MS);
 
     private VehicleSeatAccessPolicy() {
     }
@@ -94,7 +94,7 @@ public final class VehicleSeatAccessPolicy {
     }
 
     public static void clear(UUID playerId) {
-        if (playerId != null) LAST_DENIAL_MESSAGE.remove(playerId);
+        DENIAL_MESSAGES.forget(playerId);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -166,9 +166,7 @@ public final class VehicleSeatAccessPolicy {
     }
 
     private static void notify(ServerPlayer player, String message) {
-        long now = System.currentTimeMillis();
-        Long previous = LAST_DENIAL_MESSAGE.put(player.getUUID(), now);
-        if (previous != null && now - previous < DENIAL_MESSAGE_INTERVAL_MS) return;
+        if (!DENIAL_MESSAGES.tryAcquire(player.getUUID())) return;
         player.displayClientMessage(Component.literal(message), true);
     }
 }

@@ -711,7 +711,7 @@ public class GameStateManager {
         ClassSelectManager.getInstance().finishCurrentSelecting();
         String currentTeam = currentPhase.getActiveTeam();
         if (firstFactionSelectTeam != null && firstFactionSelectTeam.equals(currentTeam)) {
-            startFactionSelectForTeam("ATTACK".equals(firstFactionSelectTeam) ? "DEFEND" : "ATTACK");
+            startFactionSelectForTeam(Side.oppositeId(firstFactionSelectTeam));
             return;
         }
         startFactionReveal();
@@ -2422,7 +2422,7 @@ public class GameStateManager {
         if (current == null) {
             current = getTeamFromFactionStatic(ClassCountManager.getInstance().getPlayerFaction(id));
         }
-        String target = "ATTACK".equals(current) ? "DEFEND" : "ATTACK";
+        String target = Side.oppositeId(current);
         clearPlayerRoundAssignment(player);
         applyTeamAssignmentToPlayer(player, target);
         // applyTeamAssignmentToPlayer 只写入了 ATTACK/DEFEND 临时 factionId；

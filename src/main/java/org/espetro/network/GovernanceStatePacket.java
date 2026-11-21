@@ -136,14 +136,6 @@ public class GovernanceStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleGovernanceState", GovernanceStatePacket.class)
-                    .invoke(null, this);
-            } catch (Exception ignored) {
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleGovernanceState", GovernanceStatePacket.class, this);
     }
 }

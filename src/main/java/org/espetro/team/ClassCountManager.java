@@ -829,11 +829,9 @@ public class ClassCountManager {
     }
 
     private String normalizeTeam(String team) {
-        if (ATTACK_TEAM.equalsIgnoreCase(team)) {
-            return ATTACK_TEAM;
-        }
-        if (DEFEND_TEAM.equalsIgnoreCase(team)) {
-            return DEFEND_TEAM;
+        Side side = Side.of(team);
+        if (side != null) {
+            return side.id();
         }
         return team == null ? "UNKNOWN" : team.toUpperCase();
     }

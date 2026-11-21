@@ -59,15 +59,6 @@ public final class OutpostSupplySyncPacket {
     public boolean isHabEnabled() { return habEnabled; }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleOutpostSupplySync", OutpostSupplySyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                org.espetro.Espetro.LOGGER.error("处理前哨补给同步失败", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleOutpostSupplySync", OutpostSupplySyncPacket.class, this);
     }
 }

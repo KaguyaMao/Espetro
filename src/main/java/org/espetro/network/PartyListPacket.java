@@ -125,14 +125,6 @@ public class PartyListPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handlePartyList", PartyListPacket.class)
-                    .invoke(null, this);
-            } catch (Exception ignored) {
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handlePartyList", PartyListPacket.class, this);
     }
 }

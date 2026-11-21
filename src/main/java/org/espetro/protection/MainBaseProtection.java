@@ -1,5 +1,7 @@
 package org.espetro.protection;
 
+import org.espetro.team.Side;
+
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,7 +13,6 @@ import org.espetro.team.SpawnPointConfig;
 import org.espetro.vehicle.VehicleManager;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 
 /**
  * 本方原部署点无敌区的统一、事件驱动判定。
@@ -121,12 +122,6 @@ public final class MainBaseProtection {
 
     @Nullable
     private static String normalizeTeam(@Nullable String team) {
-        if (team == null || team.isBlank()) {
-            return null;
-        }
-        String normalized = team.trim().toUpperCase(Locale.ROOT);
-        return "ATTACK".equals(normalized) || "DEFEND".equals(normalized)
-            ? normalized
-            : null;
+        return Side.normalizeId(team);
     }
 }

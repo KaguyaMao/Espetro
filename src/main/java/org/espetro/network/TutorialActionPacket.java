@@ -53,11 +53,7 @@ public class TutorialActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) {
-                return;
-            }
+        PacketContexts.handleOnServer(ctx, player -> {
             if (action == ACTION_REOPEN) {
                 TutorialManager.getInstance().reopen(player);
                 return;
@@ -69,6 +65,5 @@ public class TutorialActionPacket {
             };
             TutorialManager.getInstance().handleAction(player, mapped, stepId);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

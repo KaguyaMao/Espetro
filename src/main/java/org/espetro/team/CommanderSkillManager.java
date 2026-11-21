@@ -19,7 +19,6 @@ import org.espetro.network.NetworkManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -677,19 +676,8 @@ public class CommanderSkillManager {
     }
 
     private String normalizeTeam(String team) {
-        if (team == null || team.isBlank()) {
-            return null;
-        }
-        String normalized = team.toLowerCase(Locale.ROOT);
-        if (normalized.contains("attack") || normalized.contains("attacker")
-            || team.contains("进攻") || team.contains("攻方")) {
-            return "ATTACK";
-        }
-        if (normalized.contains("defend") || normalized.contains("defender")
-            || team.contains("防守") || team.contains("守方")) {
-            return "DEFEND";
-        }
-        return null;
+        Side side = Side.guess(team);
+        return side == null ? null : side.id();
     }
 
     private long getServerTick() {

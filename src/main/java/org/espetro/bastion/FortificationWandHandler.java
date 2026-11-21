@@ -11,8 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.espetro.Espetro;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.espetro.util.PlayerRateLimiter;
 import java.util.UUID;
 
 /**
@@ -28,7 +27,7 @@ public final class FortificationWandHandler {
     private static final int SYNC_INTERVAL_TICKS = 10;
     private static final long MESSAGE_THROTTLE_MS = 3_000L;
 
-    private static final Map<UUID, Long> LAST_DENIAL = new HashMap<>();
+    private static final PlayerRateLimiter DENIAL_MESSAGES = new PlayerRateLimiter(MESSAGE_THROTTLE_MS);
 
     private FortificationWandHandler() {
     }
@@ -85,9 +84,7 @@ public final class FortificationWandHandler {
     }
 
     private static void deny(ServerPlayer player) {
-        long now = System.currentTimeMillis();
-        Long previous = LAST_DENIAL.put(player.getUUID(), now);
-        if (previous != null && now - previous < MESSAGE_THROTTLE_MS) return;
+        if (!DENIAL_MESSAGES.tryAcquire(player.getUUID())) return;
         player.displayClientMessage(Component.literal("§c选定棒仅管理员可用。"), true);
     }
 
@@ -95,7 +92,7 @@ public final class FortificationWandHandler {
     public static void onLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             FortificationAuthoringManager.getInstance().forget(player.getUUID());
-            LAST_DENIAL.remove(player.getUUID());
+            DENIAL_MESSAGES.forget(player.getUUID());
         }
     }
 

@@ -46,17 +46,7 @@ public record FortificationPreviewPacket(UUID token, String fortId, String displ
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFortificationPreview", FortificationPreviewPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理工事预览失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketContexts.handleOnClient(supplier, "handleFortificationPreview", FortificationPreviewPacket.class, this);
     }
 
     public record Offset(int x, int y, int z) {

@@ -49,16 +49,7 @@ public class FactionRevealPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFactionReveal", FactionRevealPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleFactionReveal", FactionRevealPacket.class, this);
     }
 
     public String getAttackFactionName() {

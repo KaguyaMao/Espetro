@@ -44,9 +44,7 @@ public class GovernanceActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketContexts.handleOnServer(ctx, player -> {
             CommanderGovernanceManager mgr = CommanderGovernanceManager.getInstance();
             switch (action) {
                 case START_IMPEACHMENT -> mgr.tryStartImpeachment(player);
@@ -59,6 +57,5 @@ public class GovernanceActionPacket {
                 }
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

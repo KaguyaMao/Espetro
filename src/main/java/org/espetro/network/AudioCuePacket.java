@@ -64,15 +64,6 @@ public final class AudioCuePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleAudioCue", AudioCuePacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException ignored) {
-            }
-        });
-        context.setPacketHandled(true);
+        PacketContexts.handleOnClient(contextSupplier, "handleAudioCue", AudioCuePacket.class, this);
     }
 }

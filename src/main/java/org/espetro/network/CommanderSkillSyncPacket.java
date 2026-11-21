@@ -75,16 +75,7 @@ public class CommanderSkillSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleCommanderSkillSync", CommanderSkillSyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleCommanderSkillSync", CommanderSkillSyncPacket.class, this);
     }
 
     public boolean isCommander() {

@@ -298,16 +298,7 @@ public class UnifiedDeployScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleUnifiedDeployScreen", UnifiedDeployScreenPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                org.espetro.Espetro.LOGGER.error("Failed to handle UnifiedDeployScreenPacket", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleUnifiedDeployScreen", UnifiedDeployScreenPacket.class, this);
     }
 
     // ============ Getters ============

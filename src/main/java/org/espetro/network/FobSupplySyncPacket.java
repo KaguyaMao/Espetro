@@ -65,15 +65,6 @@ public class FobSupplySyncPacket {
     public int getRadioMaxHealth() { return radioMaxHealth; }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFobSupplySync", FobSupplySyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleFobSupplySync", FobSupplySyncPacket.class, this);
     }
 }

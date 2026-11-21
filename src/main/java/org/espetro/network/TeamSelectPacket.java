@@ -30,9 +30,7 @@ public class TeamSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketContexts.handleOnServer(ctx, player -> {
             if (!"ATTACK".equals(team) && !"DEFEND".equals(team)) {
                 player.sendSystemMessage(net.minecraft.network.chat.Component.literal("§c无效的阵营选择。"));
                 return;
@@ -65,6 +63,5 @@ public class TeamSelectPacket {
                 Espetro.LOGGER.info("玩家 {} 选择了 {} 阵营", player.getName().getString(), team);
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

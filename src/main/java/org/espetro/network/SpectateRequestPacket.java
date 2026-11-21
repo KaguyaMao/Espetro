@@ -21,14 +21,9 @@ public class SpectateRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) {
-                return;
-            }
+        PacketContexts.handleOnServer(ctx, player -> {
             GameStateManager.getInstance().selfSetObserver(player);
             NetworkManager.sendCloseModScreens(player);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

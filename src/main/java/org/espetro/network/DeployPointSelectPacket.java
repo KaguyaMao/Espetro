@@ -54,16 +54,7 @@ public class DeployPointSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleDeployPointSelect", DeployPointSelectPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                org.espetro.Espetro.LOGGER.error("Failed to handle DeployPointSelectPacket", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleDeployPointSelect", DeployPointSelectPacket.class, this);
     }
 
     public boolean hasDeployPoint() { return hasDeployPoint; }

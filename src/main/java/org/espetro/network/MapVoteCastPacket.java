@@ -25,11 +25,8 @@ public class MapVoteCastPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketContexts.handleOnServer(ctx, player -> {
             MapVoteManager.getInstance().castVote(player, mapFolder);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

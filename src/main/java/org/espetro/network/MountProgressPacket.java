@@ -41,15 +41,6 @@ public final class MountProgressPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleMountProgress", MountProgressPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理上车进度同步失败", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleMountProgress", MountProgressPacket.class, this);
     }
 }

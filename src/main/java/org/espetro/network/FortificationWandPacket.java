@@ -72,16 +72,6 @@ public record FortificationWandPacket(boolean active, @Nullable BlockPos a, @Nul
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFortificationWand", FortificationWandPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理工事选定棒同步失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketContexts.handleOnClient(supplier, "handleFortificationWand", FortificationWandPacket.class, this);
     }
 }

@@ -64,16 +64,7 @@ public class GameStateResponsePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleGameStateResponse", GameStateResponsePacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleGameStateResponse", GameStateResponsePacket.class, this);
     }
 
     public String getPhaseName() { return phaseName; }

@@ -45,17 +45,7 @@ public final class VehicleDeployScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleVehicleDeployScreen", VehicleDeployScreenPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理载具部署同步失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketContexts.handleOnClient(supplier, "handleVehicleDeployScreen", VehicleDeployScreenPacket.class, this);
     }
 
     public boolean shouldOpenScreen() { return openScreen; }

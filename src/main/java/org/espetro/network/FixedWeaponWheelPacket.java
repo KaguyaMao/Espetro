@@ -39,16 +39,6 @@ public record FixedWeaponWheelPacket(UUID weaponEntityId, String displayName, St
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFixedWeaponWheel", FixedWeaponWheelPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理固定武器轮盘失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketContexts.handleOnClient(supplier, "handleFixedWeaponWheel", FixedWeaponWheelPacket.class, this);
     }
 }

@@ -101,9 +101,7 @@ public class ClassSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketContexts.handleOnServer(ctx, player -> {
 
             // 检查是否在编制选择阶段
             if (ClassSelectManager.getInstance().isSelectingActive()) {
@@ -240,7 +238,6 @@ public class ClassSelectPacket {
                 factionId != null ? factionId : teamOrFaction);
             NetworkManager.syncSquadsToTeam(team);
         });
-        ctx.get().setPacketHandled(true);
     }
 
     /**

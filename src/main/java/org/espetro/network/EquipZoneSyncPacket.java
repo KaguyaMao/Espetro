@@ -42,16 +42,7 @@ public class EquipZoneSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleEquipZoneSync", EquipZoneSyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketContexts.handleOnClient(ctx, "handleEquipZoneSync", EquipZoneSyncPacket.class, this);
     }
 
     public List<Zone> getZones() {

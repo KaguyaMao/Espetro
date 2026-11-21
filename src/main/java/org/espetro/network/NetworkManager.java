@@ -1,5 +1,7 @@
 package org.espetro.network;
 
+import org.espetro.team.Side;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +30,7 @@ import java.util.UUID;
  */
 public class NetworkManager {
 
-    public static final String PROTOCOL_VERSION = "1.35";
+    public static final String PROTOCOL_VERSION = "1.36";
 
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(
         ResourceLocation.fromNamespaceAndPath(Espetro.MOD_ID, "main"),
@@ -224,15 +226,6 @@ public class NetworkManager {
             MapRevealPacket::write,
             MapRevealPacket::read,
             MapRevealPacket::handle
-        );
-
-        // 职业选择界面包（S→C）
-        NET.registerMessage(
-            nextId(),
-            OpenClassSelectionPacket.class,
-            OpenClassSelectionPacket::write,
-            OpenClassSelectionPacket::read,
-            OpenClassSelectionPacket::handle
         );
 
         // 请求职业选择界面包（C→S）：客户端请求 → 服务端回传完整数据
@@ -1308,37 +1301,6 @@ public class NetworkManager {
     }
 
     /**
-     * 广播职业选择界面给所有玩家
-     * 根据玩家所在队伍的编制发送对应的职业列表
-     */
-    public static void broadcastClassSelectionScreen(String attackFactionId, String defendFactionId) {
-        MinecraftServer server = Espetro.getServer();
-        if (server == null) return;
-
-        FactionDataLoader loader = org.espetro.team.FactionDataProvider.getOrCreateLoader();
-
-        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            String playerTeam = Espetro.getPlayerTeam(player);
-            if (playerTeam == null) continue;
-
-            String factionId = "ATTACK".equals(playerTeam) ? attackFactionId : defendFactionId;
-            if (factionId == null) continue;
-
-            OpenClassSelectionPacket packet = new OpenClassSelectionPacket(factionId, loader);
-            NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
-        }
-    }
-
-    /**
-     * 发送职业选择界面给指定玩家
-     */
-    public static void sendClassSelectionScreen(ServerPlayer player, String factionId) {
-        FactionDataLoader loader = org.espetro.team.FactionDataProvider.getOrCreateLoader();
-        OpenClassSelectionPacket packet = new OpenClassSelectionPacket(factionId, loader);
-        NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    /**
      * 广播兵力统计给所有玩家
      */
     public static void broadcastTroopCounts(int attack, int defend) {
@@ -1798,7 +1760,7 @@ public class NetworkManager {
     }
 
     private static String oppositeTeam(String team) {
-        return "ATTACK".equals(team) ? "DEFEND" : "ATTACK";
+        return Side.oppositeId(team);
     }
 
     private static String teamDisplayName(String team) {
