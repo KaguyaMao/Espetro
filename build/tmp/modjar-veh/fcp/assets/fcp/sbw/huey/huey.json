@@ -1,7 +1,0 @@
-﻿{
-  "ID": "fcp:huey",
-  "Model": {
-    "Model": "fcp:geo/huey.geo.json",
-    "Texture": "fcp:textures/entity/toyota.png"
-  }
-}

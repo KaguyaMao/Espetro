@@ -1,8 +1,0 @@
-{
-	"ping": {
-		"subtitle": "subtitles.pingwheel.ping",
-		"sounds": [
-			"pingwheel:ping"
-		]
-	}
-}

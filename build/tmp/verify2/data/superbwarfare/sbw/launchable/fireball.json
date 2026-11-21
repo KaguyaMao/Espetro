@@ -1,6 +1,0 @@
-{
-  "Type": "minecraft:fireball",
-  "Data": {
-    "ExplosionPower": "@sbw:explosion_damage"
-  }
-}

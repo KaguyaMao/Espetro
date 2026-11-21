@@ -1,7 +1,0 @@
-{
-  "ID": "vvp:puma",
-  "Model": {
-    "Model": "vvp:geo/puma.geo.json",
-    "Texture": "vvp:textures/entity/puma_green.png"
-  }
-}

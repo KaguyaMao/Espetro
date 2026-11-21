@@ -1,7 +1,0 @@
-{
-  "Model": {
-    "Animation": "superbwarfare:animations/drone.animation.json",
-    "Model": "superbwarfare:geo/drone.geo.json",
-    "Texture": "superbwarfare:textures/entity/drone.png"
-  }
-}

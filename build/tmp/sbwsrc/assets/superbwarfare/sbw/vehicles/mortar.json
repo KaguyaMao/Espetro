@@ -1,9 +1,0 @@
-{
-  "Animation": "superbwarfare:animations/bedrock/vehicle/mortar.animation.json",
-  "Models": [
-    {
-      "Model": "superbwarfare:models/bedrock/vehicle/mortar.geo.json",
-      "Texture": "superbwarfare:textures/bedrock/vehicle/mortar.png"
-    }
-  ]
-}

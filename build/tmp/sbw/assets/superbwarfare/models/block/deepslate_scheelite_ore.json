@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "superbwarfare:block/deepslate_scheelite_ore"
-  }
-}

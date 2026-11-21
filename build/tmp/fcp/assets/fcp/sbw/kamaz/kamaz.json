@@ -1,7 +1,0 @@
-﻿{
-  "ID": "fcp:kamaz",
-  "Model": {
-    "Model": "fcp:geo/kamaz.geo.json",
-    "Texture": "fcp:textures/entity/toyota.png"
-  }
-}
