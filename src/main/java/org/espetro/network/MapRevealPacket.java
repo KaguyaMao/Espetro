@@ -37,7 +37,16 @@ public class MapRevealPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleMapReveal", MapRevealPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleMapReveal", MapRevealPacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 
     public String getMapDisplayName() {

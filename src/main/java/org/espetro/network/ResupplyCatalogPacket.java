@@ -122,6 +122,16 @@ public record ResupplyCatalogPacket(UUID token, long catalogRevision, long state
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        PacketContexts.handleOnClient(supplier, "handleResupplyCatalog", ResupplyCatalogPacket.class, this);
+        NetworkEvent.Context context = supplier.get();
+        context.enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleResupplyCatalog", ResupplyCatalogPacket.class)
+                    .invoke(null, this);
+            } catch (ReflectiveOperationException error) {
+                org.espetro.Espetro.LOGGER.error("处理补给目录失败", error);
+            }
+        });
+        context.setPacketHandled(true);
     }
 }

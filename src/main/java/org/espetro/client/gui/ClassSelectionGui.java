@@ -33,7 +33,7 @@ public class ClassSelectionGui {
     public static void open(String factionId) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen == null) {
-            // 向服务端请求完整职业数据，服务端会回传统一部署界面（UnifiedDeployScreen）
+            // 向服务端请求完整职业数据，服务端会回传 OpenClassSelectionPacket 自动打开GUI
             NetworkManager.requestClassSelection(factionId);
         }
     }

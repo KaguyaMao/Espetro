@@ -79,6 +79,14 @@ public class RoundEndPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleRoundEnd", RoundEndPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleRoundEnd", RoundEndPacket.class)
+                    .invoke(null, this);
+            } catch (Exception ignored) {
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

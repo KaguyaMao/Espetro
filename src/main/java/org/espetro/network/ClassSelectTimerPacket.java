@@ -39,7 +39,16 @@ public class ClassSelectTimerPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleClassSelectTimer", ClassSelectTimerPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleClassSelectTimer", ClassSelectTimerPacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 
     public int getTimeRemaining() {

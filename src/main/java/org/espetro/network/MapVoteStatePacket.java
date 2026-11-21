@@ -113,6 +113,15 @@ public class MapVoteStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleMapVoteState", MapVoteStatePacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleMapVoteState", MapVoteStatePacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                // dedicated server
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

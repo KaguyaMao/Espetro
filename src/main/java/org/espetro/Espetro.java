@@ -354,7 +354,6 @@ public class Espetro {
             countManager.removePlayer(event.getEntity());
             org.espetro.ping.VehicleSeatPingCache.clear(event.getEntity().getUUID());
             org.espetro.vehicle.VehicleSeatAccessPolicy.clear(event.getEntity().getUUID());
-            org.espetro.vehicle.VehicleEventHandler.clearDenialThrottle(event.getEntity().getUUID());
             NetworkManager.broadcastClassCounts(classCountTeam, classCountFaction);
             if (squadTeam != null) {
                 TeamPackManager.getInstance().reconcileTeam(squadTeam);

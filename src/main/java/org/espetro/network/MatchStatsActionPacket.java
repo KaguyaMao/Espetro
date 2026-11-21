@@ -41,7 +41,9 @@ public class MatchStatsActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
             SquadManager.ActionResult result = switch (action) {
                 case FORCE_JOIN_SQUAD -> SquadManager.getInstance().forceJoinSquad(player, target);
                 case KICK_FROM_SQUAD -> SquadManager.getInstance().kickMember(player, target);
@@ -55,5 +57,6 @@ public class MatchStatsActionPacket {
                 NetworkManager.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

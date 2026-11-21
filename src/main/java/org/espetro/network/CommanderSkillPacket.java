@@ -34,7 +34,9 @@ public class CommanderSkillPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
 
             if (skillId.isEmpty()) {
                 NetworkManager.sendCommanderSkillSync(player);
@@ -43,5 +45,6 @@ public class CommanderSkillPacket {
 
             CommanderSkillManager.getInstance().activateSkill(player, skillId);
         });
+        ctx.get().setPacketHandled(true);
     }
 }

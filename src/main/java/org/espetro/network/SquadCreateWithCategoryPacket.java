@@ -31,7 +31,9 @@ public class SquadCreateWithCategoryPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
             var result = SquadManager.getInstance().createSquad(player, squadName, categoryId);
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                 (result.success ? "§a" : "§c") + result.message));
@@ -56,5 +58,6 @@ public class SquadCreateWithCategoryPacket {
                 NetworkManager.syncUnifiedDeployScreen(player, -1);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

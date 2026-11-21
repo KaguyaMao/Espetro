@@ -1,7 +1,5 @@
 package org.espetro.bastion;
 
-import org.espetro.team.Side;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -1522,6 +1520,8 @@ public final class FortificationManager {
 
     @Nullable
     private static String normalizeTeam(@Nullable String team) {
-        return Side.normalizeId(team);
+        if (team == null) return null;
+        String normalized = team.trim().toUpperCase(Locale.ROOT);
+        return "ATTACK".equals(normalized) || "DEFEND".equals(normalized) ? normalized : null;
     }
 }

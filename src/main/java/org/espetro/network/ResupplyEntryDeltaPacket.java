@@ -44,6 +44,16 @@ public record ResupplyEntryDeltaPacket(UUID token, long actionSeq, long stateRev
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        PacketContexts.handleOnClient(supplier, "handleResupplyDelta", ResupplyEntryDeltaPacket.class, this);
+        NetworkEvent.Context context = supplier.get();
+        context.enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleResupplyDelta", ResupplyEntryDeltaPacket.class)
+                    .invoke(null, this);
+            } catch (ReflectiveOperationException error) {
+                org.espetro.Espetro.LOGGER.error("处理补给增量失败", error);
+            }
+        });
+        context.setPacketHandled(true);
     }
 }

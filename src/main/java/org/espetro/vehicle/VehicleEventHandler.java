@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import org.espetro.util.PlayerRateLimiter;
 
 /**
  * 载具事件处理器
@@ -44,8 +43,8 @@ public class VehicleEventHandler {
     private static final int MAX_CLAIMS_PER_VEHICLE = 8;
     /** 申请序号，用于"先申请先处理"的 FIFO 排序。 */
     private static final AtomicLong CLAIM_SEQ = new AtomicLong();
+    private static final Map<UUID, Long> LAST_DENIAL_MESSAGE = new ConcurrentHashMap<>();
     private static final long DENIAL_MESSAGE_INTERVAL_MS = 1_000L;
-    private static final PlayerRateLimiter DENIAL_MESSAGES = new PlayerRateLimiter(DENIAL_MESSAGE_INTERVAL_MS);
 
     record PendingClaim(UUID memberUuid, UUID vehicleUuid, int squadId, String team,
                         long seq, long expiryMs) {}
@@ -386,13 +385,10 @@ public class VehicleEventHandler {
 
     /** 敌方载具提示（1 秒限流，避免连点刷屏）。 */
     public static void notifyEnemyVehicle(ServerPlayer player) {
-        if (!DENIAL_MESSAGES.tryAcquire(player.getUUID())) return;
+        long now = System.currentTimeMillis();
+        Long previous = LAST_DENIAL_MESSAGE.put(player.getUUID(), now);
+        if (previous != null && now - previous < DENIAL_MESSAGE_INTERVAL_MS) return;
         player.displayClientMessage(Component.literal("§c这是敌方载具，无法登上。"), true);
-    }
-
-    /** 玩家下线时释放限流记录。 */
-    public static void clearDenialThrottle(UUID playerId) {
-        DENIAL_MESSAGES.forget(playerId);
     }
 
     /**

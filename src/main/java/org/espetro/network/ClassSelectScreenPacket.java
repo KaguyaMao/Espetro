@@ -111,6 +111,15 @@ public class ClassSelectScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleClassSelectScreen", ClassSelectScreenPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleClassSelectScreen", ClassSelectScreenPacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

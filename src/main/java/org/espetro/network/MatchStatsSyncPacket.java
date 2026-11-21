@@ -124,6 +124,14 @@ public class MatchStatsSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleMatchStats", MatchStatsSyncPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleMatchStats", MatchStatsSyncPacket.class)
+                    .invoke(null, this);
+            } catch (Exception ignored) {
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

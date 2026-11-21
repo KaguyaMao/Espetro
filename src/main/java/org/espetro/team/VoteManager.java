@@ -382,7 +382,7 @@ public class VoteManager {
         } else {
             // 串行：非投票方收到空票 + 对方倒计时
             String active = currentVotingTeam;
-            String waiting = Side.oppositeId(active);
+            String waiting = "ATTACK".equals(active) ? "DEFEND" : "ATTACK";
             org.espetro.network.VoteDataPacket waitingPacket =
                 new org.espetro.network.VoteDataPacket(Collections.emptyMap(), 0, remaining);
             for (UUID uuid : ("ATTACK".equals(waiting) ? attackPlayers : defendPlayers)) {

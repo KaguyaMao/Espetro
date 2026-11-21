@@ -89,7 +89,9 @@ public class PartyActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
             PartyManager pm = PartyManager.getInstance();
 
             switch (action) {
@@ -151,5 +153,6 @@ public class PartyActionPacket {
                     break;
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

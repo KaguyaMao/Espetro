@@ -30,7 +30,9 @@ public class CastVotePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
 
             // 查找目标玩家
             UUID targetUUID = null;
@@ -46,5 +48,6 @@ public class CastVotePacket {
                 VoteManager.getInstance().castVote(player, targetUUID);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

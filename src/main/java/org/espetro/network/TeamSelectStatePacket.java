@@ -64,6 +64,15 @@ public class TeamSelectStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleTeamSelectState", TeamSelectStatePacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleTeamSelectState", TeamSelectStatePacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

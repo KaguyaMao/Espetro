@@ -36,7 +36,16 @@ public class DeployPointSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleDeployPointSync", DeployPointSyncPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleDeployPointSync", DeployPointSyncPacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                org.espetro.Espetro.LOGGER.error("Failed to handle DeployPointSyncPacket", e);
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 
     public List<UnifiedDeployScreenPacket.BastionItem> getDeployPoints() {

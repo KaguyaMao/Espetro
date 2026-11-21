@@ -26,7 +26,9 @@ public class BuildFortificationPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
             String err = FortificationManager.getInstance().place(player, fortId);
             if (err != null) {
                 player.sendSystemMessage(Component.literal(err));
@@ -35,5 +37,6 @@ public class BuildFortificationPacket {
                     "§e已进入工事预览：左键确认，右键取消。"));
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

@@ -21,6 +21,16 @@ public record FortificationProgressPacket(String displayName, int progress, int 
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        PacketContexts.handleOnClient(supplier, "handleFortificationProgress", FortificationProgressPacket.class, this);
+        NetworkEvent.Context context = supplier.get();
+        context.enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleFortificationProgress", FortificationProgressPacket.class)
+                    .invoke(null, this);
+            } catch (ReflectiveOperationException e) {
+                org.espetro.Espetro.LOGGER.error("处理工事进度失败", e);
+            }
+        });
+        context.setPacketHandled(true);
     }
 }

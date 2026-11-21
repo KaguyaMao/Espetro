@@ -81,6 +81,22 @@ public class ClientPacketHandlers {
         }
     }
 
+    // ==================== OpenClassSelectionPacket ====================
+
+    public static void handleOpenClassSelection(OpenClassSelectionPacket packet) {
+        org.espetro.client.gui.ClientGameState.setPlayerFactionId(packet.getFactionId());
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.player != null) {
+            mc.setScreen(new org.espetro.client.gui.ClassSelectionScreen(
+                packet.getFactionId(),
+                packet.getFactionName(),
+                packet.getFactionDescription(),
+                packet.getFactionIcon(),
+                packet.getClasses()
+            ));
+        }
+    }
+
     // ==================== CommanderVotePacket ====================
 
     public static void handleCommanderVote(CommanderVotePacket packet) {
@@ -159,12 +175,17 @@ public class ClientPacketHandlers {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (packet.isError()) {
             String msg = packet.getErrorMessage();
+            if (mc.screen instanceof org.espetro.client.gui.ClassSelectionScreen screen) {
+                screen.showError(msg);
+            }
             // 右侧 AuraTip（无模组时降级聊天）
             org.espetro.client.gui.EspetroTipNotifier.showRaw(msg);
             return;
         }
 
-        if (mc.screen instanceof org.espetro.client.gui.UnifiedDeployScreen screen) {
+        if (mc.screen instanceof org.espetro.client.gui.ClassSelectionScreen screen) {
+            screen.updateClassCounts(packet.getClassCounts(), packet.getVariantCounts());
+        } else if (mc.screen instanceof org.espetro.client.gui.UnifiedDeployScreen screen) {
             screen.updateClassCounts(packet.getClassCounts(), packet.getVariantCounts(),
                 packet.getSquadClassCounts());
         }
@@ -430,6 +451,7 @@ public class ClientPacketHandlers {
         if (screen == null) return;
         boolean modRoundScreen =
             screen instanceof org.espetro.client.gui.UnifiedDeployScreen
+            || screen instanceof org.espetro.client.gui.ClassSelectionScreen
             || screen instanceof org.espetro.client.gui.ClassSelectScreen
             || screen instanceof org.espetro.client.gui.CommanderVoteScreen
             || screen instanceof org.espetro.client.gui.CommanderSkillScreen

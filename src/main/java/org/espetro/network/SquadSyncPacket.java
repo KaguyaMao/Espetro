@@ -74,7 +74,16 @@ public class SquadSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnClient(ctx, "handleSquadSync", SquadSyncPacket.class, this);
+        ctx.get().enqueueWork(() -> {
+            try {
+                Class.forName("org.espetro.client.ClientPacketHandlers")
+                    .getMethod("handleSquadSync", SquadSyncPacket.class)
+                    .invoke(null, this);
+            } catch (Exception e) {
+                org.espetro.Espetro.LOGGER.error("Failed to handle SquadSyncPacket", e);
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 
     public String getTeam() {

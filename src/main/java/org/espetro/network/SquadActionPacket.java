@@ -129,7 +129,9 @@ public class SquadActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PacketContexts.handleOnServer(ctx, player -> {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
 
             String previousTeam = Espetro.getPlayerTeam(player);
             int previousSquadId = SquadManager.getInstance().getPlayerSquadId(player.getUUID());
@@ -225,6 +227,7 @@ public class SquadActionPacket {
                 NetworkManager.syncUnifiedDeployScreen(player, -1);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 
     /** 避免在 packet 里直接依赖过多 import 的小助手 */
