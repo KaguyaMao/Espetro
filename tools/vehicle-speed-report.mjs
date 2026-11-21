@@ -16,9 +16,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PANEL = 'https://www.derpydoge.fun:20000';
-const DAEMON = '647a21e800714185aec74849f1b0f9a6';
-const UUID = 'cd06335bc1534e028d92b4b335be248a';
+const PANEL = process.env.MCSM_PANEL || '';
+const DAEMON = process.env.MCSM_DAEMON || '';
+const UUID = process.env.MCSM_INSTANCE || '';
+const USER = process.env.MCSM_USER || '';
+const PASS = process.env.MCSM_PASS || '';
+if (!PANEL || !DAEMON || !UUID) {
+  console.error('请先设置环境变量 MCSM_PANEL / MCSM_DAEMON / MCSM_INSTANCE（以及 MCSM_USER / MCSM_PASS）');
+  process.exit(1);
+}
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STAGE = path.join(ROOT, 'build/tmp/steer/stage/data');
@@ -77,7 +83,7 @@ function panel(method, pathName, body, tries = 8) {
 }
 
 async function login() {
-  const lr = await raw('POST', PANEL + '/api/auth/login', { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, JSON.stringify({ username: 'boy', password: 'boY1145141919810Fuck' }));
+  const lr = await raw('POST', PANEL + '/api/auth/login', { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, JSON.stringify({ username: USER, password: PASS }));
   const token = String(JSON.parse(lr.body).data ?? '');
   if (!token) throw new Error('登录失败: ' + lr.body.slice(0, 200));
   cookie = lr.cookie;

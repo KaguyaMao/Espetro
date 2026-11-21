@@ -28,3 +28,7 @@ replay_pid*
 # Python 工具缓存
 __pycache__/
 *.pyc
+
+# 含面板凭据的部署脚本（勿入库）
+tools/mcsm-deploy.js
+/build/tmp/
