@@ -1,9 +1,0 @@
-{
-  "Animation": "superbwarfare:animations/bedrock/vehicle/bl_132.animation.json",
-  "Models": [
-    {
-      "Model": "superbwarfare:models/bedrock/vehicle/bl_132.geo.json",
-      "Texture": "superbwarfare:textures/bedrock/vehicle/bl_132.png"
-    }
-  ]
-}

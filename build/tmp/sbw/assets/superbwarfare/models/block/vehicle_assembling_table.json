@@ -1,6 +1,0 @@
-{
-  "parent": "superbwarfare:item/vehicle_assembling_table",
-  "textures": {
-    "particle": "minecraft:block/white_concrete"
-  }
-}

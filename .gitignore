@@ -24,3 +24,6 @@ hs_err_pid*
 replay_pid*
 # Gradle 本机构建缓存（不应入库）
 .gradle/
+
+# Gradle build output
+build/

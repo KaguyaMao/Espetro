@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "superbwarfare:block/biogas_generator_bottom",
-    "particle": "superbwarfare:block/biogas_generator_side",
-    "side": "superbwarfare:block/biogas_generator_side",
-    "top": "superbwarfare:block/biogas_generator_top"
-  }
-}
