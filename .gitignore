@@ -31,4 +31,13 @@ __pycache__/
 
 # 含面板凭据的部署脚本（勿入库）
 tools/mcsm-deploy.js
+
+# 构建输出、开发运行目录、IDE 产物、旧日志（都不应入库；构建时自动重建）
+/build/
+/bin/
+/run/
+/logs/
+/assets/
+
+# 旧版临时目录
 /build/tmp/
