@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,11 +30,12 @@ class EspetroKubeJSDefaultScriptsTest {
     @Test
     void bundledEffectsUseExpectedImplementations() throws Exception {
         // 载具补给站已改为可建造工事（FortificationConfig），不再随附 KubeJS 技能脚本。
+        // 火炮按轮用 server.scheduleInTicks 排定（脚本头注释记录了长延迟实测可靠），
+        // 每发前用战场会话 ID 校验，防止回调跨局落到下一张地图。
         String artillery = read("server_scripts/00_espetro_artillery_155.js");
-        assertTrue(artillery.contains("ServerEvents.tick"));
-        assertTrue(artillery.contains("EspetroArtilleryTasks"));
+        assertTrue(artillery.contains("EspetroCommanderSkills.on('artillery_155'"));
+        assertTrue(artillery.contains("server.scheduleInTicks("));
         assertTrue(artillery.contains("getBattlefieldSessionId"));
-        assertFalse(artillery.contains("server.scheduleInTicks("));
 
         String drone = read("server_scripts/00_espetro_drone_detection.js");
         assertTrue(drone.contains("Espetro.isPlayerDeployed(target)"));
