@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.logistics.resupply.ResupplySessionManager;
 import org.espetro.logistics.resupply.ResupplySourceRef;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -26,11 +27,6 @@ public record SelectResupplyEntryPacket(UUID token, long catalogRevision, long a
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null) ResupplySessionManager.select(player, this);
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnServer(supplier, player -> ResupplySessionManager.select(player, this));
     }
 }

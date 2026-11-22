@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -36,15 +37,7 @@ public class TroopCountSyncPacket {
     public int getDefendTroops() { return defendTroops; }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleTroopCount", TroopCountSyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "TroopCountSync",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleTroopCount(this));
     }
 }

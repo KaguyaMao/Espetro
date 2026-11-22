@@ -1831,17 +1831,10 @@ public class GameStateManager {
         if (!player.level().isClientSide()) {
             return currentPhase == GamePhase.DEPLOYING || currentPhase == GamePhase.BATTLE;
         }
-        try {
-            Class<?> clientState = Class.forName("org.espetro.client.gui.ClientGameState");
-            Object phase = clientState.getMethod("getCurrentPhase").invoke(null);
-            if (phase == null) {
-                return false;
-            }
-            String name = phase.toString();
-            return "DEPLOYING".equals(name) || "BATTLE".equals(name);
-        } catch (Exception ignored) {
-            return false;
-        }
+        GamePhase phase = net.minecraftforge.fml.DistExecutor.unsafeCallWhenOn(
+            net.minecraftforge.api.distmarker.Dist.CLIENT,
+            () -> org.espetro.client.gui.ClientGameState::getCurrentPhase);
+        return phase == GamePhase.DEPLOYING || phase == GamePhase.BATTLE;
     }
 
     /**

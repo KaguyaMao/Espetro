@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.governance.CommanderGovernanceManager;
 import org.espetro.team.SquadManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -41,9 +42,7 @@ public class MatchStatsActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             SquadManager.ActionResult result = switch (action) {
                 case FORCE_JOIN_SQUAD -> SquadManager.getInstance().forceJoinSquad(player, target);
                 case KICK_FROM_SQUAD -> SquadManager.getInstance().kickMember(player, target);
@@ -57,6 +56,5 @@ public class MatchStatsActionPacket {
                 NetworkManager.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

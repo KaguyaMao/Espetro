@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.VoteManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -30,10 +31,7 @@ public class CastVotePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
-
+        PacketHandling.handleOnServer(ctx, player -> {
             // 查找目标玩家
             UUID targetUUID = null;
             var server = player.getServer();
@@ -48,6 +46,5 @@ public class CastVotePacket {
                 VoteManager.getInstance().castVote(player, targetUUID);
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

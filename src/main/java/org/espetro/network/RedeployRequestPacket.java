@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.RedeployService;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -25,12 +26,8 @@ public final class RedeployRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(supplier, player -> {
             RedeployService.requestRedeploy(player);
         });
-        context.setPacketHandled(true);
     }
 }

@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.governance.CommanderGovernanceManager;
 import org.espetro.stats.PlayerMatchStatsManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,14 +125,7 @@ public class MatchStatsSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleMatchStats", MatchStatsSyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception ignored) {
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "MatchStatsSync",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleMatchStats(this));
     }
 }

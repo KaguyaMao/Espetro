@@ -15,6 +15,7 @@ import org.espetro.team.ClassCountManager;
 import org.espetro.team.FactionDataLoader;
 import org.espetro.team.FactionDataProvider;
 import org.espetro.team.SquadManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,15 +203,8 @@ public class RadioRadialPacket {
         if (context.getDirection().getReceptionSide().isClient()) {
             context.enqueueWork(() -> {
                 if (kind == Kind.CLASS_LIST) {
-                    try {
-                        Class.forName("org.espetro.client.gui.RadioRadialController")
-                            .getMethod("onClassList", BlockPos.class, List.class)
-                            .invoke(null, pos, classes);
-                    } catch (Throwable t) {
-                        Throwable cause = t instanceof java.lang.reflect.InvocationTargetException ite
-                            && ite.getCause() != null ? ite.getCause() : t;
-                        Espetro.LOGGER.warn("RadioRadial client open failed: {}", cause.toString(), cause);
-                    }
+                    PacketHandling.runOnClient("RadioRadial",
+                        () -> () -> org.espetro.client.gui.RadioRadialController.onClassList(pos, classes));
                 }
             });
             context.setPacketHandled(true);

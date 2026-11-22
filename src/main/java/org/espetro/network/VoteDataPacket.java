@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,16 +52,8 @@ public class VoteDataPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleVoteData", VoteDataPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "VoteData",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleVoteData(this));
     }
 
     public Map<String, Integer> getVoteCounts() {

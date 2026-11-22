@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.logistics.resupply.ResupplySessionManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -19,11 +20,6 @@ public record CloseResupplySessionPacket(UUID token) {
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null) ResupplySessionManager.close(player.getUUID(), token);
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnServer(supplier, player -> ResupplySessionManager.close(player.getUUID(), token));
     }
 }

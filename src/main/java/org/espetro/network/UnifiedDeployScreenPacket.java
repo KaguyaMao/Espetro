@@ -3,6 +3,7 @@ package org.espetro.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -298,16 +299,8 @@ public class UnifiedDeployScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleUnifiedDeployScreen", UnifiedDeployScreenPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                org.espetro.Espetro.LOGGER.error("Failed to handle UnifiedDeployScreenPacket", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "UnifiedDeployScreen",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleUnifiedDeployScreen(this));
     }
 
     // ============ Getters ============

@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.PartyManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -89,9 +90,7 @@ public class PartyActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             PartyManager pm = PartyManager.getInstance();
 
             switch (action) {
@@ -153,6 +152,5 @@ public class PartyActionPacket {
                     break;
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

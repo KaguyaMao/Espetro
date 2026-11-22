@@ -99,9 +99,7 @@ public class Espetro {
         // 客户端初始化：双重 lambda 确保服务端不加载客户端类
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             try {
-                Class.forName("org.espetro.EspetroClient")
-                    .getMethod("init")
-                    .invoke(null);
+                EspetroClient.init();
             } catch (Exception e) {
                 LOGGER.error("Failed to initialize EspetroClient", e);
             }

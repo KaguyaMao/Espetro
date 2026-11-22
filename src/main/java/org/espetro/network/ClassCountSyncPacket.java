@@ -9,6 +9,7 @@ import net.minecraftforge.network.PacketDistributor;
 import org.espetro.team.ClassCountManager;
 import org.espetro.team.FactionDataLoader;
 import org.espetro.team.FactionDataProvider;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -155,14 +156,9 @@ public class ClassCountSyncPacket {
                     new ClassCountSyncPacket(counts, squadCounts, variants, factionId);
                 NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player), response);
             } else {
-                // 客户端处理：通过反射调用客户端handler（避免服务端类加载）
-                try {
-                    Class.forName("org.espetro.client.ClientPacketHandlers")
-                        .getMethod("handleClassCountSync", ClassCountSyncPacket.class)
-                        .invoke(null, this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // 客户端处理（PacketHandling 保证服务端不加载客户端类）
+                PacketHandling.runOnClient("ClassCountSync",
+                    () -> () -> org.espetro.client.ClientPacketHandlers.handleClassCountSync(this));
             }
         });
         ctx.get().setPacketHandled(true);

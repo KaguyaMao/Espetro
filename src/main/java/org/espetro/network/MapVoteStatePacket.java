@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.MapVoteManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -113,15 +114,7 @@ public class MapVoteStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleMapVoteState", MapVoteStatePacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                // dedicated server
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "MapVoteState",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleMapVoteState(this));
     }
 }

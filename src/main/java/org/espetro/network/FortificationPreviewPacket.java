@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +47,8 @@ public record FortificationPreviewPacket(UUID token, String fortId, String displ
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFortificationPreview", FortificationPreviewPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理工事预览失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnClient(supplier, "FortificationPreview",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleFortificationPreview(this));
     }
 
     public record Offset(int x, int y, int z) {

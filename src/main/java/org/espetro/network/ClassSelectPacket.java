@@ -15,6 +15,7 @@ import org.espetro.team.ClassSelectManager;
 import org.espetro.bastion.BastionManager;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -101,10 +102,7 @@ public class ClassSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
-
+        PacketHandling.handleOnServer(ctx, player -> {
             // 检查是否在编制选择阶段
             if (ClassSelectManager.getInstance().isSelectingActive()) {
                 // 当前选择阵营的所有玩家均可投票，服务端负责验证队伍和候选池。
@@ -240,7 +238,6 @@ public class ClassSelectPacket {
                 factionId != null ? factionId : teamOrFaction);
             NetworkManager.syncSquadsToTeam(team);
         });
-        ctx.get().setPacketHandled(true);
     }
 
     /**

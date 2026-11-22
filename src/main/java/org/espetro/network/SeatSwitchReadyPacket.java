@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.vehicle.SeatSwitchServer;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -18,12 +19,6 @@ public final class SeatSwitchReadyPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ServerPlayer sender = ctx.get().getSender();
-        ctx.get().enqueueWork(() -> {
-            if (sender != null) {
-                SeatSwitchServer.markReady(sender);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnServer(ctx, SeatSwitchServer::markReady);
     }
 }

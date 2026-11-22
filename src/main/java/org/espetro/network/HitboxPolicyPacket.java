@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -30,17 +31,7 @@ public final class HitboxPolicyPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            if (ctx.get().getDirection().getReceptionSide().isClient()) {
-                try {
-                    Class.forName("org.espetro.client.ClientPacketHandlers")
-                        .getMethod("handleHitboxPolicy", HitboxPolicyPacket.class)
-                        .invoke(null, this);
-                } catch (ReflectiveOperationException e) {
-                    org.espetro.Espetro.LOGGER.error("处理碰撞体积策略失败", e);
-                }
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "HitboxPolicy",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleHitboxPolicy(this));
     }
 }

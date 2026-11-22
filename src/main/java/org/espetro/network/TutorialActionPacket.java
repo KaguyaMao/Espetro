@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.tutorial.TutorialManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -53,11 +54,7 @@ public class TutorialActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) {
-                return;
-            }
+        PacketHandling.handleOnServer(ctx, player -> {
             if (action == ACTION_REOPEN) {
                 TutorialManager.getInstance().reopen(player);
                 return;
@@ -69,6 +66,5 @@ public class TutorialActionPacket {
             };
             TutorialManager.getInstance().handleAction(player, mapped, stepId);
         });
-        ctx.get().setPacketHandled(true);
     }
 }
