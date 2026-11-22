@@ -291,7 +291,7 @@ public class ClientPacketHandlers {
         if (mc.player == null) return;
 
         // 装备完全解锁模式状态（包级字段；变化时下面刷新职业按钮）
-        boolean freeUnlockChanged = org.espetro.client.gui.UnifiedDeployScreen
+        boolean freeUnlockChanged = org.espetro.client.gui.DeploySnapshots
             .applyFreeUnlock(packet.isFreeUnlock());
 
         // 记录当前阵营/编制ID

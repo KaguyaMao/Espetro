@@ -27,135 +27,230 @@ import java.util.regex.Pattern;
  * Squad-style layout: squads | roles and spawn points | tactical map.
  */
 public class UnifiedDeployScreen extends EspetroMenuScreen {
-
     private static final int BTN_H = 12;
+
     /** J 菜单内指挥官技能列（替代旧轮盘入口）。 */
-    private static final int SKILL_COL_W = 42;   // 2.5 倍后回到 42
-    private static final int SKILL_BTN_H = 50;   // 2.5 倍后回到 50
+    private static final int SKILL_COL_W = 42;
+
+   // 2.5 倍后回到 42
+    private static final int SKILL_BTN_H = 50;
+
+   // 2.5 倍后回到 50
     private static final int SKILL_BTN_GAP = 4;
-    private final List<SkillButton> skillButtons = new ArrayList<>();
+
+    private final List<DeployWidgets.SkillButton> skillButtons = new ArrayList<>();
+
     private int lastSkillSignature = Integer.MIN_VALUE;
+
     private static final int CLASS_BTN_H = 22;
+
     private static final int CLASS_ICON_SIZE = 17;
+
     private static final int TITLE_H = 35;
+
     private static final int STATUS_BAR_H = 13;
+
     private static final int MAP_FOOTER_H = BTN_H + 8;
+
     private static final int SECTION_TITLE_H = 10;
+
     private static final int INNER_PADDING = 3;
+
     private static final int SCROLLBAR_RESERVED_W = 6;
+
     private static final int SQUAD_ROW_H = 11;
+
     /** 班组标题（组名框）行高：比动作按钮略高，便于容纳右侧"加入"按钮与更清晰的文字。 */
     private static final int SQUAD_TITLE_ROW_H = SQUAD_ROW_H + 3;
+
     /** 未入队时标题行右端"加入"按钮宽度。 */
     private static final int SQUAD_JOIN_BTN_W = 32;
+
     private static final int SQUAD_MEMBER_ROW_H = 9;
+
     private static final int SQUAD_ACTION_ROW_H = 10;
+
     /** 身份色条与火力组色块同宽（像素），事件驱动静态绘制。 */
     private static final int SQUAD_ACCENT_BAR_W = 2;
+
     private static final int FIRETEAM_CONTEXT_W = 118;
+
     private static final int FIRETEAM_CONTEXT_ROW_H = 12;
+
     private static final int VARIANT_POPUP_W = 180;
+
     private static final int VARIANT_HEADER_H = 18;
+
     private static final int VARIANT_ROW_H = 28;
+
     private static final int VARIANT_MAX_VISIBLE = 6;
+
     private static final int SQUAD_ROW_GAP = 1;
+
     /** 需求 3-3：载具信息上拉菜单 —— 宽度、行高、超过多少行启用滚动列表。 */
     private static final int VEHICLE_POPUP_W = 168;
+
     private static final int VEHICLE_POPUP_ROW_H = BTN_H + 2;
+
     private static final int VEHICLE_POPUP_MAX_ROWS = 6;
+
     /** 需求 3-3：就绪载具行的淡金高亮底（对应上拉菜单的"选中项高亮"观感）。 */
     private static final int VEHICLE_ROW_READY_TINT = 0x30FFD27A;
-    private static final float UI_TEXT_SCALE = 0.72f;
+
+    static final float UI_TEXT_SCALE = 0.72f;
+
     private static final float TOOLTIP_TEXT_SCALE = 0.68f;
+
     private static final float SQUAD_TEXT_SCALE = 0.68f;
+
     /** 需求 3-2：「创建/退出小队」与「队伍类型」上拉按钮共用同一字号（取两者都放得下的值后夹在此区间）。 */
     private static final float SQUAD_ACTION_TEXT_SCALE_MIN = 0.6f;
+
     private static final float SQUAD_ACTION_TEXT_SCALE_MAX = 0.8f;
+
     private static final float SQUAD_MEMBER_TEXT_SCALE = 0.64f;
+
     /** 需求 7/9：「创建/退出」按钮宽度 = 动作区宽度的 1/5。 */
     private static final int SQUAD_CREATE_BTN_W_DIV = 5;
+
     /** 本轮需求 2：动作行所有按钮（创建/退出/队伍类型/解散/锁定）高度降为原先（2 倍行高）的一半。 */
     private static final int SQUAD_CREATE_BTN_H_MUL = 1;
+
     /** 创建小队按钮：绿色不透明底（无边框，需求 7）。 */
     private static final int SQUAD_CREATE_BG = 0xFF2E7D32;
+
     private static final int SQUAD_CREATE_BG_HOVER = 0xFF3E9E42;
+
     /** 退出小队按钮：与创建小队同位置同尺寸，红色不透明底（需求 9）。 */
     private static final int SQUAD_LEAVE_BG = 0xFF7A1B1B;
+
     private static final int SQUAD_LEAVE_BG_HOVER = 0xFFA32626;
+
     /** 队伍类型上拉按钮：黄色不透明底（需求 7）。 */
     private static final int SQUAD_CATEGORY_BG = 0xFFE6C319;
+
     private static final int SQUAD_CATEGORY_BG_HOVER = 0xFFF5D53A;
+
     /** 内联「小队名称」输入框：无边框 + 淡灰底色（需求 7）。 */
     private static final int SQUAD_INLINE_FIELD_BG = 0xFFBDBDBD;
+
     private static final int SQUAD_INLINE_FIELD_BG_ACTIVE = 0xFFD6D6D6;
+
     private static final int SQUAD_INLINE_FIELD_TEXT = 0xFF1A1A1A;
+
     private static final int SQUAD_INLINE_FIELD_DIM = 0xFF5A5A5A;
+
     /** 动作行内元素间距。 */
     private static final int SQUAD_INLINE_GAP = 2;
+
     /** 需求 5：退出/解散等二次确认弹窗的深色底（外框略淡 + 内底更实；其它面板保持全透明）。 */
     private static final int SQUAD_CONFIRM_OUTER_BG = 0xCC101418;
+
     private static final int SQUAD_CONFIRM_INNER_BG = 0xDD14181C;
 
-    // EspButton 颜色（本轮需求 6 的统一规则）：所有按钮一律不画边框；
+    // DeployWidgets.EspButton 颜色（本轮需求 6 的统一规则）：所有按钮一律不画边框；
     // "原来有底色"的按钮保留自身底色，"原来没底色"的按钮统一铺黑色半透明底。
     /** 需求 4/6：无边框按钮的统一底色（黑色半透明，透出后面的世界/地图）。 */
-    private static final int BTN_BG_PLAIN_BLACK = 0x99000000;
-    private static final int BTN_BG_HOVER    = 0x66FFFFFF;   // 悬停高亮：叠在常态底色之上
+    static final int BTN_BG_PLAIN_BLACK = 0x99000000;
+
+    static final int BTN_BG_HOVER    = 0x66FFFFFF;
+
+   // 悬停高亮：叠在常态底色之上
     /** 禁用态：比常态更淡的黑底，去掉边框后禁用按钮依然可见。 */
-    private static final int BTN_BG_DISABLED = 0x66000000;
+    static final int BTN_BG_DISABLED = 0x66000000;
+
     private static final int CLASS_BG_UNAVAILABLE = 0xFF4A2024;
+
     private static final int CLASS_BG_SELECTED   = 0xFF6A6A20;
+
     private static final int CLASS_BORDER_UNAVAILABLE = 0xFF8A3A42;
-    private static final int BTN_TEXT        = 0xFFFFFF;
+
+    static final int BTN_TEXT        = 0xFFFFFF;
+
     /** 重新部署按钮：红色系（警示性操作，需二次确认）。 */
     private static final int REDEPLOY_BG_NORMAL = 0xFF7A1B1B;
+
     private static final int REDEPLOY_BG_HOVER  = 0xFFA32626;
+
     /** J 键主 GUI 的所有非地图背景统一使用不透明纯黑，避免世界画面穿透或色块交替闪烁。 */
     // 完全透明：面板不铺任何底色，直接透出后面的世界/地图
     private static final int CHROME_BG       = 0x00000000;
+
     private static final int PANEL_LEFT_BG   = 0x00000000;
+
     private static final int PANEL_CENTER_BG = 0x00000000;
+
     private static final int PANEL_MAP_FOOTER_BG = 0x00000000;
+
     private static final int SCREEN_SHADE    = 0xFF000000;
+
     private static final int STATIC_DIVIDER = 0xFF3A3F3D;
-    private static final Pattern COORDINATE_PATTERN =
-        Pattern.compile("[-+]?\\d+(?:\\.\\d+)?");
+
+
     private static final ResourceLocation HAB_ICON =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/hab.png");
+
     private static final ResourceLocation RALLY_ICON =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/rally.png");
 
     // 数据字段
     private final String factionId;
+
     private final String factionName;
+
     private final String factionDescription;
+
     private final String factionIcon;
+
     private final List<UnifiedDeployScreenPacket.ClassInfo> classes;
+
     private final Map<String, Integer> classCounts;
+
     private final Map<String, Map<String, Integer>> variantCounts = new HashMap<>();
+
     private final boolean hasDeployPoint;
+
     private final String deployPointPos;
+
     private final List<UnifiedDeployScreenPacket.BastionItem> bastions;
+
     private final boolean isCommander;
+
     private final List<UnifiedDeployScreenPacket.SquadInfo> squads;
+
     private final List<UnifiedDeployScreenPacket.SquadCategoryInfo> squadCategories;
+
     private int mySquadId;
+
     private int deployTimeRemaining;
+
     /** 上次从服务端同步倒计时时的 epoch ms / 秒数，用于本地每秒递减，避免依赖全量包刷新。 */
     private long deployTimerAnchorMs;
+
     private int deployTimerAnchorSeconds;
+
     private final String team;
+
     private boolean waitingForDeploySelection;
+
     private long outpostRedeployCooldownEndsAt;
+
     private long classSwitchCooldownEndsAt;
+
     /** 服务端明确下发的本人职业 ID，不再从可能延迟的小队成员列表反推。 */
     private String selectedClassId;
+
     private int lastDisplayedClassSwitchCooldown = -1;
+
     private boolean lastClassSelectionLocationAllowed;
+
     private GovernanceStatePacket governanceState = ClientGovernanceState.get();
+
     private long governanceReceivedAtMs = ClientGovernanceState.getReceivedAtMs();
+
     /** candidate UUID string → vote button, for in-place label refresh */
-    private final Map<String, EspButton> governanceVoteButtons = new HashMap<>();
+    private final Map<String, DeployWidgets.EspButton> governanceVoteButtons = new HashMap<>();
+
     /** 数据事件只使相关区域失效；下一客户端 tick 合并后局部重建。 */
     private enum Section {
         SQUAD,
@@ -164,145 +259,226 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         MAP_CONTROLS,
         STATUS
     }
+
     private final EnumSet<Section> dirtySections = EnumSet.noneOf(Section.class);
 
     /** 班组成员右键上下文菜单（仅数据变更/点击时重建，非 tick 驱动）。 */
     private UUID fireteamContextTarget;
+
     private int fireteamContextX;
+
     private int fireteamContextY;
+
     private final List<FireteamContextEntry> fireteamContextEntries = new ArrayList<>();
+
     /** MUtil 弹出层；必须始终作为根节点最后一个子元素以拦截下层点击。 */
     private GuiElement fireteamContextRoot;
 
     // ===== 班组栏底部动作行（改版后单行：创建/退出 + 解散 / 锁定）=====
     /** 动作按钮专用容器：数据原地刷新时只重建这一小块。 */
     private GuiElement squadActionRoot;
+
     private int squadActionX;
+
     private int squadActionY;
+
     private int squadActionW;
-    private EspButton squadDisbandButton;
-    private EspButton squadLockButton;
-    private EspButton squadCreateLeaveButton;
+
+    private DeployWidgets.EspButton squadDisbandButton;
+
+    private DeployWidgets.EspButton squadLockButton;
+
+    private DeployWidgets.EspButton squadCreateLeaveButton;
 
     // ===== 班组栏内联创建（未入队）：名称输入框 + 队伍类型上拉菜单（替代旧创建小窗）=====
     /** 内联「小队名称」输入框。 */
     private SquadInlineNameField squadInlineNameField;
+
     /** 输入框草稿：班组栏因数据刷新整块重建时保留已输入名称。 */
     private String squadInlineName = "";
+
     /** 输入框是否处于输入焦点（跨整块重建保留）。 */
     private boolean squadInlineNameTyping;
+
     /** 上次创建发包时间：防连点重复创建。 */
     private long squadCreateSentAtMs;
+
     /** 黄色「队伍类型」上拉按钮（未入队时显示在输入框右侧）。 */
-    private EspButton squadCategoryDropButton;
+    private DeployWidgets.EspButton squadCategoryDropButton;
+
     private int squadCategoryButtonX;
+
     private int squadCategoryButtonY;
+
     private int squadCategoryButtonW;
+
     private int squadCategoryButtonH;
 
     // ===== 载具信息上拉菜单（需求 3-3：取代原独立/常驻的载具信息窗口）=====
     /** 「载具信息」上拉按钮（对战阶段位于地图页脚）。 */
-    private EspButton vehicleInfoDropButton;
+    private DeployWidgets.EspButton vehicleInfoDropButton;
+
     private int vehicleInfoButtonX;
+
     private int vehicleInfoButtonY;
+
     private int vehicleInfoButtonW;
+
     private int vehicleInfoButtonH;
+
     /** 载具信息上拉菜单层（全屏半透明遮罩 + 按钮上方的选项列表）。 */
     private GuiElement vehicleInfoRoot;
+
     /** 载具较多时启用的滚动列表（保留滚动位置）。 */
     private ScrollableList vehicleInfoScrollList;
+
     /** 面板包携带的载具快照（为空时菜单显示空态）。 */
     private List<UnifiedDeployScreenPacket.VehicleInfo> vehicleInfos = new ArrayList<>();
+
     /** 载具快照收到的时刻：包内冷却为秒，本地据此继续倒数。 */
     private long vehicleInfoReceivedAtMs;
+
     /** 菜单行按钮 ↔ 载具：每秒只刷文案，不重建结构、不丢滚动位置。 */
-    private final List<EspButton> vehicleInfoRowButtons = new ArrayList<>();
+    private final List<DeployWidgets.EspButton> vehicleInfoRowButtons = new ArrayList<>();
+
     private final List<UnifiedDeployScreenPacket.VehicleInfo> vehicleInfoRowVehicles = new ArrayList<>();
 
     // ===== 班组弹层：队伍类型上拉菜单 / 通用确认框 =====
     /** 当前选中的队伍类型 id（上拉菜单选中项）。 */
     private String squadCreateCategoryId = "none";
+
     /** 队伍类型上拉菜单层（替代旧的创建小窗，最后添加以拦截下层点击）。 */
     private GuiElement squadCategoryRoot;
+
     /** 通用确认框（退出/解散/踢人复用）；默认高亮"取消"以防误触。 */
     private GuiElement squadConfirmRoot;
+
     private String squadConfirmTitle = "";
+
     private String squadConfirmBody = "";
+
     private Runnable squadConfirmAction;
 
     // ===== 按钮引用 =====
-    private final List<EspButton> classButtons = new ArrayList<>();
-    private final Map<EspButton, Integer> classButtonToClassIndex = new HashMap<>();
-    private final List<EspButton> deployButtons = new ArrayList<>();
-    private final Map<EspButton, String> deployButtonPositions = new HashMap<>();
-    private final Map<EspButton, String> deployButtonCommands = new HashMap<>();
-    private final Map<EspButton, String> deployButtonBaseLabels = new HashMap<>();
+    private final List<DeployWidgets.EspButton> classButtons = new ArrayList<>();
+
+    private final Map<DeployWidgets.EspButton, Integer> classButtonToClassIndex = new HashMap<>();
+
+    private final List<DeployWidgets.EspButton> deployButtons = new ArrayList<>();
+
+    private final Map<DeployWidgets.EspButton, String> deployButtonPositions = new HashMap<>();
+
+    private final Map<DeployWidgets.EspButton, String> deployButtonCommands = new HashMap<>();
+
+    private final Map<DeployWidgets.EspButton, String> deployButtonBaseLabels = new HashMap<>();
+
     /** Rally 行：按钮 → 个人就绪 epoch ms；非 Rally 为 0。 */
-    private final Map<EspButton, Long> deployButtonNextWaveAt = new HashMap<>();
+    private final Map<DeployWidgets.EspButton, Long> deployButtonNextWaveAt = new HashMap<>();
+
     /** 构建部署行时使用的名称片段（不含动态 [波次 Xs]）。 */
-    private final Map<EspButton, String> deployButtonNameCores = new HashMap<>();
+    private final Map<DeployWidgets.EspButton, String> deployButtonNameCores = new HashMap<>();
+
     /** Rally 行：冷却总秒数 m（用于 n/m 显示）。 */
-    private final Map<EspButton, Integer> deployButtonWaveSeconds = new HashMap<>();
+    private final Map<DeployWidgets.EspButton, Integer> deployButtonWaveSeconds = new HashMap<>();
+
     /** HAB 行：激活就绪 epoch ms；0 表示无需等待激活。 */
-    private final Map<EspButton, Long> deployButtonHabAvailableAt = new HashMap<>();
+    private final Map<DeployWidgets.EspButton, Long> deployButtonHabAvailableAt = new HashMap<>();
+
     /** HAB 行：激活总秒数（用于倒计时显示）。 */
-    private final Map<EspButton, Integer> deployButtonHabActivationSeconds = new HashMap<>();
-    private EspButton outpostRedeployButton;
-    private EspButton confirmDeployButton;
-    private PlainText classTitleText;
-    private PlainText statusText;
-    private PlainText statusTimerText;
+    private final Map<DeployWidgets.EspButton, Integer> deployButtonHabActivationSeconds = new HashMap<>();
+
+    private DeployWidgets.EspButton outpostRedeployButton;
+
+    private DeployWidgets.EspButton confirmDeployButton;
+
+    private DeployWidgets.PlainText classTitleText;
+
+    private DeployWidgets.PlainText statusText;
+
+    private DeployWidgets.PlainText statusTimerText;
+
     /** 右上角倒计时正下方的兵力行（事件驱动 setText，不 rebuild）。 */
-    private PlainText troopCountText;
-    private PlainText phaseTitleText;
-    private PlainText governanceTimerText;
+    private DeployWidgets.PlainText troopCountText;
+
+    private DeployWidgets.PlainText phaseTitleText;
+
+    private DeployWidgets.PlainText governanceTimerText;
+
     /** 指挥官空缺治理小窗是否已关闭（最小化为「载具信息」右侧的按钮）。 */
     private boolean governanceWindowMinimized;
+
     /** 指挥官空缺治理小窗宽度/标题区高度。 */
     private static final int VACANCY_WINDOW_W = 186;
+
     /** 弹劾投票小窗（"原指挥官 / 挑战者"两行按钮，略宽）。 */
     private static final int IMPEACH_WINDOW_W = 210;
+
     private static final int VACANCY_WINDOW_HEADER_H = 26;
+
     private String pendingDeployPosition;
+
     private String pendingDeployCommand;
+
     private final Set<Integer> expandedSquadIds = new HashSet<>();
+
     private int variantPopupClassIndex = -1;
+
     private int variantPopupX;
+
     private int variantPopupY;
+
     private int variantPopupH;
+
     private int variantPopupScroll;
+
     private int lastMouseX;
+
     private int lastMouseY;
 
     // ===== 职业装备人物预览 =====
     /** 预览渲染器实例（懒初始化虚拟玩家实体）。 */
     private final ClassPreviewRenderer previewRenderer = new ClassPreviewRenderer();
+
     /** 当前正在显示的人物预览（class index + variantId）；-1/null 表示无预览。 */
     private int activePreviewClassIndex = -1;
+
     private String activePreviewVariantId = null;
+
     /** 鼠标离开所有预览目标后的宽限截止时刻（epoch ms）；0 表示未在宽限中。 */
     private long previewGraceDeadlineMs = 0L;
+
     /** 宽限过短时，鼠标在职业格间移动会频繁在战术地图/预览间切换，右侧整块闪烁。 */
     private static final long PREVIEW_GRACE_MS = 350L;
 
     // ===== 滚轮列表 =====
     private ScrollableList classScrollList;
+
     private ScrollableList deployScrollList;
+
     private ScrollableList squadScrollList;
 
     // ===== 可独立重建的区域容器 =====
     private GuiElement squadSectionRoot;
+
     private GuiElement classSectionRoot;
+
     private GuiElement deploySectionRoot;
+
     private GuiElement mapControlsRoot;
+
     private GuiElement statusSectionRoot;
 
     // ===== 区域边界 =====
     private int leftX, leftY, leftW, leftH;
+
     private int centerX, centerY, centerW, centerH;
+
     private int squadAreaX, squadAreaY, squadAreaW, squadAreaH;
+
     private int classAreaX, classAreaY, classAreaW, classAreaH;
+
     private int deployAreaX, deployAreaY, deployAreaW, deployAreaH;
+
     private int mapX, mapY, mapW, mapH;
 
     public UnifiedDeployScreen(UnifiedDeployScreenPacket data) {
@@ -329,7 +505,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         this.vehicleInfoReceivedAtMs = System.currentTimeMillis();
         this.mySquadId = data.getMySquadId();
         this.team = data.getTeam();
-        this.selectedClassId = normalizeSelectedClassId(data.getSelectedClassId());
+        this.selectedClassId = DeploySnapshots.normalizeSelectedClassId(data.getSelectedClassId());
         this.waitingForDeploySelection = data.isWaitingForDeploySelection();
         this.outpostRedeployCooldownEndsAt = System.currentTimeMillis()
             + data.getOutpostRedeployCooldownRemaining() * 1000L;
@@ -351,10 +527,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     public void updateVehicles(List<UnifiedDeployScreenPacket.VehicleInfo> nextVehicles) {
         List<UnifiedDeployScreenPacket.VehicleInfo> next = nextVehicles == null
             ? List.of() : new ArrayList<>(nextVehicles);
-        if (vehicleInfosEqual(vehicleInfos, next)) {
+        if (DeploySnapshots.vehicleInfosEqual(vehicleInfos, next)) {
             return;
         }
-        boolean rowsChanged = !vehicleRowSignatureEqual(vehicleInfos, next);
+        boolean rowsChanged = !DeploySnapshots.vehicleRowSignatureEqual(vehicleInfos, next);
         vehicleInfos = new ArrayList<>(next);
         vehicleInfoReceivedAtMs = System.currentTimeMillis();
         // bug 修复：数据变化也只就地刷新 —— 绝不 close→reopen（那会丢打开状态与滚动位置）。
@@ -362,47 +538,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (rowsChanged && hasVehicleInfoPopup()) {
             refreshVehicleInfoPopupLayout(true);
         }
-    }
-
-    /**
-     * 行集合是否变化（类型/名称/上限/刷新周期）：
-     * 只有它变了才需要重建行按钮；仅有 current 变化时原地改文案即可。
-     */
-    private static boolean vehicleRowSignatureEqual(List<UnifiedDeployScreenPacket.VehicleInfo> a,
-                                                    List<UnifiedDeployScreenPacket.VehicleInfo> b) {
-        if (a.size() != b.size()) {
-            return false;
-        }
-        for (int i = 0; i < a.size(); i++) {
-            UnifiedDeployScreenPacket.VehicleInfo x = a.get(i);
-            UnifiedDeployScreenPacket.VehicleInfo y = b.get(i);
-            if (!Objects.equals(x.type, y.type)
-                || !Objects.equals(x.displayName, y.displayName)
-                || x.max != y.max
-                || x.respawnMinutes != y.respawnMinutes) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean vehicleInfosEqual(List<UnifiedDeployScreenPacket.VehicleInfo> a,
-                                             List<UnifiedDeployScreenPacket.VehicleInfo> b) {
-        if (a.size() != b.size()) {
-            return false;
-        }
-        for (int i = 0; i < a.size(); i++) {
-            UnifiedDeployScreenPacket.VehicleInfo x = a.get(i);
-            UnifiedDeployScreenPacket.VehicleInfo y = b.get(i);
-            if (!Objects.equals(x.type, y.type)
-                || !Objects.equals(x.displayName, y.displayName)
-                || x.max != y.max
-                || x.current != y.current
-                || x.respawnMinutes != y.respawnMinutes) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -447,7 +582,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             habAtById.put(item.id, item.habAvailableAtEpochMs);
             habTotalById.put(item.id, item.habActivationTotalSeconds);
         }
-        for (EspButton button : deployButtons) {
+        for (DeployWidgets.EspButton button : deployButtons) {
             String command = deployButtonCommands.get(button);
             if (command == null || !command.startsWith("bastion select ")) {
                 continue;
@@ -502,7 +637,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                                   Map<String, Integer> updatedSquadCounts) {
         boolean countsChanged = counts != null && !counts.equals(this.classCounts);
         boolean variantsChanged = updatedVariantCounts != null
-            && !variantCountsEqual(this.variantCounts, updatedVariantCounts);
+            && !DeploySnapshots.variantCountsEqual(this.variantCounts, updatedVariantCounts);
         boolean squadCountsChanged = false;
         if (updatedSquadCounts != null) {
             for (UnifiedDeployScreenPacket.ClassInfo cls : classes) {
@@ -534,19 +669,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    private static boolean variantCountsEqual(Map<String, Map<String, Integer>> a,
-                                              Map<String, Map<String, Integer>> b) {
-        if (a == b) return true;
-        if (a == null || b == null || a.size() != b.size()) return false;
-        for (Map.Entry<String, Map<String, Integer>> e : a.entrySet()) {
-            Map<String, Integer> other = b.get(e.getKey());
-            if (other == null || !other.equals(e.getValue())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /**
      * 同步职业元数据与对玩家有效的人数（含 team_count / max_per_squad / 小队当前人数）。
      * 不 rebuild 整页，只刷新按钮 label/enabled；仅职业格子数量/id 变化时重建网格。
@@ -556,13 +678,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                               Map<String, Map<String, Integer>> updatedVariantCounts) {
         boolean countsChanged = counts != null && !counts.equals(this.classCounts);
         boolean variantsChanged = updatedVariantCounts != null
-            && !variantCountsEqual(this.variantCounts, updatedVariantCounts);
+            && !DeploySnapshots.variantCountsEqual(this.variantCounts, updatedVariantCounts);
         boolean classDataChanged = false;
         boolean classGridChanged = false;
 
         if (nextClasses != null) {
-            classGridChanged = !classGridEquals(this.classes, nextClasses);
-            classDataChanged = !classDisplayStateEquals(this.classes, nextClasses);
+            classGridChanged = !DeploySnapshots.classGridEquals(this.classes, nextClasses);
+            classDataChanged = !DeploySnapshots.classDisplayStateEquals(this.classes, nextClasses);
             // 即使按钮展示态相同，也采用最新描述与装备预览；替换数据本身不会动 GUI 树。
             this.classes.clear();
             this.classes.addAll(nextClasses);
@@ -589,79 +711,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     public void updateSelectedClass(String updatedSelectedClassId) {
-        String next = normalizeSelectedClassId(updatedSelectedClassId);
+        String next = DeploySnapshots.normalizeSelectedClassId(updatedSelectedClassId);
         if (Objects.equals(this.selectedClassId, next)) {
             return;
         }
         this.selectedClassId = next;
         refreshDeployButtonStates();
         refreshClassButtons();
-    }
-
-    private static String normalizeSelectedClassId(String classId) {
-        return classId == null || classId.isBlank() ? null : classId;
-    }
-
-    /** 职业交互结构（职业及其变体的数量、ID 与顺序）。 */
-    private static boolean classGridEquals(
-            List<UnifiedDeployScreenPacket.ClassInfo> a,
-            List<UnifiedDeployScreenPacket.ClassInfo> b) {
-        if (a == b) return true;
-        if (a == null || b == null || a.size() != b.size()) return false;
-        for (int i = 0; i < a.size(); i++) {
-            UnifiedDeployScreenPacket.ClassInfo x = a.get(i);
-            UnifiedDeployScreenPacket.ClassInfo y = b.get(i);
-            if (!Objects.equals(x.classId, y.classId)
-                || x.variants.size() != y.variants.size()) {
-                return false;
-            }
-            for (int v = 0; v < x.variants.size(); v++) {
-                if (!Objects.equals(
-                    x.variants.get(v).variantId, y.variants.get(v).variantId)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 影响按钮 label/enabled 的展示态是否一致（含小队当前人数、上限、图标名）。
-     */
-    private static boolean classDisplayStateEquals(
-            List<UnifiedDeployScreenPacket.ClassInfo> a,
-            List<UnifiedDeployScreenPacket.ClassInfo> b) {
-        if (a == b) return true;
-        if (a == null || b == null || a.size() != b.size()) return false;
-        for (int i = 0; i < a.size(); i++) {
-            UnifiedDeployScreenPacket.ClassInfo x = a.get(i);
-            UnifiedDeployScreenPacket.ClassInfo y = b.get(i);
-            if (x == y) continue;
-            if (x == null || y == null) return false;
-            if (x.maxPlayers != y.maxPlayers
-                || x.strictCount != y.strictCount
-                || x.teamCount != y.teamCount
-                || x.maxPerSquad != y.maxPerSquad
-                || x.squadCurrentCount != y.squadCurrentCount
-                || !Objects.equals(x.classId, y.classId)
-                || !Objects.equals(x.name, y.name)
-                || !Objects.equals(x.icon, y.icon)
-                || !Objects.equals(x.iconImage, y.iconImage)
-                || x.variants.size() != y.variants.size()) {
-                return false;
-            }
-            for (int v = 0; v < x.variants.size(); v++) {
-                UnifiedDeployScreenPacket.VariantInfo vx = x.variants.get(v);
-                UnifiedDeployScreenPacket.VariantInfo vy = y.variants.get(v);
-                if (!Objects.equals(vx.variantId, vy.variantId)
-                    || vx.maxPlayers != vy.maxPlayers
-                    || vx.currentCount != vy.currentCount
-                    || !Objects.equals(vx.name, vy.name)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public void updateTimeRemaining(int seconds) {
@@ -736,7 +792,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         governanceState = ClientGovernanceState.get();
         governanceReceivedAtMs = ClientGovernanceState.getReceivedAtMs();
         GovernanceStatePacket.TeamState current = activeGovernance();
-        if (!sameGovernanceLayout(previous, current)) {
+        if (!DeploySnapshots.sameGovernanceLayout(previous, current)) {
             invalidateSections(Section.MAP_CONTROLS);
         } else {
             refreshGovernanceLabels(current);
@@ -751,241 +807,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             governanceTimerText.setText("\u00a7e剩余 "
                 + ClientGovernanceState.secondsLeft(current) + "s");
         }
-        for (Map.Entry<String, EspButton> e : governanceVoteButtons.entrySet()) {
+        for (Map.Entry<String, DeployWidgets.EspButton> e : governanceVoteButtons.entrySet()) {
             try {
                 UUID candidate = UUID.fromString(e.getKey());
-                e.getValue().setLabel(buildVoteButtonLabel(current, candidate,
-                    votePrefixFor(current, candidate)));
+                e.getValue().setLabel(DeploySnapshots.buildVoteButtonLabel(current, candidate,
+                    DeploySnapshots.votePrefixFor(current, candidate)));
             } catch (IllegalArgumentException ignored) {
-            }
-        }
-    }
-
-    private static String votePrefixFor(GovernanceStatePacket.TeamState state, UUID candidate) {
-        if (state == null || candidate == null) {
-            return "候选人";
-        }
-        if ("IMPEACHMENT_VOTE".equals(state.state)) {
-            if (candidate.equals(state.commander)) {
-                return "原指挥官";
-            }
-            if (candidate.equals(state.challenger)) {
-                return "挑战者";
-            }
-        }
-        return "志愿者";
-    }
-
-    private static String buildVoteButtonLabel(GovernanceStatePacket.TeamState state,
-                                              UUID candidate, String prefix) {
-        String name = MatchScoreboardScreen.nameFor(candidate);
-        int votes = ClientGovernanceState.voteCount(state, candidate);
-        boolean mine = ClientGovernanceState.isMyVote(state, candidate);
-        String mark = mine ? "\u00a7a\u2713 " : "\u00a7f";
-        return mark + prefix + "\u00a7f\uff1a\u00a7e" + name + "  \u00a7b[" + votes + "\u7968]";
-    }
-
-    private static boolean sameGovernanceLayout(GovernanceStatePacket.TeamState a,
-                                                GovernanceStatePacket.TeamState b) {
-        if (a == b) return true;
-        if (a == null || b == null) return false;
-        return Objects.equals(a.state, b.state)
-            && Objects.equals(a.commander, b.commander)
-            && Objects.equals(a.challenger, b.challenger)
-            && Objects.equals(a.volunteers, b.volunteers);
-    }
-
-    // ==================== 自定义按钮 ====================
-
-    /** 职业分类图标：黄色渲染（用于每排左侧）。 */
-    private static class CategoryIcon extends GuiElement {
-        private final ResourceLocation texture;
-
-        CategoryIcon(ResourceLocation texture, int x, int y, int size) {
-            super(x, y, size, size);
-            this.texture = texture;
-        }
-
-        @Override
-        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
-            if (!isVisible() || texture == null) {
-                return;
-            }
-            int size = getWidth();
-            graphics.setColor(1.0f, 0.85f, 0.25f, 1.0f);      // 黄色
-            graphics.blit(texture, x + getX(), y + getY(), size, size, 0.0f, 0.0f, 128, 128, 128, 128);
-            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-    }
-
-    /** 一条细横线（用于职业排之间）：默认 1px，可指定更粗的线（需求 7）。 */
-    private static class Divider extends GuiElement {
-        private final int color;
-        private final int thickness;
-
-        Divider(int x, int y, int width, int color) {
-            this(x, y, width, color, 1);
-        }
-
-        Divider(int x, int y, int width, int color, int thickness) {
-            super(x, y, Math.max(1, width), Math.max(1, thickness));
-            this.color = color;
-            this.thickness = Math.max(1, thickness);
-        }
-
-        @Override
-        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
-            if (!isVisible()) {
-                return;
-            }
-            graphics.fill(x + getX(), y + getY(),
-                x + getX() + getWidth(), y + getY() + thickness, color);
-        }
-    }
-
-    private static class EspButton extends GuiElement {
-        private final Runnable action;
-        private String label;
-        private boolean enabled = true;
-        private boolean hovered = false;
-        private int normalColor = BTN_BG_PLAIN_BLACK;
-        private int hoverColor = BTN_BG_HOVER;
-        private int disabledColor = BTN_BG_DISABLED;
-        private int disabledBorderColor = 0x60383848;
-        private int disabledTextColor = 0x666666;
-        private int textColor = BTN_TEXT;
-        private ResourceLocation icon;
-        private int iconTextureWidth = 128;
-        private int iconTextureHeight = 128;
-        private int iconSize = 10;
-        private String rightLabel = "";
-        private float textScale = UI_TEXT_SCALE;
-        private boolean centeredText = true;
-        /** 非 0 表示已选中，画成该底色。 */
-        private int selectedColor = 0;
-        /** 禁用态仍可点击以弹出原因说明（如选职拒绝）。 */
-        private Runnable disabledAction;
-
-        EspButton(int x, int y, int w, int h, String label, Runnable action) {
-            super(x, y, w, h);
-            this.label = label;
-            this.action = action;
-        }
-
-        void setEnabled(boolean e) { enabled = e; }
-        void setLabel(String l) {
-            String next = l == null ? "" : l;
-            if (java.util.Objects.equals(label, next)) {
-                return;
-            }
-            label = next;
-        }
-        boolean isEnabled() { return enabled; }
-        void setDisabledAction(Runnable r) { disabledAction = r; }
-        void setIcon(ResourceLocation icon, int textureWidth, int textureHeight) {
-            this.icon = icon;
-            this.iconTextureWidth = textureWidth;
-            this.iconTextureHeight = textureHeight;
-        }
-        void setIconSize(int size) { iconSize = Math.max(1, size); }
-        void setRightLabel(String value) { rightLabel = value == null ? "" : value; }
-        void setTextScale(float scale) { textScale = Math.max(0.5f, Math.min(1.0f, scale)); }
-        void setCenteredText(boolean centered) { centeredText = centered; }
-
-        /**
-         * 需求 6：黑色半透明平底按钮 —— 原来"有边框、没底色"的按钮统一改用它。
-         * 边框已全局不再绘制，这里只负责铺上统一的黑半透底。
-         */
-        /** 完全透明：常态不铺底色、无边框，仅悬停高亮 / 选中黄底。 */
-        void setTransparentIdle() {
-            normalColor = 0x00000000;
-            hoverColor = 0x66FFFFFF;
-        }
-
-        void setPlainBlack() { normalColor = BTN_BG_PLAIN_BLACK; }
-
-        void setSelected(boolean selected, int color) { selectedColor = selected ? color : 0; }
-        /** 禁用态样式；border 参数在需求 6（全局去边框）后不再绘制，保留以兼容现有调用点。 */
-        void setDisabledStyle(int background, int border, int text) {
-            disabledColor = background;
-            disabledBorderColor = border;
-            disabledTextColor = text;
-        }
-
-        @Override
-        public boolean onMouseClick(int mx, int my, int button) {
-            if (button != 0 || !isVisible() || !hasFocus()) return false;
-            if (!enabled) {
-                if (disabledAction != null) {
-                    disabledAction.run();
-                    return true;
-                }
-                return false;
-            }
-            if (action != null) action.run();
-            return true;
-        }
-
-        @Override
-        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
-            if (!isVisible()) return;
-            hovered = hasFocus();
-
-            int bx = x + getX(), by = y + getY(), bw = getWidth(), bh = getHeight();
-
-            // 选中 > 禁用 > 悬停 > 常态；需求 6：所有按钮都不再绘制边框（描边）
-            boolean selected = selectedColor != 0;
-            if (selected) {
-                graphics.fill(bx, by, bx + bw, by + bh, selectedColor);
-            } else if (!enabled) {
-                if ((disabledColor >>> 24) != 0) {
-                    graphics.fill(bx, by, bx + bw, by + bh, disabledColor);
-                }
-            } else if (hovered) {
-                // 悬停：先铺常态底色再叠高亮，避免半透明白把黑半透底顶掉导致文字发虚
-                if ((normalColor >>> 24) != 0) {
-                    graphics.fill(bx, by, bx + bw, by + bh, normalColor);
-                }
-                graphics.fill(bx, by, bx + bw, by + bh, hoverColor);
-            } else {
-                graphics.fill(bx, by, bx + bw, by + bh, normalColor);
-            }
-
-            int textCol = enabled ? textColor : disabledTextColor;
-            int contentLeft = bx + 3;
-            if (icon != null) {
-                int drawnIconSize = Math.min(iconSize, bh - 3);
-                // 需求 3-4：禁用态不再铺底色，改为把图标压暗，仍能区分可用 / 不可用
-                if (!enabled) {
-                    graphics.setColor(0.45f, 0.45f, 0.45f, 1.0f);
-                }
-                graphics.blit(icon, bx + 2, by + (bh - drawnIconSize) / 2,
-                    drawnIconSize, drawnIconSize, 0.0f, 0.0f,
-                    iconTextureWidth, iconTextureHeight, iconTextureWidth, iconTextureHeight);
-                if (!enabled) {
-                    graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-                }
-                contentLeft = bx + drawnIconSize + 4;
-            }
-            int rightLabelWidth = rightLabel.isEmpty() ? 0 : Math.round(
-                Minecraft.getInstance().font.width(
-                    EspetroAuiWidgets.stripFormatting(rightLabel)) * textScale);
-            int rightLabelX = bx + bw - 3 - rightLabelWidth;
-            int availableTextWidth = Math.max(8,
-                rightLabelX - (rightLabel.isEmpty() ? 0 : 4) - contentLeft);
-            int logicalTextWidth = Math.max(8, (int) (availableTextWidth / textScale));
-            String drawnLabel = EspetroAuiWidgets.trimToWidth(label, logicalTextWidth);
-            int textWidth = Math.round(Minecraft.getInstance().font.width(
-                EspetroAuiWidgets.stripFormatting(drawnLabel)) * textScale);
-            int textX = centeredText
-                ? contentLeft + Math.max(0, (availableTextWidth - textWidth) / 2)
-                : contentLeft;
-            int textHeight = Math.max(1, Math.round(Minecraft.getInstance().font.lineHeight * textScale));
-            drawScaledString(graphics, drawnLabel, textX,
-                by + Math.max(0, (bh - textHeight) / 2), textCol, textScale);
-            if (!rightLabel.isEmpty()) {
-                drawScaledString(graphics, rightLabel, rightLabelX,
-                    by + Math.max(0, (bh - textHeight) / 2), textCol, textScale);
             }
         }
     }
@@ -1046,22 +873,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 label, (int) (availableWidth / SQUAD_MEMBER_TEXT_SCALE));
             int textHeight = Math.max(1,
                 Math.round(Minecraft.getInstance().font.lineHeight * SQUAD_MEMBER_TEXT_SCALE));
-            drawScaledString(graphics, drawnLabel, textX,
+            DeployWidgets.drawScaledString(graphics, drawnLabel, textX,
                 by + Math.max(0, (getHeight() - textHeight) / 2),
                 BTN_TEXT, SQUAD_MEMBER_TEXT_SCALE);
         }
     }
 
     private record FireteamContextEntry(String label, boolean enabled, Runnable action) {}
-
-    private static void drawScaledString(GuiGraphics graphics, String text, int x, int y,
-                                         int color, float scale) {
-        graphics.pose().pushPose();
-        graphics.pose().scale(scale, scale, 1.0f);
-        graphics.drawString(Minecraft.getInstance().font, Component.literal(text),
-            Math.round(x / scale), Math.round(y / scale), color, false);
-        graphics.pose().popPose();
-    }
 
     /**
      * 班组栏内联「小队名称」输入框（需求 7）：无边框 + 淡灰底色，点击聚焦后可输入。
@@ -1161,7 +979,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             String trimmed = Minecraft.getInstance().font.plainSubstrByWidth(drawn, logicalWidth);
             int textHeight = Math.max(1,
                 Math.round(Minecraft.getInstance().font.lineHeight * FIELD_TEXT_SCALE));
-            drawScaledString(graphics, trimmed, bx + 4,
+            DeployWidgets.drawScaledString(graphics, trimmed, bx + 4,
                 by + Math.max(1, (getHeight() - textHeight) / 2), color, FIELD_TEXT_SCALE);
 
             if (typing && (System.currentTimeMillis() / 500) % 2 == 0) {
@@ -1171,38 +989,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 graphics.fill(cursorX, by + 3, cursorX + 1,
                     by + Math.max(4, getHeight() - 3), SQUAD_INLINE_FIELD_TEXT);
             }
-        }
-    }
-
-    // ==================== 自定义文本元素（绕过 GuiText，直接用 drawString) ====================
-
-    /** 直接用 Minecraft Font 渲染的文本元素，亮度和按钮文字一致 */
-    private static class PlainText extends GuiElement {
-        private String text;
-        private int color;
-
-        PlainText(int x, int y, String text, int color) {
-            super(x, y,
-                Math.max(1, Math.round(Minecraft.getInstance().font.width(
-                    EspetroAuiWidgets.stripFormatting(text)) * UI_TEXT_SCALE)),
-                Math.max(1, Math.round(Minecraft.getInstance().font.lineHeight * UI_TEXT_SCALE)));
-            this.text = text;
-            this.color = color;
-        }
-
-        void setColor(int c) { color = c; }
-        void setText(String value) {
-            String next = value == null ? "" : value;
-            if (java.util.Objects.equals(text, next)) {
-                return;
-            }
-            text = next;
-        }
-
-        @Override
-        public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
-            if (!isVisible()) return;
-            drawScaledString(graphics, text, x + getX(), y + getY(), color, UI_TEXT_SCALE);
         }
     }
 
@@ -1436,7 +1222,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private void buildTitleBar() {
         String teamColor = EspetroAuiWidgets.teamPrefix(team);
         // Phase text — update dynamically by refreshTitleTimer()
-        phaseTitleText = new PlainText(5, 3,
+        phaseTitleText = new DeployWidgets.PlainText(5, 3,
             "\u00a76\u00a7l部署阶段 \u00a77| " + teamColor + "\u00a7l"
                 + factionIcon + " " + factionName,
             0xFFFFFF);
@@ -1446,19 +1232,19 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         String sub = "\u00a7f" + teamName;
         if (factionDescription != null && !factionDescription.isEmpty())
             sub += " \u00a7f· " + factionDescription;
-        PlainText subtitle = new PlainText(5, 15,
+        DeployWidgets.PlainText subtitle = new DeployWidgets.PlainText(5, 15,
             EspetroAuiWidgets.trimToWidth(sub, Math.max(80, this.width - 16)), BTN_TEXT);
         root.addChild(subtitle);
 
-        PlainText hint = new PlainText(5, 25,
+        DeployWidgets.PlainText hint = new DeployWidgets.PlainText(5, 25,
             EspetroAuiWidgets.trimToWidth(
                 "\u00a77选择班组、职业与部署点，确认后等待部署",
                 Math.max(80, this.width - 16)), BTN_TEXT);
         root.addChild(hint);
 
-        statusTimerText = new PlainText(this.width - 6, 4, "", 0xFFFFD27A);
+        statusTimerText = new DeployWidgets.PlainText(this.width - 6, 4, "", 0xFFFFD27A);
         root.addChild(statusTimerText);
-        troopCountText = new PlainText(this.width - 6, 16, "", 0xFFFFFFFF);
+        troopCountText = new DeployWidgets.PlainText(this.width - 6, 16, "", 0xFFFFFFFF);
         root.addChild(troopCountText);
         refreshTitleTimer();
         updateTroopLabel(TroopCountOverlay.getDisplayLine());
@@ -1491,7 +1277,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaW = squadAreaW;
         int areaH = squadAreaH;
 
-        sectionRoot.addChild(new PlainText(sx, sy, "\u00a76\u00a7l班组", 0xFFFFC766));
+        sectionRoot.addChild(new DeployWidgets.PlainText(sx, sy, "\u00a76\u00a7l班组", 0xFFFFC766));
         // 底部动作行：改版后固定 1 行（需求 7/9）
         // 未入队：[创建小队(1/5 宽·1 倍行高·绿底)] [黄色队伍类型上拉] [名称输入框(等高)]
         // 已入队：[退出小队(同位置同尺寸)]，队长时右侧追加 [解散] [锁定/解锁]（黑半透底）
@@ -1524,7 +1310,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             String state = mine ? "\u00a7a\u25cf" : squad.isLocked ? "\u00a7c\u25a0" : "\u00a77\u25cb";
             String label = disclosure + " " + state + " \u00a7f" + squad.displayId + ". " + squad.name
                 + " \u00a77" + squad.memberCount + "/" + squad.maxMembers;
-            EspButton button = new EspButton(0, rowY, titleW, SQUAD_TITLE_ROW_H,
+            DeployWidgets.EspButton button = new DeployWidgets.EspButton(0, rowY, titleW, SQUAD_TITLE_ROW_H,
                 label, () -> toggleSquadExpanded(squad.id));
             button.setTextScale(SQUAD_TEXT_SCALE);
             button.setCenteredText(false);
@@ -1543,7 +1329,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             squadScrollList.addChild(button);
             if (showJoin) {
                 // 后添加 → 优先响应点击，避免与标题按钮抢事件
-                EspButton join = new EspButton(rowW - SQUAD_JOIN_BTN_W, rowY,
+                DeployWidgets.EspButton join = new DeployWidgets.EspButton(rowW - SQUAD_JOIN_BTN_W, rowY,
                     SQUAD_JOIN_BTN_W, SQUAD_TITLE_ROW_H, "\u00a7a加入",
                     () -> ClientRequests.joinSquad(squad.id));
                 join.setTextScale(SQUAD_TEXT_SCALE);
@@ -1578,12 +1364,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     if (member.fireteam != lastFt) {
                         lastFt = member.fireteam;
                         Fireteam ft = Fireteam.fromIndex(member.fireteam);
-                        squadScrollList.addChild(new PlainText(
+                        squadScrollList.addChild(new DeployWidgets.PlainText(
                             5, rowY + 1,
                             "\u00a78火力组 " + ft.label()
                                 + (member.fireteamLeader ? "" : ""),
                             ft.color()));
-                        // PlainText 高度随字号；占一行间距
+                        // DeployWidgets.PlainText 高度随字号；占一行间距
                         rowY += SQUAD_MEMBER_ROW_H;
                     }
                     String marker = member.commander
@@ -1606,7 +1392,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
         }
         if (squads.isEmpty()) {
-            squadScrollList.addChild(new PlainText(2, 3, "\u00a77暂无班组", 0xFFABB0B3));
+            squadScrollList.addChild(new DeployWidgets.PlainText(2, 3, "\u00a77暂无班组", 0xFFABB0B3));
         }
     }
 
@@ -1680,7 +1466,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         float actionTextScale = squadActionTextScale(createW, actionDropW);
 
         // 「创建小队」/「退出小队」：永远在最左，共用同一位置与尺寸（1/5 宽 · 1 倍行高 · 无边框）
-        squadCreateLeaveButton = new EspButton(squadActionX, y, createW, rowH,
+        squadCreateLeaveButton = new DeployWidgets.EspButton(squadActionX, y, createW, rowH,
             inSquadNow ? "\u00a7c退出小队" : "\u00a7a创建小队",
             inSquadNow ? this::openLeaveSquadConfirm : this::createSquadInline);
         squadCreateLeaveButton.setTextScale(actionTextScale);   // 需求 3-2：与队伍类型按钮同一个字号
@@ -1707,7 +1493,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             squadCategoryButtonY = y;
             squadCategoryButtonW = ddW;
             squadCategoryButtonH = rowH;
-            squadCategoryDropButton = new EspButton(rightX, y, ddW, rowH,
+            squadCategoryDropButton = new DeployWidgets.EspButton(rightX, y, ddW, rowH,
                 squadCategoryDropLabel(), this::toggleSquadCategoryPopup);
             squadCategoryDropButton.setTextScale(actionTextScale);   // 需求 3-2：与创建小队同一个字号
             squadCategoryDropButton.normalColor = SQUAD_CATEGORY_BG;          // 黄色
@@ -1723,7 +1509,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } else if (leader) {
             // 解散 / 锁定（缩小 + 只显示「解散」「锁定」两词，需求 9）：排在「退出」右侧
             int disbandW = Math.max(28, (rightW - gap) / 2);
-            squadDisbandButton = new EspButton(rightX, y, disbandW, rowH,
+            squadDisbandButton = new DeployWidgets.EspButton(rightX, y, disbandW, rowH,
                 "\u00a7c解散", this::openDisbandSquadConfirm);
             squadDisbandButton.setTextScale(SQUAD_TEXT_SCALE);
             squadDisbandButton.setPlainBlack();   // 需求 4/6：无边框 + 黑色半透明底
@@ -1731,7 +1517,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
             int lockX = rightX + disbandW + gap;
             int lockW = Math.max(24, squadActionX + squadActionW - lockX);
-            squadLockButton = new EspButton(lockX, y, lockW, rowH,
+            squadLockButton = new DeployWidgets.EspButton(lockX, y, lockW, rowH,
                 locked ? "\u00a7e解锁" : "\u00a7e锁定",
                 () -> {
                     if (isMySquadLocked()) {
@@ -1862,7 +1648,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int y = py + 2;
         for (var option : options) {
             final String categoryId = option.id;
-            EspButton btn = new EspButton(px + 2, y, w - 4, rowH2 - 1,
+            DeployWidgets.EspButton btn = new DeployWidgets.EspButton(px + 2, y, w - 4, rowH2 - 1,
                 categoryLabel(option), () -> selectSquadCreateCategory(categoryId));
             btn.setTextScale(UI_TEXT_SCALE);
             btn.setCenteredText(false);
@@ -2025,7 +1811,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         vehicleInfoRoot.addChild(vehicleInfoScrollList);
 
         if (vehicleInfos.isEmpty()) {
-            EspButton empty = new EspButton(2, 0, w - 6, rowH - 1,
+            DeployWidgets.EspButton empty = new DeployWidgets.EspButton(2, 0, w - 6, rowH - 1,
                 "\u00a77当前编制暂无载具信息", null);
             empty.setTextScale(UI_TEXT_SCALE);
             empty.setCenteredText(false);
@@ -2037,7 +1823,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int rowW = w - 6 - (scrollable ? 6 : 0);   // 滚动时给滚动条留位
         int y = 0;
         for (UnifiedDeployScreenPacket.VehicleInfo vehicle : vehicleInfos) {
-            EspButton row = new EspButton(2, y, rowW, rowH - 1,
+            DeployWidgets.EspButton row = new DeployWidgets.EspButton(2, y, rowW, rowH - 1,
                 vehicleInfoRowLabel(vehicle), null);
             row.setTextScale(UI_TEXT_SCALE);
             row.setCenteredText(false);
@@ -2106,17 +1892,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return (int) Math.max(0L, base - elapsed);
     }
 
-    /**
-     * 冷却文案统一格式：分钟:秒（{@code m:ss}），秒数不足两位补零
-     * （例如 {@code 0:05}、{@code 12:05}）。技能按钮与载具行共用这一份实现。
-     */
-    static String formatCooldown(int seconds) {
-        int safe = Math.max(0, seconds);
-        int minutes = safe / 60;
-        int rest = safe % 60;
-        return minutes + ":" + (rest < 10 ? "0" : "") + rest;
-    }
-
     /** 单行文案：沿用原载具窗口的关键信息（名称 + 就绪/冷却/已满 + 刷新周期）。 */
     private String vehicleInfoRowLabel(UnifiedDeployScreenPacket.VehicleInfo vehicle) {
         int remaining = vehicleCooldownSeconds(vehicle);
@@ -2127,7 +1902,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (remaining > 0) {
             marker = "\u00a77  ";
             nameColor = "\u00a78";
-            status = "\u00a7c冷却 " + formatCooldown(remaining);
+            status = "\u00a7c冷却 " + DeploySnapshots.formatCooldown(remaining);
         } else if (vehicle.current >= vehicle.max) {
             marker = "\u00a77  ";
             nameColor = "\u00a78";
@@ -2201,15 +1976,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 需求 5：退出/解散等二次确认弹窗恢复深色底（其它面板仍保持全透明）
         squadConfirmRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, SQUAD_CONFIRM_OUTER_BG));
         squadConfirmRoot.addChild(new GuiRect(x, y, w, h, SQUAD_CONFIRM_INNER_BG));
-        squadConfirmRoot.addChild(new PlainText(x + 8, y + 6,
+        squadConfirmRoot.addChild(new DeployWidgets.PlainText(x + 8, y + 6,
             "\u00a7c\u00a7l" + squadConfirmTitle, 0xFFFFC766));
-        squadConfirmRoot.addChild(new PlainText(x + 8, y + 22,
+        squadConfirmRoot.addChild(new DeployWidgets.PlainText(x + 8, y + 22,
             EspetroAuiWidgets.trimToWidth("\u00a7f" + squadConfirmBody,
                 Math.max(60, (int) ((w - 16) / UI_TEXT_SCALE))),
             0xFFE6E6E6));
 
         int by = y + h - BTN_H - 5;
-        EspButton ok = new EspButton(x + w - 8 - 64, by, 64, BTN_H, "\u00a7c确定",
+        DeployWidgets.EspButton ok = new DeployWidgets.EspButton(x + w - 8 - 64, by, 64, BTN_H, "\u00a7c确定",
             () -> {
                 Runnable action = squadConfirmAction;
                 closeSquadConfirm();
@@ -2221,7 +1996,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         ok.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
         squadConfirmRoot.addChild(ok);
         // 默认高亮"取消"：视觉上加亮 + 置于左侧（Enter 无绑定，避免误确认）
-        EspButton cancel = new EspButton(x + 8, by, 64, BTN_H, "\u00a7e取消",
+        DeployWidgets.EspButton cancel = new DeployWidgets.EspButton(x + 8, by, 64, BTN_H, "\u00a7e取消",
             this::closeSquadConfirm);
         cancel.setTextScale(UI_TEXT_SCALE);
         // 需求 6：原本就有底色 → 只去掉边框，底色保留
@@ -2251,7 +2026,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (updated == null) {
             return;
         }
-        boolean changed = !sameSquadCategories(squadCategories, updated);
+        boolean changed = !DeploySnapshots.sameSquadCategories(squadCategories, updated);
         squadCategories.clear();
         squadCategories.addAll(updated);
         if (!changed) {
@@ -2266,34 +2041,24 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    private static boolean sameSquadCategories(
-            List<UnifiedDeployScreenPacket.SquadCategoryInfo> a,
-            List<UnifiedDeployScreenPacket.SquadCategoryInfo> b) {
-        if (a == b) {
-            return true;
-        }
-        if (a == null || b == null || a.size() != b.size()) {
-            return false;
-        }
-        for (int i = 0; i < a.size(); i++) {
-            if (!Objects.equals(a.get(i).id, b.get(i).id)
-                || !Objects.equals(a.get(i).displayName, b.get(i).displayName)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     // ---------- 职业选择（中上，5行网格）----------
-    private static final int ICON_BTN = 15;          // 按钮边长 = 2/3 * CLASS_BTN_H
+    private static final int ICON_BTN = 15;
+
+          // 按钮边长 = 2/3 * CLASS_BTN_H
     /** 需求 3-4：图标间距由 2px 收紧到 1px，职业按钮排列更紧密。 */
-    private static final int ICON_GRID_GAP = 1;      // 图标间距
+    private static final int ICON_GRID_GAP = 1;
+
+      // 图标间距
     /** 需求 3-4：行标宽度同步收紧（15px 分类图标 + 1px 间隙）。 */
-    private static final int ROW_LABEL_W = 17;       // 行标宽度（放宽以容纳职业分类图标）
+    private static final int ROW_LABEL_W = 17;
+
+       // 行标宽度（放宽以容纳职业分类图标）
     /** 需求 3-4：图标行之间的额外垂直间隙（实际排间距 = ICON_GRID_GAP + 此值 = 3px）。 */
     private static final int CLASS_ROW_EXTRA_GAP = 2;
+
     /** 需求 3-1：排间分隔线相对下一排顶部的上移量：1px 细线落在上一排图标下沿。 */
     private static final int CLASS_ROW_DIVIDER_LIFT = 3;
+
     /** 职业分类图标：命令支援 / 直接战斗 / 火力支援 / 专业兵（黄色渲染）。 */
     private static final ResourceLocation[] ROW_CATEGORY_ICONS = {
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/role_category_commandsupport.png"),
@@ -2306,7 +2071,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int sx = classAreaX, sy = classAreaY;
         int areaW = classAreaW, areaH = classAreaH;
 
-        classTitleText = new PlainText(sx, sy, buildClassTitle(), 0xFFFFAA00);
+        classTitleText = new DeployWidgets.PlainText(sx, sy, buildClassTitle(), 0xFFFFAA00);
         sectionRoot.addChild(classTitleText);
         lastDisplayedClassSwitchCooldown = getClassSwitchCooldownRemaining();
         lastClassSelectionLocationAllowed = isClassSelectionLocationAllowed();
@@ -2341,12 +2106,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (gy > 0) {
                 // 需求 3-1：恢复 1px 细线，并整体上移到上一排图标下沿
                 // （不再压在排间空隙里；颜色与横跨宽度保持不变）。
-                classScrollList.addChild(new Divider(0, gy - CLASS_ROW_DIVIDER_LIFT,
+                classScrollList.addChild(new DeployWidgets.Divider(0, gy - CLASS_ROW_DIVIDER_LIFT,
                     contentW, 0x55FFFFFF, 1));
             }
             // 该排左侧的分类图标（黄色渲染），图标之后就是这一排的职业按钮
             if (r >= 1 && r <= ROW_CATEGORY_ICONS.length) {
-                classScrollList.addChild(new CategoryIcon(ROW_CATEGORY_ICONS[r - 1], 1, gy, ICON_BTN));
+                classScrollList.addChild(new DeployWidgets.CategoryIcon(ROW_CATEGORY_ICONS[r - 1], 1, gy, ICON_BTN));
             }
             for (int i = 0; i < rowList.size(); i++) {
                 int col = i % cols;
@@ -2366,7 +2131,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             String label = "\u00a7f" + cls.name;
             String right = buildClassCountRightLabel(cls, emphasizeRed);
 
-            EspButton btn = new EspButton(0, gy, contentW, ICON_BTN + 2, label,
+            DeployWidgets.EspButton btn = new DeployWidgets.EspButton(0, gy, contentW, ICON_BTN + 2, label,
                 () -> selectClass(classes.indexOf(cls)));
             btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
             btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
@@ -2399,7 +2164,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean disabled = isClassButtonDisabled(cls);
         boolean emphasizeRed = isClassEmphasizeRed(cls, disabled);
 
-        EspButton btn = new EspButton(bx, by, size, size, "", () -> selectClass(clsIdx));
+        DeployWidgets.EspButton btn = new DeployWidgets.EspButton(bx, by, size, size, "", () -> selectClass(clsIdx));
         btn.setTransparentIdle();   // 保持完全透明（仅悬停高亮 / 选中黄底）
         btn.setIcon(RoleIconResources.resolve(cls.iconImage, cls.icon),
             RoleIconResources.TEXTURE_SIZE, RoleIconResources.TEXTURE_SIZE);
@@ -2426,7 +2191,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int areaW = deployAreaW, areaH = deployAreaH;
 
         // 标题 + 倒计时
-        sectionRoot.addChild(new PlainText(sx, sy, buildDeployTitle(), 0xFFFFAA00));
+        sectionRoot.addChild(new DeployWidgets.PlainText(sx, sy, buildDeployTitle(), 0xFFFFAA00));
 
         // 滚轮列表区域
         int listY = sy + SECTION_TITLE_H + 2;
@@ -2455,7 +2220,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (hasDeployPoint) {
             String deployLabel = "\u00a7e\u25c6 主基地 \u00a77(" + deployPointPos + ")";
             String deployCommand = "bastion deploy";
-            EspButton btn = new EspButton(
+            DeployWidgets.EspButton btn = new DeployWidgets.EspButton(
                 2, row * (BTN_H + btnSpacing), btnW, BTN_H,
                 deployLabel,
                 () -> selectDeploymentPoint(deployPointPos, deployCommand)
@@ -2472,7 +2237,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 String deployCmd = "outpost deploy " + (b.getOutpostIndex() + 1);
                 String deployLabel = "\u00a7d\u25c6 " + b.name
                     + (b.status.isBlank() ? "" : " \u00a77[" + b.status + "]");
-                EspButton selectButton = new EspButton(
+                DeployWidgets.EspButton selectButton = new DeployWidgets.EspButton(
                     2, row * (BTN_H + btnSpacing), btnW, BTN_H,
                     deployLabel,
                     () -> selectDeploymentPoint(b.pos, deployCmd)
@@ -2504,7 +2269,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 } else {
                     habReady = "HAB 可部署".equals(b.status);
                 }
-                EspButton btn = new EspButton(
+                DeployWidgets.EspButton btn = new DeployWidgets.EspButton(
                     2, row * (BTN_H + btnSpacing), btnW, BTN_H,
                     deployLabel,
                     () -> selectDeploymentPoint(b.pos, cmd)
@@ -2535,7 +2300,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             row++;
         }
 
-        confirmDeployButton = new EspButton(
+        confirmDeployButton = new DeployWidgets.EspButton(
             sx, sy + areaH - confirmH, areaW, confirmH,
             "\u00a77选择部署点",
             this::confirmDeploymentPoint
@@ -2545,7 +2310,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(confirmDeployButton);
     }
 
-    private void registerDeployButton(EspButton button, String positionText, String command,
+    private void registerDeployButton(DeployWidgets.EspButton button, String positionText, String command,
                                       String baseLabel, long nextWaveAtEpochMs, String nameCore,
                                       int waveSeconds) {
         deployScrollList.addChild(button);
@@ -2594,7 +2359,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         return " " + "\u00a7" + "7[启用中 " + remaining + "s]";
     }
 
-    private String buildLiveDeployBaseLabel(EspButton button, String fallbackBase) {
+    private String buildLiveDeployBaseLabel(DeployWidgets.EspButton button, String fallbackBase) {
         Long waveAt = deployButtonNextWaveAt.get(button);
         String nameCore = deployButtonNameCores.get(button);
         if (waveAt == null || waveAt <= 0L || nameCore == null) {
@@ -2605,7 +2370,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void refreshRallyWaveLabels() {
-        for (EspButton button : deployButtons) {
+        for (DeployWidgets.EspButton button : deployButtons) {
             Long waveAt = deployButtonNextWaveAt.get(button);
             if (waveAt == null || waveAt <= 0L) {
                 continue;
@@ -2622,8 +2387,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private void refreshHabActivationLabels() {
         long now = System.currentTimeMillis();
-        for (Map.Entry<EspButton, Long> entry : deployButtonHabAvailableAt.entrySet()) {
-            EspButton button = entry.getKey();
+        for (Map.Entry<DeployWidgets.EspButton, Long> entry : deployButtonHabAvailableAt.entrySet()) {
+            DeployWidgets.EspButton button = entry.getKey();
             long habAt = entry.getValue();
             int total = deployButtonHabActivationSeconds.getOrDefault(button, 0);
             String nameCore = deployButtonNameCores.get(button);
@@ -2677,7 +2442,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return;
         }
         // 冷却中的 Rally 仍可确认排队，但确认按钮保持冷却文案。
-        double[] coordinates = parseDeploymentCoordinates(pendingDeployPosition);
+        double[] coordinates = DeploySnapshots.parseDeploymentCoordinates(pendingDeployPosition);
         if (coordinates != null) {
             HcrTacticalMapBridge.setSelectedDeploymentPoint(coordinates[0], coordinates[1]);
         } else {
@@ -2702,8 +2467,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    private EspButton findDeployButton(String positionText, String command) {
-        for (EspButton button : deployButtons) {
+    private DeployWidgets.EspButton findDeployButton(String positionText, String command) {
+        for (DeployWidgets.EspButton button : deployButtons) {
             if (Objects.equals(deployButtonPositions.get(button), positionText)
                 && Objects.equals(deployButtonCommands.get(button), command)) {
                 return button;
@@ -2716,7 +2481,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (pendingDeployCommand == null || !pendingDeployCommand.startsWith("bastion select ")) {
             return false;
         }
-        EspButton button = findDeployButton(pendingDeployPosition, pendingDeployCommand);
+        DeployWidgets.EspButton button = findDeployButton(pendingDeployPosition, pendingDeployCommand);
         if (button == null) {
             return false;
         }
@@ -2736,7 +2501,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             confirmDeployButton.setEnabled(false);
             return;
         }
-        EspButton button = findDeployButton(pendingDeployPosition, pendingDeployCommand);
+        DeployWidgets.EspButton button = findDeployButton(pendingDeployPosition, pendingDeployCommand);
         Long waveAt = button == null ? null : deployButtonNextWaveAt.get(button);
         int total = button == null ? 0 : deployButtonWaveSeconds.getOrDefault(button, 0);
         if (waveAt != null && waveAt > System.currentTimeMillis()) {
@@ -2752,7 +2517,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void updateSelectedDeploymentPoint(String positionText) {
-        double[] coordinates = parseDeploymentCoordinates(positionText);
+        double[] coordinates = DeploySnapshots.parseDeploymentCoordinates(positionText);
         if (coordinates != null) {
             HcrTacticalMapBridge.setSelectedDeploymentPoint(coordinates[0], coordinates[1]);
         } else {
@@ -2773,24 +2538,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             confirmDeployButton.setLabel("\u00a77选择部署点");
             confirmDeployButton.setEnabled(false);
         }
-    }
-
-    private static double[] parseDeploymentCoordinates(String positionText) {
-        if (positionText == null || positionText.isBlank()) {
-            return null;
-        }
-
-        Matcher matcher = COORDINATE_PATTERN.matcher(positionText);
-        double[] values = new double[3];
-        int count = 0;
-        while (matcher.find() && count < values.length) {
-            try {
-                values[count++] = Double.parseDouble(matcher.group());
-            } catch (NumberFormatException ignored) {
-                return null;
-            }
-        }
-        return count >= 3 ? new double[] {values[0], values[2]} : null;
     }
 
     private String buildRedeployLabel() {
@@ -2820,7 +2567,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (skillSignature != lastSkillSignature) {
             invalidateSections(Section.MAP_CONTROLS);
         } else {
-            for (SkillButton button : skillButtons) {
+            for (DeployWidgets.SkillButton button : skillButtons) {
                 button.refresh();
             }
         }
@@ -2891,148 +2638,12 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             if (y + SKILL_BTN_H > maxY) {
                 break;   // 放不下就不再往下堆（技能数量通常 3~5 个）
             }
-            SkillButton button = new SkillButton(x, y, SKILL_COL_W, SKILL_BTN_H, skill);
+            DeployWidgets.SkillButton button = new DeployWidgets.SkillButton(x, y, SKILL_COL_W, SKILL_BTN_H, skill);
             skillButtons.add(button);
             sectionRoot.addChild(button);
             y += SKILL_BTN_H + SKILL_BTN_GAP;
         }
         lastSkillSignature = TacticalRadialController.skillSnapshotSignature();
-    }
-
-    /** 技能按钮：自绘（半透明灰底 + 白边 + 居中图标/名称/冷却）。 */
-    private static final class SkillButton extends GuiElement {
-        private static final int ICON_SIZE = 16;
-        private final String skillId;
-        private final String skillName;
-        private final ResourceLocation skillIcon;
-        private int cooldownSeconds;
-        /** 防抖：同一次按住/拖动/连点只算一次，避免误触连发火炮。 */
-        private long lastActivateMs;
-
-        SkillButton(int x, int y, int width, int height, CommanderSkillManager.SkillView skill) {
-            super(x, y, width, height);
-            this.skillId = skill.id();
-            this.skillName = skill.displayName();
-            this.skillIcon = TacticalRadialController.skillIcon(skill);
-            refresh();
-        }
-
-        /** 每秒调用：取全局锚点推算出的剩余秒数（重建菜单也不会重新计时）。 */
-        void refresh() {
-            cooldownSeconds = isDebugNoCooldown()
-                ? 0 : TacticalRadialController.skillCooldownSeconds(skillId);
-        }
-
-        /** 部署阶段所有技能不可用（服务端同样会拒绝）。 */
-        private static boolean isDeployPhase() {
-            return ClientGameState.getCurrentPhase() == GamePhase.DEPLOYING;
-        }
-
-        /** 调试模式（/gamerule espetroSkillNoCooldown true）：忽略冷却。 */
-        private static boolean isDebugNoCooldown() {
-            net.minecraft.client.multiplayer.ClientLevel level = Minecraft.getInstance().level;
-            return level != null && org.espetro.debug.EspetroDebugRules
-                .skillNoCooldown(level.getGameRules());
-        }
-
-        private boolean isUsable() {
-            return (cooldownSeconds <= 0 || isDebugNoCooldown())
-                && !CommanderSkillTargetRequest.isPending(skillId)
-                && !isDeployPhase();
-        }
-
-        @Override
-        public boolean onMouseClick(int mouseX, int mouseY, int button) {
-            // 关键：GuiElement 不会替叶子元素做范围判定（它只转发给子元素），
-            // 所以必须自己判断命中，否则这个按钮会吞掉整个界面的左键点击。
-            if (mouseX < getX() || mouseX >= getX() + getWidth()
-                || mouseY < getY() || mouseY >= getY() + getHeight()) {
-                return false;
-            }
-            if (button != 0 || !isUsable()) {
-                return false;
-            }
-            long now = System.currentTimeMillis();
-            if (now - lastActivateMs < 600L) {
-                return true;   // 600ms 内的重复触发直接吞掉
-            }
-            lastActivateMs = now;
-            // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
-            // 指挥官直接在这张地图上操作即可。
-            CommanderSkillTargetRequest.arm(skillId);
-            ClientRequests.sendCommanderSkillActivate(skillId);
-            return true;
-        }
-
-        @Override
-        public void draw(GuiGraphics graphics, int x, int y, int width, int height,
-                         int mouseX, int mouseY, float partialTick) {
-            if (!isVisible()) {
-                return;
-            }
-            int px = x + getX();
-            int py = y + getY();
-            int w = getWidth();
-            int h = getHeight();
-            boolean deployLocked = isDeployPhase();
-            boolean usable = isUsable();
-            boolean pending = CommanderSkillTargetRequest.isPending(skillId);
-            boolean hover = usable && mouseX >= px && mouseX < px + w
-                && mouseY >= py && mouseY < py + h;
-
-            // 待用（已点击、尚未使用）整体变黄；冷却中压暗；可用为半透明灰底
-            // 需求 6：同属按钮且原本就有底色 → 只去掉四周描边，底色保留
-            int fill;
-            if (pending) {
-                fill = hover ? 0xCC6E5A12 : 0xBB5C4A0E;
-            } else if (usable) {
-                fill = hover ? 0xAA3C4247 : 0x99202427;
-            } else {
-                fill = 0x881A1D1F;
-            }
-            graphics.fill(px, py, px + w, py + h, fill);
-
-            var font = Minecraft.getInstance().font;
-            int centerX = px + w / 2;
-
-            // ① 技能图标（居中）
-            if (skillIcon != null) {
-                float iconAlpha = usable ? 1f : 0.45f;
-                graphics.setColor(1f, 1f, 1f, iconAlpha);
-                graphics.blit(skillIcon, centerX - ICON_SIZE / 2, py + 4, 0, 0,
-                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
-                graphics.setColor(1f, 1f, 1f, 1f);
-            }
-
-            // ② 技能名称（居中；列窄时自动缩小以完整显示）
-            int nameColor = pending ? 0xFFFFE066 : usable ? 0xFFFFFFFF : 0xFF8B9099;
-            int nameWidth = font.width(skillName);
-            float nameScale = nameWidth + 6 <= w ? 1.0f : Math.max(0.5f, (w - 6f) / nameWidth);
-            graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 22, 0.0D);
-            graphics.pose().scale(nameScale, nameScale, 1.0f);
-            graphics.drawCenteredString(font, skillName, 0, 0, nameColor);
-            graphics.pose().popPose();
-
-            // ③ 冷却 / 可用（居中，字体更小）
-            String cooldownText = deployLocked ? "不可用"
-                : pending ? "选点中"
-                : usable ? "可用" : formatCooldown(cooldownSeconds);
-            int cooldownColor = deployLocked ? 0xFF8B9099
-                : usable ? 0xFF7FD98F : 0xFFB9BEC6;
-            graphics.pose().pushPose();
-            graphics.pose().translate(centerX, py + 37, 0.0D);
-            graphics.pose().scale(0.75f, 0.75f, 1.0f);
-            graphics.drawCenteredString(font, cooldownText, 0, 0, cooldownColor);
-            graphics.pose().popPose();
-
-            super.draw(graphics, x, y, width, height, mouseX, mouseY, partialTick);
-        }
-
-        /** 冷却文案统一走外层 UnifiedDeployScreen#formatCooldown（m:ss）。 */
-        private static String formatCooldown(int seconds) {
-            return UnifiedDeployScreen.formatCooldown(seconds);
-        }
     }
 
     private void buildMapPanel(GuiElement sectionRoot) {
@@ -3044,7 +2655,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         governanceVoteButtons.clear();
         int bx = mapX + 5;
         int by = mapY + mapH - BTN_H - 4;
-        EspButton score = new EspButton(bx, by, 64, BTN_H, "\u00a76玩家分数板",
+        DeployWidgets.EspButton score = new DeployWidgets.EspButton(bx, by, 64, BTN_H, "\u00a76玩家分数板",
             () -> Minecraft.getInstance().setScreen(new MatchScoreboardScreen(this)));
         score.setTextScale(UI_TEXT_SCALE);
         score.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
@@ -3056,7 +2667,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         boolean idle = state == null || "IDLE".equals(state.state);
 
         if (battle && idle) {
-            EspButton impeach = new EspButton(nextX, by, 56, BTN_H, "\u00a7c发起弹劾",
+            DeployWidgets.EspButton impeach = new DeployWidgets.EspButton(nextX, by, 56, BTN_H, "\u00a7c发起弹劾",
                 () -> ClientRequests.sendGovernanceAction(
                     GovernanceActionPacket.Action.START_IMPEACHMENT, null));
             impeach.setTextScale(UI_TEXT_SCALE);
@@ -3077,7 +2688,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         // 重新部署（红色，载具信息右侧）：立刻阵亡并重选部署点；
         // 对战阶段按阵亡规则扣兵力，部署阶段不扣。需二次确认。
-        EspButton redeploy = new EspButton(nextX, by, 72, BTN_H, "\u00a7f\u00a7l重新部署",
+        DeployWidgets.EspButton redeploy = new DeployWidgets.EspButton(nextX, by, 72, BTN_H, "\u00a7f\u00a7l重新部署",
             this::openRedeployConfirm);
         redeploy.setTextScale(UI_TEXT_SCALE);
         // 需求 6：原本就有底色（红色）→ 只去掉边框，底色保留
@@ -3095,7 +2706,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 不再整块盖住战术地图；关闭后最小化为「载具信息」右侧的按钮，点击重新打开。
         boolean impeachment = "IMPEACHMENT_VOTE".equals(state.state);
         if (governanceWindowMinimized) {
-            EspButton restore = new EspButton(nextX, by, 60, BTN_H,
+            DeployWidgets.EspButton restore = new DeployWidgets.EspButton(nextX, by, 60, BTN_H,
                 impeachment ? "\u00a7c弹劾投票" : "\u00a7a指挥官补位",
                 () -> {
                     governanceWindowMinimized = false;
@@ -3115,7 +2726,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         vehicleInfoButtonY = y;
         vehicleInfoButtonW = 64;
         vehicleInfoButtonH = BTN_H;
-        vehicleInfoDropButton = new EspButton(x, y, vehicleInfoButtonW, vehicleInfoButtonH,
+        vehicleInfoDropButton = new DeployWidgets.EspButton(x, y, vehicleInfoButtonW, vehicleInfoButtonH,
             vehicleInfoDropLabel(), this::toggleVehicleInfoPopup);
         vehicleInfoDropButton.setTextScale(UI_TEXT_SCALE);
         vehicleInfoDropButton.setPlainBlack();   // 需求 6：无边框 + 黑半透底
@@ -3139,15 +2750,15 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         sectionRoot.addChild(new GuiRect(x - 3, y - 3, w + 6, h + 6, 0x00000000));
         sectionRoot.addChild(new GuiRect(x, y, w, h, 0x00000000));
 
-        sectionRoot.addChild(new PlainText(x + 6, y + 4,
+        sectionRoot.addChild(new DeployWidgets.PlainText(x + 6, y + 4,
             "\u00a76\u00a7l" + (impeachment ? "弹劾投票" : volunteerPhase ? "指挥官空缺" : "空缺公投"),
             0xFFFFC766));
-        governanceTimerText = new PlainText(x + 6, y + 17,
+        governanceTimerText = new DeployWidgets.PlainText(x + 6, y + 17,
             "\u00a7e剩余 " + ClientGovernanceState.secondsLeft(state) + "s", 0xFFFFD27A);
         sectionRoot.addChild(governanceTimerText);
 
         // 关闭：最小化为「载具信息」右侧按钮
-        EspButton close = new EspButton(x + w - 36, y + 3, 32, BTN_H, "\u00a7c关闭",
+        DeployWidgets.EspButton close = new DeployWidgets.EspButton(x + w - 36, y + 3, 32, BTN_H, "\u00a7c关闭",
             () -> {
                 governanceWindowMinimized = true;
                 invalidateSections(Section.MAP_CONTROLS);
@@ -3167,7 +2778,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             addGovernanceVoteButton(sectionRoot, state, state.challenger, "挑战者",
                 contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
         } else if (volunteerPhase) {
-            EspButton volunteer = new EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
+            DeployWidgets.EspButton volunteer = new DeployWidgets.EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
                 () -> ClientRequests.sendGovernanceAction(
                     GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
             volunteer.setTextScale(UI_TEXT_SCALE);
@@ -3178,7 +2789,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 String names = state.volunteers.stream()
                     .map(MatchScoreboardScreen::nameFor)
                     .reduce((a, b) -> a + ", " + b).orElse("");
-                sectionRoot.addChild(new PlainText(contentX, cy,
+                sectionRoot.addChild(new DeployWidgets.PlainText(contentX, cy,
                     EspetroAuiWidgets.trimToWidth("\u00a77已志愿: " + names,
                         Math.max(8, (int) (contentW / UI_TEXT_SCALE))),
                     0xFFB0B0B0));
@@ -3200,8 +2811,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                                          int x, int y, int width,
                                          GovernanceActionPacket.Action action) {
         if (candidate == null) return;
-        EspButton button = new EspButton(x, y, Math.max(80, width), BTN_H,
-            buildVoteButtonLabel(state, candidate, prefix),
+        DeployWidgets.EspButton button = new DeployWidgets.EspButton(x, y, Math.max(80, width), BTN_H,
+            DeploySnapshots.buildVoteButtonLabel(state, candidate, prefix),
             () -> ClientRequests.sendGovernanceAction(action, candidate));
         button.setTextScale(UI_TEXT_SCALE);
         button.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
@@ -3225,14 +2836,14 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         int barY = this.height - STATUS_BAR_H;
         sectionRoot.addChild(new GuiRect(0, barY, this.width, STATUS_BAR_H, CHROME_BG));
 
-        statusText = new PlainText(5, barY + 3, buildStatusText(), BTN_TEXT);
+        statusText = new DeployWidgets.PlainText(5, barY + 3, buildStatusText(), BTN_TEXT);
         sectionRoot.addChild(statusText);
 
         boolean hasOutpost = bastions.stream().anyMatch(UnifiedDeployScreenPacket.BastionItem::isOutpost);
         if (deployTimeRemaining >= 0 && "DEFEND".equals(team) && hasOutpost) {
             // 「前哨重部署」：比地图页脚的通用「重新部署」更长，宽度放宽避免文案被裁
             int redeployW = 78;
-            outpostRedeployButton = new EspButton(
+            outpostRedeployButton = new DeployWidgets.EspButton(
                 this.width - redeployW - 4, barY + 1, redeployW, STATUS_BAR_H - 2,
                 buildRedeployLabel(),
                 () -> { var p = Minecraft.getInstance().player; if (p != null) p.connection.sendCommand("outpost redeploy"); }
@@ -3331,7 +2942,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             clearPendingDeploySelection();
         }
         boolean hasClass = hasLocalPlayerSelectedClass();
-        for (EspButton button : deployButtons) {
+        for (DeployWidgets.EspButton button : deployButtons) {
             String command = deployButtonCommands.get(button);
             boolean ready = isDeployButtonSelectable(command);
             button.setEnabled(waitingForDeploySelection && ready && hasClass);
@@ -3382,7 +2993,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     private void refreshDeployButtonLabels() {
-        for (EspButton button : deployButtons) {
+        for (DeployWidgets.EspButton button : deployButtons) {
             String baseLabel = deployButtonBaseLabels.get(button);
             if (baseLabel == null) {
                 continue;
@@ -3439,7 +3050,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             graphics.fill(mapX, mapY, mapX + mapW, mapY + viewportH, footerBg);
         }
         // 地图/预览可能改动全局 RenderSystem；复位后再画 MUtil 树，避免左栏整页闪。
-        resetGuiRenderState(graphics);
+        DeployWidgets.resetGuiRenderState(graphics);
         // 再盖一次左/中列，挡住地图 scissor 外溢。
         graphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, leftBg);
         graphics.fill(centerX, centerY, centerX + centerW, centerY + centerH, centerBg);
@@ -3491,22 +3102,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    private static void resetGuiRenderState(GuiGraphics graphics) {
-        graphics.flush();
-        graphics.setColor(1f, 1f, 1f, 1f);
-        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        com.mojang.blaze3d.systems.RenderSystem.enableBlend();
-        com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
-        com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
-        com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
-        com.mojang.blaze3d.systems.RenderSystem.disableCull();
-    }
-
     @Override
     protected void renderAfterMenu(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         computeRegions();
 
-        // 在 GUI 元素树绘制完成后解析悬停目标，此时 EspButton.hovered 已被更新。
+        // 在 GUI 元素树绘制完成后解析悬停目标，此时 DeployWidgets.EspButton.hovered 已被更新。
         updatePreviewTarget(mouseX, mouseY);
         if (activeGovernance() != null && !"IDLE".equals(activeGovernance().state)) {
             graphics.renderOutline(mapX, mapY, mapW, mapH, 0x805B6260);
@@ -3529,7 +3129,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             viewportH,
             partialTick
         );
-        resetGuiRenderState(graphics);
+        DeployWidgets.resetGuiRenderState(graphics);
         renderMapViewportBorder(graphics, viewportH);
     }
 
@@ -3566,7 +3166,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         } finally {
             graphics.disableScissor();
         }
-        resetGuiRenderState(graphics);
+        DeployWidgets.resetGuiRenderState(graphics);
         renderMapViewportBorder(graphics, viewportH);
     }
 
@@ -3615,7 +3215,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 newVariantId = resolveDefaultVariantId(cls);
             }
         } else {
-            for (EspButton btn : classButtons) {
+            for (DeployWidgets.EspButton btn : classButtons) {
                 if (btn.hovered) {
                     Integer idx = classButtonToClassIndex.get(btn);
                     if (idx != null && idx >= 0 && idx < classes.size()) {
@@ -3643,13 +3243,13 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
      * 返回 -1 表示鼠标不在任何变体行上（在标题、空白、关闭按钮或弹窗外）。
      */
     private int computeVariantPopupHoveredRow(int mouseX, int mouseY) {
-        if (!inside(mouseX, mouseY, variantPopupX, variantPopupY,
+        if (!DeploySnapshots.inside(mouseX, mouseY, variantPopupX, variantPopupY,
             VARIANT_POPUP_W, variantPopupH)) {
             return -1;
         }
         int closeX = variantPopupX + VARIANT_POPUP_W - 16;
         int closeY = variantPopupY + 2;
-        if (inside(mouseX, mouseY, closeX, closeY, 13, 13)) {
+        if (DeploySnapshots.inside(mouseX, mouseY, closeX, closeY, 13, 13)) {
             return -1; // 关闭按钮
         }
         if (mouseY < variantPopupY + VARIANT_HEADER_H) {
@@ -3721,7 +3321,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private void renderClassTooltip(GuiGraphics graphics, int mx, int my) {
         if (variantPopupClassIndex >= 0) return;
-        for (EspButton btn : classButtons) {
+        for (DeployWidgets.EspButton btn : classButtons) {
             if (!btn.hovered) continue;
             Integer clsIdx = classButtonToClassIndex.get(btn);
             if (clsIdx == null || clsIdx < 0 || clsIdx >= classes.size()) continue;
@@ -3793,7 +3393,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int logicalWidth = Math.max(8, (int) ((pw - 7) / TOOLTIP_TEXT_SCALE));
             int ty = py + 3;
             for (String line : lines) {
-                drawScaledString(graphics,
+                DeployWidgets.drawScaledString(graphics,
                     EspetroAuiWidgets.trimToWidth(line, logicalWidth),
                     px + 4, ty, BTN_TEXT, TOOLTIP_TEXT_SCALE);
                 ty += lineH;
@@ -3817,7 +3417,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         int closeX = variantPopupX + VARIANT_POPUP_W - 16;
         int closeY = variantPopupY + 2;
-        boolean closeHovered = inside(mouseX, mouseY, closeX, closeY, 13, 13);
+        boolean closeHovered = DeploySnapshots.inside(mouseX, mouseY, closeX, closeY, 13, 13);
         graphics.fill(closeX, closeY, closeX + 13, closeY + 13,
             closeHovered ? 0xFFD05A5A : 0xFF553535);
         graphics.drawCenteredString(this.font, Component.literal("§fX"), closeX + 6, closeY + 2, BTN_TEXT);
@@ -3835,7 +3435,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             // 父职业名额已满时，所有变体均不可新选；strict 时再叠加变体自身上限。
             boolean parentFull = isClassButtonDisabled(cls);
             boolean full = parentFull || (cls.strictCount && count >= variant.maxPlayers);
-            boolean hovered = inside(mouseX, mouseY, rowX, rowY, rowW, VARIANT_ROW_H - 1);
+            boolean hovered = DeploySnapshots.inside(mouseX, mouseY, rowX, rowY, rowW, VARIANT_ROW_H - 1);
             int fill = full ? 0xD02B2025 : hovered ? 0xE0435145 : 0xD01B1E20;
             // 需求 6：变体行同属按钮且原本就有底色 → 只去掉边框（悬停仍有底色高亮）
             graphics.fill(rowX, rowY, rowX + rowW, rowY + VARIANT_ROW_H - 1, fill);
@@ -3877,7 +3477,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         lastMouseY = (int) my;
         // 点击内联名称输入框以外的地方：取消它的输入焦点
         if (squadInlineNameField != null && squadInlineNameField.isTyping()
-            && !inside((int) mx, (int) my,
+            && !DeploySnapshots.inside((int) mx, (int) my,
                 squadInlineNameField.getX(), squadInlineNameField.getY(),
                 squadInlineNameField.getWidth(), squadInlineNameField.getHeight())) {
             squadInlineNameField.setTyping(false);
@@ -3904,7 +3504,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (hasSquadConfirm()) {
             return true;
         }
-        if (hasVariantPopup() && inside((int) mx, (int) my,
+        if (hasVariantPopup() && DeploySnapshots.inside((int) mx, (int) my,
             variantPopupX, variantPopupY, VARIANT_POPUP_W, variantPopupH)) {
             int maxScroll = Math.max(0,
                 classes.get(variantPopupClassIndex).variants.size() - VARIANT_MAX_VISIBLE);
@@ -3959,7 +3559,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     // ==================== 业务逻辑 ====================
 
-
     /** 是否已加入班组（mySquadId 有效）。 */
     private boolean inSquad() {
         return mySquadId >= 0;
@@ -4006,7 +3605,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return "请先加入班组小队后再选择职业。";
         }
         // 装备完全解锁模式：不再报人数类拒绝原因
-        if (freeUnlockMode) {
+        if (DeploySnapshots.isFreeUnlockMode()) {
             return "";
         }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
@@ -4057,23 +3656,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     /**
      * 未入队全部禁用；入队后 team_count 看小队满，非 team_count 看编制总限 + max_per_squad。
      */
-    /** 服务端下发的"装备完全解锁模式"状态（包级字段）。 */
-    private static volatile boolean freeUnlockMode;
-
-    /**
-     * 更新完全解锁状态。
-     *
-     * @return 状态是否发生变化（变化时调用方应刷新职业按钮）
-     */
-    public static boolean applyFreeUnlock(boolean value) {
-        if (freeUnlockMode == value) return false;
-        freeUnlockMode = value;
-        return true;
-    }
-
-    public static boolean isFreeUnlockMode() {
-        return freeUnlockMode;
-    }
 
     /** 开关状态变化后刷新职业格子（置灰/提示文案）。 */
     public void refreshForFreeUnlock() {
@@ -4090,7 +3672,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             return true;
         }
         // 装备完全解锁模式：人数类限制一律放行（位置/冷却/入队仍如上保留）
-        if (freeUnlockMode) {
+        if (DeploySnapshots.isFreeUnlockMode()) {
             return false;
         }
         if (cls.teammatesNeed > 0 && mySquadSize() < cls.teammatesNeed) {
@@ -4182,7 +3764,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     private void refreshClassButtons() {
         boolean coolingDown = getClassSwitchCooldownRemaining() > 0;
-        for (EspButton btn : classButtons) {
+        for (DeployWidgets.EspButton btn : classButtons) {
             Integer clsIdx = classButtonToClassIndex.get(btn);
             if (clsIdx == null || clsIdx < 0 || clsIdx >= classes.size()) continue;
             var cls = classes.get(clsIdx);
@@ -4307,11 +3889,11 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         int closeX = variantPopupX + VARIANT_POPUP_W - 16;
         int closeY = variantPopupY + 2;
-        if (inside(mouseX, mouseY, closeX, closeY, 13, 13)) {
+        if (DeploySnapshots.inside(mouseX, mouseY, closeX, closeY, 13, 13)) {
             closeVariantPopup();
             return true;
         }
-        if (!inside(mouseX, mouseY, variantPopupX, variantPopupY,
+        if (!DeploySnapshots.inside(mouseX, mouseY, variantPopupX, variantPopupY,
             VARIANT_POPUP_W, variantPopupH)) {
             closeVariantPopup();
             return true;
@@ -4477,7 +4059,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             FIRETEAM_CONTEXT_W, menuH, 0xF0111418));
         int y = fireteamContextY + 3;
         for (FireteamContextEntry entry : fireteamContextEntries) {
-            EspButton button = new EspButton(
+            DeployWidgets.EspButton button = new DeployWidgets.EspButton(
                 fireteamContextX + 2, y,
                 FIRETEAM_CONTEXT_W - 4, FIRETEAM_CONTEXT_ROW_H - 1,
                 entry.label, entry.action);
@@ -4488,10 +4070,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             fireteamContextRoot.addChild(button);
             y += FIRETEAM_CONTEXT_ROW_H;
         }
-    }
-
-    private static boolean inside(int x, int y, int left, int top, int width, int height) {
-        return x >= left && x < left + width && y >= top && y < top + height;
     }
 
     @Override
