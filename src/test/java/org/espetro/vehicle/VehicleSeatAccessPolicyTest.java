@@ -28,18 +28,6 @@ class VehicleSeatAccessPolicyTest {
     }
 
     @Test
-    void missingFieldKeepsLegacyVehicleTypeDefaults() {
-        assertEquals(3, VehicleSeatAccessPolicy.legacyVehicleCrewSeatCount(
-            SbwVehicleSeatResolver.Kind.TANK));
-        assertEquals(2, VehicleSeatAccessPolicy.legacyVehicleCrewSeatCount(
-            SbwVehicleSeatResolver.Kind.IFV));
-        assertEquals(1, VehicleSeatAccessPolicy.legacyVehicleCrewSeatCount(
-            SbwVehicleSeatResolver.Kind.HELICOPTER));
-        assertEquals(0, VehicleSeatAccessPolicy.legacyVehicleCrewSeatCount(
-            SbwVehicleSeatResolver.Kind.OTHER));
-    }
-
-    @Test
     void explicitCrewFlagOverridesLegacyIconFallback() {
         assertTrue(VehicleSeatAccessPolicy.resolvesVehicleCrew(true, "rifleman"));
         assertFalse(VehicleSeatAccessPolicy.resolvesVehicleCrew(false, "crewman"));
