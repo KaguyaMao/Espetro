@@ -47,7 +47,7 @@ public final class BattlefieldMiningHandler {
      */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onHarvestCheck(PlayerEvent.HarvestCheck event) {
-        if (GameStateManager.getInstance().shouldRestrictBattlefieldMining(event.getEntity())) {
+        if (PlayerHoldStates.shouldRestrictBattlefieldMining(event.getEntity())) {
             event.setCanHarvest(false);
         }
     }
@@ -55,7 +55,7 @@ public final class BattlefieldMiningHandler {
     /** 非白名单方块挖掘速度归零（客户端裂纹与服务端进度一致无法推进）；白名单保留原版速度。 */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        if (!GameStateManager.getInstance().shouldRestrictBattlefieldMining(event.getEntity())) {
+        if (!PlayerHoldStates.shouldRestrictBattlefieldMining(event.getEntity())) {
             return;
         }
         if (minableInBattle(event.getState())) {
@@ -69,7 +69,7 @@ public final class BattlefieldMiningHandler {
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
         if (player == null
-            || !GameStateManager.getInstance().shouldRestrictBattlefieldMining(player)) {
+            || !PlayerHoldStates.shouldRestrictBattlefieldMining(player)) {
             return;
         }
         if (minableInBattle(event.getState())) {

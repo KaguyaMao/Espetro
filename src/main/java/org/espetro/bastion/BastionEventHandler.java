@@ -27,6 +27,7 @@ import org.espetro.Espetro;
 import org.espetro.team.ClassCountManager;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
+import org.espetro.team.PlayerHoldStates;
 import org.espetro.team.SquadManager;
 import org.espetro.team.SpawnPointConfig;
 import org.espetro.team.TeamPackManager;
@@ -829,13 +830,13 @@ public class BastionEventHandler {
     private static void maintainHoldWithoutTeleport(
             ServerPlayer player, boolean forceBlindResync, boolean adventureDeployWaiting) {
         if (adventureDeployWaiting) {
-            GameStateManager.enforceAdventureBlindness(player, forceBlindResync);
+            PlayerHoldStates.enforceAdventureBlindness(player, forceBlindResync);
         } else {
-            GameStateManager.enforceSpectatorBlindness(player, forceBlindResync);
+            PlayerHoldStates.enforceSpectatorBlindness(player, forceBlindResync);
         }
     }
 
     private static void applyWaitingDeployState(ServerPlayer player) {
-        GameStateManager.getInstance().applyDeploymentWaitingState(player);
+        PlayerHoldStates.applyDeploymentWaitingState(player);
     }
 }

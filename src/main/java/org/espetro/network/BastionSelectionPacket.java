@@ -10,6 +10,7 @@ import org.espetro.bastion.BastionManager;
 import org.espetro.team.ClassCountManager;
 import org.espetro.team.GameStateManager;
 import org.espetro.team.TeamPackManager;
+import org.espetro.team.PlayerHoldStates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +168,7 @@ public class BastionSelectionPacket {
             127,
             false, false, false
         ));
-        GameStateManager.getInstance().applyBattlefieldMiningRestriction(player);
+        PlayerHoldStates.applyBattlefieldMiningRestriction(player);
         GameStateManager.getInstance().onMidGameDeployComplete(player);
         player.sendSystemMessage(Component.literal("§a已在 §e" + bastion.getName() + " §a复活！"));
     }

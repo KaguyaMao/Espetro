@@ -1690,7 +1690,7 @@ public class BastionManager {
             127, // 最大等级
             false, false, false
         ));
-        org.espetro.team.GameStateManager.getInstance().applyBattlefieldMiningRestriction(player);
+        org.espetro.team.PlayerHoldStates.applyBattlefieldMiningRestriction(player);
 
         player.sendSystemMessage(net.minecraft.network.chat.Component.literal("§a已在主基地复活！"));
 

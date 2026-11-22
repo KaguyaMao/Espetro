@@ -643,7 +643,7 @@ public class TeamPackManager {
             127,
             false, false, false
         ));
-        org.espetro.team.GameStateManager.getInstance().applyBattlefieldMiningRestriction(player);
+        org.espetro.team.PlayerHoldStates.applyBattlefieldMiningRestriction(player);
         player.sendSystemMessage(Component.literal("§a已随 Rally 部署复活！"));
         // 战局中加入：真正落地后补职业选择。
         // 不再 sendUnifiedDeployScreen：落地后重开 J 面板会整页闪且一直挡视线；需要时按 J。

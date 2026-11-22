@@ -64,6 +64,7 @@ import org.espetro.mapconfig.ExternalConfigBootstrap;
 import org.espetro.stats.PlayerMatchStatsManager;
 import org.espetro.governance.CommanderGovernanceManager;
 import org.espetro.team.MapVoteManager;
+import org.espetro.team.PlayerHoldStates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -296,7 +297,7 @@ public class Espetro {
 
             if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                 // 先强制主城再清背包/阶段逻辑，避免登录瞬间仍停在战场维度
-                GameStateManager.getInstance().forcePlayerToHub(serverPlayer);
+                PlayerHoldStates.forcePlayerToHub(serverPlayer);
                 clearPlayerInventory(serverPlayer);
 
                 GamePhase phase = GameStateManager.getInstance().getCurrentPhase();
@@ -320,7 +321,7 @@ public class Espetro {
             // 玩家离开时清空装备并立即写入 playerdata，避免重进时恢复退出前的职业装备。
             if (event.getEntity() instanceof ServerPlayer serverPlayer) {
                 // 退服前强制写回主城坐标与重生点（主城维度不重置）
-                GameStateManager.getInstance().forcePlayerToHub(serverPlayer);
+                PlayerHoldStates.forcePlayerToHub(serverPlayer);
                 org.espetro.network.VehicleSupplyActionPacket.clearPlayerRateLimit(
                     serverPlayer.getUUID());
                 org.espetro.bastion.FortificationManager.getInstance()
@@ -498,9 +499,9 @@ public class Espetro {
         public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
             if (event.getEntity() instanceof ServerPlayer serverPlayer) {
                 // 主城重生：所有人先冒险；非管理员再强制锁定
-                GameStateManager.getInstance().applyHubAdventureOnEnter(serverPlayer);
-                GameStateManager.getInstance().enforceHubAdventure(serverPlayer);
-                GameStateManager.getInstance().applyBattlefieldMiningRestriction(serverPlayer);
+                PlayerHoldStates.applyHubAdventureOnEnter(serverPlayer);
+                PlayerHoldStates.enforceHubAdventure(serverPlayer);
+                PlayerHoldStates.applyBattlefieldMiningRestriction(serverPlayer);
             }
         }
 
@@ -512,17 +513,17 @@ public class Espetro {
                     && "espetro".equals(event.getTo().location().getNamespace())) {
                     serverPlayer.sendSystemMessage(Component.literal(
                         "§c战场启动重置失败，本次会话地图已禁用。"));
-                    GameStateManager.getInstance().forcePlayerToHub(serverPlayer);
+                    PlayerHoldStates.forcePlayerToHub(serverPlayer);
                     return;
                 }
                 if (net.minecraft.world.level.Level.OVERWORLD.equals(event.getTo())) {
                     // 离开战场时清掉旧版疲劳残留
                     serverPlayer.removeEffect(net.minecraft.world.effect.MobEffects.DIG_SLOWDOWN);
                     // 进入主城：所有人（含管理员）设为冒险
-                    GameStateManager.getInstance().applyHubAdventureOnEnter(serverPlayer);
+                    PlayerHoldStates.applyHubAdventureOnEnter(serverPlayer);
                 } else if (org.espetro.mapconfig.BattlefieldContext
                     .isActiveBattlefield(serverPlayer.serverLevel())) {
-                    GameStateManager.getInstance().applyBattlefieldMiningRestriction(serverPlayer);
+                    PlayerHoldStates.applyBattlefieldMiningRestriction(serverPlayer);
                 } else {
                     serverPlayer.removeEffect(net.minecraft.world.effect.MobEffects.DIG_SLOWDOWN);
                 }
@@ -533,7 +534,7 @@ public class Espetro {
         public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
             // 非管理员在主城禁止切出冒险模式
             if (event.getEntity() instanceof ServerPlayer serverPlayer
-                && GameStateManager.getInstance().shouldForceHubAdventure(serverPlayer)
+                && PlayerHoldStates.shouldForceHubAdventure(serverPlayer)
                 && event.getNewGameMode() != net.minecraft.world.level.GameType.ADVENTURE) {
                 event.setNewGameMode(net.minecraft.world.level.GameType.ADVENTURE);
             }
@@ -546,7 +547,7 @@ public class Espetro {
                 if (serverPlayer.tickCount % 20 == 0) {
                     maintainPlayerFood(serverPlayer);
                     // 低频兜底：非管理员主城被其它途径改模式时拉回冒险
-                    GameStateManager.getInstance().enforceHubAdventure(serverPlayer);
+                    PlayerHoldStates.enforceHubAdventure(serverPlayer);
                 }
             }
         }
