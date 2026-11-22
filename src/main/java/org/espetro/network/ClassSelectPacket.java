@@ -27,7 +27,7 @@ public class ClassSelectPacket {
     public enum Source {
         /** J 键统一部署界面：只允许等待选点或位于本方原部署点。 */
         DEPLOY_SCREEN,
-        /** 右键己方 Radio 打开的 AuraTip 职业轮盘。 */
+        /** 右键己方 Radio 打开的 EsRadial 职业轮盘。 */
         RADIO,
         /** 战斗载具轮盘的更换职业。 */
         VEHICLE

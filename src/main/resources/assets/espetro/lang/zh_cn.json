@@ -21,7 +21,7 @@
   "item.espetro.fortification_wand": "工事选定棒",
 
   "tutorial.step.welcome.title": "欢迎来到 Espetro",
-  "tutorial.step.welcome.body": "本模式用 AuraTip 提示讲解各阶段与界面。关闭当前提示会进入下一条；可用 /espetro tutorial skip 跳过本会话，之后可在主城或命令重开。",
+  "tutorial.step.welcome.body": "本模式用屏幕底部的说明卡讲解各阶段与界面；可用 /espetro tutorial skip 跳过本会话，之后可在主城或命令重开。",
   "tutorial.step.hub.title": "主城界面 Hub",
   "tutorial.step.hub.body": "主城显示在线人数与状态。管理员在服务端开始对局后进入地图投票。点「进入新手教程」会关闭主城菜单并播放本引导。",
   "tutorial.step.map_vote.title": "地图投票界面",

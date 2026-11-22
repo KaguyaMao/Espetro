@@ -57,7 +57,7 @@ public class GameConfig {
     private static int commanderVacancySeconds = 180;
     private static int battleTimeoutSeconds = 3600;
 
-    // AuraTip 新手教程（仅手动 reopen/命令；默认不在进服/阶段切换自动弹出）
+    // 新手教程（仅手动 reopen/命令；默认不在进服/阶段切换自动弹出）
     private static boolean tutorialEnabled = true;
     private static boolean tutorialShowOnJoin = false;
     private static boolean tutorialAllowSkip = true;
@@ -264,7 +264,7 @@ public class GameConfig {
         impeachmentCooldownSeconds = s.impeachmentCooldownSeconds;
         commanderVacancySeconds = s.commanderVacancySeconds;
         battleTimeoutSeconds = s.battleTimeoutSeconds;
-        // required_players is deprecated; tutorial steps are AuraTip-driven (manual).
+        // required_players is deprecated; tutorial steps are driven manually.
         loaded = true;
         Espetro.LOGGER.info("已应用活动地图 game 快照: 选边{}s 部署{}s 揭示{}s 结算{}s 原部署点无敌半径{} 换职冷却{}s 弹劾{}s/冷却{}s 战局限时{}s",
             teamSelectSeconds, deployTimeoutSeconds, factionRevealSeconds, roundEndSeconds,

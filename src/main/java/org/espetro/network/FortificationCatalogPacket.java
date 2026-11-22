@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-/** Role-filtered global fortification catalogue used by the AuraTip build wheel. */
+/** Role-filtered global fortification catalogue used by the EsRadial build wheel. */
 public final class FortificationCatalogPacket {
 
     private static final int MAX_ENTRIES = 64;

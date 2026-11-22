@@ -52,7 +52,7 @@ public final class AuiRadial {
     }
 
     public static void show(List<AuiRadialSlot> next, String nextPage) {
-        // Radials are AuraTip. Never create the intercept overlay.
+        // Radials are drawn by EsRadial. Never create the intercept overlay.
     }
 
     public static void replace(List<AuiRadialSlot> next) {

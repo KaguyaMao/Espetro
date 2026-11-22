@@ -178,7 +178,7 @@ public class ClientPacketHandlers {
             if (mc.screen instanceof org.espetro.client.gui.ClassSelectionScreen screen) {
                 screen.showError(msg);
             }
-            // 右侧 AuraTip（无模组时降级聊天）
+            // 右侧 EsRadial 短提示（失败时降级聊天）
             org.espetro.client.gui.EspetroTipNotifier.showRaw(msg);
             return;
         }

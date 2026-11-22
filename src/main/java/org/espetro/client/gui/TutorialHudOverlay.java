@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 
 /**
  * 自绘教程 HUD：说明卡片 + 左下角「退出教程」。
- * 不依赖 AuraTip 关卡片才能下一步。
+ * 不需要关闭提示卡片才能下一步。
  */
 public final class TutorialHudOverlay {
 

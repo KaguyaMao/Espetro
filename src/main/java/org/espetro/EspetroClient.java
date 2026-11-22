@@ -47,8 +47,6 @@ public class EspetroClient {
         org.espetro.client.vehicle.SeatSwitchGate.register();
         org.espetro.client.gui.FobSupplyHud.register();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
-            .addListener(org.espetro.client.gui.AuraTipAboveScreen::onScreenRenderPost);
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(org.espetro.client.EquipZoneRenderer::onRenderLevel);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onRightClickBlock);

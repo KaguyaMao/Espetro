@@ -70,13 +70,6 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies."${mod_id}"]]
-modId = "auratip"
-mandatory = true
-versionRange = "[${auratip_version}]"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies."${mod_id}"]]
 modId = "apricityui"
 mandatory = true
 versionRange = "[${apricityui_version}]"

@@ -200,15 +200,14 @@ python tools/import_blockops_raas.py \
 | `mod_id` | `espetro` | 模组 ID 与数据包命名空间 |
 | `mod_version` | `1.1.0-alpha` | 构建版本 |
 | `mod_group_id` | `com.shuai` | Maven group |
-| `mutil_version` | `6.3.0` | MUtil 强制依赖版本 |
-| `oelib_version` | `0.2.4` | AuraTip 运行时强制依赖版本 |
-| `auratip_version` | `1.1.1-beta` | 战术轮盘强制依赖版本 |
+| `oelib_version` | `0.2.4` | OELib 运行时强制依赖版本 |
+| `esradial_version` | `0.4.0` | 战术轮盘与右侧短提示（EsToasts）强制依赖版本 |
 | `rhino_version` | `2001.2.2-build.17` | Rhino 强制依赖版本，用于 KubeJS JavaScript |
 | `architectury_version` | `9.1.12` | Architectury API 强制依赖版本，满足 KubeJS Forge 1.20.1 要求 |
 | `espoints_version` | `1.1.0-final` | ESPoints 可选运行时依赖版本 |
 | `kubejs_version` | `2001.6.5-build.26` | KubeJS 强制运行依赖版本 |
 
-`META-INF/mods.toml` 声明 MUtil、OELib、AuraTip、Rhino、Architectury API 和 KubeJS 为强制依赖，并将模组 ID 为 `espoints` 的 ESPoints `>=1.1.0-final` 声明为可选依赖。普通 GUI 使用 MUtil，战术轮盘使用 AuraTip；默认指挥官技能需要 KubeJS。未安装 ESPoints 时部署界面使用占位地图；如需战术地图、据点或 `155火炮支援` 选点，客户端和服务器必须同时安装工作区同步版 ESPoints 与 Ping Wheel。开发环境仅在传入 `-PespetroIncludeLocalEspoints=true` 时注入兄弟项目 JAR。
+`META-INF/mods.toml` 声明 ApricityUI、EsRadial、Tetrachord、OELib、Rhino、Architectury API 和 KubeJS 为强制依赖，并将模组 ID 为 `espoints` 的 ESPoints `>=1.1.0-final` 声明为可选依赖。普通 GUI 使用 ApricityUI，战术轮盘与短提示使用 EsRadial；默认指挥官技能需要 KubeJS。未安装 ESPoints 时部署界面使用占位地图；如需战术地图、据点或 `155火炮支援` 选点，客户端和服务器必须同时安装工作区同步版 ESPoints 与 Ping Wheel。开发环境仅在传入 `-PespetroIncludeLocalEspoints=true` 时注入兄弟项目 JAR。
 
 资源 JSON：
 
@@ -323,7 +322,7 @@ kubejs/server_scripts/00_espetro_artillery_155.js
 
 ### 静态教程
 
-教程不再是配置项。玩家在主城 GUI 点击“进入新手教程”后，会打开静态、可滚动的 MUtil 教程页；对局过程中不会自动推送动态提示。
+教程不再是配置项。玩家在主城 GUI 点击“进入新手教程”后，会打开静态、可滚动的教程页；对局过程中不会自动推送动态提示。
 
 持续奔跑会在开始时结算一次消耗，之后每秒结算一次；跳跃按次结算。停止消耗后经过 `regen_delay_seconds`，立即恢复一次，之后每秒恢复。默认 `full_recovery_seconds: 12` 会根据 `player_stamina` 自动提高恢复量，保证从最后一次消耗算起 12 秒内回满；`regen_per_second` 仍是最低恢复速度。若等待时间长到无法满足目标，系统会自动缩短有效等待时间。
 
@@ -823,7 +822,7 @@ Radio 能足额支付职业变体的 `ammo_cost` 时才会提交；满弹或库�
 
 `/espetro stop` 可在地图投票、地图装载、部署、战斗或结算阶段强制终止当前游戏。
 它会清除投票、职业、换职冷却、阵营、小队、兵力、比赛统计、兵站、队包、临时屏障、部署载具及冷却状态，
-并把所有在线玩家送回主世界主城、打开 MUtil 主城界面。若地图切换正在执行，清理会在切换后自动接续，
+并把所有在线玩家送回主世界主城、打开主城界面。若地图切换正在执行，清理会在切换后自动接续，
 避免留下半完成状态。
 
 战场维度在服务器启动时由 Forge 创建首份副本。玩家全部回城后，`stop` 会先把战场从服务器 Tick
