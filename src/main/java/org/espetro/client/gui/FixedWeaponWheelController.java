@@ -79,9 +79,9 @@ public final class FixedWeaponWheelController {
     private static void show(FixedWeaponWheelPacket packet) {
         RadialMenuData data = build(packet);
         RadialMenuRegistry.setMenus(OWNER, List.of(data));
-        boolean existing = RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        boolean existing = EspetroRadials.isShowing(MENU);
         if (!existing || !RadialMenuClientApi.replace(data)) {
-            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            EspetroRadials.openClick(OWNER, data);
         }
         menuWasActive = true;
     }
@@ -119,7 +119,7 @@ public final class FixedWeaponWheelController {
 
     public static boolean isActive() {
         return weaponId != null
-            && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+            && EspetroRadials.isShowing(MENU);
     }
 
     private static RadialMenuData build(FixedWeaponWheelPacket packet) {

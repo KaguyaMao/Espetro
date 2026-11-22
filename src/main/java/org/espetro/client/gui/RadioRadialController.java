@@ -33,12 +33,9 @@ public final class RadioRadialController {
 
     private static final ResourceLocation ICON_CLASS =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/rifleman.png");
-    private static final ResourceLocation ICON_RESUPPLY =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
+    private static final ResourceLocation ICON_RESUPPLY = EspetroIcons.AMMO_SUPPLY;
     private static final IRadialIcon ICON_BACK = ReturnArrowIcon.INSTANCE;
-    private static final ResourceLocation ICON_UNAVAILABLE =
-        ResourceLocation.fromNamespaceAndPath(
-            "espetro", "textures/gui/commander_skills/unavailable.png");
+    private static final ResourceLocation ICON_UNAVAILABLE = EspetroIcons.SKILL_UNAVAILABLE;
 
     private static boolean initialized;
     private static BlockPos lastRadioPos = BlockPos.ZERO;
@@ -152,7 +149,7 @@ public final class RadioRadialController {
         } else if (!vehicleClassMenu) {
             publishMenus();
             var data = RadialMenuRegistry.getRuntimeMenu(vehicleClassMenu ? CLASS_MENU : ROOT);
-            if (data != null) RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            if (data != null) EspetroRadials.openClick(OWNER, data);
         }
     }
 
@@ -197,7 +194,7 @@ public final class RadioRadialController {
     private static void replaceMenu(org.esradial.client.RadialMenuData data) {
         if (!RadialMenuClientApi.replace(data)) {
             publishMenus();
-            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            EspetroRadials.openClick(OWNER, data);
         }
     }
 

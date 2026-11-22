@@ -1,6 +1,6 @@
 package org.espetro.client.gui;
 
-/** Integer-only aspect-ratio fitting shared by image-backed MUtil widgets. */
+/** Integer-only aspect-ratio fitting shared by image-backed AUI widgets. */
 final class AspectFit {
     private AspectFit() {
     }

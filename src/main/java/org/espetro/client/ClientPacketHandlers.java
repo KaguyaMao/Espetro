@@ -424,7 +424,7 @@ public class ClientPacketHandlers {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // 更新 MUtil 轮盘技能缓存。
+        // 更新 EsRadial 轮盘技能缓存。
         org.espetro.client.gui.TacticalRadialController.updateSkills(
             packet.isCommander(), packet.getCooldowns(), packet.getSkills());
 

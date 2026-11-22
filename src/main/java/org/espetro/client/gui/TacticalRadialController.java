@@ -49,13 +49,13 @@ public final class TacticalRadialController {
     /** 火力组长不允许建造的工事 id（电台：仍限指挥官/小队长）。 */
     private static final String FIRETEAM_FORBIDDEN_FORT_ID = "espetro:radio";
 
-    private static final ResourceLocation RALLY = id("textures/gui/squad/rally_deploy.png");
+    private static final ResourceLocation RALLY = EspetroIcons.RALLY_DEPLOY;
     private static final ResourceLocation BUILD_ICON =
         ui("radialdeployablesicon");
-    private static final ResourceLocation AMMO_CRATE = id("textures/gui/squad/ammo_crate.png");
-    private static final ResourceLocation VEHICLE = id("textures/gui/squad/vehicle_deploy.png");
+    private static final ResourceLocation AMMO_CRATE = EspetroIcons.AMMO_CRATE;
+    private static final ResourceLocation VEHICLE = EspetroIcons.VEHICLE_DEPLOY;
     private static final ResourceLocation COMMAND_ICON = ui("commandandsupport_icon");
-    private static final ResourceLocation UNAVAILABLE_ICON = id("textures/gui/commander_skills/unavailable.png");
+    private static final ResourceLocation UNAVAILABLE_ICON = EspetroIcons.SKILL_UNAVAILABLE;
 
     private static boolean initialized;
     private static boolean keyWasDown;

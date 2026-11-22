@@ -148,13 +148,13 @@ public final class ResupplyRadialController {
     public static void tick() {
         if (token == null) return;
         boolean active = RadialMenuClientApi.isActive()
-            && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+            && EspetroRadials.isShowing(MENU);
         if (menuWasActive && !active) clear(true);
         menuWasActive = active;
     }
 
     public static boolean isActive() {
-        return token != null && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        return token != null && EspetroRadials.isShowing(MENU);
     }
 
     /** Test/debug counter: unchanged ticks and duplicate deltas must not rebuild menus. */
@@ -165,12 +165,12 @@ public final class ResupplyRadialController {
     private static void replacePage() {
         if (token == null) return;
         RadialMenuData data = buildPage();
-        boolean existing = RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        boolean existing = EspetroRadials.isShowing(MENU);
         boolean changed = existing ? RadialMenuClientApi.replace(data)
             : RadialMenuClientApi.isActive() && RadialMenuClientApi.navigate(data);
         if (!changed) {
             RadialMenuRegistry.setMenus(OWNER, List.of(data));
-            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            EspetroRadials.openClick(OWNER, data);
         }
         rebuildCount++;
         menuWasActive = true;

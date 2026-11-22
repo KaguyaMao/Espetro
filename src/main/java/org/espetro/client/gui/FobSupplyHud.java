@@ -8,14 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import org.espetro.Espetro;
 import org.espetro.network.FobSupplySyncPacket;
 import org.espetro.client.aui.GuiElement;
+import org.espetro.client.gui.hud.HudDraw;
 
 import java.io.IOException;
 
 /**
- * Radio 范围补给状态缓存与 MUtil HUD 元素。
+ * Radio 范围补给状态缓存与 AUI HUD 元素。
  *
  * <p>关键信息变化时，整个面板在 CPU 侧重新生成并上传成一张动态纹理；
- * 相同数据不会重建或上传。普通帧只由一个 MUtil 元素提交已经生成的纹理。</p>
+ * 相同数据不会重建或上传。普通帧只由一个 AUI 元素提交已经生成的纹理。</p>
  */
 public final class FobSupplyHud {
 
@@ -32,17 +33,15 @@ public final class FobSupplyHud {
     private static final int CONSTRUCTION_BAR_X = AMMO_BAR_X + HALF_BAR_WIDTH;
     private static final int ICON_SIZE = 10;
 
-    private static final int PANEL_BACKGROUND = 0xD0111111;
-    private static final int PANEL_BORDER = 0xB05E646C;
-    private static final int BAR_BACKGROUND = 0xFF333333;
-    private static final int BAR_HEALTH_COLOR = 0xFF4A9BFF;
-    private static final int AMMO_COLOR = 0xFFCC4444;
-    private static final int CONSTRUCTION_COLOR = 0xFFD6B300;
+    private static final int PANEL_BACKGROUND = HudDraw.PANEL_BACKGROUND;
+    private static final int PANEL_BORDER = HudDraw.PANEL_BORDER;
+    private static final int BAR_BACKGROUND = HudDraw.BAR_BACKGROUND;
+    private static final int BAR_HEALTH_COLOR = HudDraw.HEALTH;
+    private static final int AMMO_COLOR = HudDraw.AMMO;
+    private static final int CONSTRUCTION_COLOR = HudDraw.CONSTRUCTION;
 
-    private static final ResourceLocation AMMO_ICON = ResourceLocation.fromNamespaceAndPath(
-        "espetro", "textures/gui/squad/ammo_supply.png");
-    private static final ResourceLocation CONSTRUCTION_ICON = ResourceLocation.fromNamespaceAndPath(
-        "espetro", "textures/gui/squad/construction_supply.png");
+    private static final ResourceLocation AMMO_ICON = EspetroIcons.AMMO_SUPPLY;
+    private static final ResourceLocation CONSTRUCTION_ICON = EspetroIcons.CONSTRUCTION_SUPPLY;
     private static final ResourceLocation VANILLA_ASCII_FONT = ResourceLocation.fromNamespaceAndPath(
         "minecraft", "textures/font/ascii.png");
 
@@ -143,7 +142,7 @@ public final class FobSupplyHud {
     }
 
     /**
-     * Event-redrawn MUtil texture. The bitmap is rebuilt only after applyState marks
+     * Event-redrawn dynamic texture. The bitmap is rebuilt only after applyState marks
      * it dirty; normal render frames never redraw its individual contents.
      */
     private static final class SupplyElement extends GuiElement {

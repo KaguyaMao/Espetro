@@ -20,14 +20,11 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/radio_deploy.png");
     private static final ResourceLocation HAB =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/hab_deploy.png");
-    private static final ResourceLocation RALLY =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/rally_deploy.png");
+    private static final ResourceLocation RALLY = EspetroIcons.RALLY_DEPLOY;
     private static final ResourceLocation CONSTRUCTION =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/deposit_supply.png");
-    private static final ResourceLocation AMMO =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/fob_status.png");
-    private static final ResourceLocation VEHICLE =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/vehicle_deploy.png");
+    private static final ResourceLocation AMMO = EspetroIcons.FOB_STATUS;
+    private static final ResourceLocation VEHICLE = EspetroIcons.VEHICLE_DEPLOY;
     private static final ResourceLocation COMMAND =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/commander_skills/command.png");
 
