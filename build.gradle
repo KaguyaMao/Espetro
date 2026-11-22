@@ -161,13 +161,6 @@ repositories {
         }
     }
     maven {
-        name = 'Sighs Releases'
-        url = 'https://maven.sighs.cc/repository/maven-releases/'
-        content {
-            includeGroup 'cc.sighs.oelib'
-        }
-    }
-    maven {
         name = 'Sighs Public'
         url = 'https://maven.sighs.cc/repository/maven-public/'
         content {
@@ -192,7 +185,6 @@ dependencies {
     implementation(fg.deobf("com.hexagram2021.tetrachordlib:tetrachordlib:${tetrachord_version}")) {
         transitive = false
     }
-    implementation fg.deobf("cc.sighs.oelib:OELib-forge-1.20.1:${oelib_version}")
     implementation fg.deobf("com.sighs:ApricityUI-forge-1.20.1:${apricityui_version}")
     implementation fg.deobf("org.esradial:esradial-forge-1.20.1:${esradial_version}")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
@@ -245,7 +237,6 @@ tasks.named('processResources', ProcessResources).configure {
                              mod_authors         : mod_authors, mod_description: mod_description,
                              espoints_version    : espoints_version, rhino_version: rhino_version,
                              architectury_version: architectury_version, kubejs_version: kubejs_version,
-                             oelib_version       : oelib_version,
                              apricityui_version  : apricityui_version,
                              esradial_version    : esradial_version,
                              tetrachord_version  : tetrachord_version,
@@ -324,7 +315,7 @@ tasks.register('syncRunMods') {
             return
         }
 
-        def wanted = ['esradial', 'oelib', 'apricityui', 'tetrachordlib', 'rhino', 'architectury', 'kubejs']
+        def wanted = ['esradial', 'apricityui', 'tetrachordlib', 'rhino', 'architectury', 'kubejs']
         int copied = 0
         configurations.runtimeClasspath.files.findAll { File f ->
             def n = f.name.toLowerCase()

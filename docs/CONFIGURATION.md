@@ -200,14 +200,13 @@ python tools/import_blockops_raas.py \
 | `mod_id` | `espetro` | 模组 ID 与数据包命名空间 |
 | `mod_version` | `1.1.0-alpha` | 构建版本 |
 | `mod_group_id` | `com.shuai` | Maven group |
-| `oelib_version` | `0.2.4` | OELib 运行时强制依赖版本 |
 | `esradial_version` | `0.4.0` | 战术轮盘与右侧短提示（EsToasts）强制依赖版本 |
 | `rhino_version` | `2001.2.2-build.17` | Rhino 强制依赖版本，用于 KubeJS JavaScript |
 | `architectury_version` | `9.1.12` | Architectury API 强制依赖版本，满足 KubeJS Forge 1.20.1 要求 |
 | `espoints_version` | `1.1.0-final` | ESPoints 可选运行时依赖版本 |
 | `kubejs_version` | `2001.6.5-build.26` | KubeJS 强制运行依赖版本 |
 
-`META-INF/mods.toml` 声明 ApricityUI、EsRadial、Tetrachord、OELib、Rhino、Architectury API 和 KubeJS 为强制依赖，并将模组 ID 为 `espoints` 的 ESPoints `>=1.1.0-final` 声明为可选依赖。普通 GUI 使用 ApricityUI，战术轮盘与短提示使用 EsRadial；默认指挥官技能需要 KubeJS。未安装 ESPoints 时部署界面使用占位地图；如需战术地图、据点或 `155火炮支援` 选点，客户端和服务器必须同时安装工作区同步版 ESPoints 与 Ping Wheel。开发环境仅在传入 `-PespetroIncludeLocalEspoints=true` 时注入兄弟项目 JAR。
+`META-INF/mods.toml` 声明 ApricityUI、EsRadial、Tetrachord、Rhino、Architectury API 和 KubeJS 为强制依赖，并将模组 ID 为 `espoints` 的 ESPoints `>=1.1.0-final` 声明为可选依赖。普通 GUI 使用 ApricityUI，战术轮盘与短提示使用 EsRadial；默认指挥官技能需要 KubeJS。未安装 ESPoints 时部署界面使用占位地图；如需战术地图、据点或 `155火炮支援` 选点，客户端和服务器必须同时安装工作区同步版 ESPoints 与 Ping Wheel。开发环境仅在传入 `-PespetroIncludeLocalEspoints=true` 时注入兄弟项目 JAR。
 
 资源 JSON：
 

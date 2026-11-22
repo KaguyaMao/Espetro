@@ -38,13 +38,12 @@ Espetro 是 Minecraft Forge 1.20.1 的战术小队与侵攻流程模组，提供
 | ApricityUI (`apricityui`) | 1.2.6 |
 | EsRadial (`esradial`) | 0.4.0 |
 | Tetrachord (`tetrachordlib`) | 1.20+1.0.3 |
-| OELib | 0.2.4 |
 | Rhino (`rhino`) | 2001.2.2-build.17 |
 | Architectury API (`architectury`) | 9.1.12 或更高 |
 | ESPoints (`espoints`) | 1.1.0-final（本工作区同步版）或更高 |
 | KubeJS (`kubejs`) | Forge 1.20.1 使用 `2001.6.5-build.26`，强制依赖 |
 
-Espetro、ApricityUI、EsRadial、Tetrachord、OELib、Rhino、Architectury API 和 KubeJS 是基础运行依赖。普通 GUI 使用 ApricityUI；战术轮盘与右侧短提示使用 EsRadial。所有指挥官技能由 KubeJS 脚本注册和实现：`startup_scripts` 注册技能，`server_scripts` 执行技能效果。ESPoints 以 `espoints` 为模组 ID，并依赖 Espetro；Espetro 将 ESPoints 声明为软依赖。未安装时 Espetro 仍可启动，但部署界面的战术地图会使用占位显示，`155火炮支援` 无法打开选点地图。如需战术地图、据点、标点或火炮选点，客户端和服务器都必须同时安装 ESPoints 1.1.0-final、Ping Wheel 1.12.1 及其声明的 AuraTip/OELib 前置。为防止 ESPoints 影响 Espetro 的独立开发启动，本地兄弟项目默认不注入，可用 `-PespetroIncludeLocalEspoints=true` 显式启用。Esvoice 是可选的战术语音扩展。
+Espetro、ApricityUI、EsRadial、Tetrachord、Rhino、Architectury API 和 KubeJS 是基础运行依赖。普通 GUI 使用 ApricityUI；战术轮盘与右侧短提示使用 EsRadial。所有指挥官技能由 KubeJS 脚本注册和实现：`startup_scripts` 注册技能，`server_scripts` 执行技能效果。ESPoints 以 `espoints` 为模组 ID，并依赖 Espetro；Espetro 将 ESPoints 声明为软依赖。未安装时 Espetro 仍可启动，但部署界面的战术地图会使用占位显示，`155火炮支援` 无法打开选点地图。如需战术地图、据点、标点或火炮选点，客户端和服务器都必须同时安装 ESPoints 1.1.0-final、Ping Wheel 1.12.1 及其声明的 AuraTip/OELib 前置。为防止 ESPoints 影响 Espetro 的独立开发启动，本地兄弟项目默认不注入，可用 `-PespetroIncludeLocalEspoints=true` 显式启用。Esvoice 是可选的战术语音扩展。
 
 KubeJS 是强制依赖。加载时会自动暴露 `Espetro`、`EspetroAPI`、`EspetroCommanderSkills`、底层管理器、ESPoints 桥接类给 KubeJS。默认指挥官技能通过 KubeJS 执行；载具补给站已改为可配置的“建造工事”，不再是指挥官技能。`155火炮支援` 的默认火力效果由 `kubejs/server_scripts/00_espetro_artillery_155.js` 以 KubeJS `ServerEvents.tick` 队列实现。
 

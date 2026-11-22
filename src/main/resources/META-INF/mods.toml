@@ -63,13 +63,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies."${mod_id}"]]
-modId = "oelib"
-mandatory = true
-versionRange = "[${oelib_version},)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies."${mod_id}"]]
 modId = "apricityui"
 mandatory = true
 versionRange = "[${apricityui_version}]"

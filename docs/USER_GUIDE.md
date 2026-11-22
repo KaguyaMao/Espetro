@@ -2,7 +2,7 @@
 
 ## 安装与第一次启动
 
-客户端和服务器使用相同的 Forge 1.20.1 模组组合。基础运行需要 Espetro、ApricityUI、EsRadial、Tetrachord、OELib、Rhino、
+客户端和服务器使用相同的 Forge 1.20.1 模组组合。基础运行需要 Espetro、ApricityUI、EsRadial、Tetrachord、Rhino、
 Architectury API 与 KubeJS；需要战术地图和据点时还要安装本工作区同步版 ESPoints。
 
 第一次完整启动会在游戏或服务器根目录生成：
