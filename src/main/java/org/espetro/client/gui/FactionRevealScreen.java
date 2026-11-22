@@ -21,10 +21,8 @@ import java.util.Objects;
 public class FactionRevealScreen extends EspetroMenuScreen {
 
     /** 默认纹理（编制图片为 null 时回退使用）。 */
-    private static final ResourceLocation DEFAULT_ATTACK_TEXTURE =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/attack_faction.png");
-    private static final ResourceLocation DEFAULT_DEFEND_TEXTURE =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/defend_faction.png");
+    private static final ResourceLocation DEFAULT_ATTACK_TEXTURE = EspetroIcons.ATTACK_FACTION;
+    private static final ResourceLocation DEFAULT_DEFEND_TEXTURE = EspetroIcons.DEFEND_FACTION;
 
     /** 已解析的资源包/客户端本地编制图片，避免界面重建时重复解码。 */
     private static final Map<String, ResolvedTexture> TEXTURE_CACHE = new HashMap<>();

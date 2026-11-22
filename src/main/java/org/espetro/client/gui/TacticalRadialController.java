@@ -10,7 +10,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.RadialActionPacket;
 import org.espetro.network.FortificationCatalogPacket;
 import org.espetro.team.CommanderSkillManager;
@@ -49,13 +49,13 @@ public final class TacticalRadialController {
     /** 火力组长不允许建造的工事 id（电台：仍限指挥官/小队长）。 */
     private static final String FIRETEAM_FORBIDDEN_FORT_ID = "espetro:radio";
 
-    private static final ResourceLocation RALLY = id("textures/gui/squad/rally_deploy.png");
+    private static final ResourceLocation RALLY = EspetroIcons.RALLY_DEPLOY;
     private static final ResourceLocation BUILD_ICON =
         ui("radialdeployablesicon");
-    private static final ResourceLocation AMMO_CRATE = id("textures/gui/squad/ammo_crate.png");
-    private static final ResourceLocation VEHICLE = id("textures/gui/squad/vehicle_deploy.png");
+    private static final ResourceLocation AMMO_CRATE = EspetroIcons.AMMO_CRATE;
+    private static final ResourceLocation VEHICLE = EspetroIcons.VEHICLE_DEPLOY;
     private static final ResourceLocation COMMAND_ICON = ui("commandandsupport_icon");
-    private static final ResourceLocation UNAVAILABLE_ICON = id("textures/gui/commander_skills/unavailable.png");
+    private static final ResourceLocation UNAVAILABLE_ICON = EspetroIcons.SKILL_UNAVAILABLE;
 
     private static boolean initialized;
     private static boolean keyWasDown;
@@ -121,7 +121,7 @@ public final class TacticalRadialController {
             try {
                 RadialActionPacket.Action action = RadialActionPacket.Action.valueOf(
                     params.getString("action", ""));
-                NetworkManager.sendRadialAction(action);
+                ClientRequests.sendRadialAction(action);
             } catch (IllegalArgumentException ignored) {
                 return;
             }
@@ -131,7 +131,7 @@ public final class TacticalRadialController {
         Actions.register(BUILD_FORT_ACTION, params -> {
             String fortId = params.getString("fortId", "");
             if (!fortId.isEmpty()) {
-                NetworkManager.sendBuildFortification(fortId);
+                ClientRequests.sendBuildFortification(fortId);
             }
             consumedUntilRelease = true;
             ownsOverlay = false;
@@ -154,7 +154,7 @@ public final class TacticalRadialController {
                 return;
             }
             org.espetro.client.gui.CommanderSkillTargetRequest.arm(skillId);
-            NetworkManager.sendCommanderSkillActivate(skillId);
+            ClientRequests.sendCommanderSkillActivate(skillId);
             consumedUntilRelease = true;
             ownsOverlay = false;
         });
@@ -169,8 +169,8 @@ public final class TacticalRadialController {
                 return mc.player != null && mc.level != null && ClientTacticalState.canLocalPlayerOpenTacticalRadial(
                     mc.player.getName().getString());
             }, () -> {
-                NetworkManager.requestCommanderSkillSync();
-                NetworkManager.requestFortificationCatalog();
+                ClientRequests.requestCommanderSkillSync();
+                ClientRequests.requestFortificationCatalog();
                 flushSkillUpdate(); flushFortificationUpdate();
             });
     }
@@ -313,8 +313,8 @@ public final class TacticalRadialController {
 
         // 刚按下 Alt：向服务端拉一次技能列表（队长身份可能在入服同步之后才获得）
         if (!keyWasDown) {
-            NetworkManager.requestCommanderSkillSync();
-            NetworkManager.requestFortificationCatalog();
+            ClientRequests.requestCommanderSkillSync();
+            ClientRequests.requestFortificationCatalog();
         }
         keyWasDown = true;
 

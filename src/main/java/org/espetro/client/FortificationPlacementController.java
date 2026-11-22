@@ -24,7 +24,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.espetro.bastion.OnBuildingBlock;
 import org.espetro.network.FortificationPlacementPacket;
 import org.espetro.network.FortificationPreviewPacket;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,10 +89,10 @@ public final class FortificationPlacementController {
         HitResult hit = minecraft.hitResult;
         lastWorkTick = now;
         if (hit instanceof BlockHitResult blockHit && hit.getType() == HitResult.Type.BLOCK) {
-            NetworkManager.sendFortificationWork(blockHit.getBlockPos(), build && !remove);
+            ClientRequests.sendFortificationWork(blockHit.getBlockPos(), build && !remove);
         } else if (hit instanceof EntityHitResult entityHit
             && org.espetro.vehicle.VehicleManager.isMappedSupplyStation(entityHit.getEntity())) {
-            NetworkManager.sendFortificationEntityWork(entityHit.getEntity().getUUID(), build && !remove);
+            ClientRequests.sendFortificationEntityWork(entityHit.getEntity().getUUID(), build && !remove);
         }
     }
 
@@ -127,7 +127,7 @@ public final class FortificationPlacementController {
         if (mc.player == null || mc.level == null || mc.screen != null) return;
         if (preview != null) {
             if (event.isUseItem()) {
-                NetworkManager.sendFortificationPlacement(FortificationPlacementPacket.Action.CANCEL,
+                ClientRequests.sendFortificationPlacement(FortificationPlacementPacket.Action.CANCEL,
                     preview.token, BlockPos.ZERO, Direction.NORTH);
                 clear();
                 event.setCanceled(true);
@@ -141,7 +141,7 @@ public final class FortificationPlacementController {
                 mc.player.displayClientMessage(Component.literal("§c红色范围无法放置工事。"), true);
                 return;
             }
-            NetworkManager.sendFortificationPlacement(FortificationPlacementPacket.Action.CONFIRM,
+            ClientRequests.sendFortificationPlacement(FortificationPlacementPacket.Action.CONFIRM,
                 preview.token, anchor, facing);
             clear();
             return;
@@ -152,7 +152,7 @@ public final class FortificationPlacementController {
             event.setCanceled(true);
             event.setSwingHand(false);
             if (event.isAttack() || event.isUseItem()) {
-                NetworkManager.sendFortificationEntityWork(entityHit.getEntity().getUUID(), event.isAttack());
+                ClientRequests.sendFortificationEntityWork(entityHit.getEntity().getUUID(), event.isAttack());
                 lastWorkTick = mc.level.getGameTime();
             }
             return;
@@ -163,7 +163,7 @@ public final class FortificationPlacementController {
             event.setSwingHand(false);
         }
         if (event.isAttack() || event.isUseItem()) {
-            NetworkManager.sendFortificationWork(hit.getBlockPos(), event.isAttack());
+            ClientRequests.sendFortificationWork(hit.getBlockPos(), event.isAttack());
             lastWorkTick = mc.level.getGameTime();
         }
     }

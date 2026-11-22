@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.MapVoteManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -25,11 +26,8 @@ public class MapVoteCastPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             MapVoteManager.getInstance().castVote(player, mapFolder);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

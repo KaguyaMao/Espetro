@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -36,30 +37,26 @@ public class EntityResyncRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            if (ctx.get().getDirection().getReceptionSide().isServer()) {
-                ServerPlayer player = ctx.get().getSender();
-                if (player == null || player.connection == null) {
-                    return;
-                }
-                Entity entity = findEntity(player, entityId);
-                if (entity == null) {
-                    // 服务端已无此实体：清掉客户端补加的幽灵实体
-                    player.connection.send(
-                        new net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket(entityId));
-                    return;
-                }
-                // 绝对位置 + 全量数据重同步，纠正补加实体的过期位置/缺失数据
-                player.connection.send(
-                    new net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket(entity));
-                java.util.List<net.minecraft.network.syncher.SynchedEntityData.DataValue<?>> data =
-                    entity.getEntityData().getNonDefaultValues();
-                player.connection.send(
-                    new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
-                        entity.getId(), data == null ? java.util.List.of() : data));
+        PacketHandling.handleOnServer(ctx, player -> {
+            if (player.connection == null) {
+                return;
             }
+            Entity entity = findEntity(player, entityId);
+            if (entity == null) {
+                // 服务端已无此实体：清掉客户端补加的幽灵实体
+                player.connection.send(
+                    new net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket(entityId));
+                return;
+            }
+            // 绝对位置 + 全量数据重同步，纠正补加实体的过期位置/缺失数据
+            player.connection.send(
+                new net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket(entity));
+            java.util.List<net.minecraft.network.syncher.SynchedEntityData.DataValue<?>> data =
+                entity.getEntityData().getNonDefaultValues();
+            player.connection.send(
+                new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
+                    entity.getId(), data == null ? java.util.List.of() : data));
         });
-        ctx.get().setPacketHandled(true);
     }
 
     private static Entity findEntity(ServerPlayer player, int entityId) {

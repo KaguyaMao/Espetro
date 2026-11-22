@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -44,16 +45,7 @@ public record ResupplyEntryDeltaPacket(UUID token, long actionSeq, long stateRev
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleResupplyDelta", ResupplyEntryDeltaPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException error) {
-                org.espetro.Espetro.LOGGER.error("处理补给增量失败", error);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnClient(supplier, "ResupplyEntryDelta",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleResupplyDelta(this));
     }
 }

@@ -6,12 +6,13 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.espetro.bastion.FortificationConfig;
 import org.espetro.bastion.FortificationManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-/** Role-filtered global fortification catalogue used by the AuraTip build wheel. */
+/** Role-filtered global fortification catalogue used by the EsRadial build wheel. */
 public final class FortificationCatalogPacket {
 
     private static final int MAX_ENTRIES = 64;
@@ -75,13 +76,8 @@ public final class FortificationCatalogPacket {
             if (sender != null) {
                 NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> sender), forPlayer(sender));
             } else {
-                try {
-                    Class.forName("org.espetro.client.ClientPacketHandlers")
-                        .getMethod("handleFortificationCatalog", FortificationCatalogPacket.class)
-                        .invoke(null, this);
-                } catch (ReflectiveOperationException e) {
-                    org.espetro.Espetro.LOGGER.error("处理工事目录同步失败", e);
-                }
+                PacketHandling.runOnClient("FortificationCatalog",
+                    () -> () -> org.espetro.client.ClientPacketHandlers.handleFortificationCatalog(this));
             }
         });
         context.setPacketHandled(true);

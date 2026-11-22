@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -53,16 +54,8 @@ public class TutorialSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleTutorialSync", byte.class, String.class, int.class, int.class, boolean.class)
-                    .invoke(null, action, stepId, index, total, allowSkip);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "TutorialSync",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleTutorialSync(action, stepId, index, total, allowSkip));
     }
 
     public byte getAction() {

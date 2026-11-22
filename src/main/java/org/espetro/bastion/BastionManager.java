@@ -748,7 +748,7 @@ public class BastionManager {
         setBastionActive(bastion, false);
         if (!silent) {
             // 立即把新部署点列表推给该阵营（可能有玩家正开着部署界面在看这个兵站）
-            org.espetro.network.NetworkManager.refreshDeployPointsForTeam(bastionTeam);
+            org.espetro.network.DeployScreenSync.refreshDeployPointsForTeam(bastionTeam);
         }
         // Radio 增减会影响 HAB 覆盖；silent 战局清理由 reset 整体清空，无需重算。
         if (radio && !silent) {
@@ -1690,7 +1690,7 @@ public class BastionManager {
             127, // 最大等级
             false, false, false
         ));
-        org.espetro.team.GameStateManager.getInstance().applyBattlefieldMiningRestriction(player);
+        org.espetro.team.PlayerHoldStates.applyBattlefieldMiningRestriction(player);
 
         player.sendSystemMessage(net.minecraft.network.chat.Component.literal("§a已在主基地复活！"));
 

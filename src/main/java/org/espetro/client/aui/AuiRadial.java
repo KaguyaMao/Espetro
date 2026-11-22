@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.espetro.client.gui.EspetroIcons;
 
 /**
  * One persistent AUI Overlay for every Espetro / EsPoints radial.
@@ -17,8 +18,7 @@ import java.util.List;
  */
 public final class AuiRadial {
     public static final String DOCUMENT_PATH = "overlays/radial.html";
-    private static final ResourceLocation FALLBACK_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/commander_skills/unavailable.png");
+    private static final ResourceLocation FALLBACK_ICON = EspetroIcons.SKILL_UNAVAILABLE;
 
     private static Document document;
     private static final List<AuiRadialSlot> slots = new ArrayList<>();
@@ -52,7 +52,7 @@ public final class AuiRadial {
     }
 
     public static void show(List<AuiRadialSlot> next, String nextPage) {
-        // Radials are AuraTip. Never create the intercept overlay.
+        // Radials are drawn by EsRadial. Never create the intercept overlay.
     }
 
     public static void replace(List<AuiRadialSlot> next) {

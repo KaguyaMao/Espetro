@@ -3,6 +3,7 @@ package org.espetro.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -72,16 +73,7 @@ public record FortificationWandPacket(boolean active, @Nullable BlockPos a, @Nul
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleFortificationWand", FortificationWandPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException e) {
-                org.espetro.Espetro.LOGGER.error("处理工事选定棒同步失败", e);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnClient(supplier, "FortificationWand",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleFortificationWand(this));
     }
 }

@@ -1,9 +1,9 @@
 package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.GamePhase;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -49,20 +49,8 @@ public class GamePhaseSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        final String phaseNameRef = this.phaseName;
-        final String mapFolderRef = this.mapFolder;
-        final String objectiveModeRef = this.objectiveMode;
-        
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleGamePhase", String.class, String.class, String.class)
-                    .invoke(null, phaseNameRef, mapFolderRef, objectiveModeRef);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "GamePhaseSync",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleGamePhase(phaseName, mapFolder, objectiveMode));
     }
 
     public String getPhaseName() { return phaseName; }

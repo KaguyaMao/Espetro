@@ -47,8 +47,6 @@ public class EspetroClient {
         org.espetro.client.vehicle.SeatSwitchGate.register();
         org.espetro.client.gui.FobSupplyHud.register();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
-            .addListener(org.espetro.client.gui.AuraTipAboveScreen::onScreenRenderPost);
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(org.espetro.client.EquipZoneRenderer::onRenderLevel);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onRightClickBlock);
@@ -140,7 +138,7 @@ public class EspetroClient {
             if (mc.screen == null) {
                 // 发送请求到服务端，服务端会返回 GameStateResponsePacket
                 // 客户端在收到响应后根据状态决定是否打开界面
-                org.espetro.network.NetworkManager.requestGameState();
+                org.espetro.network.ClientRequests.requestGameState();
             }
         }
         // J键 - 主城打开组队面板，对战中请求职业选择

@@ -405,7 +405,7 @@ public class ClassCountManager {
         UNLOCK_PER_N_FULL
     }
 
-    /** 用户可读拒绝文案（聊天 / AuraTip）。 */
+    /** 用户可读拒绝文案（聊天 / 右侧短提示）。 */
     public static String messageFor(SelectionResult result, UUID playerId) {
         if (result == null) {
             return "§c当前无法选择该职业。";

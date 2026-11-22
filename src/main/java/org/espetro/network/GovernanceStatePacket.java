@@ -3,6 +3,7 @@ package org.espetro.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.governance.CommanderGovernanceManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,14 +137,7 @@ public class GovernanceStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleGovernanceState", GovernanceStatePacket.class)
-                    .invoke(null, this);
-            } catch (Exception ignored) {
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "GovernanceState",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleGovernanceState(this));
     }
 }

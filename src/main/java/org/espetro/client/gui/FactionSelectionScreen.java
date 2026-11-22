@@ -103,7 +103,7 @@ public class FactionSelectionScreen extends EspetroMenuScreen {
 
     private void selectFaction(String factionId) {
         if (factionId != null && !factionId.isEmpty()) {
-            org.espetro.network.NetworkManager.requestClassSelection(factionId);
+            org.espetro.network.ClientRequests.requestClassSelection(factionId);
         }
     }
 
@@ -152,7 +152,7 @@ public class FactionSelectionScreen extends EspetroMenuScreen {
     public static void openWithFaction(String factionId) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen == null) {
-            org.espetro.network.NetworkManager.requestClassSelection(factionId);
+            org.espetro.network.ClientRequests.requestClassSelection(factionId);
         }
     }
 }

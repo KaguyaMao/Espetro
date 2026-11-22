@@ -189,7 +189,7 @@ public class TroopCountManager {
     private void syncToClients() {
         int attack = getAttackTroops();
         int defend = getDefendTroops();
-        org.espetro.network.NetworkManager.broadcastTroopCounts(attack, defend);
+        org.espetro.network.MatchBroadcasts.broadcastTroopCounts(attack, defend);
     }
 
     /**
@@ -237,7 +237,7 @@ public class TroopCountManager {
 
         Espetro.LOGGER.info("兵力统计已重置");
         // 清局后同步客户端隐藏/清零兵力 HUD，避免结算残留
-        org.espetro.network.NetworkManager.broadcastTroopCounts(0, 0);
+        org.espetro.network.MatchBroadcasts.broadcastTroopCounts(0, 0);
     }
 
     /**

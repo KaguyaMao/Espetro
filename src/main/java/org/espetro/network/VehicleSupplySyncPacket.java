@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -104,13 +105,8 @@ public final class VehicleSupplySyncPacket {
                     NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> sender), response);
                 }
             } else {
-                try {
-                    Class.forName("org.espetro.client.ClientPacketHandlers")
-                        .getMethod("handleVehicleSupplySync", VehicleSupplySyncPacket.class)
-                        .invoke(null, this);
-                } catch (ReflectiveOperationException e) {
-                    org.espetro.Espetro.LOGGER.error("处理载具补给同步失败", e);
-                }
+                PacketHandling.runOnClient("VehicleSupplySync",
+                    () -> () -> org.espetro.client.ClientPacketHandlers.handleVehicleSupplySync(this));
             }
         });
         context.setPacketHandled(true);

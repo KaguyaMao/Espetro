@@ -39,14 +39,12 @@ public final class VehicleWheelController {
     private static final ResourceLocation ACTION_ID = id("vehicle_action");
     private static final ResourceLocation ICON_AMMO_WHITE =
         id("textures/gui/squad/ammo_supply_white.png");
-    private static final ResourceLocation ICON_AMMO_RED =
-        id("textures/gui/squad/ammo_supply.png");
+    private static final ResourceLocation ICON_AMMO_RED = EspetroIcons.AMMO_SUPPLY;
     private static final ResourceLocation ICON_CONSTRUCTION_WHITE =
         id("textures/gui/squad/vehicle_supply_load.png");
     private static final ResourceLocation ICON_CONSTRUCTION_RED =
         id("textures/gui/squad/vehicle_supply_unload.png");
-    private static final ResourceLocation ICON_RESUPPLY =
-        id("textures/gui/squad/ammo_crate.png");
+    private static final ResourceLocation ICON_RESUPPLY = EspetroIcons.AMMO_CRATE;
     private static final String COLOR_LOAD = "#FFFFFFFF";
     /** 建材操作的进度环颜色（与载具 HUD 的建材填充同色）。 */
     private static final String COLOR_CONSTRUCTION_PROGRESS = "#FFCCAA00";
@@ -76,7 +74,7 @@ public final class VehicleWheelController {
      * is inside the inner radius (center icon zone used by the mount channel).
      */
     public static boolean isCenterHovered() {
-        if (!isWheelActive() || !RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
+        if (!isWheelActive() || !EspetroRadials.isShowing(ROOT)) {
             return false;
         }
         if (RadialMenuClientApi.hoveredSlotIndex() >= 0) {
@@ -226,7 +224,7 @@ public final class VehicleWheelController {
         cachedSupply = packet;
         snapshotReady = packet.hasAnyAction();
         if (!previousLayout.equals(layoutSignature(packet))) {
-            if (RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
+            if (EspetroRadials.isShowing(ROOT)) {
                 RadialMenuClientApi.replace(buildRootMenu());
             } else {
                 publishMenu();
@@ -283,7 +281,7 @@ public final class VehicleWheelController {
         if (currentVehicleId == null) return;
 
         if (consumedUntilRelease) {
-            if (ownsOverlay && RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
+            if (ownsOverlay && EspetroRadials.isShowing(ROOT)) {
                 tickHold(window);
             }
             return;

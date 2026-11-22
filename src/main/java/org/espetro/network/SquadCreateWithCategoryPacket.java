@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.SquadManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -31,9 +32,7 @@ public class SquadCreateWithCategoryPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             var result = SquadManager.getInstance().createSquad(player, squadName, categoryId);
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                 (result.success ? "§a" : "§c") + result.message));
@@ -49,15 +48,14 @@ public class SquadCreateWithCategoryPacket {
                     org.espetro.team.SquadManager.getInstance().getPlayerSquadId(player.getUUID()),
                     true
                 );
-                NetworkManager.sendCommanderSkillSync(player);
-                NetworkManager.syncSquadsToTeam(result.team);
-                NetworkManager.broadcastClassCounts(result.team,
+                MatchBroadcasts.sendCommanderSkillSync(player);
+                SquadSync.syncSquadsToTeam(result.team);
+                DeployScreenSync.broadcastClassCounts(result.team,
                     org.espetro.team.ClassCountManager.getInstance().getPlayerFaction(player.getUUID()));
-                NetworkManager.broadcastMatchStats(
+                MatchBroadcasts.broadcastMatchStats(
                     org.espetro.stats.PlayerMatchStatsManager.getInstance());
-                NetworkManager.syncUnifiedDeployScreen(player, -1);
+                DeployScreenSync.syncUnifiedDeployScreen(player, -1);
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

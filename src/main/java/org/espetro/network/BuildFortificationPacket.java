@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.bastion.FortificationManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -26,9 +27,7 @@ public class BuildFortificationPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             String err = FortificationManager.getInstance().place(player, fortId);
             if (err != null) {
                 player.sendSystemMessage(Component.literal(err));
@@ -37,6 +36,5 @@ public class BuildFortificationPacket {
                     "§e已进入工事预览：左键确认，右键取消。"));
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

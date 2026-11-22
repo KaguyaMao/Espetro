@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -19,14 +20,7 @@ public class OpenMapVoteScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleOpenMapVoteScreen")
-                    .invoke(null);
-            } catch (Exception ignored) {
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "OpenMapVoteScreen",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleOpenMapVoteScreen());
     }
 }

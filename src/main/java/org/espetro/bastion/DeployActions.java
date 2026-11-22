@@ -98,7 +98,7 @@ public final class DeployActions {
             player.sendSystemMessage(Component.literal("§c你还没有选择编制！"));
             return;
         }
-        org.espetro.network.NetworkManager.sendVehicleDeployScreen(player, factionId);
+        org.espetro.network.DeployScreenSync.sendVehicleDeployScreen(player, factionId);
     }
 
     public static boolean hasRadioItem(ServerPlayer player) {

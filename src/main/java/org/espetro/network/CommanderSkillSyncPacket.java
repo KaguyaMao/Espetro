@@ -3,6 +3,7 @@ package org.espetro.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.CommanderSkillManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,16 +76,8 @@ public class CommanderSkillSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleCommanderSkillSync", CommanderSkillSyncPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "CommanderSkillSync",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleCommanderSkillSync(this));
     }
 
     public boolean isCommander() {

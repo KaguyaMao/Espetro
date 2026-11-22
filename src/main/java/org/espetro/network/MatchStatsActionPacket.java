@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.governance.CommanderGovernanceManager;
 import org.espetro.team.SquadManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -41,9 +42,7 @@ public class MatchStatsActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             SquadManager.ActionResult result = switch (action) {
                 case FORCE_JOIN_SQUAD -> SquadManager.getInstance().forceJoinSquad(player, target);
                 case KICK_FROM_SQUAD -> SquadManager.getInstance().kickMember(player, target);
@@ -51,12 +50,11 @@ public class MatchStatsActionPacket {
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                 (result.success ? "§a" : "§c") + result.message));
             if (result.success && result.team != null) {
-                NetworkManager.syncSquadsToTeam(result.team);
-                NetworkManager.broadcastClassCounts(result.team,
+                SquadSync.syncSquadsToTeam(result.team);
+                DeployScreenSync.broadcastClassCounts(result.team,
                     org.espetro.team.ClassCountManager.getInstance().getPlayerFaction(player.getUUID()));
-                NetworkManager.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
+                MatchBroadcasts.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

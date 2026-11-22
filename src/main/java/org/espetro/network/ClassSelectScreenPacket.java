@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,15 +112,7 @@ public class ClassSelectScreenPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleClassSelectScreen", ClassSelectScreenPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "ClassSelectScreen",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleClassSelectScreen(this));
     }
 }

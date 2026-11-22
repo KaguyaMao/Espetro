@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.governance.CommanderGovernanceManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -44,9 +45,7 @@ public class GovernanceActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
             CommanderGovernanceManager mgr = CommanderGovernanceManager.getInstance();
             switch (action) {
                 case START_IMPEACHMENT -> mgr.tryStartImpeachment(player);
@@ -59,6 +58,5 @@ public class GovernanceActionPacket {
                 }
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

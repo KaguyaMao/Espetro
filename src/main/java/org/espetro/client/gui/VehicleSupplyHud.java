@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.espetro.network.VehicleSupplySyncPacket;
+import org.espetro.client.gui.hud.HudDraw;
 
 /**
  * 载具 HUD 渲染器：
@@ -25,19 +26,19 @@ public final class VehicleSupplyHud {
     private static final int PANEL_HEIGHT = 28;
     private static final int TOP_MARGIN = 4;
     private static final int ICON_SIZE = 10;
-    private static final int ICON_TEXTURE_SIZE = 128;
 
-    private static final ResourceLocation ICON_AMMO =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
-    private static final ResourceLocation ICON_CONSTR =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/construction_supply.png");
+    private static final ResourceLocation ICON_AMMO = EspetroIcons.AMMO_SUPPLY;
+    private static final ResourceLocation ICON_CONSTR = EspetroIcons.CONSTRUCTION_SUPPLY;
 
-    private static final int COLOR_AMMO_FILL = 0xFFCC4444;
+    private static final int COLOR_AMMO_FILL = HudDraw.AMMO;
     private static final int COLOR_CONSTR_FILL = 0xFFCCAA00;
-    private static final int COLOR_BAR_BG = 0xFF333333;
+    private static final int COLOR_BAR_BG = HudDraw.BAR_BACKGROUND;
     private static final int COLOR_PANEL_BG = 0xDD111111;
     private static final int COLOR_PANEL_BORDER = 0xFF555555;
+    private static final int ICON_TEXTURE_SIZE = EspetroIcons.ICON_TEXTURE_SIZE;
     private static final int COLOR_HINT = 0xFFDDBB66;
+    /** 原版 drawString(String, color) 对无 alpha 颜色按不透明处理。 */
+    private static final int TEXT_COLOR = 0xFFFFFF;
     private static final double HINT_RANGE = 5.0;
     private static final int HINT_Y_OFFSET = 20;
 
@@ -91,31 +92,17 @@ public final class VehicleSupplyHud {
         int px = (screenW - PANEL_WIDTH) / 2;
         int py = TOP_MARGIN;
 
-        // 面板背景
-        graphics.fill(px, py, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BG);
-        // 面板边框
-        graphics.fill(px, py, px + PANEL_WIDTH, py + 1, COLOR_PANEL_BORDER);
-        graphics.fill(px, py + PANEL_HEIGHT - 1, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
-        graphics.fill(px, py, px + 1, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
-        graphics.fill(px + PANEL_WIDTH - 1, py, px + PANEL_WIDTH, py + PANEL_HEIGHT, COLOR_PANEL_BORDER);
+        HudDraw.panel(graphics, px, py, PANEL_WIDTH, PANEL_HEIGHT, COLOR_PANEL_BG, COLOR_PANEL_BORDER);
 
-        // 容量条背景
+        // 容量条：弹药（红，左侧优先）+ 建材（黄，接在弹药右侧）
         int barX = px + 10;
         int barY = py + 4;
         int barW = PANEL_WIDTH - 20;
         int barH = BAR_HEIGHT;
-        graphics.fill(barX, barY, barX + barW, barY + barH, COLOR_BAR_BG);
-
-        // 弹药填充（红色，左侧优先）
-        if (ammo > 0) {
-            int ammoW = (int)((long)ammo * barW / max);
-            graphics.fill(barX, barY, barX + ammoW, barY + barH, COLOR_AMMO_FILL);
-        }
-
-        // 建材填充（黄色，接在弹药右侧）
-        if (constr > 0) {
-            int ammoW = ammo > 0 ? (int)((long)ammo * barW / max) : 0;
-            int constrW = (int)((long)constr * barW / max);
+        int ammoW = HudDraw.floorWidth(ammo, max, barW);
+        HudDraw.bar(graphics, barX, barY, barW, barH, ammoW, COLOR_BAR_BG, COLOR_AMMO_FILL);
+        int constrW = HudDraw.floorWidth(constr, max, barW);
+        if (constrW > 0) {
             int constrEnd = Math.min(barX + ammoW + constrW, barX + barW);
             graphics.fill(barX + ammoW, barY, constrEnd, barY + barH, COLOR_CONSTR_FILL);
         }
@@ -126,32 +113,20 @@ public final class VehicleSupplyHud {
 
         if (supply.canCarryConstruction()) {
             // 补给载具：弹药左，建材右
-            int ammoIconX = px + 35;
-            drawSupplyIcon(graphics, ICON_AMMO, ammoIconX, iconRowY);
-            graphics.drawString(mc.font, String.valueOf(ammo),
-                ammoIconX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            HudDraw.iconValue(graphics, mc.font, ICON_AMMO, px + 35, iconRowY, ICON_SIZE,
+                String.valueOf(ammo), iconTextY, TEXT_COLOR, true);
 
             String constrText = String.valueOf(constr);
-            int constrTextW = mc.font.width(constrText);
-            int constrIconX = px + PANEL_WIDTH - 35 - ICON_SIZE - 3 - constrTextW;
-            drawSupplyIcon(graphics, ICON_CONSTR, constrIconX, iconRowY);
-            graphics.drawString(mc.font, constrText,
-                constrIconX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            int constrIconX = px + PANEL_WIDTH - 35 - HudDraw.iconValueWidth(mc.font, ICON_SIZE, constrText);
+            HudDraw.iconValue(graphics, mc.font, ICON_CONSTR, constrIconX, iconRowY, ICON_SIZE,
+                constrText, iconTextY, TEXT_COLOR, true);
         } else {
             // 战斗载具：弹药居中
             String ammoText = String.valueOf(ammo);
-            int totalW = ICON_SIZE + 3 + mc.font.width(ammoText);
-            int startX = px + (PANEL_WIDTH - totalW) / 2;
-            drawSupplyIcon(graphics, ICON_AMMO, startX, iconRowY);
-            graphics.drawString(mc.font, ammoText,
-                startX + ICON_SIZE + 3, iconTextY, 0xFFFFFF);
+            int startX = px + (PANEL_WIDTH - HudDraw.iconValueWidth(mc.font, ICON_SIZE, ammoText)) / 2;
+            HudDraw.iconValue(graphics, mc.font, ICON_AMMO, startX, iconRowY, ICON_SIZE,
+                ammoText, iconTextY, TEXT_COLOR, true);
         }
-    }
-
-    private static void drawSupplyIcon(GuiGraphics graphics, ResourceLocation icon, int x, int y) {
-        graphics.blit(icon, x, y, ICON_SIZE, ICON_SIZE,
-            0.0F, 0.0F, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
-            ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
     }
 
     // ==================== 准心提示 ====================

@@ -2,7 +2,7 @@ package org.espetro.team;
 
 import net.minecraft.server.level.ServerPlayer;
 import org.espetro.Espetro;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.SquadSync;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -178,11 +178,11 @@ public final class PartyManager {
     // -------------------- 广播 --------------------
 
     public void broadcastPartyList() {
-        NetworkManager.broadcastPartyList(this);
+        SquadSync.broadcastPartyList(this);
     }
 
     public void syncToPlayer(ServerPlayer player) {
-        NetworkManager.sendPartyListTo(player);
+        SquadSync.sendPartyListTo(player);
     }
 
     // -------------------- 管理 --------------------

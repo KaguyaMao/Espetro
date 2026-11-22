@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.GameStateManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -21,14 +22,9 @@ public class SpectateRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) {
-                return;
-            }
+        PacketHandling.handleOnServer(ctx, player -> {
             GameStateManager.getInstance().selfSetObserver(player);
-            NetworkManager.sendCloseModScreens(player);
+            MatchBroadcasts.sendCloseModScreens(player);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

@@ -15,6 +15,7 @@ import org.espetro.team.ClassSelectManager;
 import org.espetro.bastion.BastionManager;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -27,7 +28,7 @@ public class ClassSelectPacket {
     public enum Source {
         /** J 键统一部署界面：只允许等待选点或位于本方原部署点。 */
         DEPLOY_SCREEN,
-        /** 右键己方 Radio 打开的 AuraTip 职业轮盘。 */
+        /** 右键己方 Radio 打开的 EsRadial 职业轮盘。 */
         RADIO,
         /** 战斗载具轮盘的更换职业。 */
         VEHICLE
@@ -101,10 +102,7 @@ public class ClassSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
-
+        PacketHandling.handleOnServer(ctx, player -> {
             // 检查是否在编制选择阶段
             if (ClassSelectManager.getInstance().isSelectingActive()) {
                 // 当前选择阵营的所有玩家均可投票，服务端负责验证队伍和候选池。
@@ -236,11 +234,10 @@ public class ClassSelectPacket {
             String factionId = countManager.getPlayerFaction(player.getUUID());
             // Small count + squad packets replace the old full deploy-screen
             // fan-out (which repeated every ItemStack preview for every player).
-            NetworkManager.broadcastClassCounts(team,
+            DeployScreenSync.broadcastClassCounts(team,
                 factionId != null ? factionId : teamOrFaction);
-            NetworkManager.syncSquadsToTeam(team);
+            SquadSync.syncSquadsToTeam(team);
         });
-        ctx.get().setPacketHandled(true);
     }
 
     /**

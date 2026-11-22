@@ -21,6 +21,7 @@ import org.espetro.vehicle.VehicleClassChangePolicy;
 import org.espetro.vehicle.VehicleConfig;
 import org.espetro.vehicle.VehicleManager;
 import org.espetro.vehicle.VehicleNativeWhitelist;
+import org.espetro.network.core.PacketHandling;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -61,9 +62,7 @@ public final class VehicleSupplyActionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> handleServer(context.getSender()));
-        context.setPacketHandled(true);
+        PacketHandling.handleOnServer(supplier, this::handleServer);
     }
 
     private void handleServer(@Nullable ServerPlayer player) {
@@ -93,7 +92,7 @@ public final class VehicleSupplyActionPacket {
                 // 补给载具与无标签载具只下发驾驶员/载具队长，客户端轮盘因此不会列出其它职业。
                 boolean crewOnly = !VehicleClassChangePolicy
                     .allowsFullClassChange(interaction.config());
-                NetworkManager.sendVehicleClassSelect(player, interaction.factionId(), crewOnly);
+                DeployScreenSync.sendVehicleClassSelect(player, interaction.factionId(), crewOnly);
             }
             sendSync(player, interaction);
             return;

@@ -27,6 +27,7 @@ import org.espetro.Espetro;
 import org.espetro.team.ClassCountManager;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
+import org.espetro.team.PlayerHoldStates;
 import org.espetro.team.SquadManager;
 import org.espetro.team.SpawnPointConfig;
 import org.espetro.team.TeamPackManager;
@@ -138,7 +139,7 @@ public class BastionEventHandler {
                     int remaining = GameStateManager.getInstance().getCurrentPhase() == GamePhase.DEPLOYING
                         ? GameStateManager.getInstance().getDeployTimeRemainingSeconds()
                         : -1;
-                    org.espetro.network.NetworkManager.sendUnifiedDeployScreen(finalPlayer, remaining);
+                    org.espetro.network.DeployScreenSync.sendUnifiedDeployScreen(finalPlayer, remaining);
                 }
             });
         }
@@ -164,7 +165,7 @@ public class BastionEventHandler {
                     int remaining = GameStateManager.getInstance().getCurrentPhase() == GamePhase.DEPLOYING
                         ? GameStateManager.getInstance().getDeployTimeRemainingSeconds()
                         : -1;
-                    org.espetro.network.NetworkManager.sendUnifiedDeployScreen(player, remaining);
+                    org.espetro.network.DeployScreenSync.sendUnifiedDeployScreen(player, remaining);
                 }
             });
         }
@@ -829,13 +830,13 @@ public class BastionEventHandler {
     private static void maintainHoldWithoutTeleport(
             ServerPlayer player, boolean forceBlindResync, boolean adventureDeployWaiting) {
         if (adventureDeployWaiting) {
-            GameStateManager.enforceAdventureBlindness(player, forceBlindResync);
+            PlayerHoldStates.enforceAdventureBlindness(player, forceBlindResync);
         } else {
-            GameStateManager.enforceSpectatorBlindness(player, forceBlindResync);
+            PlayerHoldStates.enforceSpectatorBlindness(player, forceBlindResync);
         }
     }
 
     private static void applyWaitingDeployState(ServerPlayer player) {
-        GameStateManager.getInstance().applyDeploymentWaitingState(player);
+        PlayerHoldStates.applyDeploymentWaitingState(player);
     }
 }

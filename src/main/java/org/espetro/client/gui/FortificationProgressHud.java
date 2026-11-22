@@ -7,7 +7,7 @@ import net.minecraft.Util;
 import org.espetro.network.FortificationProgressPacket;
 import org.espetro.client.aui.GuiElement;
 
-/** Persistent MUtil construction bar; state changes only when a server packet arrives. */
+/** Persistent AUI construction bar; state changes only when a server packet arrives. */
 public final class FortificationProgressHud {
     private static final long VISIBLE_MS = 3_000L;
     private static volatile State state = State.hidden();

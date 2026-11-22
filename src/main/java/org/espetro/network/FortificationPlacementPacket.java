@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.bastion.FortificationManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -29,15 +30,11 @@ public record FortificationPlacementPacket(Action action, UUID token,
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(supplier, player -> {
             String error = action == Action.CANCEL
                 ? FortificationManager.getInstance().cancelPreview(player, token)
                 : FortificationManager.getInstance().confirmPreview(player, token, anchor, facing);
             if (error != null) player.sendSystemMessage(Component.literal(error));
         });
-        context.setPacketHandled(true);
     }
 }

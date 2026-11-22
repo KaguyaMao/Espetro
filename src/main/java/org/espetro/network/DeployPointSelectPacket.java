@@ -2,6 +2,7 @@ package org.espetro.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,16 +55,8 @@ public class DeployPointSelectPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleDeployPointSelect", DeployPointSelectPacket.class)
-                    .invoke(null, this);
-            } catch (Exception e) {
-                org.espetro.Espetro.LOGGER.error("Failed to handle DeployPointSelectPacket", e);
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "DeployPointSelect",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleDeployPointSelect(this));
     }
 
     public boolean hasDeployPoint() { return hasDeployPoint; }

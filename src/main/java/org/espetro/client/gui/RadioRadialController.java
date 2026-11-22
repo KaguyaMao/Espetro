@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.RadioRadialPacket;
 
 import java.util.ArrayList;
@@ -33,12 +34,9 @@ public final class RadioRadialController {
 
     private static final ResourceLocation ICON_CLASS =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/roles/rifleman.png");
-    private static final ResourceLocation ICON_RESUPPLY =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
+    private static final ResourceLocation ICON_RESUPPLY = EspetroIcons.AMMO_SUPPLY;
     private static final IRadialIcon ICON_BACK = ReturnArrowIcon.INSTANCE;
-    private static final ResourceLocation ICON_UNAVAILABLE =
-        ResourceLocation.fromNamespaceAndPath(
-            "espetro", "textures/gui/commander_skills/unavailable.png");
+    private static final ResourceLocation ICON_UNAVAILABLE = EspetroIcons.SKILL_UNAVAILABLE;
 
     private static boolean initialized;
     private static BlockPos lastRadioPos = BlockPos.ZERO;
@@ -108,7 +106,7 @@ public final class RadioRadialController {
                     pendingVehicleCrewOnly = false;
                 } else {
                     // Radio 换职业
-                    NetworkManager.sendRadioClassSelect(
+                    ClientRequests.sendRadioClassSelect(
                         faction != null ? faction : "", classId, variantId, lastRadioPos);
                 }
             }
@@ -131,7 +129,7 @@ public final class RadioRadialController {
         lastRadioPos = radioPos != null ? radioPos.immutable() : BlockPos.ZERO;
         pendingVehicleId = null; // 清除车辆上下文
         pendingVehicleCrewOnly = false;
-        NetworkManager.sendRadioOpen(lastRadioPos);
+        ClientRequests.sendRadioOpen(lastRadioPos);
     }
 
     /** 收到 S2C 职业列表后打开弹药箱根轮盘（补给步兵 / 更换职业）。 */
@@ -152,7 +150,7 @@ public final class RadioRadialController {
         } else if (!vehicleClassMenu) {
             publishMenus();
             var data = RadialMenuRegistry.getRuntimeMenu(vehicleClassMenu ? CLASS_MENU : ROOT);
-            if (data != null) RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            if (data != null) EspetroRadials.openClick(OWNER, data);
         }
     }
 
@@ -197,7 +195,7 @@ public final class RadioRadialController {
     private static void replaceMenu(org.esradial.client.RadialMenuData data) {
         if (!RadialMenuClientApi.replace(data)) {
             publishMenus();
-            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            EspetroRadials.openClick(OWNER, data);
         }
     }
 

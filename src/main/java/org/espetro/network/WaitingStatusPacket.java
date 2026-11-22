@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -37,16 +38,8 @@ public class WaitingStatusPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleWaitingStatus", String.class, boolean.class)
-                    .invoke(null, message, isActionBar);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        PacketHandling.handleOnClient(ctx, "WaitingStatus",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleWaitingStatus(message, isActionBar));
     }
 
     public String getMessage() {

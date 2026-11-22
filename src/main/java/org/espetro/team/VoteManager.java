@@ -103,7 +103,7 @@ public class VoteManager {
         Espetro.LOGGER.info("双方指挥官投票开始（并行）！限时{}秒", timeoutSeconds);
 
         // 双方并行：各自收到本方候选 + 统一倒计时
-        org.espetro.network.NetworkManager.broadcastBothCommanderVoteScreens(timeoutSeconds);
+        org.espetro.network.PreMatchScreens.broadcastBothCommanderVoteScreens(timeoutSeconds);
     }
 
     /**
@@ -119,7 +119,7 @@ public class VoteManager {
         timeoutSeconds = timeout;
         Espetro.LOGGER.info("守方指挥官投票开始！限时{}秒", timeout);
 
-        org.espetro.network.NetworkManager.broadcastCommanderVoteScreenForTeam("DEFEND", timeout);
+        org.espetro.network.PreMatchScreens.broadcastCommanderVoteScreenForTeam("DEFEND", timeout);
     }
 
     /**
@@ -135,7 +135,7 @@ public class VoteManager {
         timeoutSeconds = timeout;
         Espetro.LOGGER.info("攻方指挥官投票开始！限时{}秒", timeout);
 
-        org.espetro.network.NetworkManager.broadcastCommanderVoteScreenForTeam("ATTACK", timeout);
+        org.espetro.network.PreMatchScreens.broadcastCommanderVoteScreenForTeam("ATTACK", timeout);
     }
 
     /**
@@ -271,7 +271,7 @@ public class VoteManager {
                 ServerPlayer cmd = server == null ? null : server.getPlayerList().getPlayer(defendCommander);
                 if (cmd != null) {
                     Espetro.sendToPlayer(cmd, "§a你已被选为§9守方§a指挥官！");
-                    org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                    org.espetro.network.MatchBroadcasts.sendCommanderSkillSync(cmd);
                 }
             }
             Espetro.LOGGER.info("守方指挥官投票结束！指挥官: {}", name);
@@ -286,7 +286,7 @@ public class VoteManager {
                 ServerPlayer cmd = server == null ? null : server.getPlayerList().getPlayer(attackCommander);
                 if (cmd != null) {
                     Espetro.sendToPlayer(cmd, "§a你已被选为§c攻方§a指挥官！");
-                    org.espetro.network.NetworkManager.sendCommanderSkillSync(cmd);
+                    org.espetro.network.MatchBroadcasts.sendCommanderSkillSync(cmd);
                 }
             }
             Espetro.LOGGER.info("攻方指挥官投票结束！指挥官: {}", name);
@@ -319,14 +319,14 @@ public class VoteManager {
                         org.espetro.team.SquadManager.getInstance().getPlayerSquadId(commander),
                         true
                     );
-                    org.espetro.network.NetworkManager.sendCommanderSkillSync(commanderPlayer);
-                    org.espetro.network.NetworkManager.syncSquadsToTeam(result.team);
-                    org.espetro.network.NetworkManager.broadcastClassCounts(result.team,
+                    org.espetro.network.MatchBroadcasts.sendCommanderSkillSync(commanderPlayer);
+                    org.espetro.network.SquadSync.syncSquadsToTeam(result.team);
+                    org.espetro.network.DeployScreenSync.broadcastClassCounts(result.team,
                         org.espetro.team.ClassCountManager.getInstance()
                             .getPlayerFaction(commander));
-                    org.espetro.network.NetworkManager.broadcastMatchStats(
+                    org.espetro.network.MatchBroadcasts.broadcastMatchStats(
                         org.espetro.stats.PlayerMatchStatsManager.getInstance());
-                    org.espetro.network.NetworkManager.syncUnifiedDeployScreen(commanderPlayer, -1);
+                    org.espetro.network.DeployScreenSync.syncUnifiedDeployScreen(commanderPlayer, -1);
                 }
             }
         }

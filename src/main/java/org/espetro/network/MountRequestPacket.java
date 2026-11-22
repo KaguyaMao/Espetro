@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.vehicle.VehicleMountServer;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -38,17 +39,12 @@ public final class MountRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ServerPlayer sender = ctx.get().getSender();
-        ctx.get().enqueueWork(() -> {
-            if (sender == null) {
-                return;
-            }
+        PacketHandling.handleOnServer(ctx, sender -> {
             switch (action) {
                 case BEGIN -> VehicleMountServer.begin(sender, vehicleId);
                 case CANCEL -> VehicleMountServer.cancel(sender);
                 case COMPLETE -> VehicleMountServer.complete(sender, vehicleId);
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

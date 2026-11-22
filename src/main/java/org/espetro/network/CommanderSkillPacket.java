@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.CommanderSkillManager;
 import org.espetro.team.CommanderSkillType;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -34,17 +35,13 @@ public class CommanderSkillPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
-
+        PacketHandling.handleOnServer(ctx, player -> {
             if (skillId.isEmpty()) {
-                NetworkManager.sendCommanderSkillSync(player);
+                MatchBroadcasts.sendCommanderSkillSync(player);
                 return;
             }
 
             CommanderSkillManager.getInstance().activateSkill(player, skillId);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

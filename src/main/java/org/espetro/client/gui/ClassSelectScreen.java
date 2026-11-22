@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.network.ClassSelectScreenPacket;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.client.aui.GuiElement;
 
 import java.io.InputStream;
@@ -364,7 +364,7 @@ public class ClassSelectScreen extends EspetroMenuScreen {
             return;
         }
 
-        NetworkManager.sendClassSelect("", factionId);
+        ClientRequests.sendClassSelect("", factionId);
         lastSelectedFaction = factionId;
         refreshDynamicElements();
     }

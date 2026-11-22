@@ -4,7 +4,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.espetro.Espetro;
 import org.espetro.config.GameConfig;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.MatchBroadcasts;
+import org.espetro.network.SquadSync;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
 import org.espetro.team.SquadManager;
@@ -88,14 +89,14 @@ public final class CommanderGovernanceManager {
         }
         recentCommanderDisconnect.clear();
         recentCommanderTeam.clear();
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     public void syncCommandersFromVoteManager() {
         VoteManager vm = VoteManager.getInstance();
         getTeam("ATTACK").commander = vm.getAttackCommander();
         getTeam("DEFEND").commander = vm.getDefendCommander();
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
         if (GameStateManager.getInstance().getCurrentPhase() != GamePhase.BATTLE) {
             return;
         }
@@ -128,8 +129,8 @@ public final class CommanderGovernanceManager {
         governance.volunteers.clear();
         governance.tickCounter = 0;
         governance.endGameTime = 0L;
-        NetworkManager.syncSquadsToTeam(team);
-        NetworkManager.broadcastGovernanceState(this);
+        SquadSync.syncSquadsToTeam(team);
+        MatchBroadcasts.broadcastGovernanceState(this);
         Espetro.LOGGER.info("指挥官选举结果已同步到治理状态: team={}, commander={}",
             team, commander);
     }
@@ -173,7 +174,7 @@ public final class CommanderGovernanceManager {
         g.endGameTime = server.overworld().getGameTime() + g.timeoutSeconds * 20L;
         Espetro.broadcastToTeam(team, "§e⚔ 小队长 " + initiator.getName().getString()
             + " 发起弹劾！按 J 打开战术面板投票（" + g.timeoutSeconds + "秒）");
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
         return true;
     }
 
@@ -194,7 +195,7 @@ public final class CommanderGovernanceManager {
         String name = playerName(candidate);
         voter.displayClientMessage(
             net.minecraft.network.chat.Component.literal("§a已投票给 " + name), true);
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
         return true;
     }
 
@@ -213,7 +214,7 @@ public final class CommanderGovernanceManager {
         g.volunteers.add(player.getUUID());
         player.displayClientMessage(
             net.minecraft.network.chat.Component.literal("§a已登记志愿补位"), true);
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
         return true;
     }
 
@@ -232,7 +233,7 @@ public final class CommanderGovernanceManager {
         g.votes.put(voter.getUUID(), candidate);
         voter.displayClientMessage(
             net.minecraft.network.chat.Component.literal("§a已投票给 " + playerName(candidate)), true);
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
         return true;
     }
 
@@ -296,7 +297,7 @@ public final class CommanderGovernanceManager {
             return;
         }
         if (changed) {
-            NetworkManager.broadcastGovernanceState(this);
+            MatchBroadcasts.broadcastGovernanceState(this);
         }
     }
 
@@ -314,7 +315,7 @@ public final class CommanderGovernanceManager {
             if (g.state == State.VACANCY_VOTE) {
                 collapseVacancyVoteIfNeeded(team, g);
             } else if (removed) {
-                NetworkManager.broadcastGovernanceState(this);
+                MatchBroadcasts.broadcastGovernanceState(this);
             }
         }
     }
@@ -376,7 +377,7 @@ public final class CommanderGovernanceManager {
         g.tickCounter = 0;
         g.endGameTime = 0L;
         Espetro.broadcastToTeam(team, message);
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     private void collapseVacancyVoteIfNeeded(String team, TeamGovernance g) {
@@ -399,7 +400,7 @@ public final class CommanderGovernanceManager {
             g.state = State.IDLE;
             g.votes.clear();
             g.volunteers.clear();
-            NetworkManager.broadcastGovernanceState(this);
+            MatchBroadcasts.broadcastGovernanceState(this);
             return;
         }
         if (remaining.size() == 1) {
@@ -407,10 +408,10 @@ public final class CommanderGovernanceManager {
             g.state = State.IDLE;
             g.votes.clear();
             g.volunteers.clear();
-            NetworkManager.broadcastGovernanceState(this);
+            MatchBroadcasts.broadcastGovernanceState(this);
             return;
         }
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     private void startVacancy(String team) {
@@ -426,7 +427,7 @@ public final class CommanderGovernanceManager {
             ? server.overworld().getGameTime() + g.timeoutSeconds * 20L
             : 0L;
         Espetro.broadcastToTeam(team, "§e指挥官空缺！小队长可志愿补位（" + g.timeoutSeconds + "秒）");
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     public void onServerTick(MinecraftServer server) {
@@ -463,7 +464,7 @@ public final class CommanderGovernanceManager {
         g.challenger = null;
         g.votes.clear();
         g.endGameTime = 0L;
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     /**
@@ -547,7 +548,7 @@ public final class CommanderGovernanceManager {
             g.state = State.IDLE;
             g.volunteers.clear();
             g.endGameTime = 0L;
-            NetworkManager.broadcastGovernanceState(this);
+            MatchBroadcasts.broadcastGovernanceState(this);
             return;
         }
         if (vols.size() == 1) {
@@ -555,7 +556,7 @@ public final class CommanderGovernanceManager {
             g.state = State.IDLE;
             g.volunteers.clear();
             g.endGameTime = 0L;
-            NetworkManager.broadcastGovernanceState(this);
+            MatchBroadcasts.broadcastGovernanceState(this);
             return;
         }
         g.volunteers.clear();
@@ -569,7 +570,7 @@ public final class CommanderGovernanceManager {
             ? server.overworld().getGameTime() + g.timeoutSeconds * 20L
             : 0L;
         Espetro.broadcastToTeam(team, "§e多名小队长志愿补位，开始全员公投（" + g.timeoutSeconds + "秒）");
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     private void finishVacancyVote(String team, TeamGovernance g) {
@@ -587,7 +588,7 @@ public final class CommanderGovernanceManager {
         g.volunteers.clear();
         g.votes.clear();
         g.endGameTime = 0L;
-        NetworkManager.broadcastGovernanceState(this);
+        MatchBroadcasts.broadcastGovernanceState(this);
     }
 
     public void assignCommander(String team, UUID uuid, String reason) {
@@ -604,11 +605,11 @@ public final class CommanderGovernanceManager {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
             if (p != null) {
                 name = p.getName().getString();
-                NetworkManager.sendCommanderSkillSync(p);
+                MatchBroadcasts.sendCommanderSkillSync(p);
             }
         }
-        NetworkManager.syncSquadsToTeam(team);
-        NetworkManager.broadcastGovernanceState(this);
+        SquadSync.syncSquadsToTeam(team);
+        MatchBroadcasts.broadcastGovernanceState(this);
         Espetro.LOGGER.info("任命指挥官 {} 为 {} ({})", name, team, reason);
         Espetro.broadcastToTeam(team, "§a新指挥官已就任：" + name);
     }

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.Espetro;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.RadialActionPacket;
 import org.espetro.team.CommanderSkillManager;
 import org.espetro.client.aui.GuiElement;
@@ -20,14 +20,11 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/radio_deploy.png");
     private static final ResourceLocation HAB =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/hab_deploy.png");
-    private static final ResourceLocation RALLY =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/rally_deploy.png");
+    private static final ResourceLocation RALLY = EspetroIcons.RALLY_DEPLOY;
     private static final ResourceLocation CONSTRUCTION =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/deposit_supply.png");
-    private static final ResourceLocation AMMO =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/fob_status.png");
-    private static final ResourceLocation VEHICLE =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/vehicle_deploy.png");
+    private static final ResourceLocation AMMO = EspetroIcons.FOB_STATUS;
+    private static final ResourceLocation VEHICLE = EspetroIcons.VEHICLE_DEPLOY;
     private static final ResourceLocation COMMAND =
         ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/commander_skills/command.png");
 
@@ -58,7 +55,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                 options.add(new Option(label, icon, 128, cooldown <= 0,
                     () -> {
                     org.espetro.client.gui.CommanderSkillTargetRequest.arm();
-                    NetworkManager.sendCommanderSkillActivate(skill.id());
+                    ClientRequests.sendCommanderSkillActivate(skill.id());
                 }));
             }
         }
@@ -67,7 +64,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
     private void addTacticalOption(String label, ResourceLocation icon, int textureWidth,
                                    RadialActionPacket.Action action) {
         options.add(new Option(label, icon, textureWidth, true,
-            () -> NetworkManager.sendRadialAction(action)));
+            () -> ClientRequests.sendRadialAction(action)));
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.network.OutpostSupplySyncPacket;
 import org.espetro.client.aui.GuiElement;
+import org.espetro.client.gui.hud.HudDraw;
 
 /** 靠近前哨基地时的 Radio 血量、弹药/建材存量与兵站状态 HUD。 */
 public final class OutpostSupplyHud {
@@ -15,17 +16,14 @@ public final class OutpostSupplyHud {
     private static final int PANEL_WIDTH = 158;
     private static final int PANEL_HEIGHT = 52;
 
-    private static final ResourceLocation FOB_STATUS_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/fob_status.png");
-    private static final ResourceLocation AMMO_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/ammo_supply.png");
-    private static final ResourceLocation CONSTRUCTION_ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/squad/construction_supply.png");
+    private static final ResourceLocation FOB_STATUS_ICON = EspetroIcons.FOB_STATUS;
+    private static final ResourceLocation AMMO_ICON = EspetroIcons.AMMO_SUPPLY;
+    private static final ResourceLocation CONSTRUCTION_ICON = EspetroIcons.CONSTRUCTION_SUPPLY;
 
-    private static final int PANEL_BACKGROUND = 0xD0111111;
-    private static final int PANEL_BORDER = 0xB05E646C;
-    private static final int BAR_BACKGROUND = 0xFF333333;
-    private static final int BAR_HEALTH = 0xFF4A9BFF;
+    private static final int PANEL_BACKGROUND = HudDraw.PANEL_BACKGROUND;
+    private static final int PANEL_BORDER = HudDraw.PANEL_BORDER;
+    private static final int BAR_BACKGROUND = HudDraw.BAR_BACKGROUND;
+    private static final int BAR_HEALTH = HudDraw.HEALTH;
     private static final int HAB_ENABLED_COLOR = 0xFF55AAFF;
     private static final int HAB_DISABLED_COLOR = 0xFFFF5555;
 
@@ -90,44 +88,29 @@ public final class OutpostSupplyHud {
             int bw = getWidth();
             int bh = getHeight();
 
-            graphics.fill(bx, by, bx + bw, by + bh, PANEL_BACKGROUND);
-            graphics.renderOutline(bx, by, bw, bh, PANEL_BORDER);
+            HudDraw.panel(graphics, bx, by, bw, bh, PANEL_BACKGROUND, PANEL_BORDER);
 
             // 左上角 fob_status 图标 + 电台血量蓝条
             int iconSize = 12;
             int iconX = bx + 6;
             int iconY = by + 6;
-            graphics.blit(FOB_STATUS_ICON, iconX, iconY,
-                iconSize, iconSize, 0f, 0f, 128, 128, 128, 128);
+            HudDraw.icon(graphics, FOB_STATUS_ICON, iconX, iconY, iconSize);
 
             int barX = iconX + iconSize + 4;
             int barY = by + 9;
             int barW = bw - (barX - bx) - 6;
             int barH = 6;
-            graphics.fill(barX, barY, barX + barW, barY + barH, BAR_BACKGROUND);
-            int healthW = Math.max(0, (int) Math.round(
-                (double) Math.min(radioHealth, radioMaxHealth) * barW / radioMaxHealth));
-            if (healthW > 0) {
-                graphics.fill(barX, barY, barX + healthW, barY + barH, BAR_HEALTH);
-            }
+            HudDraw.bar(graphics, barX, barY, barW, barH,
+                HudDraw.roundedWidth(radioHealth, radioMaxHealth, barW), BAR_BACKGROUND, BAR_HEALTH);
 
             // 弹药 / 建材存量行
+            var font = Minecraft.getInstance().font;
             int supplyY = by + 24;
             int supplyIconSize = 10;
-            graphics.blit(AMMO_ICON, bx + 6, supplyY,
-                supplyIconSize, supplyIconSize,
-                0f, 0f, 128, 128, 128, 128);
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(String.valueOf(ammunition)),
-                bx + 6 + supplyIconSize + 3, supplyY + 1, 0xFFFFFFFF, false);
-
-            int constructionIconX = bx + 78;
-            graphics.blit(CONSTRUCTION_ICON, constructionIconX, supplyY,
-                supplyIconSize, supplyIconSize,
-                0f, 0f, 128, 128, 128, 128);
-            graphics.drawString(Minecraft.getInstance().font,
-                Component.literal(String.valueOf(construction)),
-                constructionIconX + supplyIconSize + 3, supplyY + 1, 0xFFFFFFFF, false);
+            HudDraw.iconValue(graphics, font, AMMO_ICON, bx + 6, supplyY, supplyIconSize,
+                String.valueOf(ammunition), supplyY + 1, HudDraw.TEXT, false);
+            HudDraw.iconValue(graphics, font, CONSTRUCTION_ICON, bx + 78, supplyY, supplyIconSize,
+                String.valueOf(construction), supplyY + 1, HudDraw.TEXT, false);
 
             // 最底下一行：兵站是否启用
             int statusY = by + 40;

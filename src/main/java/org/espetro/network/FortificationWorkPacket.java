@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.bastion.FortificationManager;
+import org.espetro.network.core.PacketHandling;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -38,16 +39,12 @@ public record FortificationWorkPacket(@Nullable BlockPos blockTarget,
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(supplier, player -> {
             if (entityTarget != null) {
                 FortificationManager.getInstance().workEntity(player, entityTarget, build);
             } else if (blockTarget != null) {
                 FortificationManager.getInstance().work(player, blockTarget, build);
             }
         });
-        context.setPacketHandled(true);
     }
 }

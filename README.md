@@ -23,7 +23,7 @@ Espetro 是 Minecraft Forge 1.20.1 的战术小队与侵攻流程模组，提供
 ```
 
 管理员可在任意阶段使用 `/espetro stop` 强制结束游戏。所有在线玩家会立即回到主世界主城，
-本局投票、队伍、职业、装备、统计和临时战场对象会被清理，随后重新打开 MUtil 主城界面。
+本局投票、队伍、职业、装备、统计和临时战场对象会被清理，随后重新打开主城界面。
 战场维度会从服务器 Tick 列表摘除，其区块、实体和 POI 存储句柄会在独立 IO 线程中以“不保存本局破坏”
 的方式关闭，随后删除存档中的整个战场维度目录。下一局再次选中该地图时，会重新从只读 `EsWorld`
 模板复制并挂载新的战场维度；`EsWorld` 中的原始地图不会被修改。
@@ -34,18 +34,18 @@ Espetro 是 Minecraft Forge 1.20.1 的战术小队与侵攻流程模组，提供
 | --- | --- |
 | Java | 17 |
 | Minecraft | 1.20.1 |
-| Forge | 47.4.20 |
-| MUtil | 6.3.0 |
-| OELib | 0.2.4 |
-| AuraTip | 1.1.1-beta 或更高 |
+| Forge | 47.4.22 |
+| ApricityUI (`apricityui`) | 1.2.6 |
+| EsRadial (`esradial`) | 0.4.0 |
+| Tetrachord (`tetrachordlib`) | 1.20+1.0.3 |
 | Rhino (`rhino`) | 2001.2.2-build.17 |
 | Architectury API (`architectury`) | 9.1.12 或更高 |
 | ESPoints (`espoints`) | 1.1.0-final（本工作区同步版）或更高 |
 | KubeJS (`kubejs`) | Forge 1.20.1 使用 `2001.6.5-build.26`，强制依赖 |
 
-Espetro、MUtil、OELib、AuraTip、Rhino、Architectury API 和 KubeJS 是基础运行依赖。普通 GUI 使用 MUtil；战术轮盘使用 AuraTip。所有指挥官技能由 KubeJS 脚本注册和实现：`startup_scripts` 注册技能，`server_scripts` 执行技能效果。ESPoints 以 `espoints` 为模组 ID，并依赖 Espetro；Espetro 将 ESPoints 声明为软依赖。未安装时 Espetro 仍可启动，但部署界面的战术地图会使用占位显示，`155火炮支援` 无法打开选点地图。如需战术地图、据点、标点或火炮选点，客户端和服务器都必须同时安装 ESPoints 1.1.0-final、Ping Wheel 1.12.1 及其声明的 AuraTip/OELib 前置。为防止 ESPoints 影响 Espetro 的独立开发启动，本地兄弟项目默认不注入，可用 `-PespetroIncludeLocalEspoints=true` 显式启用。Esvoice 是可选的战术语音扩展。
+Espetro、ApricityUI、EsRadial、Tetrachord、Rhino、Architectury API 和 KubeJS 是基础运行依赖。普通 GUI 使用 ApricityUI；战术轮盘与右侧短提示使用 EsRadial。所有指挥官技能由 KubeJS 脚本注册和实现：`startup_scripts` 注册技能，`server_scripts` 执行技能效果。ESPoints 以 `espoints` 为模组 ID，并依赖 Espetro；Espetro 将 ESPoints 声明为软依赖。未安装时 Espetro 仍可启动，但部署界面的战术地图会使用占位显示，`155火炮支援` 无法打开选点地图。如需战术地图、据点、标点或火炮选点，客户端和服务器都必须同时安装 ESPoints 1.1.0-final、Ping Wheel 1.12.1 及其声明的 AuraTip/OELib 前置。为防止 ESPoints 影响 Espetro 的独立开发启动，本地兄弟项目默认不注入，可用 `-PespetroIncludeLocalEspoints=true` 显式启用。Esvoice 是可选的战术语音扩展。
 
-KubeJS 是强制依赖。加载时会自动暴露 `Espetro`、`EspetroAPI`、`EspetroCommanderSkills`、底层管理器、ESPoints 桥接类和 MUtil 类给 KubeJS。默认指挥官技能通过 KubeJS 执行；载具补给站已改为可配置的“建造工事”，不再是指挥官技能。`155火炮支援` 的默认火力效果由 `kubejs/server_scripts/00_espetro_artillery_155.js` 以 KubeJS `ServerEvents.tick` 队列实现。
+KubeJS 是强制依赖。加载时会自动暴露 `Espetro`、`EspetroAPI`、`EspetroCommanderSkills`、底层管理器、ESPoints 桥接类给 KubeJS。默认指挥官技能通过 KubeJS 执行；载具补给站已改为可配置的“建造工事”，不再是指挥官技能。`155火炮支援` 的默认火力效果由 `kubejs/server_scripts/00_espetro_artillery_155.js` 用 KubeJS `server.scheduleInTicks` 排定各轮射击，并用战场会话 ID 防止跨局误射。
 
 ## 默认按键
 
@@ -60,7 +60,7 @@ KubeJS 是强制依赖。加载时会自动暴露 `Espetro`、`EspetroAPI`、`Es
 
 主城 GUI 的「进入新手教程」或 `/espetro tutorial reopen` 启动服务端权威进度的引导：
 
-- 自绘 **TutorialHudOverlay**（底部说明卡 + 左下「退出教程」），不再依赖关闭 AuraTip 卡片才能下一步。
+- 自绘 **TutorialHudOverlay**（底部说明卡 + 左下「退出教程」），不需要关闭提示卡片才能下一步。
 - 对应阶段打开 **只读预览 GUI**（`tutorialPreviewMode`），点击不会改真实战局。
 - **Enter** = 下一步；聊天栏打开时不拦截。
 - 左下角或 `/espetro tutorial skip` = 完全退出。

@@ -3,6 +3,7 @@ package org.espetro.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.audio.AudioPackId;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -64,15 +65,7 @@ public final class AudioCuePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleAudioCue", AudioCuePacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException ignored) {
-            }
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnClient(contextSupplier, "AudioCue",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleAudioCue(this));
     }
 }

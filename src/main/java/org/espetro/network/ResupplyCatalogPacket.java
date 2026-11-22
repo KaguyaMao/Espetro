@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.logistics.resupply.ResupplySourceRef;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,16 +123,7 @@ public record ResupplyCatalogPacket(UUID token, long catalogRevision, long state
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            try {
-                Class.forName("org.espetro.client.ClientPacketHandlers")
-                    .getMethod("handleResupplyCatalog", ResupplyCatalogPacket.class)
-                    .invoke(null, this);
-            } catch (ReflectiveOperationException error) {
-                org.espetro.Espetro.LOGGER.error("处理补给目录失败", error);
-            }
-        });
-        context.setPacketHandled(true);
+        PacketHandling.handleOnClient(supplier, "ResupplyCatalog",
+            () -> () -> org.espetro.client.ClientPacketHandlers.handleResupplyCatalog(this));
     }
 }

@@ -2,7 +2,7 @@ package org.espetro.client.vehicle;
 
 import net.minecraft.resources.ResourceLocation;
 
-/** Client-side vehicle interaction progress for the AuraTip wheel center. */
+/** Client-side vehicle interaction progress for the EsRadial wheel center. */
 public final class VehicleInteractionState {
 
     private static final ResourceLocation ICON =

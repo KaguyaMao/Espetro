@@ -148,13 +148,13 @@ public final class ResupplyRadialController {
     public static void tick() {
         if (token == null) return;
         boolean active = RadialMenuClientApi.isActive()
-            && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+            && EspetroRadials.isShowing(MENU);
         if (menuWasActive && !active) clear(true);
         menuWasActive = active;
     }
 
     public static boolean isActive() {
-        return token != null && RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        return token != null && EspetroRadials.isShowing(MENU);
     }
 
     /** Test/debug counter: unchanged ticks and duplicate deltas must not rebuild menus. */
@@ -165,12 +165,12 @@ public final class ResupplyRadialController {
     private static void replacePage() {
         if (token == null) return;
         RadialMenuData data = buildPage();
-        boolean existing = RadialMenuClientApi.activeMenuId().filter(MENU::equals).isPresent();
+        boolean existing = EspetroRadials.isShowing(MENU);
         boolean changed = existing ? RadialMenuClientApi.replace(data)
             : RadialMenuClientApi.isActive() && RadialMenuClientApi.navigate(data);
         if (!changed) {
             RadialMenuRegistry.setMenus(OWNER, List.of(data));
-            RadialMenuClientApi.open(data, RadialMenuClientApi.OpenOptions.click(OWNER));
+            EspetroRadials.openClick(OWNER, data);
         }
         rebuildCount++;
         menuWasActive = true;
@@ -250,11 +250,13 @@ public final class ResupplyRadialController {
         return Math.max(1, (Math.max(0, entryCount) + size - 1) / size);
     }
 
-    static List<String> pageSlotIds(int entryCount, int pageIndex, int balanceValue) {
-        int pages = pageCount(entryCount, PAGE_SIZE);
+    /** 与 {@link #buildPage()} 相同的槽位顺序；{@code pageSize} 便于测试分页（运行时为 {@code PAGE_SIZE}）。 */
+    static List<String> pageSlotIds(int entryCount, int pageIndex, int pageSize) {
+        int size = Math.max(1, pageSize);
+        int pages = pageCount(entryCount, size);
         int safePage = Math.min(Math.max(0, pageIndex), pages - 1);
-        int first = safePage * PAGE_SIZE;
-        int end = Math.min(entryCount, first + PAGE_SIZE);
+        int first = safePage * size;
+        int end = Math.min(entryCount, first + size);
         List<String> ids = new ArrayList<>();
         for (int i = first; i < end; i++) {
             ids.add("espetro.resupply.entry." + i);

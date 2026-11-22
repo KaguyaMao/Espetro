@@ -2,7 +2,7 @@ package org.espetro.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 
 /**
  * 队伍选择GUI控制器
@@ -27,7 +27,7 @@ public class TeamSelectionGui {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null) {
             // 发送阵营选择包到服务器
-            NetworkManager.sendFactionSelect(team);
+            ClientRequests.sendFactionSelect(team);
             // 客户端本地记录已选攻守方，并立刻刷新选中边框（不等下一秒广播）。
             ClientGameState.setPlayerTeam(team);
             if (mc.screen instanceof TeamSelectionScreen screen) {

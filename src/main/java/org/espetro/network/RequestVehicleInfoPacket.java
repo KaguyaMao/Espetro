@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.ClassCountManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -22,17 +23,13 @@ public final class RequestVehicleInfoPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null) return;
+        PacketHandling.handleOnServer(supplier, player -> {
             String factionId = ClassCountManager.getInstance().getPlayerFaction(player.getUUID());
             if (factionId == null) {
                 player.sendSystemMessage(Component.literal("§c你还没有选择编制！"));
                 return;
             }
-            NetworkManager.sendVehicleDeployScreen(player, factionId);
+            DeployScreenSync.sendVehicleDeployScreen(player, factionId);
         });
-        context.setPacketHandled(true);
     }
 }

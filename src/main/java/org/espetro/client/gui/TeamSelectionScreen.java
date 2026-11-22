@@ -27,10 +27,8 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
     /** 防守方编制选择图 ResourceLocation 字符串（服务端下发）。 */
     private static String defendFactionImage;
 
-    private static final ResourceLocation DEFAULT_ATTACK =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/attack_faction.png");
-    private static final ResourceLocation DEFAULT_DEFEND =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/defend_faction.png");
+    private static final ResourceLocation DEFAULT_ATTACK = EspetroIcons.ATTACK_FACTION;
+    private static final ResourceLocation DEFAULT_DEFEND = EspetroIcons.DEFEND_FACTION;
 
     // 16:9 横向图片显示尺寸
     private static final int IMG_W = 192;
@@ -174,7 +172,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
         int spectateY = labelY + 14;
         root.addChild(EspetroAuiWidgets.button(spectateX, spectateY, spectateW, 20,
             "进入观战", () -> {
-                org.espetro.network.NetworkManager.sendSpectateRequest();
+                org.espetro.network.ClientRequests.sendSpectateRequest();
                 net.minecraft.client.Minecraft.getInstance().setScreen(null);
             }));
 

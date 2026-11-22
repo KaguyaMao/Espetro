@@ -6,7 +6,7 @@ import org.espetro.Espetro;
 import org.espetro.dimension.BattlefieldWorldManager;
 import org.espetro.mapconfig.ActiveMapConfig;
 import org.espetro.mapconfig.ExternalConfigBootstrap;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.PreMatchScreens;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,9 +124,9 @@ public final class MapVoteManager {
         active = true;
         voteStateDirty = false;
         Espetro.LOGGER.info("地图投票开始: {} 个候选, {} 秒", candidates.size(), timeoutSeconds);
-        NetworkManager.broadcastMapVoteState(this);
+        PreMatchScreens.broadcastMapVoteState(this);
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            NetworkManager.sendOpenMapVoteScreen(player);
+            PreMatchScreens.sendOpenMapVoteScreen(player);
         }
         return true;
     }
@@ -151,7 +151,7 @@ public final class MapVoteManager {
         tickCounter++;
         if (voteStateDirty && tickCounter % VOTE_BROADCAST_INTERVAL_TICKS == 0) {
             voteStateDirty = false;
-            NetworkManager.broadcastMapVoteState(this);
+            PreMatchScreens.broadcastMapVoteState(this);
         }
         if (tickCounter >= timeoutSeconds * 20) {
             finish(server);
@@ -187,14 +187,14 @@ public final class MapVoteManager {
         }
         Espetro.LOGGER.info("地图投票结束: 胜出 {} ({}), 票数统计 {}",
             winner.displayName, winner.mapFolder, tally);
-        NetworkManager.broadcastMapVoteState(this);
+        PreMatchScreens.broadcastMapVoteState(this);
         GameStateManager.getInstance().onMapVoteFinished(winner);
     }
 
     public void syncToPlayer(ServerPlayer player) {
-        NetworkManager.sendMapVoteState(player, this);
+        PreMatchScreens.sendMapVoteState(player, this);
         if (active) {
-            NetworkManager.sendOpenMapVoteScreen(player);
+            PreMatchScreens.sendOpenMapVoteScreen(player);
         }
     }
 

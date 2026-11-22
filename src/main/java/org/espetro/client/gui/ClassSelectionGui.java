@@ -2,7 +2,7 @@ package org.espetro.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 
 /**
  * 职业选择GUI控制器
@@ -22,7 +22,7 @@ public class ClassSelectionGui {
                 TeamSelectionScreen.open();
             } else {
                 String factionId = ClientGameState.getPlayerFactionId();
-                NetworkManager.requestClassSelection(factionId);
+                ClientRequests.requestClassSelection(factionId);
             }
         }
     }
@@ -34,7 +34,7 @@ public class ClassSelectionGui {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen == null) {
             // 向服务端请求完整职业数据，服务端会回传 OpenClassSelectionPacket 自动打开GUI
-            NetworkManager.requestClassSelection(factionId);
+            ClientRequests.requestClassSelection(factionId);
         }
     }
 
@@ -43,10 +43,10 @@ public class ClassSelectionGui {
      */
     public static void selectClass(String factionId, String classId) {
         // 发送网络包到服务器
-        NetworkManager.sendClassSelect(factionId, classId);
+        ClientRequests.sendClassSelect(factionId, classId);
     }
 
     public static void selectClass(String factionId, String classId, String variantId) {
-        NetworkManager.sendClassSelect(factionId, classId, variantId);
+        ClientRequests.sendClassSelect(factionId, classId, variantId);
     }
 }

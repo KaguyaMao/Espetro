@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.vehicle.DismountServer;
 import org.espetro.vehicle.SbwVehicleSeatResolver;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -18,11 +19,7 @@ public final class DismountRequestPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ServerPlayer sender = ctx.get().getSender();
-        ctx.get().enqueueWork(() -> {
-            if (sender == null) {
-                return;
-            }
+        PacketHandling.handleOnServer(ctx, sender -> {
             if (sender.getVehicle() == null
                 || !SbwVehicleSeatResolver.isSupportedVehicle(sender.getVehicle())) {
                 return;
@@ -31,6 +28,5 @@ public final class DismountRequestPacket {
             sender.stopRiding();
             DismountServer.consumeReady(sender);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

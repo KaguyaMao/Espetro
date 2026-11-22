@@ -2,7 +2,7 @@ package org.espetro.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.EntityHitResult;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -38,7 +38,7 @@ public final class FixedWeaponInteractController {
             return;
         }
         // 只发"打开轮盘"请求：服务端确认是己方固定武器才回轮盘数据，否则静默
-        NetworkManager.sendFixedWeaponOpen(hit.getEntity().getUUID());
+        ClientRequests.sendFixedWeaponOpen(hit.getEntity().getUUID());
     }
 
     /** 与载具轮盘保持一致：优先 SBW 的交互键，取不到就直读 F。 */
