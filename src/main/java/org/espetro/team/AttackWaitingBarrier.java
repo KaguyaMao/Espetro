@@ -167,8 +167,8 @@ final class AttackWaitingBarrier {
             return 0;
         }
 
-        ResourceKey<Level> dimension = dimension;
-        ServerLevel level = dimension == null ? null : server.getLevel(dimension);
+        ResourceKey<Level> recordedDimension = dimension;
+        ServerLevel level = recordedDimension == null ? null : server.getLevel(recordedDimension);
         if (level == null || Level.OVERWORLD.equals(level.dimension())) {
             placedBlocks.clear();
             dimension = null;
