@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -30,19 +31,13 @@ public class RequestClassSelectionPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            if (ctx.get().getDirection().getReceptionSide().isServer()) {
-                ServerPlayer player = ctx.get().getSender();
-                if (player != null) {
-                    // 发送统一部署主界面（集成职业选择、复活点、载具、地图）
-                    GameStateManager gsm = GameStateManager.getInstance();
-                    int remaining = gsm.getCurrentPhase() == GamePhase.DEPLOYING
-                        ? gsm.getDeployTimeRemainingSeconds()
-                        : -1;
-                    NetworkManager.sendUnifiedDeployScreen(player, remaining);
-                }
-            }
+        PacketHandling.handleOnServer(ctx, player -> {
+            // 发送统一部署主界面（集成职业选择、复活点、载具、地图）
+            GameStateManager gsm = GameStateManager.getInstance();
+            int remaining = gsm.getCurrentPhase() == GamePhase.DEPLOYING
+                ? gsm.getDeployTimeRemainingSeconds()
+                : -1;
+            NetworkManager.sendUnifiedDeployScreen(player, remaining);
         });
-        ctx.get().setPacketHandled(true);
     }
 }

@@ -11,6 +11,7 @@ import org.espetro.team.ClassSelectManager;
 import org.espetro.team.GamePhase;
 import org.espetro.team.GameStateManager;
 import org.espetro.team.VoteManager;
+import org.espetro.network.core.PacketHandling;
 
 import java.util.function.Supplier;
 
@@ -31,47 +32,41 @@ public class RequestGameStatePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            if (ctx.get().getDirection().getReceptionSide().isServer()) {
-                ServerPlayer player = ctx.get().getSender();
-                if (player == null) return;
+        PacketHandling.handleOnServer(ctx, player -> {
+            GameStateManager gsm = GameStateManager.getInstance();
+            GamePhase phase = gsm.getCurrentPhase();
+            ClassCountManager ccm = ClassCountManager.getInstance();
 
-                GameStateManager gsm = GameStateManager.getInstance();
-                GamePhase phase = gsm.getCurrentPhase();
-                ClassCountManager ccm = ClassCountManager.getInstance();
+            // 获取玩家队伍和编制
+            String playerTeam = ccm.getPlayerTeam(player.getUUID());
+            String playerFaction = ccm.getPlayerFaction(player.getUUID());
 
-                // 获取玩家队伍和编制
-                String playerTeam = ccm.getPlayerTeam(player.getUUID());
-                String playerFaction = ccm.getPlayerFaction(player.getUUID());
-
-                // 计算当前阶段剩余时间
-                int timeRemaining = 0;
-                switch (phase) {
-                    case DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE ->
-                        timeRemaining = VoteManager.getInstance().getRemainingSeconds();
-                    case DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT ->
-                        timeRemaining = ClassSelectManager.getInstance().getRemainingSeconds();
-                    case DEPLOYING ->
-                        timeRemaining = gsm.getDeployTimeRemainingSeconds();
-                    default -> timeRemaining = 0;
-                }
-
-                // 获取当前投票/选择阶段的活跃队伍（用于客户端判断是否需要显示界面）
-                String activeTeam = phase.getActiveTeam();
-
-                GameStateResponsePacket response = new GameStateResponsePacket(
-                    phase.name(),
-                    playerTeam,
-                    playerFaction,
-                    activeTeam,
-                    timeRemaining,
-                    gsm.getCurrentMapFolder(),
-                    BattlefieldContext.getObjectiveMode()
-                );
-
-                NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player), response);
+            // 计算当前阶段剩余时间
+            int timeRemaining = 0;
+            switch (phase) {
+                case DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE ->
+                    timeRemaining = VoteManager.getInstance().getRemainingSeconds();
+                case DEFEND_FACTION_SELECT, ATTACK_FACTION_SELECT ->
+                    timeRemaining = ClassSelectManager.getInstance().getRemainingSeconds();
+                case DEPLOYING ->
+                    timeRemaining = gsm.getDeployTimeRemainingSeconds();
+                default -> timeRemaining = 0;
             }
+
+            // 获取当前投票/选择阶段的活跃队伍（用于客户端判断是否需要显示界面）
+            String activeTeam = phase.getActiveTeam();
+
+            GameStateResponsePacket response = new GameStateResponsePacket(
+                phase.name(),
+                playerTeam,
+                playerFaction,
+                activeTeam,
+                timeRemaining,
+                gsm.getCurrentMapFolder(),
+                BattlefieldContext.getObjectiveMode()
+            );
+
+            NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player), response);
         });
-        ctx.get().setPacketHandled(true);
     }
 }
