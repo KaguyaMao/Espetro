@@ -20,7 +20,7 @@ class ResupplyRadialControllerTest {
 
     @Test
     void firstPageHasEntriesBackAndNext() {
-        List<String> ids = ResupplyRadialController.pageSlotIds(8, 0, 40);
+        List<String> ids = ResupplyRadialController.pageSlotIds(8, 0, 5);
         assertEquals("espetro.resupply.entry.0", ids.get(0));
         assertEquals("espetro.resupply.entry.4", ids.get(4));
         assertTrue(ids.contains("espetro.resupply.back"));
@@ -30,7 +30,7 @@ class ResupplyRadialControllerTest {
 
     @Test
     void lastPageHasPreviousAndNoNext() {
-        List<String> ids = ResupplyRadialController.pageSlotIds(8, 1, 40);
+        List<String> ids = ResupplyRadialController.pageSlotIds(8, 1, 5);
         assertTrue(ids.contains("espetro.resupply.entry.5"));
         assertTrue(ids.contains("espetro.resupply.entry.7"));
         assertTrue(ids.contains("espetro.resupply.previous"));

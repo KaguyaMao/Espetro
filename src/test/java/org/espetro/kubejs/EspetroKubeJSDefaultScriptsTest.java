@@ -14,10 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class EspetroKubeJSDefaultScriptsTest {
     private static final List<String> SCRIPTS = List.of(
         "startup_scripts/00_espetro_drone_detection.js",
-        "startup_scripts/00_espetro_vehicle_supply_station.js",
         "startup_scripts/00_espetro_artillery_155.js",
         "server_scripts/00_espetro_drone_detection.js",
-        "server_scripts/00_espetro_vehicle_supply_station.js",
         "server_scripts/00_espetro_artillery_155.js"
     );
 
@@ -32,18 +30,7 @@ class EspetroKubeJSDefaultScriptsTest {
 
     @Test
     void bundledEffectsUseExpectedImplementations() throws Exception {
-        String supply = read("server_scripts/00_espetro_vehicle_supply_station.js");
-        // 技能用 /give + NBT 发放可放置物品，而不是 createEntity
-        assertTrue(supply.contains("give ") && supply.contains("ammo_supply_station"),
-            "vehicle supply script should use /give for the Dragonrise item");
-        assertTrue(supply.contains("载具补给站"),
-            "granted item should be named 载具补给站");
-        assertTrue(supply.contains("display") || supply.contains("Name"),
-            "give command should set display name NBT");
-        assertFalse(supply.contains("level.createEntity") || supply.contains(".spawn()"),
-            "vehicle supply must not spawn the station entity directly");
-        assertFalse(supply.contains("commander.getDirection()"));
-
+        // 载具补给站已改为可建造工事（FortificationConfig），不再随附 KubeJS 技能脚本。
         String artillery = read("server_scripts/00_espetro_artillery_155.js");
         assertTrue(artillery.contains("ServerEvents.tick"));
         assertTrue(artillery.contains("EspetroArtilleryTasks"));
