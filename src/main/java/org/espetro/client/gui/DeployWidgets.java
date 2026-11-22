@@ -54,7 +54,7 @@ public final class DeployWidgets {
 
     /** 一条细横线（用于职业排之间）：默认 1px，可指定更粗的线（需求 7）。 */
     static class Divider extends GuiElement {
-        private final int color;
+        final int color;
         private final int thickness;
 
         Divider(int x, int y, int width, int color) {
@@ -78,17 +78,17 @@ public final class DeployWidgets {
     }
 
     static class EspButton extends GuiElement {
-        private final Runnable action;
-        private String label;
-        private boolean enabled = true;
-        private boolean hovered = false;
-        private int normalColor = UnifiedDeployScreen.BTN_BG_PLAIN_BLACK;
-        private int hoverColor = UnifiedDeployScreen.BTN_BG_HOVER;
+        final Runnable action;
+        String label;
+        boolean enabled = true;
+        boolean hovered = false;
+        int normalColor = UnifiedDeployScreen.BTN_BG_PLAIN_BLACK;
+        int hoverColor = UnifiedDeployScreen.BTN_BG_HOVER;
         private int disabledColor = UnifiedDeployScreen.BTN_BG_DISABLED;
         private int disabledBorderColor = 0x60383848;
         private int disabledTextColor = 0x666666;
         private int textColor = UnifiedDeployScreen.BTN_TEXT;
-        private ResourceLocation icon;
+        ResourceLocation icon;
         private int iconTextureWidth = 128;
         private int iconTextureHeight = 128;
         private int iconSize = 10;
@@ -238,7 +238,7 @@ public final class DeployWidgets {
     /** 直接用 Minecraft Font 渲染的文本元素，亮度和按钮文字一致 */
     static class PlainText extends GuiElement {
         private String text;
-        private int color;
+        int color;
 
         PlainText(int x, int y, String text, int color) {
             super(x, y,
@@ -396,7 +396,7 @@ public final class DeployWidgets {
         }
 
         /** 冷却文案统一走外层 UnifiedDeployScreen#formatCooldown（m:ss）。 */
-        private static String formatCooldown(int seconds) {
+        static String formatCooldown(int seconds) {
             return DeploySnapshots.formatCooldown(seconds);
         }
     }
