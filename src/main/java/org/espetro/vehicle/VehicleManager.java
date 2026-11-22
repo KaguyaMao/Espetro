@@ -1294,7 +1294,7 @@ public class VehicleManager {
         ServerPlayer commander = commanderId == null ? null
             : server.getPlayerList().getPlayer(commanderId);
         if (commander != null) {
-            org.espetro.network.NetworkManager
+            org.espetro.network.DeployScreenSync
                 .syncVehicleDeployScreen(commander, data.factionId());
         }
     }
