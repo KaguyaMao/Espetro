@@ -301,31 +301,58 @@ int cooldown = skills.getRemainingCooldownSeconds(
 
 ## 网络开发
 
-`NetworkManager` 集中注册所有 Espetro 网络包。典型流程：
+`NetworkManager.registerNetwork()` 集中注册所有 Espetro 网络包，注册通过
+`network.core.PacketRegistrar` 并声明方向：
 
 ```java
-public static void encode(MyPacket packet, FriendlyByteBuf buf) { }
-public static MyPacket decode(FriendlyByteBuf buf) { return new MyPacket(); }
-public static void handle(MyPacket packet, Supplier<NetworkEvent.Context> context) { }
+PacketRegistrar packets = new PacketRegistrar(NET);
+packets.toClient(MyStatePacket.class, MyStatePacket::write, MyStatePacket::read, MyStatePacket::handle);
+packets.toServer(MyActionPacket.class, MyActionPacket::write, MyActionPacket::read, MyActionPacket::handle);
 ```
+
+Forge 会校验方向：`toClient` 的包若从客户端发来会被丢弃，`toServer` 反之。只有请求与响应共用同一类型的包才用
+`bidirectional`。注册顺序就是包 ID，增删或调整顺序时提升 `PROTOCOL_VERSION`。
+
+包的 `handle` 统一交给 `network.core.PacketHandling`：
+
+```java
+// S→C：双层 lambda，专用服务器不会加载客户端类；异常会带包名记录日志
+public void handle(Supplier<NetworkEvent.Context> ctx) {
+    PacketHandling.handleOnClient(ctx, "MyState",
+        () -> () -> org.espetro.client.ClientPacketHandlers.handleMyState(this));
+}
+
+// C→S：在主线程以发送者执行，发送者为空时忽略
+public void handle(Supplier<NetworkEvent.Context> ctx) {
+    PacketHandling.handleOnServer(ctx, player -> MyManager.getInstance().apply(player, value));
+}
+```
+
+不要再用 `Class.forName(...).getMethod(...).invoke(...)` 调客户端代码：直接调用能被编译器检查签名，重命名也不会悄悄失效。
 
 要求：
 
 1. 客户端请求必须在服务端重新验证阶段、阵营、权限和索引范围。
-2. 世界状态变更通过 `enqueueWork` 在主线程执行。
-3. GUI 打开包只能在客户端处理；使用现有 `ClientPacketHandlers` 隔离客户端类。
+2. 世界状态变更在主线程执行（`PacketHandling` 已处理）。
+3. GUI 打开包只能在客户端处理；客户端逻辑放在 `ClientPacketHandlers` 或对应控制器。
 4. 修改现有编码时同步升级网络协议。
 5. 集合、名字和 ID 必须限制数量与长度。
 
 ## 客户端开发
 
-`EspetroClient` 注册三个按键、兵力/体力 overlay、跳跃监听和队友名牌。客户端状态分为：
+`EspetroClient` 注册按键、HUD overlay、轮盘控制器和队友名牌。客户端状态分为：
 
 - `ClientGameState`：阶段、队伍、编制及界面权限。
 - `ClientTacticalState`：指挥官、小队成员和名牌颜色。
 - `ClientPacketHandlers`：网络包到 GUI/状态类的分派。
 
-GUI 基类是 `MutilScreen`，常用组件在 `EspetroMutilWidgets`。`ScrollableList` 用于可滚动列表，`ScreenFadeIn` 处理淡入动画。
+GUI 基于 ApricityUI（`client.aui.AuiScreen` / `GuiElement`），可复用的部件：
+
+- `EspetroIcons`：多处共用的 GUI 纹理，新增共用图标在这里声明。
+- `hud.HudDraw`：面板、图标、图标+数值、进度条原语和补给 HUD 配色。
+- `EspetroRadials`：EsRadial 轮盘的 `isShowing` / `openClick`。
+- `EspetroTipNotifier`：右侧短提示（EsRadial `EsToasts`），失败时降级到聊天栏。
+- `ScrollableList`：可滚动列表。
 
 ## HCR AAD 源码边界
 
@@ -343,6 +370,15 @@ ESPoints 变成 Espetro 的强制运行依赖。
 - 如暂时无法移除旧副本，发布前至少用类清单比较两个目录，避免同名类实现不同。
 
 ## 构建与验证
+
+EsRadial 通过 `mavenLocal` 引入，当前需要带 `EsToasts` 的 0.4.0（EsRadial 仓库 `toast-tips` 分支）。首次构建前先发布到本地：
+
+```bash
+# 在 EsRadial 仓库（toast-tips 分支）
+./gradlew :forge:publishToMavenLocal
+```
+
+`libs/` 下需放置 `dragonrise_reforge-1.5.0-beta-20260921.jar`（仅编译期使用，已被 `.gitignore` 排除）。
 
 ```bash
 ./gradlew compileJava
