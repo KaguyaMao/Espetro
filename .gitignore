@@ -12,6 +12,8 @@
 
 # Package Files #
 *.jar
+# Gradle wrapper 必须入库，否则全新检出后 ./gradlew 无法启动
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
