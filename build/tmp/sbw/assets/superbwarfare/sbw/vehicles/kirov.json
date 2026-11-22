@@ -1,8 +1,0 @@
-{
-  "Models": [
-    {
-      "Model": "superbwarfare:models/bedrock/vehicle/kirov.geo.json",
-      "Texture": "superbwarfare:textures/bedrock/vehicle/kirov.png"
-    }
-  ]
-}

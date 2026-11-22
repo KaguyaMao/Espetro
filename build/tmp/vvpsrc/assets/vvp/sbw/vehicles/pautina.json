@@ -1,7 +1,0 @@
-{
-  "ID": "vvp:pautina",
-  "Model": {
-    "Model": "vvp:geo/pautina.geo.json",
-    "Texture": "vvp:textures/entity/pautina.png"
-  }
-}

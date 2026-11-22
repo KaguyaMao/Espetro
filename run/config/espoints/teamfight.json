@@ -1,9 +1,0 @@
-{
-  "totalBatches": 1,
-  "endBehavior": "terminate",
-  "teamReinforcements": {
-    "ATTACK": 50,
-    "DEFEND": 50
-  },
-  "plannedPoints": []
-}

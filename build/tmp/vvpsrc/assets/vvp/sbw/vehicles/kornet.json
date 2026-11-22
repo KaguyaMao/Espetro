@@ -1,7 +1,0 @@
-{
-  "ID": "vvp:kornet",
-  "Model": {
-    "Model": "vvp:geo/kornet.geo.json",
-    "Texture": "vvp:textures/entity/kornet.png"
-  }
-}
