@@ -14,7 +14,7 @@ import org.espetro.kubejs.commander.EspetroCommanderSkills;
 import org.espetro.kubejs.commander.KubeCommanderSkillDefinition;
 import org.espetro.kubejs.commander.KubeCommanderSkillEvent;
 import org.espetro.kubejs.commander.SkillUserRole;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.MatchBroadcasts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -497,7 +497,7 @@ public class CommanderSkillManager {
             .computeIfAbsent(commander.getUUID(), k -> new HashMap<>())
             .put(skillId, getServerTick() + cooldownTicks);
 
-        NetworkManager.sendCommanderSkillSync(commander);
+        MatchBroadcasts.sendCommanderSkillSync(commander);
 
         String team = Espetro.getPlayerTeam(commander);
         if (team != null) {
@@ -538,7 +538,7 @@ public class CommanderSkillManager {
                 changed = true;
             }
             if (changed) {
-                NetworkManager.sendCommanderSkillSync(player);
+                MatchBroadcasts.sendCommanderSkillSync(player);
             }
         }
         Espetro.LOGGER.info("对战阶段开始：已为在线玩家起算指挥官技能冷却");

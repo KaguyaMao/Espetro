@@ -68,7 +68,7 @@ public class BastionSelectionPacket {
      * 旧复活点选择入口的兼容转发。
      */
     public static void sendBastionSelectionMessage(ServerPlayer player) {
-        NetworkManager.sendDeployPointSelectScreen(player);
+        DeployScreenSync.sendDeployPointSelectScreen(player);
     }
 
     /**
@@ -99,7 +99,7 @@ public class BastionSelectionPacket {
             // 兵站已被摧毁/不属于本队：明确提示并立刻刷新部署点列表（保留等待状态，可重选）
             player.sendSystemMessage(Component.literal(
                 "§c该部署点已被摧毁或已失效，请重新选择部署点。"));
-            NetworkManager.sendDeployPointSync(player);
+            DeployScreenSync.sendDeployPointSync(player);
             return false;
         }
 
@@ -123,7 +123,7 @@ public class BastionSelectionPacket {
             player.sendSystemMessage(Component.literal(
                 "§c无法在该兵站部署：§e" + status
                     + "§c（需己方 Radio 覆盖且未被敌方压制）"));
-            NetworkManager.sendDeployPointSync(player);
+            DeployScreenSync.sendDeployPointSync(player);
             return false;
         }
 
@@ -135,7 +135,7 @@ public class BastionSelectionPacket {
             if (!success) {
                 player.sendSystemMessage(Component.literal(
                     "§c兵站区块加载失败、超时或已失效，请重新选择部署点。"));
-                NetworkManager.sendUnifiedDeployScreen(player, -1);
+                DeployScreenSync.sendUnifiedDeployScreen(player, -1);
                 return;
             }
             completeHabDeployment(player, bastion, manager);

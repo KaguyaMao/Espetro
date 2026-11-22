@@ -138,7 +138,7 @@ public class BastionEventHandler {
                     int remaining = GameStateManager.getInstance().getCurrentPhase() == GamePhase.DEPLOYING
                         ? GameStateManager.getInstance().getDeployTimeRemainingSeconds()
                         : -1;
-                    org.espetro.network.NetworkManager.sendUnifiedDeployScreen(finalPlayer, remaining);
+                    org.espetro.network.DeployScreenSync.sendUnifiedDeployScreen(finalPlayer, remaining);
                 }
             });
         }
@@ -164,7 +164,7 @@ public class BastionEventHandler {
                     int remaining = GameStateManager.getInstance().getCurrentPhase() == GamePhase.DEPLOYING
                         ? GameStateManager.getInstance().getDeployTimeRemainingSeconds()
                         : -1;
-                    org.espetro.network.NetworkManager.sendUnifiedDeployScreen(player, remaining);
+                    org.espetro.network.DeployScreenSync.sendUnifiedDeployScreen(player, remaining);
                 }
             });
         }

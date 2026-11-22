@@ -29,7 +29,7 @@ public final class RequestVehicleInfoPacket {
                 player.sendSystemMessage(Component.literal("§c你还没有选择编制！"));
                 return;
             }
-            NetworkManager.sendVehicleDeployScreen(player, factionId);
+            DeployScreenSync.sendVehicleDeployScreen(player, factionId);
         });
     }
 }

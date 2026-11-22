@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.client.HcrTacticalMapBridge;
 import org.espetro.client.ClientEquipZones;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.UnifiedDeployScreenPacket;
 import org.espetro.network.GovernanceStatePacket;
 import org.espetro.network.GovernanceActionPacket;
@@ -1545,7 +1545,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 // 后添加 → 优先响应点击，避免与标题按钮抢事件
                 EspButton join = new EspButton(rowW - SQUAD_JOIN_BTN_W, rowY,
                     SQUAD_JOIN_BTN_W, SQUAD_TITLE_ROW_H, "\u00a7a加入",
-                    () -> NetworkManager.joinSquad(squad.id));
+                    () -> ClientRequests.joinSquad(squad.id));
                 join.setTextScale(SQUAD_TEXT_SCALE);
                 join.setPlainBlack();   // 需求 6：默认黑半透底（禁用态也保留一点底），可加入时下面覆盖为绿底
                 join.setEnabled(!unavailable);
@@ -1735,9 +1735,9 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 locked ? "\u00a7e解锁" : "\u00a7e锁定",
                 () -> {
                     if (isMySquadLocked()) {
-                        NetworkManager.unlockSquad();
+                        ClientRequests.unlockSquad();
                     } else {
-                        NetworkManager.lockSquad();
+                        ClientRequests.lockSquad();
                     }
                 });
             squadLockButton.setTextScale(SQUAD_TEXT_SCALE);
@@ -1811,7 +1811,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (squadInlineNameField != null) {
             squadInlineNameField.setTyping(false);
         }
-        NetworkManager.sendSquadCreateWithCategory(squadInlineName, categoryId);
+        ClientRequests.sendSquadCreateWithCategory(squadInlineName, categoryId);
     }
 
     /** 队伍类型上拉菜单是否打开。 */
@@ -2147,7 +2147,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private void openLeaveSquadConfirm() {
         openSquadConfirm("退出小队",
             "退出后将清空你的职业与装备。确定退出当前小队？",
-            () -> NetworkManager.leaveSquad());
+            () -> ClientRequests.leaveSquad());
     }
 
     private void openDisbandSquadConfirm() {
@@ -2156,7 +2156,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
         openSquadConfirm("解散小队",
             "解散后全队成员都会离队，且所有成员的职业与装备都会被清空。确定解散？",
-            () -> NetworkManager.deleteSquad(mySquadId));
+            () -> ClientRequests.deleteSquad(mySquadId));
     }
 
     /**
@@ -2169,7 +2169,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             battle
                 ? "对战阶段重新部署会立刻阵亡，并按本职业扣除兵力。确定重新部署？"
                 : "部署阶段重新部署不会扣除兵力，会立刻阵亡并重选部署点。确定？",
-            NetworkManager::requestRedeploy);
+            ClientRequests::requestRedeploy);
     }
 
     /**
@@ -2960,7 +2960,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             // 不再关闭 J 菜单：需要选点的技能由服务端回包进入火炮选点模式，
             // 指挥官直接在这张地图上操作即可。
             CommanderSkillTargetRequest.arm(skillId);
-            NetworkManager.sendCommanderSkillActivate(skillId);
+            ClientRequests.sendCommanderSkillActivate(skillId);
             return true;
         }
 
@@ -3057,7 +3057,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         if (battle && idle) {
             EspButton impeach = new EspButton(nextX, by, 56, BTN_H, "\u00a7c发起弹劾",
-                () -> NetworkManager.sendGovernanceAction(
+                () -> ClientRequests.sendGovernanceAction(
                     GovernanceActionPacket.Action.START_IMPEACHMENT, null));
             impeach.setTextScale(UI_TEXT_SCALE);
             impeach.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
@@ -3168,7 +3168,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 contentX, y2, contentW, GovernanceActionPacket.Action.VOTE_IMPEACHMENT);
         } else if (volunteerPhase) {
             EspButton volunteer = new EspButton(contentX, cy, contentW, BTN_H, "\u00a7a志愿补位",
-                () -> NetworkManager.sendGovernanceAction(
+                () -> ClientRequests.sendGovernanceAction(
                     GovernanceActionPacket.Action.VOLUNTEER_VACANCY, null));
             volunteer.setTextScale(UI_TEXT_SCALE);
             volunteer.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
@@ -3202,7 +3202,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (candidate == null) return;
         EspButton button = new EspButton(x, y, Math.max(80, width), BTN_H,
             buildVoteButtonLabel(state, candidate, prefix),
-            () -> NetworkManager.sendGovernanceAction(action, candidate));
+            () -> ClientRequests.sendGovernanceAction(action, candidate));
         button.setTextScale(UI_TEXT_SCALE);
         button.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
         sectionRoot.addChild(button);
@@ -4408,7 +4408,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         List<FireteamContextEntry> entries = new ArrayList<>();
         if (selfIsSquadLeader && !isSelf) {
             entries.add(new FireteamContextEntry("转移队长？", true, () -> {
-                NetworkManager.transferSquadLeader(targetId);
+                ClientRequests.transferSquadLeader(targetId);
                 closeFireteamContextMenu();
             }));
             for (Fireteam ft : Fireteam.values()) {
@@ -4418,7 +4418,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     "将该队员移至" + ft.label() + "组",
                     !already,
                     already ? null : () -> {
-                        NetworkManager.assignFireteam(targetId, assignFt);
+                        ClientRequests.assignFireteam(targetId, assignFt);
                         closeFireteamContextMenu();
                     }));
             }
@@ -4429,7 +4429,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     "指认为" + ft.label() + "组长",
                     !alreadyLeader,
                     alreadyLeader ? null : () -> {
-                        NetworkManager.appointFireteamLeader(targetId, appointFt);
+                        ClientRequests.appointFireteamLeader(targetId, appointFt);
                         closeFireteamContextMenu();
                     }));
             }
@@ -4438,7 +4438,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                 closeFireteamContextMenu();
                 openSquadConfirm("踢出队员",
                     "确定将 " + targetName + " 踢出小队？其职业与装备会被清空。",
-                    () -> NetworkManager.sendMatchStatsAction(
+                    () -> ClientRequests.sendMatchStatsAction(
                         org.espetro.network.MatchStatsActionPacket.Action.KICK_FROM_SQUAD,
                         targetId));
             }));
@@ -4446,7 +4446,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         // 小队长只交接“队长”；不能通过火力组菜单卸掉 A 组长身份。
         if (!selfIsSquadLeader && selfIsFtLeader && sameFireteam && !isSelf) {
             entries.add(new FireteamContextEntry("转移组长？", true, () -> {
-                NetworkManager.transferFireteamLeader(targetId);
+                ClientRequests.transferFireteamLeader(targetId);
                 closeFireteamContextMenu();
             }));
         }

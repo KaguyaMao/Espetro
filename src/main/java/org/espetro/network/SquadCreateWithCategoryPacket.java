@@ -48,13 +48,13 @@ public class SquadCreateWithCategoryPacket {
                     org.espetro.team.SquadManager.getInstance().getPlayerSquadId(player.getUUID()),
                     true
                 );
-                NetworkManager.sendCommanderSkillSync(player);
-                NetworkManager.syncSquadsToTeam(result.team);
-                NetworkManager.broadcastClassCounts(result.team,
+                MatchBroadcasts.sendCommanderSkillSync(player);
+                SquadSync.syncSquadsToTeam(result.team);
+                DeployScreenSync.broadcastClassCounts(result.team,
                     org.espetro.team.ClassCountManager.getInstance().getPlayerFaction(player.getUUID()));
-                NetworkManager.broadcastMatchStats(
+                MatchBroadcasts.broadcastMatchStats(
                     org.espetro.stats.PlayerMatchStatsManager.getInstance());
-                NetworkManager.syncUnifiedDeployScreen(player, -1);
+                DeployScreenSync.syncUnifiedDeployScreen(player, -1);
             }
         });
     }

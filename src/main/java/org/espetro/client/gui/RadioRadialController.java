@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.RadioRadialPacket;
 
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ public final class RadioRadialController {
                     pendingVehicleCrewOnly = false;
                 } else {
                     // Radio 换职业
-                    NetworkManager.sendRadioClassSelect(
+                    ClientRequests.sendRadioClassSelect(
                         faction != null ? faction : "", classId, variantId, lastRadioPos);
                 }
             }
@@ -128,7 +129,7 @@ public final class RadioRadialController {
         lastRadioPos = radioPos != null ? radioPos.immutable() : BlockPos.ZERO;
         pendingVehicleId = null; // 清除车辆上下文
         pendingVehicleCrewOnly = false;
-        NetworkManager.sendRadioOpen(lastRadioPos);
+        ClientRequests.sendRadioOpen(lastRadioPos);
     }
 
     /** 收到 S2C 职业列表后打开弹药箱根轮盘（补给步兵 / 更换职业）。 */

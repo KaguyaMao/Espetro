@@ -765,19 +765,19 @@ public final class FortificationAuthoringManager {
         try {
             Session session = sessions.get(player.getUUID());
             if (session == null || session.a == null || session.b == null) {
-                org.espetro.network.NetworkManager.sendFortificationWand(player,
+                org.espetro.network.MatchBroadcasts.sendFortificationWand(player,
                     org.espetro.network.FortificationWandPacket.clear());
                 return;
             }
             Stats stats = cachedStats(player);
             if (stats == null) {
-                org.espetro.network.NetworkManager.sendFortificationWand(player,
+                org.espetro.network.MatchBroadcasts.sendFortificationWand(player,
                     org.espetro.network.FortificationWandPacket.clear());
                 return;
             }
             String problem = stats.errors().isEmpty() ? "" : stats.errors().get(0);
             if (problem.isEmpty() && !stats.warnings().isEmpty()) problem = stats.warnings().get(0);
-            org.espetro.network.NetworkManager.sendFortificationWand(player,
+            org.espetro.network.MatchBroadcasts.sendFortificationWand(player,
                 new org.espetro.network.FortificationWandPacket(true, session.a, session.b,
                     session.anchor, stats.sizeX(), stats.sizeY(), stats.sizeZ(),
                     stats.blockCount(), stats.entityCount(), stats.ready(), problem));
@@ -788,7 +788,7 @@ public final class FortificationAuthoringManager {
                 Espetro.LOGGER.error("[工事编辑器] 选区同步失败（已忽略，不会崩服）", e);
             }
             try {
-                org.espetro.network.NetworkManager.sendFortificationWand(player,
+                org.espetro.network.MatchBroadcasts.sendFortificationWand(player,
                     org.espetro.network.FortificationWandPacket.clear());
             } catch (Exception ignored) {
                 // 连清空包都发不出去就彻底放弃这次同步

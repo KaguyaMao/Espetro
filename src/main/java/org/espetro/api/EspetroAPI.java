@@ -574,7 +574,7 @@ public class EspetroAPI {
         try {
             var gsm = org.espetro.team.GameStateManager.getInstance();
             if (gsm != null) {
-                org.espetro.network.NetworkManager.broadcastGamePhase(gsm.getCurrentPhase());
+                org.espetro.network.MatchBroadcasts.broadcastGamePhase(gsm.getCurrentPhase());
             }
         } catch (Throwable t) {
             Espetro.LOGGER.debug("objectiveMode 客户端同步跳过: {}", t.toString());

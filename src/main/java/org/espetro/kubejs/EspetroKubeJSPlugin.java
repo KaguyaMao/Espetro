@@ -66,6 +66,11 @@ public class EspetroKubeJSPlugin extends KubeJSPlugin {
         event.add("EspetroFactionDataProvider", FactionDataProvider.class);
         event.add("EspetroGameStateManager", GameStateManager.class);
         event.add("EspetroNetworkManager", NetworkManager.class);
+        event.add("EspetroDeployScreenSync", org.espetro.network.DeployScreenSync.class);
+        event.add("EspetroPreMatchScreens", org.espetro.network.PreMatchScreens.class);
+        event.add("EspetroSquadSync", org.espetro.network.SquadSync.class);
+        event.add("EspetroMatchBroadcasts", org.espetro.network.MatchBroadcasts.class);
+        event.add("EspetroFactionDisplay", org.espetro.network.FactionDisplay.class);
         event.add("EspetroSquadManager", SquadManager.class);
         event.add("EspetroSpawnPointConfig", SpawnPointConfig.class);
         event.add("EspetroTeamManager", TeamManager.class);

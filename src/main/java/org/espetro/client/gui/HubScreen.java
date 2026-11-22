@@ -61,7 +61,7 @@ public final class HubScreen extends EspetroMenuScreen {
             () -> {
                 // 关闭主城菜单后由服务端推送教程（HUD + 只读阶段 GUI）
                 onClose();
-                org.espetro.network.NetworkManager.sendTutorialReopen();
+                org.espetro.network.ClientRequests.sendTutorialReopen();
             }));
         root.addChild(EspetroAuiWidgets.button(x + (panelW - 140) / 2, y + 101, 140, 20,
             "关闭", this::onClose));

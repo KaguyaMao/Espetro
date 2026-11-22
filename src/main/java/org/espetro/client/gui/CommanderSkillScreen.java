@@ -2,7 +2,7 @@ package org.espetro.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.team.CommanderSkillManager;
 import org.espetro.client.aui.GuiElement;
 
@@ -202,7 +202,7 @@ public class CommanderSkillScreen extends EspetroMenuScreen {
 
     private void activateSkill(String skillId) {
         CommanderSkillTargetRequest.arm();
-        NetworkManager.sendCommanderSkillActivate(skillId);
+        ClientRequests.sendCommanderSkillActivate(skillId);
         Minecraft.getInstance().setScreen(null);
     }
 

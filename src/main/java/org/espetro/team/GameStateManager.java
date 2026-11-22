@@ -17,6 +17,11 @@ import org.espetro.Espetro;
 import org.espetro.bastion.BastionManager;
 import org.espetro.config.GameConfig;
 import org.espetro.network.NetworkManager;
+import org.espetro.network.DeployScreenSync;
+import org.espetro.network.FactionDisplay;
+import org.espetro.network.MatchBroadcasts;
+import org.espetro.network.PreMatchScreens;
+import org.espetro.network.SquadSync;
    import org.espetro.network.TeamSelectStatePacket;
 import org.espetro.vehicle.VehicleManager;
 import org.espetro.vehicle.VehicleEventHandler;
@@ -143,7 +148,7 @@ public class GameStateManager {
         GamePhase previous = this.currentPhase;
         this.currentPhase = phase;
         Espetro.LOGGER.info("游戏阶段切换: {}", phase.getDisplayName());
-        NetworkManager.broadcastGamePhase(phase);
+        MatchBroadcasts.broadcastGamePhase(phase);
         if (phase == GamePhase.BATTLE && previous != GamePhase.BATTLE) {
             // 部署阶段不可用技能：冷却从对战阶段开始才起算
             CommanderSkillManager.getInstance().armSkillCooldownsOnBattleStart();
@@ -425,7 +430,7 @@ public class GameStateManager {
         MinecraftServer server = Espetro.getServer();
         if (server == null) return;
         // 每个玩家收到自己的分配结果页
-        org.espetro.network.NetworkManager.broadcastTeamAssignShow(server);
+        org.espetro.network.PreMatchScreens.broadcastTeamAssignShow(server);
         Espetro.LOGGER.info("队伍分配提示页开始，5秒后进入指挥官投票");
     }
 
@@ -459,7 +464,7 @@ public class GameStateManager {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             applyMatchHoldState(player, HoldAnchor.AUTO);
         }
-        org.espetro.network.NetworkManager.broadcastMapRevealScreen(server, winner, 5);
+        org.espetro.network.PreMatchScreens.broadcastMapRevealScreen(server, winner, 5);
         Espetro.LOGGER.info("地图揭晓页开始，5秒后装载: {}", winner.displayName);
     }
 
@@ -602,7 +607,7 @@ public class GameStateManager {
         if (diff >= TEAM_BALANCE_MAX_DIFF) {
             lockedTeam = attack > defend ? "ATTACK" : "DEFEND";
         }
-        NetworkManager.broadcastTeamSelectState(attack, defend, remaining, end, active, lockedTeam,
+        PreMatchScreens.broadcastTeamSelectState(attack, defend, remaining, end, active, lockedTeam,
             getFinalFactionImageClassStatic("ATTACK"), getFinalFactionImageClassStatic("DEFEND"));
     }
 
@@ -614,9 +619,9 @@ public class GameStateManager {
         int attack = countPlayersOnTeam("ATTACK");
         int defend = countPlayersOnTeam("DEFEND");
         long end = server.overworld().getGameTime() + 999999L;
-        String atkImg = NetworkManager.getFactionSelectionImageStatic(
+        String atkImg = FactionDisplay.getFactionSelectionImageStatic(
             ClassSelectManager.getInstance().getFinalAttackClass());
-        String defImg = NetworkManager.getFactionSelectionImageStatic(
+        String defImg = FactionDisplay.getFactionSelectionImageStatic(
             ClassSelectManager.getInstance().getFinalDefendClass());
 
         for (UUID uuid : midGameJoiners) {
@@ -634,7 +639,7 @@ public class GameStateManager {
         String id = "ATTACK".equals(team)
             ? ClassSelectManager.getInstance().getFinalAttackClass()
             : ClassSelectManager.getInstance().getFinalDefendClass();
-        return NetworkManager.getFactionSelectionImageStatic(id);
+        return FactionDisplay.getFactionSelectionImageStatic(id);
     }
 
     private int countPlayersOnTeam(String team) {
@@ -777,7 +782,7 @@ public class GameStateManager {
         factionRevealTickCounter = 0;
 
         ClassSelectManager selectManager = ClassSelectManager.getInstance();
-        NetworkManager.broadcastFactionRevealScreen(
+        PreMatchScreens.broadcastFactionRevealScreen(
             selectManager.getFinalAttackClass(),
             selectManager.getFinalDefendClass(),
             GameConfig.getFactionRevealSeconds()
@@ -834,7 +839,7 @@ public class GameStateManager {
             if (team == null) continue;
 
             // 发送统一部署主界面（集成职业选择、复活点选择、载具部署、地图）
-            NetworkManager.queueUnifiedDeployScreen(
+            DeployScreenSync.queueUnifiedDeployScreen(
                 player, GameConfig.getDeployTimeoutSeconds(), true);
         }
         // 职业选择界面已通过 UnifiedDeployScreen 自动打开，不再发送聊天消息
@@ -938,7 +943,7 @@ public class GameStateManager {
             } else {
                 message = "§9部署防线§e[" + secondsRemaining + "秒]";
             }
-            NetworkManager.sendWaitingStatus(player, message, true);
+            MatchBroadcasts.sendWaitingStatus(player, message, true);
         }
     }
 
@@ -1156,7 +1161,7 @@ public class GameStateManager {
                 applyMatchHoldState(player, HoldAnchor.CURRENT_LOCK);
             } else if (bastionManager.isWaitingForBastion(player.getUUID())) {
                 applyDeploymentWaitingState(player);
-                NetworkManager.queueUnifiedDeployScreen(player, -1);
+                DeployScreenSync.queueUnifiedDeployScreen(player, -1);
             } else {
                 player.removeEffect(MobEffects.BLINDNESS);
                 applyBattlefieldMiningRestriction(player);
@@ -1169,7 +1174,7 @@ public class GameStateManager {
 
         // 自动首发与后续部署一致：载具被摧毁时再扣 troopValue，不在开战时预扣。
 
-        org.espetro.network.NetworkManager.broadcastTroopCounts(
+        org.espetro.network.MatchBroadcasts.broadcastTroopCounts(
             TroopCountManager.getInstance().getAttackTroops(),
             TroopCountManager.getInstance().getDefendTroops()
         );
@@ -1222,7 +1227,7 @@ public class GameStateManager {
         if (server == null) return;
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (isObserver(player.getUUID())) {
-                NetworkManager.sendWaitingStatus(player, "§e当前正在投票，请等待", true);
+                MatchBroadcasts.sendWaitingStatus(player, "§e当前正在投票，请等待", true);
             }
         }
     }
@@ -1340,7 +1345,7 @@ public class GameStateManager {
                             + TeamDisplayNames.displayName("DEFEND") + "获胜！");
                         endRound("DEFEND", true);
                     }
-                    NetworkManager.broadcastBattleTimer(remaining);
+                    MatchBroadcasts.broadcastBattleTimer(remaining);
                 }
                 break;
             case ROUND_END:
@@ -1516,7 +1521,7 @@ public class GameStateManager {
                 clearPlayerRoundAssignment(player);
                 player.removeAllEffects();
                 applyHubState(player);
-                NetworkManager.sendOpenHubScreen(player, server.getPlayerCount(),
+                MatchBroadcasts.sendOpenHubScreen(player, server.getPlayerCount(),
                     "对局已结束，等待管理员开始下一局");
             }
             broadcastHubStatus();
@@ -1583,7 +1588,7 @@ public class GameStateManager {
     public void onPlayerJoin(ServerPlayer player) {
         PlayerMatchStatsManager.getInstance().onPlayerJoin(player);
         // 入服时主动推送指挥官技能数据，确保客户端轮盘可立即显示技能入口
-        NetworkManager.sendCommanderSkillSync(player);
+        MatchBroadcasts.sendCommanderSkillSync(player);
 
         // 观察者重连：本局内保持旁观，不重新编队、不强制回城/等待点。
         if (isObserver(player.getUUID())) {
@@ -1607,7 +1612,7 @@ public class GameStateManager {
         switch (currentPhase) {
             case LOBBY, WAITING_FOR_PLAYERS -> {
                 forcePlayerToHub(player);
-                NetworkManager.sendOpenHubScreen(player, player.server.getPlayerCount(),
+                MatchBroadcasts.sendOpenHubScreen(player, player.server.getPlayerCount(),
                     "等待管理员开始下一局");
             }
             case MAP_VOTE -> {
@@ -1619,7 +1624,7 @@ public class GameStateManager {
                 // 地图揭晓页中途加入：MatchHold + 同步揭晓页
                 applyMatchHoldState(player, HoldAnchor.AUTO);
                 if (pendingMap != null) {
-                    NetworkManager.broadcastMapRevealScreenTo(player, pendingMap,
+                    PreMatchScreens.broadcastMapRevealScreenTo(player, pendingMap,
                         Math.max(1, 5 - mapRevealTickCounter / TICKS_PER_SECOND));
                 }
             }
@@ -1641,7 +1646,7 @@ public class GameStateManager {
                     waitingForTeam.add(player.getUUID());
                     clearPlayerRoundAssignment(player);
                     applyMatchHoldState(player, HoldAnchor.BATTLEFIELD_WAIT);
-                    NetworkManager.sendOpenFactionScreen(player);
+                    PreMatchScreens.sendOpenFactionScreen(player);
                     broadcastTeamSelectState();
                 }
             }
@@ -1657,7 +1662,7 @@ public class GameStateManager {
                 }
                 applyMatchHoldState(player, HoldAnchor.BATTLEFIELD_WAIT);
                 teamSelectedPlayers.add(player.getUUID());
-                NetworkManager.sendTeamAssignShowTo(player,
+                PreMatchScreens.sendTeamAssignShowTo(player,
                     ClassCountManager.getInstance().getPlayerTeam(player.getUUID()),
                     Math.max(1, 5 - teamAssignShowTickCounter / TICKS_PER_SECOND));
             }
@@ -1687,7 +1692,7 @@ public class GameStateManager {
                     }
                     if (voteManager.isVotingActive()) {
                         String[] candidateNames = voteManager.getPlayerNamesForTeam(myTeam);
-                        NetworkManager.sendCommanderVoteScreenToPlayer(
+                        PreMatchScreens.sendCommanderVoteScreenToPlayer(
                             player, myTeam, candidateNames, voteManager.getRemainingSeconds());
                     }
                 }
@@ -1965,7 +1970,7 @@ public class GameStateManager {
             // 重连直接进入部署阶段
             if (currentPhase == GamePhase.DEPLOYING || currentPhase == GamePhase.BATTLE) {
                 prepareDeploySelection(player, assigned);
-                NetworkManager.queueUnifiedDeployScreen(player, getDeployTimeRemainingSeconds());
+                DeployScreenSync.queueUnifiedDeployScreen(player, getDeployTimeRemainingSeconds());
             } else {
                 applyMatchHoldState(player, HoldAnchor.HUB_HIGH);
             }
@@ -1987,7 +1992,7 @@ public class GameStateManager {
                 currentPhase,
                 getCurrentMapFolder(),
                 BattlefieldContext.getObjectiveMode()));
-        NetworkManager.sendOpenFactionScreen(player);
+        PreMatchScreens.sendOpenFactionScreen(player);
 
         player.sendSystemMessage(Component.literal("§6========================================"));
         player.sendSystemMessage(Component.literal("§e⚡ 战场上需要增援！请选择你的阵营"));
@@ -2037,7 +2042,7 @@ public class GameStateManager {
             case DEFEND_COMMANDER_VOTE, ATTACK_COMMANDER_VOTE, COMMANDER_VOTE -> {
                 int voteRemaining = voteManager.getRemainingSeconds();
                 if (voteRemaining > 0) {
-                    NetworkManager.sendCommanderVoteScreenToPlayer(
+                    PreMatchScreens.sendCommanderVoteScreenToPlayer(
                         player, team, voteManager.getPlayerNamesForTeam(team), voteRemaining);
                 }
             }
@@ -2051,9 +2056,9 @@ public class GameStateManager {
                 boolean isCmd = cmdUuid != null && cmdUuid.equals(player.getUUID());
 
                 if (team.equals(selectingTeam)) {
-                    NetworkManager.sendClassSelectScreen(player, team, isCmd, selectRemaining);
+                    PreMatchScreens.sendClassSelectScreen(player, team, isCmd, selectRemaining);
                 } else {
-                    NetworkManager.sendClassSelectScreen(player, team, false, 0);
+                    PreMatchScreens.sendClassSelectScreen(player, team, false, 0);
                 }
             }
 
@@ -2064,9 +2069,9 @@ public class GameStateManager {
 
                 // 发送统一部署主界面
                 int remaining = getDeployTimeRemainingSeconds();
-                NetworkManager.sendUnifiedDeployScreen(player, remaining);
-                NetworkManager.sendDeployPointSync(player);
-                NetworkManager.sendWaitingStatus(player, TeamDisplayNames.isSymmetricMode()
+                DeployScreenSync.sendUnifiedDeployScreen(player, remaining);
+                DeployScreenSync.sendDeployPointSync(player);
+                MatchBroadcasts.sendWaitingStatus(player, TeamDisplayNames.isSymmetricMode()
                     ? "§e部署中[" + remaining + "秒]"
                     : ("ATTACK".equals(team)
                         ? "§c等待进攻§e[" + remaining + "秒]"
@@ -2093,7 +2098,7 @@ public class GameStateManager {
                 applyDeploymentWaitingState(player);
 
                 TroopCountManager troopMgr = TroopCountManager.getInstance();
-                NetworkManager.broadcastTroopCounts(
+                MatchBroadcasts.broadcastTroopCounts(
                     troopMgr.getAttackTroops(), troopMgr.getDefendTroops());
 
                 String commanderName = "无";
@@ -2115,8 +2120,8 @@ public class GameStateManager {
                 player.sendSystemMessage(Component.literal("§a════════════════════════════════"));
                 player.sendSystemMessage(Component.literal("§e⚠ 请先在战术面板选择部署点，再选择职业！"));
 
-                NetworkManager.sendUnifiedDeployScreen(player, -1);
-                NetworkManager.sendDeployPointSync(player);
+                DeployScreenSync.sendUnifiedDeployScreen(player, -1);
+                DeployScreenSync.sendDeployPointSync(player);
 
                 Espetro.broadcastToTeam(team, "§e⚡ 增援到达！" + player.getName().getString()
                     + " 加入了 " + TeamDisplayNames.coloredDisplayName(team));
@@ -2211,7 +2216,7 @@ public class GameStateManager {
         }
 
         int displaySeconds = GameConfig.getRoundEndSeconds();
-        NetworkManager.broadcastRoundEnd(normalized, displaySeconds,
+        MatchBroadcasts.broadcastRoundEnd(normalized, displaySeconds,
             winShow, loseShow, atkRaw, defRaw, level, attackerTimedOut);
         org.espetro.audio.FactionAudioCoordinator.broadcastRoundResult(normalized);
 
@@ -2272,7 +2277,7 @@ public class GameStateManager {
             setPhase(GamePhase.LOBBY);
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 applyHubState(player);
-                NetworkManager.sendOpenHubScreen(player, server.getPlayerCount(),
+                MatchBroadcasts.sendOpenHubScreen(player, server.getPlayerCount(),
                     "等待管理员开始下一局");
             }
             broadcastHubStatus();
@@ -2303,7 +2308,7 @@ public class GameStateManager {
         teamSelectedPlayers.remove(player.getUUID());
         deployClassSelected.remove(player.getUUID());
         if (squadTeam != null) {
-            NetworkManager.syncSquadsToTeam(squadTeam);
+            SquadSync.syncSquadsToTeam(squadTeam);
         }
     }
 
@@ -2358,7 +2363,7 @@ public class GameStateManager {
         clearPlayerRoundAssignment(player);
         // 服务端已清空队伍/小队/职业记录：让客户端立即优雅关闭残留的部署/投票/
         // 选职等对局界面，避免残留到后续阶段（J 屏等不会自行感知被移出对局）。
-        NetworkManager.sendCloseModScreens(player);
+        MatchBroadcasts.sendCloseModScreens(player);
         BastionManager.getInstance().clearWaiting(id);
         BastionManager.getInstance().unlockPlayerPosition(id);
         player.removeAllEffects();
@@ -2400,7 +2405,7 @@ public class GameStateManager {
             // 观战玩家编入后直接进入部署流程（无需击杀，人已在战场）。
             if (currentPhase == GamePhase.DEPLOYING || currentPhase == GamePhase.BATTLE) {
                 prepareDeploySelection(player, team);
-                NetworkManager.queueUnifiedDeployScreen(player, getDeployTimeRemainingSeconds());
+                DeployScreenSync.queueUnifiedDeployScreen(player, getDeployTimeRemainingSeconds());
             } else {
                 applyMatchHoldState(player, HoldAnchor.AUTO);
             }
@@ -2447,7 +2452,7 @@ public class GameStateManager {
             + " §7| §e等待管理员开始下一局";
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (player.serverLevel() == server.overworld()) {
-                NetworkManager.sendWaitingStatus(player, text, true);
+                MatchBroadcasts.sendWaitingStatus(player, text, true);
             }
         }
     }

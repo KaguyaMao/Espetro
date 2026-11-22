@@ -3,7 +3,7 @@ package org.espetro.team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.espetro.Espetro;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.DeployScreenSync;
 
 import javax.annotation.Nullable;
 
@@ -77,10 +77,10 @@ public final class FreeUnlockManager {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             String team = Espetro.getPlayerTeam(player);
             if (team == null) continue;
-            NetworkManager.resendDeployScreen(player);
+            DeployScreenSync.resendDeployScreen(player);
             String factionId = ClassCountManager.getInstance().getPlayerFaction(player.getUUID());
             if (factionId != null && !factionId.isBlank()) {
-                NetworkManager.sendVehicleClassSelect(player, factionId);
+                DeployScreenSync.sendVehicleClassSelect(player, factionId);
             }
         }
     }

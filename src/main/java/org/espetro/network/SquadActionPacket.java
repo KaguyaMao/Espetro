@@ -202,27 +202,27 @@ public class SquadActionPacket {
                     || action == Action.LEAVE
                     || action == Action.DELETE
                     || action == Action.TRANSFER_SQUAD_LEADER) {
-                    NetworkManager.sendCommanderSkillSync(player);
+                    MatchBroadcasts.sendCommanderSkillSync(player);
                 }
-                NetworkManager.broadcastMatchStats(
+                MatchBroadcasts.broadcastMatchStats(
                     org.espetro.stats.PlayerMatchStatsManager.getInstance());
             }
 
             if (result.team != null) {
                 TeamPackManager.getInstance().reconcileTeam(result.team);
-                NetworkManager.syncSquadsToTeam(result.team);
-                NetworkManager.broadcastClassCounts(
+                SquadSync.syncSquadsToTeam(result.team);
+                DeployScreenSync.broadcastClassCounts(
                     result.team,
                     ClassCountManager.getInstance().getPlayerFaction(player.getUUID())
                 );
                 // 创建/加入小队后队长身份可能变化，需重推部署面板刷新 leaderOnly 过滤
                 if (action == Action.CREATE || action == Action.JOIN) {
-                    NetworkManager.syncUnifiedDeployScreen(player, -1);
+                    DeployScreenSync.syncUnifiedDeployScreen(player, -1);
                 }
             } else {
                 TeamPackManager.getInstance().syncTeamPackItem(player);
-                NetworkManager.sendSquadSync(player);
-                NetworkManager.syncUnifiedDeployScreen(player, -1);
+                SquadSync.sendSquadSync(player);
+                DeployScreenSync.syncUnifiedDeployScreen(player, -1);
             }
         });
     }
@@ -245,7 +245,7 @@ public class SquadActionPacket {
             if (target == null) return;
             TeamPackManager.getInstance().handleSquadLeaderTransition(
                 target, team, squadId, false, team, squadId, true);
-            NetworkManager.syncUnifiedDeployScreen(target, -1);
+            DeployScreenSync.syncUnifiedDeployScreen(target, -1);
         }
 
         static void refreshSkillSync(UUID targetUuid) {
@@ -253,7 +253,7 @@ public class SquadActionPacket {
             if (server == null || targetUuid == null) return;
             ServerPlayer target = server.getPlayerList().getPlayer(targetUuid);
             if (target != null) {
-                NetworkManager.sendCommanderSkillSync(target);
+                MatchBroadcasts.sendCommanderSkillSync(target);
             }
         }
 

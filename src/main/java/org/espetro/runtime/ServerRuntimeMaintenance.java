@@ -4,7 +4,7 @@ import org.espetro.bastion.BastionManager;
 import org.espetro.dimension.BattlefieldWorldManager;
 import org.espetro.team.TeamPackManager;
 import org.espetro.stats.PlayerMatchStatsManager;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.DeployScreenSync;
 import org.espetro.vehicle.VehicleManager;
 
 /**
@@ -33,18 +33,18 @@ public final class ServerRuntimeMaintenance {
 
     public void reset() {
         tickCounter = 0;
-        NetworkManager.clearQueuedFullScreens();
+        DeployScreenSync.clearQueuedFullScreens();
     }
 
     public void onServerTick() {
         BattlefieldWorldManager.getInstance().onServerTick();
-        NetworkManager.drainQueuedFullScreens();
+        DeployScreenSync.drainQueuedFullScreens();
         PlayerMatchStatsManager.getInstance().onServerTick();
         TeamPackManager.getInstance().onServerTick();
         VehicleManager.getInstance().processInitialVehicleDeployments();
         long tick = tickCounter++;
         if (tick % DEPLOY_POINT_SYNC_INTERVAL_TICKS == 20) {
-            NetworkManager.refreshWaitingDeployPoints();
+            DeployScreenSync.refreshWaitingDeployPoints();
         }
         // 分摊：兵站 / 队包 / 载具 不同步扫，降低尖峰
         if (tick % INVALID_STATE_SCAN_INTERVAL_TICKS == 0) {

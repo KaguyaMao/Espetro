@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.PartyListPacket;
 import org.espetro.client.aui.GuiElement;
 
@@ -71,7 +71,7 @@ public final class PartyScreen extends EspetroMenuScreen {
             root.addChild(EspetroAuiWidgets.button(
                 panelX + panelW / 2 - bw1 / 2, y, bw1, 14,
                 "§c退出队伍", () -> {
-                    if (!tutorialPreviewMode) NetworkManager.sendPartyLeave();
+                    if (!tutorialPreviewMode) ClientRequests.sendPartyLeave();
                 })
                 .setColors(0x00000000, 0x20402020, 0x30502020)
                 .setBorderColor(0x00000000));
@@ -113,7 +113,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                     int bx1 = right - dbw - lbw - pwdbw - 12;
                     root.addChild(EspetroAuiWidgets.button(bx1, listY - 2, lbw, 14, lockLabel,
                         () -> {
-                            if (!tutorialPreviewMode) NetworkManager.sendPartyToggleLock(p.partyId);
+                            if (!tutorialPreviewMode) ClientRequests.sendPartyToggleLock(p.partyId);
                         })
                         .setColors(0x00000000, 0x20303050, 0x30404060)
                         .setBorderColor(0x00000000));
@@ -128,7 +128,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                         .setBorderColor(0x00000000));
                     root.addChild(EspetroAuiWidgets.button(bx1 + lbw + pwdbw + 12, listY - 2, dbw, 14, "§c解散",
                         () -> {
-                            if (!tutorialPreviewMode) NetworkManager.sendPartyDisband(p.partyId);
+                            if (!tutorialPreviewMode) ClientRequests.sendPartyDisband(p.partyId);
                         })
                         .setColors(0x00000000, 0x20402020, 0x30502020)
                         .setBorderColor(0x00000000));
@@ -142,7 +142,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                                     Minecraft.getInstance().setScreen(
                                         new JoinPartyScreen(this, p.partyId));
                                 } else {
-                                    NetworkManager.sendPartyJoin(p.partyId, "");
+                                    ClientRequests.sendPartyJoin(p.partyId, "");
                                 }
                             }
                         })
@@ -171,7 +171,7 @@ public final class PartyScreen extends EspetroMenuScreen {
         refreshTimer++;
         if (refreshTimer % 60 == 0) {
             // 每 3 秒拉取最新队伍列表
-            NetworkManager.requestPartyList();
+            ClientRequests.requestPartyList();
         }
     }
 
@@ -242,7 +242,7 @@ public final class PartyScreen extends EspetroMenuScreen {
             root.addChild(EspetroAuiWidgets.button(bx, py + 60, bw / 2 - 4, 14,
                 "\u00a7a创建（无密码）", () -> {
                     if (!tutorialPreviewMode) {
-                        NetworkManager.sendPartyCreate("");
+                        ClientRequests.sendPartyCreate("");
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })
@@ -252,7 +252,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                 "\u00a76创建", () -> {
                     if (!tutorialPreviewMode) {
                         String pwd = passwordField != null ? passwordField.getValue().trim() : "";
-                        NetworkManager.sendPartyCreate(pwd);
+                        ClientRequests.sendPartyCreate(pwd);
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })
@@ -326,7 +326,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                 "§a保存密码", () -> {
                     if (!tutorialPreviewMode) {
                         String pwd = passwordField != null ? passwordField.getValue().trim() : "";
-                        NetworkManager.sendPartySetPassword(partyId, pwd);
+                        ClientRequests.sendPartySetPassword(partyId, pwd);
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })
@@ -396,7 +396,7 @@ public final class PartyScreen extends EspetroMenuScreen {
                 "§a确认加入", () -> {
                     if (!tutorialPreviewMode) {
                         String pwd = passwordField != null ? passwordField.getValue().trim() : "";
-                        NetworkManager.sendPartyJoin(partyId, pwd);
+                        ClientRequests.sendPartyJoin(partyId, pwd);
                         Minecraft.getInstance().setScreen(parent);
                     }
                 })

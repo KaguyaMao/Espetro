@@ -545,7 +545,7 @@ public class VehicleManager {
             if (!team.equals(Espetro.getPlayerTeam(player))) continue;
             String factionId = ClassCountManager.getInstance().getPlayerFaction(player.getUUID());
             if (factionId != null) {
-                org.espetro.network.NetworkManager.syncVehicleDeployScreen(player, factionId);
+                org.espetro.network.DeployScreenSync.syncVehicleDeployScreen(player, factionId);
             }
         }
     }
@@ -656,7 +656,7 @@ public class VehicleManager {
             commander.getName().getString(), vehicleType, team, factionId, spawnPos);
 
         // 事件驱动刷新载具面板（冷却/在场数），不强制客户端关屏
-        org.espetro.network.NetworkManager.syncVehicleDeployScreen(commander, factionId);
+        org.espetro.network.DeployScreenSync.syncVehicleDeployScreen(commander, factionId);
         return null;
     }
 

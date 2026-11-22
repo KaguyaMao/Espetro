@@ -196,13 +196,13 @@ public final class FortificationEventHandler {
 
     @SubscribeEvent
     public static void onBastionBuilt(BastionLifecycleEvent.Built event) {
-        org.espetro.network.NetworkManager.refreshDeployPointsForTeam(event.team());
+        org.espetro.network.DeployScreenSync.refreshDeployPointsForTeam(event.team());
     }
 
     @SubscribeEvent
     public static void onBastionDestroyed(BastionLifecycleEvent.Destroyed event) {
         FortificationManager.getInstance().onBastionDestroyed(
             event.bastionId(), event.level(), event.attacker());
-        org.espetro.network.NetworkManager.refreshDeployPointsForTeam(event.team());
+        org.espetro.network.DeployScreenSync.refreshDeployPointsForTeam(event.team());
     }
 }

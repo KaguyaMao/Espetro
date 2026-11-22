@@ -92,7 +92,7 @@ public final class VehicleSupplyActionPacket {
                 // 补给载具与无标签载具只下发驾驶员/载具队长，客户端轮盘因此不会列出其它职业。
                 boolean crewOnly = !VehicleClassChangePolicy
                     .allowsFullClassChange(interaction.config());
-                NetworkManager.sendVehicleClassSelect(player, interaction.factionId(), crewOnly);
+                DeployScreenSync.sendVehicleClassSelect(player, interaction.factionId(), crewOnly);
             }
             sendSync(player, interaction);
             return;

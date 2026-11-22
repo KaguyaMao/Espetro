@@ -73,7 +73,7 @@ public class ClassSelectManager {
         // 消息已通过 ClassSelectScreen GUI 实时显示，不再发送聊天消息
 
         // 发送编制投票界面给守方全员
-        org.espetro.network.NetworkManager.broadcastClassSelectScreenForTeam("DEFEND", timeout);
+        org.espetro.network.PreMatchScreens.broadcastClassSelectScreenForTeam("DEFEND", timeout);
     }
 
     /**
@@ -90,7 +90,7 @@ public class ClassSelectManager {
         // 消息已通过 ClassSelectScreen GUI 实时显示，不再发送聊天消息
 
         // 发送编制投票界面给攻方全员
-        org.espetro.network.NetworkManager.broadcastClassSelectScreenForTeam("ATTACK", timeout);
+        org.espetro.network.PreMatchScreens.broadcastClassSelectScreenForTeam("ATTACK", timeout);
     }
 
     /**
@@ -265,7 +265,7 @@ public class ClassSelectManager {
 
         Espetro.LOGGER.info("{} 玩家 {} 投票编制: {}", team, voter.getName().getString(), classId);
 
-        org.espetro.network.NetworkManager.sendClassSelectScreenForTeam(team, getRemainingSeconds());
+        org.espetro.network.PreMatchScreens.sendClassSelectScreenForTeam(team, getRemainingSeconds());
 
         return true;
     }
@@ -294,7 +294,7 @@ public class ClassSelectManager {
         boolean changed = attackFactionVotes.remove(playerId) != null;
         changed |= defendFactionVotes.remove(playerId) != null;
         if (changed && selectingActive && currentSelectingTeam != null) {
-            org.espetro.network.NetworkManager.sendClassSelectScreenForTeam(
+            org.espetro.network.PreMatchScreens.sendClassSelectScreenForTeam(
                 currentSelectingTeam, getRemainingSeconds());
         }
     }
@@ -433,7 +433,7 @@ public class ClassSelectManager {
 
         // 每秒只推轻量倒计时包，避免全量 ClassSelectScreenPacket 带来整页刷新感。
         if (selectTickCounter % TICKS_PER_SECOND == 0) {
-            org.espetro.network.NetworkManager.broadcastClassSelectTimerForTeam(
+            org.espetro.network.PreMatchScreens.broadcastClassSelectTimerForTeam(
                 currentSelectingTeam, secondsRemaining);
         }
     }

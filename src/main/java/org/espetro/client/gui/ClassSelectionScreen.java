@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.OpenClassSelectionPacket;
 import org.lwjgl.glfw.GLFW;
 import org.espetro.client.aui.GuiElement;
@@ -94,7 +94,7 @@ public class ClassSelectionScreen extends EspetroMenuScreen {
                 // 回退：从本地加载
                 initFromLocalData();
             }
-            NetworkManager.requestClassCounts(factionId);
+            ClientRequests.requestClassCounts(factionId);
         }
         createButtons(root);
     }

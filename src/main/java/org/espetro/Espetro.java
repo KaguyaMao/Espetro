@@ -36,6 +36,8 @@ import org.espetro.bastion.BastionManager;
 import org.espetro.dimension.BattlefieldWorldManager;
 import org.espetro.kubejs.EspetroKubeJSDefaultScripts;
 import org.espetro.network.NetworkManager;
+import org.espetro.network.DeployScreenSync;
+import org.espetro.network.SquadSync;
 import org.espetro.runtime.ServerRuntimeMaintenance;
 import org.espetro.config.GameConfig;
 
@@ -125,8 +127,8 @@ public class Espetro {
     public static void reloadAllConfigs() {
         LOGGER.warn("Espetro 外部地图、维度、编制及每地图 EsConfig 仅在启动时加载；"
             + "本次 reload 未重新读取这些文件，请重启游戏或服务端。");
-        NetworkManager.syncSquadsToTeam("ATTACK");
-        NetworkManager.syncSquadsToTeam("DEFEND");
+        SquadSync.syncSquadsToTeam("ATTACK");
+        SquadSync.syncSquadsToTeam("DEFEND");
     }
 
     /**
@@ -352,10 +354,10 @@ public class Espetro {
             countManager.removePlayer(event.getEntity());
             org.espetro.ping.VehicleSeatPingCache.clear(event.getEntity().getUUID());
             org.espetro.vehicle.VehicleSeatAccessPolicy.clear(event.getEntity().getUUID());
-            NetworkManager.broadcastClassCounts(classCountTeam, classCountFaction);
+            DeployScreenSync.broadcastClassCounts(classCountTeam, classCountFaction);
             if (squadTeam != null) {
                 TeamPackManager.getInstance().reconcileTeam(squadTeam);
-                NetworkManager.syncSquadsToTeam(squadTeam);
+                SquadSync.syncSquadsToTeam(squadTeam);
             }
 
             // 从游戏状态管理器移除

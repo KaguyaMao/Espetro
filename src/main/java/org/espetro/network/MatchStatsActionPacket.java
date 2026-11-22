@@ -50,10 +50,10 @@ public class MatchStatsActionPacket {
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                 (result.success ? "§a" : "§c") + result.message));
             if (result.success && result.team != null) {
-                NetworkManager.syncSquadsToTeam(result.team);
-                NetworkManager.broadcastClassCounts(result.team,
+                SquadSync.syncSquadsToTeam(result.team);
+                DeployScreenSync.broadcastClassCounts(result.team,
                     org.espetro.team.ClassCountManager.getInstance().getPlayerFaction(player.getUUID()));
-                NetworkManager.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
+                MatchBroadcasts.broadcastMatchStats(org.espetro.stats.PlayerMatchStatsManager.getInstance());
             }
         });
     }

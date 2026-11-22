@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.espetro.network.FixedWeaponWheelPacket;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.esradial.client.Actions;
 import org.esradial.client.ItemIcon;
 import org.esradial.client.RadialMenuBuilder;
@@ -62,7 +62,7 @@ public final class FixedWeaponWheelController {
             }
             // 兑换后**不关闭**轮盘：按住 F 期间保持开启，便于连续兑换；
             // 服务端兑换成功后会回发刷新后的轮盘数据（FOB 弹药已扣除）。
-            NetworkManager.sendFixedWeaponExchange(weaponId);
+            ClientRequests.sendFixedWeaponExchange(weaponId);
         });
     }
 

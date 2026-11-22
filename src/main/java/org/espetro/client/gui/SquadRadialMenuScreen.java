@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.Espetro;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.network.RadialActionPacket;
 import org.espetro.team.CommanderSkillManager;
 import org.espetro.client.aui.GuiElement;
@@ -55,7 +55,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
                 options.add(new Option(label, icon, 128, cooldown <= 0,
                     () -> {
                     org.espetro.client.gui.CommanderSkillTargetRequest.arm();
-                    NetworkManager.sendCommanderSkillActivate(skill.id());
+                    ClientRequests.sendCommanderSkillActivate(skill.id());
                 }));
             }
         }
@@ -64,7 +64,7 @@ public class SquadRadialMenuScreen extends EspetroMenuScreen {
     private void addTacticalOption(String label, ResourceLocation icon, int textureWidth,
                                    RadialActionPacket.Action action) {
         options.add(new Option(label, icon, textureWidth, true,
-            () -> NetworkManager.sendRadialAction(action)));
+            () -> ClientRequests.sendRadialAction(action)));
     }
 
     @Override

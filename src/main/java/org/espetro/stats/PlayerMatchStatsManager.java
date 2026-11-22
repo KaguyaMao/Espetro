@@ -205,6 +205,6 @@ public final class PlayerMatchStatsManager {
         }
         dirty = false;
         ticksUntilBroadcast = 20;
-        org.espetro.network.NetworkManager.broadcastMatchStats(this);
+        org.espetro.network.MatchBroadcasts.broadcastMatchStats(this);
     }
 }

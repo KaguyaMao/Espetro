@@ -234,9 +234,9 @@ public class ClassSelectPacket {
             String factionId = countManager.getPlayerFaction(player.getUUID());
             // Small count + squad packets replace the old full deploy-screen
             // fan-out (which repeated every ItemStack preview for every player).
-            NetworkManager.broadcastClassCounts(team,
+            DeployScreenSync.broadcastClassCounts(team,
                 factionId != null ? factionId : teamOrFaction);
-            NetworkManager.syncSquadsToTeam(team);
+            SquadSync.syncSquadsToTeam(team);
         });
     }
 

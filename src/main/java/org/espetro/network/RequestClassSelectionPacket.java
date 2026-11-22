@@ -37,7 +37,7 @@ public class RequestClassSelectionPacket {
             int remaining = gsm.getCurrentPhase() == GamePhase.DEPLOYING
                 ? gsm.getDeployTimeRemainingSeconds()
                 : -1;
-            NetworkManager.sendUnifiedDeployScreen(player, remaining);
+            DeployScreenSync.sendUnifiedDeployScreen(player, remaining);
         });
     }
 }

@@ -49,7 +49,7 @@ public class TeamSelectPacket {
                 }
                 // 战局中加入：自动分配编制、沿用现有指挥官
                 gsm.onMidGameTeamSelected(player, team);
-                NetworkManager.sendSquadSync(player);
+                SquadSync.sendSquadSync(player);
                 Espetro.LOGGER.info("玩家 {} 战局加入 {} 阵营", player.getName().getString(), team);
             } else {
                 if (gsm.getCurrentPhase() != org.espetro.team.GamePhase.TEAM_SELECT) {
@@ -59,7 +59,7 @@ public class TeamSelectPacket {
                 }
                 // 通知游戏状态管理器玩家已选择队伍
                 gsm.onTeamSelected(player, team);
-                NetworkManager.sendSquadSync(player);
+                SquadSync.sendSquadSync(player);
 
                 Espetro.LOGGER.info("玩家 {} 选择了 {} 阵营", player.getName().getString(), team);
             }

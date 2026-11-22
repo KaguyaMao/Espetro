@@ -345,7 +345,7 @@ public class TeamPackManager {
             if (teamPack == null || isTeamPackMissing(teamPack)) {
                 iterator.remove();
                 player.sendSystemMessage(Component.literal("§c所选 Rally 已失效，请重新选择部署点。"));
-                org.espetro.network.NetworkManager.sendUnifiedDeployScreen(player, -1);
+                org.espetro.network.DeployScreenSync.sendUnifiedDeployScreen(player, -1);
                 continue;
             }
             if (now < entry.getValue().spawnAt()) {

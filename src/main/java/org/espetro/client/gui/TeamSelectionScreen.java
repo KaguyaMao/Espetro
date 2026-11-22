@@ -172,7 +172,7 @@ public class TeamSelectionScreen extends EspetroMenuScreen {
         int spectateY = labelY + 14;
         root.addChild(EspetroAuiWidgets.button(spectateX, spectateY, spectateW, 20,
             "进入观战", () -> {
-                org.espetro.network.NetworkManager.sendSpectateRequest();
+                org.espetro.network.ClientRequests.sendSpectateRequest();
                 net.minecraft.client.Minecraft.getInstance().setScreen(null);
             }));
 

@@ -95,7 +95,7 @@ KubeJS 脚本全局绑定：
 - `Espetro`：脚本友好的 facade，提供广播、玩家队伍/职业/小队查询、兵力、阶段、兵站、队包、前哨、载具和指挥官技能入口。
 - `EspetroCommanderSkills`、`EspetroCommanderSkillBuilder`、`EspetroCommanderSkillDefinition`、`EspetroCommanderSkillEvent`：指挥官技能创建、注册、回调和事件对象。
 - `EspetroAPI`、`EspetroMod`、`EspetroGameConfig`、`EspetroGamePhase`、`EspetroCommanderSkillType`、`EspetroCommanderSkillTargetRequest`、`EspetroCommanderSkillStatus`、`EspetroArtillerySupportRequest`：直接暴露的 Java API/常量类。
-- `EspetroClassCountManager`、`EspetroClassEquipment`、`EspetroClassSelectManager`、`EspetroFactionDataLoader`、`EspetroFactionDataProvider`、`EspetroGameStateManager`、`EspetroNetworkManager`、`EspetroSquadManager`、`EspetroSpawnPointConfig`、`EspetroTeamManager`、`EspetroVoteManager`、`EspetroTroopCountManager`、`EspetroCommanderSkillManager`、`EspetroBastionManager`、`EspetroTeamPackManager`、`EspetroOutpostManager`、`EspetroVehicleConfig`、`EspetroVehicleManager`：底层管理器和工具类绑定。
+- `EspetroClassCountManager`、`EspetroClassEquipment`、`EspetroClassSelectManager`、`EspetroFactionDataLoader`、`EspetroFactionDataProvider`、`EspetroGameStateManager`、`EspetroNetworkManager`（信道与注册）、`EspetroDeployScreenSync`、`EspetroPreMatchScreens`、`EspetroSquadSync`、`EspetroMatchBroadcasts`、`EspetroFactionDisplay`、`EspetroSquadManager`、`EspetroSpawnPointConfig`、`EspetroTeamManager`、`EspetroVoteManager`、`EspetroTroopCountManager`、`EspetroCommanderSkillManager`、`EspetroBastionManager`、`EspetroTeamPackManager`、`EspetroOutpostManager`、`EspetroVehicleConfig`、`EspetroVehicleManager`：底层管理器和工具类绑定。
 - `ESPointsCommanderScriptAPI`、`ESPointsTacticalMarkerManager`、`ESPointsTacticalMarkerType`、`ESPointsTacticalMapJsonConfig`：安装 ESPoints 时可用的战术地图与标点绑定。
 - `MUtil`、`MUtilMod`：MUtil 主类绑定。
 

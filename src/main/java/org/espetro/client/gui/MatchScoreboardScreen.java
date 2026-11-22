@@ -9,7 +9,7 @@ import org.espetro.network.GovernanceActionPacket;
 import org.espetro.network.GovernanceStatePacket;
 import org.espetro.network.MatchStatsActionPacket;
 import org.espetro.network.MatchStatsSyncPacket;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.client.aui.GuiElement;
 
 import java.util.ArrayList;
@@ -264,13 +264,13 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             int y = Math.min(contextY, height - 36);
             if (mouseX >= x && mouseX <= x + 76) {
                 if (mouseY >= y && mouseY < y + 17 && canForceJoin(contextRow)) {
-                    NetworkManager.sendMatchStatsAction(MatchStatsActionPacket.Action.FORCE_JOIN_SQUAD,
+                    ClientRequests.sendMatchStatsAction(MatchStatsActionPacket.Action.FORCE_JOIN_SQUAD,
                         contextRow.uuid);
                     contextRow = null;
                     return true;
                 }
                 if (mouseY >= y + 17 && mouseY <= y + 34 && canKick(contextRow)) {
-                    NetworkManager.sendMatchStatsAction(MatchStatsActionPacket.Action.KICK_FROM_SQUAD,
+                    ClientRequests.sendMatchStatsAction(MatchStatsActionPacket.Action.KICK_FROM_SQUAD,
                         contextRow.uuid);
                     contextRow = null;
                     return true;
@@ -295,7 +295,7 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
     private boolean handleGovernanceVote(double mouseX, double mouseY) {
         for (GovernanceHit hit : governanceHits) {
             if (hit.contains(mouseX, mouseY) && hit.candidate != null) {
-                NetworkManager.sendGovernanceAction(hit.action, hit.candidate);
+                ClientRequests.sendGovernanceAction(hit.action, hit.candidate);
                 return true;
             }
         }

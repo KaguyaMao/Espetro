@@ -37,7 +37,7 @@ public class CommanderSkillPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         PacketHandling.handleOnServer(ctx, player -> {
             if (skillId.isEmpty()) {
-                NetworkManager.sendCommanderSkillSync(player);
+                MatchBroadcasts.sendCommanderSkillSync(player);
                 return;
             }
 

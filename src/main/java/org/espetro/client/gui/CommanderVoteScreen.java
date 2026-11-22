@@ -3,7 +3,7 @@ package org.espetro.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import org.espetro.network.NetworkManager;
+import org.espetro.network.ClientRequests;
 import org.espetro.client.aui.GuiElement;
 
 import java.util.ArrayList;
@@ -282,7 +282,7 @@ public class CommanderVoteScreen extends EspetroMenuScreen {
         // 允许给自己投票（指挥官候选人自投）。
         if (!playerName.equals(currentVote)) {
             currentVote = playerName;
-            NetworkManager.sendCastVote(playerName);
+            ClientRequests.sendCastVote(playerName);
             refreshDynamicElements();
         }
     }

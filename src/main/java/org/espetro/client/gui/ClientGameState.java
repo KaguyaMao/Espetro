@@ -121,13 +121,13 @@ public class ClientGameState {
         if (canOpenClassSelection()) {
             String playerTeam = getPlayerTeam();
             if (playerTeam == null) {
-                org.espetro.network.NetworkManager.requestGameState();
+                org.espetro.network.ClientRequests.requestGameState();
             } else {
                 String factionId = getPlayerFactionId();
-                org.espetro.network.NetworkManager.requestClassSelection(factionId);
+                org.espetro.network.ClientRequests.requestClassSelection(factionId);
             }
         } else if (currentPhase.isLobbyLike()) {
-            org.espetro.network.NetworkManager.requestPartyList();
+            org.espetro.network.ClientRequests.requestPartyList();
             net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
             if (mc.player != null && !(mc.screen instanceof PartyScreen)) {
                 mc.setScreen(new PartyScreen());
