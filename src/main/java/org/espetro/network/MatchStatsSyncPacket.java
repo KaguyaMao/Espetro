@@ -53,13 +53,24 @@ public class MatchStatsSyncPacket {
     }
 
     public final List<Row> rows;
+    private final Map<UUID, Integer> squadNumbers;
 
     public MatchStatsSyncPacket(List<Row> rows) {
+        this(rows, Map.of());
+    }
+
+    private MatchStatsSyncPacket(List<Row> rows, Map<UUID, Integer> squadNumbers) {
         this.rows = rows != null ? rows : List.of();
+        this.squadNumbers = Map.copyOf(squadNumbers);
+    }
+
+    public Integer squadNumber(UUID uuid) {
+        return squadNumbers.get(uuid);
     }
 
     public static MatchStatsSyncPacket from(PlayerMatchStatsManager mgr) {
         List<Row> rows = new ArrayList<>();
+        Map<UUID, Integer> squadNumbers = new HashMap<>();
         for (var s : mgr.snapshot()) {
             String team = s.team != null ? s.team : s.lastTeam;
             int squadId = org.espetro.team.SquadManager.getInstance().getPlayerSquadId(s.uuid);
@@ -68,6 +79,7 @@ public class MatchStatsSyncPacket {
                 for (var snap : org.espetro.team.SquadManager.getInstance().getSquadSnapshots(team)) {
                     if (snap.id == squadId) {
                         squadName = snap.name;
+                        squadNumbers.put(s.uuid, snap.displayId);
                         break;
                     }
                 }
@@ -76,7 +88,7 @@ public class MatchStatsSyncPacket {
                 s.classId, s.classIcon, s.classIconImage,
                 s.online, squadId, squadName));
         }
-        return new MatchStatsSyncPacket(rows);
+        return new MatchStatsSyncPacket(rows, squadNumbers);
     }
 
     public static MatchStatsSyncPacket read(FriendlyByteBuf buf) {
@@ -97,7 +109,14 @@ public class MatchStatsSyncPacket {
                 buf.readUtf()
             ));
         }
-        return new MatchStatsSyncPacket(rows);
+        // Optional tail, indexed by the unchanged row order, for mixed client/server versions.
+        Map<UUID, Integer> squadNumbers = new HashMap<>();
+        for (Row row : rows) {
+            if (!buf.isReadable()) break;
+            int number = buf.readVarInt();
+            if (number > 0) squadNumbers.put(row.uuid, number);
+        }
+        return new MatchStatsSyncPacket(rows, squadNumbers);
     }
 
     public void write(FriendlyByteBuf buf) {
@@ -120,6 +139,9 @@ public class MatchStatsSyncPacket {
             buf.writeBoolean(r.online);
             buf.writeVarInt(r.squadId);
             buf.writeUtf(r.squadName != null ? r.squadName : "");
+        }
+        if (!squadNumbers.isEmpty()) {
+            for (Row row : rows) buf.writeVarInt(squadNumbers.getOrDefault(row.uuid, 0));
         }
     }
 

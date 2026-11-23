@@ -16,11 +16,16 @@ import java.util.Properties;
 public final class ClientUiPreferences {
     public static final String FILE_NAME = "espetro-ui.properties";
     private static final String THEME_KEY = "theme";
+    private static final String COMPASS_SIZE_KEY = "compass.size";
+    static final float DEFAULT_COMPASS_SIZE = 1f;
 
     private ClientUiPreferences() {
     }
 
-    public record LoadResult(UiTheme.Mode mode, String warning) {
+    public record LoadResult(UiTheme.Mode mode, String warning, float compassSize) {
+        public LoadResult(UiTheme.Mode mode, String warning) {
+            this(mode, warning, DEFAULT_COMPASS_SIZE);
+        }
     }
 
     /** Missing files use the default; unreadable or malformed files report a safe fallback. */
@@ -33,10 +38,26 @@ public final class ClientUiPreferences {
             try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
                 properties.load(reader);
             }
-            return parse(properties.getProperty(THEME_KEY));
+            LoadResult theme = parse(properties.getProperty(THEME_KEY));
+            float size = parseCompassSize(properties.getProperty(COMPASS_SIZE_KEY, "1"));
+            return new LoadResult(theme.mode(), theme.warning(),
+                Float.isNaN(size) ? DEFAULT_COMPASS_SIZE : size);
         } catch (IOException | IllegalArgumentException | SecurityException failure) {
             return new LoadResult(UiTheme.Mode.DARK,
                 "Could not read UI preferences " + file + ": " + failure);
+        }
+    }
+
+    static float parseCompassSize(String value) {
+        String normalized = value.strip().toLowerCase(Locale.ROOT);
+        if (normalized.endsWith("x") || normalized.endsWith("×")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        try {
+            float size = Float.parseFloat(normalized);
+            return size >= 0.5f && size <= 2f ? size : Float.NaN;
+        } catch (NumberFormatException invalid) {
+            return Float.NaN;
         }
     }
 
@@ -56,6 +77,10 @@ public final class ClientUiPreferences {
 
     /** Replace the previous file only after a complete UTF-8 preference file has been written. */
     public static void save(Path file, UiTheme.Mode mode) throws IOException {
+        save(file, mode, DEFAULT_COMPASS_SIZE);
+    }
+
+    static void save(Path file, UiTheme.Mode mode, float compassSize) throws IOException {
         Objects.requireNonNull(mode, "mode");
         Path target = file.toAbsolutePath().normalize();
         Path parent = target.getParent();
@@ -64,8 +89,9 @@ public final class ClientUiPreferences {
         try {
             Properties properties = new Properties();
             properties.setProperty(THEME_KEY, mode.name().toLowerCase(Locale.ROOT));
+            properties.setProperty(COMPASS_SIZE_KEY, Float.toString(compassSize));
             try (Writer writer = Files.newBufferedWriter(temporary, StandardCharsets.UTF_8)) {
-                properties.store(writer, "Espetro local UI theme: light or dark");
+                properties.store(writer, "Espetro local UI preferences");
             }
             try {
                 Files.move(temporary, target,

@@ -49,6 +49,11 @@ public final class GameSettingsSnapshot {
     /** 主基地部署等待屏障的高度（格）。 */
     public final int mainBaseBarrierHeight;
 
+    /** 地图尺寸档位：{@code big} / {@code mid} / {@code small}，决定编制使用哪套载具方案。 */
+    public final String mapSize;
+    /** 地图环境标签：{@code normal}（普通）或 {@code desert}（沙漠），决定载具出生皮肤。 */
+    public final String environment;
+
     public GameSettingsSnapshot(
         int teamSelectSeconds,
         int deployTimeoutSeconds,
@@ -82,7 +87,9 @@ public final class GameSettingsSnapshot {
         boolean deprecatedRequiredPlayersPresent,
         boolean deprecatedTutorialPresent,
         double mainBaseBarrierRadius,
-        int mainBaseBarrierHeight
+        int mainBaseBarrierHeight,
+        String mapSize,
+        String environment
     ) {
         this.teamSelectSeconds = teamSelectSeconds;
         this.deployTimeoutSeconds = deployTimeoutSeconds;
@@ -117,6 +124,30 @@ public final class GameSettingsSnapshot {
         this.deprecatedTutorialPresent = deprecatedTutorialPresent;
         this.mainBaseBarrierRadius = mainBaseBarrierRadius;
         this.mainBaseBarrierHeight = mainBaseBarrierHeight;
+        this.mapSize = normalizeMapSize(mapSize);
+        this.environment = normalizeEnvironment(environment);
+    }
+
+    public static String normalizeMapSize(String raw) {
+        if (raw == null) {
+            return "mid";
+        }
+        String value = raw.trim().toLowerCase(java.util.Locale.ROOT);
+        return switch (value) {
+            case "big", "mid", "small" -> value;
+            default -> "mid";
+        };
+    }
+
+    public static String normalizeEnvironment(String raw) {
+        if (raw == null) {
+            return "normal";
+        }
+        String value = raw.trim().toLowerCase(java.util.Locale.ROOT);
+        return switch (value) {
+            case "desert", "snow", "jungle" -> value;
+            default -> "normal";
+        };
     }
 
     public static GameSettingsSnapshot defaults() {
@@ -126,7 +157,8 @@ public final class GameSettingsSnapshot {
             100, 5, 15, 2, 2, 12,
             60, 600, 180, 3600,
             false, false,
-            45.0, 12
+            45.0, 12,
+            "mid", "normal"
         );
     }
 
@@ -153,6 +185,8 @@ public final class GameSettingsSnapshot {
         double waitingY = d.waitingY;
         double mainBaseBarrierRadius = d.mainBaseBarrierRadius;
         int mainBaseBarrierHeight = d.mainBaseBarrierHeight;
+        String mapSize = d.mapSize;
+        String environment = d.environment;
 
         int atkTroops = d.initialAttackTroops;
         int defTroops = d.initialDefendTroops;
@@ -198,6 +232,8 @@ public final class GameSettingsSnapshot {
             nameTag = getDouble(game, "teammate_name_tag_distance", nameTag);
             waitingY = getDouble(game, "waiting_y", waitingY);
             battleTimeout = getInt(game, "battle_timeout_seconds", battleTimeout);
+            mapSize = getString(game, "map_size", mapSize);
+            environment = getString(game, "environment", environment);
         }
         if (root.has("troops") && root.get("troops").isJsonObject()) {
             JsonObject troops = root.getAsJsonObject("troops");
@@ -259,8 +295,21 @@ public final class GameSettingsSnapshot {
             deprecatedRequired,
             deprecatedTutorial,
             Math.max(0.0, mainBaseBarrierRadius),
-            Math.max(1, mainBaseBarrierHeight)
+            Math.max(1, mainBaseBarrierHeight),
+            mapSize,
+            environment
         );
+    }
+
+    private static String getString(JsonObject obj, String key, String def) {
+        if (!obj.has(key) || !obj.get(key).isJsonPrimitive()) {
+            return def;
+        }
+        try {
+            return obj.get(key).getAsString();
+        } catch (RuntimeException e) {
+            return def;
+        }
     }
 
     private static int getInt(JsonObject obj, String key, int def) {

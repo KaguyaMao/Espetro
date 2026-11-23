@@ -141,9 +141,21 @@ public final class VehicleSeatAccessPolicy {
         if (factionId != null && vehicleType != null) {
             VehicleConfig.VehicleTypeConfig config =
                 VehicleConfig.getVehicleConfig(factionId, vehicleType);
-            // 仅以编制 JSON 声明的 vehicle_crew_seats 为准；未声明（null）即无需载具组员装备。
-            if (config != null && config.vehicleCrewSeats != null) {
-                return Math.max(0, config.vehicleCrewSeats);
+            if (config != null) {
+                // 同一槽位可能停不同载具（如 acv 槽既有 0 组员的运兵车、也有 2 组员的步战车），
+                // 所以先按“这辆车真实的实体类型”匹配槽位，再用槽位自己的要求。
+                String entityId = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                    .getKey(vehicle.getType()).toString();
+                for (VehicleConfig.VehicleSlotConfig slot : config.slots) {
+                    if (slot != null && entityId.equals(slot.entityTypeStr)
+                        && slot.vehicleCrewSeats != null) {
+                        return Math.max(0, slot.vehicleCrewSeats);
+                    }
+                }
+                // 仅以编制 JSON 声明的 vehicle_crew_seats 为准；未声明（null）即无需载具组员装备。
+                if (config.vehicleCrewSeats != null) {
+                    return Math.max(0, config.vehicleCrewSeats);
+                }
             }
         }
         return 0;

@@ -33,5 +33,6 @@ public final class EspetroHudOverlay {
             root.addChild(FortificationProgressHud.createElement());
         }
         root.draw(graphics, 0, 0, width, height, -1, -1, partialTick);
+        TacticalHud.render(graphics, minecraft, partialTick);
     }
 }

@@ -14,6 +14,7 @@ import org.espetro.network.FobSupplySyncPacket;
 import org.espetro.network.NetworkManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,10 @@ public final class FobSupplyTracker {
             || player.tickCount % MOVEMENT_CHECK_INTERVAL != 0) return;
         BlockPos current = player.blockPosition();
         BlockPos previous = lastPositions.put(player.getUUID(), current.immutable());
-        if (previous == null || !previous.equals(current)) syncPlayer(player, false);
+        // A stationary player's HAB can become available or be suppressed by other players.
+        if (previous == null || !previous.equals(current) || player.tickCount % 20 == 0) {
+            syncPlayer(player, false);
+        }
     }
 
     @SubscribeEvent
@@ -135,12 +139,8 @@ public final class FobSupplyTracker {
         List<BastionData> radios = BastionManager.getInstance()
             .findCoveringRadios(level, player.blockPosition(), team);
         Set<UUID> ids = new HashSet<>();
-        int construction = 0;
-        int ammunition = 0;
         for (BastionData radio : radios) {
             ids.add(radio.getBastionId());
-            construction += radio.getConstructionSupplies();
-            ammunition += radio.getAmmunitionSupplies();
         }
         updateMembership(player.getUUID(), ids);
         FortificationManager.RadioConstructionProgress radioProgress =
@@ -153,28 +153,37 @@ public final class FobSupplyTracker {
         LogisticsConfig.LogisticsSettings config = LogisticsConfig.get();
         int maxConstruction = Math.max(1, config.maxConstruction);
         int maxAmmunition = Math.max(1, config.maxAmmunition);
-        int radioHealth = 0;
-        int radioMaxHealth = 1;
-        if (radioProgress != null) {
+        BlockPos position = player.blockPosition();
+        BastionData nearest = radios.stream().min(Comparator
+            .comparingDouble((BastionData radio) -> radio.getPosition().distSqr(position))
+            .thenComparing(BastionData::getBastionId)).orElse(null);
+        boolean building = radioProgress != null && (nearest == null
+            || radioProgress.position().distSqr(position) < nearest.getPosition().distSqr(position));
+        int construction = 0;
+        int ammunition = 0;
+        int radioHealth;
+        int radioMaxHealth;
+        FobSupplySyncPacket.HabStatus hab = FobSupplySyncPacket.HabStatus.INACTIVE;
+        if (building) {
             radioHealth = radioProgress.progress();
             radioMaxHealth = Math.max(1, radioProgress.required());
         } else {
-            BastionData healthRadio = BastionManager.getInstance()
-                .findNearestRadio(level, player.blockPosition(), team,
-                    LogisticsConfig.get().radioBuildRadius);
-            if (healthRadio != null) {
-            radioHealth = (int) Math.ceil(healthRadio.getCoreHealth());
+            construction = nearest.getConstructionSupplies();
+            ammunition = nearest.getAmmunitionSupplies();
+            radioHealth = (int) Math.ceil(nearest.getCoreHealth());
             radioMaxHealth = Math.max(1, BastionManager.getInstance().getArmorStandHealth());
+            if (OutpostSupplyTracker.hasEnabledHab(level, nearest, team)) {
+                hab = FobSupplySyncPacket.HabStatus.ACTIVE;
             }
         }
         String signature = "1|" + construction + '|' + ammunition + '|'
             + maxConstruction + '|' + maxAmmunition + '|'
-            + radioHealth + '|' + radioMaxHealth;
+            + radioHealth + '|' + radioMaxHealth + '|' + hab;
         if (!force && signature.equals(lastSignatures.get(player.getUUID()))) return;
         lastSignatures.put(player.getUUID(), signature);
         NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player),
             new FobSupplySyncPacket(true, construction, ammunition,
-                maxConstruction, maxAmmunition, radioHealth, radioMaxHealth));
+                maxConstruction, maxAmmunition, radioHealth, radioMaxHealth, hab));
     }
 
     private static void updateMembership(UUID playerId, Set<UUID> next) {

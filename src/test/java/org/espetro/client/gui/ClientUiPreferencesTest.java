@@ -44,6 +44,22 @@ class ClientUiPreferencesTest {
     }
 
     @Test
+    void compassSizeSupportsOldFilesAndPersistsWithTheme() throws IOException {
+        Path file = temporaryDirectory.resolve(ClientUiPreferences.FILE_NAME);
+        Files.writeString(file, "theme=light");
+        assertEquals(1f, ClientUiPreferences.load(file).compassSize());
+
+        ClientUiPreferences.save(file, UiTheme.Mode.LIGHT, 1.5f);
+        assertEquals(1.5f, ClientUiPreferences.load(file).compassSize());
+        assertEquals(UiTheme.Mode.LIGHT, ClientUiPreferences.load(file).mode());
+        assertEquals(0.5f, ClientUiPreferences.parseCompassSize("0.5x"));
+        assertEquals(2f, ClientUiPreferences.parseCompassSize("2"));
+        for (String invalid : new String[] {"0.49", "2.01", "Infinity", "NaN", "x"}) {
+            assertTrue(Float.isNaN(ClientUiPreferences.parseCompassSize(invalid)));
+        }
+    }
+
+    @Test
     void valuesIgnoreCaseAndSurroundingWhitespace() {
         assertEquals(UiTheme.Mode.LIGHT, ClientUiPreferences.parse("  LiGhT  ").mode());
         assertEquals(UiTheme.Mode.DARK, ClientUiPreferences.parse(" DARK ").mode());

@@ -163,7 +163,7 @@ public final class FortificationManager {
                                     BlockPos pos, @Nullable String mapIcon) {
     }
 
-    public record RadioConstructionProgress(int progress, int required) {
+    public record RadioConstructionProgress(BlockPos position, int progress, int required) {
     }
 
     public enum DamageKind { EXPLOSION, PROJECTILE, DIRECT_BREAK }
@@ -1009,7 +1009,7 @@ public final class FortificationManager {
         return FortificationConfig.list().stream().anyMatch(def -> canUse(player, def));
     }
 
-    /** 查询指定位置附近己方 Radio 工事的建造进度（含在建和已建成）。 */
+    /** 查询指定位置附近尚未完工的己方 Radio。 */
     @Nullable
     public RadioConstructionProgress getRadioConstructionProgress(ServerLevel level, BlockPos pos,
                                                                   String team) {
@@ -1020,7 +1020,7 @@ public final class FortificationManager {
         Construction best = null;
         double bestDistance = Double.MAX_VALUE;
         for (Construction c : constructions.values()) {
-            if (c.blueprint.definition.behaviorType != FortificationConfig.Behavior.RADIO
+            if (c.complete || c.blueprint.definition.behaviorType != FortificationConfig.Behavior.RADIO
                 || !team.equals(c.team)
                 || !dimension.equals(c.dimension)) {
                 continue;
@@ -1032,7 +1032,7 @@ public final class FortificationManager {
             }
         }
         return best == null ? null
-            : new RadioConstructionProgress(best.progress, best.required());
+            : new RadioConstructionProgress(best.anchor, best.progress, best.required());
     }
 
     private Blueprint createBlueprint(String id, String team) {

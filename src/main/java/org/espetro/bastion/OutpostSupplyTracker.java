@@ -112,7 +112,7 @@ public final class OutpostSupplyTracker {
         return nearest;
     }
 
-    private static boolean hasEnabledHab(ServerLevel level, BastionData radio, String team) {
+    static boolean hasEnabledHab(ServerLevel level, BastionData radio, String team) {
         double radius = LogisticsConfig.get().radioBuildRadius;
         double radiusSq = radius * radius;
         for (BastionData bastion : BastionManager.getInstance().getAllBastions()) {

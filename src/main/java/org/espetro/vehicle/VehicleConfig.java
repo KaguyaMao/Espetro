@@ -139,11 +139,47 @@ public class VehicleConfig {
         public String entityTypeStr;
         public DeploymentPointConfig attack;
         public DeploymentPointConfig defend;
+        /** 该槽载具的独立刷新时间（分钟）。 */
+        public int respawnMinutes = 5;
+        /** 出生时套用的 SBW 皮肤 id；null = 模型默认外观。 */
+        @Nullable
+        public String skinId;
+        /** 该槽载具作为攻方时的首次部署延迟（秒）。 */
+        public int initialDeployDelayAttackSeconds;
+        /** 该槽载具作为守方时的首次部署延迟（秒）。 */
+        public int initialDeployDelayDefendSeconds;
+        /** 该槽载具的显示名（注册表提供，回落到类型级）。 */
+        @Nullable
+        public String displayName;
+        /** 该槽载具的地图图标（注册表提供，回落到类型级）。 */
+        @Nullable
+        public String mapIcon;
+        /** 该槽载具被摧毁时扣除的兵力。 */
+        public int troopValue;
+        /**
+         * 该槽载具要求的载具组员座位数（从 0 号座位起算）。
+         * null = 该槽未单独声明，回落到类型级配置。
+         */
+        @Nullable
+        public Integer vehicleCrewSeats;
+        public boolean supplyVeh;
+        public boolean fightVeh;
         /** Optional SNBT merged onto the entity at deploy time (e.g. Energy). */
         @Nullable
         public String nbt;
         /** 部署时写入载具集装箱的物品（"<itemId>[<snbt>] <count>"）。 */
         public List<String> items = new ArrayList<>();
+
+        public long respawnMillis() {
+            return Math.max(1, respawnMinutes) * 60_000L;
+        }
+
+        public int initialDeployDelaySeconds(String team) {
+            if ("DEFEND".equalsIgnoreCase(team)) {
+                return Math.max(0, initialDeployDelayDefendSeconds);
+            }
+            return Math.max(0, initialDeployDelayAttackSeconds);
+        }
 
         @Nullable
         public EntityType<?> getEntityType() {
@@ -189,7 +225,8 @@ public class VehicleConfig {
         FactionDataLoader loader = FactionDataProvider.getOrCreateLoader();
         loader.ensureLoaded(server.getResourceManager());
 
-        Map<String, Map<String, FactionDataLoader.VehicleData>> factionVehicles = loader.getAllFactionVehicles();
+        Map<String, Map<String, FactionDataLoader.VehicleData>> factionVehicles =
+            loader.getAllFactionVehicles(FactionDataLoader.TIER_MID);
 
         for (Map.Entry<String, Map<String, FactionDataLoader.VehicleData>> entry : factionVehicles.entrySet()) {
             String factionId = entry.getKey();
@@ -223,19 +260,28 @@ public class VehicleConfig {
         if (map == null || !map.usable) return;
         int legacyVehicleTypes = 0;
         FactionDataLoader loader = FactionDataProvider.getOrCreateLoader();
+        String tier = FactionDataLoader.tierForMapSize(map.mapSize());
+        FactionDataLoader.setActiveTier(tier);
+        String environment = map.environment();
+        Espetro.LOGGER.info("[载具注册] 地图 {} 尺寸档位 {}，环境 {}",
+            map.displayName, tier, environment);
         for (Map.Entry<String, Map<String, FactionDataLoader.VehicleData>> formation
-            : loader.getAllFactionVehicles().entrySet()) {
+            : loader.getAllFactionVehicles(tier).entrySet()) {
             if (!loader.isCompatibleWithMap(formation.getKey(), map)) continue;
             Map<String, VehicleTypeConfig> typeMap = new LinkedHashMap<>();
             for (Map.Entry<String, FactionDataLoader.VehicleData> vehicle : formation.getValue().entrySet()) {
                 String type = vehicle.getKey();
                 FactionDataLoader.VehicleData data = vehicle.getValue();
                 List<VehSpawnSnapshot.SpawnPoint> points = map.vehSpawn.spawnPointsByType.get(type);
-                if (points == null || data.entities == null || data.entities.size() > points.size()) continue;
+                if (points == null || data.entities == null || data.entities.isEmpty()
+                    || data.entities.size() > points.size()) continue;
 
+                boolean registryBacked = data.slotVehicles != null && !data.slotVehicles.isEmpty();
                 int perMax = Math.max(1, data.perMaxCount);
-                int respawn = data.respawnMinutes > 0
-                    ? data.respawnMinutes : FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES;
+                int respawn = registryBacked
+                    ? Math.max(1, data.respawnMinutes)
+                    : (data.respawnMinutes > 0
+                        ? data.respawnMinutes : FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES);
                 VehicleTypeConfig cfg = new VehicleTypeConfig(data.entities.size() * perMax, respawn);
                 cfg.perMaxCount = perMax;
                 cfg.displayName = firstNonBlank(data.displayName, type);
@@ -260,7 +306,44 @@ public class VehicleConfig {
                 for (int i = 0; i < data.entities.size(); i++) {
                     VehicleSlotConfig slot = new VehicleSlotConfig();
                     slot.index = i;
-                    slot.entityTypeStr = data.entities.get(i);
+                    if (registryBacked) {
+                        FactionDataLoader.SlotVehicle ref = data.slotVehicles.get(i);
+                        EsVehicleRegistry.EsVehicleDef def = ref.def();
+                        slot.entityTypeStr = def.entity;
+                        slot.respawnMinutes = Math.max(1, ref.effectiveRespawnMinutes());
+                        slot.skinId = def.skinFor(environment);
+                        slot.initialDeployDelayAttackSeconds = ref.delayAttack();
+                        slot.initialDeployDelayDefendSeconds = ref.delayDefend();
+                        slot.displayName = firstNonBlank(def.displayName, cfg.displayName);
+                        slot.mapIcon = firstNonBlank(def.mapIcon, cfg.mapIcon);
+                        slot.troopValue = Math.max(0, def.troopValue);
+                        slot.supplyVeh = def.supplyVeh;
+                        slot.fightVeh = def.fightVeh;
+                        slot.vehicleCrewSeats = def.vehicleCrewSeats;
+                        if (i == 0) {
+                            // 类型级指标取槽位 0 的注册表值，供部署界面与补给逻辑使用。
+                            if (def.displayName != null && !def.displayName.isBlank()) {
+                                cfg.displayName = def.displayName;
+                            }
+                            if (def.mapIcon != null && !def.mapIcon.isBlank()) {
+                                cfg.mapIcon = def.mapIcon;
+                            }
+                            cfg.troopValue = Math.max(0, def.troopValue);
+                            cfg.initialDeployDelayAttackSeconds = Math.max(0, ref.delayAttack());
+                            cfg.initialDeployDelayDefendSeconds = Math.max(0, ref.delayDefend());
+                        }
+                    } else {
+                        slot.entityTypeStr = data.entities.get(i);
+                        slot.respawnMinutes = cfg.respawnMinutes;
+                        slot.initialDeployDelayAttackSeconds = cfg.initialDeployDelayAttackSeconds;
+                        slot.initialDeployDelayDefendSeconds = cfg.initialDeployDelayDefendSeconds;
+                        slot.displayName = cfg.displayName;
+                        slot.mapIcon = cfg.mapIcon;
+                        slot.troopValue = cfg.troopValue;
+                        slot.supplyVeh = cfg.supplyVeh;
+                        slot.fightVeh = cfg.fightVeh;
+                        slot.vehicleCrewSeats = cfg.vehicleCrewSeats;
+                    }
                     slot.attack = fromPose(points.get(i).attack());
                     slot.defend = fromPose(points.get(i).defend());
                     slot.nbt = cfg.nbt;
@@ -271,6 +354,31 @@ public class VehicleConfig {
                     cfg.entityTypeStr = cfg.slots.get(0).entityTypeStr;
                     cfg.deployment.attack = cfg.slots.get(0).attack;
                     cfg.deployment.defend = cfg.slots.get(0).defend;
+                    if (registryBacked) {
+                        // 注册表模式下刷新时间/首次部署延迟按槽位各自生效；
+                        // 类型级字段取「最早」的那一刻，供部署面板与旧路径兜底。
+                        int minRespawn = Integer.MAX_VALUE;
+                        int minAttack = Integer.MAX_VALUE;
+                        int minDefend = Integer.MAX_VALUE;
+                        for (VehicleSlotConfig s : cfg.slots) {
+                            minRespawn = Math.min(minRespawn, s.respawnMinutes);
+                            minAttack = Math.min(minAttack, s.initialDeployDelayAttackSeconds);
+                            minDefend = Math.min(minDefend, s.initialDeployDelayDefendSeconds);
+                        }
+                        if (minRespawn != Integer.MAX_VALUE) cfg.respawnMinutes = Math.max(0, minRespawn);
+                        if (minAttack != Integer.MAX_VALUE) cfg.initialDeployDelayAttackSeconds = Math.max(0, minAttack);
+                        if (minDefend != Integer.MAX_VALUE) cfg.initialDeployDelayDefendSeconds = Math.max(0, minDefend);
+                        // 组员座位：槽位可能停不同载具，类型级取最严格的一档兜底，
+                        // 实际准入按槽位自己的 vehicleCrewSeats 判定。
+                        Integer strictest = null;
+                        for (VehicleSlotConfig s : cfg.slots) {
+                            if (s.vehicleCrewSeats != null) {
+                                strictest = strictest == null
+                                    ? s.vehicleCrewSeats : Math.max(strictest, s.vehicleCrewSeats);
+                            }
+                        }
+                        if (strictest != null) cfg.vehicleCrewSeats = strictest;
+                    }
                 }
                 List<VehSpawnSnapshot.SpawnPoint> outposts =
                     map.vehSpawn.outpostPointsByType.get(type);

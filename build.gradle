@@ -145,7 +145,10 @@ if (!fixedAuraTipJar.isFile()) {
 
 repositories {
     mavenLocal {
-        content { includeGroup 'org.esradial' }
+        content {
+            includeGroup 'org.esradial'
+            includeGroup 'com.example.espoints'
+        }
     }
     // Consume only the reproducibly published Tetrachord artifact. Upstream's
     // generated publication metadata exposes its Forge userdev runtime as a
@@ -155,8 +158,7 @@ repositories {
         content { includeGroup 'com.hexagram2021.tetrachordlib' }
     }
     flatDir {
-        dirs '../../../IdeaProjects/espetro-HCR/build/libs'
-        dirs '../../../IdeaProjects/EsICO/build/libs'
+        dirs '../EsICO/build/libs'
         dirs 'libs'
         dirs fixedAuraTipJar.parentFile
         dirs 'run/mods'
@@ -219,12 +221,11 @@ dependencies {
 
     // ESPoints depends on Espetro, so Espetro integrates through reflection.
     // Keep the sibling jar opt-in so standalone Espetro userdev still boots.
-    def localEspointsJar = file("../../../IdeaProjects/espetro-HCR/build/libs/espoints-${espoints_version}.jar")
     def includeLocalEspoints = providers.gradleProperty("espetroIncludeLocalEspoints")
         .map { it.toBoolean() }
         .getOrElse(false)
-    if (includeLocalEspoints && localEspointsJar.exists()) {
-        runtimeOnly fg.deobf("local:espoints:${espoints_version}")
+    if (includeLocalEspoints) {
+        runtimeOnly(fg.deobf("com.example.espoints:espoints:${espoints_version}")) { transitive = false }
     }
 
     // SBW 仅编译 mixin 目标；运行时软依赖。DragonRise/FCP 载具继承 SBW VehicleEntity。
@@ -235,9 +236,9 @@ dependencies {
         compileOnly files(localDragonriseJar)
     }
     // EsICO optional：体力与上车/换座读条；运行时可不装。
-    def localEsicoJar = file("../../../IdeaProjects/EsICO/build/libs/esico-1.0.0.jar")
+    def localEsicoJar = file("../EsICO/build/libs/esico-${esico_version}.jar")
     if (localEsicoJar.exists()) {
-        runtimeOnly fg.deobf("local:esico:1.0.0")
+        runtimeOnly fg.deobf("local:esico:${esico_version}")
     }
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
@@ -261,7 +262,9 @@ tasks.named('processResources', ProcessResources).configure {
                              loader_version_range: loader_version_range,
                              mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
                              mod_authors         : mod_authors, mod_description: mod_description,
-                             espoints_version    : espoints_version, rhino_version: rhino_version,
+                             espoints_version    : espoints_version, esico_version: esico_version,
+                             superbwarfare_version_range: superbwarfare_version_range,
+                             dragonrise_version_range: dragonrise_version_range, rhino_version: rhino_version,
                              architectury_version: architectury_version, kubejs_version: kubejs_version,
                              oelib_version       : oelib_version,
                              auratip_version     : auratip_version,
@@ -282,14 +285,6 @@ tasks.named('jar', Jar).configure {
     exclude 'com/example/hcrpoints/**'
     exclude 'assets/hcrpoints/**'
     exclude 'data/hcrpoints/**'
-    // processResources is a copy task: deleted source assets can remain in its
-    // output directory. Only the current installer manifest owns shipped payloads.
-    def bundlePrefix = 'assets/espetro/ui-bundle/files/'
-    def bundledMenuPaths = file('src/main/resources/assets/espetro/ui-bundle/manifest.tsv')
-        .readLines('UTF-8').findAll { !it.isBlank() && !it.startsWith('#') }
-        .collect { it.split('\t', -1)[2] }.toSet()
-    exclude { element -> !element.isDirectory() && element.path.startsWith(bundlePrefix) &&
-        !bundledMenuPaths.contains(element.path.substring(bundlePrefix.length())) }
     exclude '**/*.psd', '**/*.xcf', '**/*.blend', '**/*.bak', '**/*.bak-*',
         '**/*.old', '**/*.orig', '**/*.tmp', '**/*.log', '**/*~',
         '**/.DS_Store', '**/Thumbs.db', '**/__pycache__/**'

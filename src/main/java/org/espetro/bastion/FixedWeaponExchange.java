@@ -67,8 +67,8 @@ public final class FixedWeaponExchange {
         FortificationManager fm = FortificationManager.getInstance();
         FortificationConfig.FortificationDef def = fm.definitionOfEntity(weapon);
         if (def == null || def.fixedWeapon == null || !def.fixedWeapon.enabled) {
-            Espetro.LOGGER.info("固定武器轮盘请求被忽略：实体 {} ({}) 不是已启用的固定武器工事",
-                weaponEntityId, weapon.getType());
+            // 普通载具/非固定武器也会走到这里（客户端对任意载具按 F 都会发请求），
+            // 保持静默：不写日志，避免每右键一次就刷一行。
             return;
         }
         String owner = fm.teamOfEntity(weapon);

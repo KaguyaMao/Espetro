@@ -18,6 +18,7 @@ import java.util.Locale;
 /** Client-only commands, registered programmatically by EspetroClient. */
 public final class ClientUiCommands {
     private static boolean initialized;
+    private static float compassSize = ClientUiPreferences.DEFAULT_COMPASS_SIZE;
 
     private ClientUiCommands() {
     }
@@ -39,6 +40,8 @@ public final class ClientUiCommands {
         event.enqueueWork(() -> {
             ClientUiPreferences.LoadResult result = ClientUiPreferences.load(preferencesFile());
             UiTheme.setMode(result.mode());
+            compassSize = result.compassSize();
+            TacticalHud.setCompassMultiplier(compassSize);
             if (!result.warning().isEmpty()) {
                 Espetro.LOGGER.warn("{}", result.warning());
             }
@@ -60,6 +63,12 @@ public final class ClientUiCommands {
             // Consume invalid esui arguments locally too; Forge otherwise forwards unknown arguments.
             .then(Commands.argument("usage", StringArgumentType.greedyString())
                 .executes(context -> showStatus(context.getSource()))));
+        event.getDispatcher().register(Commands.literal("espetro")
+            .then(Commands.literal("compass")
+                .then(Commands.literal("size")
+                    .then(Commands.argument("multiplier", StringArgumentType.word())
+                        .executes(context -> changeCompassSize(context.getSource(),
+                            StringArgumentType.getString(context, "multiplier")))))));
     }
 
     private static int showStatus(CommandSourceStack source) {
@@ -71,7 +80,7 @@ public final class ClientUiCommands {
     private static int changeTheme(CommandSourceStack source, UiTheme.Mode mode) {
         UiTheme.setMode(mode);
         try {
-            ClientUiPreferences.save(preferencesFile(), mode);
+            ClientUiPreferences.save(preferencesFile(), mode, compassSize);
             source.sendSuccess(() -> Component.literal("[Espetro UI] 已切换为" + modeLabel(mode)
                 + "并保存，无需重启。"), false);
         } catch (IOException | SecurityException failure) {
@@ -80,6 +89,24 @@ public final class ClientUiCommands {
             source.sendSuccess(() -> Component.literal("[Espetro UI] 已切换为" + modeLabel(mode)
                 + "，但配置保存失败；本次会话仍然生效。请检查 config/"
                 + ClientUiPreferences.FILE_NAME + " 的写入权限。"), false);
+        }
+        return 1;
+    }
+
+    private static int changeCompassSize(CommandSourceStack source, String value) {
+        float size = ClientUiPreferences.parseCompassSize(value);
+        if (Float.isNaN(size)) {
+            source.sendFailure(Component.literal("[Espetro UI] 罗盘倍率应在 0.5x 到 2x 之间。"));
+            return 0;
+        }
+        compassSize = size;
+        TacticalHud.setCompassMultiplier(size);
+        try {
+            ClientUiPreferences.save(preferencesFile(), UiTheme.mode(), size);
+            source.sendSuccess(() -> Component.literal("[Espetro UI] 罗盘大小已设为 " + size + "x，并已保存。"), false);
+        } catch (IOException | SecurityException failure) {
+            Espetro.LOGGER.warn("Could not save compass size to {}", preferencesFile(), failure);
+            source.sendFailure(Component.literal("[Espetro UI] 罗盘大小已在本次会话生效，配置保存失败。"));
         }
         return 1;
     }

@@ -64,6 +64,16 @@ public final class ActiveMapConfig {
         return esPoints != null ? esPoints.capturePointsJson : null;
     }
 
+    /** 地图尺寸档位：{@code big} / {@code mid} / {@code small}（game.json 的 {@code map_size}，默认 mid）。 */
+    public String mapSize() {
+        return game == null ? "mid" : game.mapSize;
+    }
+
+    /** 地图环境标签：{@code normal} / {@code desert}（game.json 的 {@code environment}，默认 normal）。 */
+    public String environment() {
+        return game == null ? "normal" : game.environment;
+    }
+
     /** Returns a per-round copy with AAS/RAAS resolved for the supplied seed. */
     public ActiveMapConfig forRound(long seed) {
         if (!usable || esPoints == null) {

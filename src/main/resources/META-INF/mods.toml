@@ -65,7 +65,7 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "oelib"
 mandatory = true
-versionRange = "[${oelib_version},)"
+versionRange = "[${oelib_version},0.3)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -116,7 +116,7 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "espoints"
 mandatory = false
-versionRange = "[${espoints_version},)"
+versionRange = "[${espoints_version},1.2)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -131,7 +131,7 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "superbwarfare"
 mandatory = false
-versionRange = "[0,)"
+versionRange = "${superbwarfare_version_range}"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -139,7 +139,7 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "dragonrise_reforge"
 mandatory = false
-versionRange = "[0,)"
+versionRange = "${dragonrise_version_range}"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -147,7 +147,7 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "esico"
 mandatory = false
-versionRange = "[0,)"
+versionRange = "[${esico_version},2)"
 ordering = "AFTER"
 side = "BOTH"
 

@@ -118,7 +118,7 @@ public class VehicleManager {
     /** 开局延时记录：cooldownOwner -> type -> 延时秒数，供开战时刻统一落锚。 */
     private final Map<String, Map<String, Integer>> initialDelaySecondsByOwner = new HashMap<>();
 
-    private record RespawnKey(String team, String factionId, String vehicleType) {
+    private record RespawnKey(String team, String factionId, String vehicleType, int slotIndex) {
     }
 
     private final InitialVehicleDeploymentLedger initialDeploymentLedger =
@@ -361,8 +361,13 @@ public class VehicleManager {
 
     /** 部署成功后启动 respawn 冷却。 */
     private void startRespawnCooldown(String team, String factionId, String vehicleType) {
+        startRespawnCooldown(team, factionId, vehicleType, -1);
+    }
+
+    /** 部署成功后启动 respawn 冷却；{@code slotIndex >= 0} 时按该槽位的注册表刷新时间计算。 */
+    private void startRespawnCooldown(String team, String factionId, String vehicleType, int slotIndex) {
         VehicleConfig.VehicleTypeConfig cfg = VehicleConfig.getVehicleConfig(factionId, vehicleType);
-        long ms = cfg != null ? cfg.respawnMillis() : 0L;
+        long ms = cfg != null ? slotRespawnMillis(cfg, slotIndex) : 0L;
         if (ms <= 0) {
             Map<String, Long> map = cooldowns.get(cooldownOwner(team, factionId));
             if (map != null) map.remove(vehicleType);
@@ -370,6 +375,17 @@ public class VehicleManager {
         }
         cooldowns.computeIfAbsent(cooldownOwner(team, factionId), k -> new HashMap<>())
             .put(vehicleType, System.currentTimeMillis() + ms);
+    }
+
+    /** 该槽位的刷新毫秒数；{@code slotIndex < 0} 或槽位缺失时回落到类型级。 */
+    private static long slotRespawnMillis(VehicleConfig.VehicleTypeConfig cfg, int slotIndex) {
+        if (cfg == null) {
+            return 0L;
+        }
+        if (slotIndex >= 0 && slotIndex < cfg.slots.size()) {
+            return cfg.slots.get(slotIndex).respawnMillis();
+        }
+        return cfg.respawnMillis();
     }
 
     /** 服务器 tick：处理被摧毁载具的自动刷新。 */
@@ -441,16 +457,22 @@ public class VehicleManager {
 
     /** 载具被摧毁后开始刷新计时。 */
     private void scheduleAutoRespawn(String team, String factionId, String vehicleType) {
+        scheduleAutoRespawn(team, factionId, vehicleType, -1);
+    }
+
+    /** 载具被摧毁后开始刷新计时；{@code slotIndex >= 0} 时按该槽位的注册表刷新时间排队。 */
+    private void scheduleAutoRespawn(String team, String factionId, String vehicleType,
+                                     int slotIndex) {
         VehicleConfig.VehicleTypeConfig cfg = VehicleConfig.getVehicleConfig(factionId, vehicleType);
-        long ms = cfg != null ? cfg.respawnMillis() : 0L;
+        long ms = slotRespawnMillis(cfg, slotIndex);
         long readyAt = System.currentTimeMillis() + Math.max(0L, ms);
         autoRespawnQueue.computeIfAbsent(
-            new RespawnKey(team, factionId, vehicleType), ignored -> new PriorityQueue<>())
+            new RespawnKey(team, factionId, vehicleType, slotIndex), ignored -> new PriorityQueue<>())
             .add(readyAt);
         refreshAutoRespawnCooldown(team, factionId, vehicleType);
         broadcastVehicleInfoToTeam(team);
-        Espetro.LOGGER.info("载具已摧毁，自动刷新已排队: {} / {} / {}, delay={}s",
-            team, factionId, vehicleType, Math.max(0L, ms) / 1000L);
+        Espetro.LOGGER.info("载具已摧毁，自动刷新已排队: {} / {} / {} 槽位{}, delay={}s",
+            team, factionId, vehicleType, slotIndex, Math.max(0L, ms) / 1000L);
     }
 
     private void processAutoRespawns() {
@@ -491,7 +513,18 @@ public class VehicleManager {
         if (cfg == null) return false;
         if (getActiveCount(team, factionId, vehicleType) >= cfg.max) return false;
 
-        int slotIndex = findAvailableSlot(team, factionId, vehicleType, cfg);
+        int wantedSlot = key.slotIndex();
+        int slotIndex;
+        if (wantedSlot >= 0) {
+            // 只补刷新这个槽位自己的那一辆。
+            if (countActiveInSlot(team, factionId, vehicleType, wantedSlot) >= cfg.perMaxCount) {
+                return false;
+            }
+            slotIndex = wantedSlot < (cfg.slots.isEmpty() ? 1 : cfg.slots.size())
+                ? wantedSlot : -1;
+        } else {
+            slotIndex = findAvailableSlot(team, factionId, vehicleType, cfg);
+        }
         if (slotIndex < 0) return false;
         VehicleConfig.VehicleSlotConfig slot = cfg.slots.isEmpty() ? null : cfg.slots.get(slotIndex);
         VehicleConfig.DeploymentPointConfig deployment =
@@ -525,16 +558,45 @@ public class VehicleManager {
         return true;
     }
 
+    /**
+     * 把类型级冷却映射到「该类型所有待刷新槽位中最早到期的那个」，
+     * 这样部署面板显示的是最快可再部署的时间。
+     */
     private void refreshAutoRespawnCooldown(String team, String factionId, String vehicleType) {
-        RespawnKey key = new RespawnKey(team, factionId, vehicleType);
-        PriorityQueue<Long> queue = autoRespawnQueue.get(key);
         Map<String, Long> map = cooldowns.computeIfAbsent(
             cooldownOwner(team, factionId), ignored -> new HashMap<>());
-        if (queue == null || queue.isEmpty()) {
+        Long earliest = null;
+        for (Map.Entry<RespawnKey, PriorityQueue<Long>> entry : autoRespawnQueue.entrySet()) {
+            RespawnKey key = entry.getKey();
+            if (!vehicleType.equals(key.vehicleType())
+                || !factionId.equals(key.factionId())
+                || !team.equalsIgnoreCase(key.team())) {
+                continue;
+            }
+            Long head = entry.getValue().peek();
+            if (head != null && (earliest == null || head < earliest)) {
+                earliest = head;
+            }
+        }
+        if (earliest == null) {
             map.remove(vehicleType);
         } else {
-            map.put(vehicleType, queue.peek());
+            map.put(vehicleType, earliest);
         }
+    }
+
+    /** 某槽位当前在场数量。 */
+    private int countActiveInSlot(String team, String factionId, String vehicleType, int slotIndex) {
+        int count = 0;
+        for (ActiveVehicleData data : activeVehicleData.values()) {
+            if (factionId.equals(data.factionId())
+                && vehicleType.equals(data.vehicleType())
+                && team.equalsIgnoreCase(data.team())
+                && data.slotIndex() == slotIndex) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /** 向本队所有在线玩家推送载具信息快照（用于信息界面实时刷新）。 */
@@ -645,8 +707,8 @@ public class VehicleManager {
         // 记录
         trackVehicle(vehicleEntity, factionId, vehicleType, slotIndex, team, false);
 
-        // 部署成功后启动刷新冷却
-        startRespawnCooldown(team, factionId, vehicleType);
+        // 部署成功后启动刷新冷却（按被部署槽位的注册表刷新时间）
+        startRespawnCooldown(team, factionId, vehicleType, slotIndex);
 
         commander.sendSystemMessage(Component.literal(
             "§a已部署 " + getDisplayName(factionId, vehicleType) + " §a！(" + (current + 1) + "/" + cfg.max + ") §7位置: " +
@@ -1066,7 +1128,8 @@ public class VehicleManager {
             sendFullEntityResync(player, entity);
             sent++;
         }
-        Espetro.LOGGER.info("部署完成载具双端同步: {} 向 {} 重发 {} 个实体",
+        // 每次部署每个玩家都会走到这里，属正常流程，用 debug 免得刷日志。
+        Espetro.LOGGER.debug("部署完成载具双端同步: {} 向 {} 重发 {} 个实体",
             dimension.location(), player.getName().getString(), sent);
     }
 
@@ -1198,8 +1261,6 @@ public class VehicleManager {
         }
         initialVehiclesSpawned++;
         broadcastVehicleInfoToTeam(key.team());
-        // 方案 B：稍后重发 spawn 包，兜底客户端区块未就绪导致的丢失
-        scheduleSpawnResend(vehicleEntity);
         Espetro.LOGGER.info(
             "初始载具已刷新: {} / {} 槽位{} (队列剩余{})",
             key.factionId(), key.vehicleType(), key.slotIndex(), initialSpawnQueue.size());
@@ -1273,7 +1334,7 @@ public class VehicleManager {
         ActiveVehicleData data = removeTrackedVehicle(entityId);
         if (data != null) {
             applyVehicleTroopPenalty(data);
-            scheduleAutoRespawn(data.team(), data.factionId(), data.vehicleType());
+            scheduleAutoRespawn(data.team(), data.factionId(), data.vehicleType(), data.slotIndex());
             broadcastVehicleInfoToTeam(data.team());
         }
     }
@@ -1375,6 +1436,9 @@ public class VehicleManager {
 
         VehicleConfig.VehicleTypeConfig cfg = VehicleConfig.getVehicleConfig(data.factionId(), data.vehicleType());
         int penalty = cfg != null ? Math.max(0, cfg.troopValue) : 0;
+        if (cfg != null && data.slotIndex() >= 0 && data.slotIndex() < cfg.slots.size()) {
+            penalty = Math.max(0, cfg.slots.get(data.slotIndex()).troopValue);
+        }
         if (penalty <= 0) {
             return;
         }
@@ -1935,7 +1999,28 @@ public class VehicleManager {
             // 否则套用服务端 data/<ns>/supply_station/ 的补给站弹药配置
             applyVehicleSupplyLoadout(entity);
         }
+        applyVehicleSkin(entity, slot);
         return entity;
+    }
+
+    /**
+     * 按注册表配置给刚生成的载具套用皮肤。
+     * <p>用反射调用 SBW 的 {@code VehicleEntity#setSkinId(String)}，未装载具模组或接口缺失时静默跳过。</p>
+     */
+    private void applyVehicleSkin(Entity entity, @Nullable VehicleConfig.VehicleSlotConfig slot) {
+        if (entity == null || slot == null || slot.skinId == null || slot.skinId.isBlank()) {
+            return;
+        }
+        try {
+            entity.getClass().getMethod("setSkinId", String.class).invoke(entity, slot.skinId);
+            // SBW 的 setSkinId 只是写同步数据（SKIN_ID），客户端收到同步后才换贴图；
+            // 所以生成瞬间客户端可能先按模型默认外观渲染一帧/一小会儿，属正常。
+            Espetro.LOGGER.info("[载具皮肤] {} ({}) -> {}", entity.getType(), entity.getUUID(),
+                slot.skinId);
+        } catch (Throwable e) {
+            Espetro.LOGGER.warn("载具皮肤设置失败 type={} skin={}: {}",
+                entity.getType(), slot.skinId, e.toString());
+        }
     }
 
     /**

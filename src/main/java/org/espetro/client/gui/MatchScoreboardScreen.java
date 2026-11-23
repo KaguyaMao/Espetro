@@ -26,6 +26,7 @@ import java.util.UUID;
 public final class MatchScoreboardScreen extends EspetroMenuScreen {
 
     private static MatchStatsSyncPacket latestStats = new MatchStatsSyncPacket(List.of());
+    private static final java.util.Map<UUID, MatchStatsSyncPacket.Row> rowsById = new java.util.HashMap<>();
 
     private final Screen parent;
     private final List<HitRow> hitRows = new ArrayList<>();
@@ -45,6 +46,8 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
 
     public static void updateStats(MatchStatsSyncPacket packet) {
         latestStats = packet == null ? new MatchStatsSyncPacket(List.of()) : packet;
+        rowsById.clear();
+        for (MatchStatsSyncPacket.Row row : latestStats.rows) rowsById.put(row.uuid, row);
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen instanceof MatchScoreboardScreen screen) {
             screen.contextRow = null;
@@ -62,6 +65,14 @@ public final class MatchScoreboardScreen extends EspetroMenuScreen {
             if (uuid.equals(row.uuid)) return row.name;
         }
         return uuid.toString().substring(0, 8);
+    }
+
+    static MatchStatsSyncPacket.Row statsFor(UUID uuid) {
+        return rowsById.get(uuid);
+    }
+
+    static Integer squadNumberFor(UUID uuid) {
+        return latestStats.squadNumber(uuid);
     }
 
     @Override

@@ -11,7 +11,9 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.espetro.Espetro;
 import org.espetro.audio.AudioPackId;
+import org.espetro.vehicle.EsVehicleRegistry;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +42,33 @@ public class FactionDataLoader {
     private Map<String, ClassKitData> classKits = new LinkedHashMap<>();
     /** factionId -> (vehicleType -> VehicleData) 来自编制JSON的载具配置 */
     private final Map<String, Map<String, VehicleData>> factionVehicles = new LinkedHashMap<>();
+    /**
+     * factionId -> 地图尺寸档位 -> (vehicleType -> VehicleData)。
+     * 档位键为 {@link #TIER_ANY}（三档通用）/ {@link #TIER_BIG} / {@link #TIER_MID} / {@link #TIER_SMALL}。
+     */
+    private final Map<String, Map<String, Map<String, VehicleData>>> factionTierVehicles =
+        new LinkedHashMap<>();
+
+    /** 三档通用的载具方案键。 */
+    public static final String TIER_ANY = "any";
+    public static final String TIER_BIG = "big";
+    public static final String TIER_MID = "mid";
+    public static final String TIER_SMALL = "small";
+
+    /** 单个槽位里同一载具最多登记几台（防止配置写错把出生点撑爆）。 */
+    private static final int MAX_VEHICLES_PER_SLOT = 8;
+
+    /** 当前活动地图使用的尺寸档位（由 {@code VehicleConfig.applyActiveMap} 在开图时写入）。 */
+    private static volatile String activeTier = TIER_MID;
+
+    /** 当前活动地图的尺寸档位。 */
+    public static String activeTier() {
+        return activeTier;
+    }
+
+    public static void setActiveTier(String tier) {
+        activeTier = tier == null || tier.isBlank() ? TIER_MID : tier;
+    }
     /** factionId -> ordered vehicle type declarations from VehTypes. */
     private final Map<String, List<String>> factionVehicleTypes = new LinkedHashMap<>();
     private final Map<String, ClassKitData[]> classesByFaction = new HashMap<>();
@@ -130,15 +159,76 @@ public class FactionDataLoader {
         if (data.vehicles != null) {
             this.factionVehicles.put(factionId, new LinkedHashMap<>(data.vehicles));
         }
+        if (data.tierVehicles != null && !data.tierVehicles.isEmpty()) {
+            Map<String, Map<String, VehicleData>> tiers = new LinkedHashMap<>();
+            for (Map.Entry<String, Map<String, VehicleData>> entry : data.tierVehicles.entrySet()) {
+                tiers.put(entry.getKey(), new LinkedHashMap<>(entry.getValue()));
+            }
+            this.factionTierVehicles.put(factionId, tiers);
+        }
         this.factionVehicleTypes.put(factionId,
             data.vehicleTypes == null ? List.of() : List.copyOf(data.vehicleTypes));
     }
 
     private boolean validateVehicleDeclaration(ResourceLocation id, FactionJsonData data) {
-        if (data.vehicleTypes == null) {
-            warnRejected(id, "缺少 VehTypes 数组");
+        data.vehicles = new LinkedHashMap<>();
+        data.tierVehicles = new LinkedHashMap<>();
+
+        if (data.vehiclesJson != null && data.vehiclesJson.size() > 0) {
+            boolean legacy = false;
+            boolean modern = false;
+            for (Map.Entry<String, com.google.gson.JsonElement> entry : data.vehiclesJson.entrySet()) {
+                if (entry.getValue() != null && entry.getValue().isJsonObject()
+                    && isLegacyVehicleObject(entry.getValue().getAsJsonObject())) {
+                    legacy = true;
+                } else {
+                    modern = true;
+                }
+            }
+            if (legacy && modern) {
+                warnRejected(id, "vehicles 混用了旧格式(entity/entity_type)与新格式(载具注册 id)");
+                return false;
+            }
+            if (legacy) {
+                if (!validateLegacyVehicles(id, data)) {
+                    return false;
+                }
+            } else {
+                Map<String, VehicleData> any = parseVehicleRefs(id, data.vehiclesJson, "vehicles");
+                if (any == null) {
+                    return false;
+                }
+                data.tierVehicles.put(TIER_ANY, any);
+                data.vehicles.putAll(any);
+            }
+        }
+
+        if (!appendTier(id, data, TIER_BIG, data.bigMapVehiclesJson)
+            || !appendTier(id, data, TIER_MID, data.midMapVehiclesJson)
+            || !appendTier(id, data, TIER_SMALL, data.smallMapVehiclesJson)) {
             return false;
         }
+
+        if (data.tierVehicles.isEmpty() && (data.vehicles == null || data.vehicles.isEmpty())) {
+            warnRejected(id, "没有任何载具配置（vehicles / *_map_vehicles 均为空）");
+            return false;
+        }
+
+        // VehTypes 变为可选：未声明时按各档位槽位键推导（顺序：通用 → 大 → 中 → 小）。
+        if (data.vehicleTypes == null || data.vehicleTypes.isEmpty()) {
+            LinkedHashSet<String> derived = new LinkedHashSet<>();
+            for (String tier : List.of(TIER_ANY, TIER_BIG, TIER_MID, TIER_SMALL)) {
+                Map<String, VehicleData> block = data.tierVehicles.get(tier);
+                if (block != null) {
+                    derived.addAll(block.keySet());
+                }
+            }
+            if (derived.isEmpty() && data.vehicles != null) {
+                derived.addAll(data.vehicles.keySet());
+            }
+            data.vehicleTypes = new ArrayList<>(derived);
+        }
+
         LinkedHashSet<String> seen = new LinkedHashSet<>();
         List<String> normalizedTypes = new ArrayList<>();
         for (String rawType : data.vehicleTypes) {
@@ -150,24 +240,163 @@ public class FactionDataLoader {
             normalizedTypes.add(type);
         }
         data.vehicleTypes = normalizedTypes;
-        if (data.vehicles == null) {
-            data.vehicles = new LinkedHashMap<>();
+
+        // 所有档位的槽位名都必须在 VehTypes 中声明。
+        for (Map.Entry<String, Map<String, VehicleData>> tier : data.tierVehicles.entrySet()) {
+            for (String slot : tier.getValue().keySet()) {
+                if (!seen.contains(slot)) {
+                    warnRejected(id, tier.getKey() + " 档位的槽位 " + slot + " 未在 VehTypes 中声明");
+                    return false;
+                }
+            }
         }
-        Map<String, VehicleData> normalizedVehicles = new LinkedHashMap<>();
-        for (Map.Entry<String, VehicleData> entry : data.vehicles.entrySet()) {
-            String type = entry.getKey() == null
+        return true;
+    }
+
+    /** 是否为旧格式的载具对象（含 entity / entity_type）。 */
+    private static boolean isLegacyVehicleObject(JsonObject obj) {
+        return obj.has("entity") || obj.has("entity_type");
+    }
+
+    private boolean appendTier(ResourceLocation id, FactionJsonData data, String tier, JsonObject group) {
+        if (group == null || group.size() == 0) {
+            return true;
+        }
+        Map<String, VehicleData> parsed = parseVehicleRefs(id, group, tier + "_map_vehicles");
+        if (parsed == null) {
+            return false;
+        }
+        data.tierVehicles.put(tier, parsed);
+        return true;
+    }
+
+    /**
+     * 解析新格式载具声明：槽位 -> 载具注册 id -> 首次部署延迟。
+     * @return 解析结果；失败返回 null
+     */
+    @Nullable
+    private Map<String, VehicleData> parseVehicleRefs(ResourceLocation fileId, JsonObject group,
+                                                      String label) {
+        Map<String, VehicleData> normalized = new LinkedHashMap<>();
+        for (Map.Entry<String, com.google.gson.JsonElement> entry : group.entrySet()) {
+            String slot = entry.getKey() == null
                 ? "" : entry.getKey().trim().toLowerCase(Locale.ROOT);
-            if (type.isBlank() || normalizedVehicles.containsKey(type)) {
+            if (slot.isBlank() || normalized.containsKey(slot)) {
+                warnRejected(fileId, label + " 含空槽位或大小写归一化后重复的槽位");
+                return null;
+            }
+            com.google.gson.JsonElement slotValue = entry.getValue();
+            if (slotValue == null || !(slotValue.isJsonObject() || slotValue.isJsonArray())) {
+                warnRejected(fileId, label + "." + entry.getKey() + " 必须是对象或对象数组");
+                return null;
+            }
+            // 槽位值可以是对象，也可以是“每条一个对象的数组”。
+            // JSON 对象不能出现同名键（Gson 会静默覆盖），所以同型多台要写成数组：
+            //   "ifv": [ {"lav25":{"attack":0,"defend":0}}, {"lav25":{...,"respawn_minutes":15}} ]
+            List<JsonObject> entries = new ArrayList<>();
+            if (slotValue.isJsonObject()) {
+                entries.add(slotValue.getAsJsonObject());
+            } else {
+                for (com.google.gson.JsonElement element : slotValue.getAsJsonArray()) {
+                    if (element == null || !element.isJsonObject()) {
+                        warnRejected(fileId, label + "." + entry.getKey() + " 数组元素必须是对象");
+                        return null;
+                    }
+                    entries.add(element.getAsJsonObject());
+                }
+            }
+            List<SlotVehicle> slotVehicles = new ArrayList<>();
+            for (JsonObject unitObject : entries) {
+                for (Map.Entry<String, com.google.gson.JsonElement> vehicleEntry
+                    : unitObject.entrySet()) {
+                    String registryId = vehicleEntry.getKey();
+                    EsVehicleRegistry.EsVehicleDef def = EsVehicleRegistry.get(registryId);
+                    if (def == null) {
+                        warnRejected(fileId, label + "." + entry.getKey() + "." + registryId
+                            + " 未在载具注册表 " + EsVehicleRegistry.CONFIG_PATH + " 中定义");
+                        return null;
+                    }
+                    int delayAttack = 0;
+                    int delayDefend = 0;
+                    int count = 1;
+                    Integer respawnMinutes = null;
+                    if (vehicleEntry.getValue() != null && vehicleEntry.getValue().isJsonObject()) {
+                        JsonObject options = vehicleEntry.getValue().getAsJsonObject();
+                        delayAttack = readDelay(options, "attack");
+                        delayDefend = readDelay(options, "defend");
+                        if (options.has("respawn_minutes")) {
+                            respawnMinutes = Math.max(0, readDelay(options, "respawn_minutes"));
+                        }
+                        // 逗号写法的简写：一条里登记 N 台（等价于重复 N 个数组元素）。
+                        if (options.has("count")) {
+                            count = readCount(options, "count");
+                            if (count < 1) {
+                                warnRejected(fileId, label + "." + entry.getKey() + "."
+                                    + registryId + ".count 必须 >= 1");
+                                return null;
+                            }
+                        }
+                    }
+                    for (int unit = 0; unit < count; unit++) {
+                        slotVehicles.add(new SlotVehicle(def,
+                            Math.max(0, delayAttack), Math.max(0, delayDefend), respawnMinutes));
+                    }
+                }
+            }
+            if (slotVehicles.isEmpty()) {
+                warnRejected(fileId, label + "." + entry.getKey() + " 未声明任何载具");
+                return null;
+            }
+            normalized.put(slot, VehicleData.ofRegistry(slotVehicles));
+        }
+        if (normalized.isEmpty()) {
+            warnRejected(fileId, label + " 为空对象");
+            return null;
+        }
+        return normalized;
+    }
+
+    private static int readDelay(JsonObject obj, String key) {
+        if (!obj.has(key)) {
+            return 0;
+        }
+        try {
+            return obj.get(key).getAsInt();
+        } catch (RuntimeException e) {
+            return 0;
+        }
+    }
+
+    private static int readCount(JsonObject obj, String key) {
+        if (!obj.has(key)) {
+            return 1;
+        }
+        try {
+            return Math.min(MAX_VEHICLES_PER_SLOT, obj.get(key).getAsInt());
+        } catch (RuntimeException e) {
+            return 1;
+        }
+    }
+
+    /** 旧格式载具声明校验（entity/entity_type 数组）。 */
+    private boolean validateLegacyVehicles(ResourceLocation id, FactionJsonData data) {
+        Map<String, VehicleData> legacy = new LinkedHashMap<>();
+        for (Map.Entry<String, com.google.gson.JsonElement> rawEntry : data.vehiclesJson.entrySet()) {
+            String type = rawEntry.getKey() == null
+                ? "" : rawEntry.getKey().trim().toLowerCase(Locale.ROOT);
+            if (type.isBlank() || legacy.containsKey(type)) {
                 warnRejected(id, "vehicles 含空类型或大小写归一化后重复的类型");
                 return false;
             }
-            if (!seen.contains(type)) {
-                warnRejected(id, "vehicles." + entry.getKey() + " 未在 VehTypes 中声明");
+            VehicleData vehicle;
+            try {
+                vehicle = GSON.fromJson(rawEntry.getValue(), VehicleData.class);
+            } catch (RuntimeException e) {
+                warnRejected(id, "vehicles." + rawEntry.getKey() + " 解析失败: " + e.getMessage());
                 return false;
             }
-            VehicleData vehicle = entry.getValue();
             if (vehicle == null) {
-                warnRejected(id, "vehicles." + entry.getKey() + " 为空");
+                warnRejected(id, "vehicles." + rawEntry.getKey() + " 为空");
                 return false;
             }
             if ((vehicle.entities == null || vehicle.entities.isEmpty())
@@ -175,13 +404,13 @@ public class FactionDataLoader {
                 vehicle.entities = new ArrayList<>(List.of(vehicle.entityTypeStr));
             }
             if (vehicle.entities == null || vehicle.entities.isEmpty()) {
-                warnRejected(id, "vehicles." + entry.getKey() + ".entity 必须是非空数组");
+                warnRejected(id, "vehicles." + rawEntry.getKey() + ".entity 必须是非空数组");
                 return false;
             }
             List<String> normalizedEntities = new ArrayList<>();
             for (String entity : vehicle.entities) {
                 if (entity == null || entity.isBlank()) {
-                    warnRejected(id, "vehicles." + entry.getKey() + ".entity 含空实体 ID");
+                    warnRejected(id, "vehicles." + rawEntry.getKey() + ".entity 含空实体 ID");
                     return false;
                 }
                 normalizedEntities.add(entity.trim());
@@ -189,7 +418,7 @@ public class FactionDataLoader {
             vehicle.entities = normalizedEntities;
             vehicle.perMaxCount = Math.max(1, vehicle.perMaxCount);
             if (vehicle.vehicleCrewSeats != null && vehicle.vehicleCrewSeats < 0) {
-                warnRejected(id, "vehicles." + entry.getKey()
+                warnRejected(id, "vehicles." + rawEntry.getKey()
                     + ".vehicle_crew_seats 不能小于 0");
                 return false;
             }
@@ -197,9 +426,9 @@ public class FactionDataLoader {
                 String trimmedNbt = vehicle.nbt.trim();
                 vehicle.nbt = trimmedNbt.isEmpty() ? null : trimmedNbt;
             }
-            normalizedVehicles.put(type, vehicle);
+            legacy.put(type, vehicle);
         }
-        data.vehicles = normalizedVehicles;
+        data.vehicles = legacy;
         return true;
     }
 
@@ -222,6 +451,12 @@ public class FactionDataLoader {
             Espetro.LOGGER.warn("[编制兼容] {} → 失败: factionVehicleTypes 中无此编制", factionId);
             return false;
         }
+        String tier = tierForMapSize(map.mapSize());
+        if (!hasVehiclesForTier(factionId, tier)) {
+            Espetro.LOGGER.warn("[编制兼容] {} → 跳过: 地图尺寸 {} 无对应载具方案",
+                factionId, map.mapSize());
+            return false;
+        }
         for (String type : declared) {
             if (!map.vehSpawn.vehicleTypes.contains(type)) {
                 Espetro.LOGGER.warn("[编制兼容] {} → 失败: VehTypes 中 '{}' 不在地图 VehSpawn ({}) 中",
@@ -229,7 +464,7 @@ public class FactionDataLoader {
                 return false;
             }
         }
-        Map<String, VehicleData> vehicles = factionVehicles.getOrDefault(factionId, Map.of());
+        Map<String, VehicleData> vehicles = getFactionVehicles(factionId, tier);
         for (Map.Entry<String, VehicleData> entry : vehicles.entrySet()) {
             String type = entry.getKey();
             VehicleData data = entry.getValue();
@@ -572,6 +807,60 @@ public class FactionDataLoader {
         return factionVehicles.getOrDefault(factionId, Collections.emptyMap());
     }
 
+    /** 地图尺寸字符串（big/mid/small）→ 档位键；未知值按 mid。 */
+    public static String tierForMapSize(@Nullable String mapSize) {
+        if (mapSize == null) {
+            return TIER_MID;
+        }
+        return switch (mapSize.trim().toLowerCase(Locale.ROOT)) {
+            case TIER_BIG -> TIER_BIG;
+            case TIER_SMALL -> TIER_SMALL;
+            default -> TIER_MID;
+        };
+    }
+
+    /**
+     * 该编制是否提供了某个地图尺寸档位的载具方案。
+     * 旧格式没有档位概念，视为三档通用。
+     */
+    public boolean hasVehiclesForTier(String factionId, String tier) {
+        Map<String, Map<String, VehicleData>> tiers = factionTierVehicles.get(factionId);
+        if (tiers == null || tiers.isEmpty()) {
+            return factionVehicles.containsKey(factionId);
+        }
+        return tiers.containsKey(tier) || tiers.containsKey(TIER_ANY);
+    }
+
+    /** 取某档位的载具配置；没有该档时回落到“三档通用”，旧格式回落到 vehicles。 */
+    public Map<String, VehicleData> getFactionVehicles(String factionId, String tier) {
+        Map<String, Map<String, VehicleData>> tiers = factionTierVehicles.get(factionId);
+        if (tiers != null && !tiers.isEmpty()) {
+            Map<String, VehicleData> block = tiers.get(tier);
+            if (block == null) {
+                block = tiers.get(TIER_ANY);
+            }
+            return block == null ? Collections.emptyMap() : block;
+        }
+        return factionVehicles.getOrDefault(factionId, Collections.emptyMap());
+    }
+
+    /**
+     * 按地图尺寸取所有编制的载具配置（跳过该尺寸无方案的编制）。
+     */
+    public Map<String, Map<String, VehicleData>> getAllFactionVehicles(String tier) {
+        Map<String, Map<String, VehicleData>> out = new LinkedHashMap<>();
+        for (String factionId : factions.keySet()) {
+            if (!hasVehiclesForTier(factionId, tier)) {
+                continue;
+            }
+            Map<String, VehicleData> block = getFactionVehicles(factionId, tier);
+            if (!block.isEmpty()) {
+                out.put(factionId, block);
+            }
+        }
+        return out;
+    }
+
     /**
      * 获取所有编制载具配置
      */
@@ -589,8 +878,25 @@ public class FactionDataLoader {
         public List<String> vehicleTypes;
         public FactionData faction;
         public Map<String, ClassKitData> classes;
-        /** 编制自定义载具配置: vehicleType -> VehicleData */
-        public Map<String, VehicleData> vehicles;
+        /**
+         * 原始 vehicles 节。两种写法：
+         * 旧格式 {@code "ifv": {"entity": ["ns:zbd04a"], "display_name": ...}}；
+         * 新格式 {@code "ifv": {"zbd04a": {"attack": 0, "defend": 0}}}。
+         */
+        @SerializedName("vehicles")
+        public JsonObject vehiclesJson;
+        /** 地图尺寸档位专用载具方案（新格式）。 */
+        @SerializedName("big_map_vehicles")
+        public JsonObject bigMapVehiclesJson;
+        @SerializedName("mid_map_vehicles")
+        public JsonObject midMapVehiclesJson;
+        @SerializedName("small_map_vehicles")
+        public JsonObject smallMapVehiclesJson;
+
+        /** 解析后的载具配置（旧格式=原样；新格式=“三档通用”视图），供旧调用方使用。 */
+        public transient Map<String, VehicleData> vehicles;
+        /** 地图尺寸档位 -> (类型 -> VehicleData)。 */
+        public transient Map<String, Map<String, VehicleData>> tierVehicles;
     }
 
     /**
@@ -918,6 +1224,75 @@ public class FactionDataLoader {
          */
         @SerializedName(value = "map_icon", alternate = {"mapIcon", "mapicon"})
         public String mapIcon;
+
+        /** 新格式解析出的逐槽载具序列（含首次部署延迟）；旧格式为 null。 */
+        public transient List<SlotVehicle> slotVehicles;
+
+        /** 由载具注册表条目构造槽位级配置（新格式）。 */
+        public static VehicleData ofRegistry(List<SlotVehicle> slots) {
+            VehicleData data = new VehicleData();
+            data.slotVehicles = new ArrayList<>(slots);
+            List<String> entities = new ArrayList<>(slots.size());
+            for (SlotVehicle slot : slots) {
+                entities.add(slot.def().entity);
+            }
+            data.entities = entities;
+            EsVehicleRegistry.EsVehicleDef first = slots.get(0).def();
+            data.displayName = first.displayName;
+            data.mapIcon = first.mapIcon;
+            data.perMaxCount = Math.max(1, first.perMaxCount);
+            data.respawnMinutes = first.respawnMinutes;
+            data.troopValue = first.troopValue;
+            data.supplyVeh = first.supplyVeh ? Boolean.TRUE : null;
+            data.fightVeh = first.fightVeh ? Boolean.TRUE : null;
+            data.capacity = first.capacity;
+            data.vehicleCrewSeats = first.vehicleCrewSeats;
+            return data;
+        }
+    }
+
+    /** 新格式中一个槽位内的一辆载具（注册表条目 + 攻/守首次部署延迟）。 */
+    public static final class SlotVehicle {
+        private final EsVehicleRegistry.EsVehicleDef def;
+        private final int delayAttack;
+        private final int delayDefend;
+        /** 单台覆盖的刷新分钟数；null 表示沿用注册表默认值。 */
+        private final Integer respawnMinutes;
+
+        public SlotVehicle(EsVehicleRegistry.EsVehicleDef def, int delayAttack, int delayDefend) {
+            this(def, delayAttack, delayDefend, null);
+        }
+
+        public SlotVehicle(EsVehicleRegistry.EsVehicleDef def, int delayAttack, int delayDefend,
+                           @Nullable Integer respawnMinutes) {
+            this.def = def;
+            this.delayAttack = delayAttack;
+            this.delayDefend = delayDefend;
+            this.respawnMinutes = respawnMinutes;
+        }
+
+        public EsVehicleRegistry.EsVehicleDef def() {
+            return def;
+        }
+
+        public int delayAttack() {
+            return delayAttack;
+        }
+
+        public int delayDefend() {
+            return delayDefend;
+        }
+
+        /** 该台的实际刷新分钟数（槽位覆盖值优先，0 表示用默认值）。 */
+        public int effectiveRespawnMinutes() {
+            int minutes = respawnMinutes != null ? respawnMinutes : def.effectiveRespawnMinutes();
+            return minutes > 0 ? minutes : VehicleData.DEFAULT_RESPAWN_MINUTES;
+        }
+
+        /** 按队伍取首次部署延迟秒数。 */
+        public int delaySeconds(@Nullable String team) {
+            return "ATTACK".equalsIgnoreCase(team) ? delayAttack : delayDefend;
+        }
     }
 
     public static class InitialDeployDelayData {

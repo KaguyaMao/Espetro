@@ -48,9 +48,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int SQUAD_TITLE_ROW_H = SQUAD_ROW_H + 3;
     /** 未入队时标题行右端"加入"按钮宽度。 */
     private static final int SQUAD_JOIN_BTN_W = 32;
-    private static final int SQUAD_MEMBER_ROW_H = 9;
+    private static final int SQUAD_MEMBER_ROW_H = 12;
+    private static final int FIRETEAM_GUTTER = 11;
+    private static final int FIRETEAM_DROP_TOP = 5;
     private static final int SQUAD_ACTION_ROW_H = 10;
-    /** 身份色条与火力组色块同宽（像素），事件驱动静态绘制。 */
     private static final int SQUAD_ACCENT_BAR_W = 2;
     private static final int FIRETEAM_CONTEXT_W = 118;
     private static final int FIRETEAM_CONTEXT_ROW_H = 12;
@@ -287,6 +288,8 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private ScrollableList classScrollList;
     private ScrollableList deployScrollList;
     private ScrollableList squadScrollList;
+    private final List<FireteamBlock> fireteamBlocks = new ArrayList<>();
+    private SquadDrag squadDrag;
     private ThemeViewState themeViewState;
 
     private record ThemeViewState(double squads, double classes, double deploys,
@@ -1004,36 +1007,32 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         }
     }
 
-    /**
-     * 班组成员信息卡：最左火力组色块 + 身份色条（同宽）+ 文本。
-     * 静态 GuiElement，仅在班组数据 invalidate 后重建，不逐帧改结构。
-     */
     private class SquadMemberRow extends GuiElement {
-        private final String label;
-        private final int fireteamColor;
-        private final int roleAccentColor;
-        private final UUID memberUuid;
+        private final UnifiedDeployScreenPacket.SquadMemberInfo member;
         private final int squadId;
+        private final int groupColor;
+        private final ResourceLocation classIcon;
 
-        SquadMemberRow(int x, int y, int width, String label,
-                       int fireteamColor, int roleAccentColor,
-                       UUID memberUuid, int squadId) {
+        SquadMemberRow(int x, int y, int width, UnifiedDeployScreenPacket.SquadMemberInfo member,
+                       int squadId, int groupColor) {
             super(x, y, width, SQUAD_MEMBER_ROW_H);
-            this.label = label;
-            this.fireteamColor = fireteamColor;
-            this.roleAccentColor = roleAccentColor;
-            this.memberUuid = memberUuid;
+            this.member = member;
             this.squadId = squadId;
+            this.groupColor = groupColor;
+            this.classIcon = classes.stream().filter(info -> member.className.equals(info.name))
+                .findFirst().map(info -> RoleIconResources.resolveForScoreboard(info.iconImage, info.icon, info.classId))
+                .orElse(null);
         }
 
         @Override
         public boolean onMouseClick(int mx, int my, int button) {
-            if (!isVisible() || !hasFocus() || memberUuid == null) {
-                return false;
-            }
-            // 右键打开火力组/队长上下文（用屏幕最后鼠标坐标，避免 GuiElement 相对坐标偏移）
+            if (!isVisible() || !hasFocus()) return false;
             if (button == 1) {
-                openFireteamContextMenu(memberUuid, squadId, lastMouseX, lastMouseY);
+                openFireteamContextMenu(member.uuid, squadId, lastMouseX, lastMouseY);
+                return true;
+            }
+            if (button == 0 && canDragSquadMember(squadId, member)) {
+                squadDrag = new SquadDrag(squadId, member.uuid, mx, my);
                 return true;
             }
             return false;
@@ -1041,33 +1040,98 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         @Override
         public void draw(GuiGraphics graphics, int x, int y, int w, int h, int mx, int my, float tick) {
-            if (!isVisible()) {
-                return;
-            }
             int bx = x + getX();
             int by = y + getY();
-            int bar = SQUAD_ACCENT_BAR_W;
-            int rowRadius = UiTheme.RADIUS_INNER;
-            // 班组成员行：只留一层玻璃底色，不画描边（常态/悬停都不画）。
-            UiPaint.roundRect(graphics, bx, by, getWidth(), getHeight(), rowRadius,
-                hasFocus() ? UiTheme.CONTROL_HOVER : UiTheme.GLASS_PANEL_SOFT);
-            // 最左：火力组色条（圆角胶囊）
-            UiPaint.roundRect(graphics, bx + 1, by + 2, bar, Math.max(1, getHeight() - 4), 1,
-                fireteamColor);
-            // 紧邻：阵营内身份色条（金指挥官 / 紫队长 / 蓝队员）
-            UiPaint.roundRect(graphics, bx + bar + 1, by + 2, Math.max(1, bar / 2),
-                Math.max(1, getHeight() - 4), 1, roleAccentColor);
-
-            int textX = bx + bar * 2 + 3;
-            int availableWidth = Math.max(8, getWidth() - (bar * 2 + 5));
-            String drawnLabel = EspetroAuiWidgets.trimToWidth(
-                label, (int) (availableWidth / SQUAD_MEMBER_TEXT_SCALE));
-            int textHeight = Math.max(1,
-                Math.round(Minecraft.getInstance().font.lineHeight * SQUAD_MEMBER_TEXT_SCALE));
-            drawScaledString(graphics, drawnLabel, textX,
-                by + Math.max(0, (getHeight() - textHeight) / 2),
-                btnTextColor(), SQUAD_MEMBER_TEXT_SCALE);
+            if (hasFocus()) graphics.fill(bx, by, bx + getWidth(), by + getHeight(), UiTheme.CONTROL_HOVER);
+            graphics.fill(bx, by, bx + SQUAD_ACCENT_BAR_W, by + getHeight(), groupColor);
+            TacticalHud.drawHead(graphics, Minecraft.getInstance(), member.uuid, bx + 5, by + 2, 1f);
+            if (classIcon != null) TacticalHud.drawRoleIcon(graphics, classIcon, bx + 16, by + 1, UiTheme.WORLD_TEXT);
+            else TacticalHud.drawRole(graphics, member.uuid, member.className, bx + 16, by + 1, UiTheme.WORLD_TEXT);
+            int textX = bx + 29;
+            int limit = Math.max(0, (int) ((getWidth() - 31) / SQUAD_MEMBER_TEXT_SCALE));
+            String label = member.playerName + " | " + (member.className.isBlank() ? "未选择职业" : member.className);
+            String drawn = EspetroAuiWidgets.trimToWidth(label, limit);
+            drawScaledString(graphics, drawn, textX, by + 3, btnTextColor(), SQUAD_MEMBER_TEXT_SCALE);
         }
+    }
+
+    private record FireteamBlock(int squadId, Fireteam team, int y, int height) {}
+    private record SquadDrag(int squadId, UUID memberId, int startX, int startY) {
+        boolean moved(double x, double y) {
+            return Math.abs(x - startX) >= 3 || Math.abs(y - startY) >= 3;
+        }
+    }
+    private record SquadDrop(FireteamBlock block, boolean appoint, String label, Runnable action) {}
+
+    private UnifiedDeployScreenPacket.SquadInfo ownSquad() {
+        for (var squad : squads) if (squad.id == mySquadId) return squad;
+        return null;
+    }
+
+    private UnifiedDeployScreenPacket.SquadMemberInfo findLocalSquadMember() {
+        var squad = ownSquad();
+        var player = Minecraft.getInstance().player;
+        if (squad == null || player == null) return null;
+        for (var member : squad.members) if (member.uuid.equals(player.getUUID())) return member;
+        return null;
+    }
+
+    private boolean canDragSquadMember(int squadId, UnifiedDeployScreenPacket.SquadMemberInfo member) {
+        var self = findLocalSquadMember();
+        return squadId == mySquadId && self != null && !self.uuid.equals(member.uuid)
+            && (self.leader || self.fireteamLeader && self.fireteam == member.fireteam);
+    }
+
+    private SquadDrop squadDropAt(double x, double y) {
+        var drag = squadDrag;
+        var list = squadScrollList;
+        var squad = ownSquad();
+        var self = findLocalSquadMember();
+        if (drag == null || list == null || squad == null || self == null || drag.squadId() != squad.id
+            || !inside((int) x, (int) y, list.getX(), list.getY(), list.getWidth() - 6, list.getHeight())) return null;
+        var target = squad.members.stream().filter(member -> member.uuid.equals(drag.memberId())).findFirst().orElse(null);
+        if (target == null || !canDragSquadMember(squad.id, target)) return null;
+        int localY = (int) y - list.getY() + (int) list.getOffset();
+        for (var block : fireteamBlocks) {
+            if (block.squadId() != squad.id || localY < block.y() || localY >= block.y() + block.height()) continue;
+            var team = block.team();
+            boolean sameTeam = target.fireteam == team.toNetwork();
+            if (localY >= block.y() + FIRETEAM_DROP_TOP) {
+                if (self.leader && !sameTeam) return new SquadDrop(block, false, "调至" + team.label() + "组",
+                    () -> NetworkManager.assignFireteam(target.uuid, team));
+                return null;
+            }
+            if (self.leader && team == Fireteam.A) return new SquadDrop(block, true, "委任为小队长",
+                () -> NetworkManager.transferSquadLeader(target.uuid));
+            if (self.leader && !(sameTeam && target.fireteamLeader)) {
+                return new SquadDrop(block, true, "委任为" + team.label() + "组长",
+                    () -> NetworkManager.appointFireteamLeader(target.uuid, team));
+            }
+            if (!self.leader && self.fireteamLeader && self.fireteam == team.toNetwork() && sameTeam) {
+                return new SquadDrop(block, true, "委任为" + team.label() + "组长",
+                    () -> NetworkManager.transferFireteamLeader(target.uuid));
+            }
+            return null;
+        }
+        return null;
+    }
+
+    private void renderSquadDrag(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (squadDrag == null || !squadDrag.moved(mouseX, mouseY)) return;
+        var drop = squadDropAt(mouseX, mouseY);
+        if (drop != null) {
+            var list = squadScrollList;
+            var block = drop.block();
+            int x = list.getX() + FIRETEAM_GUTTER;
+            int x2 = list.getX() + list.getWidth() - 6;
+            int top = list.getY() + block.y() - (int) list.getOffset();
+            int color = TacticalHud.fireteamColor(block.team().toNetwork());
+            graphics.enableScissor(list.getX(), list.getY(), x2, list.getY() + list.getHeight());
+            if (drop.appoint()) graphics.fill(x, top + FIRETEAM_DROP_TOP - 2, x2, top + FIRETEAM_DROP_TOP, color);
+            else graphics.fill(x, top + FIRETEAM_DROP_TOP, x2, top + block.height(), UiTheme.withAlpha(color, 48));
+            graphics.disableScissor();
+        }
+        graphics.renderTooltip(font, Component.literal(drop == null ? "此处不可放置" : drop.label()), mouseX, mouseY);
     }
 
     private record FireteamContextEntry(String label, boolean enabled, Runnable action) {}
@@ -1531,6 +1595,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     // ---------- 班组（左列） ----------
     private void buildSquadSection(GuiElement sectionRoot) {
+        fireteamBlocks.clear();
         int sx = squadAreaX;
         int sy = squadAreaY;
         int areaW = squadAreaW;
@@ -1612,42 +1677,39 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             }
 
             if (squad.members.isEmpty()) {
-                squadScrollList.addChild(new SquadMemberRow(
-                    3, rowY, rowW - 3, "\u00a77暂无成员资料",
-                    UiTheme.TEXT_DISABLED, UiTheme.TEXT_DISABLED, null, squad.id));
-                rowY += SQUAD_MEMBER_ROW_H + SQUAD_ROW_GAP;
-            } else {
-                // 服务端已按 A→B→C 排序；同组聚集后插组标题（事件重建，非 tick）
-                byte lastFt = -1;
-                for (UnifiedDeployScreenPacket.SquadMemberInfo member : squad.members) {
-                    if (member.fireteam != lastFt) {
-                        lastFt = member.fireteam;
-                        Fireteam ft = Fireteam.fromIndex(member.fireteam);
-                        squadScrollList.addChild(new PlainText(
-                            5, rowY + 1,
-                            "\u00a78火力组 " + ft.label()
-                                + (member.fireteamLeader ? "" : ""),
-                            ft.color()));
-                        // PlainText 高度随字号；占一行间距
-                        rowY += SQUAD_MEMBER_ROW_H;
+                squadScrollList.addChild(new PlainText(3, rowY, "暂无成员资料", UiTheme.TEXT_THIRD));
+                rowY += SQUAD_MEMBER_ROW_H;
+                continue;
+            }
+
+            var self = mine ? findLocalSquadMember() : null;
+            for (Fireteam ft : Fireteam.values()) {
+                var members = squad.members.stream()
+                    .filter(member -> (member.leader ? Fireteam.A : Fireteam.fromIndex(member.fireteam)) == ft)
+                    .sorted(Comparator.comparingInt(member -> member.leader ? 0 : member.fireteamLeader ? 1 : 2))
+                    .toList();
+                if (members.isEmpty() && (self == null || !self.leader)) continue;
+
+                int blockHeight = FIRETEAM_DROP_TOP + Math.max(1, members.size()) * SQUAD_MEMBER_ROW_H;
+                int groupColor = TacticalHud.fireteamColor(ft.toNetwork());
+                var block = new FireteamBlock(squad.id, ft, rowY, blockHeight);
+                fireteamBlocks.add(block);
+                squadScrollList.addChild(new GuiElement(0, rowY, FIRETEAM_GUTTER, blockHeight) {
+                    @Override
+                    public void draw(GuiGraphics g, int x, int y, int w, int h, int mx, int my, float tick) {
+                        var font = Minecraft.getInstance().font;
+                        g.drawString(font, ft.label(), x + 2,
+                            y + getY() + FIRETEAM_DROP_TOP + (getHeight() - FIRETEAM_DROP_TOP - font.lineHeight) / 2,
+                            groupColor, true);
                     }
-                    String marker = member.commander
-                        ? "\u00a76\u25c6"
-                        : member.leader ? "\u00a7d\u25c6"
-                        : member.fireteamLeader ? "\u00a7b\u25b8" : "\u00a77\u00b7";
-                    String role = member.className.isBlank()
-                        ? ""
-                        : " \u00a78| \u00a7b" + member.className;
-                    int roleAccent = member.commander
-                        ? UiTheme.GOLD
-                        : member.leader ? UiTheme.PURPLE : UiTheme.SQUAD;
-                    Fireteam ft = Fireteam.fromIndex(member.fireteam);
-                    squadScrollList.addChild(new SquadMemberRow(
-                        3, rowY, rowW - 3,
-                        marker + " \u00a7f" + member.playerName + role,
-                        ft.color(), roleAccent, member.uuid, squad.id));
-                    rowY += SQUAD_MEMBER_ROW_H + SQUAD_ROW_GAP;
+                });
+                int memberY = rowY + FIRETEAM_DROP_TOP;
+                for (var member : members) {
+                    squadScrollList.addChild(new SquadMemberRow(FIRETEAM_GUTTER, memberY,
+                        rowW - FIRETEAM_GUTTER, member, squad.id, groupColor));
+                    memberY += SQUAD_MEMBER_ROW_H;
                 }
+                rowY += blockHeight + SQUAD_ROW_GAP;
             }
         }
         if (squads.isEmpty()) {
@@ -2920,6 +2982,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
     @Override
     public void removed() {
+        squadDrag = null;
         clearPendingDeploySelection();
         previewRenderer.clear();
         closeSquadCategoryPopup();
@@ -3580,6 +3643,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
 
         renderClassTooltip(graphics, mouseX, mouseY);
         renderVariantPopup(graphics, mouseX, mouseY);
+        renderSquadDrag(graphics, mouseX, mouseY);
     }
 
     private void renderTacticalMap(GuiGraphics graphics, float partialTick) {
@@ -3934,6 +3998,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         if (tutorialPreviewMode) {
             return super.mouseClicked(mx, my, button);
         }
+        if (squadDrag != null) return true;
         lastMouseX = (int) mx;
         lastMouseY = (int) my;
         // 点击内联名称输入框以外的地方：取消它的输入焦点
@@ -3977,7 +4042,28 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     }
 
     @Override
+    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+        if (button == 0 && squadDrag != null) return true;
+        return super.mouseDragged(mx, my, button, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(double mx, double my, int button) {
+        if (button == 0 && squadDrag != null) {
+            var drop = squadDrag.moved(mx, my) ? squadDropAt(mx, my) : null;
+            squadDrag = null;
+            if (drop != null) drop.action().run();
+            return true;
+        }
+        return super.mouseReleased(mx, my, button);
+    }
+
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && squadDrag != null) {
+            squadDrag = null;
+            return true;
+        }
         // 内联「小队名称」输入框聚焦时：键盘只喂给输入框，避免触发其它快捷键
         // （字符输入走 charTyped，与 keyPressed 的返回值无关）。
         SquadInlineNameField inline = squadInlineNameField;

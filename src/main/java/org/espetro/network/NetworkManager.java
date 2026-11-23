@@ -30,6 +30,10 @@ public class NetworkManager {
 
     public static final String PROTOCOL_VERSION = "1.39";
 
+    /** 投票卡片载具行只记一次日志，避免每次下发刷屏。 */
+    private static final java.util.Set<String> VEHICLE_LINE_LOGGED =
+        java.util.concurrent.ConcurrentHashMap.newKeySet();
+
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(
         ResourceLocation.fromNamespaceAndPath(Espetro.MOD_ID, "main"),
         () -> PROTOCOL_VERSION,
@@ -1005,18 +1009,45 @@ public class NetworkManager {
     /** 编制投票卡片「?」面板：该编制的载具显示名与刷新时间（分钟）。 */
     private static List<ClassSelectScreenPacket.VehicleLine> buildFactionVehicleLines(
             FactionDataLoader loader, String factionId) {
-        java.util.Map<String, FactionDataLoader.VehicleData> vehicles = loader.getFactionVehicles(factionId);
+        java.util.Map<String, FactionDataLoader.VehicleData> vehicles =
+            loader.getFactionVehicles(factionId, FactionDataLoader.activeTier());
         if (vehicles == null || vehicles.isEmpty()) return java.util.List.of();
         List<ClassSelectScreenPacket.VehicleLine> lines = new ArrayList<>(vehicles.size());
         for (java.util.Map.Entry<String, FactionDataLoader.VehicleData> entry : vehicles.entrySet()) {
             FactionDataLoader.VehicleData data = entry.getValue();
             if (data == null) continue;
-            String display = data.displayName != null && !data.displayName.isBlank()
-                ? data.displayName : entry.getKey();
-            int minutes = data.respawnMinutes > 0
-                ? data.respawnMinutes : FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES;
-            int slots = data.entities != null && !data.entities.isEmpty() ? data.entities.size() : 1;
-            int count = slots * Math.max(1, data.perMaxCount);
+            String display;
+            int minutes;
+            int count;
+            if (data.slotVehicles != null && !data.slotVehicles.isEmpty()) {
+                // 注册表模式：显示名与刷新时间都取注册表条目，
+                // 同一槽位停多种载具时把所有型号名并列，刷新时间取最快的那辆。
+                java.util.LinkedHashSet<String> names = new java.util.LinkedHashSet<>();
+                int fastest = Integer.MAX_VALUE;
+                for (FactionDataLoader.SlotVehicle ref : data.slotVehicles) {
+                    if (ref == null || ref.def() == null) continue;
+                    String name = ref.def().displayName;
+                    names.add(name == null || name.isBlank() ? ref.def().id : name);
+                    fastest = Math.min(fastest, ref.effectiveRespawnMinutes());
+                }
+                display = names.isEmpty() ? entry.getKey() : String.join(" / ", names);
+                minutes = fastest == Integer.MAX_VALUE
+                    ? FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES : fastest;
+                count = data.slotVehicles.size() * Math.max(1, data.perMaxCount);
+                if (VEHICLE_LINE_LOGGED.add(factionId + "#" + FactionDataLoader.activeTier())) {
+                    Espetro.LOGGER.info("[投票卡片] {} 档位={} 载具行 {} 条，示例 {} / {}",
+                        factionId, FactionDataLoader.activeTier(), lines.size() + 1,
+                        display, minutes + " 分钟");
+                }
+            } else {
+                display = data.displayName != null && !data.displayName.isBlank()
+                    ? data.displayName : entry.getKey();
+                minutes = data.respawnMinutes > 0
+                    ? data.respawnMinutes : FactionDataLoader.VehicleData.DEFAULT_RESPAWN_MINUTES;
+                int slots = data.entities != null && !data.entities.isEmpty()
+                    ? data.entities.size() : 1;
+                count = slots * Math.max(1, data.perMaxCount);
+            }
             lines.add(new ClassSelectScreenPacket.VehicleLine(stripFormatting(display), minutes, count));
         }
         return lines;

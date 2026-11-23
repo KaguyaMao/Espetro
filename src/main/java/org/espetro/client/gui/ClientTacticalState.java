@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * 客户端战术显示状态。
@@ -21,6 +22,9 @@ public final class ClientTacticalState {
     private static final Map<String, MarkerInfo> markersByName = new HashMap<>();
     private static final Set<String> commanderNames = new HashSet<>();
     private static int mySquadId = NO_SQUAD;
+    private static UnifiedDeployScreenPacket.SquadInfo localSquad;
+    private static final Map<UUID, Integer> squadNumbers = new HashMap<>();
+    private static final Map<UUID, String> classNames = new HashMap<>();
     private static byte myFireteam = FIRETEAM_NONE;
     private static double teammateNameTagDistance = 10.0;
 
@@ -29,7 +33,11 @@ public final class ClientTacticalState {
 
     public static void updateSquads(List<UnifiedDeployScreenPacket.SquadInfo> squads, int updatedMySquadId,
                                     List<String> updatedCommanderNames, double updatedNameTagDistance) {
+        var previousSquad = localSquad;
         markersByName.clear();
+        squadNumbers.clear();
+        classNames.clear();
+        localSquad = null;
         commanderNames.clear();
         mySquadId = updatedMySquadId;
         myFireteam = FIRETEAM_NONE;
@@ -44,6 +52,7 @@ public final class ClientTacticalState {
         }
 
         if (squads == null) {
+            if (previousSquad != null) TacticalHud.rosterUpdated();
             return;
         }
 
@@ -51,7 +60,10 @@ public final class ClientTacticalState {
         String localName = mc.player != null ? key(mc.player.getName().getString()) : "";
 
         for (UnifiedDeployScreenPacket.SquadInfo squad : squads) {
+            if (squad.id == mySquadId) localSquad = squad;
             for (UnifiedDeployScreenPacket.SquadMemberInfo member : squad.members) {
+                squadNumbers.put(member.uuid, squad.displayId);
+                classNames.put(member.uuid, member.className);
                 String memberKey = key(member.playerName);
                 markersByName.put(memberKey,
                     new MarkerInfo(squad.id, squad.displayId, member.leader, member.fireteamLeader,
@@ -64,6 +76,24 @@ public final class ClientTacticalState {
                 }
             }
         }
+        if (localSquad == null ? previousSquad != null : previousSquad == null
+                || localSquad.id != previousSquad.id || localSquad.displayId != previousSquad.displayId
+                || !localSquad.name.equals(previousSquad.name)
+                || !localSquad.members.equals(previousSquad.members)) {
+            TacticalHud.rosterUpdated();
+        }
+    }
+
+    static UnifiedDeployScreenPacket.SquadInfo localSquad() {
+        return localSquad;
+    }
+
+    static Integer squadNumber(UUID playerId) {
+        return squadNumbers.get(playerId);
+    }
+
+    static String className(UUID playerId) {
+        return classNames.get(playerId);
     }
 
     public static int getNameColor(String playerName) {

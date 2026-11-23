@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.espetro.Espetro;
 import org.espetro.network.FobSupplySyncPacket;
@@ -14,28 +15,25 @@ import org.espetro.client.aui.GuiElement;
  * Radio 范围补给状态缓存与 AUI HUD 元素。
  *
  * <p>关键信息变化时，原素材补给图标重新烘焙并上传成一张透明底的高分辨率动态纹理；
- * 相同数据不会重建或上传。卡片底（圆角玻璃）、进度槽与数值每帧由 {@link UiPaint}
- * 直接绘制，普通帧没有位图重建成本。</p>
+ * 相同数据不会重建或上传。进度槽与数值每帧直接绘制，普通帧没有位图重建成本。</p>
  */
 public final class FobSupplyHud {
 
-    private static final int HUD_X = 8;
-    private static final int HUD_Y = 8;
-    private static final int PANEL_WIDTH = 120;
-    private static final int PANEL_HEIGHT = 26;
-    // 卡片内边距：左右各留 6px，顶部 4px，底部 2px（贴边不糊）。
-    private static final int BAR_X = 6;
-    private static final int BAR_Y = 4;
-    private static final int BAR_HEIGHT = 4;
-    private static final int BAR_WIDTH = 108;
-    private static final int ICON_SIZE = 14;
-    private static final int AMMO_ICON_X = 7;
-    private static final int AMMO_ICON_Y = 10;
-    private static final int AMMO_TEXT_X = 24;
-    private static final int CONSTRUCTION_ICON_X = 64;
-    private static final int CONSTRUCTION_ICON_Y = 10;
-    private static final int CONSTRUCTION_TEXT_X = 81;
-    private static final int VALUE_TEXT_Y = 12;
+    private static final int PANEL_WIDTH = 104;
+    private static final int PANEL_HEIGHT = 39;
+    private static final int PAD = 5;
+    private static final int ICON_SIZE = 11;
+    private static final int CONTENT_X = PAD + ICON_SIZE + 4;
+    private static final int RADIO_CENTER = 8;
+    private static final int SUPPLY_CENTER = 20;
+    private static final int HAB_CENTER = 32;
+    private static final int BAR_HEIGHT = 3;
+    private static final int BAR_WIDTH = PANEL_WIDTH - CONTENT_X - PAD;
+    private static final int CONSTRUCTION_X = PANEL_WIDTH / 2;
+    private static final ResourceLocation RADIO_ICON = ResourceLocation.fromNamespaceAndPath(
+        "espetro", "textures/gui/map/radio.png");
+    private static final ResourceLocation HAB_ICON = ResourceLocation.fromNamespaceAndPath(
+        "espetro", "textures/gui/map/hab.png");
 
     private static final int ICON_RASTER_SCALE = 4;
 
@@ -46,11 +44,18 @@ public final class FobSupplyHud {
     private static int maxAmmunition = 1;
     private static int radioHealth;
     private static int radioMaxHealth = 1;
+    private static FobSupplySyncPacket.HabStatus habStatus = FobSupplySyncPacket.HabStatus.UNKNOWN;
     private static SupplyElement activeElement;
     private static long stateRevision;
 
     private FobSupplyHud() {
     }
+
+    static boolean isShowing() { return inRange; }
+
+    static int bottomEdge(int height) { return topInset(height) + PANEL_HEIGHT; }
+
+    private static int topInset(int height) { return Math.max(4, Math.round(height * 0.016f)); }
 
     /** Kept for binary/source compatibility; rendering is owned by {@link EspetroHudOverlay}. */
     public static void register() {
@@ -73,7 +78,8 @@ public final class FobSupplyHud {
             && maxConstruction == nextMaxConstruction
             && maxAmmunition == nextMaxAmmunition
             && radioHealth == nextRadioHealth
-            && radioMaxHealth == nextRadioMaxHealth) {
+            && radioMaxHealth == nextRadioMaxHealth
+            && habStatus == packet.getHabStatus()) {
             return;
         }
         inRange = true;
@@ -83,6 +89,7 @@ public final class FobSupplyHud {
         maxAmmunition = nextMaxAmmunition;
         radioHealth = nextRadioHealth;
         radioMaxHealth = nextRadioMaxHealth;
+        habStatus = packet.getHabStatus();
         stateRevision++;
         applyStateToElement();
     }
@@ -131,6 +138,7 @@ public final class FobSupplyHud {
         maxAmmunition = 1;
         radioHealth = 0;
         radioMaxHealth = 1;
+        habStatus = FobSupplySyncPacket.HabStatus.UNKNOWN;
         stateRevision = 0;
         activeElement = null;
     }
@@ -150,7 +158,7 @@ public final class FobSupplyHud {
         private long themeRevision = -1L;
 
         private SupplyElement() {
-            super(HUD_X, HUD_Y, PANEL_WIDTH, PANEL_HEIGHT);
+            super(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
         }
 
         /** Network/root events only: mark one future bitmap upload as necessary. */
@@ -174,15 +182,16 @@ public final class FobSupplyHud {
                 dirty = true;
             }
             if (dirty && !failed) rebuildTexture();
-            int panelX = parentX + getX();
-            int panelY = parentY + getY();
+            int panelX = parentX + Math.max(4, Math.round(drawWidth * 0.008f));
+            int panelY = parentY + topInset(drawHeight);
 
-            // 无框玻璃卡；数值和图标保留清晰对比。
-            UiPaint.card(graphics, panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT);
-            // 电台血量沿用统一进度条。
-            float healthRatio = radioMaxHealth <= 0 ? 0f : radioHealth / (float) radioMaxHealth;
-            UiPaint.progress(graphics, panelX + BAR_X, panelY + BAR_Y,
-                BAR_WIDTH, BAR_HEIGHT, healthRatio, UiTheme.ACCENT);
+            drawStatusIcon(graphics, RADIO_ICON, panelX + PAD, panelY + RADIO_CENTER,
+                26, 76, UiTheme.HUD_CYAN);
+            int barX = panelX + CONTENT_X;
+            int barY = panelY + RADIO_CENTER - BAR_HEIGHT / 2;
+            graphics.fill(barX, barY, barX + BAR_WIDTH, barY + BAR_HEIGHT, UiTheme.HUD_TRACK);
+            int filled = scaledBarWidth(radioHealth, radioMaxHealth, BAR_WIDTH);
+            if (filled > 0) graphics.fill(barX, barY, barX + filled, barY + BAR_HEIGHT, UiTheme.HUD_CYAN);
 
             if (textureLocation != null && !failed) {
                 HudRenderState.begin(graphics);
@@ -195,13 +204,35 @@ public final class FobSupplyHud {
                 drawFallbackIcons(graphics, panelX, panelY);
             }
 
-            // 关键数值：标题字号 + 投影，保持高可读。
-            UiPaint.textScaled(graphics, Integer.toString(ammunition),
-                panelX + AMMO_TEXT_X, panelY + VALUE_TEXT_Y, UiTheme.TEXT,
-                UiTheme.TYPE_HEADING, true);
-            UiPaint.textScaled(graphics, Integer.toString(construction),
-                panelX + CONSTRUCTION_TEXT_X, panelY + VALUE_TEXT_Y, UiTheme.TEXT,
-                UiTheme.TYPE_HEADING, true);
+            int textY = panelY + SUPPLY_CENTER - Minecraft.getInstance().font.lineHeight / 2;
+            UiPaint.textScaled(graphics, Integer.toString(ammunition), panelX + CONTENT_X,
+                textY, UiTheme.WORLD_NEGATIVE, 1f, true);
+            UiPaint.textScaled(graphics, Integer.toString(construction), panelX + CONSTRUCTION_X + ICON_SIZE + 4,
+                textY, UiTheme.WORLD_WARNING, 1f, true);
+
+            boolean operational = habStatus == FobSupplySyncPacket.HabStatus.ACTIVE;
+            drawStatusIcon(graphics, HAB_ICON, panelX + PAD, panelY + HAB_CENTER,
+                43, 51, operational ? UiTheme.HUD_CYAN : UiTheme.WORLD_MUTED);
+            String status = switch (habStatus) {
+                case ACTIVE -> "hud.espetro.fob.hab_active";
+                case INACTIVE -> "hud.espetro.fob.hab_inactive";
+                case UNKNOWN -> "hud.espetro.fob.hab_unknown";
+            };
+            int habTextHeight = Math.round(Minecraft.getInstance().font.lineHeight * UiTheme.TYPE_MICRO);
+            UiPaint.textScaled(graphics, Component.translatable(status).getString(),
+                panelX + CONTENT_X, panelY + HAB_CENTER - habTextHeight / 2,
+                operational ? UiTheme.WORLD_TEXT : UiTheme.WORLD_MUTED,
+                UiTheme.TYPE_MICRO, true);
+        }
+
+        private static void drawStatusIcon(GuiGraphics graphics, ResourceLocation icon,
+                                           int x, int centerY, int sourceY, int sourceHeight, int color) {
+            // Both map glyphs have a 91px wide painted region in a 128px square.
+            int height = Math.round(ICON_SIZE * sourceHeight / 91f);
+            UiPaint.tint(graphics, color);
+            graphics.blit(icon, x, centerY - height / 2, ICON_SIZE, height,
+                19, sourceY, 91, sourceHeight, 128, 128);
+            UiPaint.tint(graphics, UiTheme.TEXTURE_WHITE);
         }
 
         private void rebuildTexture() {
@@ -230,17 +261,18 @@ public final class FobSupplyHud {
         /** Sample the original sprites at four pixels per GUI unit instead of flattening them to 10px. */
         private void paintBitmap() {
             pixels.fillRect(0, 0, pixels.getWidth(), pixels.getHeight(), 0);
-            iconSources.paint(pixels, AMMO_ICON_X * ICON_RASTER_SCALE,
-                AMMO_ICON_Y * ICON_RASTER_SCALE, ICON_SIZE * ICON_RASTER_SCALE, false);
-            iconSources.paint(pixels, CONSTRUCTION_ICON_X * ICON_RASTER_SCALE,
-                CONSTRUCTION_ICON_Y * ICON_RASTER_SCALE, ICON_SIZE * ICON_RASTER_SCALE, true);
+            int y = SUPPLY_CENTER * ICON_RASTER_SCALE - ICON_SIZE * ICON_RASTER_SCALE / 2;
+            iconSources.paint(pixels, PAD * ICON_RASTER_SCALE,
+                y, ICON_SIZE * ICON_RASTER_SCALE, false);
+            iconSources.paint(pixels, CONSTRUCTION_X * ICON_RASTER_SCALE,
+                y, ICON_SIZE * ICON_RASTER_SCALE, true);
         }
 
         /** Texture failure draws the same original source sprites directly. */
         private void drawFallbackIcons(GuiGraphics graphics, int x, int y) {
-            SupplyIcons.ammunition(graphics, x + AMMO_ICON_X, y + AMMO_ICON_Y, ICON_SIZE);
-            SupplyIcons.construction(graphics, x + CONSTRUCTION_ICON_X,
-                y + CONSTRUCTION_ICON_Y, ICON_SIZE);
+            int iconY = y + SUPPLY_CENTER - ICON_SIZE / 2;
+            SupplyIcons.ammunition(graphics, x + PAD, iconY, ICON_SIZE);
+            SupplyIcons.construction(graphics, x + CONSTRUCTION_X, iconY, ICON_SIZE);
         }
 
         private void dispose() {

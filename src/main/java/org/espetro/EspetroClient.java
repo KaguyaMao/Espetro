@@ -15,12 +15,7 @@ public class EspetroClient {
      */
     @SuppressWarnings({"unchecked", "removal"})
     public static void init() {
-        // Normally already installed by EspetroMixinPlugin. A failed early disk
-        // operation must not abort startup; retry without injecting FancyMenu.
-        org.espetro.client.ui.BundledMenuInstaller.installForClient(
-            net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get());
-        org.espetro.client.ui.BundledPreviewInstaller.installForClient(
-            net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get());
+        // 本分支不再内置任何客户端资源（FancyMenu 布局、编制头像、地图预览都由外部提供）。
         // 注册 MOD 事件总线（快捷键注册）
         // FMLJavaModLoadingContext.get() 在 Forge 1.20+ 已过时，但 1.20.1 仍可用
         net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus()
@@ -42,6 +37,10 @@ public class EspetroClient {
             .addListener(org.espetro.client.gui.VanillaHudLayout::onRenderOverlayPre);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onRenderOverlay);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(org.espetro.client.gui.TacticalHud::positionChat);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS
+            .addListener(EspetroClient::onClientLogout);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS
             .addListener(EspetroClient::onRenderNameTag);
 
@@ -110,6 +109,7 @@ public class EspetroClient {
         event.register(keyClass);
         event.register(keyRadial);
         event.register(keyFortRotate);
+        event.register(org.espetro.client.gui.TacticalHud.TOGGLE);
         Espetro.KEY_TEAM = keyTeam;
         Espetro.KEY_CLASS = keyClass;
         Espetro.KEY_RADIAL = keyRadial;
@@ -126,6 +126,7 @@ public class EspetroClient {
         if (event.phase != net.minecraftforge.event.TickEvent.Phase.END) return;
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc == null) return;
+        org.espetro.client.gui.TacticalHud.tick(mc);
 
         net.minecraft.client.KeyMapping radialKey =
             Espetro.KEY_RADIAL instanceof net.minecraft.client.KeyMapping key ? key : null;
@@ -200,6 +201,15 @@ public class EspetroClient {
         }
         org.espetro.client.gui.TutorialHudOverlay.render(
             event.getGuiGraphics(), mc, event.getPartialTick());
+    }
+
+    private static void onClientLogout(net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) {
+        org.espetro.client.gui.TacticalHud.reset();
+        org.espetro.client.gui.ClientGameState.setCurrentPhase(org.espetro.team.GamePhase.LOBBY);
+        org.espetro.client.gui.ClientTacticalState.updateSquads(java.util.List.of(), -1, java.util.List.of(), 10.0);
+        org.espetro.client.gui.MatchScoreboardScreen.updateStats(null);
+        org.espetro.client.gui.FobSupplyHud.clear();
+        org.espetro.client.gui.OutpostSupplyHud.clear();
     }
 
     /**

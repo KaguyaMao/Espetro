@@ -45,6 +45,11 @@ public final class UiTheme {
     public static final int WORLD_POSITIVE = 0xFF7BE39D;
     public static final int WORLD_NEGATIVE = 0xFFFF766B;
     public static final int WORLD_WARNING = 0xFFFFD45C;
+    public static final int HUD_CYAN = 0xFF39D7EA;
+    public static final int HUD_VOICE_BLUE = 0xFF61B6FF;
+    public static final int HUD_FIRETEAM_PURPLE = 0xFFC08CFF;
+    public static final int HUD_SURFACE = 0x99101410;
+    public static final int HUD_TRACK = 0x55F5F5EE;
     public static final int TEXTURE_WHITE = 0xFFFFFFFF;
     public static final int ICON_PLATE = 0xFF252B23;
     /** Explicit selection and category accents requested for the class picker. */

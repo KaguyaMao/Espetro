@@ -26,6 +26,7 @@
     "dragonrise.DragonVehicleDeployerIdleClearMixin"
   ],
   "client": [
+    "client.BattleChatLinesMixin",
     "client.EsRadialGlassMixin",
     "sbw.ClickDismountMixin",
     "sbw.MinecraftSeatMixin",

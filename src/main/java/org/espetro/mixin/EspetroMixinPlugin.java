@@ -23,18 +23,8 @@ public final class EspetroMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        // FancyMenu is itself loaded while other mixin configs are prepared.
-        // Never target its main class: install the pure-file bundle here instead,
-        // before mod constructors read layouts, without linking any Minecraft class.
-        if (FMLLoader.getDist() == net.minecraftforge.api.distmarker.Dist.CLIENT) {
-            try {
-                org.espetro.client.ui.BundledMenuInstaller.installForClient(
-                    net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get());
-            } catch (RuntimeException | LinkageError failure) {
-                org.slf4j.LoggerFactory.getLogger(EspetroMixinPlugin.class)
-                    .error("Early menu installation unavailable; will retry during client setup", failure);
-            }
-        }
+        // The mod no longer ships or overwrites FancyMenu layouts, so nothing must run
+        // this early; the preview bundle is installed during regular client setup.
     }
 
     @Override

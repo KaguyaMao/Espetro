@@ -10,7 +10,7 @@ import org.espetro.client.aui.GuiElement;
 public final class OutpostSupplyHud {
 
     private static final int HUD_X = 8;
-    private static final int HUD_Y = 34;
+    private static final int HUD_Y = 52;
     private static final int PANEL_WIDTH = 158;
     private static final int PANEL_HEIGHT = 52;
 
@@ -33,6 +33,10 @@ public final class OutpostSupplyHud {
 
     private OutpostSupplyHud() {
     }
+
+    static boolean isShowing() { return inRange; }
+
+    static int bottomEdge() { return HUD_Y + PANEL_HEIGHT; }
 
     public static void update(OutpostSupplySyncPacket packet) {
         if (packet == null || !packet.isInRange()) {
