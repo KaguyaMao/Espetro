@@ -1330,10 +1330,10 @@ public class VehicleManager {
     /**
      * 移除已死亡的载具追踪
      */
-    public void onVehicleDeath(UUID entityId) {
-        ActiveVehicleData data = removeTrackedVehicle(entityId);
+    public void onVehicleDeath(Entity entity) {
+        ActiveVehicleData data = removeTrackedVehicle(entity.getUUID());
         if (data != null) {
-            applyVehicleTroopPenalty(data);
+            applyVehicleTroopPenalty(data, entity);
             scheduleAutoRespawn(data.team(), data.factionId(), data.vehicleType(), data.slotIndex());
             broadcastVehicleInfoToTeam(data.team());
         }
@@ -1429,7 +1429,7 @@ public class VehicleManager {
         }
     }
 
-    private void applyVehicleTroopPenalty(ActiveVehicleData data) {
+    private void applyVehicleTroopPenalty(ActiveVehicleData data, Entity entity) {
         if (GameStateManager.getInstance().getCurrentPhase() != GamePhase.BATTLE) {
             return;
         }
@@ -1445,12 +1445,22 @@ public class VehicleManager {
 
         TroopCountManager troopManager = TroopCountManager.getInstance();
         String displayName = getDisplayName(data.factionId(), data.vehicleType());
+        int squadId = VehicleSquadOwnership.getSquadId(entity);
+        String squad = org.espetro.team.SquadManager.getInstance().getSquadSnapshots(data.team()).stream()
+            .filter(entry -> entry.id == squadId).findFirst()
+            .map(entry -> entry.displayId + "号小队 · " + entry.name).orElse("");
+        List<String> occupants = new ArrayList<>();
+        for (Entity passenger : entity.getIndirectPassengers()) {
+            if (passenger instanceof ServerPlayer player) occupants.add(player.getGameProfile().getName());
+        }
+        var reason = new org.espetro.network.RoundReport.Reason(org.espetro.network.RoundReport.Cause.VEHICLE,
+            displayName + " 被击毁", data.vehicleType() + "|" + java.util.Objects.toString(mapIconFor(data), ""), squad, occupants);
         if ("ATTACK".equals(data.team())) {
-            troopManager.modifyAttackTroops(-penalty);
+            troopManager.modifyAttackTroops(-penalty, reason);
             Espetro.broadcastToTeam(data.team(), "§c☠ 攻方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
             Espetro.LOGGER.info("攻方载具 {} 被摧毁，扣除 {} 兵力，剩余: {}", displayName, penalty, troopManager.getAttackTroops());
         } else if ("DEFEND".equals(data.team())) {
-            troopManager.modifyDefendTroops(-penalty);
+            troopManager.modifyDefendTroops(-penalty, reason);
             Espetro.broadcastToTeam(data.team(), "§9☠ 守方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
             Espetro.LOGGER.info("守方载具 {} 被摧毁，扣除 {} 兵力，剩余: {}", displayName, penalty, troopManager.getDefendTroops());
         }

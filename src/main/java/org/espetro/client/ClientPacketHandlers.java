@@ -556,7 +556,7 @@ public class ClientPacketHandlers {
                 packet.winner, packet.displaySeconds,
                 packet.winnerShowName, packet.loserShowName,
                 packet.attackTickets, packet.defendTickets,
-                packet.resultLevel, packet.attackerTimeout));
+                packet.resultLevel, packet.attackerTimeout, packet.report));
         }
     }
 

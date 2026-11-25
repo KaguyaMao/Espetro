@@ -165,7 +165,7 @@ public class VehicleEventHandler {
         Entity entity = event.getEntity();
 
         if (entity.getTags().contains("espetro_vehicle")) {
-            VehicleManager.getInstance().onVehicleDeath(entity.getUUID());
+            VehicleManager.getInstance().onVehicleDeath(entity);
             Espetro.LOGGER.debug("载具 {} 已死亡，移除追踪", entity.getUUID());
         }
 
@@ -187,14 +187,14 @@ public class VehicleEventHandler {
             VehicleManager.getInstance().updateVehicleLocation(entity);
             Espetro.LOGGER.info("载具 {} 离开已加载世界（reason={}），追踪保留", entity.getUUID(), entity.getRemovalReason());
             if (entity.getRemovalReason() == Entity.RemovalReason.KILLED) {
-                VehicleManager.getInstance().onVehicleDeath(entity.getUUID());
+                VehicleManager.getInstance().onVehicleDeath(entity);
                 Espetro.LOGGER.debug("载具 {} 已被杀毁，移除追踪并处理兵力扣除", entity.getUUID());
             } else if (entity.getRemovalReason() == Entity.RemovalReason.DISCARDED) {
                 if (isDestroyedSbwVehicle(entity)) {
                     // SBW destroys vehicles by entering wreck state and finally calling discard().
                     // This is a fallback for the destroy() mixin and remains idempotent when the
                     // mixin has already registered the loss.
-                    VehicleManager.getInstance().onVehicleDeath(entity.getUUID());
+                    VehicleManager.getInstance().onVehicleDeath(entity);
                     Espetro.LOGGER.debug("载具 {} 残骸已移除，确保自动刷新已登记", entity.getUUID());
                 } else {
                     VehicleManager.getInstance().onVehicleRemoved(entity.getUUID());

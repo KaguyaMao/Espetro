@@ -52,7 +52,6 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
     private static final int FIRETEAM_GUTTER = 11;
     private static final int FIRETEAM_DROP_TOP = 5;
     private static final int SQUAD_ACTION_ROW_H = 10;
-    private static final int SQUAD_ACCENT_BAR_W = 2;
     private static final int FIRETEAM_CONTEXT_W = 118;
     private static final int FIRETEAM_CONTEXT_ROW_H = 12;
     private static final int VARIANT_POPUP_W = 180;
@@ -1011,14 +1010,18 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         private final UnifiedDeployScreenPacket.SquadMemberInfo member;
         private final int squadId;
         private final int groupColor;
+        private final boolean joinsPrevious;
+        private final boolean joinsNext;
         private final ResourceLocation classIcon;
 
         SquadMemberRow(int x, int y, int width, UnifiedDeployScreenPacket.SquadMemberInfo member,
-                       int squadId, int groupColor) {
+                       int squadId, int groupColor, boolean joinsPrevious, boolean joinsNext) {
             super(x, y, width, SQUAD_MEMBER_ROW_H);
             this.member = member;
             this.squadId = squadId;
             this.groupColor = groupColor;
+            this.joinsPrevious = joinsPrevious;
+            this.joinsNext = joinsNext;
             this.classIcon = classes.stream().filter(info -> member.className.equals(info.name))
                 .findFirst().map(info -> RoleIconResources.resolveForScoreboard(info.iconImage, info.icon, info.classId))
                 .orElse(null);
@@ -1043,7 +1046,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
             int bx = x + getX();
             int by = y + getY();
             if (hasFocus()) graphics.fill(bx, by, bx + getWidth(), by + getHeight(), UiTheme.CONTROL_HOVER);
-            graphics.fill(bx, by, bx + SQUAD_ACCENT_BAR_W, by + getHeight(), groupColor);
+            TacticalHud.drawFireteamBar(graphics, bx, by, getHeight(), groupColor, joinsPrevious, joinsNext, 1f);
             TacticalHud.drawHead(graphics, Minecraft.getInstance(), member.uuid, bx + 5, by + 2, 1f);
             if (classIcon != null) TacticalHud.drawRoleIcon(graphics, classIcon, bx + 16, by + 1, UiTheme.WORLD_TEXT);
             else TacticalHud.drawRole(graphics, member.uuid, member.className, bx + 16, by + 1, UiTheme.WORLD_TEXT);
@@ -1704,9 +1707,10 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
                     }
                 });
                 int memberY = rowY + FIRETEAM_DROP_TOP;
-                for (var member : members) {
+                for (int index = 0; index < members.size(); index++) {
                     squadScrollList.addChild(new SquadMemberRow(FIRETEAM_GUTTER, memberY,
-                        rowW - FIRETEAM_GUTTER, member, squad.id, groupColor));
+                        rowW - FIRETEAM_GUTTER, members.get(index), squad.id, groupColor,
+                        index > 0, index + 1 < members.size()));
                     memberY += SQUAD_MEMBER_ROW_H;
                 }
                 rowY += blockHeight + SQUAD_ROW_GAP;

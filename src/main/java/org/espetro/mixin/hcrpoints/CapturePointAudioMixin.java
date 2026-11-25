@@ -43,7 +43,8 @@ public abstract class CapturePointAudioMixin {
             // Capturing every point is an attacker objective victory. Persist
             // the defender ticket loss before endRound snapshots the scores.
             if ("ATTACK".equals(winner)) {
-                TroopCountManager.getInstance().setDefendTroops(0);
+                TroopCountManager.getInstance().setDefendTroops(0,
+                    org.espetro.network.RoundReport.Reason.of(org.espetro.network.RoundReport.Cause.CAPTURE, "全部据点失守"));
             }
             EspetroAPI.endRound(winner);
         }

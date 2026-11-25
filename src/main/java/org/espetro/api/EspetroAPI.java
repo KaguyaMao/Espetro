@@ -576,10 +576,17 @@ public class EspetroAPI {
             return;
         }
         var troops = org.espetro.team.TroopCountManager.getInstance();
+        var cause = switch (reason == null ? "" : reason) {
+            case "RAAS capture", "AAS batch" -> org.espetro.network.RoundReport.Cause.CAPTURE;
+            default -> org.espetro.network.RoundReport.Cause.OTHER;
+        };
+        var reportReason = org.espetro.network.RoundReport.Reason.of(cause,
+            cause == org.espetro.network.RoundReport.Cause.CAPTURE ? "占领据点"
+                : reason == null || reason.isBlank() ? "票数调整" : reason);
         if ("ATTACK".equalsIgnoreCase(team.trim())) {
-            troops.modifyAttackTroops(delta);
+            troops.modifyAttackTroops(delta, reportReason);
         } else if ("DEFEND".equalsIgnoreCase(team.trim())) {
-            troops.modifyDefendTroops(delta);
+            troops.modifyDefendTroops(delta, reportReason);
         }
         if (reason != null && !reason.isBlank()) {
             Espetro.LOGGER.info("[Troops] {} {} {:+d} ({})", team, reason, delta);

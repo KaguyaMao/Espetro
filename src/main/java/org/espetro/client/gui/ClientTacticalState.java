@@ -23,6 +23,7 @@ public final class ClientTacticalState {
     private static final Set<String> commanderNames = new HashSet<>();
     private static int mySquadId = NO_SQUAD;
     private static UnifiedDeployScreenPacket.SquadInfo localSquad;
+    private static List<UnifiedDeployScreenPacket.SquadMemberInfo> rosterMembers = List.of();
     private static final Map<UUID, Integer> squadNumbers = new HashMap<>();
     private static final Map<UUID, String> classNames = new HashMap<>();
     private static byte myFireteam = FIRETEAM_NONE;
@@ -38,6 +39,7 @@ public final class ClientTacticalState {
         squadNumbers.clear();
         classNames.clear();
         localSquad = null;
+        rosterMembers = List.of();
         commanderNames.clear();
         mySquadId = updatedMySquadId;
         myFireteam = FIRETEAM_NONE;
@@ -76,6 +78,14 @@ public final class ClientTacticalState {
                 }
             }
         }
+        if (localSquad != null) {
+            rosterMembers = localSquad.members.stream()
+                .sorted(java.util.Comparator
+                    .comparingInt((UnifiedDeployScreenPacket.SquadMemberInfo member) -> member.leader ? 0 : 1)
+                    .thenComparingInt(member -> member.fireteam)
+                    .thenComparingInt(member -> member.fireteamLeader ? 0 : 1))
+                .toList();
+        }
         if (localSquad == null ? previousSquad != null : previousSquad == null
                 || localSquad.id != previousSquad.id || localSquad.displayId != previousSquad.displayId
                 || !localSquad.name.equals(previousSquad.name)
@@ -83,6 +93,8 @@ public final class ClientTacticalState {
             TacticalHud.rosterUpdated();
         }
     }
+
+    static List<UnifiedDeployScreenPacket.SquadMemberInfo> rosterMembers() { return rosterMembers; }
 
     static UnifiedDeployScreenPacket.SquadInfo localSquad() {
         return localSquad;

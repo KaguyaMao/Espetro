@@ -794,10 +794,12 @@ public class BastionManager {
             String attackerName = attacker == null ? "unknown" : attacker.getName().getString();
             if (deductManpower) {
                 org.espetro.team.TroopCountManager troopManager = org.espetro.team.TroopCountManager.getInstance();
+                var reason = org.espetro.network.RoundReport.Reason.of(
+                    org.espetro.network.RoundReport.Cause.FOB, bastionName + " 被摧毁");
                 if ("ATTACK".equals(bastionTeam)) {
-                    troopManager.modifyAttackTroops(-penalty);
+                    troopManager.modifyAttackTroops(-penalty, reason);
                 } else {
-                    troopManager.modifyDefendTroops(-penalty);
+                    troopManager.modifyDefendTroops(-penalty, reason);
                 }
                 Espetro.LOGGER.info("Radio {} 被摧毁！攻击者={} 扣兵力={}", bastionName, attackerName, penalty);
                 Espetro.broadcastToTeam(bastionTeam,

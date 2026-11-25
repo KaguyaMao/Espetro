@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 public class NetworkManager {
 
-    public static final String PROTOCOL_VERSION = "1.39";
+    public static final String PROTOCOL_VERSION = "1.40";
 
     /** 投票卡片载具行只记一次日志，避免每次下发刷屏。 */
     private static final java.util.Set<String> VEHICLE_LINE_LOGGED =
@@ -2078,7 +2078,8 @@ public class NetworkManager {
         if (server == null) return;
         RoundEndPacket packet = new RoundEndPacket(winner, seconds,
             winnerShowName, loserShowName, attackTickets, defendTickets,
-            resultLevel, attackerTimedOut);
+            resultLevel, attackerTimedOut,
+            org.espetro.team.TroopCountManager.getInstance().finishReport());
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             NET.send(PacketDistributor.PLAYER.with(() -> player), packet);
         }

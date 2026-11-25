@@ -177,7 +177,7 @@ public final class GameSettingsSnapshot {
         int pool = d.factionPoolSize;
         int reveal = d.factionRevealSeconds;
         int lockReveal = d.factionLockRevealSeconds;
-        int roundEnd = d.roundEndSeconds;
+        int roundEnd = org.espetro.network.RoundReport.DISPLAY_SECONDS;
         int invuln = d.respawnInvincibilityTicks;
         double mainBaseInvulnerabilityRadius = d.mainBaseInvulnerabilityRadius;
         int classSwitchCooldown = d.classSwitchCooldownSeconds;
@@ -219,7 +219,6 @@ public final class GameSettingsSnapshot {
             pool = getInt(game, "faction_pool_size", pool);
             reveal = getInt(game, "faction_reveal_seconds", reveal);
             lockReveal = getInt(game, "faction_lock_reveal_seconds", lockReveal);
-            roundEnd = getInt(game, "round_end_seconds", roundEnd);
             invuln = getInt(game, "respawn_invincibility_ticks", invuln);
             mainBaseInvulnerabilityRadius = getDouble(
                 game, "main_base_invulnerability_radius", mainBaseInvulnerabilityRadius);

@@ -29,7 +29,7 @@ public abstract class VehicleEntityWreckMixin {
             VehicleEntity vehicle = (VehicleEntity) (Object) this;
             if (!vehicle.level().isClientSide
                 && vehicle.getTags().contains("espetro_vehicle")) {
-                VehicleManager.getInstance().onVehicleDeath(vehicle.getUUID());
+                VehicleManager.getInstance().onVehicleDeath(vehicle);
             }
         } catch (Throwable t) {
             Espetro.LOGGER.error("Espetro failed to register a destroyed vehicle", t);

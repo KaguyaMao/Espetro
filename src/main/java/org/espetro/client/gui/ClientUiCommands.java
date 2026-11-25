@@ -30,6 +30,8 @@ public final class ClientUiCommands {
         initialized = true;
         modEventBus.addListener(ClientUiCommands::onClientSetup);
         MinecraftForge.EVENT_BUS.addListener(ClientUiCommands::registerCommands);
+        MinecraftForge.EVENT_BUS.addListener(UiDevPreviews::onTitleKey);
+        MinecraftForge.EVENT_BUS.addListener(UiDevPreviews::onTitleOpened);
     }
 
     private static Path preferencesFile() {
@@ -60,6 +62,7 @@ public final class ClientUiCommands {
                 .then(Commands.literal("toggle")
                     .executes(context -> changeTheme(context.getSource(),
                         UiTheme.mode() == UiTheme.Mode.DARK ? UiTheme.Mode.LIGHT : UiTheme.Mode.DARK))))
+            .then(UiDevPreviews.command())
             // Consume invalid esui arguments locally too; Forge otherwise forwards unknown arguments.
             .then(Commands.argument("usage", StringArgumentType.greedyString())
                 .executes(context -> showStatus(context.getSource()))));

@@ -121,7 +121,7 @@ public final class TacticalHud {
 
     private static void drawRoster(GuiGraphics g, Minecraft mc) {
         var squad = ClientTacticalState.localSquad();
-        List<SquadMemberInfo> members = squad == null ? List.of() : squad.members;
+        List<SquadMemberInfo> members = ClientTacticalState.rosterMembers();
         List<Speaker> active = speakers;
         int inset = Math.max(5, Math.round(g.guiWidth() * 0.015f));
         boolean mounted = SbwVehicleSeatResolver.isSupportedVehicle(mc.player.getRootVehicle());
@@ -157,8 +157,10 @@ public final class TacticalHud {
                 for (int i = 0; i < visibleRows; i++) {
                     SquadMemberInfo member = members.get(i);
                     int rowY = y + ROW * (i + 1);
-                    int group = fireteamColor(member.fireteam);
-                    if (group != 0) g.fill(x + 3, rowY + 1, x + 5, rowY + ROW, UiTheme.alpha(group, opacity));
+                    boolean joinsPrevious = i > 0 && members.get(i - 1).fireteam == member.fireteam;
+                    boolean joinsNext = i + 1 < visibleRows && members.get(i + 1).fireteam == member.fireteam;
+                    drawFireteamBar(g, x + 3, rowY, ROW, fireteamColor(member.fireteam),
+                        joinsPrevious, joinsNext, opacity);
                     Speaker speaking = byPlayer.get(member.uuid);
                     int color = UiTheme.alpha(UiTheme.WORLD_TEXT, opacity);
                     drawHead(g, mc, member.uuid, x + 8, rowY + 2, opacity);
@@ -250,6 +252,12 @@ public final class TacticalHud {
         if (width < ellipsisWidth) return;
         String label = font.width(text) <= width ? text : font.plainSubstrByWidth(text, width - ellipsisWidth) + "…";
         g.drawString(font, label, x, y, color, true);
+    }
+
+    static void drawFireteamBar(GuiGraphics g, int x, int y, int height, int color,
+                                boolean joinsPrevious, boolean joinsNext, float opacity) {
+        if (color != 0) g.fill(x, y + (joinsPrevious ? 0 : 1), x + 2,
+            y + height - (joinsNext ? 0 : 1), UiTheme.alpha(color, opacity));
     }
 
     static int fireteamColor(byte team) {

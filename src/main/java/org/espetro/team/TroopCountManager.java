@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.espetro.Espetro;
 import org.espetro.config.GameConfig;
+import org.espetro.network.RoundReport;
 import org.espetro.mapconfig.BattlefieldContext;
 import org.espetro.mapconfig.GameConfigBridge;
 import org.espetro.stats.PlayerMatchStatsManager;
@@ -28,6 +29,9 @@ public class TroopCountManager {
     public static final String DEFEND_TROOPS_NAME = "defend_troops";
 
     private static TroopCountManager INSTANCE;
+    private final RoundReportRecorder roundReport = new RoundReportRecorder();
+
+    public RoundReport finishReport() { return roundReport.finish(getAttackTroops(), getDefendTroops()); }
 
     private TroopCountManager() {
         INSTANCE = this;
@@ -98,12 +102,16 @@ public class TroopCountManager {
     /**
      * 设置攻方兵力
      */
-    public void setAttackTroops(int value) {
+    public void setAttackTroops(int value) { setAttackTroops(value, RoundReport.Reason.OTHER); }
+
+    public void setAttackTroops(int value, RoundReport.Reason reason) {
         Scoreboard scoreboard = getScoreboard();
         if (scoreboard == null) return;
         Objective objective = getOrCreateObjective(scoreboard);
         Score score = scoreboard.getOrCreatePlayerScore(ATTACK_TROOPS_NAME, objective);
+        int before = score.getScore();
         score.setScore(Math.max(0, value));
+        roundReport.record(true, before, score.getScore(), reason);
         Espetro.LOGGER.info("攻方兵力设置为: {}", value);
         syncToClients();
     }
@@ -111,12 +119,16 @@ public class TroopCountManager {
     /**
      * 设置守方兵力
      */
-    public void setDefendTroops(int value) {
+    public void setDefendTroops(int value) { setDefendTroops(value, RoundReport.Reason.OTHER); }
+
+    public void setDefendTroops(int value, RoundReport.Reason reason) {
         Scoreboard scoreboard = getScoreboard();
         if (scoreboard == null) return;
         Objective objective = getOrCreateObjective(scoreboard);
         Score score = scoreboard.getOrCreatePlayerScore(DEFEND_TROOPS_NAME, objective);
+        int before = score.getScore();
         score.setScore(Math.max(0, value));
+        roundReport.record(false, before, score.getScore(), reason);
         Espetro.LOGGER.info("守方兵力设置为: {}", value);
         syncToClients();
     }
@@ -130,8 +142,12 @@ public class TroopCountManager {
      * AAS 批次完成时，向双方播放据点提示；对称 RAAS 由 ESPoints 自行发消息。
      */
     public void modifyAttackTroops(int delta) {
+        modifyAttackTroops(delta, RoundReport.Reason.OTHER);
+    }
+
+    public void modifyAttackTroops(int delta, RoundReport.Reason reason) {
         int current = getAttackTroops();
-        setAttackTroops(current + delta);
+        setAttackTroops(current + delta, reason);
 
         if (delta <= 0 || TeamDisplayNames.isSymmetricMode()) {
             return;
@@ -179,8 +195,12 @@ public class TroopCountManager {
      * 增加/减少守方兵力
      */
     public void modifyDefendTroops(int delta) {
+        modifyDefendTroops(delta, RoundReport.Reason.OTHER);
+    }
+
+    public void modifyDefendTroops(int delta, RoundReport.Reason reason) {
         int current = getDefendTroops();
-        setDefendTroops(current + delta);
+        setDefendTroops(current + delta, reason);
     }
 
     /**
@@ -209,6 +229,7 @@ public class TroopCountManager {
 
         Score defendScore = scoreboard.getOrCreatePlayerScore(DEFEND_TROOPS_NAME, objective);
         defendScore.setScore(initialDefend);
+        roundReport.begin(attackScore.getScore(), defendScore.getScore());
 
         Espetro.LOGGER.info("兵力统计已初始化: 攻方 {} | 守方 {}", initialAttack, initialDefend);
         Espetro.broadcastToAll("§6========================================");
@@ -226,6 +247,7 @@ public class TroopCountManager {
      * 重置兵力值
      */
     public void resetTroops() {
+        roundReport.reset();
         Scoreboard scoreboard = getScoreboard();
         if (scoreboard == null) return;
 
@@ -315,14 +337,15 @@ public class TroopCountManager {
 
         // 扣除相应队伍兵力
         TroopCountManager manager = getInstance();
+        var reason = RoundReport.Reason.of(RoundReport.Cause.DEATH, player.getGameProfile().getName() + " 阵亡");
         if ("ATTACK".equals(team)) {
-            manager.modifyAttackTroops(-(troopValue + commandPenalty));
+            manager.modifyAttackTroops(-(troopValue + commandPenalty), reason);
             String msg = "§c☠ 攻方 [" + player.getName().getString() + "] 阵亡！- " + troopValue + " 兵力";
             if (isCommander) msg += " §c(指挥官额外 -" + commandPenalty + ")";
             Espetro.broadcastToTeam(team, msg);
             Espetro.LOGGER.info("攻方 {} 阵亡(指挥官={})，扣除 {}{} 兵力，剩余: {}", player.getName().getString(), isCommander, troopValue, commandPenalty > 0 ? "+" + commandPenalty : "", manager.getAttackTroops());
         } else {
-            manager.modifyDefendTroops(-(troopValue + commandPenalty));
+            manager.modifyDefendTroops(-(troopValue + commandPenalty), reason);
             String msg = "§9☠ 守方 [" + player.getName().getString() + "] 阵亡！- " + troopValue + " 兵力";
             if (isCommander) msg += " §9(指挥官额外 -" + commandPenalty + ")";
             Espetro.broadcastToTeam(team, msg);

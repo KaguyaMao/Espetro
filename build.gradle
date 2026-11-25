@@ -89,6 +89,8 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
+            def uiDevPreview = providers.gradleProperty('espetroUiDev').orNull
+            if (uiDevPreview != null) property 'espetro.uiDev', uiDevPreview
 
             // Hybrid GPU workaround (Intel + broken/mismatched NVIDIA userspace):
             // force Mesa / Intel so GLFW can create an OpenGL context.
@@ -285,6 +287,9 @@ tasks.named('jar', Jar).configure {
     exclude 'com/example/hcrpoints/**'
     exclude 'assets/hcrpoints/**'
     exclude 'data/hcrpoints/**'
+    // processResources can retain obsolete payloads in its output after source files are removed.
+    exclude 'assets/espetro/ui-bundle/**', 'assets/espetro/textures/gui/factions/**',
+        'espetro_previews/**'
     exclude '**/*.psd', '**/*.xcf', '**/*.blend', '**/*.bak', '**/*.bak-*',
         '**/*.old', '**/*.orig', '**/*.tmp', '**/*.log', '**/*~',
         '**/.DS_Store', '**/Thumbs.db', '**/__pycache__/**'

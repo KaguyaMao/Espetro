@@ -2276,13 +2276,16 @@ public class GameStateManager {
         BattlefieldContext.setLastRoundWinner(normalized);
         roundEndTickCounter = 0;
         removeAttackWaitingBarrier();
+        TroopCountManager tcm = TroopCountManager.getInstance();
+        if (attackerTimedOut) {
+            tcm.setAttackTroops(0, org.espetro.network.RoundReport.Reason.of(
+                org.espetro.network.RoundReport.Cause.OTHER, "进攻超时"));
+        }
         setPhase(GamePhase.ROUND_END);
 
         // —— 收集结算数据 ——
-        TroopCountManager tcm = TroopCountManager.getInstance();
         int atkRaw = tcm.getAttackTroops();
         int defRaw = tcm.getDefendTroops();
-        if (attackerTimedOut) atkRaw = 0;
 
         // 获取双方 faction show_name / name
         String atkFactionId = ClassSelectManager.getInstance().getFinalAttackClass();

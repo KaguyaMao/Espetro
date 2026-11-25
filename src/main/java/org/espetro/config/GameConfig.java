@@ -54,7 +54,7 @@ public class GameConfig {
     private static int teamSelectSeconds = 60;
     private static int factionRevealSeconds = 5;
     private static int factionLockRevealSeconds = 5;
-    private static int roundEndSeconds = 10;
+    private static final int roundEndSeconds = org.espetro.network.RoundReport.DISPLAY_SECONDS;
     private static int impeachmentVoteSeconds = 60;
     private static int impeachmentCooldownSeconds = 600;
     private static int commanderVacancySeconds = 180;
@@ -268,7 +268,6 @@ public class GameConfig {
         factionPoolSize = s.factionPoolSize;
         factionRevealSeconds = s.factionRevealSeconds;
         factionLockRevealSeconds = s.factionLockRevealSeconds;
-        roundEndSeconds = s.roundEndSeconds;
         respawnInvincibilityTicks = s.respawnInvincibilityTicks;
         mainBaseInvulnerabilityRadius = s.mainBaseInvulnerabilityRadius;
         mainBaseBarrierRadius = s.mainBaseBarrierRadius;

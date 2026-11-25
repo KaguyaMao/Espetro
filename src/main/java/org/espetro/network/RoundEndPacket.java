@@ -37,11 +37,12 @@ public class RoundEndPacket {
     public final int resultLevel;
     /** 攻击方是否因超时判负 */
     public final boolean attackerTimeout;
+    public final RoundReport report;
 
     public RoundEndPacket(String winner, int displaySeconds,
                           String winnerShowName, String loserShowName,
                           int attackTickets, int defendTickets,
-                          int resultLevel, boolean attackerTimeout) {
+                          int resultLevel, boolean attackerTimeout, RoundReport report) {
         this.winner = winner == null ? "DRAW" : winner;
         this.displaySeconds = Math.max(1, displaySeconds);
         this.winnerShowName = (winnerShowName == null || winnerShowName.isEmpty()) ? null : winnerShowName;
@@ -50,6 +51,7 @@ public class RoundEndPacket {
         this.defendTickets = Math.max(0, defendTickets);
         this.resultLevel = Math.max(0, Math.min(5, resultLevel));
         this.attackerTimeout = attackerTimeout;
+        this.report = report;
     }
 
     public static RoundEndPacket read(FriendlyByteBuf buf) {
@@ -61,7 +63,8 @@ public class RoundEndPacket {
             buf.readVarInt(),
             buf.readVarInt(),
             buf.readVarInt(),
-            buf.readBoolean()
+            buf.readBoolean(),
+            RoundReport.read(buf)
         );
     }
 
@@ -76,6 +79,7 @@ public class RoundEndPacket {
         buf.writeVarInt(defendTickets);
         buf.writeVarInt(resultLevel);
         buf.writeBoolean(attackerTimeout);
+        report.write(buf);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
