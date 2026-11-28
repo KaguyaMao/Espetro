@@ -1,0 +1,54 @@
+{
+  "exports": [
+    {
+      "file": "master-2048.png",
+      "width": 2048,
+      "height": 2048,
+      "opaque": true,
+      "bytes": 3924479,
+      "sha256": "800d47ff77e85a2466381cfa4a81ae2022c338070d79cfc72447e48c4c7b2112"
+    },
+    {
+      "file": "avatar-1024.png",
+      "width": 1024,
+      "height": 1024,
+      "opaque": true,
+      "bytes": 1189806,
+      "sha256": "50b31babeda8f8af19d2fa6d25e177a22307295a3784481f8feb95c2f45b93f3"
+    },
+    {
+      "file": "avatar-512.png",
+      "width": 512,
+      "height": 512,
+      "opaque": true,
+      "bytes": 323288,
+      "sha256": "61e683c3da7540c12bd4d1417acbd6bdc1b7e91be9b537fc220445097dc99e60"
+    },
+    {
+      "file": "client-icon.png",
+      "width": 256,
+      "height": 256,
+      "opaque": true,
+      "bytes": 95245,
+      "sha256": "6d3b096e645b9615b0c5da1465397ca823d90b5f4e777df3d04d4e14e7dfdfbb"
+    },
+    {
+      "file": "server-icon.png",
+      "width": 64,
+      "height": 64,
+      "opaque": true,
+      "bytes": 8632,
+      "sha256": "47f27667103c0d73f9ea4d91be3dda7465e54aecf3c5dfc7c5dbc44bfd6a819a"
+    }
+  ],
+  "ico_sizes": [
+    16,
+    24,
+    32,
+    48,
+    64,
+    128,
+    256
+  ],
+  "server_icon": "64x64 PNG verified"
+}

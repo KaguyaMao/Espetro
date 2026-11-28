@@ -32,6 +32,20 @@ import net.minecraft.server.MinecraftServer;
  * 供其他模组查询玩家的阵营、小队、指挥官信息
  */
 public class EspetroAPI {
+    public static String getRoundCaptureFlag(String team) {
+        var selection = org.espetro.team.ClassSelectManager.getInstance();
+        String factionId = switch (team) {
+            case "ATTACK" -> selection.getFinalAttackClass();
+            case "DEFEND" -> selection.getFinalDefendClass();
+            default -> null;
+        };
+        if (factionId == null || factionId.isBlank()) {
+            return "";
+        }
+        var faction = org.espetro.team.FactionDataProvider.getOrCreateLoader().getFaction(factionId);
+        return faction == null || faction.flagImage == null ? "" : faction.flagImage;
+    }
+
     private static ActiveMapConfig cachedActiveMap;
     private static ActiveBattlefieldSnapshot cachedBattlefieldSnapshot;
     private static long tacticalRevision;

@@ -95,6 +95,8 @@ public final class TacticalRadialController {
     private static final Map<String, Integer> pendingCooldowns = new HashMap<>();
     private static final List<CommanderSkillManager.SkillView> pendingSkills = new ArrayList<>();
     private static volatile boolean fortificationsDirty;
+    private static int radioAvailable=-1,radioLimit=-1;
+    private static int pendingRadioAvailable=-1,pendingRadioLimit=-1;
     private static volatile List<FortificationCatalogPacket.Entry> pendingFortifications = List.of();
 
     /** 是否有待延迟执行的菜单重建 */
@@ -202,7 +204,8 @@ public final class TacticalRadialController {
         skillsDirty = true;
     }
 
-    public static void updateFortifications(List<FortificationCatalogPacket.Entry> entries) {
+    public static void updateFortifications(List<FortificationCatalogPacket.Entry> entries,int available,int limit) {
+        pendingRadioAvailable=available;pendingRadioLimit=limit;
         pendingFortifications = entries == null ? List.of() : List.copyOf(entries);
         fortificationsDirty = true;
     }
@@ -244,6 +247,7 @@ public final class TacticalRadialController {
         fortificationsDirty = false;
         cachedFortifications.clear();
         cachedFortifications.addAll(pendingFortifications);
+        radioAvailable=pendingRadioAvailable;radioLimit=pendingRadioLimit;
         String newSignature = computeSignature();
         if (!newSignature.equals(lastMenuSignature)) {
             if (ownsOverlay || RadialMenuOverlay.INSTANCE.isActive()) {
@@ -266,7 +270,7 @@ public final class TacticalRadialController {
             sb.append(skill.id()).append(':')
               .append(cachedCooldowns.getOrDefault(skill.id(), 0)).append(',');
         }
-        sb.append('|');
+        sb.append('|').append(radioAvailable).append('/').append(radioLimit).append('|');
         for (FortificationCatalogPacket.Entry fort : cachedFortifications) {
             sb.append(fort.id()).append(':').append(fort.icon()).append(':')
                 .append(fort.constructionCost()).append(':')
@@ -405,7 +409,7 @@ public final class TacticalRadialController {
             });
         if (!cachedFortifications.isEmpty()) builder.slot("espetro.build", BUILD_ICON,
             Actions.script(OPEN_SUBMENU_ACTION, Map.of("menu", "build")),
-            Component.literal("工事建造"), UiTheme.hex(UiTheme.ACCENT), false).submenuLast().tintLast(UiTheme.ACCENT).sectorLast(270,30);
+            Component.literal("工事建造"), "#FFD5B25C", false).submenuLast().tintLast(0xFFD5B25C).sectorLast(270,30);
         return builder.build();
     }
 
@@ -472,9 +476,12 @@ public final class TacticalRadialController {
             if (fort.ammunitionCost() > 0) label.append("弹药 ").append(fort.ammunitionCost());
             label.append(')');
         }
+        boolean radio=FIRETEAM_FORBIDDEN_FORT_ID.equals(fort.id());
+        if (radio && radioLimit>=0) label.append(" | ").append(radioAvailable).append('/').append(radioLimit);
         builder.slot("espetro.fort." + fort.id(), icon,
             Actions.script(BUILD_FORT_ACTION, Map.of("fortId", fort.id())),
             Component.literal(label.toString()), UiTheme.hex(UiTheme.ACCENT));
+        if (radio && radioAvailable==0) builder.disabledLast(Component.literal("没有可用电台名额"));
     }
 
     private static org.esradial.client.RadialMenuData skillsMenu() {

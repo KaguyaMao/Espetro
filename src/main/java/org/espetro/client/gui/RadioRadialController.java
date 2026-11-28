@@ -45,7 +45,6 @@ public final class RadioRadialController {
     private static BlockPos lastRadioPos = BlockPos.ZERO;
     private static java.util.UUID pendingVehicleId; // 车辆换职业时非 null
     /** 车辆换职业时是否只允许驾驶员/载具队长（补给载具与无标签载具）。 */
-    private static boolean pendingVehicleCrewOnly;
     private static List<RadioRadialPacket.ClassEntry> cachedClasses = List.of();
 
     /** 由车辆轮盘调用，在下一次职业列表到达时标记为车辆换职 */
@@ -61,7 +60,6 @@ public final class RadioRadialController {
      */
     public static void markNextClassListAsVehicle(java.util.UUID vehicleId, boolean crewOnly) {
         pendingVehicleId = vehicleId;
-        pendingVehicleCrewOnly = crewOnly;
     }
 
     private RadioRadialController() {
@@ -106,7 +104,6 @@ public final class RadioRadialController {
                             faction != null ? faction : "", classId, variantId,
                             pendingVehicleId));
                     pendingVehicleId = null;
-                    pendingVehicleCrewOnly = false;
                 } else {
                     // Radio 换职业
                     NetworkManager.sendRadioClassSelect(
@@ -131,7 +128,6 @@ public final class RadioRadialController {
         }
         lastRadioPos = radioPos != null ? radioPos.immutable() : BlockPos.ZERO;
         pendingVehicleId = null; // 清除车辆上下文
-        pendingVehicleCrewOnly = false;
         NetworkManager.sendRadioOpen(lastRadioPos);
     }
 
@@ -250,23 +246,9 @@ public final class RadioRadialController {
         return builder.build();
     }
 
-    /**
-     * 补给载具/无标签载具里打开职业轮盘时只列出驾驶员（载具组员）与载具队长；
-     * 步兵战斗载具保持完整列表。判定只看职业自身的 {@code vehicle_crew} 标签/图标，
-     * 因此与阵营前缀无关，新增或改名职业后自动跟随。
-     */
     private static List<RadioRadialPacket.ClassEntry> visibleClassEntries() {
-        if (pendingVehicleId == null || !pendingVehicleCrewOnly) {
-            return cachedClasses;
-        }
-        List<RadioRadialPacket.ClassEntry> filtered = new ArrayList<>();
-        for (RadioRadialPacket.ClassEntry entry : cachedClasses) {
-            if (entry != null
-                && org.espetro.vehicle.VehicleClassChangePolicy.isVehicleCrewIcon(entry.icon)) {
-                filtered.add(entry);
-            }
-        }
-        return filtered;
+        // The server filters by explicit vehicle_crew configuration as well as legacy icon names.
+        return cachedClasses;
     }
 
     private static org.esradial.client.RadialMenuData buildVariantMenuData(

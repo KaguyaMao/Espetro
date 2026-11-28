@@ -118,7 +118,8 @@ public final class FixedWeaponExchange {
         }
         Entity weapon = level.getEntity(weaponEntityId);
         if (weapon == null || !weapon.isAlive()) {
-            message(player, "§c固定武器不存在或已被摧毁。");
+            message(player, org.espetro.stats.RoundScoreConfig.hidden()
+                ? "§c固定武器不可用。" : "§c固定武器不存在或已被摧毁。");
             return;
         }
         FortificationManager fm = FortificationManager.getInstance();

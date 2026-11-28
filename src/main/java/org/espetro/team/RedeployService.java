@@ -41,7 +41,8 @@ public final class RedeployService {
         }
 
         if (player.isDeadOrDying()) {
-            player.sendSystemMessage(Component.literal("§c你已阵亡，正在等待部署点选择。"));
+            player.sendSystemMessage(Component.literal(org.espetro.stats.RoundScoreConfig.hidden()
+                ? "§7正在等待部署点选择。" : "§c你已阵亡，正在等待部署点选择。"));
             return;
         }
 

@@ -1,0 +1,67 @@
+{
+  "buttons": {
+    "mc_titlescreen_multiplayer_button": [
+      28,
+      6,
+      164,
+      26,
+      "primary",
+      "多人游戏"
+    ],
+    "mc_titlescreen_singleplayer_button": [
+      28,
+      36,
+      164,
+      22,
+      "secondary",
+      "单人游戏"
+    ],
+    "mc_titlescreen_options_button": [
+      28,
+      62,
+      80,
+      20,
+      "small",
+      "设置"
+    ],
+    "forge_titlescreen_mods_button": [
+      112,
+      62,
+      80,
+      20,
+      "small",
+      "模组"
+    ],
+    "mc_titlescreen_language_button": [
+      28,
+      86,
+      80,
+      18,
+      "utility",
+      "语言"
+    ],
+    "mc_titlescreen_quit_button": [
+      112,
+      86,
+      80,
+      18,
+      "utility",
+      "退出游戏"
+    ]
+  },
+  "palette": {
+    "background": "#111410",
+    "button": "#12100E",
+    "ink": "#F0F2E8",
+    "muted": "#C0C6B8",
+    "disabled_text": "#6E7864",
+    "hover": "#2D3329",
+    "disabled": "#10140F",
+    "accent": "#FFE500",
+    "primary": "#F0F2E8",
+    "primary_ink": "#171A16",
+    "brand_cyan": "#06DEE5"
+  },
+  "theme": "Espetro dark",
+  "layer_fix": "Parse layout-meta including hyphen; verify render_custom_elements_behind_vanilla=true."
+}

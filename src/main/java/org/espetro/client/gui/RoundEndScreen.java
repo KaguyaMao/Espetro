@@ -22,8 +22,10 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     private final long closesAt;
     private long pageStartedAt = nowMillis();
     private int page;
+    private boolean manualPage;
     private final RoundEndDetails details;
     private final RoundEndScoreboard scoreboard;
+    private final java.util.Map<RoundReport.Award, java.util.List<RoundReport.Player>> honorees;
     private net.minecraft.client.gui.screens.Screen previewParent;
     private boolean preview;
     /** 赢方 show_name，平局时为 null */
@@ -33,7 +35,6 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     private final int attackTickets;
     private final int defendTickets;
     private final int resultLevel;     // 5→0
-    private final boolean attackerTimeout;
 
     public RoundEndScreen(String winner, int displaySeconds,
                           String winnerShowName, String loserShowName,
@@ -44,12 +45,19 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         this.closesAt = nowMillis() + Math.max(1, displaySeconds) * 1000L;
         this.details = new RoundEndDetails(report);
         this.scoreboard = new RoundEndScoreboard(report.players());
+        this.honorees = new java.util.EnumMap<>(RoundReport.Award.class);
+        for (var award : RoundReport.Award.values()) {
+            long best = report.players().stream().mapToLong(player -> player.score().points(award)).max().orElse(0);
+            honorees.put(award, best <= 0 ? java.util.List.of() : report.players().stream()
+                .filter(player -> player.score().points(award) == best)
+                .sorted(java.util.Comparator.comparing(RoundReport.Player::name, String.CASE_INSENSITIVE_ORDER))
+                .toList());
+        }
         this.winnerShowName = winnerShowName;
         this.loserShowName = loserShowName;
         this.attackTickets = attackTickets;
         this.defendTickets = defendTickets;
         this.resultLevel = Math.max(0, Math.min(5, resultLevel));
-        this.attackerTimeout = attackerTimeout;
     }
 
     @Override
@@ -73,6 +81,7 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     public boolean mouseClicked(double x, double y, int button) {
         int start = navStart(), step = navStep();
         if (button == 0 && y >= height - 40 && y < height - 14 && x >= start && x < start + step * 3) {
+            manualPage = true;
             selectPage((int) (x - start) / step);
             return true;
         }
@@ -104,13 +113,14 @@ public final class RoundEndScreen extends EspetroMenuScreen {
     @Override
     protected void renderAfterMenu(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         long now = nowMillis();
-        if (!preview && now < closesAt && now - pageStartedAt >= PAGE_MILLIS) {
+        if (!preview && !manualPage && page < PAGES.length - 1 && now < closesAt && now - pageStartedAt >= PAGE_MILLIS) {
             long steps = (now - pageStartedAt) / PAGE_MILLIS;
-            page = (int) ((page + steps) % PAGES.length);
-            pageStartedAt += steps * PAGE_MILLIS;
+            int next = (int) Math.min(PAGES.length - 1, page + steps);
+            pageStartedAt += (next - page) * PAGE_MILLIS;
+            page = next;
         }
         int contentBottom = height - 45;
-        if (page == 0) renderResult(g);
+        if (page == 0) renderResult(g, mouseX, mouseY, contentBottom);
         if (page == 1) details.render(g, font, width, contentBottom, mouseX, mouseY,
             Math.min(1f, (now - pageStartedAt) / 1500f));
         if (page == 2) scoreboard.render(g, minecraft, width, contentBottom);
@@ -124,7 +134,7 @@ public final class RoundEndScreen extends EspetroMenuScreen {
                 i == page ? UiTheme.SIGNAL_YELLOW : hovered ? UiTheme.TEXT : UiTheme.TEXT_SECOND);
             g.fill(x + 3, navY + 17, x + step - 3, navY + 19, UiTheme.HAIRLINE_STRONG);
             if (i == page) {
-                float progress = preview ? 1f : Math.min(1f, (now - pageStartedAt) / (float) PAGE_MILLIS);
+                float progress = preview || manualPage ? 1f : Math.min(1f, (now - pageStartedAt) / (float) PAGE_MILLIS);
                 g.fill(x + 3, navY + 17, x + 3 + Math.round((step - 6) * progress), navY + 19, UiTheme.SIGNAL_YELLOW);
             }
         }
@@ -132,95 +142,77 @@ public final class RoundEndScreen extends EspetroMenuScreen {
         g.drawCenteredString(font, seconds + " 秒后返回主城", width / 2, height - 12, UiTheme.TEXT_SECOND);
     }
 
-    private void renderResult(GuiGraphics g) {
+    private void renderResult(GuiGraphics g, int mouseX, int mouseY, int bottom) {
         String myTeam = preview ? winner : ClientGameState.getPlayerTeam();
-        boolean isDraw = "DRAW".equals(winner);
-        boolean iWon = !isDraw && winner.equals(myTeam);
-        int level = resultLevel;
-
-        // ── 1. 超大等级文字（居中上方）──
-        String levelText = isDraw ? "平局" : (iWon ? WIN_LABELS[level] : LOSE_LABELS[level]);
-        int levelColor = isDraw ? UiTheme.GOLD : !iWon ? UiTheme.NEGATIVE : switch (level) {
-            case 1, 2 -> UiTheme.WARNING;
-            case 3, 4 -> UiTheme.ATTACK;
-            case 5 -> UiTheme.NEGATIVE;
-            default -> UiTheme.GOLD;
-        };
-        int resultW = Math.min(620, Math.max(1, width - UiTheme.GAP_L * 2));
-        int resultX = (width - resultW) / 2;
-        int resultY = Math.max(12, (int) ((height - 45) * 0.12f));
-
-        UiPaint.hairline(g, resultX, resultY + 14, resultW, UiTheme.HAIRLINE_STRONG);
-        UiPaint.textCentered(g, levelText, 0, (int) ((height - 45) * 0.23f), width,
-            levelColor, height < 260 ? 2.4f : 3.5f, true);
-
-        // ── 2. "XXX赢得了胜利"（小字）──
-        if (!isDraw) {
-            String victorName = winnerShowName != null ? winnerShowName : (iWon ? "我方" : "敌方");
-            UiPaint.textCentered(g, victorName + "赢得了胜利", 0, (int) ((height - 45) * 0.38f), width,
-                iWon ? UiTheme.POSITIVE : UiTheme.ATTACK, UiTheme.TYPE_TITLE, true);
+        boolean draw = "DRAW".equals(winner);
+        boolean lost = !draw && myTeam != null && !winner.equals(myTeam);
+        String grade = draw ? "平局" : (lost ? LOSE_LABELS : WIN_LABELS)[resultLevel];
+        int headerY = Math.max(5, bottom / 14);
+        float headingScale = Math.max(0.9f, Math.min(3f, bottom / 90f));
+        UiPaint.textCentered(g, grade, 0, headerY, width, UiTheme.TEXT, headingScale, true);
+        if (!draw) {
+            String victor = winnerShowName != null ? winnerShowName
+                : org.espetro.team.TeamDisplayNames.displayName(winner);
+            UiPaint.textCentered(g, victor + "获胜", 0, headerY + Math.round(10 * headingScale) + 5,
+                width, UiTheme.SIGNAL_YELLOW, UiTheme.TYPE_TITLE, false);
         }
 
-        // ── 3. 下半区：双方阵营名 + 票数 ──
-        // 确定玩家视角下的左/右双方
-        boolean isAttacker = "ATTACK".equals(myTeam);
+        String attackName = "ATTACK".equals(winner) ? winnerShowName : loserShowName;
+        String defendName = "DEFEND".equals(winner) ? winnerShowName : loserShowName;
+        int ticketY = Math.round(bottom * 0.28f);
+        int ticketW = Math.min(140, Math.max(40, width / 3));
+        int ticketH = Math.max(29, bottom / 6);
+        drawTickets(g, width / 2 - ticketW - 8, ticketY, ticketW, ticketH, attackName, attackTickets, true);
+        drawTickets(g, width / 2 + 8, ticketY, ticketW, ticketH, defendName, defendTickets, false);
 
-        String leftFaction, rightFaction;
-        int leftTickets, rightTickets;
-        int leftAccent = UiTheme.ATTACK;
-        int rightAccent = UiTheme.DEFEND;
-
-        if (!isDraw && myTeam != null) {
-            if (iWon) {
-                // 我赢了：左=赢得方，右=输方
-                leftFaction = winnerShowName != null ? winnerShowName : "我方";
-                rightFaction = loserShowName != null ? loserShowName : "敌方";
-                leftAccent = isAttacker ? UiTheme.ATTACK : UiTheme.DEFEND;
-                rightAccent = isAttacker ? UiTheme.DEFEND : UiTheme.ATTACK;
-                if (isAttacker) { leftTickets = attackTickets; rightTickets = defendTickets; }
-                else            { leftTickets = defendTickets; rightTickets = attackTickets; }
-            } else {
-                // 我输了：左=我方，右=敌方（敌方是赢方）
-                leftFaction = loserShowName != null ? loserShowName : "我方";
-                rightFaction = winnerShowName != null ? winnerShowName : "敌方";
-                leftAccent = isAttacker ? UiTheme.ATTACK : UiTheme.DEFEND;
-                rightAccent = isAttacker ? UiTheme.DEFEND : UiTheme.ATTACK;
-                if (isAttacker) { leftTickets = attackTickets; rightTickets = defendTickets; }
-                else            { leftTickets = defendTickets; rightTickets = attackTickets; }
+        int awardsTitle = Math.max(ticketY + ticketH + 6, Math.round(bottom * 0.53f));
+        g.drawCenteredString(font, "本局嘉奖", width / 2, awardsTitle, UiTheme.TEXT);
+        int slot = Math.min(150, Math.max(22, (width - 16) / 4));
+        int start = (width - slot * 4) / 2;
+        int cardY = awardsTitle + 14, cardH = Math.max(25, Math.min(74, bottom - cardY - 4));
+        java.util.List<Component> tooltip = null;
+        for (var award : RoundReport.Award.values()) {
+            int x = start + award.ordinal() * slot;
+            int cardW = slot - 4;
+            var players = honorees.get(award);
+            UiPaint.glassPanel(g, x, cardY, cardW, cardH, UiTheme.GLASS_PANEL_SOFT);
+            drawFitted(g, award.title, x, cardY + 4, cardW, UiTheme.SIGNAL_YELLOW);
+            if (players.isEmpty()) {
+                drawFitted(g, "空缺", x, cardY + 16, cardW, UiTheme.TEXT_THIRD);
+                continue;
             }
-        } else {
-            // 平局或无队伍：按攻/守固定展示
-            leftFaction = winnerShowName != null ? winnerShowName
-                : org.espetro.team.TeamDisplayNames.displayName("ATTACK");
-            rightFaction = loserShowName != null ? loserShowName
-                : org.espetro.team.TeamDisplayNames.displayName("DEFEND");
-            leftTickets = attackTickets;
-            rightTickets = defendTickets;
+            var first = players.get(0);
+            int color = RoundEndDetails.teamColor(first.attack());
+            g.fill(x, cardY, x + cardW, cardY + 1, color);
+            if (cardH >= 47) {
+                TacticalHud.drawHead(g, minecraft, first.id(), x + (cardW - 8) / 2, cardY + 15, 1f);
+            }
+            int nameY = cardY + (cardH >= 47 ? 26 : 14);
+            String name = first.name() + (players.size() == 1 ? "" : " 等" + players.size() + "人");
+            drawFitted(g, name, x, nameY, cardW, UiTheme.TEXT);
+            if (cardH >= 33) drawFitted(g, first.score().points(award) + " 分", x, nameY + 11, cardW, UiTheme.TEXT_SECOND);
+            if (mouseX >= x && mouseX < x + cardW && mouseY >= cardY && mouseY < cardY + cardH) {
+                tooltip = new java.util.ArrayList<>();
+                tooltip.add(Component.literal(award.title + " · " + first.score().points(award) + " 分"));
+                for (var player : players) tooltip.add(Component.literal(player.name()));
+            }
         }
+        if (tooltip != null) g.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+    }
 
-        // 下半区 Y 起始
-        int bottomY = (int) ((height - 45) * 0.53f);
-        int panelHeight = Math.max(32, Math.min(75, height - bottomY - 49));
-        UiPaint.glassPanel(g, 8, bottomY - 6, width / 2 - 12, panelHeight, UiTheme.GLASS_PANEL);
-        UiPaint.glassPanel(g, width / 2 + 4, bottomY - 6, width / 2 - 12, panelHeight, UiTheme.GLASS_PANEL);
-        int leftX = width / 4;
-        int rightX = width * 3 / 4;
-        UiPaint.hairlineV(g, width / 2, bottomY - 5, panelHeight, UiTheme.HAIRLINE_STRONG);
+    private void drawTickets(GuiGraphics g, int x, int y, int w, int h, String name, int tickets, boolean attack) {
+        String team = attack ? "ATTACK" : "DEFEND";
+        int color = RoundEndDetails.teamColor(attack);
+        UiPaint.glassPanel(g, x, y, w, h, UiTheme.GLASS_PANEL_SOFT);
+        g.fill(x, y, x + w, y + 1, color);
+        drawFitted(g, name == null ? org.espetro.team.TeamDisplayNames.displayName(team) : name,
+            x, y + 4, w, color);
+        UiPaint.textCentered(g, Integer.toString(tickets), x, y + 15, w, UiTheme.TEXT,
+            Math.min(2.2f, (h - 16) / 10f), true);
+    }
 
-        // 阵营名（中号 1.8x）+ 底部阵营色条
-        float nameScale = 1.8f;
-        UiPaint.textCentered(g, leftFaction, 0, bottomY, width / 2, leftAccent, nameScale, true);
-        UiPaint.textCentered(g, rightFaction, width / 2, bottomY, width / 2, rightAccent,
-            nameScale, true);
-        UiPaint.accentBarBottom(g, leftX - 32, bottomY + 20, 64, leftAccent);
-        UiPaint.accentBarBottom(g, rightX - 32, bottomY + 20, 64, rightAccent);
-
-        // 票数（大号数值，在阵营名下方）
-        int numberY = bottomY + 30;
-        float numScale = 2.5f;
-        UiPaint.textCentered(g, String.valueOf(leftTickets), 0, numberY, width / 2,
-            UiTheme.GOLD, numScale, true);
-        UiPaint.textCentered(g, String.valueOf(rightTickets), width / 2, numberY, width / 2,
-            UiTheme.GOLD, numScale, true);
+    private void drawFitted(GuiGraphics g, String value, int x, int y, int w, int color) {
+        float scale = Math.min(1f, (w - 4f) / Math.max(1, font.width(value)));
+        UiPaint.textCentered(g, value, x, y, w, color, scale, false);
     }
 }

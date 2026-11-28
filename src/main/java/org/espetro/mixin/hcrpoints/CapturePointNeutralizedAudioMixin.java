@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.lang.reflect.Method;
 import java.util.List;
 
-/** Optional ESPoints hook fired once when an owned point becomes neutral. */
+/** Emits formation audio from authoritative capture state transitions. */
 @Pseudo
 @Mixin(targets = {
     "com.example.hcrpoints.capturepoint.CapturePoint",
@@ -34,24 +34,58 @@ public abstract class CapturePointNeutralizedAudioMixin {
     private String espetro$audioOldState;
     @Unique
     private String espetro$audioOldCaptor;
+    @Unique
+    private int espetro$audioUpdateDepth;
 
     @Inject(method = "updateStatus(Ljava/util/List;)V", at = @At("HEAD"),
         require = 0, remap = false)
     private void espetro$rememberOwnerBeforeUpdate(List<?> playersInPoint, CallbackInfo ci) {
-        espetro$audioOldState = espetro$getStateName();
-        espetro$audioOldCaptor = getCaptorName();
+        espetro$beginAudioUpdate();
     }
 
     @Inject(method = "updateStatus(Ljava/util/List;)V", at = @At("RETURN"),
         require = 0, remap = false)
-    private void espetro$onPointNeutralized(List<?> playersInPoint, CallbackInfo ci) {
-        if (espetro$audioOldCaptor == null || espetro$audioOldCaptor.isBlank()
-            || "NEUTRAL".equals(espetro$audioOldState)
-            || !"NEUTRAL".equals(espetro$getStateName())) {
+    private void espetro$finishLegacyUpdate(List<?> playersInPoint, CallbackInfo ci) {
+        espetro$finishAudioUpdate(playersInPoint);
+    }
+
+    @Inject(method = "updateStatus(Ljava/util/List;I)V", at = @At("HEAD"),
+        require = 0, remap = false)
+    private void espetro$rememberOwnerBeforeElapsedUpdate(List<?> playersInPoint, int elapsedTicks, CallbackInfo ci) {
+        if (elapsedTicks >= 0) {
+            espetro$beginAudioUpdate();
+        }
+    }
+
+    @Inject(method = "updateStatus(Ljava/util/List;I)V", at = @At("RETURN"),
+        require = 0, remap = false)
+    private void espetro$finishElapsedUpdate(List<?> playersInPoint, int elapsedTicks, CallbackInfo ci) {
+        espetro$finishAudioUpdate(playersInPoint);
+    }
+
+    @Unique
+    private void espetro$beginAudioUpdate() {
+        if (espetro$audioUpdateDepth++ == 0) {
+            espetro$audioOldState = espetro$getStateName();
+            espetro$audioOldCaptor = getCaptorName();
+        }
+    }
+
+    @Unique
+    private void espetro$finishAudioUpdate(List<?> playersInPoint) {
+        if (--espetro$audioUpdateDepth != 0 || espetro$audioOldState == null) {
             return;
         }
-        EspetroAPI.onCapturePointNeutralized(
-            espetro$audioOldCaptor, espetro$findAttackingTeam(playersInPoint));
+        String state = espetro$getStateName();
+        boolean wasOwned = switch (espetro$audioOldState) {
+            case "CAPTURED", "CAPTURING_DOWN", "CONTESTED" -> true;
+            default -> false;
+        };
+        if (wasOwned && "NEUTRAL".equals(state)) {
+            EspetroAPI.onCapturePointNeutralized(espetro$audioOldCaptor, espetro$findAttackingTeam(playersInPoint));
+        } else if (!wasOwned && "CAPTURED".equals(state)) {
+            EspetroAPI.onCapturePointCaptured(getCaptorName());
+        }
     }
 
     @Unique

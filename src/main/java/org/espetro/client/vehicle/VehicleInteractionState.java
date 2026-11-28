@@ -7,10 +7,11 @@ import org.espetro.client.gui.UiTheme;
 public final class VehicleInteractionState {
 
     private static final ResourceLocation ICON =
-        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/vehicle/mount.png");
+        ResourceLocation.fromNamespaceAndPath("espetro", "textures/gui/vehicle/radial_seat.png");
 
     private static VehicleInteractionKind kind = VehicleInteractionKind.NONE;
     private static float progress = -1f;
+    private static float previousProgress;
 
     private VehicleInteractionState() {
     }
@@ -20,8 +21,10 @@ public final class VehicleInteractionState {
             clear();
             return;
         }
+        float next = clamp(p);
+        if (kind != newKind || next != progress) previousProgress = kind == newKind && next >= progress ? progress : 0;
         kind = newKind;
-        progress = clamp(p);
+        progress = next;
     }
 
     public static void setMount(float p) {
@@ -47,6 +50,11 @@ public final class VehicleInteractionState {
 
     public static float progress() {
         return kind == VehicleInteractionKind.NONE ? -1f : progress;
+    }
+
+    public static float progress(float partialTick) {
+        return kind == VehicleInteractionKind.NONE ? -1f
+            : net.minecraft.util.Mth.lerp(clamp(partialTick), previousProgress, progress);
     }
 
     public static ResourceLocation icon() {

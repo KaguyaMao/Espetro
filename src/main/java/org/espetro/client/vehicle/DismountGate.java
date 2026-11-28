@@ -19,6 +19,7 @@ public final class DismountGate {
     private static boolean wasDown;
     /** 已发送过一次下车请求；等待 F 释放后才允许再次触发，防止按住 F 持续循环下车。 */
     private static boolean sent;
+    private static boolean leftCenter;
 
     private DismountGate() {
     }
@@ -40,6 +41,8 @@ public final class DismountGate {
         if (mc.player == null || mc.screen != null) {
             reset();
             wasDown = false;
+            sent = false;
+            leftCenter = false;
             return;
         }
         if (mc.player.getVehicle() == null
@@ -70,11 +73,26 @@ public final class DismountGate {
             }
             wasDown = false;
             sent = false;
+            leftCenter = false;
             return;
         }
         wasDown = true;
         if (sent) {
             // 已发送过下车请求：本次按住 F 期间不再重复发送，等释放后再触发。
+            return;
+        }
+
+        if (!VehicleWheelController.isMountedInteraction()) {
+            reset();
+            return;
+        }
+        if (!VehicleWheelController.isWheelActive()) {
+            reset();
+            return;
+        }
+        if (!VehicleWheelController.isCenterHovered()) leftCenter = true;
+        if (leftCenter) {
+            reset();
             return;
         }
 
@@ -84,6 +102,7 @@ public final class DismountGate {
         if (ticks >= delay) {
             NetworkManager.NET.sendToServer(new DismountRequestPacket());
             sent = true;
+            VehicleWheelController.completeSeatInteraction();
             reset();
         }
     }

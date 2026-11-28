@@ -1,0 +1,1333 @@
+{
+  "screens": [
+    {
+      "identifier": "realms_main_screen",
+      "klass": "com/mojang/realmsclient/RealmsMainScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_backup_info_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupInfoScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_backup_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_broken_world_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_client_outdated_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsClientOutdatedScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_configure_world_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfigureWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_confirm_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfirmScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_create_realm_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsCreateRealmScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_download_latest_world_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsDownloadLatestWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_generic_error_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsGenericErrorScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_invite_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsInviteScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_long_running_mco_task_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsLongRunningMcoTaskScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_notifications_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsNotificationsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_parental_consent_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsParentalConsentScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_pending_invites_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPendingInvitesScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_player_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPlayerScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_reset_normal_world_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetNormalWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_reset_world_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_select_file_to_upload_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectFileToUploadScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_select_world_template_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_settings_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSettingsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_slot_options_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSlotOptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_subscription_info_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSubscriptionInfoScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_terms_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsTermsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "realms_upload_screen",
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsUploadScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "accessibility_onboarding_screen",
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOnboardingScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "accessibility_options_screen",
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "alert_screen",
+      "klass": "net/minecraft/client/gui/screens/AlertScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "backup_confirm_screen",
+      "klass": "net/minecraft/client/gui/screens/BackupConfirmScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "chat_options_screen",
+      "klass": "net/minecraft/client/gui/screens/ChatOptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "confirm_link_screen",
+      "klass": "net/minecraft/client/gui/screens/ConfirmLinkScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "confirm_screen",
+      "klass": "net/minecraft/client/gui/screens/ConfirmScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "connect_screen",
+      "klass": "net/minecraft/client/gui/screens/ConnectScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "create_buffet_world_screen",
+      "klass": "net/minecraft/client/gui/screens/CreateBuffetWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "create_flat_world_screen",
+      "klass": "net/minecraft/client/gui/screens/CreateFlatWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "credits_and_attribution_screen",
+      "klass": "net/minecraft/client/gui/screens/CreditsAndAttributionScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "datapack_load_failure_screen",
+      "klass": "net/minecraft/client/gui/screens/DatapackLoadFailureScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "death_screen",
+      "klass": "net/minecraft/client/gui/screens/DeathScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "title_confirm_screen",
+      "klass": "net/minecraft/client/gui/screens/DeathScreen$TitleConfirmScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "direct_join_server_screen",
+      "klass": "net/minecraft/client/gui/screens/DirectJoinServerScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "disconnected_screen",
+      "klass": "net/minecraft/client/gui/screens/DisconnectedScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "edit_server_screen",
+      "klass": "net/minecraft/client/gui/screens/EditServerScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "error_screen",
+      "klass": "net/minecraft/client/gui/screens/ErrorScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "language_select_screen",
+      "klass": "net/minecraft/client/gui/screens/LanguageSelectScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "mouse_settings_screen",
+      "klass": "net/minecraft/client/gui/screens/MouseSettingsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "online_options_screen",
+      "klass": "net/minecraft/client/gui/screens/OnlineOptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "options_screen",
+      "klass": "net/minecraft/client/gui/screens/OptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "pause_screen",
+      "klass": "net/minecraft/client/gui/screens/PauseScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "popup_screen",
+      "klass": "net/minecraft/client/gui/screens/PopupScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "preset_flat_world_screen",
+      "klass": "net/minecraft/client/gui/screens/PresetFlatWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "share_to_lan_screen",
+      "klass": "net/minecraft/client/gui/screens/ShareToLanScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "skin_customization_screen",
+      "klass": "net/minecraft/client/gui/screens/SkinCustomizationScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "sound_options_screen",
+      "klass": "net/minecraft/client/gui/screens/SoundOptionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "video_settings_screen",
+      "klass": "net/minecraft/client/gui/screens/VideoSettingsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "stats_screen",
+      "klass": "net/minecraft/client/gui/screens/achievement/StatsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "advancements_screen",
+      "klass": "net/minecraft/client/gui/screens/advancements/AdvancementsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "controls_screen",
+      "klass": "net/minecraft/client/gui/screens/controls/ControlsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "join_multiplayer_screen",
+      "klass": "net/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "safety_screen",
+      "klass": "net/minecraft/client/gui/screens/multiplayer/SafetyScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "pack_selection_screen",
+      "klass": "net/minecraft/client/gui/screens/packs/PackSelectionScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "chat_report_screen",
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatReportScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "chat_selection_screen",
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatSelectionScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "report_reason_selection_screen",
+      "klass": "net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "social_interactions_screen",
+      "klass": "net/minecraft/client/gui/screens/social/SocialInteractionsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "telemetry_info_screen",
+      "klass": "net/minecraft/client/gui/screens/telemetry/TelemetryInfoScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "confirm_experimental_features_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/ConfirmExperimentalFeaturesScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "create_world_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/CreateWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "edit_game_rules_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "edit_world_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "experiments_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/ExperimentsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "optimize_world_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/OptimizeWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "select_world_screen",
+      "klass": "net/minecraft/client/gui/screens/worldselection/SelectWorldScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "disconnected_realms_screen",
+      "klass": "net/minecraft/realms/DisconnectedRealmsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "net.minecraft.client.gui.screens.controls.KeyBindsScreen",
+      "klass": "net/minecraft/client/gui/screens/controls/KeyBindsScreen",
+      "kind": "vanilla"
+    },
+    {
+      "identifier": "net.minecraftforge.client.gui.ModListScreen",
+      "klass": "net/minecraftforge/client/gui/ModListScreen",
+      "kind": "forge"
+    },
+    {
+      "identifier": "me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI",
+      "klass": "me/jellysquid/mods/sodium/client/gui/SodiumOptionsGUI",
+      "kind": "embeddium"
+    },
+    {
+      "identifier": "org.embeddedt.embeddium.gui.EmbeddiumVideoOptionsScreen",
+      "klass": "org/embeddedt/embeddium/gui/EmbeddiumVideoOptionsScreen",
+      "kind": "embeddium"
+    }
+  ],
+  "layouts": [
+    {
+      "file": "stm_vanilla_1683964b-6a2_menu.txt",
+      "identifier": "realms_main_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/RealmsMainScreen"
+    },
+    {
+      "file": "stm_vanilla_1683964b-6a2_world.txt",
+      "identifier": "realms_main_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/RealmsMainScreen"
+    },
+    {
+      "file": "stm_vanilla_ccf79a11-046_menu.txt",
+      "identifier": "realms_backup_info_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_ccf79a11-046_world.txt",
+      "identifier": "realms_backup_info_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_4615eb1c-3f6_menu.txt",
+      "identifier": "realms_backup_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupScreen"
+    },
+    {
+      "file": "stm_vanilla_4615eb1c-3f6_world.txt",
+      "identifier": "realms_backup_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBackupScreen"
+    },
+    {
+      "file": "stm_vanilla_bb692f11-31c_menu.txt",
+      "identifier": "realms_broken_world_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_bb692f11-31c_world.txt",
+      "identifier": "realms_broken_world_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsBrokenWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_cc99f808-81b_menu.txt",
+      "identifier": "realms_client_outdated_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsClientOutdatedScreen"
+    },
+    {
+      "file": "stm_vanilla_cc99f808-81b_world.txt",
+      "identifier": "realms_client_outdated_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsClientOutdatedScreen"
+    },
+    {
+      "file": "stm_vanilla_8999598e-1f2_menu.txt",
+      "identifier": "realms_configure_world_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfigureWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_8999598e-1f2_world.txt",
+      "identifier": "realms_configure_world_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfigureWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_9e28f730-431_menu.txt",
+      "identifier": "realms_confirm_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_9e28f730-431_world.txt",
+      "identifier": "realms_confirm_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_b75d97e9-1da_menu.txt",
+      "identifier": "realms_create_realm_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsCreateRealmScreen"
+    },
+    {
+      "file": "stm_vanilla_b75d97e9-1da_world.txt",
+      "identifier": "realms_create_realm_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsCreateRealmScreen"
+    },
+    {
+      "file": "stm_vanilla_b47b33d4-257_menu.txt",
+      "identifier": "realms_download_latest_world_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsDownloadLatestWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_b47b33d4-257_world.txt",
+      "identifier": "realms_download_latest_world_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsDownloadLatestWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_b7fd53e9-f84_menu.txt",
+      "identifier": "realms_generic_error_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsGenericErrorScreen"
+    },
+    {
+      "file": "stm_vanilla_b7fd53e9-f84_world.txt",
+      "identifier": "realms_generic_error_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsGenericErrorScreen"
+    },
+    {
+      "file": "stm_vanilla_16226357-8cf_menu.txt",
+      "identifier": "realms_invite_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsInviteScreen"
+    },
+    {
+      "file": "stm_vanilla_16226357-8cf_world.txt",
+      "identifier": "realms_invite_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsInviteScreen"
+    },
+    {
+      "file": "stm_vanilla_ff6e6f24-664_menu.txt",
+      "identifier": "realms_long_running_mco_task_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsLongRunningMcoTaskScreen"
+    },
+    {
+      "file": "stm_vanilla_ff6e6f24-664_world.txt",
+      "identifier": "realms_long_running_mco_task_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsLongRunningMcoTaskScreen"
+    },
+    {
+      "file": "stm_vanilla_d0287f23-af6_menu.txt",
+      "identifier": "realms_notifications_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsNotificationsScreen"
+    },
+    {
+      "file": "stm_vanilla_d0287f23-af6_world.txt",
+      "identifier": "realms_notifications_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsNotificationsScreen"
+    },
+    {
+      "file": "stm_vanilla_8036a1dc-e6d_menu.txt",
+      "identifier": "realms_parental_consent_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsParentalConsentScreen"
+    },
+    {
+      "file": "stm_vanilla_8036a1dc-e6d_world.txt",
+      "identifier": "realms_parental_consent_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsParentalConsentScreen"
+    },
+    {
+      "file": "stm_vanilla_84afcd97-7ae_menu.txt",
+      "identifier": "realms_pending_invites_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPendingInvitesScreen"
+    },
+    {
+      "file": "stm_vanilla_84afcd97-7ae_world.txt",
+      "identifier": "realms_pending_invites_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPendingInvitesScreen"
+    },
+    {
+      "file": "stm_vanilla_acc9cac0-e4e_menu.txt",
+      "identifier": "realms_player_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPlayerScreen"
+    },
+    {
+      "file": "stm_vanilla_acc9cac0-e4e_world.txt",
+      "identifier": "realms_player_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsPlayerScreen"
+    },
+    {
+      "file": "stm_vanilla_9ec0133b-0a5_menu.txt",
+      "identifier": "realms_reset_normal_world_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetNormalWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_9ec0133b-0a5_world.txt",
+      "identifier": "realms_reset_normal_world_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetNormalWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_f08e9590-f08_menu.txt",
+      "identifier": "realms_reset_world_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_f08e9590-f08_world.txt",
+      "identifier": "realms_reset_world_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsResetWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_4ea6f56b-960_menu.txt",
+      "identifier": "realms_select_file_to_upload_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectFileToUploadScreen"
+    },
+    {
+      "file": "stm_vanilla_4ea6f56b-960_world.txt",
+      "identifier": "realms_select_file_to_upload_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectFileToUploadScreen"
+    },
+    {
+      "file": "stm_vanilla_6b5ff331-989_menu.txt",
+      "identifier": "realms_select_world_template_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen"
+    },
+    {
+      "file": "stm_vanilla_6b5ff331-989_world.txt",
+      "identifier": "realms_select_world_template_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSelectWorldTemplateScreen"
+    },
+    {
+      "file": "stm_vanilla_4f3f1fec-957_menu.txt",
+      "identifier": "realms_settings_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_4f3f1fec-957_world.txt",
+      "identifier": "realms_settings_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_62a33516-178_menu.txt",
+      "identifier": "realms_slot_options_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSlotOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_62a33516-178_world.txt",
+      "identifier": "realms_slot_options_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSlotOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_8a26ef26-1f7_menu.txt",
+      "identifier": "realms_subscription_info_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSubscriptionInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_8a26ef26-1f7_world.txt",
+      "identifier": "realms_subscription_info_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsSubscriptionInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_f0a3af90-585_menu.txt",
+      "identifier": "realms_terms_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsTermsScreen"
+    },
+    {
+      "file": "stm_vanilla_f0a3af90-585_world.txt",
+      "identifier": "realms_terms_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsTermsScreen"
+    },
+    {
+      "file": "stm_vanilla_f0e3361d-b8d_menu.txt",
+      "identifier": "realms_upload_screen",
+      "world": false,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsUploadScreen"
+    },
+    {
+      "file": "stm_vanilla_f0e3361d-b8d_world.txt",
+      "identifier": "realms_upload_screen",
+      "world": true,
+      "klass": "com/mojang/realmsclient/gui/screens/RealmsUploadScreen"
+    },
+    {
+      "file": "stm_vanilla_27c03291-95d_menu.txt",
+      "identifier": "accessibility_onboarding_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOnboardingScreen"
+    },
+    {
+      "file": "stm_vanilla_27c03291-95d_world.txt",
+      "identifier": "accessibility_onboarding_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOnboardingScreen"
+    },
+    {
+      "file": "stm_vanilla_71b6c51e-e51_menu.txt",
+      "identifier": "accessibility_options_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_71b6c51e-e51_world.txt",
+      "identifier": "accessibility_options_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/AccessibilityOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_7f288487-753_menu.txt",
+      "identifier": "alert_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/AlertScreen"
+    },
+    {
+      "file": "stm_vanilla_7f288487-753_world.txt",
+      "identifier": "alert_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/AlertScreen"
+    },
+    {
+      "file": "stm_vanilla_1af3bb28-e7e_menu.txt",
+      "identifier": "backup_confirm_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/BackupConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_1af3bb28-e7e_world.txt",
+      "identifier": "backup_confirm_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/BackupConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_5dfa16e7-e46_menu.txt",
+      "identifier": "chat_options_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ChatOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_5dfa16e7-e46_world.txt",
+      "identifier": "chat_options_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ChatOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_a7373044-d26_menu.txt",
+      "identifier": "confirm_link_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ConfirmLinkScreen"
+    },
+    {
+      "file": "stm_vanilla_a7373044-d26_world.txt",
+      "identifier": "confirm_link_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ConfirmLinkScreen"
+    },
+    {
+      "file": "stm_vanilla_5e63a3c0-7fa_menu.txt",
+      "identifier": "confirm_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_5e63a3c0-7fa_world.txt",
+      "identifier": "confirm_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_e1c97e48-17e_menu.txt",
+      "identifier": "connect_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ConnectScreen"
+    },
+    {
+      "file": "stm_vanilla_e1c97e48-17e_world.txt",
+      "identifier": "connect_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ConnectScreen"
+    },
+    {
+      "file": "stm_vanilla_08b6faeb-c80_menu.txt",
+      "identifier": "create_buffet_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/CreateBuffetWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_08b6faeb-c80_world.txt",
+      "identifier": "create_buffet_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/CreateBuffetWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_80189cf3-a72_menu.txt",
+      "identifier": "create_flat_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/CreateFlatWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_80189cf3-a72_world.txt",
+      "identifier": "create_flat_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/CreateFlatWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_5d754066-0cd_menu.txt",
+      "identifier": "credits_and_attribution_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/CreditsAndAttributionScreen"
+    },
+    {
+      "file": "stm_vanilla_5d754066-0cd_world.txt",
+      "identifier": "credits_and_attribution_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/CreditsAndAttributionScreen"
+    },
+    {
+      "file": "stm_vanilla_3b3c6329-aea_menu.txt",
+      "identifier": "datapack_load_failure_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/DatapackLoadFailureScreen"
+    },
+    {
+      "file": "stm_vanilla_3b3c6329-aea_world.txt",
+      "identifier": "datapack_load_failure_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/DatapackLoadFailureScreen"
+    },
+    {
+      "file": "stm_vanilla_19408ea8-cd8_menu.txt",
+      "identifier": "death_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/DeathScreen"
+    },
+    {
+      "file": "stm_vanilla_19408ea8-cd8_world.txt",
+      "identifier": "death_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/DeathScreen"
+    },
+    {
+      "file": "stm_vanilla_652759fb-ff3_menu.txt",
+      "identifier": "title_confirm_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/DeathScreen$TitleConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_652759fb-ff3_world.txt",
+      "identifier": "title_confirm_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/DeathScreen$TitleConfirmScreen"
+    },
+    {
+      "file": "stm_vanilla_bb36d4ee-5e3_menu.txt",
+      "identifier": "direct_join_server_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/DirectJoinServerScreen"
+    },
+    {
+      "file": "stm_vanilla_bb36d4ee-5e3_world.txt",
+      "identifier": "direct_join_server_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/DirectJoinServerScreen"
+    },
+    {
+      "file": "stm_vanilla_90e8824f-119_menu.txt",
+      "identifier": "disconnected_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/DisconnectedScreen"
+    },
+    {
+      "file": "stm_vanilla_90e8824f-119_world.txt",
+      "identifier": "disconnected_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/DisconnectedScreen"
+    },
+    {
+      "file": "stm_vanilla_7fc777a3-4ad_menu.txt",
+      "identifier": "edit_server_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/EditServerScreen"
+    },
+    {
+      "file": "stm_vanilla_7fc777a3-4ad_world.txt",
+      "identifier": "edit_server_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/EditServerScreen"
+    },
+    {
+      "file": "stm_vanilla_768e03a2-23d_menu.txt",
+      "identifier": "error_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ErrorScreen"
+    },
+    {
+      "file": "stm_vanilla_768e03a2-23d_world.txt",
+      "identifier": "error_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ErrorScreen"
+    },
+    {
+      "file": "stm_vanilla_668ad41d-bb9_menu.txt",
+      "identifier": "language_select_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/LanguageSelectScreen"
+    },
+    {
+      "file": "stm_vanilla_668ad41d-bb9_world.txt",
+      "identifier": "language_select_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/LanguageSelectScreen"
+    },
+    {
+      "file": "stm_vanilla_bbbdc3bc-e3d_menu.txt",
+      "identifier": "mouse_settings_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/MouseSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_bbbdc3bc-e3d_world.txt",
+      "identifier": "mouse_settings_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/MouseSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_14d2875b-d35_menu.txt",
+      "identifier": "online_options_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/OnlineOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_14d2875b-d35_world.txt",
+      "identifier": "online_options_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/OnlineOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_acc3f8d2-7aa_menu.txt",
+      "identifier": "options_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/OptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_acc3f8d2-7aa_world.txt",
+      "identifier": "options_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/OptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_2f1ed5e9-fc7_menu.txt",
+      "identifier": "pause_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/PauseScreen"
+    },
+    {
+      "file": "stm_vanilla_2f1ed5e9-fc7_world.txt",
+      "identifier": "pause_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/PauseScreen"
+    },
+    {
+      "file": "stm_vanilla_ebe2b622-d6c_menu.txt",
+      "identifier": "popup_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/PopupScreen"
+    },
+    {
+      "file": "stm_vanilla_ebe2b622-d6c_world.txt",
+      "identifier": "popup_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/PopupScreen"
+    },
+    {
+      "file": "stm_vanilla_b61dc0ad-a9a_menu.txt",
+      "identifier": "preset_flat_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/PresetFlatWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_b61dc0ad-a9a_world.txt",
+      "identifier": "preset_flat_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/PresetFlatWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_a50dbf64-878_menu.txt",
+      "identifier": "share_to_lan_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/ShareToLanScreen"
+    },
+    {
+      "file": "stm_vanilla_a50dbf64-878_world.txt",
+      "identifier": "share_to_lan_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/ShareToLanScreen"
+    },
+    {
+      "file": "stm_vanilla_d2107a67-61c_menu.txt",
+      "identifier": "skin_customization_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/SkinCustomizationScreen"
+    },
+    {
+      "file": "stm_vanilla_d2107a67-61c_world.txt",
+      "identifier": "skin_customization_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/SkinCustomizationScreen"
+    },
+    {
+      "file": "stm_vanilla_e12d6558-fa8_menu.txt",
+      "identifier": "sound_options_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/SoundOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_e12d6558-fa8_world.txt",
+      "identifier": "sound_options_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/SoundOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_aad3d5a6-70d_menu.txt",
+      "identifier": "video_settings_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/VideoSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_aad3d5a6-70d_world.txt",
+      "identifier": "video_settings_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/VideoSettingsScreen"
+    },
+    {
+      "file": "stm_vanilla_476bbede-c51_menu.txt",
+      "identifier": "stats_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/achievement/StatsScreen"
+    },
+    {
+      "file": "stm_vanilla_476bbede-c51_world.txt",
+      "identifier": "stats_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/achievement/StatsScreen"
+    },
+    {
+      "file": "stm_vanilla_5f0f94bf-655_menu.txt",
+      "identifier": "advancements_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/advancements/AdvancementsScreen"
+    },
+    {
+      "file": "stm_vanilla_5f0f94bf-655_world.txt",
+      "identifier": "advancements_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/advancements/AdvancementsScreen"
+    },
+    {
+      "file": "stm_vanilla_e7add4d3-183_menu.txt",
+      "identifier": "controls_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/controls/ControlsScreen"
+    },
+    {
+      "file": "stm_vanilla_e7add4d3-183_world.txt",
+      "identifier": "controls_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/controls/ControlsScreen"
+    },
+    {
+      "file": "stm_vanilla_ac5e260b-cdc_menu.txt",
+      "identifier": "join_multiplayer_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen"
+    },
+    {
+      "file": "stm_vanilla_ac5e260b-cdc_world.txt",
+      "identifier": "join_multiplayer_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen"
+    },
+    {
+      "file": "stm_vanilla_7c4c7774-7be_menu.txt",
+      "identifier": "safety_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/multiplayer/SafetyScreen"
+    },
+    {
+      "file": "stm_vanilla_7c4c7774-7be_world.txt",
+      "identifier": "safety_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/multiplayer/SafetyScreen"
+    },
+    {
+      "file": "stm_vanilla_3894adcd-604_menu.txt",
+      "identifier": "pack_selection_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/packs/PackSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_3894adcd-604_world.txt",
+      "identifier": "pack_selection_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/packs/PackSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_5a3afc85-354_menu.txt",
+      "identifier": "chat_report_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatReportScreen"
+    },
+    {
+      "file": "stm_vanilla_5a3afc85-354_world.txt",
+      "identifier": "chat_report_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatReportScreen"
+    },
+    {
+      "file": "stm_vanilla_c4621399-3f7_menu.txt",
+      "identifier": "chat_selection_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_c4621399-3f7_world.txt",
+      "identifier": "chat_selection_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/reporting/ChatSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_03ade424-9ca_menu.txt",
+      "identifier": "report_reason_selection_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_03ade424-9ca_world.txt",
+      "identifier": "report_reason_selection_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/reporting/ReportReasonSelectionScreen"
+    },
+    {
+      "file": "stm_vanilla_67fa7239-670_menu.txt",
+      "identifier": "social_interactions_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/social/SocialInteractionsScreen"
+    },
+    {
+      "file": "stm_vanilla_67fa7239-670_world.txt",
+      "identifier": "social_interactions_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/social/SocialInteractionsScreen"
+    },
+    {
+      "file": "stm_vanilla_513d09fa-c77_menu.txt",
+      "identifier": "telemetry_info_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/telemetry/TelemetryInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_513d09fa-c77_world.txt",
+      "identifier": "telemetry_info_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/telemetry/TelemetryInfoScreen"
+    },
+    {
+      "file": "stm_vanilla_c2e5c27c-283_menu.txt",
+      "identifier": "confirm_experimental_features_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/ConfirmExperimentalFeaturesScreen"
+    },
+    {
+      "file": "stm_vanilla_c2e5c27c-283_world.txt",
+      "identifier": "confirm_experimental_features_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/ConfirmExperimentalFeaturesScreen"
+    },
+    {
+      "file": "stm_vanilla_8539bc4f-97d_menu.txt",
+      "identifier": "create_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/CreateWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_8539bc4f-97d_world.txt",
+      "identifier": "create_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/CreateWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_0133e44c-b02_menu.txt",
+      "identifier": "edit_game_rules_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen"
+    },
+    {
+      "file": "stm_vanilla_0133e44c-b02_world.txt",
+      "identifier": "edit_game_rules_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditGameRulesScreen"
+    },
+    {
+      "file": "stm_vanilla_9545d57f-9f1_menu.txt",
+      "identifier": "edit_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_9545d57f-9f1_world.txt",
+      "identifier": "edit_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/EditWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_524e1e44-fb4_menu.txt",
+      "identifier": "experiments_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/ExperimentsScreen"
+    },
+    {
+      "file": "stm_vanilla_524e1e44-fb4_world.txt",
+      "identifier": "experiments_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/ExperimentsScreen"
+    },
+    {
+      "file": "stm_vanilla_4fac540d-f5e_menu.txt",
+      "identifier": "optimize_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/OptimizeWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_4fac540d-f5e_world.txt",
+      "identifier": "optimize_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/OptimizeWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_0349230a-ef3_menu.txt",
+      "identifier": "select_world_screen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/worldselection/SelectWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_0349230a-ef3_world.txt",
+      "identifier": "select_world_screen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/worldselection/SelectWorldScreen"
+    },
+    {
+      "file": "stm_vanilla_a85a2234-cf2_menu.txt",
+      "identifier": "disconnected_realms_screen",
+      "world": false,
+      "klass": "net/minecraft/realms/DisconnectedRealmsScreen"
+    },
+    {
+      "file": "stm_vanilla_a85a2234-cf2_world.txt",
+      "identifier": "disconnected_realms_screen",
+      "world": true,
+      "klass": "net/minecraft/realms/DisconnectedRealmsScreen"
+    },
+    {
+      "file": "stm_vanilla_9cf15915-218_menu.txt",
+      "identifier": "net.minecraft.client.gui.screens.controls.KeyBindsScreen",
+      "world": false,
+      "klass": "net/minecraft/client/gui/screens/controls/KeyBindsScreen"
+    },
+    {
+      "file": "stm_vanilla_9cf15915-218_world.txt",
+      "identifier": "net.minecraft.client.gui.screens.controls.KeyBindsScreen",
+      "world": true,
+      "klass": "net/minecraft/client/gui/screens/controls/KeyBindsScreen"
+    },
+    {
+      "file": "stm_vanilla_8cd5152b-a96_menu.txt",
+      "identifier": "net.minecraftforge.client.gui.ModListScreen",
+      "world": false,
+      "klass": "net/minecraftforge/client/gui/ModListScreen"
+    },
+    {
+      "file": "stm_vanilla_8cd5152b-a96_world.txt",
+      "identifier": "net.minecraftforge.client.gui.ModListScreen",
+      "world": true,
+      "klass": "net/minecraftforge/client/gui/ModListScreen"
+    },
+    {
+      "file": "stm_vanilla_c0dc5e87-4df_menu.txt",
+      "identifier": "me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI",
+      "world": false,
+      "klass": "me/jellysquid/mods/sodium/client/gui/SodiumOptionsGUI"
+    },
+    {
+      "file": "stm_vanilla_c0dc5e87-4df_world.txt",
+      "identifier": "me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI",
+      "world": true,
+      "klass": "me/jellysquid/mods/sodium/client/gui/SodiumOptionsGUI"
+    },
+    {
+      "file": "stm_vanilla_32620109-adc_menu.txt",
+      "identifier": "org.embeddedt.embeddium.gui.EmbeddiumVideoOptionsScreen",
+      "world": false,
+      "klass": "org/embeddedt/embeddium/gui/EmbeddiumVideoOptionsScreen"
+    },
+    {
+      "file": "stm_vanilla_32620109-adc_world.txt",
+      "identifier": "org.embeddedt.embeddium.gui.EmbeddiumVideoOptionsScreen",
+      "world": true,
+      "klass": "org/embeddedt/embeddium/gui/EmbeddiumVideoOptionsScreen"
+    }
+  ],
+  "palette": {
+    "text": "#F0F2E8",
+    "muted": "#C0C6B8",
+    "button_alpha": 0.1,
+    "hover_alpha": 0.3,
+    "disabled_alpha": 0.04,
+    "blur": 4.0
+  },
+  "original_sha256": {
+    "customizablemenus.txt": "a474ea7af5a5f1e5b18ebf6838cf75db9fbad4227460e4572f2bfd9838d276d9",
+    "drippy_loading_overlay_layout.txt": "c1dfa999338c26e39afb9d65fd5ae415790757c9da5b67776fa250f02ad0be23",
+    "title_screen_layout.txt": "a3b08d479733b053b03a6badd4f49d147ce45427dbe4837a1d894f69f5368a5e"
+  },
+  "limitations": [
+    "Embeddium draws some controls itself; FancyMenu styles its backdrop and native widgets only.",
+    "Native text boxes, tabs, list rows and inventory textures retain their native drawing.",
+    "Screens are not repositioned; blur applies to the background before native content."
+  ]
+}

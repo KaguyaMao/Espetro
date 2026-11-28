@@ -277,6 +277,14 @@ public final class TacticalHud {
         };
     }
 
+    private static final java.lang.reflect.Method POINT_COMPASS = findPointCompass();
+    private static java.lang.reflect.Method findPointCompass() {
+        try {
+            return Class.forName("com.example.espoints.client.MarkerCompass").getMethod("render",
+                GuiGraphics.class,float.class,int.class,int.class,int.class);
+        } catch (ReflectiveOperationException ignored) { return null; }
+    }
+
     private static void drawCompass(GuiGraphics g, Minecraft mc, float partialTick) {
         float heading = Mth.positiveModulo(mc.player.getViewYRot(partialTick) + 180f, 360f);
         int center = g.guiWidth() / 2;
@@ -291,6 +299,9 @@ public final class TacticalHud {
         g.pose().scale(scale, scale, 1f);
         g.pose().translate(-center, -bottom, 0);
         try {
+            if (POINT_COMPASS != null) try {
+                POINT_COMPASS.invoke(null,g,heading,center,halfWidth,y);
+            } catch (ReflectiveOperationException ignored) {}
             int first = Mth.floor((heading - 60) / 15) * 15;
             for (int angle = first; angle <= heading + 60; angle += 15) {
                 int x = center + Math.round((angle - heading) * halfWidth / 60);

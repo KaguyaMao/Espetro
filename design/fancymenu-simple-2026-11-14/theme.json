@@ -1,0 +1,17 @@
+{
+  "source": "D:\\minecraft\\modp\\Espetro\\src\\main\\java\\org\\espetro\\client\\gui\\UiTheme.java",
+  "mode": "dark",
+  "colors": {
+    "background": "#111410",
+    "button": "#12100E",
+    "ink": "#F0F2E8",
+    "muted": "#C0C6B8",
+    "disabled_text": "#6E7864",
+    "hover": "#2D3329",
+    "disabled": "#10140F",
+    "accent": "#FFE500",
+    "primary": "#F0F2E8",
+    "primary_ink": "#171A16",
+    "brand_cyan": "#06DEE5"
+  }
+}

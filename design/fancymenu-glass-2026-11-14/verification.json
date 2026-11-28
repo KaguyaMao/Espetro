@@ -1,0 +1,20 @@
+[
+  {
+    "layout": "drippy_loading_overlay_layout.txt",
+    "native_widgets": 1,
+    "resources": "all valid",
+    "logical_sizes_checked": 7,
+    "actions": "unchanged",
+    "blur_regions": 0,
+    "render_custom_elements_behind_vanilla": "true"
+  },
+  {
+    "layout": "title_screen_layout.txt",
+    "native_widgets": 14,
+    "resources": "all valid",
+    "logical_sizes_checked": 7,
+    "actions": "unchanged",
+    "blur_regions": 6,
+    "render_custom_elements_behind_vanilla": "true"
+  }
+]

@@ -29,7 +29,28 @@ public record RoundReport(int duration, int initialAttack, int initialDefend,
     public record Ticket(int tick, boolean attack, int before, int after, Reason reason) {}
     public record Player(UUID id, String name, boolean attack, int squad, String squadName,
                          byte fireteam, boolean leader, boolean fireteamLeader, String role,
-                         String icon, String iconImage, String classId, int kills, int deaths) {}
+                         String icon, String iconImage, String classId, Score score) {}
+
+    public enum Award {
+        COMBAT("战斗英豪", "战斗"), LOGISTICS("后勤标兵", "后勤"),
+        RESCUE("战场天使", "救助"), CAPTURE("中流砥柱", "占领");
+        public final String title;
+        public final String category;
+        Award(String title, String category) { this.title = title; this.category = category; }
+    }
+
+    public record Score(long combat, long logistics, long rescue, long capture) {
+        public static final Score ZERO = new Score(0, 0, 0, 0);
+        public long total() { return combat + logistics + rescue + capture; }
+        public long points(Award award) {
+            return switch (award) {
+                case COMBAT -> combat;
+                case LOGISTICS -> logistics;
+                case RESCUE -> rescue;
+                case CAPTURE -> capture;
+            };
+        }
+    }
 
     void write(FriendlyByteBuf buf) {
         buf.writeVarInt(duration).writeVarInt(initialAttack).writeVarInt(initialDefend);
@@ -46,8 +67,10 @@ public record RoundReport(int duration, int initialAttack, int initialDefend,
             b.writeBoolean(p.attack());
             b.writeVarInt(p.squad()).writeUtf(p.squadName());
             b.writeByte(p.fireteam()).writeBoolean(p.leader()).writeBoolean(p.fireteamLeader());
-            b.writeUtf(p.role()).writeUtf(p.icon()).writeUtf(p.iconImage()).writeUtf(p.classId())
-                .writeVarInt(p.kills()).writeVarInt(p.deaths());
+            b.writeUtf(p.role()).writeUtf(p.icon()).writeUtf(p.iconImage()).writeUtf(p.classId());
+            var score = p.score();
+            b.writeVarLong(score.combat()).writeVarLong(score.logistics())
+                .writeVarLong(score.rescue()).writeVarLong(score.capture());
         });
     }
 
@@ -58,7 +81,7 @@ public record RoundReport(int duration, int initialAttack, int initialDefend,
                 b.readList(FriendlyByteBuf::readUtf))));
         var players = buf.readList(b -> new Player(b.readUUID(), b.readUtf(), b.readBoolean(), b.readVarInt(),
             b.readUtf(), b.readByte(), b.readBoolean(), b.readBoolean(), b.readUtf(), b.readUtf(), b.readUtf(),
-            b.readUtf(), b.readVarInt(), b.readVarInt()));
+            b.readUtf(), new Score(b.readVarLong(), b.readVarLong(), b.readVarLong(), b.readVarLong())));
         return new RoundReport(duration, attack, defend, tickets, players);
     }
 }

@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 public class NetworkManager {
 
-    public static final String PROTOCOL_VERSION = "1.40";
+    public static final String PROTOCOL_VERSION = "1.41";
 
     /** 投票卡片载具行只记一次日志，避免每次下发刷屏。 */
     private static final java.util.Set<String> VEHICLE_LINE_LOGGED =

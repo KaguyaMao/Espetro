@@ -369,7 +369,7 @@ public final class FortificationManager {
     /** One O(1), per-player-rate-limited shovel operation. */
     public void work(ServerPlayer player, BlockPos target, boolean build) {
         if (player == null || target == null || player.isSpectator() || !player.isAlive()
-            || player.getMainHandItem().getItem() != Items.IRON_SHOVEL
+            || !org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())
             || !(player.level() instanceof ServerLevel level)
             || player.getEyePosition().distanceToSqr(Vec3.atCenterOf(target)) > 49.0D
             || !isLookingAt(player, target)) return;
@@ -382,7 +382,7 @@ public final class FortificationManager {
 
     public void workEntity(ServerPlayer player, UUID target, boolean build) {
         if (player == null || target == null || player.isSpectator() || !player.isAlive()
-            || player.getMainHandItem().getItem() != Items.IRON_SHOVEL
+            || !org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())
             || !(player.level() instanceof ServerLevel level)) return;
         UUID constructionId = entityIndex.get(target);
         Construction construction = constructionId == null ? null : constructions.get(constructionId);
@@ -414,6 +414,8 @@ public final class FortificationManager {
         if (now - previous < WORK_INTERVAL_TICKS) return;
         lastWorkTick.put(player.getUUID(), now);
 
+        boolean completedBeforeWork = construction.complete;
+        int workBefore = completedBeforeWork ? construction.structuralValue : construction.progress;
         if (construction.complete) {
             if (build) {
                 construction.structuralValue = Math.min(
@@ -447,6 +449,11 @@ public final class FortificationManager {
             if (construction.progress == 0) {
                 destroy(level, construction, player, true, true, true);
             }
+        }
+        int workAfter = completedBeforeWork ? construction.structuralValue : construction.progress;
+        if (!completedBeforeWork || !build) {
+            org.espetro.stats.RoundScoring.shovel(player, construction.anchor, construction.blueprint.id(),
+                build, workBefore, workAfter);
         }
         if (constructions.containsKey(construction.id)) sendProgress(player, construction, build);
         else NetworkManager.NET.send(PacketDistributor.PLAYER.with(() -> player),
@@ -1100,6 +1107,13 @@ public final class FortificationManager {
                                     @Nullable String error) {
     }
 
+    public long occupiedRadioSlots(String team) {
+        if (team == null) return 0;
+        long pending=constructions.values().stream().filter(c -> !c.complete
+            && c.blueprint.definition.behaviorType==FortificationConfig.Behavior.RADIO && team.equals(c.team)).count();
+        return BastionManager.getInstance().getActiveBastionCount(team)+pending;
+    }
+
     private PlacementBacking validateBacking(ServerPlayer player, PreviewSession preview, BlockPos anchor) {
         Blueprint blueprint = preview.blueprint;
         ServerLevel level = player.serverLevel();
@@ -1114,11 +1128,7 @@ public final class FortificationManager {
             // 只统计“在建”的 Radio：已建成（c.complete）的 Radio 会保留在 constructions 里用于
             // 追踪方块/血量，并且已经计入 getActiveBastionCount(team)；若这里再算一次就会把每个
             // Radio 数两遍，导致上限 4 时实际只能放 2 个。
-            long pending = constructions.values().stream().filter(c ->
-                !c.complete
-                    && c.blueprint.definition.behaviorType == FortificationConfig.Behavior.RADIO
-                    && c.team.equals(preview.team)).count();
-            if (manager.getActiveBastionCount(preview.team) + pending >= manager.getBastionLimitPerTeam()) {
+            if (occupiedRadioSlots(preview.team) >= manager.getBastionLimitPerTeam()) {
                 return new PlacementBacking(null, null, "§c本方 Radio 数量已达到上限。" );
             }
             if (manager.wouldRadioCoverageOverlap(level, anchor, preview.team)

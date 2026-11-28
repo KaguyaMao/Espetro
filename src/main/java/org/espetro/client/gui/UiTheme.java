@@ -56,10 +56,13 @@ public final class UiTheme {
     public static final int SIGNAL_YELLOW = 0xFFFFD45C;
     public static final int TEXT_ON_SIGNAL = 0xFF151719;
     /** Match the existing EsPoints/Alt command wheel's neutral translucent surfaces. */
-    public static final int RADIAL_BACKGROUND = 0xB824292B;
-    public static final int RADIAL_BACKGROUND_OUTER = 0xC832383A;
+    public static final int RADIAL_BACKGROUND = 0x9D10151B;
+    public static final int RADIAL_BACKGROUND_OUTER = 0x9D10151B;
     public static final int RADIAL_HOVER = 0xB8000000;
     public static final int RADIAL_DISABLED = 0x60000000;
+    public static final int RADIAL_STOCK_PLATE = 0xAD10151B;
+    public static final int RADIAL_STOCK_TRACK = 0x78646A71;
+    public static final int RADIAL_SEAT_PLATE = 0xE8101318;
     public static final int RADIAL_CENTER = 0x99000000;
 
     /** ARGB form used by EsRadial's CSS color API. */

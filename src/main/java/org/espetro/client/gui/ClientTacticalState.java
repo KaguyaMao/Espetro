@@ -21,6 +21,8 @@ public final class ClientTacticalState {
 
     private static final Map<String, MarkerInfo> markersByName = new HashMap<>();
     private static final Set<String> commanderNames = new HashSet<>();
+    private static Map<Integer,Integer> markerSquads = Map.of();
+    public static Map<Integer,Integer> markerTargetSquads() { return markerSquads; }
     private static int mySquadId = NO_SQUAD;
     private static UnifiedDeployScreenPacket.SquadInfo localSquad;
     private static List<UnifiedDeployScreenPacket.SquadMemberInfo> rosterMembers = List.of();
@@ -54,6 +56,7 @@ public final class ClientTacticalState {
         }
 
         if (squads == null) {
+            markerSquads=Map.of();
             if (previousSquad != null) TacticalHud.rosterUpdated();
             return;
         }
@@ -61,6 +64,9 @@ public final class ClientTacticalState {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         String localName = mc.player != null ? key(mc.player.getName().getString()) : "";
 
+        var numbered=new java.util.TreeMap<Integer,Integer>();
+        for(var squad:squads) numbered.put(squad.id,squad.displayId);
+        markerSquads=java.util.Collections.unmodifiableMap(numbered);
         for (UnifiedDeployScreenPacket.SquadInfo squad : squads) {
             if (squad.id == mySquadId) localSquad = squad;
             for (UnifiedDeployScreenPacket.SquadMemberInfo member : squad.members) {

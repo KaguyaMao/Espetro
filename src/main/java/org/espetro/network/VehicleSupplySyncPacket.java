@@ -18,6 +18,7 @@ public final class VehicleSupplySyncPacket {
     private final int maxCapacity;
     private final boolean supplyVehicle;
     private final boolean fightVehicle;
+    private final boolean fullClassChange;
     private final boolean transferAmmo;
     private final boolean transferConstruction;
     private final int transferIntervalTicks;
@@ -25,7 +26,7 @@ public final class VehicleSupplySyncPacket {
     private VehicleSupplySyncPacket(boolean request, UUID vehicleId, int ammo, int construction,
                                     int maxCapacity, boolean supplyVehicle, boolean fightVehicle,
                                     boolean transferAmmo, boolean transferConstruction,
-                                    int transferIntervalTicks) {
+                                    int transferIntervalTicks, boolean fullClassChange) {
         this.request = request;
         this.vehicleId = vehicleId;
         this.ammo = ammo;
@@ -33,6 +34,7 @@ public final class VehicleSupplySyncPacket {
         this.maxCapacity = maxCapacity;
         this.supplyVehicle = supplyVehicle;
         this.fightVehicle = fightVehicle;
+        this.fullClassChange = fullClassChange;
         this.transferAmmo = transferAmmo;
         this.transferConstruction = transferConstruction;
         this.transferIntervalTicks = Math.max(1, transferIntervalTicks);
@@ -40,7 +42,7 @@ public final class VehicleSupplySyncPacket {
 
     public static VehicleSupplySyncPacket request(UUID vehicleId) {
         return new VehicleSupplySyncPacket(true, vehicleId, 0, 0, 0,
-            false, false, false, false, 20);
+            false, false, false, false, 20, false);
     }
 
     public static VehicleSupplySyncPacket state(UUID vehicleId, int ammo, int construction,
@@ -48,9 +50,17 @@ public final class VehicleSupplySyncPacket {
                                                 boolean fightVehicle, boolean transferAmmo,
                                                 boolean transferConstruction,
                                                 int transferIntervalTicks) {
+        return state(vehicleId, ammo, construction, maxCapacity, supplyVehicle, fightVehicle,
+            transferAmmo, transferConstruction, transferIntervalTicks, fightVehicle && !supplyVehicle);
+    }
+
+    public static VehicleSupplySyncPacket state(UUID vehicleId, int ammo, int construction,
+                                                int maxCapacity, boolean supplyVehicle, boolean fightVehicle,
+                                                boolean transferAmmo, boolean transferConstruction,
+                                                int transferIntervalTicks, boolean fullClassChange) {
         return new VehicleSupplySyncPacket(false, vehicleId, ammo, construction, maxCapacity,
             supplyVehicle, fightVehicle, transferAmmo, transferConstruction,
-            transferIntervalTicks);
+            transferIntervalTicks, fullClassChange);
     }
 
     public UUID getVehicleId() { return vehicleId; }
@@ -59,6 +69,7 @@ public final class VehicleSupplySyncPacket {
     public int getMaxCapacity() { return maxCapacity; }
     public boolean isSupplyVehicle() { return supplyVehicle; }
     public boolean isFightVehicle() { return fightVehicle; }
+    public boolean allowsFullClassChange() { return fullClassChange; }
     public boolean canTransferAmmo() { return transferAmmo; }
     public boolean canTransferConstruction() { return transferConstruction; }
     /** 任何载具均可从自身弹药向步兵补给。 */
@@ -74,9 +85,13 @@ public final class VehicleSupplySyncPacket {
         boolean request = buf.readBoolean();
         UUID id = buf.readUUID();
         if (request) return request(id);
-        return state(id, buf.readVarInt(), buf.readVarInt(), buf.readVarInt(),
-            buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(),
-            buf.readVarInt());
+        int ammo = buf.readVarInt(), construction = buf.readVarInt(), capacity = buf.readVarInt();
+        boolean supply = buf.readBoolean(), fight = buf.readBoolean();
+        boolean transferAmmo = buf.readBoolean(), transferConstruction = buf.readBoolean();
+        int interval = buf.readVarInt();
+        // Older servers lack the explicit permission; present a conservative crew icon.
+        return state(id, ammo, construction, capacity, supply, fight, transferAmmo,
+            transferConstruction, interval, buf.isReadable() && buf.readBoolean());
     }
 
     public void write(FriendlyByteBuf buf) {
@@ -91,6 +106,7 @@ public final class VehicleSupplySyncPacket {
         buf.writeBoolean(transferAmmo);
         buf.writeBoolean(transferConstruction);
         buf.writeVarInt(transferIntervalTicks);
+        buf.writeBoolean(fullClassChange);
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {

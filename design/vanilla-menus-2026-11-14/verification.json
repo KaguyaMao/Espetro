@@ -1,0 +1,39 @@
+{
+  "screens": 77,
+  "layouts": 154,
+  "resources": 9,
+  "background_conditions": "exclusive world/menu pairs",
+  "native_geometry_labels_actions": "unchanged",
+  "title_loading": "unchanged",
+  "supported_logical_sizes": [
+    [
+      320,
+      240
+    ],
+    [
+      427,
+      240
+    ],
+    [
+      480,
+      270
+    ],
+    [
+      569,
+      304
+    ],
+    [
+      640,
+      360
+    ],
+    [
+      854,
+      480
+    ],
+    [
+      1024,
+      576
+    ]
+  ],
+  "verification": "static; not in-game"
+}

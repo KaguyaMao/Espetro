@@ -14,6 +14,7 @@ gradle.projectsEvaluated {
             include 'org/espetro/client/gui/FobSupplyHudTest.java'
             include 'org/espetro/network/BattleHudSyncTest.java'
             include 'org/espetro/network/RoundReportTest.java'
+            include 'org/espetro/stats/RoundScoringTest.java'
             include 'org/espetro/client/gui/RoundEndDetailsTest.java'
             include 'org/espetro/client/gui/IconRasterizerTest.java'
             include 'org/espetro/client/gui/UiMotionTest.java'

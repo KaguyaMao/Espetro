@@ -911,6 +911,8 @@ public class FactionDataLoader {
         /** 编制投票卡片使用的完整 Minecraft 纹理资源位置。 */
         @SerializedName(value = "selection_image", alternate = {"selectionImage"})
         public String selectionImage;
+        @SerializedName(value = "flag_image", alternate = {"flagImage"})
+        public String flagImage;
         /** 客户端根目录 EsAudio 下的音频套装目录索引。 */
         @SerializedName(value = "audio_pack", alternate = {"audioPack", "audio_index", "audioIndex"})
         public String audioPack;

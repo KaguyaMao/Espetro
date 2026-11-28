@@ -7,6 +7,10 @@
   "plugin": "org.espetro.mixin.EspetroMixinPlugin",
   "mixins": [
     "ServerGamePacketListenerWaitingLockMixin",
+    "DeathNoticeMixin",
+    "OptionalExplosiveUseDurationMixin",
+    "realgrisly.CompletedReviveMixin",
+    "hcrpoints.ContestedScoringMixin",
     "network.KeepAliveTimeoutMixin",
     "network.ClientReadTimeoutMixin",
     "network.ServerReadTimeoutMixin",
@@ -27,7 +31,7 @@
   ],
   "client": [
     "client.BattleChatLinesMixin",
-    "client.EsRadialGlassMixin",
+    "client.TeamChatScreenMixin",
     "sbw.ClickDismountMixin",
     "sbw.MinecraftSeatMixin",
     "sbw.VehicleChangeSeatDelayMixin",

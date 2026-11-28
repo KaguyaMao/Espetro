@@ -26,7 +26,7 @@ class VehicleWheelControllerTest {
         UUID id = UUID.fromString("00000000-0000-0000-0000-000000000001");
         VehicleSupplySyncPacket supply = VehicleSupplySyncPacket.state(
             id, 100, 50, 200, true, false, true, true, 10);
-        assertEquals("ACRS-:10", VehicleWheelController.layoutSignature(supply));
+        assertEquals("ACRS--:10", VehicleWheelController.layoutSignature(supply));
         assertEquals("", VehicleWheelController.layoutSignature(null));
         VehicleSupplySyncPacket differentInterval = VehicleSupplySyncPacket.state(
             id, 100, 50, 200, true, false, true, true, 8);
@@ -39,18 +39,20 @@ class VehicleWheelControllerTest {
     }
 
     @Test
-    void visibleActionsFollowSnapshotFlags() {
-        UUID id = UUID.fromString("00000000-0000-0000-0000-000000000002");
-        VehicleSupplySyncPacket fight = VehicleSupplySyncPacket.state(
-            id, 20, 0, 20, false, true, false, false, 20);
-        List<String> actions = VehicleWheelController.visibleActions(fight);
-        assertEquals(List.of("RESUPPLY_INFANTRY", "CHANGE_CLASS"), actions);
-
-        VehicleSupplySyncPacket logistics = VehicleSupplySyncPacket.state(
-            id, 80, 40, 200, true, false, true, true, 8);
-        assertEquals(
-            List.of("LOAD_AMMO", "UNLOAD_AMMO", "LOAD_CONSTRUCTION",
-                "UNLOAD_CONSTRUCTION", "RESUPPLY_INFANTRY", "CHANGE_CLASS"),
-            VehicleWheelController.visibleActions(logistics));
+    void transferSlotsStayInPlaceWhenThereIsNoDropPointOrConstructionSupport() {
+        UUID id = UUID.randomUUID();
+        var fight = VehicleSupplySyncPacket.state(id, 20, 0, 20, false, true, false, false, 20);
+        var logistics = VehicleSupplySyncPacket.state(id, 80, 40, 200, true, false, true, true, 8);
+        assertEquals(List.of("LOAD_AMMO", "UNLOAD_AMMO", "LOAD_CONSTRUCTION", "UNLOAD_CONSTRUCTION",
+            "RESUPPLY_INFANTRY", "CHANGE_CLASS", "RESET_VEHICLE"), VehicleWheelController.visibleActions(fight));
+        assertEquals(VehicleWheelController.visibleActions(fight), VehicleWheelController.visibleActions(logistics));
+        assertFalse(VehicleWheelController.canTransfer(fight, "LOAD_AMMO"));
+        assertFalse(VehicleWheelController.canTransfer(fight, "UNLOAD_CONSTRUCTION"));
+        assertTrue(VehicleWheelController.canTransfer(logistics, "LOAD_AMMO"));
+        assertTrue(VehicleWheelController.canTransfer(logistics, "UNLOAD_CONSTRUCTION"));
+        var ordinary = VehicleSupplySyncPacket.state(id, 50, 0, 200, false, false, false, false, 20);
+        assertEquals(List.of("LOAD_CONSTRUCTION", "UNLOAD_CONSTRUCTION", "RESUPPLY_INFANTRY", "RESET_VEHICLE"),
+            VehicleWheelController.visibleActions(ordinary));
+        assertFalse(VehicleWheelController.canTransfer(ordinary, "LOAD_CONSTRUCTION"));
     }
 }

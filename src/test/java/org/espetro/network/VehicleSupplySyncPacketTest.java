@@ -38,4 +38,19 @@ class VehicleSupplySyncPacketTest {
         assertTrue(packet.canResupplyInfantry());
         assertFalse(packet.canTransferAmmo());
     }
+    @Test
+    void explicitPermissionSurvivesRoundTripAndOldPayloadDefaultsToCrew() {
+        var id = UUID.randomUUID();
+        var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        try {
+            VehicleSupplySyncPacket.state(id, 200, 0, 300,
+                false, true, true, false, 20, true).write(buffer);
+            assertTrue(VehicleSupplySyncPacket.read(buffer).allowsFullClassChange());
+            buffer.readerIndex(0);
+            buffer.writerIndex(buffer.writerIndex() - 1);
+            assertFalse(VehicleSupplySyncPacket.read(buffer).allowsFullClassChange());
+        } finally {
+            buffer.release();
+        }
+    }
 }

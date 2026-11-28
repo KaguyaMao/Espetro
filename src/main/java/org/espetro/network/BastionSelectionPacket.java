@@ -98,7 +98,8 @@ public class BastionSelectionPacket {
             }
             // 兵站已被摧毁/不属于本队：明确提示并立刻刷新部署点列表（保留等待状态，可重选）
             player.sendSystemMessage(Component.literal(
-                "§c该部署点已被摧毁或已失效，请重新选择部署点。"));
+                org.espetro.stats.RoundScoreConfig.hidden()
+                    ? "§c该部署点不可用，请重新选择。" : "§c该部署点已被摧毁或已失效，请重新选择部署点。"));
             NetworkManager.sendDeployPointSync(player);
             return false;
         }

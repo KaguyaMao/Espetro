@@ -165,7 +165,7 @@ public class VehicleEventHandler {
         Entity entity = event.getEntity();
 
         if (entity.getTags().contains("espetro_vehicle")) {
-            VehicleManager.getInstance().onVehicleDeath(entity);
+            VehicleManager.getInstance().onVehicleDeath(entity, event.getSource().getEntity());
             Espetro.LOGGER.debug("载具 {} 已死亡，移除追踪", entity.getUUID());
         }
 

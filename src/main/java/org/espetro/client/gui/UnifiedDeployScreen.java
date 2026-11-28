@@ -3173,12 +3173,7 @@ public class UnifiedDeployScreen extends EspetroMenuScreen {
         governanceVoteButtons.clear();
         int bx = mapX + 5;
         int by = mapY + mapH - BTN_H - 4;
-        EspButton score = new EspButton(bx, by, 64, BTN_H, "\u00a76玩家分数板",
-            () -> Minecraft.getInstance().setScreen(new MatchScoreboardScreen(this)));
-        score.setTextScale(UI_TEXT_SCALE);
-        score.setPlainBlack();   // 需求 6：原"有边框、没底色" → 无边框 + 黑半透底
-        sectionRoot.addChild(score);
-        int nextX = bx + 68;
+        int nextX = bx;
 
         GovernanceStatePacket.TeamState state = activeGovernance();
         boolean battle = ClientGameState.getCurrentPhase() == GamePhase.BATTLE;

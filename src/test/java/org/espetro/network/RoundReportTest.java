@@ -22,7 +22,7 @@ class RoundReportTest {
                 new RoundReport.Ticket(900, false, 375, 0,
                     RoundReport.Reason.of(RoundReport.Cause.CAPTURE, "全部据点失守"))),
             List.of(new RoundReport.Player(UUID.randomUUID(), "Driver", true, 2, "装甲支援",
-                (byte) 0, true, true, "车组长", "crewman", "", "crew", 9, 2)));
+                (byte) 0, true, true, "车组长", "crewman", "", "crew", new RoundReport.Score(900, 145, 200, 25))));
         var packet = new RoundEndPacket("ATTACK", RoundReport.DISPLAY_SECONDS, "进攻方", "防守方",
             365, 0, 3, false, report);
         var buffer = new FriendlyByteBuf(Unpooled.buffer());
@@ -30,6 +30,7 @@ class RoundReportTest {
             packet.write(buffer);
             var decoded = RoundEndPacket.read(buffer);
             assertEquals(report, decoded.report);
+            assertEquals(1270, decoded.report.players().get(0).score().total());
             assertEquals(30, decoded.displaySeconds);
             assertEquals(365, decoded.attackTickets);
             assertEquals(0, buffer.readableBytes());

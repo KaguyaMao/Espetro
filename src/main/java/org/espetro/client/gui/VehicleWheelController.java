@@ -18,6 +18,7 @@ import org.espetro.network.RequestResupplyCatalogPacket;
 import org.espetro.network.VehicleSupplyActionPacket;
 import org.espetro.network.VehicleSupplySyncPacket;
 import org.espetro.logistics.resupply.ResupplySourceRef;
+import org.espetro.vehicle.SbwVehicleSeatResolver;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.espetro.client.gui.UiTheme;
 
-/** Hold SBW INTERACT EsRadial wheel for the vehicle under the crosshair. */
+/** Opens the interaction wheel for the ridden vehicle or the vehicle under the crosshair. */
 public final class VehicleWheelController {
 
     private static final String OWNER = "espetro_vehicle";
@@ -38,16 +39,17 @@ public final class VehicleWheelController {
 
     private static final ResourceLocation ROOT = id("vehicle_root");
     private static final ResourceLocation ACTION_ID = id("vehicle_action");
-    private static final ResourceLocation ICON_AMMO_WHITE =
-        id("textures/gui/squad/ammo_supply_white.png");
-    private static final ResourceLocation ICON_AMMO_RED =
-        id("textures/gui/squad/ammo_supply.png");
-    private static final ResourceLocation ICON_CONSTRUCTION_WHITE =
-        id("textures/gui/squad/vehicle_supply_load.png");
-    private static final ResourceLocation ICON_CONSTRUCTION_RED =
-        id("textures/gui/squad/vehicle_supply_unload.png");
-    private static final ResourceLocation ICON_RESUPPLY =
-        id("textures/gui/squad/ammo_crate.png");
+    private static final ResourceLocation ICON_AMMO_LOAD = vehicleIcon("radial_ammo_load");
+    private static final ResourceLocation ICON_AMMO_UNLOAD = vehicleIcon("radial_ammo_unload");
+    private static final ResourceLocation ICON_BUILD_LOAD = vehicleIcon("radial_build_load");
+    private static final ResourceLocation ICON_BUILD_UNLOAD = vehicleIcon("radial_build_unload");
+    private static final ResourceLocation ICON_RESUPPLY = vehicleIcon("radial_resupply");
+    private static final ResourceLocation ICON_ANY_ROLE = vehicleIcon("radial_any_role");
+    private static final ResourceLocation ICON_CREW_ROLE = vehicleIcon("radial_crew_role");
+    private static final String NO_DROP_POINT = "附近没有补给投放点";
+    private static final String NO_CONSTRUCTION = "此载具不支持建材补给";
+    private static final int REFRESH_TICKS = 20;
+
     private static final ResourceLocation ICON_RESET_VEHICLE =
         id("textures/gui/vehicle/reset_vehicle.png");
 
@@ -61,7 +63,16 @@ public final class VehicleWheelController {
     private static boolean consumedUntilRelease;
     private static boolean snapshotReady;
     private static int heldTicks;
+    private static int refreshTicks;
     private static UUID currentVehicleId;
+    private static boolean startedMounted;
+
+    public static boolean isMountedInteraction() { return startedMounted; }
+
+    public static void completeSeatInteraction() {
+        consumedUntilRelease=true;
+        closeOwnedOverlay();
+    }
     private static VehicleSupplySyncPacket cachedSupply;
     private static long themeRevision = -1L;
 
@@ -77,6 +88,14 @@ public final class VehicleWheelController {
 
     public static boolean isWheelActive() {
         return ownsOverlay && RadialMenuClientApi.isActive() && RadialMenuClientApi.isOwnedBy(OWNER);
+    }
+
+    static boolean isVehicleRootActive() {
+        return isWheelActive() && RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent();
+    }
+
+    static int displayRadius(int width, int height) {
+        return Math.max(0, Math.min(WHEEL_OUTER, Math.min(width - 32, height - 64) / 2));
     }
 
     /**
@@ -136,6 +155,7 @@ public final class VehicleWheelController {
                 return;
             }
             if (isTransferAction(actionName)) {
+                if (!canTransfer(cachedSupply, actionName)) return;
                 holdAction = actionName;
                 holdProgress = 0;
                 sendSupplyAction(actionName);
@@ -155,7 +175,7 @@ public final class VehicleWheelController {
                 }
                 if (action == VehicleSupplyActionPacket.Action.CHANGE_CLASS) {
                     RadioRadialController.markNextClassListAsVehicle(
-                        currentVehicleId, isClassChangeCrewOnly());
+                        currentVehicleId);
                 }
                 NetworkManager.NET.sendToServer(
                     new VehicleSupplyActionPacket(currentVehicleId, action));
@@ -192,54 +212,61 @@ public final class VehicleWheelController {
             .radii(WHEEL_INNER, WHEEL_OUTER)
             .animationSpeed(1.25f)
             .ringColors(RadialGlassStyle.ringColors())
-            .gap(130, 40).gap(260, 35)
             .progress(() -> {
                 // 「重置载具」长按时优先显示它的 10 秒进度，其余动作沿用转交进度。
                 if (resetHoldTicks > 0) {
                     float hold = Math.min(1.0F, resetHoldTicks / (float) RESET_HOLD_TICKS);
                     return new RadialMenuData.Progress(null, hold, UiTheme.hex(UiTheme.WARNING));
                 }
-                float value = org.espetro.client.vehicle.VehicleInteractionState.progress();
-                return value < 0 ? RadialMenuData.Progress.NONE : new RadialMenuData.Progress(null, value,
-                    UiTheme.hex(org.espetro.client.vehicle.VehicleInteractionState.color()));
+                return RadialMenuData.Progress.NONE;
             });
 
-        if (cachedSupply.canTransferAmmo()) {
-            builder = builder
-                .persistentSlot("espetro.veh.load_ammo", ICON_AMMO_WHITE,
-                    Actions.script(ACTION_ID, Map.of("action", "LOAD_AMMO")),
-                    Component.literal("装载弹药"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(-30, 55).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
-                .persistentSlot("espetro.veh.unload_ammo", ICON_AMMO_RED,
-                    Actions.script(ACTION_ID, Map.of("action", "UNLOAD_AMMO")),
-                    Component.literal("卸下弹药"), UiTheme.hex(UiTheme.WORLD_NEGATIVE), UiTheme.hex(UiTheme.WORLD_NEGATIVE)).sectorLast(25, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
+        String gold = UiTheme.hex(UiTheme.WORLD_WARNING);
+        if (showsTransfers(cachedSupply)) {
+            transfer(builder, "LOAD_AMMO", ICON_AMMO_LOAD, "装载弹药", 240);
+            transfer(builder, "UNLOAD_AMMO", ICON_AMMO_UNLOAD, "卸载弹药", 180);
         }
-        if (cachedSupply.canTransferConstruction()) {
-            builder = builder
-                .persistentSlot("espetro.veh.load_construction", ICON_CONSTRUCTION_WHITE,
-                    Actions.script(ACTION_ID, Map.of("action", "LOAD_CONSTRUCTION")),
-                    Component.literal("装载建材"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
-                .progressColorLast(UiTheme.hex(UiTheme.WORLD_WARNING)).sectorLast(90, 40).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()))
-                .persistentSlot("espetro.veh.unload_construction", ICON_CONSTRUCTION_RED,
-                    Actions.script(ACTION_ID, Map.of("action", "UNLOAD_CONSTRUCTION")),
-                    Component.literal("卸下建材"), UiTheme.hex(UiTheme.WORLD_NEGATIVE), UiTheme.hex(UiTheme.WORLD_NEGATIVE))
-                .progressColorLast(UiTheme.hex(UiTheme.WORLD_WARNING)).sectorLast(170, 35).repeatLast(Math.max(1, cachedSupply.getTransferIntervalTicks()));
-        }
+        transfer(builder, "LOAD_CONSTRUCTION", ICON_BUILD_LOAD, "装载建材", 60);
+        transfer(builder, "UNLOAD_CONSTRUCTION", ICON_BUILD_UNLOAD, "卸载建材", 120);
         if (cachedSupply.canResupplyInfantry()) {
-            builder = builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,
+            builder.persistentSlot("espetro.veh.resupply_infantry", ICON_RESUPPLY,
                 Actions.script(ACTION_ID, Map.of("action", "RESUPPLY_INFANTRY")),
-                Component.literal("补给步兵"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(205, 55);
+                Component.literal("补给步兵"), gold, gold).tintLast(UiTheme.WORLD_WARNING).sectorLast(0,60);
         }
         if (cachedSupply.isSupplyVehicle() || cachedSupply.isFightVehicle()) {
-            builder = builder.persistentSlot("espetro.veh.change_class", ICON_AMMO_WHITE,
+            builder.persistentSlot("espetro.veh.change_class",
+                isClassChangeCrewOnly() ? ICON_CREW_ROLE : ICON_ANY_ROLE,
                 Actions.script(ACTION_ID, Map.of("action", "CHANGE_CLASS")),
-                Component.literal("更换职业"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT)).sectorLast(295, 35);
+                Component.literal("更换职业"), gold, gold).tintLast(UiTheme.WORLD_WARNING).sectorLast(330,30);
         }
-        // 2~3 点方向（60°~90°）：长按左键 10 秒重置载具姿态并抬高 3 格。
-        builder = builder.persistentSlot("espetro.veh.reset_vehicle", ICON_RESET_VEHICLE,
+        builder.persistentSlot("espetro.veh.reset_vehicle", ICON_RESET_VEHICLE,
             Actions.script(ACTION_ID, Map.of("action", ACTION_RESET_VEHICLE)),
-            Component.literal("重置载具 (长按10秒)"), UiTheme.hex(UiTheme.ACCENT), UiTheme.hex(UiTheme.ACCENT))
-            .sectorLast(60, 30);
+            Component.literal("重置载具 (长按10秒)"), gold, gold)
+            .tintLast(UiTheme.WORLD_WARNING).sectorLast(300,30);
         return builder.build();
+    }
+
+    private static void transfer(RadialMenuBuilder builder, String action, ResourceLocation icon,
+                                 String label, int angle) {
+        builder.persistentSlot("espetro.veh." + action.toLowerCase(java.util.Locale.ROOT), icon,
+            Actions.script(ACTION_ID, Map.of("action", action)), Component.literal(label),
+            UiTheme.hex(UiTheme.WORLD_TEXT), UiTheme.hex(UiTheme.WORLD_TEXT)).sectorLast(angle, 60);
+        if (canTransfer(cachedSupply, action)) {
+            builder.repeatLast(cachedSupply.getTransferIntervalTicks());
+        } else if (action.endsWith("CONSTRUCTION") && !cachedSupply.canCarryConstruction()) {
+            builder.disabledLast(Component.literal(NO_CONSTRUCTION)).tintLast(0xFF757575);
+        } else {
+            builder.disabledLast(Component.literal(NO_DROP_POINT));
+        }
+    }
+
+    private static boolean showsTransfers(@Nullable VehicleSupplySyncPacket supply) {
+        return supply != null && (supply.isSupplyVehicle() || supply.isFightVehicle());
+    }
+
+    static boolean canTransfer(@Nullable VehicleSupplySyncPacket supply, String action) {
+        return supply != null && (action.endsWith("CONSTRUCTION")
+            ? supply.canTransferConstruction() : supply.canTransferAmmo());
     }
 
     /** Called on the client thread by the packet handler. */
@@ -264,7 +291,8 @@ public final class VehicleWheelController {
             + (packet.canTransferConstruction() ? "C" : "-")
             + (packet.canResupplyInfantry() ? "R" : "-")
             + (packet.isSupplyVehicle() ? "S" : "-")
-            + (packet.isFightVehicle() ? "F" : "-") + ":" + packet.getTransferIntervalTicks();
+            + (packet.isFightVehicle() ? "F" : "-")
+            + (packet.allowsFullClassChange() ? "K" : "-") + ":" + packet.getTransferIntervalTicks();
     }
 
     public static void tick(Minecraft minecraft) {
@@ -304,7 +332,10 @@ public final class VehicleWheelController {
         }
 
         if (!keyWasDown) {
-            currentVehicleId = findLookedAtVehicle(minecraft);
+            refreshTicks = 0;
+            Entity mountedVehicle = SbwVehicleSeatResolver.findMountedVehicle(minecraft.player);
+            startedMounted = mountedVehicle != null;
+            currentVehicleId = startedMounted ? mountedVehicle.getUUID() : findLookedAtVehicle(minecraft);
             snapshotReady = false;
             cachedSupply = null;
             if (currentVehicleId != null) {
@@ -313,6 +344,11 @@ public final class VehicleWheelController {
         }
         keyWasDown = true;
         if (currentVehicleId == null) return;
+        if (isWheelActive() && RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()
+                && ++refreshTicks >= REFRESH_TICKS) {
+            refreshTicks = 0;
+            NetworkManager.NET.sendToServer(VehicleSupplySyncPacket.request(currentVehicleId));
+        }
 
         if (consumedUntilRelease) {
             if (ownsOverlay && RadialMenuClientApi.activeMenuId().filter(ROOT::equals).isPresent()) {
@@ -329,7 +365,7 @@ public final class VehicleWheelController {
         }
 
         heldTicks++;
-        if (heldTicks >= OPEN_DELAY_TICKS && snapshotReady) {
+        if (snapshotReady && (startedMounted || heldTicks >= OPEN_DELAY_TICKS)) {
             publishMenu();
             var data = RadialMenuRegistry.getRuntimeMenu(ROOT);
             ownsOverlay = data != null && RadialMenuClientApi.open(data,
@@ -337,29 +373,18 @@ public final class VehicleWheelController {
         }
     }
 
-    /**
-     * 该载具的换职轮盘是否只允许驾驶员/载具队长。
-     *
-     * <p>客户端快照只有 {@code supplyVehicle}/{@code fightVehicle} 两个布尔（协议不新增字段），
-     * 因此这里按“补给载具或非战斗载具”保守收敛；服务端始终会做权威校验并只下发允许的职业，
-     * 未声明标签的旧载具以服务端下发结果为准。</p>
-     */
+    /** Match the permission used by the server to populate the class list. */
     static boolean isClassChangeCrewOnly() {
-        if (cachedSupply == null) {
-            return true;
-        }
-        return cachedSupply.isSupplyVehicle() || !cachedSupply.isFightVehicle();
+        return cachedSupply == null || !cachedSupply.allowsFullClassChange();
     }
 
     static List<String> visibleActions(@Nullable VehicleSupplySyncPacket supply) {
-        List<String> actions = new ArrayList<>(5);
-        if (supply != null && supply.canTransferAmmo()) {
-            actions.add("LOAD_AMMO");
-            actions.add("UNLOAD_AMMO");
+        List<String> actions = new ArrayList<>(7);
+        if (showsTransfers(supply)) {
+            actions.addAll(List.of("LOAD_AMMO", "UNLOAD_AMMO"));
         }
-        if (supply != null && supply.canTransferConstruction()) {
-            actions.add("LOAD_CONSTRUCTION");
-            actions.add("UNLOAD_CONSTRUCTION");
+        if (supply != null && !supply.isRequest()) {
+            actions.addAll(List.of("LOAD_CONSTRUCTION", "UNLOAD_CONSTRUCTION"));
         }
         if (supply != null && supply.canResupplyInfantry()) {
             actions.add("RESUPPLY_INFANTRY");
@@ -384,7 +409,7 @@ public final class VehicleWheelController {
         String action = slot >= 0 && slot < actions.size() ? actions.get(slot) : null;
         boolean leftDown = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT)
             == GLFW.GLFW_PRESS;
-        if (action == null || !isTransferAction(action) || !leftDown) {
+        if (action == null || !isTransferAction(action) || !canTransfer(cachedSupply, action) || !leftDown) {
             holdAction = null;
             holdProgress = 0;
             return;
@@ -475,6 +500,7 @@ public final class VehicleWheelController {
         consumedUntilRelease = false;
         snapshotReady = false;
         currentVehicleId = null;
+        startedMounted = false;
         cachedSupply = null;
         holdAction = null;
         holdProgress = 0;
@@ -510,6 +536,10 @@ public final class VehicleWheelController {
             // fall through
         }
         return "F";
+    }
+
+    private static ResourceLocation vehicleIcon(String name) {
+        return id("textures/gui/vehicle/" + name + ".png");
     }
 
     private static ResourceLocation id(String path) {

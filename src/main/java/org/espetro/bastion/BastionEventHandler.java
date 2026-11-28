@@ -375,7 +375,7 @@ public class BastionEventHandler {
         if (FortificationManager.getInstance().contains(level, event.getPos())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
-            if (player.getMainHandItem().getItem() != Items.IRON_SHOVEL) {
+            if (!org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())) {
                 player.displayClientMessage(net.minecraft.network.chat.Component.literal(
                     "§e使用工兵铲右键拆除，左键修建或修复。"), true);
             }
@@ -643,7 +643,7 @@ public class BastionEventHandler {
             || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
-        if (player.getMainHandItem().getItem() == Items.IRON_SHOVEL
+        if (org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())
             && FortificationManager.getInstance().contains(level, event.getPos())) {
             return;
         }
@@ -668,7 +668,7 @@ public class BastionEventHandler {
         if (event.getLevel().isClientSide()) return;
         ServerLevel level = (ServerLevel) event.getLevel();
         BlockPos clickedPos = event.getPos();
-        if (player.getMainHandItem().getItem() == Items.IRON_SHOVEL
+        if (org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())
             && FortificationManager.getInstance().contains(level, clickedPos)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);

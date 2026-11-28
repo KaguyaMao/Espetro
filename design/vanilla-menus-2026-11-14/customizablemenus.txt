@@ -1,0 +1,239 @@
+type = customizablemenus
+
+de.keksuccino.drippyloadingscreen.customization.DrippyOverlayScreen {
+}
+
+net.minecraft.client.gui.screens.TitleScreen {
+}
+
+com.mojang.realmsclient.RealmsMainScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsBackupInfoScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsBackupScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsBrokenWorldScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsClientOutdatedScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsConfigureWorldScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsConfirmScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsCreateRealmScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsDownloadLatestWorldScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsGenericErrorScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsInviteScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsLongRunningMcoTaskScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsNotificationsScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsParentalConsentScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsPendingInvitesScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsPlayerScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsResetNormalWorldScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsResetWorldScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsSelectFileToUploadScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsSelectWorldTemplateScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsSettingsScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsSlotOptionsScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsSubscriptionInfoScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsTermsScreen {
+}
+
+com.mojang.realmsclient.gui.screens.RealmsUploadScreen {
+}
+
+me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI {
+}
+
+net.minecraft.client.gui.screens.AccessibilityOnboardingScreen {
+}
+
+net.minecraft.client.gui.screens.AccessibilityOptionsScreen {
+}
+
+net.minecraft.client.gui.screens.AlertScreen {
+}
+
+net.minecraft.client.gui.screens.BackupConfirmScreen {
+}
+
+net.minecraft.client.gui.screens.ChatOptionsScreen {
+}
+
+net.minecraft.client.gui.screens.ConfirmLinkScreen {
+}
+
+net.minecraft.client.gui.screens.ConfirmScreen {
+}
+
+net.minecraft.client.gui.screens.ConnectScreen {
+}
+
+net.minecraft.client.gui.screens.CreateBuffetWorldScreen {
+}
+
+net.minecraft.client.gui.screens.CreateFlatWorldScreen {
+}
+
+net.minecraft.client.gui.screens.CreditsAndAttributionScreen {
+}
+
+net.minecraft.client.gui.screens.DatapackLoadFailureScreen {
+}
+
+net.minecraft.client.gui.screens.DeathScreen {
+}
+
+net.minecraft.client.gui.screens.DeathScreen$TitleConfirmScreen {
+}
+
+net.minecraft.client.gui.screens.DirectJoinServerScreen {
+}
+
+net.minecraft.client.gui.screens.DisconnectedScreen {
+}
+
+net.minecraft.client.gui.screens.EditServerScreen {
+}
+
+net.minecraft.client.gui.screens.ErrorScreen {
+}
+
+net.minecraft.client.gui.screens.LanguageSelectScreen {
+}
+
+net.minecraft.client.gui.screens.MouseSettingsScreen {
+}
+
+net.minecraft.client.gui.screens.OnlineOptionsScreen {
+}
+
+net.minecraft.client.gui.screens.OptionsScreen {
+}
+
+net.minecraft.client.gui.screens.PauseScreen {
+}
+
+net.minecraft.client.gui.screens.PopupScreen {
+}
+
+net.minecraft.client.gui.screens.PresetFlatWorldScreen {
+}
+
+net.minecraft.client.gui.screens.ShareToLanScreen {
+}
+
+net.minecraft.client.gui.screens.SkinCustomizationScreen {
+}
+
+net.minecraft.client.gui.screens.SoundOptionsScreen {
+}
+
+net.minecraft.client.gui.screens.VideoSettingsScreen {
+}
+
+net.minecraft.client.gui.screens.achievement.StatsScreen {
+}
+
+net.minecraft.client.gui.screens.advancements.AdvancementsScreen {
+}
+
+net.minecraft.client.gui.screens.controls.ControlsScreen {
+}
+
+net.minecraft.client.gui.screens.controls.KeyBindsScreen {
+}
+
+net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen {
+}
+
+net.minecraft.client.gui.screens.multiplayer.SafetyScreen {
+}
+
+net.minecraft.client.gui.screens.packs.PackSelectionScreen {
+}
+
+net.minecraft.client.gui.screens.reporting.ChatReportScreen {
+}
+
+net.minecraft.client.gui.screens.reporting.ChatSelectionScreen {
+}
+
+net.minecraft.client.gui.screens.reporting.ReportReasonSelectionScreen {
+}
+
+net.minecraft.client.gui.screens.social.SocialInteractionsScreen {
+}
+
+net.minecraft.client.gui.screens.telemetry.TelemetryInfoScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.ConfirmExperimentalFeaturesScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.CreateWorldScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.EditGameRulesScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.EditWorldScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.ExperimentsScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.OptimizeWorldScreen {
+}
+
+net.minecraft.client.gui.screens.worldselection.SelectWorldScreen {
+}
+
+net.minecraft.realms.DisconnectedRealmsScreen {
+}
+
+net.minecraftforge.client.gui.ModListScreen {
+}
+
+org.embeddedt.embeddium.gui.EmbeddiumVideoOptionsScreen {
+}
+

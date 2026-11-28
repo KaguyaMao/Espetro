@@ -51,6 +51,14 @@ public final class SbwVehicleSeatResolver {
         return vehicle != null && access != null && access.vehicleClass.isInstance(vehicle);
     }
 
+    @Nullable
+    public static Entity findMountedVehicle(Entity passenger) {
+        for (Entity vehicle = passenger.getVehicle(); vehicle != null; vehicle = vehicle.getVehicle()) {
+            if (isSupportedVehicle(vehicle)) return vehicle;
+        }
+        return null;
+    }
+
     /**
      * 反射调用 SBW {@code changeSeat(Entity, int)}。
      * 客户端用于本地预测（配合 {@code VehicleChangeSeatDelayMixin} 的 armed 门控放行）；

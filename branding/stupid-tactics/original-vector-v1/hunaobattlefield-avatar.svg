@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="504" height="504" viewBox="-24 -112 504 504" role="img" aria-labelledby="brand-title brand-desc">
+  <title id="brand-title">胡闹战场 · Stupid Tactics Minecraft</title>
+  <desc id="brand-desc">Square avatar, using the original field mark on a dark solid ground.</desc>
+  <rect x="-24" y="-112" width="504" height="504" fill="#1C2930"/><g transform="translate(0 8)"><g id="field-mark" fill="#F3F1E7">
+  <path id="s-route" d="M0 0H168V56H56V112H168V280H0V224H112V168H0Z"/>
+  <path id="t-position" d="M200 0H368V56H312V280H256V56H200Z"/>
+  <path id="off-grid-tile" fill="#FF8266" d="M400-16H456V40H400Z"/>
+</g></g>
+</svg>

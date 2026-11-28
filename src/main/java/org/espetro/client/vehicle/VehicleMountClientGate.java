@@ -28,6 +28,7 @@ public final class VehicleMountClientGate {
     private static boolean registered;
     private static UUID mountingVehicleId;
     private static int mountTicks;
+    private static boolean completed;
 
     private VehicleMountClientGate() {
     }
@@ -74,6 +75,7 @@ public final class VehicleMountClientGate {
         }
 
         if (mc.player.getVehicle() != null) {
+            if (completed) VehicleWheelController.completeSeatInteraction();
             resetMount(false);
             return;
         }
@@ -98,67 +100,37 @@ public final class VehicleMountClientGate {
 
         boolean interactDown = VehicleWheelController.isInteractHeld();
         boolean wheelActive = VehicleWheelController.isWheelActive();
-        boolean centerHovered = VehicleWheelController.isCenterHovered()
-            && org.lwjgl.glfw.GLFW.glfwGetMouseButton(mc.getWindow().getWindow(),
-                org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
+        boolean centerHovered = VehicleWheelController.isCenterHovered();
 
         if (!interactDown || !wheelActive) {
             resetMount(true);
             return;
         }
 
-        Entity target = lookVehicle(mc);
-        if (target == null) {
-            if (mountingVehicleId == null) {
-                resetMount(false);
-                return;
-            }
-        } else if (mountingVehicleId == null
-            || !mountingVehicleId.equals(target.getUUID())) {
-            if (!centerHovered) {
-                resetMount(false);
-                return;
-            }
-            begin(target.getUUID());
-        }
-
+        if (completed) return;
         if (!centerHovered) {
-            if (mountTicks > 0 || VehicleInteractionState.kind() == VehicleInteractionKind.MOUNT) {
-                mountTicks = 0;
-                VehicleInteractionState.clear();
-                NetworkManager.NET.sendToServer(new MountRequestPacket(
-                    MountRequestPacket.Action.CANCEL, mountingVehicleId));
-            }
+            resetMount(true);
             return;
         }
-
-        if (mountingVehicleId == null) {
-            return;
-        }
-
-        if (mountTicks == 0) {
+        Entity target = lookVehicle(mc);
+        if (target != null && (mountingVehicleId == null || !mountingVehicleId.equals(target.getUUID()))) {
+            resetMount(true);
+            mountingVehicleId=target.getUUID();
             NetworkManager.NET.sendToServer(new MountRequestPacket(
-                MountRequestPacket.Action.BEGIN, mountingVehicleId));
+                MountRequestPacket.Action.BEGIN,mountingVehicleId));
         }
+        if (mountingVehicleId==null) return;
         mountTicks++;
-        float progress = Math.min(1f, mountTicks / (float) delay);
-        VehicleInteractionState.setMount(progress);
-        if (mountTicks >= delay) {
+        VehicleInteractionState.setMount(Math.min(1f, mountTicks/(float)delay));
+        if (mountTicks>=delay) {
             NetworkManager.NET.sendToServer(new MountRequestPacket(
-                MountRequestPacket.Action.COMPLETE, mountingVehicleId));
-            VehicleInteractionState.setMount(1f);
+                MountRequestPacket.Action.COMPLETE,mountingVehicleId));
+            completed=true;
         }
-    }
-
-    private static void begin(UUID vehicleId) {
-        mountingVehicleId = vehicleId;
-        mountTicks = 0;
-        VehicleInteractionState.setMount(0f);
-        NetworkManager.NET.sendToServer(new MountRequestPacket(
-            MountRequestPacket.Action.BEGIN, vehicleId));
     }
 
     private static void resetMount(boolean notifyServer) {
+        completed=false;
         if (mountingVehicleId == null && mountTicks == 0) {
             if (VehicleInteractionState.kind() == VehicleInteractionKind.MOUNT) {
                 VehicleInteractionState.clear();

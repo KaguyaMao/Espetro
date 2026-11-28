@@ -104,7 +104,8 @@ final class UiDevPreviews {
             players.add(new RoundReport.Player(UUID.nameUUIDFromBytes(names[i].getBytes(java.nio.charset.StandardCharsets.UTF_8)),
                 names[i], i < 6, j >= 4 ? 2 : 1, j >= 4 ? "装甲支援" : "前线步兵",
                 (byte) (j == 2 || j == 5 ? 1 : j == 3 ? 2 : 0), j == 0 || j == 4,
-                j != 1, roles[i], icons[i], "", icons[i], 19 - i, 3 + i % 4));
+                j != 1, roles[i], icons[i], "", icons[i],
+                new RoundReport.Score((19 - i) * 50L, (i * 95L) % 500, i % 3 == 1 ? i * 100L : 0, 75 - i * 5L)));
         }
         return new RoundEndScreen("ATTACK", RoundReport.DISPLAY_SECONDS, "进攻方", "防守方", red, blue, 3,
             false, new RoundReport(52 * 1200, 600, 600, tickets, players)).preview(parent, page);

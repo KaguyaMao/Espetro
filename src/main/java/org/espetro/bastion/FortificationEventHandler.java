@@ -2,7 +2,6 @@ package org.espetro.bastion;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -31,7 +30,7 @@ public final class FortificationEventHandler {
         if (event.isCanceled() || !(event.getLevel() instanceof ServerLevel level)) return;
         FortificationManager manager = FortificationManager.getInstance();
         if (!manager.contains(level, event.getPos())) return;
-        if (event.getPlayer().getMainHandItem().getItem() == Items.IRON_SHOVEL) {
+        if (org.espetro.compat.ConstructionTools.isTool(event.getPlayer().getMainHandItem())) {
             event.setCanceled(true);
             return;
         }
@@ -123,7 +122,7 @@ public final class FortificationEventHandler {
 
     private static void guardShovelWork(PlayerInteractEvent event, boolean build) {
         if (event.getLevel().isClientSide() || !(event.getLevel() instanceof ServerLevel level)
-            || event.getEntity().getMainHandItem().getItem() != Items.IRON_SHOVEL
+            || !org.espetro.compat.ConstructionTools.isTool(event.getEntity().getMainHandItem())
             || !FortificationManager.getInstance().contains(level, event.getPos())) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
@@ -143,7 +142,7 @@ public final class FortificationEventHandler {
 
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
-        if (event.getEntity().getMainHandItem().getItem() == Items.IRON_SHOVEL
+        if (org.espetro.compat.ConstructionTools.isTool(event.getEntity().getMainHandItem())
             && FortificationManager.getInstance().containsEntity(event.getTarget().getUUID())) {
             event.setCanceled(true);
         }
@@ -151,7 +150,7 @@ public final class FortificationEventHandler {
 
     @SubscribeEvent
     public static void onUseEntity(PlayerInteractEvent.EntityInteract event) {
-        if (event.getEntity().getMainHandItem().getItem() == Items.IRON_SHOVEL
+        if (org.espetro.compat.ConstructionTools.isTool(event.getEntity().getMainHandItem())
             && FortificationManager.getInstance().containsEntity(event.getTarget().getUUID())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
@@ -173,7 +172,7 @@ public final class FortificationEventHandler {
         }
         // 铁镐是施工工具：右键=拆除、左键=修复，交给 guardShovelWork / work 流程处理，
         // 这里不能拦，否则敌方无法拆除己方工事。
-        if (player.getMainHandItem().getItem() == Items.IRON_SHOVEL) {
+        if (org.espetro.compat.ConstructionTools.isTool(player.getMainHandItem())) {
             return;
         }
         String owner = FortificationManager.getInstance().teamAt(level, event.getPos());

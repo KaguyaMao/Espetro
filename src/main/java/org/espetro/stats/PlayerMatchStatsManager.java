@@ -168,6 +168,7 @@ public final class PlayerMatchStatsManager {
             String killerTeam = killerStats.team != null ? killerStats.team : killerStats.lastTeam;
             if (victimTeam != null && killerTeam != null && !victimTeam.equals(killerTeam)) {
                 killerStats.kills++;
+                RoundScoring.infantry(killer);
             }
         }
         broadcastIfDirty();

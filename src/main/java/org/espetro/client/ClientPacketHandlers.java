@@ -232,7 +232,7 @@ public class ClientPacketHandlers {
                 org.espetro.client.gui.ClientGameState.setBattleTimeRemaining(-1);
             }
             if (phase.isLobbyLike() || phase == GamePhase.CLEANUP) {
-                org.espetro.client.audio.ClientFormationAudioManager.stopAll();
+                org.espetro.client.audio.ClientFormationAudioManager.onRoundCleanup();
             }
 
             net.minecraft.client.Minecraft phaseMc = net.minecraft.client.Minecraft.getInstance();
@@ -619,7 +619,7 @@ public class ClientPacketHandlers {
 
     public static void handleFortificationCatalog(FortificationCatalogPacket packet) {
         org.espetro.client.gui.TacticalRadialController
-            .updateFortifications(packet.entries());
+            .updateFortifications(packet.entries(),packet.radioAvailable(),packet.radioLimit());
     }
 
     public static void handleFortificationPreview(FortificationPreviewPacket packet) {

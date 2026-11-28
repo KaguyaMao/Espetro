@@ -11,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
@@ -80,7 +79,7 @@ public final class FortificationPlacementController {
             return;
         }
         if (minecraft.screen != null
-            || minecraft.player.getMainHandItem().getItem() != Items.IRON_SHOVEL) return;
+            || !org.espetro.compat.ConstructionTools.isTool(minecraft.player.getMainHandItem())) return;
         boolean build = minecraft.options.keyAttack.isDown();
         boolean remove = minecraft.options.keyUse.isDown();
         if (!build && !remove) return;
@@ -146,7 +145,7 @@ public final class FortificationPlacementController {
             clear();
             return;
         }
-        if (mc.player.getMainHandItem().getItem() != Items.IRON_SHOVEL) return;
+        if (!org.espetro.compat.ConstructionTools.isTool(mc.player.getMainHandItem())) return;
         if (mc.hitResult instanceof EntityHitResult entityHit
             && org.espetro.vehicle.VehicleManager.isMappedSupplyStation(entityHit.getEntity())) {
             event.setCanceled(true);

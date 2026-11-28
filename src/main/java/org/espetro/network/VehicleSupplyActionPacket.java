@@ -192,6 +192,7 @@ public final class VehicleSupplyActionPacket {
         if (!interaction.unrestricted()
             && !interaction.radio().consumeAmmunitionSupplies(available)) return;
         int added = supply.addAmmo(available);
+        org.espetro.stats.RoundScoring.load(player, interaction.vehicleId(), true, added, interaction.mainBase());
         if (added < available && !interaction.unrestricted()) {
             interaction.radio().addAmmunitionSupplies(
                 available - added, LogisticsConfig.get().maxAmmunition);
@@ -211,10 +212,14 @@ public final class VehicleSupplyActionPacket {
             player.displayClientMessage(Component.literal("§e没有可卸载的弹药或 Radio 已满。"), true);
             return;
         }
-        int removed = supply.removeAmmo(removable);
+        int removed = supply.removeAmmoForTransfer(removable);
+        int accepted = 0;
         if (!interaction.unrestricted()) {
+            int before = interaction.radio().getAmmunitionSupplies();
             interaction.radio().addAmmunitionSupplies(removed, LogisticsConfig.get().maxAmmunition);
+            accepted = interaction.radio().getAmmunitionSupplies() - before;
         }
+        org.espetro.stats.RoundScoring.unload(player, interaction.vehicleId(), true, removed, accepted);
         notifyRadio(interaction.radio());
     }
 
@@ -235,6 +240,7 @@ public final class VehicleSupplyActionPacket {
         if (!interaction.unrestricted()
             && !interaction.radio().consumeConstructionSupplies(available)) return;
         int added = supply.addConstruction(available);
+        org.espetro.stats.RoundScoring.load(player, interaction.vehicleId(), false, added, interaction.mainBase());
         if (added < available && !interaction.unrestricted()) {
             interaction.radio().addConstructionSupplies(
                 available - added, LogisticsConfig.get().maxConstruction);
@@ -254,10 +260,14 @@ public final class VehicleSupplyActionPacket {
             player.displayClientMessage(Component.literal("§e没有可卸载的建材或 Radio 已满。"), true);
             return;
         }
-        int removed = supply.removeConstruction(removable);
+        int removed = supply.removeConstructionForTransfer(removable);
+        int accepted = 0;
         if (!interaction.unrestricted()) {
+            int before = interaction.radio().getConstructionSupplies();
             interaction.radio().addConstructionSupplies(removed, LogisticsConfig.get().maxConstruction);
+            accepted = interaction.radio().getConstructionSupplies() - before;
         }
+        org.espetro.stats.RoundScoring.unload(player, interaction.vehicleId(), false, removed, accepted);
         notifyRadio(interaction.radio());
     }
 
@@ -302,9 +312,7 @@ public final class VehicleSupplyActionPacket {
         VehicleConfig.VehicleTypeConfig config = new VehicleConfig.VehicleTypeConfig(0, 0);
         VehicleManager.VehicleSupplyState supply =
             new VehicleManager.VehicleSupplyState(0, false);
-        boolean ridingThisVehicle = player.getVehicle() != null
-            && (vehicleId.equals(player.getVehicle().getUUID())
-                || vehicleId.equals(player.getVehicle().getRootVehicle().getUUID()));
+        boolean ridingThisVehicle = entity.hasIndirectPassenger(player);
         return new Interaction(vehicleId, "", config, supply, false, null,
             ridingThisVehicle, false, false);
     }
@@ -320,7 +328,8 @@ public final class VehicleSupplyActionPacket {
             supply.getMaxCapacity(), interaction.config().supplyVeh,
             interaction.config().fightVeh, interaction.canTransferAmmo(),
             interaction.canTransferConstruction(),
-            FortificationConfig.vehicleService().transferIntervalTicks);
+            FortificationConfig.vehicleService().transferIntervalTicks,
+            VehicleClassChangePolicy.allowsFullClassChange(interaction.config()));
     }
 
     @Nullable
@@ -346,9 +355,7 @@ public final class VehicleSupplyActionPacket {
         BlockPos vehiclePos = entity.blockPosition();
         boolean mainBase = isAtMainBase(level, vehiclePos, team);
         // 骑乘在载具上本身不授予装卸权限：装卸必须在主基地或 FOB 覆盖范围内。
-        boolean ridingThisVehicle = player.getVehicle() != null
-            && (vehicleId.equals(player.getVehicle().getUUID())
-                || vehicleId.equals(player.getVehicle().getRootVehicle().getUUID()));
+        boolean ridingThisVehicle = entity.hasIndirectPassenger(player);
         BastionData radio = null;
         if (!mainBase) {
             if (config.supplyVeh) {
@@ -367,7 +374,7 @@ public final class VehicleSupplyActionPacket {
             ridingThisVehicle, canTransferAmmo, canTransferConstruction);
     }
 
-    static boolean isAtMainBase(ServerLevel level, BlockPos vehiclePos, String team) {
+    public static boolean isAtMainBase(ServerLevel level, BlockPos vehiclePos, String team) {
         SpawnPointConfig.SpawnPoint spawn = SpawnPointConfig.getSpawnPoint(team);
         if (spawn == null) return false;
         double dx = vehiclePos.getX() + 0.5 - spawn.x;

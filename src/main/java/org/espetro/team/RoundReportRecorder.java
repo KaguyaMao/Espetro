@@ -23,6 +23,7 @@ public final class RoundReportRecorder {
         initialAttack = attack;
         initialDefend = defend;
         active = true;
+        org.espetro.stats.RoundScoring.begin();
     }
 
     public void record(boolean attack, int before, int after, RoundReport.Reason reason) {
@@ -34,6 +35,7 @@ public final class RoundReportRecorder {
     public void reset() {
         active = false;
         tickets.clear();
+        org.espetro.stats.RoundScoring.reset();
     }
 
     public RoundReport finish(int attack, int defend) {
@@ -58,10 +60,18 @@ public final class RoundReportRecorder {
                 membership == null ? "" : safe(membership.squad().name),
                 member == null ? (byte) -1 : member.fireteam.toNetwork(),
                 member != null && member.leader, member != null && member.fireteamLeader, role,
-                safe(stat.classIcon), safe(stat.classIconImage), safe(stat.classId), stat.kills, stat.deaths));
+                safe(stat.classIcon), safe(stat.classIconImage), safe(stat.classId), org.espetro.stats.RoundScoring.score(stat.uuid)));
+        }
+        List<RoundReport.Ticket> visibleTickets = tickets;
+        if (org.espetro.stats.RoundScoreConfig.hidden()) {
+            visibleTickets = tickets.stream().map(ticket -> switch (ticket.reason().cause()) {
+                case DEATH, VEHICLE, FOB -> new RoundReport.Ticket(ticket.tick(), ticket.attack(),
+                    ticket.before(), ticket.after(), RoundReport.Reason.OTHER);
+                default -> ticket;
+            }).toList();
         }
         var report = new RoundReport(active ? Math.max(0, now() - startTick) : 0,
-            active ? initialAttack : attack, active ? initialDefend : defend, tickets, rows);
+            active ? initialAttack : attack, active ? initialDefend : defend, visibleTickets, rows);
         active = false;
         return report;
     }

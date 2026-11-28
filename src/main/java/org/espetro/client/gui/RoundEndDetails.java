@@ -82,7 +82,7 @@ final class RoundEndDetails {
     }
 
     void render(GuiGraphics g, Font font, int width, int bottom, int mx, int my, float progress) {
-        UiPaint.glassPanel(g, 8, 29, width - 16, bottom - 29, UiTheme.GLASS_PANEL);
+        UiPaint.glassPanel(g, 8, 29, width - 16, bottom - 29, UiTheme.GLASS_PANEL_SOFT);
         g.drawCenteredString(font, "票数走势", width / 2, 13, UiTheme.TEXT);
         g.drawString(font, "进攻方", width - 92, 13, UiTheme.ATTACK, false);
         g.drawString(font, "防守方", width - 48, 13, UiTheme.DEFEND, false);

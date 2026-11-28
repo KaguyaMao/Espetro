@@ -17,14 +17,17 @@ public final class FortificationCatalogPacket {
     private static final int MAX_ENTRIES = 64;
     private final boolean request;
     private final List<Entry> entries;
+    private final int radioAvailable;
+    private final int radioLimit;
 
-    private FortificationCatalogPacket(boolean request, List<Entry> entries) {
+    private FortificationCatalogPacket(boolean request, List<Entry> entries, int radioAvailable, int radioLimit) {
         this.request = request;
         this.entries = List.copyOf(entries);
+        this.radioAvailable=radioAvailable; this.radioLimit=radioLimit;
     }
 
     public static FortificationCatalogPacket request() {
-        return new FortificationCatalogPacket(true, List.of());
+        return new FortificationCatalogPacket(true, List.of(),-1,-1);
     }
 
     public static FortificationCatalogPacket forPlayer(ServerPlayer player) {
@@ -32,16 +35,23 @@ public final class FortificationCatalogPacket {
         for (FortificationConfig.FortificationDef def : FortificationConfig.list()) {
             if (!FortificationManager.canUse(player, def) || entries.size() >= MAX_ENTRIES) continue;
             // 阵营数量已满：轮盘里不再显示（避免选了之后被拒）
-            if (FortificationManager.getInstance().isFactionLimitReached(player, def)) continue;
+            if (def.behaviorType != FortificationConfig.Behavior.RADIO
+                && FortificationManager.getInstance().isFactionLimitReached(player, def)) continue;
             entries.add(new Entry(def.id, def.displayName, def.icon,
                 def.constructionCost, def.ammunitionCost));
         }
-        return new FortificationCatalogPacket(false, entries);
+        String team=org.espetro.Espetro.getPlayerTeam(player);
+        int limit=org.espetro.bastion.BastionManager.getInstance().getBastionLimitPerTeam();
+        int available=(int)Math.max(0,limit-FortificationManager.getInstance().occupiedRadioSlots(team));
+        return new FortificationCatalogPacket(false, entries, team==null?-1:available,team==null?-1:limit);
     }
 
     public List<Entry> entries() {
         return entries;
     }
+
+    public int radioAvailable() { return radioAvailable; }
+    public int radioLimit() { return radioLimit; }
 
     public static FortificationCatalogPacket read(FriendlyByteBuf buf) {
         boolean request = buf.readBoolean();
@@ -53,7 +63,9 @@ public final class FortificationCatalogPacket {
                 buf.readUtf(64), buf.readUtf(128), buf.readUtf(256),
                 buf.readVarInt(), buf.readVarInt()));
         }
-        return new FortificationCatalogPacket(false, entries);
+        int available=buf.isReadable()?buf.readVarInt():-1;
+        int limit=buf.isReadable()?buf.readVarInt():-1;
+        return new FortificationCatalogPacket(false, entries,available,limit);
     }
 
     public void write(FriendlyByteBuf buf) {
@@ -68,6 +80,8 @@ public final class FortificationCatalogPacket {
             buf.writeVarInt(Math.max(0, entry.constructionCost()));
             buf.writeVarInt(Math.max(0, entry.ammunitionCost()));
         }
+        buf.writeVarInt(radioAvailable);
+        buf.writeVarInt(radioLimit);
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {

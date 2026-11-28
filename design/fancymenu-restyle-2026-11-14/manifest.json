@@ -1,0 +1,69 @@
+{
+  "client": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试",
+  "palette": {
+    "background": "#0D1419",
+    "panel": "#101C23",
+    "ink": "#EAF0EF",
+    "cyan": "#06DEE5",
+    "border": "#35505A",
+    "muted": "#91ABB3",
+    "hover": "#203D48",
+    "disabled": "#17252C"
+  },
+  "buttons": {
+    "mc_titlescreen_multiplayer_button": [
+      30,
+      0,
+      164,
+      26,
+      "primary",
+      "多人游戏"
+    ],
+    "mc_titlescreen_singleplayer_button": [
+      30,
+      30,
+      164,
+      22,
+      "secondary",
+      "单人游戏"
+    ],
+    "mc_titlescreen_options_button": [
+      30,
+      56,
+      80,
+      20,
+      "small",
+      "设置"
+    ],
+    "forge_titlescreen_mods_button": [
+      114,
+      56,
+      80,
+      20,
+      "small",
+      "模组"
+    ],
+    "mc_titlescreen_language_button": [
+      30,
+      80,
+      80,
+      18,
+      "utility",
+      "语言"
+    ],
+    "mc_titlescreen_quit_button": [
+      114,
+      80,
+      80,
+      18,
+      "utility",
+      "退出游戏"
+    ]
+  },
+  "notes": [
+    "Code-drawn SVG/PNG assets; no image generation.",
+    "Existing slideshow, native button IDs and executable blocks retained.",
+    "Layouts use logical GUI coordinates; minimum supported GUI size 320x240.",
+    "Live multiplayer session is not interrupted. Preview is reconstructed, not an in-game screenshot."
+  ]
+}

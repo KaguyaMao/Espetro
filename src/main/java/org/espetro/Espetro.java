@@ -114,6 +114,9 @@ public class Espetro {
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(
             net.minecraftforge.fml.config.ModConfig.Type.SERVER,
             org.espetro.vehicle.VehicleInteractionConfig.SPEC);
+        net.minecraftforge.fml.ModLoadingContext.get().registerConfig(
+            net.minecraftforge.fml.config.ModConfig.Type.SERVER,
+            org.espetro.stats.RoundScoreConfig.SPEC, "espetro-round-score.toml");
 
         // 客户端初始化：双重 lambda 确保服务端不加载客户端类
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -504,6 +507,7 @@ public class Espetro {
         @SubscribeEvent
         public static void onServerStopped(ServerStoppedEvent event) {
             // 服务器已停止后只清理内存状态，避免在世界卸载阶段访问区块或实体。
+            org.espetro.stats.RoundScoring.reset();
             ResupplySessionManager.clearAll();
             BastionManager.getInstance().clearRuntimeState();
             TeamPackManager.getInstance().clearRuntimeState();
@@ -652,6 +656,7 @@ public class Espetro {
         @SubscribeEvent
         public static void onServerTick(TickEvent.ServerTickEvent event) {
             if (event.phase == TickEvent.Phase.END) {
+                org.espetro.stats.RoundScoring.tick(event.getServer());
                 GameStateManager.getInstance().onServerTick();
                 ServerRuntimeMaintenance.getInstance().onServerTick();
                 BastionManager.getInstance().tickDerivedTacticalState(event.getServer());

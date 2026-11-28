@@ -802,20 +802,20 @@ public class BastionManager {
                     troopManager.modifyDefendTroops(-penalty, reason);
                 }
                 Espetro.LOGGER.info("Radio {} 被摧毁！攻击者={} 扣兵力={}", bastionName, attackerName, penalty);
-                Espetro.broadcastToTeam(bastionTeam,
+                if (!org.espetro.stats.RoundScoreConfig.hidden()) Espetro.broadcastToTeam(bastionTeam,
                     "§c[Radio] §e" + bastionName + " §c已被摧毁！- " + penalty + " 兵力");
             } else if (radio) {
                 Espetro.LOGGER.info("Radio {} 被拆除（不扣兵力）攻击者={}", bastionName, attackerName);
-                Espetro.broadcastToTeam(bastionTeam,
+                if (!org.espetro.stats.RoundScoreConfig.hidden()) Espetro.broadcastToTeam(bastionTeam,
                     "§e[Radio] §6" + bastionName + " §e已拆除（不扣兵力）。");
             } else {
                 Espetro.LOGGER.info("兵站 HAB {} 被摧毁！攻击者={}（不扣兵力）", bastionName, attackerName);
-                Espetro.broadcastToTeam(bastionTeam,
+                if (!org.espetro.stats.RoundScoreConfig.hidden()) Espetro.broadcastToTeam(bastionTeam,
                     "§c[兵站] §e" + bastionName + " §c已被摧毁！无法再从此点复活（不扣兵力）。");
             }
 
             ServerPlayer commander = findCommanderForTeam(bastionTeam);
-            if (commander != null) {
+            if (commander != null && !org.espetro.stats.RoundScoreConfig.hidden()) {
                 commander.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                     deductManpower
                         ? "§c你的 Radio §e" + bastionName + " §c已被摧毁！"

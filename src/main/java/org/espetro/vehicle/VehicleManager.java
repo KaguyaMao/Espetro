@@ -171,12 +171,18 @@ public class VehicleManager {
 
     /** 单辆载具的弹药/建材库存 */
     public static final class VehicleSupplyState {
+        private final UUID trackedVehicleId;
         private int ammo;
         private int construction;
         private final int maxCapacity;
         private final boolean canCarryConstruction;
 
         public VehicleSupplyState(int maxCapacity, boolean canCarryConstruction) {
+            this(null, maxCapacity, canCarryConstruction);
+        }
+
+        private VehicleSupplyState(@Nullable UUID trackedVehicleId, int maxCapacity, boolean canCarryConstruction) {
+            this.trackedVehicleId = trackedVehicleId;
             this.maxCapacity = maxCapacity;
             this.canCarryConstruction = canCarryConstruction;
         }
@@ -196,6 +202,12 @@ public class VehicleManager {
         }
 
         public int removeAmmo(int amount) {
+            int removed = removeAmmoForTransfer(amount);
+            org.espetro.stats.RoundScoring.discardCargo(trackedVehicleId, true, removed);
+            return removed;
+        }
+
+        public int removeAmmoForTransfer(int amount) {
             int removed = Math.min(amount, ammo);
             ammo -= removed;
             return removed;
@@ -210,6 +222,12 @@ public class VehicleManager {
         }
 
         public int removeConstruction(int amount) {
+            int removed = removeConstructionForTransfer(amount);
+            org.espetro.stats.RoundScoring.discardCargo(trackedVehicleId, false, removed);
+            return removed;
+        }
+
+        public int removeConstructionForTransfer(int amount) {
             int removed = Math.min(amount, construction);
             construction -= removed;
             return removed;
@@ -1331,8 +1349,14 @@ public class VehicleManager {
      * 移除已死亡的载具追踪
      */
     public void onVehicleDeath(Entity entity) {
+        onVehicleDeath(entity, entity instanceof VehicleEntity vehicle ? vehicle.getLastAttacker() : null);
+    }
+
+    public void onVehicleDeath(Entity entity, @Nullable Entity attacker) {
+        org.espetro.stats.RoundScoring.forgetVehicle(entity.getUUID());
         ActiveVehicleData data = removeTrackedVehicle(entity.getUUID());
         if (data != null) {
+            org.espetro.stats.RoundScoring.vehicle(attacker, data.team());
             applyVehicleTroopPenalty(data, entity);
             scheduleAutoRespawn(data.team(), data.factionId(), data.vehicleType(), data.slotIndex());
             broadcastVehicleInfoToTeam(data.team());
@@ -1343,6 +1367,7 @@ public class VehicleManager {
      * 移除未按死亡处理的载具追踪，例如卸载或重置。
      */
     public void onVehicleRemoved(UUID entityId) {
+        org.espetro.stats.RoundScoring.forgetVehicle(entityId);
         ActiveVehicleData data = removeTrackedVehicle(entityId);
         if (data != null) broadcastVehicleInfoToTeam(data.team());
     }
@@ -1410,7 +1435,7 @@ public class VehicleManager {
             vehicle.level().dimension(), vehicle.blockPosition().immutable()));
         // 初始化载具补给库存；所有新生成的载具都按类型自动装填
         if (vcfg != null && vcfg.supplyCapacity > 0) {
-            VehicleSupplyState supply = new VehicleSupplyState(vcfg.supplyCapacity, vcfg.canCarryConstruction());
+            VehicleSupplyState supply = new VehicleSupplyState(vehicleId, vcfg.supplyCapacity, vcfg.canCarryConstruction());
             if (vcfg.supplyVeh) {
                 supply.fillHalf();
             } else {
@@ -1457,11 +1482,11 @@ public class VehicleManager {
             displayName + " 被击毁", data.vehicleType() + "|" + java.util.Objects.toString(mapIconFor(data), ""), squad, occupants);
         if ("ATTACK".equals(data.team())) {
             troopManager.modifyAttackTroops(-penalty, reason);
-            Espetro.broadcastToTeam(data.team(), "§c☠ 攻方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
+            if (!org.espetro.stats.RoundScoreConfig.hidden()) Espetro.broadcastToTeam(data.team(), "§c☠ 攻方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
             Espetro.LOGGER.info("攻方载具 {} 被摧毁，扣除 {} 兵力，剩余: {}", displayName, penalty, troopManager.getAttackTroops());
         } else if ("DEFEND".equals(data.team())) {
             troopManager.modifyDefendTroops(-penalty, reason);
-            Espetro.broadcastToTeam(data.team(), "§9☠ 守方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
+            if (!org.espetro.stats.RoundScoreConfig.hidden()) Espetro.broadcastToTeam(data.team(), "§9☠ 守方载具 [" + displayName + "] 被摧毁！- " + penalty + " 兵力");
             Espetro.LOGGER.info("守方载具 {} 被摧毁，扣除 {} 兵力，剩余: {}", displayName, penalty, troopManager.getDefendTroops());
         }
         troopManager.checkVictoryCondition();
@@ -1563,7 +1588,7 @@ public class VehicleManager {
         if (existing != null) return existing;
         VehicleConfig.VehicleTypeConfig vcfg = VehicleConfig.getVehicleConfig(factionId, vehicleType);
         if (vcfg == null || vcfg.supplyCapacity <= 0) return null;
-        VehicleSupplyState supply = new VehicleSupplyState(vcfg.supplyCapacity, vcfg.canCarryConstruction());
+        VehicleSupplyState supply = new VehicleSupplyState(entityId, vcfg.supplyCapacity, vcfg.canCarryConstruction());
         if (vcfg.supplyVeh) {
             supply.fillHalf();
         } else {
@@ -1665,6 +1690,7 @@ public class VehicleManager {
         }
         Entity target = player.serverLevel().getEntity(vehicleId);
         if (target == null || target.isRemoved()) return false;
+        if (target.hasIndirectPassenger(player)) return true;
         double range = SUPPLY_INTERACT_RANGE;
         Vec3 eye = player.getEyePosition(1.0F);
         Vec3 look = player.getLookAngle();
@@ -1681,8 +1707,8 @@ public class VehicleManager {
     }
 
     /**
-     * 最终提交换装时使用的权威校验。除阵营、加载状态、五格视线外，目标还必须
-     * 仍是当前编制声明的战斗/补给载具，防止客户端伪造或使用过期轮盘状态。
+     * 最终提交换装时使用的权威校验。目标必须通过载具交互校验，并且仍是
+     * 当前编制声明的战斗/补给载具。
      */
     public boolean canPlayerChangeClassAtVehicle(ServerPlayer player, UUID vehicleId) {
         if (!canPlayerInteractWithVehicle(player, vehicleId)) return false;

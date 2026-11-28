@@ -84,7 +84,7 @@ public class MatchStatsSyncPacket {
                     }
                 }
             }
-            rows.add(new Row(s.uuid, s.name, team, s.kills, s.deaths,
+            rows.add(new Row(s.uuid, s.name, team, 0, 0,
                 s.classId, s.classIcon, s.classIconImage,
                 s.online, squadId, squadName));
         }

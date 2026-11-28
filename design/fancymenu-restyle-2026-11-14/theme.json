@@ -1,0 +1,10 @@
+{
+  "background": "#0D1419",
+  "panel": "#101C23",
+  "ink": "#EAF0EF",
+  "cyan": "#06DEE5",
+  "border": "#35505A",
+  "muted": "#91ABB3",
+  "hover": "#203D48",
+  "disabled": "#17252C"
+}

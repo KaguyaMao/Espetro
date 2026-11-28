@@ -1,6 +1,15 @@
 package org.espetro.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import org.espetro.client.vehicle.VehicleInteractionKind;
+import org.espetro.client.vehicle.VehicleInteractionState;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -20,29 +29,33 @@ import org.espetro.network.VehicleSupplySyncPacket;
  */
 public final class VehicleSupplyHud {
 
-    private static final int BAR_WIDTH = 200;
-    private static final int BAR_HEIGHT = 5;
-    private static final int PANEL_WIDTH = 220;
-    private static final int PANEL_HEIGHT = 34;
-    private static final int TOP_MARGIN = 4;
-    private static final int ICON_SIZE = 10;
+    private static final int PANEL_WIDTH = 116;
+    private static final int PANEL_HEIGHT = 31;
+    private static final int ICON_SIZE = 13;
     private static final int ICON_TEXTURE_SIZE = 128;
-    /** 卡片内边距：左右各 10px，标题/进度条/数值行按 4px 网格排。 */
-    private static final int PAD_X = 10;
-    private static final int LABEL_Y = 4;
-    private static final int BAR_Y = 14;
-    private static final int ICON_ROW_Y = 22;
+    private static final int PAD_X = 5;
+    private static final int BADGE_RADIUS = 16;
 
     private static final double HINT_RANGE = 5.0;
     private static final int HINT_Y_OFFSET = 20;
     private static final int HINT_PILL_HEIGHT = 13;
 
     private static boolean registered;
+    private static boolean centerHook;
 
     public static void register() {
         if (registered) return;
         registered = true;
         MinecraftForge.EVENT_BUS.register(VehicleSupplyHud.class);
+        try {
+            var api=org.esradial.client.RadialMenuClientApi.class;
+            var hook=api.getMethod("registerCenterPresentation",net.minecraft.resources.ResourceLocation.class,
+                java.util.function.Supplier.class,java.util.function.BiConsumer.class);
+            hook.invoke(null,net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("espetro","vehicle_root"),
+                (java.util.function.Supplier<String>) () -> "",
+                (java.util.function.BiConsumer<GuiGraphics,Float>) VehicleSupplyHud::renderWheelCenter);
+            centerHook=true;
+        } catch(ReflectiveOperationException ignored) {}
     }
 
     @SubscribeEvent
@@ -53,19 +66,17 @@ public final class VehicleSupplyHud {
         GuiGraphics graphics = event.getGuiGraphics();
 
         float interactionProgress =
-            org.espetro.client.vehicle.VehicleInteractionState.progress();
+            VehicleInteractionState.progress(event.getPartialTick());
 
-        if (VehicleWheelController.isWheelActive()) {
+        if (mc.options.hideGui || mc.screen != null) return;
+        if (VehicleWheelController.isVehicleRootActive()) {
             VehicleSupplySyncPacket supply = VehicleWheelController.getCachedSupply();
             if (supply != null) drawCapacityBar(graphics, mc, supply);
-            // EsRadial owns the ring and transfer progress. Keep only the center icon/text here.
-            if (interactionProgress >= 0f) {
-                drawInteractionCenterProgress(graphics, mc, interactionProgress);
-            } else if (!VehicleWheelController.isHolding() && VehicleWheelController.isCenterHovered()) {
-                drawCenterMountHint(graphics, mc);
-            }
+            if (!centerHook && VehicleWheelController.isCenterHovered()) renderWheelCenter(graphics,event.getPartialTick());
             return;
         }
+
+        if (VehicleWheelController.isWheelActive()) return;
 
         if (interactionProgress >= 0f) {
             drawInteractionCenterProgress(graphics, mc, interactionProgress);
@@ -78,82 +89,52 @@ public final class VehicleSupplyHud {
         drawCrosshairHint(graphics, mc);
     }
 
-    // ==================== 容量条（屏幕顶部居中面板） ====================
+    private static void renderWheelCenter(GuiGraphics graphics,float partialTick) {
+        var mc=Minecraft.getInstance();
+        if (mc.player==null || mc.options.hideGui || !VehicleWheelController.isCenterHovered()) return;
+        float progress=VehicleInteractionState.progress(partialTick);
+        VehicleInteractionKind kind=progress>=0 ? VehicleInteractionState.kind()
+            : mc.player.getVehicle()!=null ? VehicleInteractionKind.DISMOUNT : VehicleInteractionKind.MOUNT;
+        drawSeatBadge(graphics,mc,kind,Math.max(0f,progress));
+    }
 
+    /** Compact shared-capacity bar, immediately above the vehicle wheel. */
     private static void drawCapacityBar(GuiGraphics graphics, Minecraft mc, VehicleSupplySyncPacket supply) {
-        int max = supply.getMaxCapacity();
-        if (max <= 0) return;
-        int ammo = supply.getAmmo();
-        int constr = supply.canCarryConstruction() ? supply.getConstruction() : 0;
-
-        int screenW = mc.getWindow().getGuiScaledWidth();
-        int px = (screenW - PANEL_WIDTH) / 2;
-        int py = TOP_MARGIN;
-
-        // 顶部居中的无框玻璃卡。
-        UiPaint.card(graphics, px, py, PANEL_WIDTH, PANEL_HEIGHT);
-
-        // 标题微标签 + 右侧容量读数。
-        UiPaint.textScaled(graphics, "载具补给", px + PAD_X, py + LABEL_Y,
-            UiTheme.TEXT_THIRD, UiTheme.TYPE_MICRO, false);
-        String capacityText = (ammo + constr) + " / " + max;
-        int capacityWidth = Math.round(mc.font.width(capacityText) * UiTheme.TYPE_MICRO);
-        UiPaint.textScaled(graphics, capacityText,
-            px + PANEL_WIDTH - PAD_X - capacityWidth, py + LABEL_Y,
-            UiTheme.TEXT_SECOND, UiTheme.TYPE_MICRO, false);
-
-        // 容量条：内凹槽 + 渐变填充 + 高光走 UiPaint.progress；建材段再以黄色叠在弹药段右侧。
-        int barX = px + PAD_X;
-        int barY = py + BAR_Y;
-        int barW = BAR_WIDTH;
-        int ammoW = (int) ((long) ammo * barW / max);
-        int constrW = (int) ((long) constr * barW / max);
-        int filled = Math.min(barW, ammoW + constrW);
-        UiPaint.progress(graphics, barX, barY, barW, BAR_HEIGHT,
-            filled / (float) barW, UiTheme.ATTACK);
-        if (constrW > 0) {
-            int start = Math.min(barX + ammoW, barX + barW);
-            int width = Math.min(constrW, barX + barW - start);
-            if (width > 0) {
-                // 建材段沿用弹药填充的内缩与厚度（槽内 2px 边距、高度 - 4），
-                // 不再整块盖住凹槽，避免建材条看起来比弹药条粗。
-                int innerY = barY + 2;
-                int innerH = Math.max(1, BAR_HEIGHT - 4);
-                int x1 = Math.max(barX + 2, start);
-                int x2 = Math.min(barX + barW - 2, start + width);
-                if (x2 > x1) {
-                    graphics.fill(x1, innerY, x2, innerY + innerH, UiTheme.WARNING);
-                }
-            }
-        }
-
-        // 图标 + 数值行（容量条下方，数值用标题字号 + 投影）。
-        int iconRowY = py + ICON_ROW_Y;
-        int textY = iconRowY;
+        int capacity = supply.getMaxCapacity();
+        if (capacity <= 0) return;
+        int ammo = Math.max(0, supply.getAmmo());
+        int construction = supply.canCarryConstruction() ? Math.max(0, supply.getConstruction()) : 0;
+        int w = graphics.guiWidth(), h = graphics.guiHeight();
+        int cx = w / 2;
+        int x = cx - PANEL_WIDTH / 2;
+        int y = Math.max(2, h / 2 - VehicleWheelController.displayRadius(w, h) - PANEL_HEIGHT - 5);
+        graphics.fill(x, y, x + PANEL_WIDTH, y + PANEL_HEIGHT, UiTheme.RADIAL_STOCK_PLATE);
 
         if (supply.canCarryConstruction()) {
-            // 补给载具：弹药左，建材右
-            int ammoIconX = px + 35;
-            SupplyIcons.ammunition(graphics, ammoIconX, iconRowY, ICON_SIZE);
-            UiPaint.textScaled(graphics, String.valueOf(ammo),
-                ammoIconX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
-
-            String constrText = String.valueOf(constr);
-            int constrTextW = Math.round(mc.font.width(constrText) * UiTheme.TYPE_HEADING);
-            int constrIconX = px + PANEL_WIDTH - 35 - ICON_SIZE - 4 - constrTextW;
-            SupplyIcons.construction(graphics, constrIconX, iconRowY, ICON_SIZE);
-            UiPaint.textScaled(graphics, constrText,
-                constrIconX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
+            drawStockValue(graphics, mc, cx - PANEL_WIDTH / 4, y + 2, ammo, false);
+            drawStockValue(graphics, mc, cx + PANEL_WIDTH / 4, y + 2, construction, true);
         } else {
-            // 战斗载具：弹药居中
-            String ammoText = String.valueOf(ammo);
-            int ammoTextW = Math.round(mc.font.width(ammoText) * UiTheme.TYPE_HEADING);
-            int totalW = ICON_SIZE + 4 + ammoTextW;
-            int startX = px + (PANEL_WIDTH - totalW) / 2;
-            SupplyIcons.ammunition(graphics, startX, iconRowY, ICON_SIZE);
-            UiPaint.textScaled(graphics, ammoText,
-                startX + ICON_SIZE + 4, textY, UiTheme.TEXT, UiTheme.TYPE_HEADING, true);
+            drawStockValue(graphics, mc, cx, y + 2, ammo, false);
         }
+        int bar = PANEL_WIDTH - PAD_X * 2, bx = x + PAD_X;
+        int ammoEnd = (int) Math.min(bar, (long) ammo * bar / capacity);
+        int totalEnd = (int) Math.min(bar, ((long) ammo + construction) * bar / capacity);
+        graphics.fill(bx, y + 17, bx + bar, y + 21, UiTheme.RADIAL_STOCK_TRACK);
+        if (ammoEnd > 0) graphics.fill(bx, y + 17, bx + ammoEnd, y + 21, UiTheme.WORLD_NEGATIVE);
+        if (totalEnd > ammoEnd) graphics.fill(bx + ammoEnd, y + 17, bx + totalEnd, y + 21, UiTheme.WORLD_WARNING);
+        String maximum = String.format(java.util.Locale.ROOT, "%,d", capacity);
+        UiPaint.textScaled(graphics, "0", bx, y + 23, UiTheme.WORLD_TEXT, .75f, true);
+        UiPaint.textScaled(graphics, maximum, bx + bar - Math.round(mc.font.width(maximum) * .75f),
+            y + 23, UiTheme.WORLD_TEXT, .75f, true);
+    }
+
+    private static void drawStockValue(GuiGraphics graphics, Minecraft mc, int center, int y, int value, boolean build) {
+        String text = String.format(java.util.Locale.ROOT, "%,d", value);
+        int left = center - (ICON_SIZE + 3 + mc.font.width(text)) / 2;
+        if (build) SupplyIcons.construction(graphics, left, y, ICON_SIZE);
+        else SupplyIcons.ammunition(graphics, left, y, ICON_SIZE);
+        UiPaint.textShadowed(graphics, text, left + ICON_SIZE + 3, y + 2,
+            build ? UiTheme.WORLD_WARNING : UiTheme.WORLD_NEGATIVE);
     }
 
     // ==================== 准心提示 ====================
@@ -192,44 +173,68 @@ public final class VehicleSupplyHud {
     // ==================== 圆形进度条 ====================
 
     private static void drawInteractionCenterProgress(GuiGraphics graphics, Minecraft mc, float fill) {
-        int cx = mc.getWindow().getGuiScaledWidth() / 2;
-        int cy = mc.getWindow().getGuiScaledHeight() / 2;
-        var icon = org.espetro.client.vehicle.VehicleInteractionState.icon();
+        drawSeatBadge(graphics, mc, VehicleInteractionState.kind(), fill);
+    }
+
+    private static void drawSeatBadge(GuiGraphics graphics, Minecraft mc, VehicleInteractionKind kind, float fill) {
+        int cx = graphics.guiWidth() / 2, cy = graphics.guiHeight() / 2;
+        drawArc(graphics,cx,cy,0,BADGE_RADIUS,1,UiTheme.RADIAL_SEAT_PLATE);
+        drawArc(graphics,cx,cy,BADGE_RADIUS-1.65f,BADGE_RADIUS,1,UiTheme.RADIAL_STOCK_TRACK);
+        if(fill>0) drawArc(graphics,cx,cy,BADGE_RADIUS-1.65f,BADGE_RADIUS,fill,UiTheme.WORLD_TEXT);
+
         int size = 18;
-        // 轻量图标底，保留交互状态图标。
-        UiPaint.circle(graphics, cx, cy - 6, size / 2 + 2, UiTheme.ICON_PLATE);
-        graphics.blit(icon, cx - size / 2, cy - size / 2 - 6, size, size,
-            0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
-            ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
-        String label = org.espetro.client.vehicle.VehicleInteractionState.label();
-        String percentText = Math.round(fill * 100f) + "%";
-        int labelWidth = mc.font.width(label);
-        int percentWidth = mc.font.width(percentText);
-        int totalWidth = labelWidth + 4 + percentWidth;
-        int textX = cx - totalWidth / 2;
-        int textY = cy + 16;
-        // 文本底衬：半透明深底，保证在亮色天空/雪地上也清晰。
-        UiPaint.glassPanel(graphics, textX - 6, textY - 3, totalWidth + 12,
-            HINT_PILL_HEIGHT, UiTheme.GLASS_PANEL);
-        UiPaint.textShadowed(graphics, label, textX, textY, UiTheme.TEXT);
-        UiPaint.textShadowed(graphics, percentText, textX + labelWidth + 4, textY, UiTheme.GOLD);
+        graphics.blit(VehicleInteractionState.icon(), cx - size / 2, cy - size / 2, size, size,
+            0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
+        boolean switchSeat = kind == VehicleInteractionKind.SEAT_SWITCH;
+        String prefix = switchSeat ? "" : "按住";
+        String key = switchSeat ? "Ctrl + 数字" : VehicleWheelController.interactKeyName();
+        String suffix = switchSeat ? "更换座位" : kind == VehicleInteractionKind.DISMOUNT ? "以离开载具" : "以进入载具";
+        int keyWidth = mc.font.width(key) + 8, gap = 4;
+        int prefixWidth = mc.font.width(prefix);
+        int width = prefixWidth + keyWidth + mc.font.width(suffix) + gap * (prefix.isEmpty() ? 1 : 2);
+        int x = cx - width / 2, y = cy + BADGE_RADIUS + 7;
+        if (!prefix.isEmpty()) {
+            UiPaint.textShadowed(graphics, prefix, x, y, UiTheme.WORLD_TEXT);
+            x += prefixWidth + gap;
+        }
+        graphics.fill(x, y - 3, x + keyWidth, y + 11, UiTheme.RADIAL_SEAT_PLATE);
+        graphics.renderOutline(x, y - 3, keyWidth, 14, UiTheme.WORLD_TEXT);
+        graphics.drawCenteredString(mc.font, key, x + keyWidth / 2, y, UiTheme.WORLD_TEXT);
+        UiPaint.textShadowed(graphics, suffix, x + keyWidth + gap, y, UiTheme.WORLD_TEXT);
     }
 
-    private static void drawCenterMountHint(GuiGraphics graphics, Minecraft mc) {
-        int cx = mc.getWindow().getGuiScaledWidth() / 2;
-        int cy = mc.getWindow().getGuiScaledHeight() / 2;
-        net.minecraft.resources.ResourceLocation mountIcon =
-            org.espetro.client.vehicle.VehicleInteractionState.icon();
-        UiPaint.circle(graphics, cx, cy - 6, 11, UiTheme.ICON_PLATE);
-        graphics.blit(mountIcon, cx - 9, cy - 15, 18, 18,
-            0f, 0f, ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
-            ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
-        String text = "上车";
-        int textWidth = mc.font.width(text);
-        int textY = cy + 16;
-        UiPaint.glassPanel(graphics, cx - textWidth / 2 - 6, textY - 3, textWidth + 12,
-            HINT_PILL_HEIGHT, UiTheme.GLASS_PANEL);
-        UiPaint.textShadowed(graphics, text, cx - textWidth / 2, textY, UiTheme.TEXT_SECOND);
+    private static void drawArc(GuiGraphics graphics,int cx,int cy,float inner,float outer,float fraction,int color) {
+        graphics.flush();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableCull();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        var buffer=Tesselator.getInstance().getBuilder();
+        var pose=graphics.pose().last().pose();
+        buffer.begin(VertexFormat.Mode.QUADS,DefaultVertexFormat.POSITION_COLOR);
+        float feather=(float)graphics.guiWidth()/Minecraft.getInstance().getWindow().getWidth();
+        float[] radii={Math.max(0,inner-feather*.5f),inner+feather*.5f,outer-feather*.5f,outer+feather*.5f};
+        if(inner==0)radii[1]=0;
+        int[] alpha={inner==0?255:0,255,255,0};
+        int steps=Math.max(2,(int)Math.ceil(128*fraction));
+        double sweep=2*Math.PI*fraction, endFeather=Math.min(sweep*.35,feather/outer);
+        for(int i=0;i<steps;i++){
+            double a=sweep*i/steps,b=sweep*(i+1)/steps;
+            float aa=fraction>=1?1:(float)Math.min(1,Math.min(a,sweep-a)/endFeather);
+            float ba=fraction>=1?1:(float)Math.min(1,Math.min(b,sweep-b)/endFeather);
+            for(int j=0;j<3;j++){
+                arcVertex(buffer,pose,cx,cy,a,radii[j],color,Math.round(alpha[j]*aa));
+                arcVertex(buffer,pose,cx,cy,b,radii[j],color,Math.round(alpha[j]*ba));
+                arcVertex(buffer,pose,cx,cy,b,radii[j+1],color,Math.round(alpha[j+1]*ba));
+                arcVertex(buffer,pose,cx,cy,a,radii[j+1],color,Math.round(alpha[j+1]*aa));
+            }
+        }
+        try {BufferUploader.drawWithShader(buffer.end());}
+        finally {RenderSystem.enableCull(); RenderSystem.disableBlend();}
     }
 
+    private static void arcVertex(BufferBuilder buffer,org.joml.Matrix4f pose,int cx,int cy,double a,float r,int color,int alpha) {
+        buffer.vertex(pose,cx+(float)Math.sin(a)*r,cy-(float)Math.cos(a)*r,0)
+            .color((color>>>16)&255,(color>>>8)&255,color&255,(color>>>24)*alpha/255).endVertex();
+    }
 }

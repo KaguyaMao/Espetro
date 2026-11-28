@@ -1,0 +1,17 @@
+{
+  "backup": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\fancymenu-backups\\20261114-003144",
+  "files": [
+    {
+      "file": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\config\\fancymenu\\customization\\drippy_loading_overlay_layout.txt",
+      "before_sha256": "3467807eee3ff0ae0baa73d2be47b02f50dd54644cdf5631ad1b840eac24ce52",
+      "after_sha256": "59f95f54f9dce35b58c696de312d6c70de52b78d6d2dd1e6d6a07ba5a8d8b3ea"
+    },
+    {
+      "file": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\config\\fancymenu\\customization\\title_screen_layout.txt",
+      "before_sha256": "cc4fe55ce7ed258ba712e32ab6ed5f28122482c593e3ef5f231cf95f2aa22d41",
+      "after_sha256": "a3b08d479733b053b03a6badd4f49d147ce45427dbe4837a1d894f69f5368a5e"
+    }
+  ],
+  "assets": "D:\\minecraft\\squadMC预发布测试\\versions\\Squad预发布测试\\config\\fancymenu\\assets\\stm_glass",
+  "new_assets": 30
+}

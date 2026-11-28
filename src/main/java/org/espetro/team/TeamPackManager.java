@@ -740,6 +740,7 @@ public class TeamPackManager {
             }
         }
 
+        if (org.espetro.stats.RoundScoreConfig.hidden()) return;
         if (enemyAction) {
             broadcastToSquad(teamPack.team, teamPack.squadId, "§c[队包] 队伍集结点已被敌方摧毁！");
             if (actor != null) {
@@ -772,7 +773,9 @@ public class TeamPackManager {
         }
 
         unregisterTeamPack(teamPack);
-        broadcastToSquad(teamPack.team, teamPack.squadId, "§c[队包] 队伍集结点已被爆炸摧毁！");
+        if (!org.espetro.stats.RoundScoreConfig.hidden()) {
+            broadcastToSquad(teamPack.team, teamPack.squadId, "§c[队包] 队伍集结点已被爆炸摧毁！");
+        }
     }
 
     public void reset() {

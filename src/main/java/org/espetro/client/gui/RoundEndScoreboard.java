@@ -15,6 +15,7 @@ final class RoundEndScoreboard {
     private static final int ROW = 13;
     private static final int GROUP_GAP = 2;
     private static final int HEADER = 14;
+    private static final String[] SCORE_LABELS = {"战斗", "后勤", "救助", "占领", "总分"};
     private record Row(String heading, RoundReport.Player player, boolean joinsPrevious, boolean joinsNext, int groupSize) {}
 
     private final List<Row> attack;
@@ -42,7 +43,7 @@ final class RoundEndScoreboard {
             .comparingInt((RoundReport.Player p) -> p.leader() ? 0 : 1)
             .thenComparingInt(RoundReport.Player::fireteam)
             .thenComparingInt(p -> p.fireteamLeader() ? 0 : 1)
-            .thenComparing(Comparator.comparingInt(RoundReport.Player::kills).reversed())
+            .thenComparing(Comparator.comparingLong((RoundReport.Player p) -> p.score().total()).reversed())
             .thenComparing(RoundReport.Player::name, String.CASE_INSENSITIVE_ORDER);
         for (var squad : squads.values()) {
             squad.sort(order);
@@ -77,18 +78,15 @@ final class RoundEndScoreboard {
                               boolean isAttack, List<Row> rows, int scroll) {
         var font = mc.font;
         int teamColor = RoundEndDetails.teamColor(isAttack);
-        UiPaint.glassPanel(g, x, 20, width, bottom - 20, UiTheme.GLASS_PANEL);
+        UiPaint.glassPanel(g, x, 20, width, bottom - 20, UiTheme.GLASS_PANEL_SOFT);
         int end = x + width - 5;
-        int numericW = Math.max(8, Math.min(23, (width - 65) / 5));
+        int numericW = Math.max(10, Math.min(28, (width - 72) / 5));
         int statStart = end - numericW * 5;
         g.fill(x, 20, x + width, 21, teamColor);
         g.drawString(font, isAttack ? "进攻方" : "防守方", x + 5, 26, teamColor, false);
-        if (numericW >= 17) {
-            g.drawCenteredString(font, "击杀", statStart + numericW / 2, 43, UiTheme.TEXT_SECOND);
-            g.drawCenteredString(font, "死亡", statStart + numericW * 3 / 2, 43, UiTheme.TEXT_SECOND);
+        for (int i = 0; i < SCORE_LABELS.length; i++) {
+            drawStat(g, font, SCORE_LABELS[i], statStart + numericW * i, 43, numericW, i == 4);
         }
-        for (int i = 2; i < 6; i++)
-            g.fill(statStart + numericW * i, 42, statStart + numericW * i + 1, bottom, UiTheme.HAIRLINE);
         g.enableScissor(x, 56, x + width, bottom - 2);
         try {
             int y = 56 - scroll;
@@ -117,8 +115,12 @@ final class RoundEndScoreboard {
                     String role = player.role().isBlank() ? "" : " | " + player.role();
                     RoundEndDetails.draw(g, font, player.name() + role, x + 42, y + 2,
                         statStart - x - 44, UiTheme.TEXT);
-                    g.drawCenteredString(font, Integer.toString(player.kills()), statStart + numericW / 2, y + 2, UiTheme.TEXT);
-                    g.drawCenteredString(font, Integer.toString(player.deaths()), statStart + numericW * 3 / 2, y + 2, UiTheme.TEXT_SECOND);
+                    var score = player.score();
+                    drawStat(g, font, Long.toString(score.combat()), statStart, y + 2, numericW, false);
+                    drawStat(g, font, Long.toString(score.logistics()), statStart + numericW, y + 2, numericW, false);
+                    drawStat(g, font, Long.toString(score.rescue()), statStart + numericW * 2, y + 2, numericW, false);
+                    drawStat(g, font, Long.toString(score.capture()), statStart + numericW * 3, y + 2, numericW, false);
+                    drawStat(g, font, Long.toString(score.total()), statStart + numericW * 4, y + 2, numericW, true);
                 }
                 y += ROW + (row.joinsNext() ? 0 : GROUP_GAP);
             }
@@ -131,6 +133,12 @@ final class RoundEndScoreboard {
             int y = 56 + (viewport - handle) * scroll / max;
             g.fill(x + width - 3, y, x + width - 1, y + handle, UiTheme.TEXT_THIRD);
         }
+    }
+
+    private static void drawStat(GuiGraphics g, net.minecraft.client.gui.Font font, String text,
+                                 int x, int y, int width, boolean total) {
+        UiPaint.textCentered(g, text, x, y, width, total ? UiTheme.SIGNAL_YELLOW : UiTheme.TEXT,
+            Math.min(1f, (width - 2f) / Math.max(1, font.width(text))), false);
     }
 
     private int maxScroll(List<Row> rows) {
